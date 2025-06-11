@@ -1,0 +1,64 @@
+{
+  "plan_id": "devfast_mode_verification",
+  "status": "PENDING",
+  "preceding_plan_id_ref": "phase1_v2",
+  "created_g": <current_g>,
+  "description": "Verify that 'haios run --mode dev-fast' executes demo plan in <5s, skips snapshot, and labels artefacts as '*_devfast.txt'.",
+  "tasks": [
+    {
+      "task_id": "devfast_1",
+      "status": "PENDING",
+      "description": "Benchmark execution time for demo plan in DEV_FAST mode.",
+      "execution_type": "NATIVE_OS_ACTION",
+      "inputs": ["Demo plan", "Engine CLI"],
+      "outputs": ["Execution time log"],
+      "execution_checklist": [
+        {"item_id": "benchmark_time", "description": "Measure and record execution time.", "status": "PENDING"}
+      ]
+    },
+    {
+      "task_id": "devfast_2",
+      "status": "PENDING",
+      "description": "Verify snapshot step is skipped in DEV_FAST mode.",
+      "execution_type": "NATIVE_OS_ACTION",
+      "inputs": ["Execution logs"],
+      "outputs": ["Verification log"],
+      "execution_checklist": [
+        {"item_id": "verify_snapshot_skip", "description": "Confirm snapshot is skipped.", "status": "PENDING"}
+      ]
+    },
+    {
+      "task_id": "devfast_3",
+      "status": "PENDING",
+      "description": "Confirm artefacts are labeled '*_devfast.txt'.",
+      "execution_type": "NATIVE_OS_ACTION",
+      "inputs": ["Artefact files"],
+      "outputs": ["Artefact verification log"],
+      "execution_checklist": [
+        {"item_id": "verify_labeling", "description": "Check artefact filenames for correct labeling.", "status": "PENDING"}
+      ]
+    },
+    {
+      "task_id": "devfast_4",
+      "status": "PENDING",
+      "description": "Add/expand automated tests for DEV_FAST mode behaviors.",
+      "execution_type": "NATIVE_OS_ACTION",
+      "inputs": ["Test suite"],
+      "outputs": ["Updated tests"],
+      "execution_checklist": [
+        {"item_id": "add_tests", "description": "Add or expand tests for DEV_FAST mode.", "status": "PENDING"}
+      ]
+    },
+    {
+      "task_id": "devfast_5",
+      "status": "PENDING",
+      "description": "Document findings and update onboarding.",
+      "execution_type": "NATIVE_OS_ACTION",
+      "inputs": ["Verification logs", "Artefact verification log"],
+      "outputs": ["Documentation update"],
+      "execution_checklist": [
+        {"item_id": "document_findings", "description": "Document findings and update onboarding.", "status": "PENDING"}
+      ]
+    }
+  ]
+} 

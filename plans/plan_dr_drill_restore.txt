@@ -1,0 +1,64 @@
+{
+  "plan_id": "dr_drill_restore",
+  "status": "PENDING",
+  "preceding_plan_id_ref": "phase1_v2",
+  "created_g": <current_g>,
+  "description": "Complete DR drill: restore from object-lock backup, run registry-fsck, and verify signatures.",
+  "tasks": [
+    {
+      "task_id": "drdrill_1",
+      "status": "PENDING",
+      "description": "Restore system from object-lock backup.",
+      "execution_type": "NATIVE_OS_ACTION",
+      "inputs": ["Object-lock backup"],
+      "outputs": ["Restored system state"],
+      "execution_checklist": [
+        {"item_id": "restore_backup", "description": "Restore from object-lock backup.", "status": "PENDING"}
+      ]
+    },
+    {
+      "task_id": "drdrill_2",
+      "status": "PENDING",
+      "description": "Run registry-fsck and confirm no corruption.",
+      "execution_type": "NATIVE_OS_ACTION",
+      "inputs": ["Restored system state"],
+      "outputs": ["fsck log"],
+      "execution_checklist": [
+        {"item_id": "run_fsck", "description": "Run registry-fsck and log results.", "status": "PENDING"}
+      ]
+    },
+    {
+      "task_id": "drdrill_3",
+      "status": "PENDING",
+      "description": "Verify all signatures post-restore.",
+      "execution_type": "NATIVE_OS_ACTION",
+      "inputs": ["Restored system state"],
+      "outputs": ["Signature verification log"],
+      "execution_checklist": [
+        {"item_id": "verify_signatures", "description": "Verify all signatures after restore.", "status": "PENDING"}
+      ]
+    },
+    {
+      "task_id": "drdrill_4",
+      "status": "PENDING",
+      "description": "Document full DR drill procedure and results.",
+      "execution_type": "NATIVE_OS_ACTION",
+      "inputs": ["fsck log", "Signature verification log"],
+      "outputs": ["dr_exercise_report_g###.md"],
+      "execution_checklist": [
+        {"item_id": "document_drdrill", "description": "Document DR drill procedure and results.", "status": "PENDING"}
+      ]
+    },
+    {
+      "task_id": "drdrill_5",
+      "status": "PENDING",
+      "description": "Update ops run-book and onboarding.",
+      "execution_type": "NATIVE_OS_ACTION",
+      "inputs": ["dr_exercise_report_g###.md"],
+      "outputs": ["Updated ops run-book", "Updated onboarding"],
+      "execution_checklist": [
+        {"item_id": "update_docs", "description": "Update ops run-book and onboarding.", "status": "PENDING"}
+      ]
+    }
+  ]
+} 

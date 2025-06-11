@@ -1,0 +1,54 @@
+[PROJECT_NAME]/
+├── haios.config.json
+|
+├── os_root/
+│   ├── state.txt
+│   ├── agent_registry.txt
+│   ├── global_issues_summary.txt
+│   ├── global_project_summary.txt
+│   ├── global_registry_map.txt
+│   ├── human_attention_queue.txt
+│   ├── request_summary.txt
+│   │
+│   ├── agents/
+│   │   ├── persona_coding_assistant.txt
+│   │   ├── persona_testing_agent.txt
+│   │   └── persona_critique_agent.txt
+│   │
+│   ├── initiatives/
+│   │   └── initiative_00002_phase1_mvp/
+│   │       ├── init_plan_00002.txt
+│   │       ├── exec_plan_00003.txt
+│   │       ├── exec_status_00003.txt
+│   │       │
+│   │       ├── issues/
+│   │       │   └── issue_0000X.txt  # (Placeholder for future issues)
+│   │       │
+│   │       └── initiative_issues_summary_00002.txt
+│   │
+│   ├── scaffold_definitions/
+│   │   ├── react_component_v1.json
+│   │   └── nodejs_service_v1.json
+│   │
+│   ├── snapshots/
+│   │   └── snapshot_0000Y.json # (Placeholder for future snapshots)
+│   │
+│   └── user_requests/
+│       └── request_0000Z.txt  # (Placeholder for future user requests)
+│
+├── project_templates/
+│   ├── report_outlines/
+│   │   ├── analysis_report_outline.md
+│   │   └── validation_report_outline.md
+│   │
+│   ├── react_component_template.tsx
+│   └── tsconfig.template.json
+│
+└── project_workspace/
+    ├── docs/
+    │   └── guidelines/
+    │       ├── testing_guidelines.md
+    │       └── coding_standards.md
+    │
+    └── src/
+        └── ... # (To be populated by CONSTRUCT phase tasks)

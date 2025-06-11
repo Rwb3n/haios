@@ -1,0 +1,20 @@
+groups:
+- name: haios_alerts
+  rules:
+  - alert: BudgetWarning
+    expr: haios_usd_spend_total > 0.9 * haios_budget_usd
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "HAiOS budget warning ({{ $labels.plan_id }})"
+      description: "The plan {{ $labels.plan_id }} has exceeded 90% of its USD budget."
+
+  - alert: BudgetExceeded
+    expr: haios_usd_spend_total >= haios_budget_usd
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "HAiOS budget exceeded ({{ $labels.plan_id }})"
+      description: "The plan {{ $labels.plan_id }} has exceeded its USD budget."

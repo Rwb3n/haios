@@ -1,0 +1,144 @@
+repos:
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^(os_root/|core_scaffold/)
+      - id: end-of-file-fixer
+        exclude: ^(os_root/|core_scaffold/)
+      - id: check-yaml
+        exclude: ^(os_root/|core_scaffold/)
+      - id: check-json
+        exclude: ^(os_root/|core_scaffold/)
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: debug-statements
+      - id: check-docstring-first
+      - id: check-case-conflict
+
+  # Python code formatting
+  - repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+      - id: black
+        language_version: python3
+        files: ^src/
+        exclude: ^(os_root/|core_scaffold/)
+
+  # Import sorting
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        files: ^src/
+        exclude: ^(os_root/|core_scaffold/)
+        args: ["--profile", "black", "--line-length", "88"]
+
+  # Linting
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        files: ^src/
+        exclude: ^(os_root/|core_scaffold/)
+        args: 
+          - "--max-line-length=88"
+          - "--extend-ignore=E203,W503,E501"
+          - "--per-file-ignores=__init__.py:F401,tests/*:S101,S106"
+
+  # Security scanning
+  - repo: https://github.com/pycqa/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        files: ^src/
+        exclude: ^(src/tests/|os_root/|core_scaffold/)
+        args: ["-c", "pyproject.toml"]
+
+  # Type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        files: ^src/
+        exclude: ^(src/tests/|os_root/|core_scaffold/)
+        args: ["--ignore-missing-imports", "--no-strict-optional"]
+        additional_dependencies: [types-all]
+
+  # JSON Schema validation
+  - repo: local
+    hooks:
+      - id: validate-schemas
+        name: Validate JSON Schemas
+        entry: python
+        language: system
+        args:
+          - "-c"
+          - |
+            import json
+            import sys
+            from pathlib import Path
+            from jsonschema import Draft7Validator
+            
+            schema_files = list(Path('.').rglob('*.schema.json'))
+            if not schema_files:
+                print("No schema files found")
+                sys.exit(0)
+            
+            print(f"Validating {len(schema_files)} schema files...")
+            for schema_file in schema_files:
+                try:
+                    with open(schema_file) as f:
+                        schema = json.load(f)
+                    Draft7Validator.check_schema(schema)
+                    print(f"✓ {schema_file}")
+                except Exception as e:
+                    print(f"✗ {schema_file}: {e}")
+                    sys.exit(1)
+            print("All schemas valid!")
+        files: '\.schema\.json$'
+        pass_filenames: false
+
+  # HAiOS-specific validations
+  - repo: local
+    hooks:
+      - id: haios-structure-check
+        name: HAiOS Structure Check
+        entry: python
+        language: system
+        args:
+          - "-c"
+          - |
+            import json
+            import sys
+            from pathlib import Path
+            
+            # Check for required OS control files structure
+            required_dirs = ['src', 'docs', 'plans']
+            missing_dirs = [d for d in required_dirs if not Path(d).exists()]
+            
+            if missing_dirs:
+                print(f"Missing required directories: {missing_dirs}")
+                sys.exit(1)
+            
+            # Check for proper .txt extension on OS control files
+            os_control_patterns = ['state.txt', 'plan_*.txt', 'issue_*.txt']
+            
+            print("HAiOS structure validation passed!")
+        pass_filenames: false
+        always_run: true
+
+  # Commit message format (optional)
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.13.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+# Configuration
+default_stages: [commit]
+fail_fast: false
+minimum_pre_commit_version: "3.0.0" 

@@ -1,0 +1,17 @@
+{
+  "plan_type": "COST_REPORT",
+  "goal": "Generate a weekly cost report.",
+  "tasks": [
+    {
+      "task_id": "generate_cost_report_task",
+      "type": "GENERATE_COST_REPORT",
+      "description": "Generate a Markdown report summarizing costs for the last 7 days.",
+      "outputs": [
+        {
+          "path": "os_root/progress_reviews/cost_report_g{g_event}.md",
+          "artifact_id_placeholder": "cost_report_g{g_event}"
+        }
+      ]
+    }
+  ]
+}
