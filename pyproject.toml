@@ -54,6 +54,7 @@ dev = [
     "bandit>=1.7",
     "safety>=2.0",
     "pre-commit>=3.0",
+    "pip-tools>=7.0",
     # Note: Trivy is installed separately as a binary
     # Download from: https://github.com/aquasecurity/trivy/releases
 ]

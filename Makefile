@@ -4,7 +4,7 @@
 .PHONY: help install install-dev test test-unit test-integration test-e2e
 .PHONY: lint format type-check security-scan validate clean build
 .PHONY: docs docs-serve release docker-build docker-run
-.PHONY: pre-commit setup-hooks ci cd
+.PHONY: pre-commit setup-hooks ci cd requirements-lock
 
 # Default target
 help: ## Show this help message
@@ -203,4 +203,7 @@ sbom: ## Generate CycloneDX SBOM
 	@echo "Generating SBOM for project..."
 	pip show cyclonedx-bom >/dev/null 2>&1 || pip install cyclonedx-bom
 	cyclonedx-bom create --output sbom.json
-	@echo "SBOM generated at sbom.json" 
+	@echo "SBOM generated at sbom.json"
+
+requirements-lock: ## Generate requirements.lock.txt using pip-compile
+	pip-compile pyproject.toml --output-file=requirements.lock.txt 
