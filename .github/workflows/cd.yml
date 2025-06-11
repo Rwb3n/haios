@@ -164,7 +164,7 @@ jobs:
     
     - name: Upload Docker security reports
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: docker-security-reports
         path: |

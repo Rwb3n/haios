@@ -15,7 +15,7 @@ from __future__ import annotations
     "authors_and_contributors": [{"g_contribution": 235, "identifier": "Roo"}],
     "internal_dependencies": ["core.exceptions"],
     "external_dependencies": [
-        {"name": "pyage-next", "version_constraint": ">=1.0.0,<2.0.0"}
+        {"name": "age", "version_constraint": ">=1.0.0,<2.0.0"}
     ],
     "linked_issue_ids": ["issue_C1_roadmap"]
   }
