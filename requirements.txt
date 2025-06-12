@@ -1,6 +1,7 @@
 structlog
 age
 jsonschema
+networkx
 portalocker
 psutil
 pynacl
