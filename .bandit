@@ -1,0 +1,3 @@
+[bandit]
+exclude_dirs = tests,src/tests,os_root,core_scaffold
+skips = B101,B110,B403,B404,B601,B603 

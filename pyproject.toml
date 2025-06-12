@@ -194,10 +194,7 @@ ignore_missing_imports = true
 module = "tests.*"
 ignore_errors = true
 
-# Bandit configuration
-[tool.bandit]
-exclude_dirs = ["tests", "src/tests", "os_root", "core_scaffold"]
-skips = ["B101", "B110", "B403", "B404", "B601", "B603"]  # Skip test-related and development issues
+# Bandit configuration moved to .bandit file
 
 # Flake8 configuration (in setup.cfg format for compatibility)
 [tool.flake8]
