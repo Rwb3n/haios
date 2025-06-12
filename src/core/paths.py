@@ -2,19 +2,19 @@ from __future__ import annotations
 
 # ANNOTATION_BLOCK_START
 {
-  "artifact_annotation_header": {
-    "artifact_id_of_host": "core_paths_py_g148",
-    "g_annotation_created": 148,
-    "version_tag_of_host_at_annotation": "1.0.0"
-  },
-  "payload": {
-    "description": "Provides path manipulation utilities with a focus on security, including a sandboxed path joining function.",
-    "artifact_type": "CORE_MODULE_PYTHON",
-    "purpose_statement": "To prevent path traversal vulnerabilities by ensuring all file system access remains within designated project boundaries.",
-    "authors_and_contributors": [{"g_contribution": 148, "identifier": "Cody"}],
-    "internal_dependencies": ["core_exceptions_py_g137"],
-    "linked_issue_ids": ["issue_00121"]
-  }
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "core_paths_py_g148",
+        "g_annotation_created": 148,
+        "version_tag_of_host_at_annotation": "1.0.0",
+    },
+    "payload": {
+        "description": "Provides path manipulation utilities with a focus on security, including a sandboxed path joining function.",
+        "artifact_type": "CORE_MODULE_PYTHON",
+        "purpose_statement": "To prevent path traversal vulnerabilities by ensuring all file system access remains within designated project boundaries.",
+        "authors_and_contributors": [{"g_contribution": 148, "identifier": "Cody"}],
+        "internal_dependencies": ["core_exceptions_py_g137"],
+        "linked_issue_ids": ["issue_00121"],
+    },
 }
 # ANNOTATION_BLOCK_END
 """core.paths
@@ -22,8 +22,8 @@ from __future__ import annotations
 Security-hardened path manipulation utilities.
 """
 import os
-from pathlib import Path
 from contextlib import contextmanager
+from pathlib import Path
 
 from .exceptions import PathEscapeError
 
@@ -70,6 +70,7 @@ def safe_join(sandbox_root: Path, untrusted_subpath: str | Path) -> Path:
             f"Path traversal detected. Attempted to access '{resolved_path}' "
             f"which is outside the sandbox '{sandbox_root}'."
         ) from e
+
 
 @contextmanager
 def chroot(path: Path):

@@ -1,34 +1,39 @@
 # ANNOTATION_BLOCK_START
 {
-  "artifact_annotation_header": {
-    "artifact_id_of_host": "test_schema_converter_py_g235",
-    "g_annotation_last_modified": 235,
-    "version_tag_of_host_at_annotation": "3.1.0"
-  },
-  "payload": {
-    "description": "A production-ready and comprehensive unit test suite for the schema_converter.py utility. This final version includes full coverage for core logic, error handling, and key edge cases like multi-block files, filename collisions, and invalid schema structures.",
-    "artifact_type": "TEST_SCRIPT_PYTHON_UNITTEST",
-    "status_in_lifecycle": "STABLE",
-    "purpose_statement": "To provide high-confidence, verifiable evidence that the schema converter correctly identifies, parses, and writes JSON schemas from various Markdown file formats and handles errors gracefully.",
-    "authors_and_contributors": [
-      {
-        "g_contribution": 49, "identifier": "Successor Agent"
-      },
-      {
-        "g_contribution": 235, "identifier": "Cody", "contribution_summary": "Remediation (exec_plan_00011): Updated quality assessment flags to reflect full test coverage."
-      }
-    ],
-    "internal_dependencies": ["util_schema_converter_py_g10"],
-    "quality_notes": {
-      "overall_quality_assessment": "EXCELLENT",
-      "last_validation_report_ref": "val_report_g36",
-      "unit_tests": { "status": "PASS" }
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "test_schema_converter_py_g235",
+        "g_annotation_last_modified": 235,
+        "version_tag_of_host_at_annotation": "3.1.0",
     },
-    "test_plan_notes_from_scaffold": [
-      { "test_type": "UNIT", "focus_area_or_scenario": "Test filename collision handling.", "current_status": "IMPLEMENTED_AND_PASSING", "g_status_updated": 235 }
-    ],
-    "linked_issue_ids": ["issue_00015", "issue_00044"]
-  }
+    "payload": {
+        "description": "A production-ready and comprehensive unit test suite for the schema_converter.py utility. This final version includes full coverage for core logic, error handling, and key edge cases like multi-block files, filename collisions, and invalid schema structures.",
+        "artifact_type": "TEST_SCRIPT_PYTHON_UNITTEST",
+        "status_in_lifecycle": "STABLE",
+        "purpose_statement": "To provide high-confidence, verifiable evidence that the schema converter correctly identifies, parses, and writes JSON schemas from various Markdown file formats and handles errors gracefully.",
+        "authors_and_contributors": [
+            {"g_contribution": 49, "identifier": "Successor Agent"},
+            {
+                "g_contribution": 235,
+                "identifier": "Cody",
+                "contribution_summary": "Remediation (exec_plan_00011): Updated quality assessment flags to reflect full test coverage.",
+            },
+        ],
+        "internal_dependencies": ["util_schema_converter_py_g10"],
+        "quality_notes": {
+            "overall_quality_assessment": "EXCELLENT",
+            "last_validation_report_ref": "val_report_g36",
+            "unit_tests": {"status": "PASS"},
+        },
+        "test_plan_notes_from_scaffold": [
+            {
+                "test_type": "UNIT",
+                "focus_area_or_scenario": "Test filename collision handling.",
+                "current_status": "IMPLEMENTED_AND_PASSING",
+                "g_status_updated": 235,
+            }
+        ],
+        "linked_issue_ids": ["issue_00015", "issue_00044"],
+    },
 }
 # ANNOTATION_BLOCK_END
 
@@ -82,12 +87,14 @@ LOGGER_NAME = schema_converter.__name__
 # Helper fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture()
 def tmp_src_tgt(tmp_path: Path):
     """Yield ``(source_dir, target_dir)`` and auto‑clean them."""
     src = tmp_path / "source"
     tgt = tmp_path / "target"
-    src.mkdir(); tgt.mkdir()
+    src.mkdir()
+    tgt.mkdir()
     return src, tgt
 
 
@@ -147,12 +154,14 @@ NO_SCHEMA_MD = "# plain doc\n\nno json here"
     "filename, content, expect_files, expect_error_substr",
     [
         ("valid.md", VALID_SCHEMA_MD, ["valid.schema.json"], None),
-        ("plain.md", NO_SCHEMA_MD,            [], None),
-        ("bad_json.md", INVALID_JSON_MD,      [], "Invalid JSON"),
-        ("bad_schema.md", INVALID_SCHEMA_MD,  [], "Invalid JSON‑Schema"),
+        ("plain.md", NO_SCHEMA_MD, [], None),
+        ("bad_json.md", INVALID_JSON_MD, [], "Invalid JSON"),
+        ("bad_schema.md", INVALID_SCHEMA_MD, [], "Invalid JSON‑Schema"),
     ],
 )
-def test_core_cases(tmp_src_tgt, caplog, filename, content, expect_files, expect_error_substr):
+def test_core_cases(
+    tmp_src_tgt, caplog, filename, content, expect_files, expect_error_substr
+):
     src, tgt = tmp_src_tgt
     _write(src / filename, content)
 

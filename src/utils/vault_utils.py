@@ -2,23 +2,23 @@ from __future__ import annotations
 
 # ANNOTATION_BLOCK_START
 {
-  "artifact_annotation_header": {
-    "artifact_id_of_host": "utils_vault_utils_py_g235",
-    "g_annotation_created": 235,
-    "version_tag_of_host_at_annotation": "1.0.0"
-  },
-  "payload": {
-    "description": "A utility module for managing the age-encrypted secrets vault.",
-    "artifact_type": "UTILITY_MODULE_PYTHON",
-    "status_in_lifecycle": "PROPOSED",
-    "purpose_statement": "To provide a secure, file-based vault for managing secrets with different scopes, as per ADR-OS-018.",
-    "authors_and_contributors": [{"g_contribution": 235, "identifier": "Roo"}],
-    "internal_dependencies": ["core.exceptions"],
-    "external_dependencies": [
-        {"name": "age", "version_constraint": ">=1.0.0,<2.0.0"}
-    ],
-    "linked_issue_ids": ["issue_C1_roadmap"]
-  }
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "utils_vault_utils_py_g235",
+        "g_annotation_created": 235,
+        "version_tag_of_host_at_annotation": "1.0.0",
+    },
+    "payload": {
+        "description": "A utility module for managing the age-encrypted secrets vault.",
+        "artifact_type": "UTILITY_MODULE_PYTHON",
+        "status_in_lifecycle": "PROPOSED",
+        "purpose_statement": "To provide a secure, file-based vault for managing secrets with different scopes, as per ADR-OS-018.",
+        "authors_and_contributors": [{"g_contribution": 235, "identifier": "Roo"}],
+        "internal_dependencies": ["core.exceptions"],
+        "external_dependencies": [
+            {"name": "age", "version_constraint": ">=1.0.0,<2.0.0"}
+        ],
+        "linked_issue_ids": ["issue_C1_roadmap"],
+    },
 }
 # ANNOTATION_BLOCK_END
 
@@ -30,16 +30,22 @@ from typing import Any, Dict
 try:
     import age  # type: ignore
 except ImportError:  # pragma: no cover – testing environment stub
-    import types, sys
+    import sys
+    import types
+
     age = types.ModuleType("age")
+
     class _Identity:
         @staticmethod
         def from_bech32(key):
             return _Identity()
+
         def to_public(self):
             return self
+
     def _noop(data, recipients):
         return data
+
     age.Identity = _Identity
     age.encrypt = _noop
     age.decrypt = _noop
@@ -47,6 +53,7 @@ except ImportError:  # pragma: no cover – testing environment stub
     sys.modules["age"] = age
 
 from core.exceptions import VaultError
+
 
 class Vault:
     """Manages the age-encrypted secrets vault."""
@@ -66,7 +73,7 @@ class Vault:
         """Reads and decrypts the secrets from the vault."""
         if not self.vault_path.exists():
             raise VaultError("Vault does not exist. Please initialize it first.")
-        
+
         try:
             with open(self.vault_path, "rb") as f:
                 decrypted_data = age.decrypt(f.read(), [self.key])
@@ -77,7 +84,9 @@ class Vault:
     def _write_secrets(self, secrets: Dict[str, Any]):
         """Encrypts and writes secrets to the vault."""
         try:
-            encrypted_data = age.encrypt(json.dumps(secrets, indent=2).encode(), [self.key.to_public()])
+            encrypted_data = age.encrypt(
+                json.dumps(secrets, indent=2).encode(), [self.key.to_public()]
+            )
             with open(self.vault_path, "wb") as f:
                 f.write(encrypted_data)
         except Exception as e:

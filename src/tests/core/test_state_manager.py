@@ -1,11 +1,11 @@
 # ANNOTATION_BLOCK_START
 {
-  "artifact_annotation_header": {"artifact_id_of_host": "test_state_manager_py_g78"},
-  "payload": {
-    "description": "Unit tests for the StateManager module. Covers the optimistic locking protocol, atomic writes, and error handling.",
-    "artifact_type": "TEST_SCRIPT_PYTHON_PYTEST",
-    "purpose_statement": "To provide evidence that the OS's live state can be managed with high integrity and safety."
-  }
+    "artifact_annotation_header": {"artifact_id_of_host": "test_state_manager_py_g78"},
+    "payload": {
+        "description": "Unit tests for the StateManager module. Covers the optimistic locking protocol, atomic writes, and error handling.",
+        "artifact_type": "TEST_SCRIPT_PYTHON_PYTEST",
+        "purpose_statement": "To provide evidence that the OS's live state can be managed with high integrity and safety.",
+    },
 }
 # ANNOTATION_BLOCK_END
 
@@ -56,12 +56,14 @@ if str(SRC_DIR) not in sys.path:
 
 from utils import state_manager
 from utils.state_manager import StateManager
+from utils.validators import Validator
 
 # ---------------------------------------------------------------------------
 # Helper / fixtures
 # ---------------------------------------------------------------------------
 
-from utils.validators import Validator
+
+
 class DummyValidator(Validator):
     """A minimal validator that can be instructed to pass or raise."""
 
@@ -87,6 +89,7 @@ def _stub_portalocker(monkeypatch):
 
 
 import portalocker
+
 
 class DummyPortalocker:
     class LockException(Exception):
@@ -124,6 +127,7 @@ def manager(state_file: Path, validator: DummyValidator) -> StateManager:
 # Tests
 # ---------------------------------------------------------------------------
 
+
 def test_round_trip_read_write(manager: StateManager, validator: DummyValidator):
     """Initial write then read should succeed and bump version+g."""
 
@@ -151,7 +155,9 @@ def test_stale_write_rejected(manager: StateManager):
         manager.write_state({"beta": 2}, expected_version=1)
 
 
-def test_schema_validation_failure_on_read(manager: StateManager, validator: DummyValidator, state_file: Path):
+def test_schema_validation_failure_on_read(
+    manager: StateManager, validator: DummyValidator, state_file: Path
+):
     """If the on‑disk JSON is invalid, ``SchemaValidationError`` bubbles up."""
 
     # Instruct the validator to raise on validation

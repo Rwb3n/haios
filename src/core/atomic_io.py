@@ -2,29 +2,33 @@ from __future__ import annotations
 
 # ANNOTATION_BLOCK_START
 {
-  "artifact_annotation_header": {
-    "artifact_id_of_host": "core_atomic_io_py_g223",
-    "g_annotation_last_modified": 223,
-    "version_tag_of_host_at_annotation": "1.1.0"
-  },
-  "payload": {
-    "description": "Provides data safety primitives for the HAiOS engine, including atomic file writes and an advisory file lock context manager.",
-    "artifact_type": "CORE_MODULE_PYTHON",
-    "purpose_statement": "To prevent data loss and race conditions when multiple processes could potentially access core OS files.",
-    "authors_and_contributors": [
-      {"g_contribution": 139, "identifier": "Cody"},
-      {"g_contribution": 223, "identifier": "Cody", "contribution_summary": "Remediation (exec_plan_00007): Hardened file_lock to prevent creation on shared locks and added upper-bound version pin to portalocker dependency."}
-    ],
-    "external_dependencies": [
-      {
-        "name": "portalocker",
-        "version_constraint": ">=2.0.0,<3.0",
-        "reason_or_usage": "Provides a cross-platform advisory file locking mechanism, essential for the file_lock context manager."
-      }
-    ],
-    "internal_dependencies": ["core_exceptions_py_g137"],
-    "linked_issue_ids": ["issue_00121"]
-  }
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "core_atomic_io_py_g223",
+        "g_annotation_last_modified": 223,
+        "version_tag_of_host_at_annotation": "1.1.0",
+    },
+    "payload": {
+        "description": "Provides data safety primitives for the HAiOS engine, including atomic file writes and an advisory file lock context manager.",
+        "artifact_type": "CORE_MODULE_PYTHON",
+        "purpose_statement": "To prevent data loss and race conditions when multiple processes could potentially access core OS files.",
+        "authors_and_contributors": [
+            {"g_contribution": 139, "identifier": "Cody"},
+            {
+                "g_contribution": 223,
+                "identifier": "Cody",
+                "contribution_summary": "Remediation (exec_plan_00007): Hardened file_lock to prevent creation on shared locks and added upper-bound version pin to portalocker dependency.",
+            },
+        ],
+        "external_dependencies": [
+            {
+                "name": "portalocker",
+                "version_constraint": ">=2.0.0,<3.0",
+                "reason_or_usage": "Provides a cross-platform advisory file locking mechanism, essential for the file_lock context manager.",
+            }
+        ],
+        "internal_dependencies": ["core_exceptions_py_g137"],
+        "linked_issue_ids": ["issue_00121"],
+    },
 }
 # ANNOTATION_BLOCK_END
 """core.atomic_io
@@ -39,17 +43,15 @@ from pathlib import Path
 from typing import IO, Iterator
 
 import portalocker
-
 from opentelemetry import trace
+
 from .exceptions import AtomicWriteError, WriteConflictError
 
 logger = logging.getLogger(__name__)
 
 
 @contextlib.contextmanager
-def file_lock(
-    path: Path, *, shared: bool = False, create: bool = True
-) -> Iterator[IO]:
+def file_lock(path: Path, *, shared: bool = False, create: bool = True) -> Iterator[IO]:
     """
     A context manager for acquiring a shared or exclusive advisory file lock.
 
@@ -75,7 +77,9 @@ def file_lock(
     """
     # Harden the logic: a shared lock should never create a file.
     if shared and not path.exists():
-        raise FileNotFoundError(f"Cannot acquire shared lock on non-existent file: {path}")
+        raise FileNotFoundError(
+            f"Cannot acquire shared lock on non-existent file: {path}"
+        )
 
     lock_type = portalocker.LOCK_SH if shared else portalocker.LOCK_EX
     mode = "r" if shared else "a+"  # 'a+' creates if not exists and allows read/write
@@ -94,7 +98,11 @@ def file_lock(
         handle = open(path, mode, encoding="utf-8")
         handle.seek(0)
 
-        logger.debug("Attempting to acquire %s lock on %s", "shared" if shared else "exclusive", path)
+        logger.debug(
+            "Attempting to acquire %s lock on %s",
+            "shared" if shared else "exclusive",
+            path,
+        )
         portalocker.lock(handle, lock_type | portalocker.LOCK_NB)
         logger.debug("Lock acquired on %s", path)
         yield handle
@@ -108,7 +116,14 @@ def file_lock(
             portalocker.unlock(handle)
             handle.close()
 
-def atomic_write(path: Path, data: str | bytes, *, encoding: str = "utf-8", signing_key_hex: str | None = None) -> None:
+
+def atomic_write(
+    path: Path,
+    data: str | bytes,
+    *,
+    encoding: str = "utf-8",
+    signing_key_hex: str | None = None,
+) -> None:
     """
     Atomically writes data to a file using a temporary file and an OS rename.
     This operation is concurrency-safe across processes.
@@ -154,7 +169,9 @@ def atomic_write(path: Path, data: str | bytes, *, encoding: str = "utf-8", sign
             try:
                 os.replace(temp_path, path)
             except PermissionError as e:
-                logger.warning("atomic_replace_permission: path=%s, err=%s", str(path), str(e))
+                logger.warning(
+                    "atomic_replace_permission: path=%s, err=%s", str(path), str(e)
+                )
                 with open(path, "wb") as dst:
                     dst.write(write_data)
                 os.remove(temp_path)
@@ -163,6 +180,7 @@ def atomic_write(path: Path, data: str | bytes, *, encoding: str = "utf-8", sign
 
             if signing_key_hex:
                 from utils.signing_utils import sign_file
+
                 sign_file(path, signing_key_hex)
 
     except (portalocker.LockException, BlockingIOError) as e:
@@ -177,4 +195,4 @@ def atomic_write(path: Path, data: str | bytes, *, encoding: str = "utf-8", sign
             try:
                 os.remove(temp_path_str)
             except OSError:
-                pass # Ignore errors on cleanup
+                pass  # Ignore errors on cleanup

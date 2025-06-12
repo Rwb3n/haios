@@ -2,19 +2,19 @@ from __future__ import annotations
 
 # ANNOTATION_BLOCK_START
 {
-  "artifact_annotation_header": {
-    "artifact_id_of_host": "core_config_py_g146",
-    "g_annotation_created": 146,
-    "version_tag_of_host_at_annotation": "1.0.0"
-  },
-  "payload": {
-    "description": "Defines the immutable Config dataclass, providing a type-safe and explicit contract for all OS configuration data.",
-    "artifact_type": "CORE_MODULE_PYTHON",
-    "purpose_statement": "To eliminate brittle, 'magic key' access to configuration and provide a single source of truth for configuration shape.",
-    "authors_and_contributors": [{"g_contribution": 146, "identifier": "Cody"}],
-    "internal_dependencies": ["core_exceptions_py_g137"],
-    "linked_issue_ids": ["issue_00121"]
-  }
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "core_config_py_g146",
+        "g_annotation_created": 146,
+        "version_tag_of_host_at_annotation": "1.0.0",
+    },
+    "payload": {
+        "description": "Defines the immutable Config dataclass, providing a type-safe and explicit contract for all OS configuration data.",
+        "artifact_type": "CORE_MODULE_PYTHON",
+        "purpose_statement": "To eliminate brittle, 'magic key' access to configuration and provide a single source of truth for configuration shape.",
+        "authors_and_contributors": [{"g_contribution": 146, "identifier": "Cody"}],
+        "internal_dependencies": ["core_exceptions_py_g137"],
+        "linked_issue_ids": ["issue_00121"],
+    },
 }
 # ANNOTATION_BLOCK_END
 """core.config
@@ -28,8 +28,10 @@ from typing import Any, Dict, List, NamedTuple
 
 from .exceptions import ConfigError
 
+
 class PathConfig(NamedTuple):
     """Container for all configured paths."""
+
     os_root: Path
     project_workspace: Path
     project_templates: Path
@@ -43,9 +45,11 @@ class PathConfig(NamedTuple):
     exec_plans: Path
     global_registry_map: Path
 
+
 @dataclass(frozen=True)
 class RuntimeConfig:
     """Container for runtime mode settings."""
+
     mode: str
     cli_override_allowed: bool
 
@@ -53,18 +57,22 @@ class RuntimeConfig:
         """Create a new RuntimeConfig instance with updated values."""
         return dataclasses.replace(self, **changes)
 
+
 @dataclass(frozen=True)
 class ExecutionConfig:
     """Container for execution settings."""
+
     isolation_mode: str
 
     def replace(self, **changes: Any) -> ExecutionConfig:
         """Create a new ExecutionConfig instance with updated values."""
         return dataclasses.replace(self, **changes)
 
+
 @dataclass(frozen=True)
 class BudgetsConfig:
     """Container for resource and cost budgets."""
+
     max_cpu_seconds_per_plan: int
     max_mem_bytes_per_plan: int
     max_tokens_per_plan: int
@@ -74,20 +82,24 @@ class BudgetsConfig:
         """Create a new BudgetsConfig instance with updated values."""
         return dataclasses.replace(self, **changes)
 
+
 @dataclass(frozen=True)
 class SecurityConfig:
     """Container for security settings."""
+
     redact_regexes: List[str]
 
     def replace(self, **changes: Any) -> SecurityConfig:
         """Create a new SecurityConfig instance with updated values."""
         return dataclasses.replace(self, **changes)
 
+
 @dataclass(frozen=True)
 class Config:
     """
     An immutable, type-safe representation of the haios.config.json file.
     """
+
     project_name: str
     project_root: Path
     paths: PathConfig
@@ -127,6 +139,7 @@ class Config:
         integration tests.
         """
         import json
+
         p = Path(path)
         with p.open("r", encoding="utf-8") as f:
             data = json.load(f)
@@ -149,21 +162,29 @@ class Config:
         """
         try:
             path_data = config_dict.get("paths", {})
+
             def _p(key, default):
                 return project_root_path / path_data.get(key, default)
+
             paths = PathConfig(
                 os_root=_p("os_root", "os_root"),
                 project_workspace=_p("project_workspace", "project_workspace"),
                 project_templates=_p("project_templates", "project_templates"),
-                scaffold_definitions=_p("scaffold_definitions", "os_root/scaffold_definitions"),
+                scaffold_definitions=_p(
+                    "scaffold_definitions", "os_root/scaffold_definitions"
+                ),
                 guidelines=_p("guidelines", "docs/guidelines"),
                 state_file=_p("state_file", "os_root/state.txt"),
                 schema_dir=_p("schema_dir", "schemas"),
-                human_attention_queue=_p("human_attention_queue", "os_root/human_attention_queue.txt"),
+                human_attention_queue=_p(
+                    "human_attention_queue", "os_root/human_attention_queue.txt"
+                ),
                 secrets_vault=_p("secrets_vault", "os_root/vault.enc"),
                 control=_p("control", "os_root/control"),
                 exec_plans=_p("exec_plans", "os_root/initiatives"),
-                global_registry_map=_p("global_registry_map", "os_root/global_registry_map.txt"),
+                global_registry_map=_p(
+                    "global_registry_map", "os_root/global_registry_map.txt"
+                ),
             )
 
             runtime_data = config_dict.get("runtime", {})
@@ -179,8 +200,12 @@ class Config:
 
             budgets_data = config_dict.get("budgets", {})
             budgets = BudgetsConfig(
-                max_cpu_seconds_per_plan=budgets_data.get("max_cpu_seconds_per_plan", 10_000),
-                max_mem_bytes_per_plan=budgets_data.get("max_mem_bytes_per_plan", 1_000_000_000),
+                max_cpu_seconds_per_plan=budgets_data.get(
+                    "max_cpu_seconds_per_plan", 10_000
+                ),
+                max_mem_bytes_per_plan=budgets_data.get(
+                    "max_mem_bytes_per_plan", 1_000_000_000
+                ),
                 max_tokens_per_plan=budgets_data.get("max_tokens_per_plan", 500_000),
                 max_usd_per_plan=budgets_data.get("max_usd_per_plan", 10.0),
             )

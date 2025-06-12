@@ -14,4 +14,4 @@ from src.utils.state_manager import (  # type: ignore[F401]
     StateManager,
 )
 
-__all__ = ["StateManager"] 
+__all__ = ["StateManager"]

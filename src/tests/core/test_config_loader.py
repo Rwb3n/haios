@@ -2,12 +2,12 @@ from __future__ import annotations
 
 # ANNOTATION_BLOCK_START
 {
-  "artifact_annotation_header": {"artifact_id_of_host": "test_config_loader_py_g77"},
-  "payload": {
-    "description": "Unit tests for the ConfigLoader module. Covers successful loading, error conditions, and behavior of the get() method.",
-    "artifact_type": "TEST_SCRIPT_PYTHON_PYTEST",
-    "purpose_statement": "To provide evidence that the OS configuration can be loaded reliably and safely."
-  }
+    "artifact_annotation_header": {"artifact_id_of_host": "test_config_loader_py_g77"},
+    "payload": {
+        "description": "Unit tests for the ConfigLoader module. Covers successful loading, error conditions, and behavior of the get() method.",
+        "artifact_type": "TEST_SCRIPT_PYTHON_PYTEST",
+        "purpose_statement": "To provide evidence that the OS configuration can be loaded reliably and safely.",
+    },
 }
 # ANNOTATION_BLOCK_END
 
@@ -37,11 +37,11 @@ from typing import Any
 import pytest
 
 from core.config_loader import ConfigLoader
-from utils.validators import Validator, SchemaValidationError
 from core.exceptions import (
     ConfigNotFoundError,
     ConfigParseError,
 )
+from utils.validators import SchemaValidationError, Validator
 
 
 @pytest.fixture()
@@ -77,6 +77,7 @@ def _write_config(path: Path, obj: dict[str, Any]):
 # 1. Happy path
 # ---------------------------------------------------------------------------
 
+
 def test_load_success(schema_and_validator: Validator, config_path: Path):
     _write_config(config_path, {"name": "Ruben"})
 
@@ -89,7 +90,10 @@ def test_load_success(schema_and_validator: Validator, config_path: Path):
 # 2. Access before load
 # ---------------------------------------------------------------------------
 
-def test_malformed_json_raises_decode_error(schema_and_validator: Validator, config_path: Path):
+
+def test_malformed_json_raises_decode_error(
+    schema_and_validator: Validator, config_path: Path
+):
     # Intentionally bad JSON (missing closing brace)
     config_path.write_text('{"name": "Ruben"', encoding="utf-8")
 
@@ -110,6 +114,7 @@ def test_schema_validation_failure(schema_and_validator: Validator, config_path:
 # ---------------------------------------------------------------------------
 # 4. Schema validation failure
 # ---------------------------------------------------------------------------
+
 
 def test_config_not_found_raises(schema_and_validator: Validator, config_path: Path):
     loader = ConfigLoader(config_path=config_path, validator=schema_and_validator)

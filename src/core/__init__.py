@@ -1,14 +1,14 @@
 # ANNOTATION_BLOCK_START
 {
-  "artifact_annotation_header": {
-    "artifact_id_of_host": "core_init_py_g136",
-    "g_annotation_created": 136,
-    "version_tag_of_host_at_annotation": "1.0.0"
-  },
-  "payload": {
-    "description": "Initializes the 'core' module as a Python package.",
-    "artifact_type": "CORE_MODULE_PYTHON"
-  }
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "core_init_py_g136",
+        "g_annotation_created": 136,
+        "version_tag_of_host_at_annotation": "1.0.0",
+    },
+    "payload": {
+        "description": "Initializes the 'core' module as a Python package.",
+        "artifact_type": "CORE_MODULE_PYTHON",
+    },
 }
 # ANNOTATION_BLOCK_END
 

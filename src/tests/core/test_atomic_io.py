@@ -1,17 +1,17 @@
 # ANNOTATION_BLOCK_START
 {
-  "artifact_annotation_header": {
-    "artifact_id_of_host": "test_core_atomic_io_py_g144",
-    "g_annotation_created": 144,
-    "version_tag_of_host_at_annotation": "1.0.0"
-  },
-  "payload": {
-    "description": "Unit tests for the core.atomic_io module. Validates the correctness of atomic_write and the concurrency safety of file_lock.",
-    "artifact_type": "TEST_SCRIPT_PYTHON_PYTEST",
-    "purpose_statement": "To provide verifiable evidence that the data safety primitives prevent data loss and race conditions.",
-    "internal_dependencies": ["core_atomic_io_py_g139"],
-    "linked_issue_ids": ["issue_00121"]
-  }
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "test_core_atomic_io_py_g144",
+        "g_annotation_created": 144,
+        "version_tag_of_host_at_annotation": "1.0.0",
+    },
+    "payload": {
+        "description": "Unit tests for the core.atomic_io module. Validates the correctness of atomic_write and the concurrency safety of file_lock.",
+        "artifact_type": "TEST_SCRIPT_PYTHON_PYTEST",
+        "purpose_statement": "To provide verifiable evidence that the data safety primitives prevent data loss and race conditions.",
+        "internal_dependencies": ["core_atomic_io_py_g139"],
+        "linked_issue_ids": ["issue_00121"],
+    },
 }
 # ANNOTATION_BLOCK_END
 """tests.core.test_atomic_io
@@ -30,6 +30,7 @@ from core.exceptions import AtomicWriteError, WriteConflictError
 
 # --- Test atomic_write ---
 
+
 def test_atomic_write_creates_file_with_correct_content(tmp_path: Path):
     """Happy path: atomic_write should create a file with the expected data."""
     test_file = tmp_path / "test.txt"
@@ -38,6 +39,7 @@ def test_atomic_write_creates_file_with_correct_content(tmp_path: Path):
 
     assert test_file.exists()
     assert test_file.read_text(encoding="utf-8") == test_data
+
 
 def test_atomic_write_overwrites_existing_file(tmp_path: Path):
     """atomic_write should correctly replace an existing file."""
@@ -48,6 +50,7 @@ def test_atomic_write_overwrites_existing_file(tmp_path: Path):
     atomic_io.atomic_write(test_file, new_data)
 
     assert test_file.read_text(encoding="utf-8") == new_data
+
 
 @patch("os.replace")
 def test_atomic_write_cleans_up_temp_file_on_failure(mock_replace, tmp_path: Path):
@@ -63,7 +66,9 @@ def test_atomic_write_cleans_up_temp_file_on_failure(mock_replace, tmp_path: Pat
     temp_files = list(tmp_path.glob(".*"))
     assert not temp_files
 
+
 # --- Test file_lock ---
+
 
 def lock_file_exclusively(path: Path, queue: multiprocessing.Queue):
     """Target function for a separate process to acquire a lock."""
@@ -78,6 +83,7 @@ def lock_file_exclusively(path: Path, queue: multiprocessing.Queue):
         queue.put("CONFLICT")
     except Exception as e:
         queue.put(f"ERROR: {e}")
+
 
 def test_file_lock_prevents_concurrent_exclusive_writes(tmp_path: Path):
     """A second process must not be able to acquire an exclusive lock."""
@@ -100,6 +106,7 @@ def test_file_lock_prevents_concurrent_exclusive_writes(tmp_path: Path):
     # Wait for Process 1 to finish and release the lock
     assert queue.get(timeout=2) == "RELEASED"
     p1.join()
+
 
 def test_file_lock_allows_concurrent_shared_reads(tmp_path: Path):
     """Multiple processes should be able to acquire shared locks concurrently."""

@@ -1,23 +1,26 @@
 # ANNOTATION_BLOCK_START
 {
-  "artifact_annotation_header": {
-    "artifact_id_of_host": "utils_state_manager_py_g229",
-    "g_annotation_last_modified": 229,
-    "version_tag_of_host_at_annotation": "2.0.0"
-  },
-  "payload": {
-    "description": "A concurrency-safe class for atomic, version-checked, and schema-validated reads and writes of the OS's central state.txt file.",
-    "authors_and_contributors": [
-      {"g_contribution": 74, "identifier": "Cody"},
-      {"g_contribution": 164, "identifier": "Cody"},
-      {
-        "g_contribution": 229, "identifier": "Cody",
-        "contribution_summary": "Remediation (exec_plan_00009): Replaced local exception hierarchy with imports from core.exceptions. Fixed a latent P0 bug in the implementation of `increment_g_and_write`."
-      }
-    ],
-    "internal_dependencies": ["..core.exceptions", "..utils.validators"],
-    "external_dependencies": [{"name": "portalocker", "version_constraint": ">=2.0.0,<3.0"}]
-  }
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "utils_state_manager_py_g229",
+        "g_annotation_last_modified": 229,
+        "version_tag_of_host_at_annotation": "2.0.0",
+    },
+    "payload": {
+        "description": "A concurrency-safe class for atomic, version-checked, and schema-validated reads and writes of the OS's central state.txt file.",
+        "authors_and_contributors": [
+            {"g_contribution": 74, "identifier": "Cody"},
+            {"g_contribution": 164, "identifier": "Cody"},
+            {
+                "g_contribution": 229,
+                "identifier": "Cody",
+                "contribution_summary": "Remediation (exec_plan_00009): Replaced local exception hierarchy with imports from core.exceptions. Fixed a latent P0 bug in the implementation of `increment_g_and_write`.",
+            },
+        ],
+        "internal_dependencies": ["..core.exceptions", "..utils.validators"],
+        "external_dependencies": [
+            {"name": "portalocker", "version_constraint": ">=2.0.0,<3.0"}
+        ],
+    },
 }
 # ANNOTATION_BLOCK_END
 
@@ -32,30 +35,39 @@ import portalocker
 
 from core.exceptions import DataSafetyError
 
+
 class StateIOError(DataSafetyError):
     """Base class for state I/O errors."""
+
 
 class StateNotFoundError(StateIOError):
     """Raised when the state file cannot be found."""
 
+
 class StatePermissionError(StateIOError):
     """Raised on permission errors reading/writing the state file."""
+
 
 class StateDecodeError(StateIOError):
     """Raised when the state file is not valid JSON."""
 
+
 class StaleStateException(StateIOError):
     """Raised on write if the in-memory version is out of sync with the disk."""
+
 
 # If Validator isn't provided (e.g., in lightweight tests) we fall back to a
 # permissive stub that performs no schema validation.
 from .validators import Validator
 
+
 class _NoopValidator:
     def validate(self, *_args, **_kwargs):
         return True
 
+
 logger = logging.getLogger(__name__)
+
 
 class StateManager:
     """Manage a JSON state file with versioning & validation."""
@@ -66,7 +78,9 @@ class StateManager:
     GLOBAL_KEY = "g"
     SCHEMA_ID = "state"
 
-    def __init__(self, state_path: os.PathLike | str, validator: Optional[Validator] = None) -> None:
+    def __init__(
+        self, state_path: os.PathLike | str, validator: Optional[Validator] = None
+    ) -> None:
         self._state_path = Path(state_path)
         self._validator = validator or _NoopValidator()
         self._lock_timeout = 10  # seconds
@@ -83,7 +97,9 @@ class StateManager:
         try:
             data = json.loads(raw)
         except json.JSONDecodeError as exc:
-            raise StateDecodeError(f"Malformed JSON in {self._state_path}: {exc}") from exc
+            raise StateDecodeError(
+                f"Malformed JSON in {self._state_path}: {exc}"
+            ) from exc
 
         self._validator.validate(self.SCHEMA_ID, data)
         return data
@@ -92,14 +108,18 @@ class StateManager:
         """Write *data* atomically, replacing the previous state. Assumes lock is held."""
         tmp_dir = self._state_path.parent
         try:
-            with tempfile.NamedTemporaryFile("w", dir=tmp_dir, delete=False, encoding="utf-8") as tmp:
+            with tempfile.NamedTemporaryFile(
+                "w", dir=tmp_dir, delete=False, encoding="utf-8"
+            ) as tmp:
                 json.dump(data, tmp, indent=2)
                 tmp.flush()
                 os.fsync(tmp.fileno())
             os.replace(tmp.name, self._state_path)
         except PermissionError as exc:
             # On Windows a locked file cannot be replaced; log and skip write in DEV/test environments.
-            logger.warning("atomic_write_permission_skipped", path=str(self._state_path))
+            logger.warning(
+                "atomic_write_permission_skipped", path=str(self._state_path)
+            )
             return
         finally:
             try:
@@ -111,10 +131,12 @@ class StateManager:
         """Return a deep copy of the current state dict."""
         # Try multiple approaches to read the state file, handling Windows locking issues
         state = {}
-        
+
         # First try: use portalocker with shared lock
         try:
-            with portalocker.Lock(str(self._state_path), "r", timeout=self._lock_timeout):
+            with portalocker.Lock(
+                str(self._state_path), "r", timeout=self._lock_timeout
+            ):
                 state = self._read_state()
         except (portalocker.LockException, PermissionError):
             # Second try: direct file read without lock (for Windows compatibility)
@@ -124,7 +146,7 @@ class StateManager:
                     state = json.loads(raw) if raw else {}
                 except (PermissionError, json.JSONDecodeError):
                     state = {}
-        
+
         # If we got an empty state due to permission error, try reading the file directly
         if not state and self._state_path.exists():
             try:
@@ -132,19 +154,25 @@ class StateManager:
                 state = json.loads(raw) if raw else {}
             except (PermissionError, json.JSONDecodeError):
                 state = {}
-        
+
         # Ensure backward compatibility: always expose 'g' at top level
         if self.HEADER_KEY in state and self.GLOBAL_KEY not in state:
             state[self.GLOBAL_KEY] = state[self.HEADER_KEY][self.GLOBAL_KEY]
-        
+
         return state
 
-    def write_state(self, new_payload: Dict[str, Any], expected_version: Optional[int] = None) -> None:
+    def write_state(
+        self, new_payload: Dict[str, Any], expected_version: Optional[int] = None
+    ) -> None:
         """Attempt to persist *new_payload*."""
         try:
             self._state_path.parent.mkdir(parents=True, exist_ok=True)
-            with portalocker.Lock(str(self._state_path), "r", timeout=self._lock_timeout):
-                current_state = self._read_state() if self._state_path.exists() else None
+            with portalocker.Lock(
+                str(self._state_path), "r", timeout=self._lock_timeout
+            ):
+                current_state = (
+                    self._read_state() if self._state_path.exists() else None
+                )
 
             if current_state and self.HEADER_KEY in current_state:
                 current_version = current_state[self.HEADER_KEY][self.VERSION_KEY]
@@ -158,10 +186,15 @@ class StateManager:
 
             next_version = current_version + 1
             next_global = (
-                current_state[self.HEADER_KEY][self.GLOBAL_KEY] + 1 if current_state else 0
+                current_state[self.HEADER_KEY][self.GLOBAL_KEY] + 1
+                if current_state
+                else 0
             )
             next_state = {
-                self.HEADER_KEY: {self.VERSION_KEY: next_version, self.GLOBAL_KEY: next_global},
+                self.HEADER_KEY: {
+                    self.VERSION_KEY: next_version,
+                    self.GLOBAL_KEY: next_global,
+                },
                 self.PAYLOAD_KEY: new_payload,
                 self.GLOBAL_KEY: next_global,  # Mirror for backward compat
             }
@@ -169,7 +202,9 @@ class StateManager:
             self._atomic_write(next_state)
             logger.info("State written -> v=%s g=%s", next_version, next_global)
         except portalocker.LockException as exc:
-            raise StateIOError(f"Could not obtain lock on {self._state_path}: {exc}") from exc
+            raise StateIOError(
+                f"Could not obtain lock on {self._state_path}: {exc}"
+            ) from exc
 
     def increment_g_and_write(self) -> int:
         """Reads the current state, increments g, and writes it back atomically. Returns the new g-value."""
@@ -177,7 +212,9 @@ class StateManager:
             self._state_path.parent.mkdir(parents=True, exist_ok=True)
 
             # Use "a+" mode to create file if it doesn't exist, then seek to start
-            with portalocker.Lock(str(self._state_path), "a+", timeout=self._lock_timeout) as fh:
+            with portalocker.Lock(
+                str(self._state_path), "a+", timeout=self._lock_timeout
+            ) as fh:
                 fh.seek(0)  # Move to start for reading
                 try:
                     raw = fh.read()
@@ -196,8 +233,12 @@ class StateManager:
                     _legacy_flat = False
                 else:
                     # Legacy flat format: {'g': 123}
-                    current_version = current_state.get("v", -1) if current_state else -1
-                    current_g = current_state.get(self.GLOBAL_KEY, -1) if current_state else -1
+                    current_version = (
+                        current_state.get("v", -1) if current_state else -1
+                    )
+                    current_g = (
+                        current_state.get(self.GLOBAL_KEY, -1) if current_state else -1
+                    )
                     _legacy_flat = True
 
                 next_version = current_version + 1
@@ -224,10 +265,16 @@ class StateManager:
                 fh.flush()
                 os.fsync(fh.fileno())
 
-                logger.info("State g-counter incremented -> v=%s g=%s", next_version, next_global)
+                logger.info(
+                    "State g-counter incremented -> v=%s g=%s",
+                    next_version,
+                    next_global,
+                )
                 return next_global
         except portalocker.LockException as exc:
-            raise StateIOError(f"Could not obtain lock on {self._state_path} to increment g-counter: {exc}") from exc
+            raise StateIOError(
+                f"Could not obtain lock on {self._state_path} to increment g-counter: {exc}"
+            ) from exc
 
     def set_current_task(self, task_id: str) -> None:
         """A convenience method to update only the current task ID in the state."""

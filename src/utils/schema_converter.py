@@ -1,52 +1,58 @@
 # ANNOTATION_BLOCK_START
 {
-  "artifact_annotation_header": {
-    "artifact_id_of_host": "util_schema_converter_py_g10",
-    "entity_type": "EMBEDDED_ANNOTATION_BLOCK",
-    "schema_definition_id_ref": "HybridAI_OS_EmbeddedAnnotation_Payload_v5.3",
-    "g_annotation_created": 10,
-    "g_annotation_last_modified": 48,
-    "version_tag_of_host_at_annotation": "2.0.0"
-  },
-  "payload": {
-    "description": "A production-ready utility to parse Markdown documentation, extract all JSON schema blocks, validate their structure, and write them to a mirrored directory structure, handling filename collisions and edge cases.",
-    "artifact_type": "UTILITY_SCRIPT_PYTHON",
-    "status_in_lifecycle": "STABLE",
-    "purpose_statement": "To automate the creation of machine-readable schemas from human-readable documentation, enforcing data integrity for the HAiOS.",
-    "authors_and_contributors": [
-      {
-        "_locked_entry_definition": True,
-        "g_contribution": 10, "identifier": "Successor Agent", "contribution_summary": "Initial creation."
-      },
-      {
-        "_locked_entry_definition": True,
-        "g_contribution": 40, "identifier": "Successor Agent", "contribution_summary": "Remediation 1: Multi-block parsing."
-      },
-      {
-        "_locked_entry_definition": True,
-        "g_contribution": 41, "identifier": "Successor Agent", "contribution_summary": "Remediation 2: Added jsonschema self-validation."
-      },
-      {
-        "_locked_entry_definition": True,
-        "g_contribution": 48, "identifier": "Successor Agent", "contribution_summary": "Final Micro-Remediation (exec_plan_00045): Fixed logger mismatch and hardened regex."
-      }
-    ],
-    "key_logic_points_or_summary": [
-      "Instantiates and uses a module-specific logger (`logging.getLogger(__name__)`).",
-      "Uses a robust, multi-line regex to find all `json` code blocks.",
-      "Implements a filename suffixing strategy (_1, _2) to prevent collisions.",
-      "Uses jsonschema.Draft202012Validator to validate that the extracted object is a structurally valid JSON Schema.",
-      "Handles UnicodeDecodeError during file reads gracefully."
-    ],
-    "quality_notes": {
-      "overall_quality_assessment": "NEEDS_IMPROVEMENT",
-      "last_validation_report_ref": "val_report_g36",
-      "unit_tests": {
-        "status": "NEEDS_REWORK"
-      }
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "util_schema_converter_py_g10",
+        "entity_type": "EMBEDDED_ANNOTATION_BLOCK",
+        "schema_definition_id_ref": "HybridAI_OS_EmbeddedAnnotation_Payload_v5.3",
+        "g_annotation_created": 10,
+        "g_annotation_last_modified": 48,
+        "version_tag_of_host_at_annotation": "2.0.0",
     },
-    "linked_issue_ids": ["issue_00015", "issue_00044"]
-  }
+    "payload": {
+        "description": "A production-ready utility to parse Markdown documentation, extract all JSON schema blocks, validate their structure, and write them to a mirrored directory structure, handling filename collisions and edge cases.",
+        "artifact_type": "UTILITY_SCRIPT_PYTHON",
+        "status_in_lifecycle": "STABLE",
+        "purpose_statement": "To automate the creation of machine-readable schemas from human-readable documentation, enforcing data integrity for the HAiOS.",
+        "authors_and_contributors": [
+            {
+                "_locked_entry_definition": True,
+                "g_contribution": 10,
+                "identifier": "Successor Agent",
+                "contribution_summary": "Initial creation.",
+            },
+            {
+                "_locked_entry_definition": True,
+                "g_contribution": 40,
+                "identifier": "Successor Agent",
+                "contribution_summary": "Remediation 1: Multi-block parsing.",
+            },
+            {
+                "_locked_entry_definition": True,
+                "g_contribution": 41,
+                "identifier": "Successor Agent",
+                "contribution_summary": "Remediation 2: Added jsonschema self-validation.",
+            },
+            {
+                "_locked_entry_definition": True,
+                "g_contribution": 48,
+                "identifier": "Successor Agent",
+                "contribution_summary": "Final Micro-Remediation (exec_plan_00045): Fixed logger mismatch and hardened regex.",
+            },
+        ],
+        "key_logic_points_or_summary": [
+            "Instantiates and uses a module-specific logger (`logging.getLogger(__name__)`).",
+            "Uses a robust, multi-line regex to find all `json` code blocks.",
+            "Implements a filename suffixing strategy (_1, _2) to prevent collisions.",
+            "Uses jsonschema.Draft202012Validator to validate that the extracted object is a structurally valid JSON Schema.",
+            "Handles UnicodeDecodeError during file reads gracefully.",
+        ],
+        "quality_notes": {
+            "overall_quality_assessment": "NEEDS_IMPROVEMENT",
+            "last_validation_report_ref": "val_report_g36",
+            "unit_tests": {"status": "NEEDS_REWORK"},
+        },
+        "linked_issue_ids": ["issue_00015", "issue_00044"],
+    },
 }
 # ANNOTATION_BLOCK_END
 
@@ -101,6 +107,7 @@ SCHEMA_BLOCK_REGEX = re.compile(
 
 
 from typing import Iterator
+
 
 def _iter_markdown_files(root: Path) -> Iterator[Path]:
     """Yield Markdown files (*.md, *.markdown) under *root* recursively."""
@@ -182,7 +189,9 @@ def find_and_parse_schemas(
             try:
                 Draft202012Validator.check_schema(data)
             except Exception as exc:
-                logger.error("Invalid JSON‑Schema in %s block %d: %s", md_path, idx, exc)
+                logger.error(
+                    "Invalid JSON‑Schema in %s block %d: %s", md_path, idx, exc
+                )
                 errors += 1
                 continue
 
@@ -210,7 +219,9 @@ def _parse_args(argv: List[str] | None = None) -> argparse.Namespace:
 def main(argv: List[str] | None = None) -> None:
     args = _parse_args(argv)
 
-    level = logging.WARNING - (10 * args.verbose)  # WARN by default, INFO (-v), DEBUG (-vv)
+    level = logging.WARNING - (
+        10 * args.verbose
+    )  # WARN by default, INFO (-v), DEBUG (-vv)
     logging.basicConfig(format=LOG_FORMAT, level=level)
 
     ok, errors = find_and_parse_schemas(args.source, args.target, dry_run=args.check)
