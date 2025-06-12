@@ -30,7 +30,7 @@ import pytest
 
 from src.core.config import Config
 from src.plan_runner import PlanRunner
-from src.state_manager import StateManager
+from src.utils.state_manager import StateManager
 
 
 @pytest.fixture
