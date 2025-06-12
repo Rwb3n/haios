@@ -130,8 +130,8 @@ jobs:
         # Run the demo in dev-fast mode to ensure basic functionality
         timeout 30s python -m src --demo --mode dev-fast || true
         
-        # Run specific E2E test scenarios
-        pytest src/tests/ -v -k "e2e" --tb=short
+        # Run specific E2E test scenarios (disable coverage for E2E tests)
+        pytest src/tests/ -v -k "e2e" --tb=short --no-cov
     
     - name: Archive test artifacts
       if: failure()
