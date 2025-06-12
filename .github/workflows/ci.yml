@@ -198,7 +198,7 @@ jobs:
         sarif_file: 'trivy-fs-results.sarif'
     
     - name: Upload Trivy config scan results to GitHub Security tab
-      if: always()
+      if: ${{ always() && hashFiles('trivy-config-results.sarif') != '' }}
       uses: github/codeql-action/upload-sarif@v2
       with:
         sarif_file: 'trivy-config-results.sarif'
