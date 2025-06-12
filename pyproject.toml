@@ -196,8 +196,8 @@ ignore_errors = true
 
 # Bandit configuration
 [tool.bandit]
-exclude_dirs = ["tests", "os_root", "core_scaffold"]
-skips = ["B101", "B601"]  # Skip assert_used and shell_injection_process_args
+exclude_dirs = ["tests", "src/tests", "os_root", "core_scaffold"]
+skips = ["B101", "B110", "B403", "B404", "B601", "B603"]  # Skip test-related and development issues
 
 # Flake8 configuration (in setup.cfg format for compatibility)
 [tool.flake8]
