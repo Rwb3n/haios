@@ -16,22 +16,34 @@ This directory contains all Architecture Decision Records for the Hybrid AI Oper
 - [**ADR-OS-010**](ADR-OS-010.md) - **Atomic File Operations** - Safe, concurrent file operations with locking and conflict resolution
 - [**ADR-OS-011**](ADR-OS-011.md) - **Task Failure Handling & Remediation** - Structured approach to handling and recovering from failures
 - [**ADR-OS-016**](ADR-OS-016.md) - **Dependency Management & Topological Sorting** - Task ordering and dependency cycle detection
+- [**ADR-OS-022**](ADR-OS-022.md) - **Mechanical Inventory Buffer** - Prevent redundant work via buffered resources
+- [**ADR-OS-023**](ADR-OS-023.md) - **Universal Idempotency & Retry Policy** - Safe retries with exponential back-off and circuit breakers
+- [**ADR-OS-024**](ADR-OS-024.md) - **Async & Eventual Consistency Patterns** - Message-bus driven workflows and sagas
+- [**ADR-OS-025**](ADR-OS-025.md) - **Zero-Trust Internal Security Baseline** - Mutual-TLS and token authentication for all internal calls
+- [**ADR-OS-026**](ADR-OS-026.md) - **Dynamic Topology & Health Checking** - Service discovery, heartbeats, and failure propagation
+- [**ADR-OS-027**](ADR-OS-027.md) - **Global & Vector Clock Event Ordering** - Preserve causality in distributed workflows
+- [**ADR-OS-028**](ADR-OS-028.md) - **Partition Tolerance & Split-Brain Protocol** - CAP trade-offs and reconciliation strategy
 
 ### 🧪 **Quality Assurance**
 - [**ADR-OS-007**](ADR-OS-007.md) - **Integrated Testing Lifecycle** - Evidence-based testing with separation of duties
 - [**ADR-OS-008**](ADR-OS-008.md) - **OS-Generated Reporting Strategy** - Analysis, Validation, and Progress reports
 - [**ADR-OS-014**](ADR-OS-014.md) - **Project Guidelines Artifact** - Durable project standards and bias prevention checklists
+- [**ADR-OS-021**](ADR-OS-021.md) - **Explicit Assumption Surfacing** - Mandatory confidence & self-critique blocks in all artifacts
+- [**ADR-OS-031**](ADR-OS-031.md) - **Pre-Initiative Source Artifact Standards** - Required upstream documentation for every initiative
+- [**ADR-OS-032**](ADR-OS-032.md) - **Frameworks Registry & Enforcement** - Canonical models, compliance proofs, and CI lint rules
 
 ### 🤖 **Agent Management**
 - [**ADR-OS-012**](ADR-OS-012.md) - **Dynamic Agent Management** - Runtime agent registration and configuration
 - [**ADR-OS-015**](ADR-OS-015.md) - **Precision Context Loading** - Efficient, targeted context loading for LLM agents
 - [**ADR-OS-018**](ADR-OS-018.md) - **MCP Tool Integration** - Model Context Protocol for external tool access
+- [**ADR-OS-030**](ADR-OS-030.md) - **Archetypal Agent Roles & Protocols** - Fixed role set with access and escalation contracts
 
 ### 📊 **Monitoring & Operations**
 - [**ADR-OS-009**](ADR-OS-009.md) - **Issue Management & Summarization** - Structured issue tracking with tiered summaries
 - [**ADR-OS-013**](ADR-OS-013.md) - **Artifact Registry & Linking** - Global artifact registry for dependency tracking
 - [**ADR-OS-019**](ADR-OS-019.md) - **Observability & Budget Governance** - Prometheus metrics, cost tracking, and budget enforcement
 - [**ADR-OS-020**](ADR-OS-020.md) - **Runtime Modes & Developer Experience** - STRICT vs DEV_FAST modes for different use cases
+- [**ADR-OS-029**](ADR-OS-029.md) - **Universal Observability & Trace Propagation** - End-to-end distributed tracing standard
 
 ### 🚀 **Implementation Phases**
 - [**ADR-OS-017**](ADR-OS-017.md) - **Phase 1 - MVP Engine & Tooling** - Minimum viable product scope and deliverables
@@ -52,16 +64,16 @@ This directory contains all Architecture Decision Records for the Hybrid AI Oper
 ### 🏗️ **Foundation (001-005)**
 Core architectural decisions that establish the fundamental structure and data model of HAiOS.
 
-### ⚙️ **Operations (006-011, 016)**
+### ⚙️ **Operations (006-011, 016, 022-028)**
 Decisions about how the system operates, including phases, file operations, and error handling.
 
-### 🔍 **Quality & Testing (007-008, 014)**
+### 🔍 **Quality & Testing (007-008, 014, 021, 031, 032)**
 Decisions about ensuring system quality, testing strategies, and reporting mechanisms.
 
-### 🤖 **Agent Integration (012, 015, 018)**
+### 🤖 **Agent Integration (012, 015, 018, 030)**
 Decisions about how AI agents are managed, configured, and interact with external tools.
 
-### 📈 **Monitoring & Management (009, 013, 019-020)**
+### 📈 **Monitoring & Management (009, 013, 019-020, 029)**
 Decisions about system observability, artifact management, and operational modes.
 
 ### 🎯 **Implementation (017)**

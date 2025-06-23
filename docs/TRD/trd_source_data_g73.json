@@ -1,0 +1,22 @@
+{
+  "os_file_header": {
+    "file_id": "trd_source_data_g73",
+    "entity_type": "TRD_SOURCE_DATA",
+    "schema_definition_id_ref": "HybridAI_OS_TRD_SourceData_v1.0",
+    "g_file_created": 73,
+    "g_file_last_modified": 73,
+    "v_file_instance": 1
+  },
+  "payload": {
+    "records": [
+      {"adr_id": "ADR-OS-001", "clarification_file": "docs/ADR/clarifications/ADR-OS-001_clarification.md", "title": "Five-phase operational loop & state management"},
+      {"adr_id": "ADR-OS-002", "clarification_file": "docs/ADR/clarifications/ADR-OS-002_clarification.md", "title": "Hierarchical planning store lineage guarantees"},
+      {"adr_id": "ADR-OS-003", "clarification_file": "docs/ADR/clarifications/ADR-OS-003_clarification.md", "title": "EmbeddedAnnotationBlock embedding strategy"},
+      {"adr_id": "ADR-OS-004", "clarification_file": "docs/ADR/clarifications/ADR-OS-004_clarification.md", "title": "Global event & version counters"},
+      {"adr_id": "ADR-OS-005", "clarification_file": "docs/ADR/clarifications/ADR-OS-005_clarification.md", "title": "Configuration-driven directory structure"},
+      {"adr_id": "ADR-OS-006", "clarification_file": "docs/ADR/clarifications/ADR-OS-006_clarification.md", "title": "Schema-based scaffolding system"},
+      {"adr_id": "ADR-OS-007", "clarification_file": "docs/ADR/clarifications/ADR-OS-007_clarification.md", "title": "Evidence-based testing lifecycle"},
+      {"adr_id": "ADR-OS-008", "clarification_file": "docs/ADR/clarifications/ADR-OS-008_clarification.md", "title": "Narrative Markdown reports generation"}
+    ]
+  }
+} 

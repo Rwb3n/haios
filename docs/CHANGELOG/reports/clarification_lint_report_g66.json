@@ -1,0 +1,85 @@
+{
+  "os_file_header": {
+    "file_id": "clarification_lint_report_g66",
+    "entity_type": "REPORT",
+    "schema_definition_id_ref": "HybridAI_OS_LintReport_Payload_v1.0",
+    "g_file_created": 66,
+    "g_file_last_modified": 66,
+    "v_file_instance": 1
+  },
+  "payload": {
+    "report_summary": "Schema & style linting of ADR clarification records 001–008 completed. All files parsed; issues identified for subsequent cleanup tasks.",
+    "files": [
+      {
+        "file": "docs/ADR/clarifications/ADR-OS-001_clarification.md",
+        "issues": [
+          "duplicate_sections_detected (Architect-1 Response repeated)",
+          "multiple_Distributed_Systems_Compliance_checklists",
+          "placeholder_tokens_present ({{TODO-*}})",
+          "open_questions_without_responses"
+        ]
+      },
+      {
+        "file": "docs/ADR/clarifications/ADR-OS-002_clarification.md",
+        "issues": [
+          "placeholder_tokens_present ({{TODO-*}})",
+          "open_questions_without_responses"
+        ]
+      },
+      {
+        "file": "docs/ADR/clarifications/ADR-OS-003_clarification.md",
+        "issues": [
+          "initial_draft_TBD_placeholder",
+          "missing_formal_reviews_section_content",
+          "placeholder_tokens_present ({{TRACE-ID}} {{VECTOR-CLOCK}})"
+        ]
+      },
+      {
+        "file": "docs/ADR/clarifications/ADR-OS-004_clarification.md",
+        "issues": [
+          "missing_initial_draft_content",
+          "placeholder_tokens_present ({{TRACE-ID}})",
+          "distributed_compliance_checklist_status_mismatch"
+        ]
+      },
+      {
+        "file": "docs/ADR/clarifications/ADR-OS-005_clarification.md",
+        "issues": [
+          "missing_initial_draft_content",
+          "placeholder_tokens_present ({{TRACE-ID}})",
+          "distributed_compliance_checklist_status_mismatch"
+        ]
+      },
+      {
+        "file": "docs/ADR/clarifications/ADR-OS-006_clarification.md",
+        "issues": [
+          "missing_initial_draft_content",
+          "placeholder_tokens_present ({{TRACE-ID}})",
+          "distributed_compliance_checklist_status_mismatch"
+        ]
+      },
+      {
+        "file": "docs/ADR/clarifications/ADR-OS-007_clarification.md",
+        "issues": [
+          "missing_initial_draft_content",
+          "placeholder_tokens_present ({{TRACE-ID}})",
+          "distributed_compliance_checklist_status_mismatch",
+          "open_objections_pending_resolution"
+        ]
+      },
+      {
+        "file": "docs/ADR/clarifications/ADR-OS-008_clarification.md",
+        "issues": [
+          "missing_initial_draft_content",
+          "open_questions_table_unanswered",
+          "placeholder_tokens_present ({{TRACE-ID}})",
+          "missing_formal_reviews_section_content"
+        ]
+      }
+    ],
+    "metrics": {
+      "total_files_scanned": 8,
+      "total_issues_found": 29
+    }
+  }
+} 

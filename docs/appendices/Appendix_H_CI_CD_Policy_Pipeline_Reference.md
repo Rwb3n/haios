@@ -31,9 +31,10 @@ Defines the standard CI/CD workflows, gates, and security/observability requirem
 
 1. **Test Suite** – matrix test across Python 3.9-3.12, linting, typing, coverage upload.
 2. **Schema Validation & Compliance** – validates JSON schemas; fails build if ADR-023-029 fields missing.
-3. **End-to-End Tests** – executes demo in dev-fast mode and archives artifacts.
-4. **Security Scan** – Bandit, Safety, Trivy with SARIF upload.
-5. **Build Check** – validates package build integrity.
+3. **Clarification Artifact Validation** – custom linter checks that every ADR (001-032) has a corresponding clarification file under `docs/ADR/clarifications/` **and** that each clarification file contains all mandatory template sections (Assumptions & Constraints, Dependencies & Risks, Summary, Clarification Questions, Responses, Traceability, Distributed-Systems Compliance). Build fails on any mismatch or missing section.
+4. **End-to-End Tests** – executes demo in dev-fast mode and archives artifacts.
+5. **Security Scan** – Bandit, Safety, Trivy with SARIF upload.
+6. **Build Check** – validates package build integrity.
 
 ## CD Pipeline Overview
 
@@ -97,6 +98,7 @@ CI will fail unless:
 * All tests pass with **≥ 85 % coverage**
 * No lint/type/security errors
 * Schema validation & distributed-systems compliance linter pass
+* Clarification artefact linter confirms 1-to-1 ADR↔clarification mapping and template completeness
 
 ## Monitoring & Observability
 
