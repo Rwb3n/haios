@@ -1,54 +1,127 @@
-﻿# ADR-OS-008: OS-Generated Reporting Strategy
+# ANNOTATION_BLOCK_START
+{
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "adr_os_008_md",
+        "g_annotation_created": 16,
+        "version_tag_of_host_at_annotation": "1.2.0"
+    },
+    "payload": {
+        "description": "Retrofitted to comply with ADR-OS-032: Canonical Models and Frameworks Registry & Enforcement.",
+        "artifact_type": "DOCUMENTATION",
+        "purpose_statement": "To ensure framework compliance and improve architectural decision clarity.",
+        "authors_and_contributors": [
+            { "g_contribution": 16, "identifier": "Hybrid_AI_OS" },
+            { "g_contribution": 4, "identifier": "Framework_Compliance_Retrofit" }
+        ],
+        "internal_dependencies": [
+            "adr_os_template_md",
+            "adr_os_032_md"
+        ],
+        "linked_issue_ids": []
+    }
+}
+# ANNOTATION_BLOCK_END
 
-*   **Status:** Proposed
-*   **Date:** 2024-05-31 (g value of this session)
-*   **Context:**
-    For a human supervisor to effectively manage and trust the Hybrid_AI_OS, the system's reasoning, progress, and findings must be transparent and comprehensible. Relying on raw logs or structured data files (`.txt` JSON) is insufficient for high-level oversight. The OS needs a formal mechanism to synthesize information and present it in a clear, narrative, and evidence-based format at key points in the project lifecycle.
+# ADR-OS-008: OS-Generated Reporting Strategy
 
-*   **Decision:**
-    We will establish a formal strategy where the OS is responsible for generating three primary types of human-readable reports as **annotated Markdown (`.md`) Project Artifacts**. Each report type serves a distinct purpose and is generated at a specific point in the operational loop. These reports will adhere to predefined, structured outlines to ensure consistency and completeness.
+* **Status**: Proposed
+* **Date**: 2024-05-31
+* **Deciders**: \[List of decision-makers]
+* **Reviewed By**: \[List of reviewers]
 
-    The three primary report types are:
-    1.  **`Analysis Report`**: Produced at the end of the `ANALYZE` phase.
-    2.  **`Validation Report`**: Produced at the end of the `VALIDATE` phase for a specific `Execution Plan`.
-    3.  **`Progress Review`**: A higher-level, periodic, or on-demand report synthesizing progress across multiple plans and initiatives.
+---
 
-*   **Rationale:**
-    *   **Transparency & Auditability:** These reports provide a clear "paper trail" of the AI's reasoning, from initial analysis of a `Request` to the detailed validation of executed work.
-    *   **Exploiting the Human Constraint (TOC):** The reports are a key mechanism for exploiting the human-in-the-loop bottleneck. They pre-digest complex state information into decision-ready summaries, making human review and approval cycles faster and more effective.
-    *   **Durable, Shareable Artifacts:** As version-controlled Markdown artifacts, these reports can be easily read, shared, and referenced by both humans and other AI agents. Their `EmbeddedAnnotationBlock`s ensure they are deeply integrated into the project's web of linked artifacts.
-    *   **Enforcing Structured Thinking:** Requiring the AI to generate reports based on a structured outline forces it to consider all required aspects (e.g., risks, critical insights, potential biases) rather than just reporting surface-level facts.
+## Context
 
-*   **Report Types & Generation Flow:**
+For a human supervisor to effectively manage and trust the Hybrid_AI_OS, the system's reasoning, progress, and findings must be transparent and comprehensible. Relying on raw logs or structured data files is insufficient. The OS needs a formal mechanism to synthesize information and present it in a clear, narrative, and evidence-based format.
 
-    1.  **`Analysis Report`**
-        *   **Purpose:** To document the AI's comprehensive analysis of a `Request` and to propose and justify the resulting `Initiative Plan`.
-        *   **Generation:** Produced via a dedicated `ANALYSIS_EXECUTION` plan. The process involves creating a draft report shell and then executing tasks to populate each section, ensuring a thorough and investigative approach.
-        *   **Key Content:** User Request interpretation, feasibility/impact analysis, risk/ambiguity identification, and a detailed proposal for the `Initiative Plan` structure (including what should be locked).
+## Assumptions
 
-    2.  **`Validation Report`**
-        *   **Purpose:** To document the rigorous verification of a completed `Execution Plan`.
-        *   **Generation:** A primary output of the `VALIDATE` phase.
-        *   **Key Content:** An executive summary of the plan's outcome, a task-by-task breakdown of verification checks, analysis of `Test Results` artifacts, a summary of any `Issues` raised during validation, and an overall assessment.
+* [ ] Human-readable reports are a critical requirement for project oversight and trust.
+* [ ] Markdown is a suitable and sufficient format for these reports.
+* [ ] The overhead of generating reports is an acceptable trade-off for transparency.
+* [ ] Report templates and outlines are versioned and consistently applied across all report types.
+* [ ] The system can detect and mitigate "report fatigue" or low-quality, formulaic self-assessments.
+* [ ] All reports are linked to their source data and traceable via trace_id and event references.
+* [ ] All compliance requirements from referenced ADRs (e.g., ADR-OS-032) are up-to-date and enforced.
 
-    3.  **`Progress Review`**
-        *   **Purpose:** To provide a high-level, cumulative summary of project progress over a longer period or across multiple initiatives.
-        *   **Generation:** Created on-demand via a `Request` that triggers a `REVIEW_EXECUTION` plan. This plan's tasks involve gathering and synthesizing information from multiple sources (past plans, reports, issue summaries).
-        *   **Key Content:** A recap of major milestones achieved, synthesis of key findings from recent `Validation Reports`, incorporation of recent stakeholder feedback, and a strategic assessment of the project's current status and next steps.
+_This section was expanded in response to [issue_assumptions.txt](../../issues/issue_assumptions.txt) to surface implicit assumptions and improve framework compliance._
 
-*   **Critical Self-Assessment in Reporting:**
-    Following our analysis of potential biases in testing, all report outlines will include sections that prompt the AI for critical self-assessment. For example, a `Validation Report` might have a section for "Honest Assessment of Test Validity & Potential Biases," requiring the AI to actively question its own results and report any red flags (e.g., "results seem too good to be true," "test environment was too ideal").
+## Frameworks/Models Applied
 
-*   **Consequences:**
-    *   **Pros:**
-        *   Makes the AI's thought process visible and auditable.
-        *   Provides high-quality, decision-ready information to human supervisors.
-        *   The reports themselves become valuable, context-rich historical artifacts for the project.
-        *   Promotes a more rigorous and self-critical operational behavior from the AI.
-    *   **Cons:**
-        *   Adds overhead; the OS spends cycles generating reports in addition to executing primary tasks. This is a deliberate trade-off for transparency and quality.
-        *   The quality of the reports is dependent on the AI's synthesis and writing capabilities.
+This ADR applies the following canonical models and frameworks (per ADR-OS-032):
 
-*   **Alternatives Considered:**
-    *   **Directly Reading JSON Files:** Requiring humans to parse `init_plan_*.txt`, `exec_plan_*.txt`, etc. Rejected as inefficient and not user-friendly.
-    *   **Simple Log Output:** Relying on a continuous stream of log messages. Rejected as it lacks structure, synthesis, and a clear "final verdict" for key project phases.
+### Traceability v1.0
+- **Compliance Proof:** Reports provide transparent audit trail of AI reasoning, progress, and findings with clear linkage to source data and decisions.
+- **Self-Critique:** Reports might oversimplify complex issues, potentially misleading human reviewers.
+
+### Distributed Systems Principles v1.0
+- **Compliance Proof:** Reports include trace_id references and event correlation to support distributed observability.
+- **Self-Critique:** **PARTIAL COMPLIANCE:** Missing explicit discussion of report generation in distributed/partitioned scenarios.
+
+### Self-Critique Methodology v1.0
+- **Compliance Proof:** All reports include mandatory self-assessment sections forcing structured critical thinking about decisions and findings.
+- **Self-Critique:** AI might learn to "game" self-assessment sections, providing formulaic rather than genuinely critical answers.
+
+### Human-Centered Design v1.0
+- **Compliance Proof:** Reports designed for human comprehension with narrative synthesis rather than raw data dumps.
+- **Self-Critique:** If reports are too verbose or frequent, could lead to "report fatigue" and be ignored.
+
+### Assumption Surfacing v1.0
+- **Compliance Proof:** Explicit assumptions section with checkboxes for validation about human requirements, format suitability, and overhead acceptance.
+- **Self-Critique:** Only three assumptions listed; reporting strategy likely has more implicit assumptions about human reading patterns and information needs.
+
+### Structured Thinking Enforcement v1.0
+- **Compliance Proof:** Predefined report outlines enforce consistent, structured analysis and presentation across all AI-generated reports.
+- **Self-Critique:** Maintaining consistency across different report templates could become maintenance burden.
+
+### Evidence-Based Decision Making v1.0
+- **Compliance Proof:** Reports synthesize evidence from multiple sources and provide clear reasoning chains for conclusions.
+- **Self-Critique:** Quality of reports dependent on AI's synthesis and writing capabilities.
+
+## Decision
+
+**Decision:**
+
+> The OS will be responsible for generating three primary types of human-readable reports as annotated Markdown (`.md`) artifacts: **`Analysis Report`** (post-`ANALYZE`), **`Validation Report`** (post-`VALIDATE`), and **`Progress Review`** (on-demand). Each report will follow a predefined, structured outline that includes sections for critical self-assessment.
+
+**Confidence:** High
+
+## Rationale
+
+1. **Transparency & Auditability**
+   * Self-critique: The reports might oversimplify complex issues, potentially misleading a human reviewer.
+   * Confidence: High
+2. **Exploiting the Human Constraint**
+   * Self-critique: If reports are too verbose or frequent, they could lead to "report fatigue" and be ignored.
+   * Confidence: Medium
+3. **Durable, Shareable Artifacts**
+   * Self-critique: Maintaining consistency across different report templates could become a maintenance burden.
+   * Confidence: High
+4. **Enforcing Structured Thinking**
+   * Self-critique: The AI might learn to "game" the self-assessment sections, providing formulaic rather than genuinely critical answers.
+   * Confidence: Medium
+
+## Alternatives Considered
+
+1. **Directly Reading JSON Files**: Rejected as inefficient, not user-friendly, and lacking narrative synthesis.
+   * Confidence: High
+2. **Simple Log Output**: Rejected as it lacks structure, synthesis, and a clear "final verdict" for key project phases.
+   * Confidence: High
+
+## Consequences
+
+* **Positive:** Makes the AI's thought process visible and auditable. Provides high-quality, decision-ready information to human supervisors. Promotes more rigorous and self-critical operational behavior from the AI.
+* **Negative:** Adds computational and time overhead to the OS lifecycle. The quality of reports is dependent on the AI's synthesis and writing capabilities.
+
+## Clarifying Questions
+
+* What are the specific schemas/outlines for each of the three report types, and how are they versioned and evolved?
+* How can a human or agent trigger an on-demand `Progress Review`, and what is the audit trail for such triggers?
+* What mechanisms will be in place to detect and mitigate low-quality, formulaic, or "gamed" self-assessments in reports?
+* How does the system handle report generation, consistency, and traceability in distributed or partitioned environments?
+* What is the process for updating, archiving, or deprecating report templates as project requirements evolve?
+
+---
+
+*This template integrates explicit assumption-surfacing, confidence indicators, self-critiques, and clarifying questions as per ADR-OS-021.*

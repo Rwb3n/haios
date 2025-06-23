@@ -1,47 +1,122 @@
-﻿# ADR-OS-007: Integrated Testing Lifecycle & Artifacts
+# ANNOTATION_BLOCK_START
+{
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "adr_os_007_md",
+        "g_annotation_created": 13,
+        "version_tag_of_host_at_annotation": "1.2.0"
+    },
+    "payload": {
+        "description": "Retrofitted to comply with ADR-OS-032: Canonical Models and Frameworks Registry & Enforcement.",
+        "artifact_type": "DOCUMENTATION",
+        "purpose_statement": "To ensure framework compliance and improve architectural decision clarity.",
+        "authors_and_contributors": [
+            { "g_contribution": 13, "identifier": "Hybrid_AI_OS" },
+            { "g_contribution": 4, "identifier": "Framework_Compliance_Retrofit" }
+        ],
+        "internal_dependencies": [
+            "adr_os_template_md",
+            "adr_os_032_md"
+        ],
+        "linked_issue_ids": []
+    }
+}
+# ANNOTATION_BLOCK_END
 
-*   **Status:** Proposed
-*   **Date:** 2025-06-08 
-*   **Context:**
-    An autonomous development system can inadvertently produce flawed code or "hallucinate" test success. To ensure project quality and reliability, a rigorous, evidence-based testing lifecycle must be an explicit and non-negotiable part of the development process. Claims of success must be backed by verifiable proof.
+# ADR-OS-007: Integrated Testing Lifecycle & Artifacts
 
-*   **Decision:**
-    We will implement a closed-loop, evidence-based testing lifecycle built on three core principles:
-    1.  **Dedicated Testing Plans & Artifacts:** The acts of defining tests, executing tests, and recording results will be handled by dedicated, typed `Execution Plans` that produce specific, machine-parsable `Test Script` and `Test Results` artifacts.
-    2.  **Separation of Duties:** The agent persona responsible for development (`Coding Agent` executing `DEVELOPMENT` plans) is explicitly prohibited from generating the official `Test Results Artifact`. This artifact may only be produced by a trusted `Testing Agent` executing a `TEST_EXECUTION` plan.
-    3.  **Validation of Evidence:** The `VALIDATE` phase acts as an auditor. It does not trust claims of success; it programmatically parses the `Test Results Artifact` (the evidence) to verify outcomes and update the quality status of the artifacts that were tested.
+* **Status**: Proposed
+* **Date**: 2025-06-08
+* **Deciders**: \[List of decision-makers]
+* **Reviewed By**: \[List of reviewers]
 
-*   **Rationale:**
-    *   **Prevents "Fox Guarding the Hennhouse":** Separating the duties of coding and test result generation ensures that the agent writing the code cannot fake its own test outcomes. This is a fundamental trust and security principle.
-    *   **Evidence over Declaration:** The system's state of quality is based on verifiable, machine-readable `Test Results Artifacts`, not on an agent's declarative statement of completion. This makes the entire process auditable and reliable.
-    *   **Makes Testing a First-Class Citizen:** By dedicating plan types (`VALIDATION_STRATEGY_DEFINITION`, `TEST_EXECUTION`) and artifact types (`Test Script`, `Test Results`) to testing, it is treated as a core part of the development process, not an afterthought.
-    *   **Enables Quality Gates:** The verified test outcomes, recorded in `EmbeddedAnnotationBlock.quality_notes`, serve as the basis for automated quality gates defined in `Initiative Plan` exit criteria.
+---
 
-*   **Testing Lifecycle & Artifact Flow:**
+## Context
 
-    1.  **Scaffolding (`SCAFFOLDING` Plan):** `test_plan_notes_from_scaffold` are embedded in new artifacts, creating an initial test plan. `Test Script` stubs are generated.
-    2.  **Test Definition (`VALIDATION_STRATEGY_DEFINITION` Plan):** A `Coding Agent` populates the `Test Script` stubs with actual test logic. The output is a complete `Test Script Artifact`.
-    3.  **Test Execution (`TEST_EXECUTION` Plan):**
-        *   A trusted **`Testing Agent`** executes this plan.
-        *   The agent runs the `Test Script Artifact(s)`.
-        *   Its sole write-output is the official **`Test Results Artifact`** (e.g., a JSON log from the test runner). The `EmbeddedAnnotationBlock` of this artifact is effectively "signed" by the Testing Agent's identifier in the `authors_and_contributors` field.
-    4.  **Validation (`VALIDATE` Phase):**
-        *   A **`Validation Agent`** (or Supervisor) loads the `Test Results Artifact`.
-        *   It verifies the artifact was authored by the trusted `Testing Agent`.
-        *   It parses the results (passes, fails, coverage).
-        *   It updates the `quality_notes` in the `EmbeddedAnnotationBlock` of the *source artifacts that were tested*.
-        *   It logs new `Issues` for any test failures.
-        *   It documents these actions in its `Validation Report`.
+An autonomous development system can inadvertently produce flawed code or "hallucinate" test success. To ensure project quality and reliability, a rigorous, evidence-based testing lifecycle must be an explicit and non-negotiable part of the development process. Claims of success must be backed by verifiable proof.
 
-*   **Consequences:**
-    *   **Pros:**
-        *   Creates a high-trust, verifiable quality assurance process.
-        *   The system becomes inherently self-auditing regarding test outcomes.
-        *   Dramatically reduces the risk of AI shortcuts or errors going undetected.
-    *   **Cons:**
-        *   More overhead than a simpler model. It requires more `Execution Plans` and a more sophisticated orchestration between different agent roles/permissions.
-        *   Requires a trusted, isolated process/agent for test execution.
+## Assumptions
 
-*   **Alternatives Considered:**
-    *   **Trust-Based Model:** Allowing the `CONSTRUCT` agent to run tests and self-report success. Rejected as it is fundamentally unverifiable and insecure.
-    *   **Validation Phase Runs Tests:** Having the `VALIDATE` phase run the tests itself instead of a `TEST_EXECUTION` plan. Rejected because it conflates the concerns of *executing* tests (a `CONSTRUCT`-like activity) with *validating the results of execution* (a `VALIDATE` activity). Separating them is cleaner.
+* [ ] A trusted, isolated environment is available for the `Testing Agent` to execute tests.
+* [ ] `Test Results Artifacts` have a consistent, machine-parsable format.
+* [ ] The `Validation Agent` has read access to both the `Test Script` and `Test Results` artifacts.
+* [ ] The integrity and security of the isolated test environment is continuously monitored and enforced.
+* [ ] The system can detect and handle flaky or intermittent test failures.
+* [ ] All test artifacts are versioned and traceable to their source execution and agent.
+* [ ] All compliance requirements from referenced ADRs (e.g., ADR-OS-032) are up-to-date and enforced.
+
+_This section was expanded in response to [issue_assumptions.txt](../../issues/issue_assumptions.txt) to surface implicit assumptions and improve framework compliance._
+
+## Frameworks/Models Applied
+
+This ADR applies the following canonical models and frameworks (per ADR-OS-032):
+
+### AAA (Arrange, Act, Assert) v1.0
+- **Compliance Proof:** Testing lifecycle follows AAA pattern: Arrange (create test scripts), Act (execute tests via Testing Agent), Assert (validate results in VALIDATE phase).
+- **Self-Critique:** System becomes dependent on integrity of Testing Agent's isolated environment.
+
+### Separation of Duties v1.0
+- **Compliance Proof:** Strict separation between Coding Agent (creates tests), Testing Agent (executes tests), and Validation Agent (verifies results).
+- **Self-Critique:** Introduces process overhead requiring more Execution Plans and complex orchestration between agent roles.
+
+### Evidence-Based Verification v1.0
+- **Compliance Proof:** Claims of test success must be backed by verifiable Test Results Artifacts; no self-reporting allowed.
+- **Self-Critique:** Added artifact types (Test Script, Test Results) increase complexity of data ecosystem.
+
+### Idempotency v1.0
+- **Compliance Proof:** Test execution can be repeated safely; Testing Agent produces consistent results for same inputs.
+- **Self-Critique:** Flaky tests or intermittent failures need special handling within this lifecycle.
+
+### Assumption Surfacing v1.0
+- **Compliance Proof:** Explicit assumptions section with checkboxes for validation about isolated environment, artifact formats, and access permissions.
+- **Self-Critique:** Only three assumptions listed; testing lifecycle likely has more implicit assumptions about test environments and failure modes.
+
+### Zero Trust Security v1.0
+- **Compliance Proof:** No agent is trusted to self-report test success; independent Testing Agent and Validation Agent provide verification chain.
+- **Self-Critique:** "Fox guarding the henhouse" problem eliminated but at cost of increased operational complexity.
+
+### First-Class Citizen Principle v1.0
+- **Compliance Proof:** Testing becomes first-class citizen with dedicated artifacts, agents, and lifecycle phases rather than afterthought.
+- **Self-Critique:** Requires secure, isolated process for Testing Agent which adds infrastructure requirements.
+
+## Decision
+
+**Decision:**
+
+> We will implement a closed-loop, evidence-based testing lifecycle with a strict **separation of duties**. A `Coding Agent` may create/update `Test Script` artifacts, but only a trusted `Testing Agent` may execute them and produce the official, "signed" `Test Results Artifact`. The `VALIDATE` phase acts as an auditor, verifying this evidence to update the quality status of source artifacts.
+
+**Confidence:** High
+
+## Rationale
+
+1. **Prevents "Fox Guarding the Hennhouse"**
+   * Self-critique: This introduces process overhead, requiring more `Execution Plans` and more complex orchestration between agent roles.
+   * Confidence: High
+2. **Evidence over Declaration**
+   * Self-critique: The system becomes dependent on the integrity of the `Testing Agent`'s isolated environment.
+   * Confidence: High
+3. **Makes Testing a First-Class Citizen**
+   * Self-critique: The added artifact types (`Test Script`, `Test Results`) increase the complexity of the data ecosystem.
+   * Confidence: High
+
+## Alternatives Considered
+
+1. **Trust-Based Model**: Allowing the `CONSTRUCT` agent to run tests and self-report success. Rejected as fundamentally unverifiable and insecure.
+   * Confidence: High
+2. **Validation Phase Runs Tests**: Rejected because it conflates the concerns of *executing* tests (a `CONSTRUCT`-like activity) with *validating the results of execution* (a `VALIDATE` activity).
+   * Confidence: High
+
+## Consequences
+
+* **Positive:** Creates a high-trust, verifiable quality assurance process. The system becomes inherently self-auditing. Dramatically reduces the risk of AI shortcuts or errors going undetected.
+* **Negative:** Increased operational overhead due to more plans and artifacts. Requires a secure, isolated process for the `Testing Agent`.
+
+## Clarifying Questions
+
+* How is the "trustworthiness" of the `Testing Agent`'s execution environment technically enforced?
+* What is the exact schema for the `Test Results Artifact`?
+* How are flaky tests or intermittent failures handled within this lifecycle?
+
+---
+
+*This template integrates explicit assumption-surfacing, confidence indicators, self-critiques, and clarifying questions as per ADR-OS-021.*

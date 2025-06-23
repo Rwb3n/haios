@@ -1,0 +1,11 @@
+{
+  "issue_id": "missing_diagrams_adr_compliance",
+  "status": "OPEN",
+  "priority": "MEDIUM",
+  "created_g": 4,
+  "title": "Missing Explicit Diagrams in ADRs",
+  "description": "Multiple ADRs marked NON-COMPLIANCE for Explicit Diagramming. Need: ADR-001 (state machine), ADR-002 (hierarchy), ADR-003 (annotation), ADR-005 (directory tree), ADR-006 (scaffolding).",
+  "linked_plan_ids": ["adr_framework_compliance_retrofit"],
+  "assignee": "Future_Documentation_Agent",
+  "tags": ["framework-compliance", "diagrams", "technical-debt"]
+}

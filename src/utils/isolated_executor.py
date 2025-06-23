@@ -26,6 +26,7 @@ import multiprocessing
 import os
 import time
 from pathlib import Path
+from typing import Any, Dict
 
 import psutil
 
@@ -34,7 +35,13 @@ from core.exceptions import PathEscapeError
 from task_executor import execute_task
 
 
-def _isolated_task_wrapper(task, config, state_manager, secrets, result_queue):
+def _isolated_task_wrapper(
+    task: Dict[str, Any],
+    config: Config,
+    state_manager: Any,
+    secrets: Dict[str, Any],
+    result_queue: multiprocessing.Queue,
+) -> None:
     """A wrapper function to run a task in a separate process."""
     try:
         # This is a simplified check. A more robust implementation would
@@ -54,9 +61,11 @@ class IsolatedTaskExecutor:
     def __init__(self, config: Config):
         self.config = config
 
-    def execute(self, task, state_manager, secrets) -> bool:
+    def execute(
+        self, task: Dict[str, Any], state_manager: Any, secrets: Dict[str, Any]
+    ) -> bool:
         """Executes a task in an isolated process."""
-        result_queue = multiprocessing.Queue()
+        result_queue: multiprocessing.Queue = multiprocessing.Queue()
         process = multiprocessing.Process(
             target=_isolated_task_wrapper,
             args=(task, self.config, state_manager, secrets, result_queue),
@@ -83,4 +92,4 @@ class IsolatedTaskExecutor:
         if isinstance(result, Exception):
             raise result
 
-        return result
+        return bool(result)

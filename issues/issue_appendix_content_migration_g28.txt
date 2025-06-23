@@ -1,0 +1,11 @@
+{
+  "issue_id": "issue_appendix_content_migration_g28",
+  "status": "CLOSED",
+  "resolution": "Content fully migrated in g45-g46 remediation.",
+  "created_g": 28,
+  "title": "Appendix content placeholders need full migration",
+  "description": "Appendices A–H contain placeholder 'migrated content snippet' sections. Full content from source documents must be migrated, formatted, and verified.",
+  "linked_plan_id_ref": "appendix_refactor_g25",
+  "severity": "MEDIUM",
+  "trace_id": "g28_validation"
+} 

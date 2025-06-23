@@ -54,7 +54,7 @@ from utils.state_manager import StateManager
 logger = structlog.get_logger()
 
 
-def _load_registry(registry_path: Path) -> Dict:
+def _load_registry(registry_path: Path) -> Dict[str, Any]:
     """Loads the global registry map into memory using a shared lock.
 
     If the registry file does **not** yet exist (first run, clean checkout, or
@@ -77,7 +77,12 @@ def _load_registry(registry_path: Path) -> Dict:
             if not content:
                 logger.warning("registry_map_empty", path=str(registry_path))
                 return {"os_file_header": {}, "payload": {"artifact_registry_tree": {}}}
-            return json.loads(content)
+            registry_data = json.loads(content)
+            return (
+                dict(registry_data)
+                if isinstance(registry_data, dict)
+                else {"os_file_header": {}, "payload": {"artifact_registry_tree": {}}}
+            )
     except (json.JSONDecodeError, DataSafetyError) as e:
         logger.error("registry_map_load_failed", err=str(e))
         return {"os_file_header": {}, "payload": {"artifact_registry_tree": {}}}
@@ -342,7 +347,7 @@ def handle_rotate_registry(
             logger.info("registry_rotated", backup_path=str(backup_path))
 
         # Create a new, empty registry
-        new_registry = {"payload": {"artifact_registry_tree": {}}}
+        new_registry: Dict[str, Any] = {"payload": {"artifact_registry_tree": {}}}
         atomic_write(registry_path, json.dumps(new_registry, indent=2))
         return True
     except Exception as e:

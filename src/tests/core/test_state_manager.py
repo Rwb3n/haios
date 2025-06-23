@@ -40,7 +40,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Union
 
 import pytest
 
@@ -70,14 +70,17 @@ class DummyValidator(Validator):
         self._should_raise = False
         self.calls: int = 0
 
-    def set_invalid(self, raise_exc: Exception | None) -> None:
+    def set_invalid(self, raise_exc: Union[Exception, None]) -> None:
         self._should_raise = True
         self._exc = raise_exc
 
     def validate(self, schema_id: str, data_to_validate: Dict[str, Any]) -> None:
         self.calls += 1
         if self._should_raise:
-            raise self._exc
+            if self._exc is not None:
+                raise self._exc
+            else:
+                raise Exception("Validation failed")
 
 
 # All tests stub ``portalocker.lock`` to a no‑op to avoid the need for admin

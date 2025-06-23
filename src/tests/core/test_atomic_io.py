@@ -21,6 +21,7 @@ Tests for the data safety primitives in core.atomic_io.
 import multiprocessing
 import os
 from pathlib import Path
+from typing import Any
 from unittest.mock import patch
 
 import pytest
@@ -70,7 +71,7 @@ def test_atomic_write_cleans_up_temp_file_on_failure(mock_replace, tmp_path: Pat
 # --- Test file_lock ---
 
 
-def lock_file_exclusively(path: Path, queue: multiprocessing.Queue):
+def lock_file_exclusively(path: Path, queue: Any):
     """Target function for a separate process to acquire a lock."""
     try:
         with atomic_io.file_lock(path):
@@ -88,7 +89,7 @@ def lock_file_exclusively(path: Path, queue: multiprocessing.Queue):
 def test_file_lock_prevents_concurrent_exclusive_writes(tmp_path: Path):
     """A second process must not be able to acquire an exclusive lock."""
     test_file = tmp_path / "lock_test.txt"
-    queue = multiprocessing.Queue()
+    queue: Any = multiprocessing.Queue()
 
     # Process 1 acquires the lock
     p1 = multiprocessing.Process(target=lock_file_exclusively, args=(test_file, queue))

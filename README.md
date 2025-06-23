@@ -102,10 +102,8 @@ make test-coverage     # Detailed coverage report
 ## 📚 Documentation
 
 - **[Onboarding Guide](docs/onboarding/README.md)**: Start here for new contributors
-- **[CI/CD Setup](docs/CI_CD_SETUP.md)**: Complete CI/CD pipeline documentation
-- **[Architecture Docs](docs/Document_1/)**: Core principles and phase logic
-- **[Schema Definitions](docs/Document_2/)**: JSON schema specifications
-- **[Scaffold Specs](docs/Document_3/)**: Scaffold definition specification
+- **[Appendices A–H](docs/appendices/)**: Core principles, operational guides, scaffold template, schema directory, testing, frameworks registry, and CI/CD policy
+- **[Schema Directory](docs/schema/)**: Canonical JSON-schema specifications (formerly "Document 2")
 - **[ADRs](docs/ADR/)**: Architectural decision records
 - **[Reports](docs/reports/)**: Progress and completion reports
 

@@ -23,6 +23,7 @@ in task_executor.
 import json
 import multiprocessing
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -34,7 +35,7 @@ NUM_PROCESSES = 5
 ITEMS_PER_PROCESS = 10
 
 
-def worker_function(registry_path: Path, process_id: int, lock: multiprocessing.Lock):
+def worker_function(registry_path: Path, process_id: int, lock: Any):
     """
     Simulates an agent process that repeatedly adds entries to the registry.
     """

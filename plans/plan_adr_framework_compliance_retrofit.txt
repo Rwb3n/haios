@@ -1,0 +1,87 @@
+﻿{
+    "plan_id":  "adr_framework_compliance_retrofit",
+    "status":  "DONE",
+    "preceding_plan_id_ref":  "roadmap_standardization",
+    "created_g":  "\u003ccurrent_g\u003e",
+    "description":  "Retrofit all existing ADRs (001-032) to comply with ADR-OS-032 by adding explicit framework compliance sections, visual/proof sections, and structured model references.",
+    "tasks":  [
+                  {
+                      "task_id":  "adr_batch_1_retrofit",
+                      "status":  "DONE",
+                      "description":  "Retrofit ADRs 001-008 to include framework compliance sections and required proofs.",
+                      "execution_type":  "NATIVE_OS_ACTION",
+                      "inputs":  [
+                                     "docs/ADR/ADR-OS-001.md through ADR-OS-008.md",
+                                     "ADR-OS-032.md"
+                                 ],
+                      "outputs":  [
+                                      "Updated ADR files with framework compliance sections"
+                                  ]
+                  },
+                  {
+                      "task_id":  "adr_batch_2_retrofit",
+                      "status":  "DONE",
+                      "dependencies":  [
+                                           "adr_batch_1_retrofit"
+                                       ],
+                      "description":  "Retrofit ADRs 009-016 to include framework compliance sections and required proofs.",
+                      "execution_type":  "NATIVE_OS_ACTION",
+                      "inputs":  [
+                                     "docs/ADR/ADR-OS-009.md through ADR-OS-016.md",
+                                     "ADR-OS-032.md"
+                                 ],
+                      "outputs":  [
+                                      "Updated ADR files with framework compliance sections"
+                                  ]
+                  },
+                  {
+                      "task_id":  "adr_batch_3_retrofit",
+                      "status":  "DONE",
+                      "dependencies":  [
+                                           "adr_batch_2_retrofit"
+                                       ],
+                      "description":  "Retrofit ADRs 017-024 to include framework compliance sections and required proofs.",
+                      "execution_type":  "NATIVE_OS_ACTION",
+                      "inputs":  [
+                                     "docs/ADR/ADR-OS-017.md through ADR-OS-024.md",
+                                     "ADR-OS-032.md"
+                                 ],
+                      "outputs":  [
+                                      "Updated ADR files with framework compliance sections"
+                                  ]
+                  },
+                  {
+                      "task_id":  "adr_batch_4_retrofit",
+                      "status":  "DONE",
+                      "dependencies":  [
+                                           "adr_batch_3_retrofit"
+                                       ],
+                      "description":  "Retrofit ADRs 025-032 to include framework compliance sections and required proofs.",
+                      "execution_type":  "NATIVE_OS_ACTION",
+                      "inputs":  [
+                                     "docs/ADR/ADR-OS-025.md through ADR-OS-032.md",
+                                     "ADR-OS-032.md"
+                                 ],
+                      "outputs":  [
+                                      "Updated ADR files with framework compliance sections"
+                                  ]
+                  },
+                  {
+                      "task_id":  "framework_registry_creation",
+                      "status":  "DONE",
+                      "dependencies":  [
+                                           "adr_batch_4_retrofit"
+                                       ],
+                      "description":  "Create the canonical models and frameworks registry file referenced by ADR-OS-032.",
+                      "execution_type":  "NATIVE_OS_ACTION",
+                      "inputs":  [
+                                     "ADR-OS-032.md"
+                                 ],
+                      "outputs":  [
+                                      "docs/frameworks_registry.md"
+                                  ]
+                  }
+              ]
+}
+
+

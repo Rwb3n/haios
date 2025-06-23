@@ -54,7 +54,7 @@ def snapshot_project(tmp_path):
             "project_workspace": "project_workspace",
             "exec_plans": "os_root/initiatives/init_1",
             "state_file": "os_root/state.txt",
-            "schema_dir": "docs/Document_2",
+            "schema_dir": "docs/schema",
             "project_templates": "project_templates",
             "secrets_vault": "os_root/secrets.vault",
             "human_attention_queue": "os_root/human_attention_queue.txt",

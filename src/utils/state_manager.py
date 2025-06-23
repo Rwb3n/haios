@@ -29,7 +29,7 @@ import logging
 import os
 import tempfile
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 import portalocker
 
@@ -79,7 +79,7 @@ class StateManager:
     SCHEMA_ID = "state"
 
     def __init__(
-        self, state_path: os.PathLike | str, validator: Optional[Validator] = None
+        self, state_path: Union[os.PathLike, str], validator: Optional[Validator] = None
     ) -> None:
         self._state_path = Path(state_path)
         self._validator = validator or _NoopValidator()
@@ -102,7 +102,7 @@ class StateManager:
             ) from exc
 
         self._validator.validate(self.SCHEMA_ID, data)
-        return data
+        return dict(data) if isinstance(data, dict) else {}
 
     def _atomic_write(self, data: Dict[str, Any]) -> None:
         """Write *data* atomically, replacing the previous state. Assumes lock is held."""
@@ -117,9 +117,7 @@ class StateManager:
             os.replace(tmp.name, self._state_path)
         except PermissionError as exc:
             # On Windows a locked file cannot be replaced; log and skip write in DEV/test environments.
-            logger.warning(
-                "atomic_write_permission_skipped", path=str(self._state_path)
-            )
+            logger.warning("atomic_write_permission_skipped: %s", str(self._state_path))
             return
         finally:
             try:
@@ -270,7 +268,7 @@ class StateManager:
                     next_version,
                     next_global,
                 )
-                return next_global
+                return int(next_global)
         except portalocker.LockException as exc:
             raise StateIOError(
                 f"Could not obtain lock on {self._state_path} to increment g-counter: {exc}"

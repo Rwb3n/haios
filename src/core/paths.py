@@ -75,12 +75,15 @@ def safe_join(sandbox_root: Path, untrusted_subpath: str | Path) -> Path:
 @contextmanager
 def chroot(path: Path):
     """A context manager that temporarily changes the root directory."""
+    if not hasattr(os, "chroot") or not hasattr(os, "fchdir"):
+        raise OSError("chroot functionality is not available on this platform")
+
     original_root = os.open("/", os.O_RDONLY)
     try:
         os.chroot(path)
         os.chdir("/")
         yield
     finally:
-        os.fchdir(original_root)
+        os.fchdir(original_root)  # type: ignore[attr-defined]
         os.chroot(".")
         os.close(original_root)

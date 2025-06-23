@@ -41,7 +41,7 @@ try:
         # Remove wrong module entry first
         del sys.modules["core"]
         # Import the correct package now that SRC_PATH is at the front
-        import core as _core_pkg  # type: ignore
+        import core as _core_pkg
     # Ensure src/core is on the package __path__ for sub-modules resolution
     _core_src_path = SRC_PATH / "core"
     if str(_core_src_path) not in _core_pkg.__path__:
@@ -66,10 +66,11 @@ if "age" not in sys.modules:
     def _decrypt(data, identities):
         return data  # no-op stub
 
-    age_stub.Identity = _Identity
-    age_stub.encrypt = _encrypt
-    age_stub.decrypt = _decrypt
-    age_stub.DecryptError = Exception
+    # Set attributes directly on the module
+    setattr(age_stub, "Identity", _Identity)
+    setattr(age_stub, "encrypt", _encrypt)
+    setattr(age_stub, "decrypt", _decrypt)
+    setattr(age_stub, "DecryptError", Exception)
     sys.modules["age"] = age_stub
 
 # Ensure subprocesses can import project modules
@@ -103,7 +104,7 @@ if "_rebuild_generic_obj" not in globals():
 # dedicated reducer.  This makes local classes (e.g. defined inside a test
 # function) picklable under the Win32 'spawn' start-method.
 try:
-    copyreg.pickle(object, _generic_obj_reducer)  # type: ignore[arg-type]
+    copyreg.pickle(object, _generic_obj_reducer)
 except Exception:  # pragma: no cover
     pass
 
@@ -115,13 +116,14 @@ def _reduce_dynamic_class(cls):
             for k, v in cls.__dict__.items()
             if k not in ("__dict__", "__weakref__")
         }
-        return _rebuild_generic_obj, (cls.__qualname__, attrs)
+        return _rebuild_dynamic_class, (cls.__qualname__, attrs)
     raise TypeError
 
 
-def _rebuild_generic_obj(qualname, attrs):
+def _rebuild_dynamic_class(qualname, attrs):
     new_cls = type(qualname.split(".")[-1], (), {})
-    new_cls.__dict__.update(attrs)
+    for key, value in attrs.items():
+        setattr(new_cls, key, value)
     return new_cls
 
 
@@ -138,11 +140,11 @@ if str(_src_root) not in os.environ["PYTHONPATH"].split(os.pathsep):
 
 # Last-chance pickling fallback for multiprocessing on Windows
 try:
-    import multiprocessing.reduction as _reduction  # type: ignore
+    import multiprocessing.reduction as _reduction
 
-    _orig_dump = _reduction.ForkingPickler.dump  # type: ignore[attr-defined]
+    _orig_dump = _reduction.ForkingPickler.dump
 
-    def _safe_dump(self, obj):  # type: ignore
+    def _safe_dump(self, obj):
         try:
             return _orig_dump(self, obj)
         except Exception:
@@ -151,18 +153,18 @@ try:
                 _rebuild_generic_obj, (obj.__class__, state), obj=obj
             )
 
-    _reduction.ForkingPickler.dump = _safe_dump  # type: ignore[attr-defined]
+    setattr(_reduction.ForkingPickler, "dump", _safe_dump)
 except Exception:  # pragma: no cover
     pass
 
 # Register generic reducer with multiprocessing ForkingPickler
 try:
-    import multiprocessing.reduction as _reduction  # type: ignore
+    import multiprocessing.reduction as _reduction
 
-    def _reduce_any(obj):  # type: ignore
+    def _reduce_any(obj):
         return (_rebuild_generic_obj, (obj.__class__, obj.__dict__))
 
-    _reduction.ForkingPickler.register(object, _reduce_any)  # type: ignore[attr-defined]
+    _reduction.ForkingPickler.register(object, _reduce_any)
 except Exception:
     pass
 

@@ -1,36 +1,124 @@
-﻿# ADR-OS-011: Task Failure Handling & Remediation
+﻿# ANNOTATION_BLOCK_START
+{
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "adr_os_011_md",
+        "g_annotation_created": 25,
+        "version_tag_of_host_at_annotation": "1.2.0"
+    },
+    "payload": {
+        "description": "Retrofitted to comply with ADR-OS-032: Canonical Models and Frameworks Registry & Enforcement.",
+        "artifact_type": "DOCUMENTATION",
+        "purpose_statement": "To ensure framework compliance and improve architectural decision clarity.",
+        "authors_and_contributors": [
+            { "g_contribution": 25, "identifier": "Hybrid_AI_OS" },
+            { "g_contribution": 4, "identifier": "Framework_Compliance_Retrofit" }
+        ],
+        "internal_dependencies": [
+            "adr_os_template_md",
+            "adr_os_032_md"
+        ],
+        "linked_issue_ids": []
+    }
+}
+# ANNOTATION_BLOCK_END
 
-*   **Status:** Proposed
-*   **Date:** 2025-06-09
-*   **Context:**
-    In any complex execution system, tasks will inevitably fail due to environmental issues, flawed logic, invalid inputs, or other unforeseen problems. A robust autonomous system must have a predictable, safe, and traceable process for handling these failures without corrupting state or halting progress indefinitely. A simple "crash and stop" approach is insufficient.
+# ADR-OS-011: Task Failure Handling & Remediation
 
-*   **Decision:**
-    We will adopt a **"Log, Isolate, and Remediate"** strategy for task failure handling. Automated, stateful rollback of artifact content will be avoided in favor of explicit, planned remediation.
+* **Status**: Proposed
+* **Date**: 2025-06-09
+* **Deciders**: \[List of decision-makers]
+* **Reviewed By**: \[List of reviewers]
 
-    The process is as follows:
-    1.  **Detect & Log:** When a task in the `CONSTRUCT` phase fails and exceeds its configured retry attempts, the executing agent MUST record the failure state.
-        *   It will update the task's `status` to `FAILED` in the `exec_plan_*.txt`.
-        *   It will populate the task's `failure_details` object with the `g` of failure, a clear `reason`, and detailed technical error messages/stack traces.
-        *   It will update the task's `retry_attempts_log`.
-    2.  **Isolate & Report:** The agent MUST immediately log a new `Issue` of type `BUG`, `RUNTIME_ERROR`, or `BLOCKER`. This `Issue` will contain all details from the task's `failure_details` and link back to the failed plan, task, and any relevant artifacts.
-    3.  **Halt & Escalate:** The OS will set the `Execution Plan`'s `status` to `BLOCKED` or `FAILED` and `state.txt.st` to `BLOCK_INPUT`. It will add an item to the `human_attention_queue.txt` referencing the new `Issue`, signaling that the automated process cannot continue without intervention.
-    4.  **Remediate via New Plan:** The resolution of the `Issue` will be handled through the standard OS lifecycle. A human or Supervisor agent will analyze the `Issue` and `blueprint` a new `Execution Plan` of type `REMEDIATION`. This plan will contain tasks to fix the underlying problem (e.g., "Correct logic in `module_X.ts`," "Install missing dependency Y," "Fix configuration in `artifact_Z.json`").
+---
 
-*   **Rationale:**
-    *   **Avoids Complex State Management:** Automated, stateful rollback of file system changes is extremely complex and fraught with edge cases. It can lead to inconsistent states. Our approach treats the failed state as a new "fact" to be addressed, which is simpler and more robust.
-    *   **Traceability of Remediation:** By forcing failures to be resolved via a new `REMEDIATION` plan, the fix itself becomes a traceable, planned, and validated unit of work, just like any other feature development. This provides a clear audit trail of what went wrong and how it was fixed.
-    *   **Leverages Existing Mechanisms:** This strategy reuses the existing `Issue` management and `Execution Plan` systems, requiring no new, complex rollback machinery. Failure handling becomes a standard part of the OS's operational loop.
-    *   **Human-in-the-Loop for Complex Failures:** For non-trivial failures, human or high-level supervisor intelligence is often required to diagnose the root cause and determine the best corrective action. This model provides a natural escalation path for such scenarios.
+## Context
 
-*   **Consequences:**
-    *   **Pros:**
-        *   Highly robust and safe; prevents the OS from attempting complex, potentially destructive rollback operations.
-        *   Creates a complete and auditable history of all failures and their resolutions.
-        *   Simple to implement as it builds on existing OS primitives (Plans, Issues).
-    *   **Cons:**
-        *   Slower recovery for simple failures. A simple typo that fails a task might require a full new `REMEDIATION` plan to fix, which could feel heavyweight. (This can be mitigated by the intelligence of the Supervisor agent in creating very small, fast-tracked remediation plans).
+Tasks will inevitably fail. A robust autonomous system must have a predictable, safe, and traceable process for handling these failures without corrupting state or halting progress indefinitely. A simple "crash and stop" approach is insufficient.
 
-*   **Alternatives Considered:**
-    *   **Automated Artifact Rollback:** Using snapshots or VCS (like `git restore`) to automatically revert file changes on task failure. Rejected due to the high complexity of managing which files to revert, handling partially successful tasks, and ensuring a consistent state across all related artifacts and OS Control Files.
-    *   **Conversational Debugging Loop:** Keeping the agent in a tight loop to try and fix the problem conversationally. While the agent can do this *within* its retry attempts for a single task, once that threshold is breached, we escalate to the more formal "Log, Isolate, Remediate" process to ensure the failure is formally tracked and resolved.
+## Assumptions
+
+* [ ] Automated, stateful rollback of file system changes is too complex and risky to be reliable.
+* [ ] Failures, once they exceed a simple retry threshold, require formal tracking as `Issues`.
+* [ ] Human or supervisor-level intelligence is necessary to diagnose and plan remediation for non-trivial failures.
+* [ ] The retry policy and escalation thresholds are clearly defined and versioned.
+* [ ] The system can distinguish between task failure and unreachable dependencies in distributed environments.
+* [ ] The human_attention_queue and remediation process are auditable and tamper-evident.
+* [ ] All compliance requirements from referenced ADRs (e.g., ADR-OS-023, ADR-OS-028, ADR-OS-029) are up-to-date and enforced.
+
+_This section was expanded in response to [issue_assumptions.txt](../../issues/issue_assumptions.txt) to surface implicit assumptions and improve framework compliance._
+
+## Frameworks/Models Applied
+
+This ADR applies the following canonical models and frameworks (per ADR-OS-032):
+
+### Fail-Safe Design v1.0
+- **Compliance Proof:** "Log, Isolate, and Remediate" strategy ensures system fails safely without corrupting state or halting indefinitely.
+- **Self-Critique:** Approach is intentionally heavyweight; simple task failures require creating new issue and plan.
+
+### Distributed Systems Principles v1.0
+- **Compliance Proof:** Addresses idempotency, partition tolerance, and observability for failure handling in distributed environments.
+- **Self-Critique:** Distinguishing between task failure and unreachable dependency needs clearer implementation guidelines.
+
+### Escalation Management v1.0
+- **Compliance Proof:** Formal escalation to human_attention_queue when failures exceed retry thresholds.
+- **Self-Critique:** Human attention queue presentation mechanism needs definition.
+
+### Traceability v1.0
+- **Compliance Proof:** Every failure creates Issue with complete context and trace_id linkage for debugging.
+- **Self-Critique:** Relies on quality of initial failure report; poor failure_details make diagnosis difficult.
+
+### Assumption Surfacing v1.0
+- **Compliance Proof:** Explicit assumptions about rollback complexity, formal tracking needs, and human intelligence requirements.
+- **Self-Critique:** Only three assumptions listed; failure handling likely has more implicit assumptions about retry policies and state management.
+
+## Decision
+
+**Decision:**
+
+> We will adopt a **"Log, Isolate, and Remediate"** strategy. On task failure beyond retries, the agent MUST: 1) Update the task status to `FAILED` with details. 2) Log a new `Issue` containing all failure context. 3) Halt the current plan and escalate to the `human_attention_queue`. Remediation will occur via a new, explicit `REMEDIATION`-type `Execution Plan`.
+>
+> ### Distributed Systems Implications
+>
+> The failure handling process must be robust against the challenges of a distributed environment.
+>
+> *   **Idempotency & Retries (ADR-OS-023):** The initial, pre-`FAILED` state retry attempts mentioned in "Alternatives Considered" MUST adhere to the universal retry policy, using exponential backoff and circuit breakers to avoid retry storms. The task execution itself must be idempotent to ensure retries are safe.
+> *   **Partition Tolerance (ADR-OS-028):** In a network partition, an agent must be able to distinguish between task failure and an unreachable dependency. If a required service is in a separate, unreachable partition, the task should be marked `BLOCKED`, not `FAILED`, to await partition healing.
+> *   **Observability (ADR-OS-029):** Every task failure, retry attempt, and state change (`PENDING` -> `ACTIVE` -> `FAILED`) MUST be captured as events within a distributed trace. The resulting `Issue` must be linked to the `trace_id` of the failure for end-to-end debugging.
+
+**Confidence:** High
+
+## Rationale
+
+1. **Avoids Complex State Management**
+   * Self-critique: This approach is intentionally heavyweight. The failure of even a simple task requires creating a new issue and plan, which could slow down development for trivial errors.
+   * Confidence: High
+2. **Traceability of Remediation**
+   * Self-critique: It relies on the quality of the initial failure report. If the agent's `failure_details` are poor, the resulting `Issue` may be difficult to diagnose.
+   * Confidence: High
+3. **Leverages Existing Mechanisms**
+   * Self-critique: This could lead to a proliferation of small, single-task `REMEDIATION` plans, cluttering the project history.
+   * Confidence: High
+
+## Alternatives Considered
+
+1. **Automated Artifact Rollback**: Rejected due to the high complexity of managing which files to revert and ensuring a consistent state across all related artifacts and OS Control Files.
+   * Confidence: High
+2. **Conversational Debugging Loop**: This is used *within* a task's retry attempts. The "Log, Isolate, Remediate" process is for when that inner loop fails, ensuring formal tracking.
+   * Confidence: High
+
+## Consequences
+
+* **Positive:** Highly robust and safe. Creates a complete, auditable history of all failures and their resolutions. Simple to implement as it builds on existing OS primitives.
+* **Negative:** Slower recovery for simple failures. A typo that fails a task might require a new plan to fix, which can feel heavyweight.
+
+## Clarifying Questions
+
+* What is the standard retry and escalation policy before a task is officially marked as `FAILED`, and how is this policy versioned and enforced?
+* How does the `human_attention_queue` get presented to the supervisor, and what is the audit trail for human interventions?
+* Can a `REMEDIATION` plan itself fail, and if so, does it trigger a new, nested remediation? How is remediation recursion managed?
+* How does the system distinguish between task failure and unreachable dependencies in distributed or partitioned environments?
+* What mechanisms are in place to audit, validate, and roll back failure and remediation events, especially in the presence of partial or conflicting updates?
+
+---
+
+*This template integrates explicit assumption-surfacing, confidence indicators, self-critiques, and clarifying questions as per ADR-OS-021.*

@@ -71,11 +71,11 @@ Key features
   (``myfile.schema.json``, ``myfile_1.schema.json`` …).
 * Filename collisions across different source files are resolved by
   suffixing ``-1``, ``-2`` …
-* Each schema is self‑validated with *jsonschema* (Draft 2020‑12).  Invalid
+* Each schema is self‑validated with *jsonschema* (Draft 2020‑12).  Invalid
   files are skipped with an ERROR log.
 * ``--check`` flag performs a dry‑run that prints would‑be actions,
   suitable for CI / pre‑commit.
-* Exits with status 1 if any ERROR was logged.
+* Exits with status 1 if any ERROR was logged.
 
 Requires: ``jsonschema``
 
@@ -92,7 +92,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 from jsonschema import Draft202012Validator
 
@@ -143,8 +143,8 @@ def _write_schema(schema: dict, dest: Path, dry_run: bool) -> None:
 
 
 def find_and_parse_schemas(
-    source_dir: str | os.PathLike,
-    target_dir: str | os.PathLike,
+    source_dir: Union[str, os.PathLike],
+    target_dir: Union[str, os.PathLike],
     *,
     dry_run: bool = False,
 ) -> Tuple[int, int]:
@@ -201,7 +201,7 @@ def find_and_parse_schemas(
     return ok, errors
 
 
-def _parse_args(argv: List[str] | None = None) -> argparse.Namespace:
+def _parse_args(argv: Union[List[str], None] = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("source", help="Source directory containing Markdown files")
     p.add_argument("target", help="Target directory for .schema.json output")
@@ -216,7 +216,7 @@ def _parse_args(argv: List[str] | None = None) -> argparse.Namespace:
     return p.parse_args(argv)
 
 
-def main(argv: List[str] | None = None) -> None:
+def main(argv: Union[List[str], None] = None) -> None:
     args = _parse_args(argv)
 
     level = logging.WARNING - (

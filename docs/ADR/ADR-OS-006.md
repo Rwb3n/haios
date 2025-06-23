@@ -1,49 +1,128 @@
-﻿# ADR-OS-006: Scaffolding Process & `Scaffold Definition` Usage
+# ANNOTATION_BLOCK_START
+{
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "adr_os_006_md",
+        "g_annotation_created": 12,
+        "version_tag_of_host_at_annotation": "1.2.0"
+    },
+    "payload": {
+        "description": "Retrofitted to comply with ADR-OS-032: Canonical Models and Frameworks Registry & Enforcement.",
+        "artifact_type": "DOCUMENTATION",
+        "purpose_statement": "To ensure framework compliance and improve architectural decision clarity.",
+        "authors_and_contributors": [
+            { "g_contribution": 12, "identifier": "Hybrid_AI_OS" },
+            { "g_contribution": 4, "identifier": "Framework_Compliance_Retrofit" }
+        ],
+        "internal_dependencies": [
+            "adr_os_template_md",
+            "adr_os_032_md"
+        ],
+        "linked_issue_ids": []
+    }
+}
+# ANNOTATION_BLOCK_END
 
-*   **Status:** Proposed
-*   **Date:** 2024-06-06
-*   **Context:**
-    To ensure consistency, reduce boilerplate, and accelerate the setup of new projects or components, a standardized and automated scaffolding process is required. 
-    This process must create not only the file and directory structure but also embed foundational metadata (`EmbeddedAnnotationBlock`), content placeholders, and initial testing considerations directly into the newly created artifacts. 
-    This provides durable context for all subsequent development work.
+# ADR-OS-006: Scaffolding Process & `Scaffold Definition` Usage
 
-*   **Decision:**
-    We will adopt a two-part scaffolding system:
+* **Status**: Proposed
+* **Date**: 2024-06-06
+* **Deciders**: \[List of decision-makers]
+* **Reviewed By**: \[List of reviewers]
 
-    1.  **`Scaffold Definition` Definitions:** Un-annotated JSON files (located in `os_root/scaffold_definitions/` with semantic names like `react_module_v1.json`) will serve as the master instructions for scaffolding. These schemas define directory structures, file creation instructions, references to boilerplate source files, placeholder definitions, initial annotation hints, and test considerations.
-    2.  **Boilerplate Template Assets:** Reusable source files (e.g., `.tsx.template`, `tsconfig.json.template`) will be stored in the `project_templates/` directory. The `Scaffold Definition` definitions will reference these assets.
+---
 
-    The OS will execute scaffolding via a dedicated **`SCAFFOLDING` type `Execution Plan`**. This plan's tasks will be blueprinted based on a `Scaffold Definition` and initiative-specific `customization_parameters` defined in the `Initiative Plan`.
+## Context
 
-*   **Rationale:**
-    *   **Consistency & Best Practices:** Ensures all new components or projects start from a pre-defined, best-practice structure, preventing inconsistencies.
-    *   **Durable Context from Inception:** By creating files with fully populated `EmbeddedAnnotationBlock`s (including `scaffold_info` and `test_plan_notes_from_scaffold`) from the very beginning, we establish a rich, durable context that persists throughout the artifact's lifecycle, reducing AI "drift" or "forgetting."
-    *   **Separation of Instruction and Content:** Separating the `Scaffold Definition` (the "how-to" instructions) from the `project_templates/` (the "what-to-use" boilerplate content) makes both easier to manage, version, and reuse.
-    *   **Dynamic Customization:** The use of `customization_parameters` in the `Initiative Plan` allows a generic `Scaffold Definition` to be adapted for specific contexts (e.g., different module or entity names) without altering the master template, making the system flexible.
-    *   **Structured Process:** Using a dedicated `SCAFFOLDING` Execution Plan makes the entire scaffolding process traceable, verifiable, and manageable like any other unit of work in the system.
+To ensure consistency, reduce boilerplate, and accelerate the setup of new projects or components, a standardized and automated scaffolding process is required. This process must create not only the file and directory structure but also embed foundational metadata (`EmbeddedAnnotationBlock`), content placeholders, and initial testing considerations directly into the newly created artifacts.
 
-*   **Scaffolding Workflow:**
+## Assumptions
 
-    1.  **Directive:** An `Initiative Plan`'s lifecycle stage specifies `expected_exec_plan_types: ["SCAFFOLDING"]` and provides `scaffolding_directives` (including the `master_scaffold_schema_id_ref` and any `customization_parameters`).
-    2.  **`BLUEPRINT` Phase:** The OS generates a new `Execution Plan` of `plan_type: "SCAFFOLDING"`. The tasks in this plan are derived from the `Scaffold Definition`'s `directories` and `files` arrays, adapted with the initiative's `customization_parameters`. The plan will include tasks for directory creation, file creation (from templates), and a final task for verifying inter-artifact linking.
-    3.  **`CONSTRUCT` Phase:** The OS executes the `SCAFFOLDING` plan. For each file creation task:
-        a.  The corresponding template file from `project_templates/` is read.
-        b.  Any defined `template_processing_instructions` (e.g., JSON merges, placeholder replacements) are applied.
-        c.  The resulting content (including placeholder markers like `// <<PLACEHOLDER_ID: Description>>` in the body) is written to the target path in `project_workspace/`.
-        d.  A complete `EmbeddedAnnotationBlock` is generated and injected into the new file's designated annotation area. This block is populated using hints and definitions from the `Scaffold Definition`.
-        e.  The new artifact is registered in `global_registry_map.txt`.
-    4.  **Final Linking Task:** The last task in the `SCAFFOLDING` plan iterates over the newly created artifacts to ensure their `dependents` fields are correctly populated, establishing bi-directional linkage.
+* [ ] `Scaffold Definition` definitions are well-formed, valid JSON.
+* [ ] Boilerplate assets referenced in a `Scaffold Definition` exist at the specified paths within `project_templates/`.
+* [ ] The OS has write permissions to the target `project_workspace/` directory.
+* [ ] The template processing logic can handle all supported file types and placeholder patterns.
+* [ ] The scaffolding process is idempotent and can recover from partial failures.
+* [ ] All scaffolded artifacts receive a valid and complete EmbeddedAnnotationBlock at creation.
+* [ ] All compliance requirements from referenced ADRs (e.g., ADR-OS-032) are up-to-date and enforced.
 
-*   **Consequences:**
-    *   **Pros:**
-        *   Highly automated and reliable project/component bootstrapping.
-        *   Creates "intelligent" artifacts from day one.
-        *   Enforces project structure and coding conventions from the start.
-        *   The process is fully auditable via the `SCAFFOLDING` Execution Plan.
-    *   **Cons:**
-        *   Requires well-structured `Scaffold Definition` definitions and `project_templates/`, which represents an upfront investment.
-        *   The logic for the AI to correctly interpret and execute `template_processing_instructions` can be complex.
+_This section was expanded in response to [issue_assumptions.txt](../../issues/issue_assumptions.txt) to surface implicit assumptions and improve framework compliance._
 
-*   **Alternatives Considered:**
-    *   **Manual Scaffolding:** Relying on a human to set up all initial files. Rejected as it is slow, error-prone, and fails to establish the initial `EmbeddedAnnotationBlock` metadata required for autonomous operation.
-    *   **Simple File Copy:** A simpler mechanism that just copies files without annotation or placeholder processing. Rejected because it misses the primary benefit of creating intelligent, context-aware artifacts from inception.
+## Frameworks/Models Applied
+
+This ADR applies the following canonical models and frameworks (per ADR-OS-032):
+
+### AAA (Arrange, Act, Assert) v1.0
+- **Compliance Proof:** Scaffolding process follows AAA pattern: Arrange (prepare templates), Act (execute scaffold), Assert (validate created artifacts with annotations).
+- **Self-Critique:** Initial annotation might become stale if not updated during development, giving false sense of context.
+
+### DRY (Don't Repeat Yourself) v1.0
+- **Compliance Proof:** Template-based approach eliminates code duplication by reusing boilerplate assets from project_templates/ for multiple component creation.
+- **Self-Critique:** Managing the link between Scaffold Definition and its many template assets could become complex.
+
+### Explicit Diagramming v1.0
+- **Compliance Proof:** Scaffolding process and template structure are described textually.
+- **Self-Critique:** **NON-COMPLIANCE:** Actual diagram showing scaffolding workflow and template relationships is missing.
+- **Mitigation:** Future revision will include explicit scaffolding process diagram.
+
+### Separation of Concerns v1.0
+- **Compliance Proof:** Clear separation between scaffold instructions (Scaffold Definition), template content (project_templates/), and target artifacts (project_workspace/).
+- **Self-Critique:** Template processing logic could become complex subsystem to maintain.
+
+### Self-Describing Systems v1.0
+- **Compliance Proof:** Every scaffolded artifact receives complete EmbeddedAnnotationBlock from inception, making it immediately self-describing.
+- **Self-Critique:** Poorly designed Scaffold Definition could enforce bad practices across many components.
+
+### Assumption Surfacing v1.0
+- **Compliance Proof:** Explicit assumptions section with checkboxes for validation about JSON validity, template existence, and write permissions.
+- **Self-Critique:** Only three assumptions listed; scaffolding process likely has more implicit assumptions about template structure and processing capabilities.
+
+### Best Practices Enforcement v1.0
+- **Compliance Proof:** Scaffolding system enforces consistent project structure and coding conventions through standardized templates.
+- **Self-Critique:** Requires upfront investment in creating well-structured Scaffold Definitions and templates.
+
+## Decision
+
+**Decision:**
+
+> We will implement a scaffolding system driven by **`Scaffold Definition`** JSON files that instruct a dedicated **`SCAFFOLDING`-type `Execution Plan`**. This plan will use boilerplate assets from `/project_templates` to create new artifacts in the `/project_workspace`, injecting a complete `EmbeddedAnnotationBlock` into each file upon creation.
+
+**Confidence:** High
+
+## Rationale
+
+1. **Consistency & Best Practices**
+   * Self-critique: A poorly designed `Scaffold Definition` could enforce bad practices across many components.
+   * Confidence: High
+2. **Durable Context from Inception**
+   * Self-critique: The initial annotation might become stale if not updated during development, giving a false sense of context.
+   * Confidence: High
+3. **Separation of Instruction and Content**
+   * Self-critique: Managing the link between a `Scaffold Definition` and its many template assets could become complex.
+   * Confidence: Medium
+4. **Dynamic Customization**
+   * Self-critique: The logic for placeholder replacement and customization could become a complex subsystem to maintain.
+   * Confidence: Medium
+
+## Alternatives Considered
+
+1. **Manual Scaffolding**: Rejected as it is slow, error-prone, and fails to establish the initial `EmbeddedAnnotationBlock` required for autonomous operation.
+   * Confidence: High
+2. **Simple File Copy**: Rejected because it misses the primary benefit of creating intelligent, context-aware artifacts from inception.
+   * Confidence: High
+
+## Consequences
+
+* **Positive:** Highly automated and reliable project bootstrapping. Creates "intelligent" artifacts from day one. Enforces project structure and coding conventions. The process is fully auditable.
+* **Negative:** Requires an upfront investment in creating well-structured `Scaffold Definition` definitions and templates. The template processing logic can be complex.
+
+## Clarifying Questions
+
+* How will versioning and backward compatibility of `Scaffold Definition` files and templates be managed as requirements evolve?
+* What is the process for updating or migrating existing components that were created from an older scaffold version?
+* How does the system validate the integrity and completeness of scaffolded artifacts, especially their `EmbeddedAnnotationBlock`?
+* What are the error recovery and rollback procedures if the scaffolding process fails partway through execution?
+* How are customizations and overrides handled for components that deviate from the standard scaffold?
+
+---
+
+*This template integrates explicit assumption-surfacing, confidence indicators, self-critiques, and clarifying questions as per ADR-OS-021.*

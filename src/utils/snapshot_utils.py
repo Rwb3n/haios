@@ -52,10 +52,14 @@ def _get_open_issue_count(config: Config) -> int:
         with summary_path.open("r", encoding="utf-8") as f:
             summary_data = json.load(f)
 
-        count = 0
         # This logic needs to be aware of the summary schema.
         # Assuming a simple top-level count for now.
-        return summary_data.get("payload", {}).get("open_issue_count", 0)
+        payload = summary_data.get("payload", {})
+        open_issue_count = payload.get("open_issue_count", 0)
+        if open_issue_count is not None:
+            return int(open_issue_count)
+        else:
+            return 0
 
     except (IOError, json.JSONDecodeError):
         logger.warning(

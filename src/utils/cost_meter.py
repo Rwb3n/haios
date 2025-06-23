@@ -54,7 +54,10 @@ class CostMeter:
 
     def _get_cpu_time(self) -> float:
         """Gets the total CPU time of the process and its children."""
-        return self.process.cpu_times().user + self.process.cpu_times().system
+        cpu_times = self.process.cpu_times()
+        user_time = float(cpu_times.user)
+        system_time = float(cpu_times.system)
+        return user_time + system_time
 
     def check_budget(self):
         """Checks if any budget has been exceeded."""

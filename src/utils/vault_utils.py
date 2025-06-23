@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import Any, Dict
 
 try:
-    import age  # type: ignore
+    import age
 except ImportError:  # pragma: no cover – testing environment stub
     import sys
     import types
@@ -77,7 +77,8 @@ class Vault:
         try:
             with open(self.vault_path, "rb") as f:
                 decrypted_data = age.decrypt(f.read(), [self.key])
-            return json.loads(decrypted_data)
+            secrets_data = json.loads(decrypted_data)
+            return dict(secrets_data) if isinstance(secrets_data, dict) else {}
         except (age.DecryptError, json.JSONDecodeError) as e:
             raise VaultError(f"Failed to read or decrypt vault: {e}") from e
 
@@ -103,9 +104,18 @@ class Vault:
         secrets = self._read_secrets()
         if name not in secrets:
             raise VaultError(f"Secret '{name}' not found in vault.")
-        return secrets[name]
+        secret_data = secrets[name]
+        return (
+            dict(secret_data)
+            if isinstance(secret_data, dict)
+            else {"value": str(secret_data)}
+        )
 
     def list_secrets(self) -> Dict[str, Any]:
         """Lists all secrets in the vault, without their values."""
         secrets = self._read_secrets()
-        return {name: {"scope": data["scope"]} for name, data in secrets.items()}
+        result: Dict[str, Any] = {}
+        for name, data in secrets.items():
+            if isinstance(data, dict) and "scope" in data:
+                result[name] = {"scope": data["scope"]}
+        return result

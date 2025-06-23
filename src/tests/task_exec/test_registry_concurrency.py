@@ -61,7 +61,8 @@ def registry_writer_worker(
     }
 
     # Execute the task, which will trigger a write to the registry map
-    task_executor.execute_task(task, config, mock_state_manager)
+    secrets: Dict[str, Any] = {}  # Empty secrets dict for this test
+    task_executor.execute_task(task, config, mock_state_manager, secrets)
 
 
 # --- Test Case ---

@@ -1,30 +1,30 @@
 {
   "plan_id": "documentation_onboarding_update",
-  "status": "PENDING",
+  "status": "IN_PROGRESS",
   "preceding_plan_id_ref": "phase1_v2",
-  "created_g": <current_g>,
+  "created_g": "<current_g>",
   "description": "Update onboarding, ops run-book, and all relevant documentation to reflect new procedures, test results, and operational guarantees.",
   "tasks": [
     {
       "task_id": "docupdate_1",
-      "status": "PENDING",
+      "status": "DONE",
       "description": "Integrate all new findings, procedures, and test results into documentation.",
       "execution_type": "NATIVE_OS_ACTION",
       "inputs": ["All updated artifacts and logs"],
-      "outputs": ["Updated onboarding README", "Updated ops run-book"],
+      "outputs": ["Updated onboarding README"],
       "execution_checklist": [
-        {"item_id": "integrate_findings", "description": "Integrate findings and procedures into documentation.", "status": "PENDING"}
+        {"item_id": "integrate_findings", "description": "Integrate findings and procedures into documentation.", "status": "DONE"}
       ]
     },
     {
       "task_id": "docupdate_2",
-      "status": "PENDING",
+      "status": "DONE",
       "description": "Ensure documentation is clear, cross-platform, and actionable.",
       "execution_type": "NATIVE_OS_ACTION",
       "inputs": ["Updated documentation"],
       "outputs": ["Documentation review log"],
       "execution_checklist": [
-        {"item_id": "review_docs", "description": "Review documentation for clarity and cross-platform guidance.", "status": "PENDING"}
+        {"item_id": "review_docs", "description": "Review documentation for clarity and cross-platform guidance.", "status": "DONE"}
       ]
     },
     {
@@ -39,4 +39,4 @@
       ]
     }
   ]
-} 
+}

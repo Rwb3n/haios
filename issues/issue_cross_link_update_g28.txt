@@ -1,0 +1,11 @@
+{
+  "issue_id": "issue_cross_link_update_g28",
+  "status": "CLOSED",
+  "resolution": "Legacy links updated via script at g46.",
+  "created_g": 28,
+  "title": "Cross-links to new Appendices not updated across docs",
+  "description": "References in ADRs, onboarding docs, and other markdown files still point to original source documents. Need to update citations to new Appendices paths and IDs.",
+  "linked_plan_id_ref": "appendix_refactor_g25",
+  "severity": "HIGH",
+  "trace_id": "g28_validation"
+} 

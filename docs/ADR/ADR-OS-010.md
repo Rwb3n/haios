@@ -1,49 +1,131 @@
-﻿# ADR-OS-010: Constraint Management & Locking Strategy
+﻿# ANNOTATION_BLOCK_START
+{
+    "artifact_annotation_header": {
+        "artifact_id_of_host": "adr_os_010_md",
+        "g_annotation_created": 22,
+        "version_tag_of_host_at_annotation": "1.2.0"
+    },
+    "payload": {
+        "description": "Retrofitted to comply with ADR-OS-032: Canonical Models and Frameworks Registry & Enforcement.",
+        "artifact_type": "DOCUMENTATION",
+        "purpose_statement": "To ensure framework compliance and improve architectural decision clarity.",
+        "authors_and_contributors": [
+            { "g_contribution": 22, "identifier": "Hybrid_AI_OS" },
+            { "g_contribution": 4, "identifier": "Framework_Compliance_Retrofit" }
+        ],
+        "internal_dependencies": [
+            "adr_os_template_md",
+            "adr_os_032_md"
+        ],
+        "linked_issue_ids": []
+    }
+}
+# ANNOTATION_BLOCK_END
 
-*   **Status:** Proposed
-*   **Date:** 2025-06-09
-*   **Context:**
-    Autonomous AI agents, while powerful, can exhibit "drift" or "forget" critical project-level constraints over time (e.g., technology choices, architectural patterns, non-negotiable requirements). To ensure long-term project integrity and alignment with strategic decisions, a mechanism is needed to make these constraints durable and explicitly non-mutable by standard agent operations.
+# ADR-OS-010: Constraint Management & Locking Strategy
 
-*   **Decision:**
-    We will implement a **granular data locking strategy** directly within the schemas of our OS Control Files and `EmbeddedAnnotationBlock`s. This will be achieved by adding specific boolean "lock" fields to designated keys or objects.
+* **Status**: Proposed
+* **Date**: 2025-06-09
+* **Deciders**: \[List of decision-makers]
+* **Reviewed By**: \[List of reviewers]
 
-    The convention for these fields will be:
-    *   `_fieldname_locked: true`: For simple key-value pairs (e.g., `_overall_goal_locked`).
-    *   `_locked_entry_definition: true`: For objects within an array, locking the *definitional* content of that specific entry.
-    *   `_list_immutable: true`: For an array, preventing the addition, removal, or reordering of its items.
-    *   `_locked_object_definition: true`: For a sub-object, locking its key structure and the values of its definitional fields.
+---
 
-    An AI agent **MUST** check for the presence and `true` value of these lock fields before attempting any modification. If a locked item is encountered and the task requires its modification, the agent **MUST NOT** proceed. Instead, it must log a `BLOCKER` `Issue` and set its current task `status` to `BLOCKED`, signaling the need for explicit human/supervisor override.
+## Context
 
-*   **Rationale:**
-    *   **Enforces Architectural Integrity:** Provides a direct, machine-readable mechanism to protect foundational decisions (e.g., "Use shadcn/ui," "This stage is non-negotiable") from being inadvertently changed by a subordinate agent.
-    *   **Durable, Proximate Constraints:** Placing the lock directly on the data it protects makes the constraint explicit and co-located with the context. An agent examining an artifact's annotation immediately knows which parts are fixed.
-    *   **Clear Override Path:** The "log issue and block" behavior creates a formal, auditable process for overriding locked constraints. An override is not a simple bypass but requires a new `Request` and a conscious decision from a higher-level authority.
-    *   **Reduces "AI Hallucination" Impact:** Prevents an agent from creatively "refactoring" a core component into a non-compliant state because it hallucinated a new requirement or forgot an old one.
+Autonomous AI agents can "drift" or "forget" critical project-level constraints over time. To ensure long-term project integrity, a mechanism is needed to make these constraints durable and explicitly non-mutable by standard agent operations.
 
-*   **Implementation Areas:**
-    This locking mechanism will be applied selectively across various schemas, including but not limited to:
-    *   **`init_plan_*.txt`:** Locking the `overall_goal`, `quality_acceptance_criteria`, and the structure of `initiative_lifecycle_stages` after they are approved.
-    *   **`exec_plan_*.txt`:** Locking the `plan_type`, `goal`, and the core definitions of `tasks` and their `execution_checklist`s once the plan is finalized and ready for `CONSTRUCT`.
-    *   **`EmbeddedAnnotationBlock`:** Locking critical `requisites_and_assumptions`, key `external_dependencies`, `scaffold_info` structure, and the definitions within `test_plan_notes_from_scaffold`.
+## Assumptions
 
-*   **The Locking Lifecycle:**
-    1.  **Creation:** Artifacts are often created in a "DRAFT" or unlocked state.
-    2.  **Review/Critique:** During review (e.g., by a `CRITIQUE_AGENT` or human supervisor), the decision is made on what to lock.
-    3.  **Locking:** An explicit OS action (triggered by plan completion or a specific `Request`) sets the relevant `_locked*` flags to `true`. This action is logged.
-    4.  **Enforcement:** The locks are now active for all subsequent agent interactions.
-    5.  **Override (Exception):** A `BLOCKER` issue is raised by an agent. A user/supervisor provides a new `Request` explicitly authorizing the change. An OS action then temporarily bypasses or permanently removes the lock to apply the change, logging this override in a `decision_log`.
+* [ ] AI "drift" is a real and significant risk to long-term project stability.
+* [ ] A data-centric locking mechanism is an effective way to mitigate this risk.
+* [ ] The OS and its agents can be reliably programmed to respect these lock fields.
+* [ ] The semantics and enforcement of all `_locked*` fields are clearly defined and versioned.
+* [ ] The system can detect and recover from failed or partial lock/unlock operations.
+* [ ] The override and audit trail process is robust and tamper-evident.
+* [ ] All compliance requirements from referenced ADRs (e.g., ADR-OS-023, ADR-OS-028) are up-to-date and enforced.
 
-*   **Consequences:**
-    *   **Pros:**
-        *   Provides strong guardrails for autonomous agents.
-        *   Makes project constraints explicit and machine-readable.
-        *   Creates a formal process for high-stakes changes.
-    *   **Cons:**
-        *   Adds complexity to the schemas and the AI agent's operational logic (must always check for locks).
-        *   Can introduce rigidity if not applied judiciously. The default state for most fields should be unlocked.
+_This section was expanded in response to [issue_assumptions.txt](../../issues/issue_assumptions.txt) to surface implicit assumptions and improve framework compliance._
 
-*   **Alternatives Considered:**
-    *   **Role-Based Access Control (RBAC):** Defining that only certain agent personas can edit certain fields. This is a complementary, not mutually exclusive, idea. Our `_locked*` flag is a data-centric constraint, while RBAC is an agent-centric one. Using both could be powerful in a more mature system.
-    *   **Constraints in a Single Global File:** Having one file list all locked paths. Rejected as it decouples the constraint from the data it protects, making it harder for an agent to be contextually aware of the lock.
+## Frameworks/Models Applied
+
+This ADR applies the following canonical models and frameworks (per ADR-OS-032):
+
+### Distributed Systems Principles v1.0
+- **Compliance Proof:** "Distributed Systems Implications" section addresses idempotency and partition tolerance for lock operations.
+- **Self-Critique:** Lock checking in distributed environment needs more comprehensive failure mode analysis.
+
+### Data-Centric Security v1.0
+- **Compliance Proof:** Locking mechanism places constraints directly on data rather than relying on agent-level access control.
+- **Self-Critique:** Over-locking could lead to excessive rigidity requiring frequent human intervention.
+
+### Fail-Safe Design v1.0
+- **Compliance Proof:** Agents MUST halt and log BLOCKER issue when encountering locked constraints, preventing unauthorized modifications.
+- **Self-Critique:** Override process requiring new Request could become bottleneck if not managed efficiently.
+
+### Assumption Surfacing v1.0
+- **Compliance Proof:** Explicit assumptions section about AI drift risk, locking effectiveness, and agent compliance reliability.
+- **Self-Critique:** Only three assumptions listed; constraint management likely has more implicit assumptions about lock semantics.
+
+### Architectural Integrity v1.0
+- **Compliance Proof:** Granular boolean lock fields protect foundational decisions from inadvertent agent changes.
+- **Self-Critique:** Meaning of different lock types adds cognitive load for developers and agents.
+
+### Audit Trail v1.0
+- **Compliance Proof:** Override process creates formal, auditable trail for high-stakes constraint changes.
+- **Self-Critique:** Audit trail quality depends on proper logging of override decisions and rationale.
+
+### Proximity Principle v1.0
+- **Compliance Proof:** Lock fields placed directly within schemas near the data they protect for contextual awareness.
+- **Self-Critique:** Decoupled constraints in global file would be harder for agents to discover contextually.
+
+## Decision
+
+**Decision:**
+
+> We will implement a granular, data-centric locking strategy using specific boolean fields (e.g., `_fieldname_locked`, `_locked_entry_definition`) directly within the schemas of OS Control Files and `EmbeddedAnnotationBlock`s. An agent encountering a `true` lock on an item it must modify **MUST** halt, log a `BLOCKER` issue, and set its task to `BLOCKED`.
+>
+> ### Distributed Systems Implications
+>
+> Operations that set or check these locks must be robust in a distributed environment.
+>
+> *   **Idempotency (ADR-OS-023):** Any OS action that sets or removes a lock (`_locked*` flag) MUST be idempotent. A second attempt to apply the same lock should result in success, not an error.
+> *   **Partition Tolerance (ADR-OS-028):** Checking a lock is a read operation and can proceed in any partition. However, changing a lock is a write operation. Since OS Control Files are CP systems, an attempt to change a lock in a minority partition will fail until the partition heals, preventing inconsistent lock states across the system.
+
+**Confidence:** High
+
+## Rationale
+
+1. **Enforces Architectural Integrity**
+   * Self-critique: Over-locking could lead to excessive rigidity and require frequent human intervention for minor, legitimate changes.
+   * Confidence: High
+2. **Durable, Proximate Constraints**
+   * Self-critique: The meaning of different lock types (e.g., `_list_immutable` vs. `_locked_entry_definition`) adds cognitive load for developers and agents.
+   * Confidence: High
+3. **Clear Override Path**
+   * Self-critique: The override process, requiring a new `Request` and explicit authorization, could become a bottleneck if not managed efficiently.
+   * Confidence: Medium
+
+## Alternatives Considered
+
+1. **Role-Based Access Control (RBAC)**: Considered complementary, not mutually exclusive. RBAC is agent-centric; this is data-centric. Combining them could be a future enhancement.
+   * Confidence: High
+2. **Constraints in a Single Global File**: Rejected because it decouples the constraint from the data it protects, making it harder for an agent to be contextually aware of the lock.
+   * Confidence: High
+
+## Consequences
+
+* **Positive:** Provides strong guardrails for autonomous agents. Makes project constraints explicit and machine-readable. Creates a formal, auditable process for high-stakes changes.
+* **Negative:** Adds complexity to schemas and agent logic, as they must always check for locks. Could introduce rigidity if locks are not applied judiciously.
+
+## Clarifying Questions
+
+* What is the definitive list of all `_locked*` field types and their precise meanings, and how is this list versioned and maintained?
+* What is the process for a supervisor to review, approve, and audit a lock override request, and how is this process made tamper-evident?
+* How does this locking mechanism apply to binary or non-text-based artifacts, and what are the limitations?
+* How are distributed lock state, partition healing, and lock conflict resolution handled in multi-agent or partitioned environments?
+* What is the process for evolving the lock schema or semantics as new constraint types are identified?
+
+---
+
+*This template integrates explicit assumption-surfacing, confidence indicators, self-critiques, and clarifying questions as per ADR-OS-021.*

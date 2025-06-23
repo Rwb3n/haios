@@ -183,7 +183,7 @@ def _load_config(config_path: Path, schema_dir: Path) -> Config:
 
             validator = _NoopValidator()
 
-        loader = ConfigLoader(config_path=config_path, validator=validator)  # type: ignore[arg-type]
+        loader = ConfigLoader(config_path=config_path, validator=validator)
         return loader.load_and_validate()
     except Exception as e:
         logger.error("config_error", err=str(e), config_path=str(config_path))
@@ -262,7 +262,7 @@ def main(argv: Optional[list[str]] = None) -> None:  # pragma: no cover
         # This is a bit of a chicken-and-egg problem, so we resolve it relative
         # to the config file path provided.
         config_path = getattr(args, "config", Path("haios.config.json"))
-        schema_dir = config_path.parent.resolve() / "docs/Document_2/"
+        schema_dir = config_path.parent.resolve() / "docs/schema/"
         cfg = _load_config(config_path, schema_dir)
 
         # Override runtime mode if the CLI flag is set
@@ -277,7 +277,7 @@ def main(argv: Optional[list[str]] = None) -> None:  # pragma: no cover
         )
         _run_plan(args.plan_id, cfg, bound_logger, tracer)
     elif args.cmd == "vault":
-        schema_dir = args.config.parent.resolve() / "docs/Document_2/"
+        schema_dir = args.config.parent.resolve() / "docs/schema/"
         cfg = _load_config(args.config, schema_dir)
         vault_path = cfg.paths.secrets_vault
         vault = Vault(vault_path, args.key)
@@ -294,7 +294,7 @@ def main(argv: Optional[list[str]] = None) -> None:  # pragma: no cover
             secrets = vault.list_secrets()
             print(json.dumps(secrets, indent=2))
     elif args.cmd == "scaffold":
-        schema_dir = args.config.parent.resolve() / "docs/Document_2/"
+        schema_dir = args.config.parent.resolve() / "docs/schema/"
         cfg = _load_config(args.config, schema_dir)
         template_path = cfg.paths.project_templates / f"{args.template}.json"
         plan_path = cfg.paths.exec_plans / f"{args.plan_id}.json"
@@ -312,7 +312,7 @@ def main(argv: Optional[list[str]] = None) -> None:  # pragma: no cover
             f"Plan '{args.plan_id}' created from template '{args.template}' at {plan_path}"
         )
     elif args.cmd == "registry-fsck":
-        schema_dir = args.config.parent.resolve() / "docs/Document_2/"
+        schema_dir = args.config.parent.resolve() / "docs/schema/"
         cfg = _load_config(args.config, schema_dir)
         validator = Validator(schema_dir=str(cfg.paths.schema_dir))
         registry_path = cfg.paths.os_root / "global_registry_map.txt"

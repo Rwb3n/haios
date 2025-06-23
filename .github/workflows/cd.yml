@@ -203,7 +203,7 @@ jobs:
           - Home: README.md
           - Onboarding: docs/onboarding/README.md
           - Architecture: docs/Document_1/
-          - Schemas: docs/Document_2/
+          - Schemas: docs/schema/
           - Scaffolds: docs/Document_3/
           - ADRs: docs/ADR/
           - Reports: docs/reports/

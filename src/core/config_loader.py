@@ -35,7 +35,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Union
 
 from .config import Config
 from .exceptions import ConfigError, ConfigNotFoundError, ConfigParseError
@@ -48,7 +48,7 @@ class ConfigLoader:
 
     CONFIG_SCHEMA_ID = "haios.config"
 
-    def __init__(self, config_path: str | Path, validator):
+    def __init__(self, config_path: Union[str, Path], validator):
         """
         Initializes the ConfigLoader.
 
@@ -105,7 +105,9 @@ class ConfigLoader:
         # Return raw dict if 'paths' section missing (minimal configs used in unit tests)
         if "paths" not in data:
             logger.info("Returning raw config dict (no 'paths' key found)")
-            return data
+            return Config.from_dict(
+                data, project_root_path=self._config_path.parent.resolve()
+            )
 
         logger.debug("Schema validation passed. Creating Config object.")
         try:
@@ -129,5 +131,9 @@ class ConfigLoader:
                 logger.debug(
                     "Minimal config detected (no 'paths'); returning raw dictionary"
                 )
-                return data
-            return data
+                return Config.from_dict(
+                    data, project_root_path=self._config_path.parent.resolve()
+                )
+            return Config.from_dict(
+                data, project_root_path=self._config_path.parent.resolve()
+            )
