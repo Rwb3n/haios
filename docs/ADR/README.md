@@ -4,112 +4,60 @@ This directory contains all Architecture Decision Records for the Hybrid AI Oper
 
 ## Quick Navigation
 
-### 📋 **Core System Architecture**
-- [**ADR-OS-001**](ADR-OS-001.md) - **Embedded Annotation Blocks** - Metadata and versioning system for all project artifacts
-- [**ADR-OS-002**](ADR-OS-002.md) - **Hierarchical Planning Model** - Multi-tiered planning from Request → Analysis → Initiative → Execution
-- [**ADR-OS-003**](ADR-OS-003.md) - **OS Control File Schemas** - Structured data formats for state management and planning
-- [**ADR-OS-004**](ADR-OS-004.md) - **Global Event Tracking & Versioning** - `g` counter and `v` versioning for event sequencing and optimistic locking
-- [**ADR-OS-005**](ADR-OS-005.md) - **Directory Structure & File Naming** - Configuration-driven project layout and naming conventions
+### 🏗️ **Core Concepts & Data Models (Foundation)**
+- [**ADR-OS-001**](ADR-OS-001.md) - **Core Operational Loop & Phasing** - The five-phase state machine: ANALYZE → BLUEPRINT → CONSTRUCT → VALIDATE → IDLE.
+- [**ADR-OS-002**](ADR-OS-002.md) - **Hierarchical Planning Model** - Multi-tiered planning from `Request` → `Analysis` → `Initiative Plan` → `Execution Plan`.
+- [**ADR-OS-003**](ADR-OS-003.md) - **Artifact Annotation Strategy** - Mandates the `EmbeddedAnnotationBlock` for self-describing artifacts.
+- [**ADR-OS-004**](ADR-OS-004.md) - **Global Event Tracking & Versioning** - `g` counter for total event ordering and `v` versioning for optimistic locking.
+- [**ADR-OS-005**](ADR-OS-005.md) - **Directory Structure & File Naming** - Configuration-driven project layout via `haios.config.json`.
+- [**ADR-OS-009**](ADR-OS-009.md) - **Issue Management & Summarization** - Structured, tiered issue tracking from individual files to global summaries.
 
-### 🔄 **Operational Framework**
-- [**ADR-OS-006**](ADR-OS-006.md) - **Phase-Based Operational Model** - ANALYZE → BLUEPRINT → CONSTRUCT → VALIDATE → IDLE cycle
-- [**ADR-OS-010**](ADR-OS-010.md) - **Atomic File Operations** - Safe, concurrent file operations with locking and conflict resolution
-- [**ADR-OS-011**](ADR-OS-011.md) - **Task Failure Handling & Remediation** - Structured approach to handling and recovering from failures
-- [**ADR-OS-016**](ADR-OS-016.md) - **Dependency Management & Topological Sorting** - Task ordering and dependency cycle detection
-- [**ADR-OS-022**](ADR-OS-022.md) - **Mechanical Inventory Buffer** - Prevent redundant work via buffered resources
-- [**ADR-OS-023**](ADR-OS-023.md) - **Universal Idempotency & Retry Policy** - Safe retries with exponential back-off and circuit breakers
-- [**ADR-OS-024**](ADR-OS-024.md) - **Async & Eventual Consistency Patterns** - Message-bus driven workflows and sagas
-- [**ADR-OS-025**](ADR-OS-025.md) - **Zero-Trust Internal Security Baseline** - Mutual-TLS and token authentication for all internal calls
-- [**ADR-OS-026**](ADR-OS-026.md) - **Dynamic Topology & Health Checking** - Service discovery, heartbeats, and failure propagation
-- [**ADR-OS-027**](ADR-OS-027.md) - **Global & Vector Clock Event Ordering** - Preserve causality in distributed workflows
-- [**ADR-OS-028**](ADR-OS-028.md) - **Partition Tolerance & Split-Brain Protocol** - CAP trade-offs and reconciliation strategy
+### ⚙️ **Operational Patterns & Execution**
+- [**ADR-OS-006**](ADR-OS-006.md) - **Scaffolding Process** - Automated artifact creation using `Scaffold Definition` files and templates.
+- [**ADR-OS-010**](ADR-OS-010.md) - **Constraint Management & Locking Strategy** - Using `_locked` fields to enforce architectural integrity and prevent agent drift.
+- [**ADR-OS-011**](ADR-OS-011.md) - **Task Failure Handling & Remediation** - "Log, Isolate, and Remediate" strategy for robust error handling.
+- [**ADR-OS-013**](ADR-OS-013.md) - **Pre-Execution Readiness Checks** - Mandates verification of task prerequisites to prevent guaranteed failures.
+- [**ADR-OS-015**](ADR-OS-015.md) - **Precision Context Loading** - Efficient, targeted context loading for LLM agents using line/pattern slicing.
+- [**ADR-OS-016**](ADR-OS-016.md) - **Live Execution Status Tracking** - Separating immutable plans from mutable status files (`exec_status_*.txt`).
+- [**ADR-OS-018**](ADR-OS-018.md) - **Execution Status Persistence & Recovery** - *(Note: Content is about foundational security controls, not persistence. Needs review.)*
+- [**ADR-OS-022**](ADR-OS-022.md) - **Mechanical Inventory Buffer** - Prevents redundant work by staging reusable resources in a crash-safe buffer.
 
-### 🧪 **Quality Assurance**
-- [**ADR-OS-007**](ADR-OS-007.md) - **Integrated Testing Lifecycle** - Evidence-based testing with separation of duties
-- [**ADR-OS-008**](ADR-OS-008.md) - **OS-Generated Reporting Strategy** - Analysis, Validation, and Progress reports
-- [**ADR-OS-014**](ADR-OS-014.md) - **Project Guidelines Artifact** - Durable project standards and bias prevention checklists
-- [**ADR-OS-021**](ADR-OS-021.md) - **Explicit Assumption Surfacing** - Mandatory confidence & self-critique blocks in all artifacts
-- [**ADR-OS-031**](ADR-OS-031.md) - **Pre-Initiative Source Artifact Standards** - Required upstream documentation for every initiative
-- [**ADR-OS-032**](ADR-OS-032.md) - **Frameworks Registry & Enforcement** - Canonical models, compliance proofs, and CI lint rules
+### 🤖 **Agent & Tool Management**
+- [**ADR-OS-012**](ADR-OS-012.md) - **Dynamic Agent Management** - Runtime agent registration and configuration via an agent registry and "Agent Cards".
+- [**ADR-OS-030**](ADR-OS-030.md) - **Archetypal Agent Roles & Protocols** - Defines a fixed set of agent roles (Supervisor, Manager, etc.) with strict permissions and escalation paths.
+- [**ADR-OS-033**](ADR-OS-033.md) - **Cookbook & Recipe Management System** - ⚠️ **PROPOSED** - Formal system for capturing, validating, and reusing implementation patterns across HAiOS projects.
+- [**ADR-OS-034**](ADR-OS-034.md) - **Orchestration Layer & Session Management** - ⚠️ **PROPOSED** - Unified coordination of multi-agent workflows with persistent session state and Cockpit interface.
+- [**ADR-OS-035**](ADR-OS-035.md) - **The Crystallization Protocol & Gatekeeper Agent** - ⚠️ **PROPOSED** - Formal two-space system for validating exploratory work before canonization.
 
-### 🤖 **Agent Management**
-- [**ADR-OS-012**](ADR-OS-012.md) - **Dynamic Agent Management** - Runtime agent registration and configuration
-- [**ADR-OS-015**](ADR-OS-015.md) - **Precision Context Loading** - Efficient, targeted context loading for LLM agents
-- [**ADR-OS-018**](ADR-OS-018.md) - **MCP Tool Integration** - Model Context Protocol for external tool access
-- [**ADR-OS-030**](ADR-OS-030.md) - **Archetypal Agent Roles & Protocols** - Fixed role set with access and escalation contracts
+### 🔍 **Quality, Governance & Meta-Architecture**
+- [**ADR-OS-007**](ADR-OS-007.md) - **Integrated Testing Lifecycle** - Evidence-based testing with a strict separation of duties between agents.
+- [**ADR-OS-008**](ADR-OS-008.md) - **OS-Generated Reporting Strategy** - Mandates `Analysis`, `Validation`, and `Progress` reports for human oversight.
+- [**ADR-OS-014**](ADR-OS-014.md) - **Project Guidelines Artifact** - A durable, version-controlled home for project standards, conventions, and checklists.
+- [**ADR-OS-021**](ADR-OS-021.md) - **Explicit Assumption Surfacing** - Mandates that all ADRs surface assumptions, confidence levels, and self-critiques.
+- [**ADR-OS-031**](ADR-OS-031.md) - **Pre-Initiative Source Artifact Standards** - Defines the required set of upstream documents (PRD, TRD, etc.) for any new initiative.
+- [**ADR-OS-032**](ADR-OS-032.md) - **Canonical Models and Frameworks Registry & Enforcement** - A registry of best practices (KISS, DRY, ToC) that artifacts must explicitly reference and prove compliance with.
 
-### 📊 **Monitoring & Operations**
-- [**ADR-OS-009**](ADR-OS-009.md) - **Issue Management & Summarization** - Structured issue tracking with tiered summaries
-- [**ADR-OS-013**](ADR-OS-013.md) - **Artifact Registry & Linking** - Global artifact registry for dependency tracking
-- [**ADR-OS-019**](ADR-OS-019.md) - **Observability & Budget Governance** - Prometheus metrics, cost tracking, and budget enforcement
-- [**ADR-OS-020**](ADR-OS-020.md) - **Runtime Modes & Developer Experience** - STRICT vs DEV_FAST modes for different use cases
-- [**ADR-OS-029**](ADR-OS-029.md) - **Universal Observability & Trace Propagation** - End-to-end distributed tracing standard
+### 🌐 **Distributed Systems & Cross-Cutting Policies**
+- [**ADR-OS-019**](ADR-OS-019.md) - **Observability & Budget Governance** - Defines Prometheus metrics, cost tracking, and budget enforcement.
+- [**ADR-OS-020**](ADR-OS-020.md) - **Runtime Modes & Developer Experience** - Defines `STRICT` and `DEV_FAST` modes to balance safety and velocity.
+- [**ADR-OS-023**](ADR-OS-023.md) - **Universal Idempotency & Retry Policy** - A cross-cutting policy for safe retries with exponential backoff and circuit breakers.
+- [**ADR-OS-024**](ADR-OS-024.md) - **Asynchronous and Eventual Consistency Patterns** - Standardizes on event-driven communication, sagas, and eventual consistency.
+- [**ADR-OS-025**](ADR-OS-025.md) - **Zero-Trust Internal Security Baseline** - Mandates mTLS and token-based auth for all internal service communication.
+- [**ADR-OS-026**](ADR-OS-026.md) - **Dynamic Topology, Health Checking, and Failure Propagation** - Defines service discovery, heartbeats, and status propagation.
+- [**ADR-OS-027**](ADR-OS-027.md) - **Global and Vector Clock Event Ordering** - Specifies the use of logical clocks to preserve causality in distributed workflows.
+- [**ADR-OS-028**](ADR-OS-028.md) - **Partition Tolerance and Split-Brain Protocol** - Defines explicit CAP trade-offs and reconciliation strategies for network partitions.
+- [**ADR-OS-029**](ADR-OS-029.md) - **Universal Observability and Trace Propagation** - Mandates end-to-end distributed tracing via universal `trace_id` propagation.
 
-### 🚀 **Implementation Phases**
-- [**ADR-OS-017**](ADR-OS-017.md) - **Phase 1 - MVP Engine & Tooling** - Minimum viable product scope and deliverables
-
----
-
-## ADR Status Legend
-
-| Status | Description |
-|--------|-------------|
-| **Proposed** | Under consideration, not yet implemented |
-| **Accepted** | Approved and being implemented |
-| **Superseded** | Replaced by a newer ADR |
-| **Deprecated** | No longer recommended |
-
-## ADR Categories
-
-### 🏗️ **Foundation (001-005)**
-Core architectural decisions that establish the fundamental structure and data model of HAiOS.
-
-### ⚙️ **Operations (006-011, 016, 022-028)**
-Decisions about how the system operates, including phases, file operations, and error handling.
-
-### 🔍 **Quality & Testing (007-008, 014, 021, 031, 032)**
-Decisions about ensuring system quality, testing strategies, and reporting mechanisms.
-
-### 🤖 **Agent Integration (012, 015, 018, 030)**
-Decisions about how AI agents are managed, configured, and interact with external tools.
-
-### 📈 **Monitoring & Management (009, 013, 019-020, 029)**
-Decisions about system observability, artifact management, and operational modes.
-
-### 🎯 **Implementation (017)**
-Decisions about implementation phases and delivery strategy.
-
----
-
-## Quick Reference
-
-### Most Critical ADRs for New Contributors
-1. **ADR-OS-001** - Understanding the annotation system
-2. **ADR-OS-002** - Understanding the planning hierarchy  
-3. **ADR-OS-006** - Understanding the operational phases
-4. **ADR-OS-005** - Understanding the directory structure
-
-### Most Critical ADRs for Operators
-1. **ADR-OS-019** - Observability and budgets
-2. **ADR-OS-020** - Runtime modes
-3. **ADR-OS-011** - Failure handling
-4. **ADR-OS-009** - Issue management
-
-### Most Critical ADRs for Agent Developers
-1. **ADR-OS-012** - Agent management
-2. **ADR-OS-015** - Context loading
-3. **ADR-OS-018** - MCP tool integration
-4. **ADR-OS-007** - Testing lifecycle
+### 🚀 **Implementation & Phasing**
+- [**ADR-OS-017**](ADR-OS-017.md) - **Phase 1 - MVP Engine & Tooling** - Defines the scope and deliverables for the initial implementation phase.
 
 ---
 
 ## Contributing to ADRs
 
 When proposing a new ADR:
-1. Use the next available ADR-OS-XXX number
-2. Follow the established template format
-3. Include proper status, date, and context
-4. Update this index with the new ADR
-5. Ensure the ADR includes an `EmbeddedAnnotationBlock`
-
-For questions about existing ADRs or to propose changes, please create an issue in the project repository. 
+1. Use the next available ADR-OS-XXX number.
+2. Follow the established template format defined in `adr_os_template.md` and mandated by `ADR-OS-021`.
+3. Update this index with the new ADR.
+4. Ensure the ADR includes a valid `EmbeddedAnnotationBlock`.
+5. Ensure the ADR complies with the governance standards in `ADR-OS-031` and `ADR-OS-032`. 

@@ -26,6 +26,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `docs/guidelines/test_guidelines.md`, `docs/source/frameworks_registry.md`,
   `docs/CI_CD_SETUP.md`) moved under `docs/_legacy/`.
 
+### Critical Fixes
+- **ADR Index Desynchronization Resolution** - Fixed critical desynchronization between `docs/ADR/README.md` index and actual ADR content that was breaking system navigability. Updated descriptions to match actual ADR content:
+  - ADR-OS-001: Corrected from "Embedded Annotation Blocks" to "Core Operational Loop & Phasing"
+  - ADR-OS-003: Corrected from "OS Control File Schemas" to "Artifact Annotation Strategy"  
+  - ADR-OS-006: Corrected from "Phase-Based Operational Model" to "Scaffolding Process"
+  - ADR-OS-018: Flagged title/content mismatch for review (title says "Persistence & Recovery" but content covers security controls)
+  - Reorganized categories by system function rather than implementation order for better developer experience
+- **Third-Party Evaluation Follow-up** - Created comprehensive tracking issue for remaining architectural validation items identified in comprehensive third-party review process
+
+### New Proposed ADRs
+- **ADR-OS-033: Cookbook & Recipe Management System** - Formal system for capturing, validating, and reusing proven implementation patterns across HAiOS projects. Enforces DRY principles through structured Recipe lifecycle with validation process. Includes comprehensive Recipe schema with evidence requirements and integration with HAiOS governance model.
+- **ADR-OS-034: Orchestration Layer & Session Management** - Unified coordination system for multi-agent workflows with persistent session state management and Cockpit interface for human operators. Addresses session continuity, agent coordination gaps, and workflow fragmentation identified in architectural review. Integrates with existing agent roles from ADR-OS-030.
+- **ADR-OS-035: The Crystallization Protocol & Gatekeeper Agent** - Establishes formal two-space system for safely isolating exploratory work from canonical system state. Implements quality ratchet mechanism ensuring only validated knowledge enters canonical state. Addresses critical gap between creative exploration and rigorous governance identified in third-party architectural review.
+
 ---
 
 ## 2025-06-27 – Appendix & Schema Retrofit

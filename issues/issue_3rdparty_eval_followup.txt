@@ -1,0 +1,76 @@
+{
+  "_embedded_annotation_block": {
+    "artifact_type": "issue",
+    "artifact_id_of_host": "issue_3rdparty_eval_followup_g250",
+    "g_created": 250,
+    "g_last_modified": 250,
+    "version_tag": 1,
+    "author_persona_id": "haios_system",
+    "internal_dependencies": [
+      "3rdpartyeval-1.md"
+    ],
+    "external_dependencies": [],
+    "overall_quality_assessment": "PASS",
+    "quality_notes": {
+      "unit_tests": {
+        "status": "NA",
+        "evidence_artifact_id_refs": []
+      }
+    }
+  },
+  "issue_header": {
+    "issue_id": "issue_3rdparty_eval_followup",
+    "title": "Third-Party Evaluation Follow-up Actions",
+    "type": "DOCUMENTATION_MAINTENANCE",
+    "severity": "MEDIUM",
+    "status": "OPEN",
+    "created_by": "haios_system",
+    "assigned_to": null,
+    "labels": ["documentation", "maintenance", "third-party-review"]
+  },
+  "issue_body": {
+    "description": "Follow-up actions required based on validation of 3rdpartyeval-1.md findings. Critical README.md desynchronization has been resolved, but additional items need attention.",
+    "requirements": [
+      {
+        "id": "req_1",
+        "description": "Review and resolve ADR-OS-018 title/content mismatch",
+        "details": "ADR-OS-018 is titled 'Execution Status Persistence & Recovery' but actual content covers foundational security controls (secrets vault, process isolation, kill-switches). Either retitle the ADR or move content to appropriate location.",
+        "priority": "HIGH",
+        "status": "PENDING"
+      },
+      {
+        "id": "req_2", 
+        "description": "Implement systematic cross-linking of ADR references",
+        "details": "Convert all ADR references throughout documentation to live markdown links (e.g., [ADR-OS-011](ADR-OS-011.md)) to create navigable web of knowledge.",
+        "priority": "MEDIUM",
+        "status": "PENDING"
+      },
+      {
+        "id": "req_3",
+        "description": "Audit ADR-OS-005, ADR-OS-014, ADR-OS-017 for duplicated sections",
+        "details": "Third-party evaluation claimed these files contain duplicated sections or leftover draft content. Verify current state and clean up if necessary.",
+        "priority": "LOW",
+        "status": "PENDING"
+      },
+      {
+        "id": "req_4",
+        "description": "Validate framework compliance sections in ADR-OS-019 and ADR-OS-020",
+        "details": "Evaluation claimed copy-paste errors in frameworks sections. Current content appears coherent but should be verified for topic relevance.",
+        "priority": "LOW", 
+        "status": "PENDING"
+      }
+    ],
+    "acceptance_criteria": [
+      "All ADR titles accurately reflect their content",
+      "Systematic cross-linking implemented across ADR documentation",
+      "No duplicated or inconsistent content in ADR files",
+      "All framework compliance sections are topically relevant"
+    ],
+    "blockers": [],
+    "related_artifacts": [
+      "docs/ADR/README.md",
+      "docs/ADR/ADR-OS-018.md",
+      "3rdpartyeval-1.md"
+    ]
+  }
+} 

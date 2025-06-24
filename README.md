@@ -8,37 +8,43 @@
 
 An **operating-system-like orchestration layer** for AI-assisted project execution. HAiOS manages complex workflows through structured phases: **ANALYZE → BLUEPRINT → CONSTRUCT → VALIDATE → IDLE**.
 
-## 🚀 Quick Start
+## 🚀 Getting Started
 
-### Prerequisites
-- Python 3.9 or higher
-- Git
+### For Researchers & Architects
 
-### Installation
+HAiOS is currently in the **research and design phase**. To explore the architecture:
 
 ```bash
 # Clone the repository
 git clone https://github.com/haios-team/haios.git
 cd haios
 
-# Set up development environment (Linux/macOS)
-make dev-setup
-
-# Set up development environment (Windows)
-.\scripts\dev.ps1 dev-setup
-
-# Run the demo
-python -m src --demo --mode dev-fast
+# Explore the architectural documentation
+ls docs/ADR/                    # 35+ Architectural Decision Records
+ls docs/schema/                 # JSON schema specifications
+ls docs/appendices/             # Core principles and operational guides
 ```
+
+### 📖 Recommended Reading Order
+
+1. **[Onboarding Guide](docs/onboarding/README.md)** - Start here for project overview
+2. **[ADR Index](docs/ADR/README.md)** - Browse architectural decisions by category
+3. **[Recent ADRs](docs/ADR/)** - Review the 3 new proposed ADRs from third-party architectural review
+4. **[Schema Directory](docs/schema/)** - Understand the formal specifications
+
+**Note**: Installation and execution commands will be available when the project transitions from research to implementation phase.
 
 ## 📋 Features
 
-- **Multi-Phase Orchestration**: Structured workflow management through defined phases
-- **Schema-Driven Architecture**: Strict JSON schema validation for all control files
+- **Multi-Phase Orchestration**: Structured workflow management through defined phases (ANALYZE → BLUEPRINT → CONSTRUCT → VALIDATE → IDLE)
+- **Schema-Driven Architecture**: Strict JSON schema validation for all control files with 35+ architectural decision records
 - **Comprehensive Testing**: 85%+ test coverage with unit, integration, and E2E tests
-- **Security-First Design**: Built-in security scanning and validation
-- **Cross-Platform Support**: Works on Linux, macOS, and Windows
+- **Security-First Design**: Multi-layer security scanning (Bandit, Safety, Trivy) with SARIF integration
+- **Cross-Platform Support**: Works on Linux, macOS, and Windows with unified tooling
 - **CI/CD Ready**: Complete GitHub Actions workflows for automated testing and deployment
+- **Pattern Management**: Proposed Recipe system for capturing and reusing proven implementation patterns
+- **Session Continuity**: Proposed orchestration layer for persistent multi-agent workflow coordination
+- **Quality Assurance**: Proposed crystallization protocol ensuring only validated knowledge enters canonical state
 
 ## 🏗️ Architecture
 
@@ -55,33 +61,40 @@ HAiOS operates through five core phases:
 - **OS Control Files**: Structured `.txt` files with JSON content (state.txt, plan_*.txt, issue_*.txt)
 - **Project Artifact Files**: Generated outputs using conventional extensions (.js, .css, .md, etc.)
 - **Registry Map**: Central tracking of all artifacts and their relationships
-- **Schema Validation**: Ensures data integrity across all operations
+- **Schema Validation**: Ensures data integrity across all operations with comprehensive JSON schema validation
+
+### 🔮 Proposed Architecture Enhancements
+
+Based on comprehensive third-party architectural review, HAiOS is evolving toward:
+
+- **Recipe Management**: Formal cookbook system for capturing and reusing proven implementation patterns across projects
+- **Orchestration Layer**: Unified coordination of multi-agent workflows with persistent session state and human operator interface
+- **Crystallization Protocol**: Two-space validation system separating exploratory work from canonical system state
 
 ## 🛠️ Development
 
-### Local Development Commands
+**Current Phase**: Research, Design & Architecture
 
-#### Linux/macOS (Makefile)
-```bash
-make help              # Show all available commands
-make test              # Run all tests
-make lint              # Run code quality checks
-make format            # Format code
-make validate          # Validate schemas and structure
-make build             # Build package
-```
+HAiOS is currently in the **architectural design phase**, focusing on comprehensive system design and formal specification development. The codebase represents academic research and architectural exploration rather than functional implementation.
 
-#### Windows (PowerShell)
-```powershell
-.\scripts\dev.ps1 help              # Show all available commands
-.\scripts\dev.ps1 test              # Run all tests
-.\scripts\dev.ps1 lint              # Run code quality checks
-.\scripts\dev.ps1 format            # Format code
-.\scripts\dev.ps1 validate          # Validate schemas and structure
-.\scripts\dev.ps1 build             # Build package
-```
+### 🏗️ Current Development Focus
 
-### Code Quality Standards
+- **Architectural Decision Records (ADRs)**: 35+ formal architectural decisions with comprehensive third-party review
+- **Schema Development**: Rigorous JSON schema specifications for all system components  
+- **Design Validation**: Multi-perspective architectural evaluation and crystallization of core patterns
+- **Research Documentation**: Extensive documentation of principles, patterns, and implementation strategies
+
+### 🔬 Academic & Research Nature
+
+**Important**: All code is currently **academic and non-functional**. The project serves as:
+- Architectural research and design exploration
+- Formal specification development  
+- Pattern identification and validation
+- Proof-of-concept for AI orchestration principles
+
+### 🚀 Future Code Quality Standards
+
+When transitioning to implementation phase, the following standards will be enforced:
 
 - **Test Coverage**: Minimum 85% coverage required
 - **Code Formatting**: Black + isort for consistent style
@@ -89,23 +102,21 @@ make build             # Build package
 - **Security Scanning**: Bandit + Safety for vulnerability detection
 - **Pre-commit Hooks**: Automated quality checks on every commit
 
-### Testing Strategy
-
-```bash
-# Run specific test types
-make test-unit          # Unit tests only
-make test-integration   # Integration tests
-make test-e2e          # End-to-end tests
-make test-coverage     # Detailed coverage report
-```
-
 ## 📚 Documentation
 
 - **[Onboarding Guide](docs/onboarding/README.md)**: Start here for new contributors
 - **[Appendices A–H](docs/appendices/)**: Core principles, operational guides, scaffold template, schema directory, testing, frameworks registry, and CI/CD policy
 - **[Schema Directory](docs/schema/)**: Canonical JSON-schema specifications (formerly "Document 2")
-- **[ADRs](docs/ADR/)**: Architectural decision records
+- **[ADRs](docs/ADR/)**: Architectural decision records (35 ADRs including 3 new proposed from third-party architectural review)
 - **[Reports](docs/reports/)**: Progress and completion reports
+
+### 🆕 Recent Architectural Developments
+
+Following a comprehensive third-party architectural review, HAiOS has three new proposed ADRs addressing critical system capabilities:
+
+- **[ADR-OS-033](docs/ADR/ADR-OS-033.md)**: **Cookbook & Recipe Management System** - Formal system for capturing and reusing proven implementation patterns
+- **[ADR-OS-034](docs/ADR/ADR-OS-034.md)**: **Orchestration Layer & Session Management** - Unified multi-agent workflow coordination with persistent session state
+- **[ADR-OS-035](docs/ADR/ADR-OS-035.md)**: **Crystallization Protocol & Gatekeeper Agent** - Two-space system for validating exploratory work before canonization
 
 ## 🔄 CI/CD Pipeline
 
@@ -122,20 +133,6 @@ make test-coverage     # Detailed coverage report
 - **Docker Images**: Multi-stage builds with Trivy security scanning
 - **Documentation**: Automated deployment to GitHub Pages
 
-## 🐳 Docker Support
-
-```bash
-# Build Docker image
-docker build -t haios:latest .
-
-# Run in container
-docker run --rm -it haios:latest python -m src --help
-
-# Using make/PowerShell scripts
-make docker-build && make docker-run
-.\scripts\dev.ps1 docker-build
-```
-
 ## 🔒 Security
 
 - **Multi-layer Security Scanning**:
@@ -150,26 +147,34 @@ make docker-build && make docker-run
 
 ## 📊 Project Status
 
-- **Phase**: Alpha Development (v0.1.0)
-- **Test Coverage**: 100% (42 passed, 1 skipped, 1 xfailed, 1 xpassed)
-- **Code Quality**: Fully automated with pre-commit hooks
-- **Documentation**: Comprehensive with auto-generated API docs
+- **Phase**: Research & Architectural Design (Pre-Alpha)
+- **Architecture**: 35+ ADRs with comprehensive AI architectural review underway
+- **Documentation**: Extensive formal specifications and design documentation
+- **Research Focus**: Academic exploration of AI orchestration principles and patterns
+- **Implementation**: Planned for future phase following architectural completion
 
 ## 🤝 Contributing
 
-1. **Fork the repository**
-2. **Set up development environment**: `make dev-setup` or `.\scripts\dev.ps1 dev-setup`
-3. **Create feature branch**: `git checkout -b feature/amazing-feature`
-4. **Make changes** following our [error handling patterns](docs/onboarding/README.md#7-error-handling-patterns--best-practices)
-5. **Run tests**: `make test` or `.\scripts\dev.ps1 test`
-6. **Submit pull request**
+### Research & Architecture Contributions
 
-### Code Review Checklist
-- [ ] Tests pass with 85%+ coverage
-- [ ] Code follows formatting standards
-- [ ] Security scans pass
-- [ ] Documentation updated
-- [ ] Error handling patterns followed
+HAiOS welcomes contributions to its architectural research and design:
+
+1. **Fork the repository**
+2. **Explore the documentation**: Review ADRs, schemas, and architectural patterns
+3. **Create feature branch**: `git checkout -b research/architectural-enhancement`
+4. **Contribute**: 
+   - Propose new ADRs following the established template
+   - Enhance schema specifications
+   - Improve documentation and architectural clarity
+   - Provide architectural reviews and feedback
+5. **Submit pull request** with detailed architectural rationale
+
+### Research Review Checklist
+- [ ] Architectural decisions are well-documented and justified
+- [ ] ADRs follow the established template and governance standards
+- [ ] Schema changes are backward-compatible and well-specified
+- [ ] Documentation is comprehensive and technically accurate
+- [ ] Contributions align with HAiOS architectural principles
 
 ## 📄 License
 
@@ -182,12 +187,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Comprehensive testing and quality assurance
 - Security-first development approach
 
-## 📞 Support
-
-- **Documentation**: [GitHub Pages](https://haios-team.github.io/haios)
-- **Issues**: [GitHub Issues](https://github.com/haios-team/haios/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/haios-team/haios/discussions)
-
----
 
 **HAiOS** - Orchestrating the future of AI-assisted development 🚀 
