@@ -1,0 +1,45 @@
+
+version: '3.8'
+
+services:
+  n8n:
+    image: n8nio/n8n
+    ports:
+      - "${N8N_PORT}:5678"
+    volumes:
+      - ./data/n8n:/home/node/.n8n
+    networks: [localnet]
+    env_file: .env
+
+  nocodb:
+    image: nocodb/nocodb:latest
+    ports:
+      - "${NOCODB_PORT}:8080"
+    volumes:
+      - ./data/nocodb:/usr/app/data
+    networks: [localnet]
+    env_file: .env
+
+  langflow:
+    image: langflow/langflow:latest
+    ports:
+      - "${LANGFLOW_PORT}:7860"
+    volumes:
+      - ./agent:/app/langflow_data
+    networks: [localnet]
+    command: ["--host", "0.0.0.0"]
+    env_file: .env
+
+  markdown:
+    image: ghcr.io/insanum/mdsrv:latest
+    ports:
+      - "${MARKDOWN_PORT}:8000"
+    volumes:
+      - ./docs:/docs
+    working_dir: /docs
+    command: ["mdsrv", ".", "--host", "0.0.0.0"]
+    networks: [localnet]
+
+networks:
+  localnet:
+    driver: bridge

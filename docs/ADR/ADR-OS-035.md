@@ -26,10 +26,12 @@
 
 # ADR-OS-035: The Crystallization Protocol & Gatekeeper Agent
 
-* **Status**: Proposed
+* **Status**: SUPERSEDED 
 * **Date**: 2025-01-28
 * **Deciders**: \[List of decision-makers]
 * **Reviewed By**: \[List of reviewers]
+
+_ UPDATE: This was a good idea, but it's been replaced by a more powerful and integrated concept. The function of the "Canonizer-Agent" is now better understood as a part of the CI/CD pipeline's lint stage, not a standalone agent. _ 
 
 ---
 
