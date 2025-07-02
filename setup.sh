@@ -1,14 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
-echo "[+] Creating data directories..."
-mkdir -p data/n8n data/nocodb agent docs
+# Load env vars
+source .env
 
-echo "[+] Starting Docker services..."
+# Create data dirs
+mkdir -p data/n8n data/nocodb data/langflow
+
+# Start services
 docker compose up -d
 
-echo ""
-echo "✅ n8n        → http://localhost:${N8N_PORT}"
-echo "✅ NocoDB     → http://localhost:${NOCODB_PORT}"
-echo "✅ Langflow   → http://localhost:${LANGFLOW_PORT}"
-echo "✅ Markdown   → http://localhost:${MARKDOWN_PORT}"
+# Print URLs
+echo "n8n    -> http://localhost:${N8N_PORT}"
+echo "NocoDB -> http://localhost:${NOCODB_PORT}"
+echo "Langflow -> http://localhost:${LANGFLOW_PORT}"
