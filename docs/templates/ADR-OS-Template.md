@@ -1,95 +1,147 @@
-# ADR-OS-XXX: \[Short Decision Title]
+# ADR-OS-XXX: [Short Decision Title]
 
-* **Status**: {Proposed | Accepted | Deprecated}
-* **Date**: YYYY-MM-DD
-* **Deciders**: \[List of decision-makers]
-* **Reviewed By**: \[List of reviewers]
-
----
+**Status**: {Proposed | Accepted | Deprecated}  
+**Date**: YYYY-MM-DD  
+**Deciders**: [List of decision-makers]  
+**Reviewed By**: [List of reviewers]
 
 ## Context
 
 Describe the background and motivation for this decision. Explain what problem or requirement the architecture must address.
 
+Include:
+- The fundamental challenge being addressed
+- How this decision fits into the broader system architecture
+- Any critical dependencies or relationships with other components
+- Why this decision is needed now
+
 ## Assumptions
 
-List the key assumptions underlying this decision. Each entry should include a checkbox and concise statement.
+List the key assumptions underlying this decision. Number each assumption for easy reference.
 
-* [ ] {Assumption 1}
-* [ ] {Assumption 2}
-* [ ] {Assumption 3}
+1. **[Assumption Category]**: [Detailed assumption statement]
+2. **[Assumption Category]**: [Detailed assumption statement]
+3. **[Assumption Category]**: [Detailed assumption statement]
 
-## Models/Frameworks Applied
+*Example categories: Performance, Scalability, Security, User Behavior, Technical Constraints, Resource Availability*
 
-List all governing models, frameworks, and design/engineering heuristics that inform or constrain this decision (e.g., Distributed Systems Principles, Theory of Constraints, KISS, DRY, AAA, JTBD, Self-Critique, etc.). For each, demonstrate compliance, note exceptions, and reference registry entry/version.
+## Models and Frameworks Applied
 
-- **[Model/Framework Name] (Registry vX.Y):**
-  - *Proof:* {How is this model/framework enforced or demonstrated here? (e.g., explicit buffer for ToC, retry logic for DS, diagram for protocol)}
-  - *Self-critique:* {Weaknesses, plausible violations, or partial compliance?}
-  - *Exceptions/Justifications:* {If not fully compliant, why?}
-- …
+List all governing models, frameworks, and design/engineering heuristics that inform or constrain this decision. For each, provide specific evidence of application.
+
+### [Model/Framework Name]
+- **Application**: How this model/framework is specifically applied in this decision
+- **Proof**: Concrete evidence or implementation details demonstrating compliance
+- **Rationale**: Why this model/framework is relevant to this decision
 
 *Example:*
-- **Distributed Systems Principles (Registry v1.0):**
-  - *Proof:* Inventory and retry logic for network failures; event ordering via `g`.
-  - *Self-critique:* Partition handling may require human override; not all flows are fully async.
-  - *Exceptions:* None.
+### Evidence-Based Development
+- **Application**: Every component produces verifiable artifacts with integrity checks
+- **Proof**: All outputs include SHA-256 hashes and timestamp validation
+- **Rationale**: Ensures tamper-proof audit trails and reproducible results
 
-- **KISS (Registry v1.0):**
-  - *Proof:* Single responsibility per agent archetype; protocol minimized.
-  - *Self-critique:* Some artifact chains are verbose by necessity.
-  - *Exceptions:* None.
-
+### Distributed Systems Principles
+- **Application**: All operations designed for idempotency and eventual consistency
+- **Proof**: Retry logic with exponential backoff, unique request IDs
+- **Rationale**: Enables reliable operation in unreliable network conditions
 
 ## Decision
 
-State the decision clearly. Provide enough detail so that the chosen approach and its implications are understandable.
+### Primary Decision
+**[State the main architectural or design decision in one clear sentence]**
 
-**Decision:**
+### Detailed Decisions
 
-> {Describe the decision.}
+1. **[Decision Component 1]**
+   - [Detailed description of this aspect of the decision]
+   - Confidence: {Very High (0.95) | High (0.85-0.94) | Medium (0.70-0.84) | Low (<0.70)}
+   - Self-critique: [What assumptions might be wrong? What could fail?]
 
-**Confidence:** {High | Medium | Low}
+2. **[Decision Component 2]**
+   - [Detailed description of this aspect of the decision]
+   - Confidence: {Very High (0.95) | High (0.85-0.94) | Medium (0.70-0.84) | Low (<0.70)}
+   - Self-critique: [Potential weaknesses or limitations]
+
+### Confidence Indicators
+- Overall Architectural Confidence: **[Level] ([Numeric])**
+- Technical Implementation Confidence: **[Level] ([Numeric])**
+- Integration Confidence: **[Level] ([Numeric])**
 
 ## Rationale
 
-Explain why this decision was made. For each major point, include a self-critique and confidence annotation.
+Explain why this decision was made. Structure each rationale section with clear headers.
 
-1. **{Rationale Point A}**
+### Why [Specific Choice 1]
+1. **[Benefit/Reason 1]**: [Detailed explanation]
+2. **[Benefit/Reason 2]**: [Detailed explanation]
+3. **[Benefit/Reason 3]**: [Detailed explanation]
 
-   * Self-critique: {What could go wrong?}
-   * Confidence: {High | Medium | Low}
-2. **{Rationale Point B}**
+*Self-critique: [What are the potential downsides or risks of this choice? What assumptions might prove incorrect?]*
 
-   * Self-critique: {Potential weak spot}
-   * Confidence: {High | Medium | Low}
+### Why [Specific Choice 2]
+1. **[Benefit/Reason 1]**: [Detailed explanation]
+2. **[Benefit/Reason 2]**: [Detailed explanation]
+
+*Self-critique: [Honest assessment of limitations or concerns]*
 
 ## Alternatives Considered
 
-Briefly describe other options that were considered and why they were not chosen. Include confidence or critique where relevant.
+### Alternative 1: [Alternative Name]
+- **Description**: [What this alternative would entail]
+- **Pros**: [Key advantages]
+- **Cons**: [Key disadvantages]
+- **Rejection Reason**: [Why this wasn't chosen]
 
-1. **{Alternative A}**: {Brief reason for rejection}
-
-   * Confidence: {High | Medium | Low}
-2. **{Alternative B}**: {Brief reason for rejection}
-
-   * Confidence: {High | Medium | Low}
+### Alternative 2: [Alternative Name]
+- **Description**: [What this alternative would entail]
+- **Pros**: [Key advantages]
+- **Cons**: [Key disadvantages]
+- **Rejection Reason**: [Why this wasn't chosen]
 
 ## Consequences
 
-Describe the positive and negative consequences of the decision.
+### Positive Consequences
+1. **[Benefit Category]**: [Detailed positive outcome]
+2. **[Benefit Category]**: [Detailed positive outcome]
+3. **[Benefit Category]**: [Detailed positive outcome]
 
-* **Positive:** {Benefit or positive outcome}
-* **Negative:** {Cost or drawback}
+### Negative Consequences
+1. **[Risk Category]**: [Detailed negative outcome or cost]
+2. **[Risk Category]**: [Detailed negative outcome or cost]
+3. **[Risk Category]**: [Detailed negative outcome or cost]
+
+### Risk Mitigation Strategies
+1. **[Risk from above]**: [Specific mitigation approach]
+2. **[Risk from above]**: [Specific mitigation approach]
+3. **[Risk from above]**: [Specific mitigation approach]
 
 ## Clarifying Questions
 
-List any unresolved questions or areas requiring further investigation.
+### Q1: [Question requiring future investigation]
+*Context: [Why this question matters and what depends on the answer]*
 
-* {Clarifying question 1}
-* {Clarifying question 2}
-* {Clarifying question 3}
+### Q2: [Question requiring future investigation]
+*Context: [Why this question matters and what depends on the answer]*
+
+### Q3: [Question requiring future investigation]
+*Context: [Why this question matters and what depends on the answer]*
+
+## References
+
+- [Related ADR]: [Brief description of relationship]
+- [Related Schema]: [Path to schema file]
+- [Related Implementation]: [Path to code or configuration]
+- [External Documentation]: [Links to relevant external resources]
 
 ---
 
-*This template integrates explicit assumption-surfacing, confidence indicators, self-critiques, and clarifying questions as per ADR-OS-021.*
+*This template incorporates:*
+- *Structured decision components with individual confidence ratings*
+- *Explicit self-critique sections throughout*
+- *Risk mitigation strategies paired with negative consequences*
+- *Contextual clarifying questions*
+- *Numbered lists for better organization and reference*
+- *Clear separation between primary and detailed decisions*
+- *Comprehensive alternatives analysis*
+
+*Template version: 2.0 (Enhanced based on ADR-OS-041 patterns)*

@@ -1,0 +1,323 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://haios.ai/schemas/research_evidence_v1.json",
+  "title": "Research Evidence Artifact Schema",
+  "description": "Schema for research evidence artifacts with cryptographic verification",
+  "type": "object",
+  "required": [
+    "evidence_id",
+    "artifact_type",
+    "schema_version",
+    "source_metadata",
+    "evidence_chain",
+    "integrity",
+    "trace_metadata"
+  ],
+  "properties": {
+    "evidence_id": {
+      "type": "string",
+      "description": "Unique identifier for this evidence artifact",
+      "pattern": "^ev_[0-9]{13}_[a-z0-9]{9}$"
+    },
+    "artifact_type": {
+      "type": "string",
+      "enum": [
+        "paper_analysis",
+        "topic_survey",
+        "strategic_scan",
+        "crystal_seed"
+      ],
+      "description": "Type of research evidence artifact"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Schema version for compatibility"
+    },
+    "source_metadata": {
+      "type": "object",
+      "description": "Metadata about the source of evidence",
+      "required": ["source_type", "source_id", "retrieval_timestamp", "source_url"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["arxiv", "pubmed", "doi", "internal"]
+        },
+        "source_id": {
+          "type": "string",
+          "description": "Unique identifier in source system"
+        },
+        "retrieval_timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "source_hash": {
+          "type": "string",
+          "description": "SHA-256 hash of source content"
+        }
+      }
+    },
+    "evidence_chain": {
+      "type": "array",
+      "description": "Chain of evidence showing processing steps",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["step_id", "action", "timestamp", "input_hash", "output_hash", "agent_id"],
+        "properties": {
+          "step_id": {
+            "type": "string",
+            "description": "Unique identifier for this processing step"
+          },
+          "action": {
+            "type": "string",
+            "description": "Action performed in this step"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "input_hash": {
+            "type": "string",
+            "description": "SHA-256 hash of input data"
+          },
+          "output_hash": {
+            "type": "string",
+            "description": "SHA-256 hash of output data"
+          },
+          "agent_id": {
+            "type": "string",
+            "description": "ID of agent that performed this step"
+          },
+          "validation_status": {
+            "type": "string",
+            "enum": ["pending", "validated", "failed"]
+          }
+        }
+      }
+    },
+    "research_content": {
+      "type": "object",
+      "description": "The actual research content/findings",
+      "properties": {
+        "paper_analysis": {
+          "$ref": "#/definitions/paper_analysis"
+        },
+        "topic_survey": {
+          "$ref": "#/definitions/topic_survey"
+        },
+        "strategic_scan": {
+          "$ref": "#/definitions/strategic_scan"
+        },
+        "crystal_seed": {
+          "$ref": "#/definitions/crystal_seed"
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "description": "Integrity verification data",
+      "required": ["content_hash", "evidence_signature", "validator_signature"],
+      "properties": {
+        "content_hash": {
+          "type": "string",
+          "description": "SHA-256 hash of research_content"
+        },
+        "evidence_signature": {
+          "type": "string",
+          "description": "Digital signature from builder agent"
+        },
+        "validator_signature": {
+          "type": "string",
+          "description": "Digital signature from validator agent"
+        },
+        "hash_algorithm": {
+          "type": "string",
+          "const": "SHA-256"
+        }
+      }
+    },
+    "trace_metadata": {
+      "type": "object",
+      "required": ["trace_id", "request_id", "execution_time_ms", "builder_agent", "validator_agent"],
+      "properties": {
+        "trace_id": {
+          "type": "string",
+          "description": "Distributed trace ID"
+        },
+        "request_id": {
+          "type": "string",
+          "description": "Original request ID"
+        },
+        "execution_time_ms": {
+          "type": "integer",
+          "description": "Total execution time in milliseconds"
+        },
+        "builder_agent": {
+          "type": "string",
+          "description": "ID of builder agent"
+        },
+        "validator_agent": {
+          "type": "string",
+          "description": "ID of validator agent"
+        }
+      }
+    },
+    "embedded_annotations": {
+      "type": "array",
+      "description": "EmbeddedAnnotationBlocks for context",
+      "items": {
+        "$ref": "embedded_annotation_block_schema.json"
+      }
+    },
+    "_locked": {
+      "type": "boolean",
+      "const": true,
+      "description": "Indicates this artifact is immutable"
+    }
+  },
+  "definitions": {
+    "paper_analysis": {
+      "type": "object",
+      "required": ["paper_id", "title", "authors", "abstract", "key_findings", "relevance_score"],
+      "properties": {
+        "paper_id": {"type": "string"},
+        "title": {"type": "string"},
+        "authors": {"type": "array", "items": {"type": "string"}},
+        "abstract": {"type": "string"},
+        "key_findings": {"type": "array", "items": {"type": "string"}},
+        "relevance_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "haios_applications": {"type": "array", "items": {"type": "string"}},
+        "extracted_concepts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["concept_name", "concept_type", "description"],
+            "properties": {
+              "concept_name": {"type": "string"},
+              "concept_type": {"type": "string"},
+              "description": {"type": "string"},
+              "evidence_quote": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "topic_survey": {
+      "type": "object",
+      "required": ["topic", "paper_count", "time_range", "summary", "categorized_papers"],
+      "properties": {
+        "topic": {"type": "string"},
+        "paper_count": {"type": "integer"},
+        "time_range": {
+          "type": "object",
+          "properties": {
+            "start": {"type": "string", "format": "date"},
+            "end": {"type": "string", "format": "date"}
+          }
+        },
+        "summary": {"type": "string"},
+        "categorized_papers": {
+          "type": "object",
+          "properties": {
+            "highly_relevant": {"type": "array", "items": {"$ref": "#/definitions/paper_summary"}},
+            "moderately_relevant": {"type": "array", "items": {"$ref": "#/definitions/paper_summary"}},
+            "peripherally_relevant": {"type": "array", "items": {"$ref": "#/definitions/paper_summary"}}
+          }
+        },
+        "emerging_themes": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "strategic_scan": {
+      "type": "object",
+      "required": ["scan_scope", "priorities", "recommendations"],
+      "properties": {
+        "scan_scope": {
+          "type": "object",
+          "properties": {
+            "categories": {"type": "array", "items": {"type": "string"}},
+            "time_window": {"type": "string"}
+          }
+        },
+        "priorities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["topic", "relevance_score", "rationale"],
+            "properties": {
+              "topic": {"type": "string"},
+              "relevance_score": {"type": "number"},
+              "rationale": {"type": "string"},
+              "impacted_adrs": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        },
+        "recommendations": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "crystal_seed": {
+      "type": "object",
+      "required": ["source_artifact_id", "extracted_concepts", "architectural_impact", "implementation_proposal"],
+      "properties": {
+        "source_artifact_id": {"type": "string"},
+        "extracted_concepts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["concept_id", "name", "type", "description", "haios_application"],
+            "properties": {
+              "concept_id": {"type": "string"},
+              "name": {"type": "string"},
+              "type": {"type": "string", "enum": ["ALGORITHM", "PROTOCOL", "ARCHITECTURE", "PATTERN", "PRINCIPLE"]},
+              "description": {"type": "string"},
+              "haios_application": {"type": "string"},
+              "confidence_score": {"type": "number"}
+            }
+          }
+        },
+        "architectural_impact": {
+          "type": "object",
+          "properties": {
+            "answered_questions": {"type": "array", "items": {"type": "string"}},
+            "revealed_questions": {"type": "array", "items": {"type": "string"}},
+            "impacted_adrs": {"type": "array", "items": {"type": "string"}},
+            "proposed_changes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "change_type": {"type": "string", "enum": ["ADR_UPDATE", "NEW_COMPONENT", "DEPRECATION"]},
+                  "target": {"type": "string"},
+                  "description": {"type": "string"}
+                }
+              }
+            }
+          }
+        },
+        "implementation_proposal": {
+          "type": "object",
+          "properties": {
+            "priority": {"type": "string", "enum": ["critical", "high", "medium", "low"]},
+            "estimated_effort": {"type": "string"},
+            "risks": {"type": "array", "items": {"type": "string"}},
+            "dependencies": {"type": "array", "items": {"type": "string"}}
+          }
+        }
+      }
+    },
+    "paper_summary": {
+      "type": "object",
+      "required": ["paper_id", "title", "relevance_score"],
+      "properties": {
+        "paper_id": {"type": "string"},
+        "title": {"type": "string"},
+        "relevance_score": {"type": "number"},
+        "summary": {"type": "string"}
+      }
+    }
+  }
+}

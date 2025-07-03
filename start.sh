@@ -50,4 +50,7 @@ cat << EOF
    • n8n      → http://localhost:${N8N_PORT}
    • NocoDB   → http://localhost:${NOCODB_PORT}
    • Langflow → http://localhost:${LANGFLOW_PORT:-7860}
+
+💡 To use Claude Code with MCP servers for this project, run:
+   claude --mcp-server "filesystem:$(pwd)" --mcp-server memory --mcp-server "sqlite:$(pwd)/data/nocodb/noco.db $(pwd)/data/langflow/langflow.db"
 EOF
