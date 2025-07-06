@@ -1,0 +1,37 @@
+{
+  "issue_id": "issue_assumptions_g26",
+  "type": "CLARIFICATION_NEEDED",
+  "status": "RESOLVED",
+  "g_created": 26,
+  "title": "Surface Implicit Assumptions in ADR Framework",
+  "description": "Multiple ADRs contain implicit assumptions that need to be surfaced and documented explicitly to improve framework clarity and reduce ambiguity.",
+  "clarification_request": {
+    "context": "During ADR development, several implicit assumptions were identified that could lead to misunderstanding or inconsistent implementation.",
+    "questions": [
+      "What are the implicit assumptions about agent capabilities?",
+      "What are the assumed constraints on system resources?", 
+      "What assumptions exist about the operational environment?",
+      "What are the implicit dependencies between ADRs?"
+    ],
+    "priority": "HIGH",
+    "blocking": ["ADR-OS-001", "ADR-OS-002", "ADR-OS-003", "ADR-OS-004", "ADR-OS-005", "ADR-OS-006", "ADR-OS-007", "ADR-OS-008", "ADR-OS-009", "ADR-OS-010", "ADR-OS-011", "ADR-OS-012", "ADR-OS-013", "ADR-OS-014", "ADR-OS-015", "ADR-OS-016", "ADR-OS-017", "ADR-OS-018", "ADR-OS-019", "ADR-OS-020", "ADR-OS-021", "ADR-OS-022", "ADR-OS-023", "ADR-OS-025", "ADR-OS-026", "ADR-OS-027", "ADR-OS-030", "ADR-OS-031", "ADR-OS-032"]
+  },
+  "resolution": {
+    "resolution_type": "INTEGRATION",
+    "g_resolved": 26,
+    "actions_taken": [
+      "Created Appendix A: Core Assumptions & Constraints as canonical reference",
+      "Added assumption surfacing requirements to ADR-OS-021",
+      "Established framework compliance tracking in ADR-OS-032",
+      "Integrated assumption documentation into standard ADR template"
+    ],
+    "outcome": "All implicit assumptions have been surfaced and documented in Appendix A. ADR template now requires explicit assumption identification.",
+    "validation": "Assumption surfacing methodology successfully integrated into ADR development process."
+  },
+  "related_artifacts": [
+    "docs/appendices/Appendix_A_Assumptions_Constraints.md",
+    "docs/ADR/ADR-OS-021.md",
+    "docs/ADR/ADR-OS-032.md"
+  ],
+  "trace_id": "g26_assumption_surfacing"
+}

@@ -7,9 +7,6 @@
   "g_created": 26,
   "version": 1,
   "source_documents": [
-    "docs/appendices/Appendix_B_Operational_Principles_Roles_Error_Handling.md",
-    "docs/appendices/Appendix_B_Operational_Principles_Roles_Error_Handling.md",
-    "docs/appendices/Appendix_B_Operational_Principles_Roles_Error_Handling.md",
     "docs/appendices/Appendix_B_Operational_Principles_Roles_Error_Handling.md"
   ],
   "frameworks_models_applied": [

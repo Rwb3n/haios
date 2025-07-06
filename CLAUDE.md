@@ -8,25 +8,38 @@ HAIOS (Hybrid AI Operating System) is a **Trust Engine** that transforms low-tru
 
 The system implements a "Certainty Ratchet" architecture - a one-way mechanism that only allows movement from ambiguity toward verified truth. HAIOS positions itself as the "Admiralty" commanding fleets of commodity AI agents, focusing on governance, planning, and synthesis rather than direct task execution.
 
-## Commands
+### MCP Server Configuration
+The project includes MCP (Model Context Protocol) servers for enhanced Claude Code integration:
+- **Filesystem Server**: Full access to the HAIOS project directory
+- **Memory Server**: Knowledge graph for context persistence
+- **SQLite Server**: Direct access to NocoDB and Langflow databases
+- **Playwright Server**: Browser automation capabilities
 
-### Service Management
+Configure MCP servers:
 ```bash
-# Initial setup (creates data directories and starts services)
-./setup.sh
-
-# Start all services with health checks
-./start.sh
-
-# Update Docker images and restart services
-./update.sh
-
-# Docker operations
-docker compose up -d          # Start services
-docker compose ps             # View status
-docker compose logs -f [service]  # View logs
-docker compose down           # Stop services
+./mcp-config.sh setup     # Add all HAIOS MCP servers
+./mcp-config.sh remove    # Remove HAIOS MCP servers
+./mcp-config.sh info      # Show configuration
+claude mcp list           # List all configured servers
 ```
+
+#### SQLite MCP Tool Usage Pattern
+**CRITICAL**: SQLite MCP servers (`nocodb-sqlite`, `langflow-sqlite`) cannot be accessed directly by Claude Code. Use this pattern:
+
+```
+1. Use Task tool to delegate SQL queries to an agent
+2. Agent accesses MCP servers and executes queries
+3. Results returned in agent's final report
+
+Example:
+Task: "Query nocodb-sqlite to list all tables and show data from ingestion_queue"
+```
+
+**Quick Reference - NocoDB Tables**:
+- `nc__b20___ingestion_queue` - Research paper processing queue
+- `nc__b20___raw_research` - Raw research data storage
+- `nc__b20___concept_reports` - Processed concept reports
+- Research pipeline: ingestion_queue → raw_research → concept_reports
 
 ### Service URLs
 - n8n (workflow automation): http://localhost:5678
@@ -37,6 +50,14 @@ docker compose down           # Stop services
 ```bash
 cd agents/rhiza_agent
 pip install -r requirements.txt
+
+# Test Rhiza MVP (v3 architecture)
+./test_mvp_v3.sh
+
+# Test individual phases
+python3 adapters/phase1_strategic_triage_v3.py  # v3 with MCP
+python3 adapters/phase2_tactical_ingestion.py   # v2 (v3 pending)
+python3 adapters/phase3_crystal_seed.py         # v2 (v3 pending)
 ```
 
 ## Architecture & Critical Patterns
@@ -116,6 +137,9 @@ pip install -r requirements.txt
 ### Agent Patterns
 1. **2A System (Architect Dialogue)**: Evaluator-optimizer pattern with feedback loops
 2. **Rhiza Agent**: Three-phase research mining (Strategic Triage → Tactical Ingestion → Crystal Seed Extraction)
+   - **v3 Architecture**: Uses Claude-as-a-Service (`Python → MCP Client → Claude Server → Anthropic API`)
+   - Automatic CLAUDE.md context loading via claude-server
+   - See `/agents/rhiza_agent/rhiza_blueprint_v3.md` for details
 3. **Plan Validation Gateway**: Semantic, economic, and behavioral linting
 4. **Argus Protocol**: Real-time monitoring and safety enforcement
 

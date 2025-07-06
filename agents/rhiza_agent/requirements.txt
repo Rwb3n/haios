@@ -1,3 +1,6 @@
 httpx
 beautifulsoup4
 PyMuPDF
+anthropic
+openai
+python-dotenv

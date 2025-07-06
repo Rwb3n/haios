@@ -1,0 +1,47 @@
+{
+  "mcpServers": {
+    "haios-filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-filesystem",
+        "/mnt/d/PROJECTS/haios"
+      ],
+      "env": {}
+    },
+    "haios-memory": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {}
+    },
+    "haios-nocodb": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-sqlite",
+        "/mnt/d/PROJECTS/haios/data/nocodb/noco.db"
+      ],
+      "env": {}
+    },
+    "haios-langflow": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-sqlite",
+        "/mnt/d/PROJECTS/haios/data/langflow/langflow.db"
+      ],
+      "env": {}
+    },
+    "haios-playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ],
+      "env": {}
+    }
+  }
+}

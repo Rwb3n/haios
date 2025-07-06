@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(find:*)",
+      "Bash(claude mcp add nocodb-sqlite \"npx\" \"@modelcontextprotocol/server-sqlite\" \"/mnt/d/PROJECTS/haios/data/nocodb/noco.db\")",
+      "Bash(claude mcp add langflow-sqlite \"npx\" \"@modelcontextprotocol/server-sqlite\" \"/mnt/d/PROJECTS/haios/data/langflow/langflow.db\")",
+      "Bash(claude mcp:*)",
+      "Bash(mv:*)",
+      "Bash(ls:*)",
+      "mcp__filesystem__list_allowed_directories",
+      "Bash(sqlite3:*)",
+      "mcp__haios-filesystem__list_allowed_directories",
+      "Bash(grep:*)",
+      "mcp__haios-filesystem__list_directory",
+      "mcp__haios-filesystem__read_multiple_files",
+      "mcp__haios-filesystem__read_file",
+      "Bash(chmod:*)",
+      "Bash(python3:*)",
+      "Bash(./lint/canon_linter.sh:*)",
+      "Bash(dos2unix:*)"
+    ],
+    "deny": []
+  },
+  "enabledMcpjsonServers": [
+    "haios-filesystem",
+    "haios-memory",
+    "haios-nocodb",
+    "haios-langflow",
+    "haios-playwright"
+  ]
+}

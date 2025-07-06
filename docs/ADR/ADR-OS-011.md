@@ -1,28 +1,4 @@
-﻿# ANNOTATION_BLOCK_START
-{
-    "artifact_annotation_header": {
-        "artifact_id_of_host": "adr_os_011_md",
-        "g_annotation_created": 25,
-        "version_tag_of_host_at_annotation": "1.2.0"
-    },
-    "payload": {
-        "description": "Retrofitted to comply with ADR-OS-032: Canonical Models and Frameworks Registry & Enforcement.",
-        "artifact_type": "DOCUMENTATION",
-        "purpose_statement": "To ensure framework compliance and improve architectural decision clarity.",
-        "authors_and_contributors": [
-            { "g_contribution": 25, "identifier": "Hybrid_AI_OS" },
-            { "g_contribution": 4, "identifier": "Framework_Compliance_Retrofit" }
-        ],
-        "internal_dependencies": [
-            "adr_os_template_md",
-            "adr_os_032_md"
-        ],
-        "linked_issue_ids": []
-    }
-}
-# ANNOTATION_BLOCK_END
-
-# ADR-OS-011: Task Failure Handling & Remediation
+﻿# ADR-OS-011: Task Failure Handling & Remediation
 
 * **Status**: Proposed
 * **Date**: 2025-06-09

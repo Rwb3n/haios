@@ -1,0 +1,277 @@
+{
+  "name": "Rhiza_MVP_Linear",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "c8ba6c61-aeb1-4cbb-9cfa-0c1d95e4106f",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "# Rhiza MVP Linear Workflow\n\nThis workflow runs all three Rhiza phases sequentially:\n\n1. **Phase 1**: Strategic Triage - Identify research themes\n2. **Phase 2**: Tactical Ingestion - Categorize papers\n3. **Phase 3**: Crystal Seed - Extract insights from top paper\n\n## Input\nProvide categories array, e.g.:\n```json\n{\n  \"categories\": [\"cs.AI\", \"cs.DC\"]\n}\n```",
+        "height": 239.33333333333331,
+        "width": 456
+      },
+      "id": "29c00e59-bbf0-42e6-9d95-3e8b07461559",
+      "name": "Workflow Notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        160,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /data/agents/rhiza_agent/adapters && python phase1_strategic_triage_v2.py --categories {{ $json.categories.join(' ') }}",
+        "cwd": "/data"
+      },
+      "id": "0c6e91e5-7d0b-4e5e-9508-f78bb31286f2",
+      "name": "Execute Phase 1",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Phase 1 output to extract report path\nconst output = $input.item.json.stdout;\nconsole.log('Phase 1 Output:', output);\n\n// Extract report path using regex\nconst reportMatch = output.match(/Full report saved to: (.+\\.json)/);\nif (!reportMatch) {\n  throw new Error('Could not find report path in Phase 1 output');\n}\n\nconst reportPath = reportMatch[1];\n\n// Also extract the first theme for Phase 2\nconst themeMatch = output.match(/1\\. (.+?) \\(Score:/);\nconst topTheme = themeMatch ? themeMatch[1] : 'distributed systems';\n\nreturn {\n  phase1_report: reportPath,\n  top_theme: topTheme,\n  phase1_success: true\n};"
+      },
+      "id": "1d87b85f-c5c0-4db2-87e9-2c6ad93f3990",
+      "name": "Parse Phase 1 Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /data/agents/rhiza_agent/adapters && python phase2_tactical_ingestion.py --topic \"{{ $json.top_theme }}\"",
+        "cwd": "/data"
+      },
+      "id": "e87ae7a0-6e07-477f-b60d-34a32c7fb65f",
+      "name": "Execute Phase 2",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Phase 2 output to get first Tier 1 paper\nconst output = $input.item.json.stdout;\nconsole.log('Phase 2 Output:', output);\n\n// Extract paper ID from the example command\nconst paperIdMatch = output.match(/--paper-id ([\\w\\.]+)/);\nif (!paperIdMatch) {\n  // Try to find report path and indicate no Tier 1 papers\n  const reportMatch = output.match(/Report saved to: (.+\\.json)/);\n  return {\n    phase2_report: reportMatch ? reportMatch[1] : null,\n    tier1_paper_id: null,\n    has_tier1_papers: false,\n    phase2_success: true\n  };\n}\n\nconst paperId = paperIdMatch[1];\n\n// Extract report path\nconst reportMatch = output.match(/Report saved to: (.+\\.json)/);\nconst reportPath = reportMatch ? reportMatch[1] : null;\n\nreturn {\n  phase2_report: reportPath,\n  tier1_paper_id: paperId,\n  has_tier1_papers: true,\n  phase2_success: true\n};"
+      },
+      "id": "42e15d60-95cf-4e82-9fb9-2ca029d3d4f4",
+      "name": "Parse Phase 2 Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.has_tier1_papers }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "f5b8e5f8-b899-4f1e-b4d1-d087c9dd09f9",
+      "name": "Has Tier 1 Papers?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "command": "cd /data/agents/rhiza_agent/adapters && python phase3_crystal_seed.py --paper-id {{ $json.tier1_paper_id }}",
+        "cwd": "/data"
+      },
+      "id": "0ce14476-0c20-40bc-9b90-ad088c4e6df8",
+      "name": "Execute Phase 3",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse Phase 3 output\nconst output = $input.item.json.stdout;\nconsole.log('Phase 3 Output:', output);\n\n// Extract report path\nconst reportMatch = output.match(/Full proposal saved to: (.+\\.json)/);\nconst reportPath = reportMatch ? reportMatch[1] : null;\n\n// Extract concept count\nconst conceptMatch = output.match(/Concepts Found: (\\d+)/);\nconst conceptCount = conceptMatch ? parseInt(conceptMatch[1]) : 0;\n\nreturn {\n  phase3_report: reportPath,\n  concepts_found: conceptCount,\n  phase3_success: !!reportPath\n};"
+      },
+      "id": "35c88f8f-1e96-4f63-9e01-8b1c88cb9e6f",
+      "name": "Parse Phase 3 Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1780,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// No Tier 1 papers found\nreturn {\n  phase3_skipped: true,\n  reason: 'No Tier 1 papers found in Phase 2',\n  phase2_report: $json.phase2_report\n};"
+      },
+      "id": "d973e3f9-dcf7-4e95-aa5f-4a1171a69fb2",
+      "name": "No Tier 1 Papers",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1560,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Compile final summary\nconst phase1Data = $('Parse Phase 1 Results').first().json;\nconst phase2Data = $('Parse Phase 2 Results').first().json;\n\n// Get Phase 3 data from whichever branch executed\nlet phase3Data = {};\nif ($('Parse Phase 3 Results').first()) {\n  phase3Data = $('Parse Phase 3 Results').first().json;\n} else if ($('No Tier 1 Papers').first()) {\n  phase3Data = $('No Tier 1 Papers').first().json;\n}\n\nreturn {\n  workflow_complete: true,\n  execution_time: new Date().toISOString(),\n  summary: {\n    phase1: {\n      success: phase1Data.phase1_success,\n      report: phase1Data.phase1_report,\n      top_theme: phase1Data.top_theme\n    },\n    phase2: {\n      success: phase2Data.phase2_success,\n      report: phase2Data.phase2_report,\n      has_tier1_papers: phase2Data.has_tier1_papers,\n      tier1_paper_id: phase2Data.tier1_paper_id\n    },\n    phase3: {\n      success: phase3Data.phase3_success || false,\n      skipped: phase3Data.phase3_skipped || false,\n      report: phase3Data.phase3_report || null,\n      concepts_found: phase3Data.concepts_found || 0,\n      skip_reason: phase3Data.reason || null\n    }\n  },\n  next_steps: [\n    'Review generated reports in agents/rhiza_agent/reports/',\n    'Check NocoDB tables for persisted data',\n    'Run validation on outputs'\n  ]\n};"
+      },
+      "id": "11acce45-2e87-41e8-a1d6-b829bb6dc833",
+      "name": "Final Summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        300
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Execute Phase 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Phase 1": {
+      "main": [
+        [
+          {
+            "node": "Parse Phase 1 Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Phase 1 Results": {
+      "main": [
+        [
+          {
+            "node": "Execute Phase 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Phase 2": {
+      "main": [
+        [
+          {
+            "node": "Parse Phase 2 Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Phase 2 Results": {
+      "main": [
+        [
+          {
+            "node": "Has Tier 1 Papers?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Tier 1 Papers?": {
+      "main": [
+        [
+          {
+            "node": "Execute Phase 3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Tier 1 Papers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Phase 3": {
+      "main": [
+        [
+          {
+            "node": "Parse Phase 3 Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Phase 3 Results": {
+      "main": [
+        [
+          {
+            "node": "Final Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Tier 1 Papers": {
+      "main": [
+        [
+          {
+            "node": "Final Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "01020304-0506-0708-090a-0b0c0d0e0f10",
+  "id": "rhiza_mvp_001",
+  "meta": {
+    "instanceId": "27cc9b56542ad3b29a0e256379d572018177d9080b4ba7908b929798c1b8cceb"
+  },
+  "tags": []
+}

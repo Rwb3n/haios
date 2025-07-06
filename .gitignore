@@ -4,6 +4,15 @@
 
 _legacy/
 data/
+mcp-config.sh
+
+# Rhiza agent outputs
+agents/rhiza_agent/reports/phase1_priorities/*.json
+agents/rhiza_agent/reports/phase1_priorities/*.md
+agents/rhiza_agent/reports/phase2_triage/*.json
+agents/rhiza_agent/reports/phase2_triage/*.md
+agents/rhiza_agent/reports/phase3_crystal_seeds/*.json
+agents/rhiza_agent/reports/phase3_crystal_seeds/*.md
 
 #################################################
 ################ general ########################

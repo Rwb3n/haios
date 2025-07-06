@@ -29,6 +29,29 @@ services:
     networks:
       - localnet
 
+  # Claude-as-a-Service for Rhiza agent
+  claude-server:
+    build:
+      context: ./agents/rhiza_agent
+      dockerfile: claude-server/Dockerfile
+    command: ["claude", "mcp", "serve", "--port", "8090"]
+    volumes:
+      - .:/app/project:ro  # Read-only mount of entire project for CLAUDE.md
+    working_dir: /app/project
+    networks:
+      - localnet
+    env_file: .env
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - rhiza-v3  # Use docker compose --profile rhiza-v3 up
+
 networks:
   localnet:
     driver: bridge

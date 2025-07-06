@@ -7,9 +7,6 @@
   "g_created": 26,
   "version": 1,
   "source_documents": [
-    "docs/appendices/Appendix_A_Assumptions_Constraints.md",
-    "docs/appendices/Appendix_A_Assumptions_Constraints.md",
-    "docs/appendices/Appendix_A_Assumptions_Constraints.md",
     "docs/appendices/Appendix_A_Assumptions_Constraints.md"
   ],
   "frameworks_models_applied": [
