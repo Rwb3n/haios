@@ -1,30 +1,4 @@
-﻿# ANNOTATION_BLOCK_START
-{
-    "artifact_annotation_header": {
-        "artifact_id_of_host": "adr_os_019_md",
-        "g_annotation_created": 19,
-        "version_tag_of_host_at_annotation": "1.2.0"
-    },
-    "payload": {
-        "description": "Refactored to align with the standardized ADR template as per ADR-OS-021. Moved embedded annotation to the header.",
-        "artifact_type": "DOCUMENTATION",
-        "purpose_statement": "To define the unified Observability & Budget Framework for the HAiOS runtime.",
-        "authors_and_contributors": [
-            { "g_contribution": 19, "identifier": "Hybrid_AI_OS" },
-            { "g_contribution": 231, "identifier": "platform-observability-wg" }
-        ],
-        "internal_dependencies": [
-            "adr_os_template_md",
-            "core_atomic_io_py_g222",
-            "utils_cost_meter_py_g226",
-            "engine_py_g120"
-        ],
-        "linked_issue_ids": []
-    }
-}
-# ANNOTATION_BLOCK_END
-
-# ADR-OS-019: Observability & Budget Governance
+﻿# ADR-OS-019: Observability & Budget Governance
 
 *   **Status**: Proposed
 *   **Date**: 2025-06-11
