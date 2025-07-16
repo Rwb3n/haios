@@ -184,6 +184,37 @@ def ensure_required_files_exist():
             print(f"Found required file: {file_name}")
 
 
+def extract_speaker_role(prompt_file_path: str) -> str:
+    """Extract speaker role from prompt file header."""
+    try:
+        with open(prompt_file_path, 'r') as f:
+            first_line = f.readline().strip()
+        
+        # Parse <Role Prompt: Description> format
+        if first_line.startswith('<') and first_line.endswith('>'):
+            # Extract text between < and >
+            content = first_line[1:-1]
+            
+            # Look for "Prompt:" pattern and extract the role part
+            if 'Prompt:' in content:
+                role_part = content.split('Prompt:')[0].strip()
+                return role_part
+            else:
+                # Fallback: use everything before " Prompt"
+                if ' Prompt' in content:
+                    return content.split(' Prompt')[0].strip()
+                else:
+                    return content.strip()
+        
+        # Fallback: return filename without extension
+        return Path(prompt_file_path).stem.replace('_PROMPT_FILE_BASED', '').replace('_', '-')
+        
+    except Exception as e:
+        print(f"Error extracting speaker role from {prompt_file_path}: {e}")
+        # Return filename-based fallback
+        return Path(prompt_file_path).stem.replace('_PROMPT_FILE_BASED', '').replace('_', '-')
+
+
 if __name__ == "__main__":
     """Run utilities for testing."""
     print("=== 2A Orchestrator Utilities Test ===")

@@ -22,57 +22,55 @@ class SummarizerNode(AsyncNode):
         self.scribe_prompt = "Scribe/Scribe_PROMPT.txt"
     
     async def prep_async(self, shared: Dict[str, Any]) -> Dict[str, Any]:
-        """Prepare dialogue history for summarization."""
-        dialogue_path = shared["dialogue_path"]
-        
-        # Read current dialogue file
-        try:
-            with open(dialogue_path, 'r') as f:
-                data = json.load(f)
-            
-            dialogue_history = data.get("dialogue", [])
-            return {
-                "dialogue_history": dialogue_history,
-                "round_num": shared["round_num"],
-                "total_entries": len(dialogue_history)
-            }
-        except Exception as e:
-            print(f"  [ERROR] Failed to read dialogue for summary: {e}")
-            return {"dialogue_history": [], "round_num": 1, "total_entries": 0}
+        """Prepare context for summarization."""
+        return {
+            "dialogue_path": shared["dialogue_path"],
+            "round_num": shared["round_num"],
+            "session_dir": shared.get("session_dir", "output_2A/session_default")
+        }
     
     async def exec_async(self, context: Dict[str, Any]) -> str:
-        """Generate dialogue summary using Scribe persona."""
-        dialogue_history = context["dialogue_history"]
+        """Generate dialogue summary using Scribe persona with restricted tools."""
         round_num = context["round_num"]
         
-        # Skip summary for first round or empty dialogues
-        if round_num <= 1 or len(dialogue_history) == 0:
+        # Skip summary for first round
+        if round_num <= 1:
             return "No previous dialogue to summarize."
         
         print(f"\n--- Generating Dialogue Summary (Round {round_num}) ---")
         
-        # Read scribe prompt
+        # Read scribe prompt file with read-only access (principle of least privilege)
         base_dir = Path.cwd()
         scribe_prompt_path = str(base_dir / self.scribe_prompt)
         
-        response, tools = await run_agent_step(f"Read {scribe_prompt_path}", ["Read"])
-        if tools == 0:
+        from .shared_components import run_read_only_step
+        prompt_response, prompt_tools = await run_read_only_step(f"Read {scribe_prompt_path}", scribe_prompt_path)
+        if prompt_tools == 0:
+            print(f"  [ERROR] Failed to read Scribe prompt from {scribe_prompt_path}")
             return "Error: Failed to read Scribe prompt"
         
-        # Create summary request
-        dialogue_json = json.dumps(dialogue_history, indent=2)
-        summary_instruction = f"""Read the following dialogue history and create a concise summary following your instructions:
-
-{dialogue_json}
-
-Please provide a bullet-point summary of the key arguments, decisions, and open questions."""
+        print(f"  [OK] Scribe read prompt file ({len(prompt_response)} chars)")
         
-        summary_response, summary_tools = await run_agent_step(summary_instruction, ["Read"])
-        if summary_tools == 0:
-            return "Error: Failed to generate dialogue summary"
+        # Get session directory from context
+        session_dir = context.get("session_dir", "output_2A/session_default")
+        summary_file_path = f"{session_dir}/summary.md"
         
-        print(f"  [OK] Generated dialogue summary ({len(summary_response)} chars)")
-        return summary_response
+        # Simple file operation instruction (identical pattern to Architects)
+        base_dir = Path.cwd()
+        summary_abs = str(base_dir / summary_file_path)
+        dialogue_abs = str(base_dir / context["dialogue_path"])
+        
+        summary_instruction = f"""Read {dialogue_abs} then read {summary_abs} then use Edit ONCE to replace the entire summary file with an updated version containing key information from the dialogue."""
+        
+        # Standard Read + Edit pattern (identical to Architects)
+        response, tools_used = await run_agent_step(summary_instruction, ["Read", "Edit"])
+        print(f"  [DEBUG] Scribe used {tools_used} tools")
+        
+        if tools_used < 3:
+            return f"Error: Scribe must use Read (dialogue), Read (summary), and Edit tools (used {tools_used} tools)"
+        
+        print(f"  [OK] Generated dialogue summary ({len(response)} chars)")
+        return response
     
     async def exec_fallback_async(self, prep_res: Dict[str, Any], exc: Exception) -> str:
         """Graceful fallback if summary generation fails."""
@@ -80,8 +78,13 @@ Please provide a bullet-point summary of the key arguments, decisions, and open 
         return "Summary generation failed. Proceeding without dialogue context."
     
     async def post_async(self, shared: Dict[str, Any], prep_res: Dict[str, Any], exec_res: str) -> str:
-        """Store summary in shared state."""
+        """Store summary in shared state (file already written by Scribe)."""
+        # Store in shared state for backwards compatibility
         shared["dialogue_summary"] = exec_res
+        
+        # Note: File is already written by Scribe agent using Write tool
+        # No need to write again here - just update shared state
+        
         print(f"  [OK] Dialogue summary stored in shared state")
         print(f"\n{'='*60}")
         print("DIALOGUE SUMMARY CONTENT:")

@@ -275,13 +275,56 @@ END DIALOGUE SUMMARY
 ============================================================
 ```
 
+## HAiOS Compliance & Design Patterns
+
+The 2A Agent implements **HAiOS-compliant patterns** that prevent agent hallucination and ensure metadata control:
+
+### Claude Code SDK v2 Pattern (HARDENED)
+
+**Core Principle**: NO CONTENT EMBEDDING IN PROMPTS
+
+✅ **Orchestrator Pre-fills Skeleton Entries**
+```json
+// Orchestrator creates this BEFORE calling agent:
+{
+  "round": 1,
+  "role": "Architect-1",           // Role extracted from prompt file header
+  "timestamp": "2025-07-16T18:27:27.123",
+  "content": ""                    // Agent ONLY fills this field
+}
+```
+
+✅ **Agent Instructions are File Operations Only**
+```
+"Read dialogue.json then use Edit to fill in the content field of the last entry"
+```
+
+✅ **Role Name Control**
+- Role names extracted from prompt file headers: `<Architect-1 Prompt: The Proposer>`
+- Orchestrator controls all metadata (role, round, timestamp)
+- Agents cannot hallucinate role names or modify structure
+
+### HAiOS Three Pillars Implementation
+
+1. **Evidence-Based Development**: All dialogue entries are persisted JSON artifacts
+2. **Durable, Co-located Context**: Context lives in files, not embedded in prompts  
+3. **Separation of Duties**: Orchestrator handles metadata, agents handle content only
+
+### Pattern Benefits
+
+- **Prevents Agent Hallucination**: Agents cannot modify role names or structure
+- **Ensures Consistency**: All entries follow identical JSON schema
+- **Maintains Audit Trail**: Complete metadata control with HAiOS standards
+- **Enables Testing**: File-based operations are easily testable and reproducible
+
 ## Integration with HAIOS
 
 The 2A Agent serves as a critical component in HAIOS's architecture validation:
 - Transforms architectural gaps into concrete specifications
-- Provides structured critical analysis for ADR refinement
+- Provides structured critical analysis for ADR refinement  
 - Enables automated clarification processing
 - Supports the "Certainty Ratchet" by moving from ambiguity to verified truth
+- **Implements HAiOS-compliant agent orchestration patterns**
 
 ## Future Enhancements
 

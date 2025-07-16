@@ -16,11 +16,12 @@ from flow_clean import create_2a_flow, create_single_round_flow
 
 def create_dialogue_file(adr_path: str = "../../docs/ADR/ADR-OS-001.md", 
                         question_path: str = "input_2A/initial_question.txt",
-                        max_rounds: int = 3) -> str:
+                        max_rounds: int = 3,
+                        session_dir: str = None) -> tuple[str, str]:
     """
-    Create initial dialogue file.
+    Create initial dialogue file and session directory.
     
-    EXACT COPY from original working 2a_orchestrator_working.py
+    Returns tuple of (dialogue_path, session_dir)
     """
     print(f"Loading ADR from: {adr_path}")
     with open(adr_path, 'r') as f:
@@ -29,6 +30,13 @@ def create_dialogue_file(adr_path: str = "../../docs/ADR/ADR-OS-001.md",
     print(f"Loading question from: {question_path}")
     with open(question_path, 'r') as f:
         question = f.read().strip()
+    
+    # Create session directory if not provided
+    if session_dir is None:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        session_dir = f"output_2A/session_{timestamp}"
+    
+    Path(session_dir).mkdir(parents=True, exist_ok=True)
     
     dialogue_data = {
         "metadata": {
@@ -41,15 +49,38 @@ def create_dialogue_file(adr_path: str = "../../docs/ADR/ADR-OS-001.md",
         "dialogue": []
     }
     
-    Path("output_2A").mkdir(exist_ok=True)
-    dialogue_path = "output_2A/dialogue_working.json"
+    dialogue_path = f"{session_dir}/dialogue.json"
     
     with open(dialogue_path, 'w') as f:
         json.dump(dialogue_data, f, indent=2)
     
+    # Pre-create summary.md structure (like dialogue.json)
+    summary_path = f"{session_dir}/summary.md"
+    initial_summary = """# Dialogue Summary: [TO BE UPDATED]
+
+**Question**: [TO BE EXTRACTED]
+**Round**: [TO BE UPDATED]
+**Status**: IN_PROGRESS
+
+## Key Decisions & Agreements
+[TO BE FILLED]
+
+## Open Questions & Dissents
+[TO BE FILLED]
+
+## Current State of Proposal
+[TO BE FILLED]
+
+## Context for Next Round
+[TO BE FILLED]"""
+    
+    with open(summary_path, 'w', encoding='utf-8') as f:
+        f.write(initial_summary)
+    
     print(f"Created dialogue file: {dialogue_path}")
+    print(f"Created summary file: {summary_path}")
     print(f"Question: {question}")
-    return dialogue_path
+    return dialogue_path, session_dir
 
 
 async def run_2a_orchestrator(adr_path: str, question_path: str, max_rounds: int):
@@ -60,8 +91,8 @@ async def run_2a_orchestrator(adr_path: str, question_path: str, max_rounds: int
     """
     print("=== 2A Orchestrator (Clean PocketFlow) ===\n")
     
-    # Setup dialogue file
-    dialogue_path = create_dialogue_file(adr_path, question_path, max_rounds)
+    # Setup dialogue file and session directory
+    dialogue_path, session_dir = create_dialogue_file(adr_path, question_path, max_rounds)
     
     # Create flow
     dialogue_flow = create_2a_flow()
@@ -70,6 +101,7 @@ async def run_2a_orchestrator(adr_path: str, question_path: str, max_rounds: int
     shared = {
         "round_num": 1,
         "dialogue_path": dialogue_path,
+        "session_dir": session_dir,
         "max_rounds": max_rounds
     }
     
@@ -109,10 +141,11 @@ async def run_single_round_test():
     print("=== Single Round Test ===\n")
     
     # Create minimal dialogue file
-    dialogue_path = create_dialogue_file(max_rounds=1)
+    dialogue_path, session_dir = create_dialogue_file(max_rounds=1)
     
     shared = {
         "dialogue_path": dialogue_path,
+        "session_dir": session_dir,
         "round_num": 1,
         "max_rounds": 1
     }
