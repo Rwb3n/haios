@@ -15,47 +15,67 @@ from nodes import (
     Architect2Node, 
     ConsensusCheckNode,
     DialogueSummaryNode,
-    SummarizerNode
+    ConsensusSynthesisNode,
+    SummarizerNode,
+    ReadPromptNode,
+    UpdateDialogueNode
 )
 
 
 def create_2a_flow():
     """
-    Create the 2A dialogue flow with clean PocketFlow implementation.
+    Create the 2A dialogue flow with ATOMIC execution nodes (v1.3).
     
-    Flow structure matches original working pattern:
-    - Check consensus (skip first round)
-    - Run Architect-1 (reads file, appends response)
-    - Run Architect-2 (reads file, appends response, checks consensus)
-    - Loop or end based on consensus
+    New atomic flow structure (EXEC_PLAN_REFACTOR_ATOMIC_EXECUTION):
+    - ConsensusCheck → Summarizer
+    - ReadPrompt_A1 → UpdateDialogue_A1
+    - ReadPrompt_A2 → UpdateDialogue_A2  
+    - Loop based on consensus
+    
+    Each node performs exactly one atomic operation.
     """
     
-    # Create node instances
+    # Create atomic node instances
     consensus_check = ConsensusCheckNode()
     summarizer = SummarizerNode()
-    architect1 = Architect1Node()
-    architect2 = Architect2Node()
-    summary = DialogueSummaryNode()
     
-    # Define the flow graph according to v1.1 specification
+    # Atomic nodes for Architect-1 workflow
+    read_prompt_a1 = ReadPromptNode("A1/A1_PROMPT_FILE_BASED.txt")
+    update_dialogue_a1 = UpdateDialogueNode("Architect-1")
+    
+    # Atomic nodes for Architect-2 workflow  
+    read_prompt_a2 = ReadPromptNode("A2/A2_PROMPT_FILE_BASED.txt")
+    update_dialogue_a2 = UpdateDialogueNode("Architect-2")
+    
+    synthesis = ConsensusSynthesisNode()
+    
+    # Define the atomic flow graph
     # Start with consensus check
     consensus_check - "continue" >> summarizer
-    consensus_check - "consensus" >> summary
+    consensus_check - "consensus" >> synthesis
     
-    # Summarizer creates dialogue context before Architect-1
-    summarizer - "default" >> architect1
+    # Summarizer → Architect-1 atomic chain
+    summarizer - "default" >> read_prompt_a1
     
-    # Architect-1 flows to Architect-2 on success
-    architect1 - "default" >> architect2
-    architect1 - "error" >> summary  # End on error
+    # Architect-1 atomic chain: ReadPrompt → UpdateDialogue
+    read_prompt_a1 - "default" >> update_dialogue_a1
+    read_prompt_a1 - "error" >> synthesis
+    
+    # Architect-1 → Architect-2 atomic chain
+    update_dialogue_a1 - "continue" >> read_prompt_a2
+    update_dialogue_a1 - "error" >> synthesis
+    
+    # Architect-2 atomic chain: ReadPrompt → UpdateDialogue
+    read_prompt_a2 - "default" >> update_dialogue_a2
+    read_prompt_a2 - "error" >> synthesis
     
     # Architect-2 determines next action based on consensus
-    architect2 - "continue" >> consensus_check  # Loop back for next round
-    architect2 - "consensus" >> summary         # End on consensus
-    architect2 - "error" >> summary            # End on error
+    update_dialogue_a2 - "continue" >> consensus_check  # Loop back for next round
+    update_dialogue_a2 - "consensus" >> synthesis       # End on consensus with synthesis
+    update_dialogue_a2 - "error" >> synthesis          # End on error
     
-    # Summary node ends the flow
-    summary - "default" >> None  # Flow ends naturally
+    # Synthesis node ends the flow
+    synthesis - "default" >> None  # Flow ends naturally
     
     # Create the flow starting with consensus check
     return AsyncFlow(start=consensus_check)
@@ -65,46 +85,58 @@ def create_single_round_flow():
     """Create a single round flow for testing."""
     architect1 = Architect1Node()
     architect2 = Architect2Node()
-    summary = DialogueSummaryNode()
+    synthesis = ConsensusSynthesisNode()
     
     # Simple linear flow with error handling
     architect1 - "default" >> architect2
-    architect1 - "error" >> summary
+    architect1 - "error" >> synthesis
     
-    architect2 - "default" >> summary
-    architect2 - "continue" >> summary
-    architect2 - "consensus" >> summary
-    architect2 - "error" >> summary
+    architect2 - "default" >> synthesis
+    architect2 - "continue" >> synthesis
+    architect2 - "consensus" >> synthesis
+    architect2 - "error" >> synthesis
     
-    summary - "default" >> None
+    synthesis - "default" >> None
     
     return AsyncFlow(start=architect1)
 
 
 def create_custom_flow(a1_prompt: str = "A1/A1_PROMPT_FILE_BASED.txt",
                       a2_prompt: str = "A2/A2_PROMPT_FILE_BASED.txt"):
-    """Create a customized 2A flow with specific prompt files."""
+    """Create a customized 2A flow with atomic nodes and specific prompt files."""
     
-    # Create nodes with custom parameters
+    # Create atomic nodes with custom parameters
     consensus_check = ConsensusCheckNode()
     summarizer = SummarizerNode()
-    architect1 = Architect1Node(prompt_file=a1_prompt)
-    architect2 = Architect2Node(prompt_file=a2_prompt)
-    summary = DialogueSummaryNode()
     
-    # Same graph structure as create_2a_flow with summarizer
+    # Atomic nodes with custom prompts
+    read_prompt_a1 = ReadPromptNode(a1_prompt)
+    update_dialogue_a1 = UpdateDialogueNode("Architect-1")
+    
+    read_prompt_a2 = ReadPromptNode(a2_prompt)
+    update_dialogue_a2 = UpdateDialogueNode("Architect-2")
+    
+    synthesis = ConsensusSynthesisNode()
+    
+    # Same atomic graph structure as create_2a_flow
     consensus_check - "continue" >> summarizer
-    consensus_check - "consensus" >> summary
+    consensus_check - "consensus" >> synthesis
     
-    summarizer - "default" >> architect1
+    summarizer - "default" >> read_prompt_a1
     
-    architect1 - "default" >> architect2
-    architect1 - "error" >> summary
+    read_prompt_a1 - "default" >> update_dialogue_a1
+    read_prompt_a1 - "error" >> synthesis
     
-    architect2 - "continue" >> consensus_check
-    architect2 - "consensus" >> summary
-    architect2 - "error" >> summary
+    update_dialogue_a1 - "continue" >> read_prompt_a2
+    update_dialogue_a1 - "error" >> synthesis
     
-    summary - "default" >> None
+    read_prompt_a2 - "default" >> update_dialogue_a2
+    read_prompt_a2 - "error" >> synthesis
+    
+    update_dialogue_a2 - "continue" >> consensus_check
+    update_dialogue_a2 - "consensus" >> synthesis
+    update_dialogue_a2 - "error" >> synthesis
+    
+    synthesis - "default" >> None
     
     return AsyncFlow(start=consensus_check)

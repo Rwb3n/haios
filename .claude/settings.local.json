@@ -18,11 +18,20 @@
       "Bash(chmod:*)",
       "Bash(python3:*)",
       "Bash(./lint/canon_linter.sh:*)",
-      "Bash(dos2unix:*)"
+      "Bash(dos2unix:*)",
+      "Bash(git tag:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   },
   "enabledMcpjsonServers": [
+    "haios-filesystem",
+    "haios-memory",
+    "haios-nocodb",
+    "haios-langflow",
+    "haios-playwright"
+  ],
+  "disabledMcpjsonServers": [
     "haios-filesystem",
     "haios-memory",
     "haios-nocodb",

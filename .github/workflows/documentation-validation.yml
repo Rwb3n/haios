@@ -1,0 +1,60 @@
+name: Documentation Validation
+
+on:
+  pull_request:
+    paths:
+      - 'docs/ADR/**'
+      - 'scripts/validate_documentation.py'
+  push:
+    branches: [ main ]
+    paths:
+      - 'docs/ADR/**'
+      - 'scripts/validate_documentation.py'
+
+jobs:
+  validate-documentation:
+    runs-on: ubuntu-latest
+    name: Validate ADR Documentation
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Run documentation validation
+      run: |
+        python3 scripts/validate_documentation.py
+        
+    - name: Comment on PR (if validation fails)
+      if: failure() && github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## 📚 Documentation Validation Failed
+            
+            The automated documentation validation has detected issues with the ADR documentation. 
+            Please review and fix the issues before merging.
+            
+            **Common Issues:**
+            - ADR title doesn't match file content
+            - Missing entries in README.md index
+            - Framework references not relevant to ADR topic
+            - Missing markdown heading format
+            
+            Run the validation locally:
+            \`\`\`bash
+            python3 scripts/validate_documentation.py
+            \`\`\`
+            
+            This ensures HAiOS maintains its "Evidence over Declaration" integrity.`
+          });

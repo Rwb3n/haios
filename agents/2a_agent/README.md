@@ -10,7 +10,7 @@ The system uses two AI personas (Architect-1 as evaluator, Architect-2 as optimi
 
 - **File-based dialogue persistence** - All conversations stored in JSON format
 - **Configurable round limits** - Support for fixed rounds or infinite dialogue (-1)
-- **Consensus detection** - Automatic termination when "**No Further Dissent**" is detected
+- **Dual-mode consensus detection** - Boolean field (primary) + pattern matching (fallback)
 - **Context summarization** - Optional Scribe persona prevents dialogue amnesia (v1.1)
 - **PocketFlow integration** - Built on minimalist async LLM framework
 - **Atomic node architecture** - Modular design with one class per file
@@ -143,31 +143,60 @@ DialogueSummaryNode
 
 ## Key Improvements
 
-### From Monolithic to Modular
+### From Monolithic to Modular (v1.2)
 - **Before**: Single 216-line script with complex while loop
 - **After**: Modular nodes with clear responsibilities
 
-### PocketFlow Compliance
+### PocketFlow Compliance (v1.2)
 - **Before**: Manual exception handling and state management
 - **After**: Built-in retry mechanisms and graceful fallbacks
 
-### File-Based State Management
+### File-Based State Management (v1.2)
 - **Before**: Complex in-memory state coordination
 - **After**: Simple, persistent JSON file shared between agents
 
-### Enhanced Testability
-- **Before**: Hard to test individual components
-- **After**: Each node can be tested independently
+### Atomic Execution Pattern (v1.3)
+- **Before**: Multi-step orchestration within single nodes (AP-007 anti-pattern)
+- **After**: Truly atomic nodes - ReadPromptNode + UpdateDialogueNode chains
+- **Result**: Perfect PocketFlow compliance and enhanced retry logic
 
-### Improved Maintainability
-- **Before**: Monolithic script hard to modify
-- **After**: Easy to modify individual nodes or flow structure
+### Enhanced Consensus Detection (v1.3)
+- **Before**: Hardcoded pattern matching for "**No Further Dissent**"
+- **After**: Dual-mode approach with boolean field (primary) + pattern matching (fallback)
+- **Benefits**: Explicit control signals, backwards compatibility, language-agnostic
 
 ### Fixed Round Logic (Bug Fix)
 - **Before**: Infinite loop bug - script would run indefinitely without respecting round limits
 - **After**: Proper round counting and max_rounds enforcement
 - **Result**: Each round produces exactly 2 dialogue entries (1 per agent)
 - **Termination**: Script properly stops after max_rounds or consensus detection
+
+### Fixed Consensus Detection Logic (v1.3.1 Bug Fix)
+- **Before**: Consensus only detected after Architect-2 responses, missing Architect-1 consensus signals
+- **After**: Either architect can signal consensus via boolean field or pattern matching
+- **Result**: Immediate dialogue termination when any architect sets `consensus: true`
+- **Enhancement**: Improved logging shows which architect signaled consensus
+
+### Consensus Synthesis Engine (v1.4) - SDK Reference Compliant
+- **Added**: ConsensusSynthesisNode following proven Scribe pattern from SDK Reference
+- **Trigger**: Automatically invoked when consensus achieved (any architect sets `consensus: true`)
+- **Pattern**: 3-tool approach - Read dialogue → Read skeleton → Edit synthesis
+- **Tools**: `["Read", "Edit"]` (SDK Reference file modification pattern)
+- **Process**:
+  1. **Orchestrator**: Creates structured skeleton with metadata from dialogue.json
+  2. **Agent**: Reads dialogue context and fills skeleton placeholders
+  3. **Output**: Professional `consensus_synthesis.md` for stakeholder communication
+- **vs SummarizerNode**: SummarizerNode tracks ongoing dialogue, ConsensusSynthesisNode creates final deliverable
+- **Content**: Implementation roadmap, success criteria, risk mitigation (not just summary)
+- **Fallback**: Creates basic skeleton if dialogue reading fails
+
+### Enhanced Testability
+- **Before**: Hard to test individual components
+- **After**: Each atomic node can be tested independently
+
+### Improved Maintainability
+- **Before**: Monolithic script hard to modify
+- **After**: Easy to modify individual nodes or flow structure
 
 ## Migration from Legacy
 
@@ -316,6 +345,23 @@ The 2A Agent implements **HAiOS-compliant patterns** that prevent agent hallucin
 - **Ensures Consistency**: All entries follow identical JSON schema
 - **Maintains Audit Trail**: Complete metadata control with HAiOS standards
 - **Enables Testing**: File-based operations are easily testable and reproducible
+
+### Observability & Performance Metrics
+
+The 2A Agent provides comprehensive tool operation logging:
+
+**Real-time Operation Tracking:**
+- Duration timing for all operations (milliseconds)
+- Character count logging for content size awareness
+- Tool violation detection and flagging
+- Performance bottleneck identification
+
+**Logging Patterns by Tool Type:**
+- **Read**: `[Tool] Read: path` → `[OK] Read operation (X chars, Yms)`
+- **Edit**: `[Tool] Edit: path (old: X chars, new: Y chars)` → `[OK] Agent response (Z chars, Wms)`
+- **Write**: `[Tool] Write: path (X chars)` → `[OK] Agent response (Y chars, Zms)`
+
+**Technical Design**: Logging differences reflect Claude Code SDK constraints - Edit/Write show immediate character counts from input parameters, while Read operations show counts only after completion due to content being in the response rather than input.
 
 ## Integration with HAIOS
 

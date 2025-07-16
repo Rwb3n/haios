@@ -49,7 +49,6 @@ class SummarizerNode(AsyncNode):
             print(f"  [ERROR] Failed to read Scribe prompt from {scribe_prompt_path}")
             return "Error: Failed to read Scribe prompt"
         
-        print(f"  [OK] Scribe read prompt file ({len(prompt_response)} chars)")
         
         # Get session directory from context
         session_dir = context.get("session_dir", "output_2A/session_default")
@@ -69,7 +68,6 @@ class SummarizerNode(AsyncNode):
         if tools_used < 3:
             return f"Error: Scribe must use Read (dialogue), Read (summary), and Edit tools (used {tools_used} tools)"
         
-        print(f"  [OK] Generated dialogue summary ({len(response)} chars)")
         return response
     
     async def exec_fallback_async(self, prep_res: Dict[str, Any], exc: Exception) -> str:

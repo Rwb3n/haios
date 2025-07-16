@@ -4,6 +4,7 @@ Shared components used by multiple nodes in the 2A orchestrator.
 
 import sys
 import os
+import time
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'PocketFlow'))
 
 from claude_code_sdk import (
@@ -27,6 +28,7 @@ async def run_agent_step(prompt: str, tools: list[str]) -> tuple[str, int]:
     Returns:
         tuple: (response_text, tool_count)
     """
+    start_time = time.time()
     # Principle of least privilege: explicitly allow only requested tools
     # Block all dangerous tools by default
     dangerous_tools = ["Bash", "Write", "WebFetch", "WebSearch", "Task"]
@@ -57,7 +59,26 @@ async def run_agent_step(prompt: str, tools: list[str]) -> tuple[str, int]:
                     if block.name not in tools:
                         print(f"  [VIOLATION] Agent used disallowed tool: {block.name}")
                     else:
-                        print(f"  [Tool] {block.name}: {block.input.get('file_path', 'N/A')}")
+                        file_path = block.input.get('file_path', 'N/A')
+                        
+                        # Enhanced logging with operation details
+                        if block.name == "Read":
+                            # For Read operations, we'll get the content length from the response later
+                            print(f"  [Tool] {block.name}: {file_path}")
+                        elif block.name == "Edit":
+                            old_string = block.input.get('old_string', '')
+                            new_string = block.input.get('new_string', '')
+                            print(f"  [Tool] {block.name}: {file_path} (old: {len(old_string)} chars, new: {len(new_string)} chars)")
+                        elif block.name == "Write":
+                            content = block.input.get('content', '')
+                            print(f"  [Tool] {block.name}: {file_path} ({len(content)} chars)")
+                        else:
+                            print(f"  [Tool] {block.name}: {file_path}")
+    
+    # Log final response character count and duration for observability
+    duration_ms = int((time.time() - start_time) * 1000)
+    if response_text:
+        print(f"  [OK] Agent response ({len(response_text)} chars, {duration_ms}ms)")
     
     return response_text, tool_count
 
@@ -73,6 +94,7 @@ async def run_read_only_step(prompt: str, file_path: str = None) -> tuple[str, i
     Returns:
         tuple: (response_text, tool_count)
     """
+    start_time = time.time()
     # Ultra-restrictive: only Read tool allowed
     options = ClaudeCodeOptions(
         allowed_tools=["Read"],
@@ -96,6 +118,12 @@ async def run_read_only_step(prompt: str, file_path: str = None) -> tuple[str, i
                     elif file_path and block.input.get('file_path') != file_path:
                         print(f"  [VIOLATION] Read access to unauthorized file: {block.input.get('file_path')}")
                     else:
-                        print(f"  [Tool] {block.name}: {block.input.get('file_path', 'N/A')}")
+                        file_path_accessed = block.input.get('file_path', 'N/A')
+                        print(f"  [Tool] {block.name}: {file_path_accessed}")
+    
+    # Log final response character count and duration for observability
+    duration_ms = int((time.time() - start_time) * 1000)
+    if response_text:
+        print(f"  [OK] Read operation ({len(response_text)} chars, {duration_ms}ms)")
     
     return response_text, tool_count
