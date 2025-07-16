@@ -1,0 +1,15 @@
+{
+  "session_id": "session_20250716_122308",
+  "adr_path": "../../docs/ADR/ADR-OS-001.md",
+  "question_path": "input_2A/initial_question.txt",
+  "output_dir": "output_2A/session_20250716_122308",
+  "max_rounds": -1,
+  "personas": {
+    "architect_1": {
+      "prompt_path": "A1/A1_PROMPT_FILE_BASED.txt"
+    },
+    "architect_2": {
+      "prompt_path": "A2/A2_PROMPT_FILE_BASED.txt"
+    }
+  }
+}
