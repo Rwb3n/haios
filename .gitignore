@@ -6,6 +6,25 @@ _legacy/
 data/
 mcp-config.sh
 
+# Claude Code specific
+.claude/settings.local.json
+.env
+
+# Temporary/scratch files
+*.xml
+log.txt
+feedback.txt
+
+# Agent working directories
+agents/2a_agent/2a_agent/
+agents/*/Scripts/
+agents/*/Include/
+agents/*/Lib/
+agents/*/pyvenv.cfg
+
+# Build/output directories
+scripts/
+
 # Rhiza agent outputs
 agents/rhiza_agent/reports/phase1_priorities/*.json
 agents/rhiza_agent/reports/phase1_priorities/*.md
