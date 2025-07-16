@@ -6,7 +6,10 @@ without requiring Claude SDK to be fully functional.
 import json
 import asyncio
 from pathlib import Path
-from nodes_clean import Architect1Node, Architect2Node, ConsensusCheckNode, DialogueSummaryNode
+from nodes import ConsensusCheckNode
+from nodes.__legacy.architect1_node import Architect1Node  
+from nodes.__legacy.architect2_node import Architect2Node
+from nodes.__legacy.dialogue_summary_node import DialogueSummaryNode
 from flow_clean import create_2a_flow, create_single_round_flow
 
 

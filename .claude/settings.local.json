@@ -20,7 +20,10 @@
       "Bash(./lint/canon_linter.sh:*)",
       "Bash(dos2unix:*)",
       "Bash(git tag:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(python:*)"
     ],
     "deny": []
   },

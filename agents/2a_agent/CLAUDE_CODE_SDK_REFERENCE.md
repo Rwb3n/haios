@@ -58,11 +58,13 @@ Content lives in files, not in prompt instructions. If an agent needs context (A
 
 ### Agent-Specific Tools
 
-#### Architect-1 & Architect-2
+#### Architect Dialogue (Atomic Pattern) - v1.4 ACTIVE
+- **Implementation**: ReadPromptNode + UpdateDialogueNode atomic chains
 - **Tools**: `["Read", "Edit"]`
-- **Purpose**: Read dialogue files, edit/append entries
-- **Pattern**: Read existing files, make targeted edits
-- **Instruction Example**: `"Read dialogue.json then use Edit to append your response"`
+- **Purpose**: Read prompt files, read dialogue files, edit/append entries
+- **Pattern**: ReadPromptNode → UpdateDialogueNode (atomic execution)
+- **Tool Count**: 3 tools per architect (Read prompt, Read dialogue, Edit dialogue)
+- **Legacy**: Monolithic Architect1Node/Architect2Node moved to `nodes/__legacy/`
 
 #### Scribe (Summarizer) - v2 PROVEN PATTERN
 - **Tools**: `["Read", "Edit"]` 

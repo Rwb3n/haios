@@ -106,40 +106,57 @@ python main_clean.py --adr docs/ADR/ADR-OS-001.md --question "What about timeout
 ### Output
 - `output_2A/dialogue_working.json`: Dialogue state and results
 
-## Flow Diagram (v1.1)
+## Flow Diagram (v1.4 - Current Atomic Pattern)
 
 ```
-[ConsensusCheck] ─(continue)→ [SummarizerNode] → [Architect1] → [Architect2]
-       ↑                                                              │
-       └────────────────(continue)────────────────────────────────────┘
+[ConsensusCheck] ─(continue)→ [SummarizerNode] → [ReadPrompt_A1] → [UpdateDialogue_A1]
+       ↑                                                                     ↓
+       │                                           [ReadPrompt_A2] ← ────────┘
+       │                                                  ↓
+       └────────────────(continue)─────────── [UpdateDialogue_A2]
        │
     (consensus)
        ↓
-[DialogueSummary] → END
+[ConsensusSynthesis] → END
 ```
 
-### Flow Details
+### Active Node Structure (v1.4)
 
 ```
 ConsensusCheckNode 
-    ├─ "continue" → SummarizerNode (v1.1)
-    └─ "consensus" → DialogueSummaryNode
+    ├─ "continue" → SummarizerNode
+    └─ "consensus" → ConsensusSynthesisNode
 
-SummarizerNode (v1.1)
-    └─ "default" → Architect1Node
+SummarizerNode
+    └─ "default" → ReadPromptNode(A1)
 
-Architect1Node
-    ├─ "default" → Architect2Node
-    └─ "error" → DialogueSummaryNode
+ReadPromptNode(A1) 
+    ├─ "default" → UpdateDialogueNode(Architect-1)
+    └─ "error" → ConsensusSynthesisNode
 
-Architect2Node
+UpdateDialogueNode(Architect-1)
+    ├─ "continue" → ReadPromptNode(A2)
+    └─ "error" → ConsensusSynthesisNode
+
+ReadPromptNode(A2)
+    ├─ "default" → UpdateDialogueNode(Architect-2) 
+    └─ "error" → ConsensusSynthesisNode
+
+UpdateDialogueNode(Architect-2)
     ├─ "continue" → ConsensusCheckNode (loop)
-    ├─ "consensus" → DialogueSummaryNode
-    └─ "error" → DialogueSummaryNode
+    ├─ "consensus" → ConsensusSynthesisNode
+    └─ "error" → ConsensusSynthesisNode
 
-DialogueSummaryNode
+ConsensusSynthesisNode
     └─ "default" → END
 ```
+
+### Legacy Nodes (Deprecated - v1.3)
+
+Legacy monolithic nodes moved to `nodes/__legacy/`:
+- `Architect1Node` → Replaced by ReadPromptNode + UpdateDialogueNode atomic chain
+- `Architect2Node` → Replaced by ReadPromptNode + UpdateDialogueNode atomic chain  
+- `DialogueSummaryNode` → Replaced by ConsensusSynthesisNode (professional deliverable)
 
 ## Key Improvements
 
@@ -190,23 +207,54 @@ DialogueSummaryNode
 - **Content**: Implementation roadmap, success criteria, risk mitigation (not just summary)
 - **Fallback**: Creates basic skeleton if dialogue reading fails
 
+### Node Structure Cleanup (v1.4)
+- **Added**: Clean separation between active and deprecated nodes
+- **Active Nodes**: Only SDK Reference compliant, atomic pattern nodes in main directory
+- **Legacy Nodes**: Deprecated monolithic nodes moved to `nodes/__legacy/`
+- **Import Structure**: Clean imports with legacy nodes accessible via `__legacy/` path
+- **Backward Compatibility**: Test flows still work via legacy imports
+
 ### Enhanced Testability
 - **Before**: Hard to test individual components
 - **After**: Each atomic node can be tested independently
+- **Structure**: Clean node directory with only active components
 
 ### Improved Maintainability
 - **Before**: Monolithic script hard to modify
 - **After**: Easy to modify individual nodes or flow structure
+- **Clean Architecture**: Deprecated code isolated in legacy directory
+
+## Current Node Architecture (v1.4)
+
+### Active Nodes (Main Directory)
+```
+nodes/
+├── consensus_check_node.py       # Flow control and consensus detection
+├── consensus_synthesis_node.py   # Professional deliverable generation
+├── read_prompt_node.py           # Atomic: read prompt files
+├── update_dialogue_node.py       # Atomic: update dialogue with agent responses  
+├── summarizer_node.py            # Ongoing dialogue tracking
+└── shared_components.py          # Common utilities
+```
+
+### Legacy Nodes (Deprecated)
+```
+nodes/__legacy/
+├── architect1_node.py            # Replaced by atomic chain
+├── architect2_node.py            # Replaced by atomic chain
+├── dialogue_summary_node.py     # Replaced by ConsensusSynthesisNode
+└── ... (other legacy files)
+```
 
 ## Migration from Legacy
 
-The legacy `2a_orchestrator_working.py` has been replaced with this clean system:
+The legacy monolithic approach has been replaced with atomic, SDK Reference compliant patterns:
 
 1. **Initialization** → `create_dialogue_file()` in `main_clean.py`
-2. **Agent Steps** → `Architect1Node` and `Architect2Node` in `nodes_clean.py`
-3. **Main Loop** → Flow graph in `flow_clean.py`
-4. **Consensus Detection** → `ConsensusCheckNode` and logic in `Architect2Node`
-5. **Summary** → `DialogueSummaryNode`
+2. **Agent Steps** → Atomic ReadPromptNode + UpdateDialogueNode chains
+3. **Main Loop** → Flow graph in `flow_clean.py` using active nodes only
+4. **Consensus Detection** → Dual-mode detection in `UpdateDialogueNode` 
+5. **Final Deliverable** → `ConsensusSynthesisNode` (replaces basic summary)
 
 ## Customization
 

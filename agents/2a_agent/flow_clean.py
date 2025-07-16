@@ -11,15 +11,16 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', 'PocketFlow'
 
 from pocketflow import AsyncFlow
 from nodes import (
-    Architect1Node, 
-    Architect2Node, 
     ConsensusCheckNode,
-    DialogueSummaryNode,
     ConsensusSynthesisNode,
     SummarizerNode,
     ReadPromptNode,
     UpdateDialogueNode
 )
+
+# Legacy imports for deprecated test flows
+from nodes.__legacy.architect1_node import Architect1Node
+from nodes.__legacy.architect2_node import Architect2Node
 
 
 def create_2a_flow():
