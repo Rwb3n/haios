@@ -12,7 +12,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'PocketFlow'))
 
 from pocketflow import AsyncNode
-from .shared_components import run_read_only_step
+from .shared_components import run_read_only_step, AgentStepResult
 
 
 class ReadPromptNode(AsyncNode):
@@ -41,12 +41,18 @@ class ReadPromptNode(AsyncNode):
         print(f"Step 1: Reading prompt file...")
         
         # Single atomic operation: read prompt file with absolute path
-        prompt_content, tools_used = await run_read_only_step(
+        result: AgentStepResult = await run_read_only_step(
             f"Read {context['prompt_file']}", 
             context['prompt_file']
         )
         
-        return prompt_content
+        if result.error:
+            return f"ERROR: {result.error}"
+        
+        # Validation log for file access
+        print(f"  [VALIDATION] Prompt file read access validated: {context['prompt_file']}")
+        
+        return result.response_text
     
     async def exec_fallback_async(self, prep_res: Dict[str, Any], exc: Exception) -> str:
         """Graceful fallback if prompt reading fails."""

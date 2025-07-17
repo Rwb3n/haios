@@ -14,7 +14,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'PocketFlow'))
 
 from pocketflow import AsyncNode
-from .shared_components import run_agent_step
+from .shared_components import run_agent_step, AgentStepResult, AGENT_CONFIGS
 
 
 class UpdateDialogueNode(AsyncNode):
@@ -80,6 +80,9 @@ class UpdateDialogueNode(AsyncNode):
         with open(dialogue_path, 'w') as f:
             json.dump(data, f, indent=2)
         
+        # Validation log for skeleton creation
+        print(f"  [VALIDATION] Dialogue skeleton entry created for {speaker_role} (round {context['round_num']})")
+        
         # ATOMIC operation: Get agent response only
         base_dir = Path.cwd()
         dialogue_abs = str(base_dir / dialogue_path)
@@ -89,13 +92,27 @@ class UpdateDialogueNode(AsyncNode):
 IMPORTANT: If you believe consensus has been reached, also set the "consensus" field to true in your entry. Only set consensus=true if you are certain the architectural question has been fully resolved and no further discussion is needed."""
         
         # Single atomic operation: get agent response
-        response, tools_used = await run_agent_step(instruction, ["Read", "Edit"])
-        print(f"  [DEBUG] {context['persona_name']} used {tools_used} tools")
+        result: AgentStepResult = await run_agent_step(instruction, ["Read", "Edit"])
+        print(f"  [DEBUG] {context['persona_name']} used {result.tool_count} tools: {result.tools_used}")
         
-        if tools_used < 2:
+        if result.error:
+            return f"ERROR: {result.error}"
+        
+        # Validation log for tool usage
+        if result.tool_count < 2:
+            print(f"  [VALIDATION] Tool usage validation failed: {context['persona_name']} must use both Read and Edit tools")
             return f"ERROR: {context['persona_name']} must use both Read and Edit tools"
+        else:
+            print(f"  [VALIDATION] Tool usage validated: {context['persona_name']} used {result.tool_count} tools correctly")
         
-        return response
+        # Log cost information if available
+        if result.cost_usd:
+            print(f"  [COST] {context['persona_name']} operation cost: ${result.cost_usd:.4f}")
+        
+        # Validation log for operation completion
+        print(f"  [VALIDATION] {context['persona_name']} dialogue update completed successfully")
+        
+        return result.response_text
     
     async def exec_fallback_async(self, prep_res: Dict[str, Any], exc: Exception) -> str:
         """Graceful fallback if dialogue update fails."""

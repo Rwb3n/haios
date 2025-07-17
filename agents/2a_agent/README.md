@@ -329,27 +329,64 @@ python main_clean.py --config test_configs/infinite_rounds.json
 ```
 
 ### Debug Output
-The system provides detailed console output:
-- Node execution status
-- Tool usage tracking
-- Dialogue summary content (with debug logging enabled)
+The system provides comprehensive validation logging with structured step progression:
+- Sequential step numbering (1→2→3→4)
+- File access validation
+- Tool usage validation  
+- Cost tracking
+- Operation completion validation
 - Round progression
 - Consensus detection
 
 ### Example Debug Session
 ```
---- Generating Dialogue Summary (Round 2) ---
-  [Tool] Read: D:\PROJECTS\haios\agents\2a_agent\Scribe\Scribe_PROMPT.txt
-  [OK] Generated dialogue summary (1702 chars)
-  [OK] Dialogue summary stored in shared state
+Step 1: Reading prompt file...
+  [Tool] Read: D:\PROJECTS\haios\agents\2a_agent\A1\A1_PROMPT_FILE_BASED.txt
+  [OK] Agent response (1799 chars, 14367ms)
+  [VALIDATION] Read-only access validated for: D:\PROJECTS\haios\agents\2a_agent\A1\A1_PROMPT_FILE_BASED.txt
+  [VALIDATION] Prompt file read access validated: D:\PROJECTS\haios\agents\2a_agent\A1\A1_PROMPT_FILE_BASED.txt
 
-============================================================
-DIALOGUE SUMMARY CONTENT:
-============================================================
-[Summary content appears here]
-============================================================
-END DIALOGUE SUMMARY
-============================================================
+Step 2: Getting Architect-1 response...
+  [VALIDATION] Dialogue skeleton entry created for Architect-1 (round 1)
+  [Tool] Read: D:\PROJECTS\haios\agents\2a_agent\output_2A\session_20250717_122748\dialogue.json
+  [Tool] Edit: D:\PROJECTS\haios\agents\2a_agent\output_2A\session_20250717_122748\dialogue.json (old: 20 chars, new: 2386 chars)
+  [OK] Agent response (1261 chars, 28347ms)
+  [DEBUG] Architect-1 used 2 tools: ['Read', 'Edit']
+  [VALIDATION] Tool usage validated: Architect-1 used 2 tools correctly
+  [COST] Architect-1 operation cost: $0.0826
+  [VALIDATION] Architect-1 dialogue update completed successfully
+
+Step 3: Generating dialogue summary (Round 2)...
+  [VALIDATION] Summary file access validated: [file_path]
+  [VALIDATION] Dialogue file access validated: [file_path]
+  [Tool] Read: [dialogue file]
+  [Tool] Read: [summary file]
+  [Tool] Edit: [summary file] (old: 297 chars, new: 2618 chars)
+  [OK] Agent response (1007 chars, 33848ms)
+  [DEBUG] Scribe used 3 tools: ['Read', 'Read', 'Edit']
+  [VALIDATION] Tool usage validated: Scribe used 3 tools correctly
+  [COST] Scribe operation cost: $0.0777
+  [VALIDATION] Summary generation completed successfully (1007 chars)
+
+Step 4: Creating consensus synthesis...
+  [VALIDATION] Synthesis skeleton file created: [file_path]
+  [VALIDATION] Synthesis file access validated: [file_path]
+  [VALIDATION] Dialogue file access validated: [file_path]
+  [Tool] Read: [dialogue file]
+  [Tool] Read: [synthesis file]
+  [Tool] Edit: [synthesis file] (multiple edits)
+  [OK] Agent response (1487 chars, 92639ms)
+  [DEBUG] Synthesis agent used 8 tools: ['Read', 'Read', 'Edit', 'Edit', 'Edit', 'Edit', 'Edit', 'Edit']
+  [VALIDATION] Tool usage validated: Synthesis agent used 8 tools correctly
+  [COST] Synthesis operation cost: $0.1903
+  [VALIDATION] Synthesis generation completed successfully (1487 chars)
+
+================================================================================
+🎯 CONSENSUS SYNTHESIS COMPLETE
+================================================================================
+📝 Synthesis saved: output_2A/session_20250717_122748\consensus_synthesis.md
+📊 Length: 11857 characters
+================================================================================
 ```
 
 ## HAiOS Compliance & Design Patterns
@@ -396,16 +433,29 @@ The 2A Agent implements **HAiOS-compliant patterns** that prevent agent hallucin
 
 ### Observability & Performance Metrics
 
-The 2A Agent provides comprehensive tool operation logging:
+The 2A Agent provides comprehensive validation logging with structured step progression:
 
-**Real-time Operation Tracking:**
-- Duration timing for all operations (milliseconds)
-- Character count logging for content size awareness
-- Tool violation detection and flagging
-- Performance bottleneck identification
+**Sequential Step Validation:**
+- **Step 1**: ReadPromptNode - File access validation
+- **Step 2**: UpdateDialogueNode - Skeleton creation, tool usage, completion validation
+- **Step 3**: SummarizerNode - File access, tool usage, content validation
+- **Step 4**: ConsensusSynthesisNode - Skeleton creation, file access, tool usage, completion validation
+
+**Validation Log Types:**
+- `[VALIDATION] File access validated: [file_path]` - File accessibility confirmation
+- `[VALIDATION] Tool usage validated: [agent] used X tools correctly` - Tool usage compliance
+- `[VALIDATION] [Operation] completed successfully (X chars)` - Operation completion confirmation
+- `[VALIDATION] [Specific operation] created/updated: [details]` - Specific operation validation
+
+**Enhanced Observability:**
+- **Duration Tracking**: All operations timed from start to completion (milliseconds)
+- **Character Counts**: Content size metrics for all file operations
+- **Cost Tracking**: USD cost tracking for all agent operations
+- **Tool Validation**: Comprehensive tool usage validation and violation detection
+- **Performance Metrics**: Response times, content sizes, tool efficiency
 
 **Logging Patterns by Tool Type:**
-- **Read**: `[Tool] Read: path` → `[OK] Read operation (X chars, Yms)`
+- **Read**: `[Tool] Read: path` → `[OK] Agent response (X chars, Yms)`
 - **Edit**: `[Tool] Edit: path (old: X chars, new: Y chars)` → `[OK] Agent response (Z chars, Wms)`
 - **Write**: `[Tool] Write: path (X chars)` → `[OK] Agent response (Y chars, Zms)`
 
