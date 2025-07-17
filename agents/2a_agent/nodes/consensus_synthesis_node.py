@@ -105,7 +105,7 @@ class ConsensusSynthesisNode(AsyncNode):
             return f"ERROR: {context['error']}"
         
         print(f"{'='*60}")
-        print(f"STEP 4: Creating Consensus Synthesis")
+        print(f"STEP 5: Creating Consensus Synthesis")
         print(f"{'='*60}")
         
         # Validation log for file access

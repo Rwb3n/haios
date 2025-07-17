@@ -18,9 +18,11 @@ from .shared_components import run_read_only_step, AgentStepResult
 class ReadPromptNode(AsyncNode):
     """Atomic node that only reads a prompt file and stores content."""
     
-    def __init__(self, prompt_file: str):
+    def __init__(self, prompt_file: str, step_number: int = 1, architect_name: str = ""):
         super().__init__(max_retries=2, wait=1.0)
         self.prompt_file = prompt_file
+        self.step_number = step_number
+        self.architect_name = architect_name
     
     async def prep_async(self, shared: Dict[str, Any]) -> Dict[str, Any]:
         """Prepare absolute prompt file path for reading."""
@@ -39,7 +41,8 @@ class ReadPromptNode(AsyncNode):
             return f"ERROR: Prompt file not found: {context['prompt_file']}"
         
         print(f"{'='*60}")
-        print(f"STEP 1: Reading Prompt File")
+        step_desc = f"Reading {self.architect_name} Prompt File" if self.architect_name else "Reading Prompt File"
+        print(f"STEP {self.step_number}: {step_desc}")
         print(f"{'='*60}")
         
         # Single atomic operation: read prompt file with absolute path
@@ -54,7 +57,6 @@ class ReadPromptNode(AsyncNode):
         # Validation log for file access
         print(f"  [VALIDATION] Prompt file read access validated: {context['prompt_file']}")
         
-        print(f"  [DEBUG] ReadPromptNode: Returning response text ({len(result.response_text)} chars)")
         return result.response_text
     
     async def exec_fallback_async(self, prep_res: Dict[str, Any], exc: Exception) -> str:
@@ -67,10 +69,8 @@ class ReadPromptNode(AsyncNode):
         if exec_res.startswith("ERROR:"):
             shared["prompt_content"] = ""
             shared["prompt_error"] = exec_res
-            print(f"  [DEBUG] ReadPromptNode: Returning 'error' due to: {exec_res}")
             return "error"
         else:
             shared["prompt_content"] = exec_res
             shared["prompt_error"] = None
-            print(f"  [DEBUG] ReadPromptNode: Returning 'default', stored {len(exec_res)} chars in shared state")
             return "default"

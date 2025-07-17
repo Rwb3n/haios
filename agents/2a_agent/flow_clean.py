@@ -41,12 +41,12 @@ def create_2a_flow():
     summarizer = SummarizerNode()
     
     # Atomic nodes for Architect-1 workflow
-    read_prompt_a1 = ReadPromptNode("A1/A1_PROMPT_FILE_BASED.txt")
-    update_dialogue_a1 = UpdateDialogueNode("Architect-1")
+    read_prompt_a1 = ReadPromptNode("A1/A1_PROMPT_FILE_BASED.txt", step_number=1, architect_name="Architect-1")
+    update_dialogue_a1 = UpdateDialogueNode("Architect-1", step_number=2)
     
     # Atomic nodes for Architect-2 workflow  
-    read_prompt_a2 = ReadPromptNode("A2/A2_PROMPT_FILE_BASED.txt")
-    update_dialogue_a2 = UpdateDialogueNode("Architect-2")
+    read_prompt_a2 = ReadPromptNode("A2/A2_PROMPT_FILE_BASED.txt", step_number=3, architect_name="Architect-2")
+    update_dialogue_a2 = UpdateDialogueNode("Architect-2", step_number=4)
     
     synthesis = ConsensusSynthesisNode()
     

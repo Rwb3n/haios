@@ -10,6 +10,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'PocketFlow'))
 
 from pocketflow import AsyncNode
+# from .shared_components import init_round_tracking, generate_round_summary, finalize_round_metrics
 
 
 class ConsensusCheckNode(AsyncNode):
@@ -29,11 +30,8 @@ class ConsensusCheckNode(AsyncNode):
         """Check if consensus was reached in previous round."""
         round_num = context["round_num"]
         
-        print(f"  [DEBUG] ConsensusCheck: round_num={round_num}")
-        
         # Skip check for first round
         if round_num <= 1:
-            print(f"  [DEBUG] ConsensusCheck: First round, returning 'continue'")
             return "continue"
         
         # Read dialogue file to check for consensus
@@ -41,29 +39,21 @@ class ConsensusCheckNode(AsyncNode):
             data = json.load(f)
         
         dialogue_entries = data.get("dialogue", [])
-        print(f"  [DEBUG] ConsensusCheck: Found {len(dialogue_entries)} dialogue entries")
         
         if not dialogue_entries:
-            print(f"  [DEBUG] ConsensusCheck: No dialogue entries, returning 'continue'")
             return "continue"
         
         last_entry = dialogue_entries[-1]
         content = last_entry.get("content", "")
         consensus_field = last_entry.get("consensus", False)
         
-        print(f"  [DEBUG] ConsensusCheck: Last entry consensus field = {consensus_field}")
-        
         # Primary: Check boolean consensus field
         if consensus_field:
-            print(f"  [DEBUG] ConsensusCheck: Boolean consensus detected, returning 'consensus'")
             return "consensus"
         
         # Fallback: Pattern matching
         if "**No Further Dissent**" in content:
-            print(f"  [DEBUG] ConsensusCheck: Pattern consensus detected, returning 'consensus'")
             return "consensus"
-        
-        print(f"  [DEBUG] ConsensusCheck: No consensus detected, returning 'continue'")
         return "continue"
     
     async def exec_fallback_async(self, prep_res: Dict[str, Any], exc: Exception) -> str:
@@ -81,8 +71,13 @@ class ConsensusCheckNode(AsyncNode):
             print(f"{'='*80}\n")
             return "consensus"
         
-        # Starting new round
+        # Starting new round - initialize round tracking
         round_num = prep_res.get("round_num", 1)
+        
+        # Initialize new round metrics
+        # round_metrics = init_round_tracking(round_num)
+        # shared["current_round_metrics"] = round_metrics
+        
         print(f"\n{'='*80}")
         print(f"ROUND {round_num} START")
         print(f"{'='*80}")

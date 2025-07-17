@@ -14,15 +14,20 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'PocketFlow'))
 
 from pocketflow import AsyncNode
-from .shared_components import run_agent_step, AgentStepResult, AGENT_CONFIGS
+from .shared_components import (
+    run_agent_step, AgentStepResult, AGENT_CONFIGS
+    # start_step_tracking, finalize_step_tracking, update_round_metrics,
+    # finalize_round_metrics, generate_round_summary, add_violation
+)
 
 
 class UpdateDialogueNode(AsyncNode):
     """Atomic node that only handles agent response and dialogue update."""
     
-    def __init__(self, persona_name: str):
+    def __init__(self, persona_name: str, step_number: int = 2):
         super().__init__(max_retries=2, wait=1.0)
         self.persona_name = persona_name
+        self.step_number = step_number
     
     async def prep_async(self, shared: Dict[str, Any]) -> Dict[str, Any]:
         """Prepare context for dialogue update."""
@@ -43,7 +48,7 @@ class UpdateDialogueNode(AsyncNode):
             return "ERROR: No prompt content available"
         
         print(f"{'='*60}")
-        print(f"STEP 2: Getting {context['persona_name']} Response")
+        print(f"STEP {self.step_number}: Getting {context['persona_name']} Response")
         print(f"{'='*60}")
         
         # Auto-extract speaker role from prompt content (HAiOS pattern)
@@ -122,10 +127,11 @@ IMPORTANT: If you believe consensus has been reached, also set the "consensus" f
         return f"ERROR: {prep_res['persona_name']} failed: {exc}"
     
     async def post_async(self, shared: Dict[str, Any], prep_res: Dict[str, Any], exec_res: str) -> str:
-        """Update shared state and determine next action."""
+        """Update shared state and determine next action.""" 
         if exec_res.startswith("ERROR:"):
             shared["last_error"] = exec_res
             return "error"
+        
         
         # Read dialogue file to get updated entry count and check consensus
         dialogue_path = prep_res["dialogue_path"]
@@ -171,16 +177,12 @@ IMPORTANT: If you believe consensus has been reached, also set the "consensus" f
                 shared["consensus_reached"] = True
                 return "consensus"
             
+            # TODO: Re-implement round metrics tracking after fixing flow issues
+            
             # Only increment round after Architect-2 responses (complete round finished)
             if prep_res['persona_name'] == "Architect-2":
                 completed_round = shared.get("round_num", 1)
                 shared["round_num"] = completed_round + 1
-                
-                print(f"\n{'='*80}")
-                print(f"ROUND {completed_round} COMPLETED")
-                print(f"{'='*80}")
-                print(f"Starting Round {shared['round_num']} - Continuing Dialogue...")
-                print(f"{'='*80}\n")
             
             shared["last_error"] = None
             return "continue"
