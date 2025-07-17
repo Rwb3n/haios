@@ -1,0 +1,11 @@
+{
+  "session_id": "test_quick_consensus",
+  "adr_path": "../../docs/ADR/ADR-OS-001.md",
+  "question_path": "input_2A/quick_test_question.txt",
+  "output_dir": "output_2A/test_quick_consensus", 
+  "max_rounds": 1,
+  "personas": {
+    "architect_1": {"prompt_path": "A1/A1_CONSENSUS_TEST.txt"},
+    "architect_2": {"prompt_path": "A2/A2_PROMPT_FILE_BASED.txt"}
+  }
+}

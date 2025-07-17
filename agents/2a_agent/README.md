@@ -472,6 +472,73 @@ The 2A Agent serves as a critical component in HAIOS's architecture validation:
 
 ## Future Enhancements
 
+### Immediate Priority: Hook System Implementation
+
+**CRITICAL_INITIATIVE**: Architectural Hardening via Hook Validation Nodes
+
+**Background**: HAiOS feedback identified "Benevolent Misalignment" as a critical failure mode where Claude Code agents helpfully refactor code while inadvertently destroying carefully-designed architectural patterns. This represents an existential threat to the "Certainty Ratchet" philosophy.
+
+**Current Gap**: Claude Code SDK v0.0.14 lacks hook support that exists in the CLI, making SDK-level tool interception impossible.
+
+**Proposed Solution**: PocketFlow Hook Validation Nodes
+
+#### **Implementation Plan: Hook Node Architecture**
+
+**Phase 1: Pattern Validation Nodes**
+- [ ] **PreValidationHookNode** - Validates inputs before expensive operations
+  - File accessibility validation
+  - Parameter compliance checking
+  - Business rule enforcement
+- [ ] **PostValidationHookNode** - Validates outputs after operations
+  - Content quality validation
+  - Format compliance checking
+  - Rollback trigger mechanisms
+
+**Phase 2: Architectural Pattern Protection**
+- [ ] **PocketFlowPatternValidator** - Ensures node compliance
+  - Validates AsyncNode inheritance patterns
+  - Enforces prep→exec→post structure
+  - Checks atomic operation principles
+- [ ] **HAiOSPatternValidator** - Ensures HAiOS compliance
+  - Validates skeleton creation patterns
+  - Enforces separation of duties
+  - Checks file-based operation patterns
+
+**Phase 3: Integration & Flow Enhancement**
+```
+[Node] → [PreHook] → [Operation] → [PostHook] → [NextNode]
+           ↓                          ↓
+    [ValidationError]         [QualityCheck/Rollback]
+```
+
+**Benefits**:
+- **Defense in Depth**: Workflow-level protection complementing future SDK-level hooks
+- **Immediate Implementation**: No dependency on SDK hook support
+- **Pattern Enforcement**: Deterministic validation of architectural patterns
+- **Rollback Capability**: Safe recovery from validation failures
+
+#### **Technical Specifications**
+
+**Hook Node Base Class**:
+```python
+class BaseHookNode(AsyncNode):
+    def __init__(self, validation_rules: List[ValidationRule]):
+        super().__init__(max_retries=1, wait=0)
+        self.validation_rules = validation_rules
+    
+    async def exec_async(self, context) -> ValidationResult:
+        # Run validation rules
+        # Return PASS/FAIL with detailed feedback
+```
+
+**Validation Rule Engine**:
+- **Pattern Matching Rules**: Regex-based pattern validation
+- **Structural Rules**: JSON schema validation
+- **Business Logic Rules**: Custom validation functions
+- **Performance Rules**: Size/duration threshold validation
+
+### Standard Enhancements
+
 - [ ] Web UI for dialogue visualization
 - [ ] Integration with n8n workflows
 - [ ] Support for multi-ADR analysis

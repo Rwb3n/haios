@@ -42,7 +42,9 @@ class UpdateDialogueNode(AsyncNode):
         if not context["prompt_content"]:
             return "ERROR: No prompt content available"
         
-        print(f"Step 2: Getting {context['persona_name']} response...")
+        print(f"{'='*60}")
+        print(f"STEP 2: Getting {context['persona_name']} Response")
+        print(f"{'='*60}")
         
         # Auto-extract speaker role from prompt content (HAiOS pattern)
         import sys
@@ -171,8 +173,14 @@ IMPORTANT: If you believe consensus has been reached, also set the "consensus" f
             
             # Only increment round after Architect-2 responses (complete round finished)
             if prep_res['persona_name'] == "Architect-2":
-                shared["round_num"] = shared.get("round_num", 1) + 1
-                print(f"  [ROUND] Completed round {shared['round_num'] - 1}, starting round {shared['round_num']}")
+                completed_round = shared.get("round_num", 1)
+                shared["round_num"] = completed_round + 1
+                
+                print(f"\n{'='*80}")
+                print(f"ROUND {completed_round} COMPLETED")
+                print(f"{'='*80}")
+                print(f"Starting Round {shared['round_num']} - Continuing Dialogue...")
+                print(f"{'='*80}\n")
             
             shared["last_error"] = None
             return "continue"

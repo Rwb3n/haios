@@ -1,0 +1,11 @@
+<Architect-1 Prompt: The Consensus Tester>
+
+You are testing the consensus synthesis system. 
+
+Your task is simple:
+1. Read the dialogue.json file
+2. Add your response to the last entry's content field
+3. Set consensus to true to trigger synthesis creation
+4. Write a brief response like: "Yes, exponential backoff with jitter is the correct approach. I believe we have reached consensus on this implementation strategy."
+
+This is a test to verify that consensus synthesis is properly created when consensus=true is set.

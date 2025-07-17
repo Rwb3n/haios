@@ -104,7 +104,9 @@ class ConsensusSynthesisNode(AsyncNode):
         if context.get("error"):
             return f"ERROR: {context['error']}"
         
-        print(f"Step 4: Creating consensus synthesis...")
+        print(f"{'='*60}")
+        print(f"STEP 4: Creating Consensus Synthesis")
+        print(f"{'='*60}")
         
         # Validation log for file access
         print(f"  [VALIDATION] Synthesis file access validated: {context['synthesis_abs']}")
@@ -165,10 +167,10 @@ You are a synthesis specialist creating the final architectural summary after co
                 synthesis_content = f.read()
             
             print(f"\n{'='*80}")
-            print("🎯 CONSENSUS SYNTHESIS COMPLETE")
+            print("CONSENSUS SYNTHESIS COMPLETE")
             print(f"{'='*80}")
-            print(f"📝 Synthesis saved: {synthesis_path}")
-            print(f"📊 Length: {len(synthesis_content)} characters")
+            print(f"Synthesis saved: {synthesis_path}")
+            print(f"Length: {len(synthesis_content)} characters")
             
             print(f"\n{'='*80}")
             print("FINAL SYNTHESIS PREVIEW:")

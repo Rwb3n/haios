@@ -1,0 +1,11 @@
+{
+  "session_id": "test_normal_flow",
+  "adr_path": "../../docs/ADR/ADR-OS-001.md",
+  "question_path": "input_2A/quick_test_question.txt",
+  "output_dir": "output_2A/test_normal_flow", 
+  "max_rounds": 2,
+  "personas": {
+    "architect_1": {"prompt_path": "A1/A1_PROMPT_FILE_BASED.txt"},
+    "architect_2": {"prompt_path": "A2/A2_PROMPT_FILE_BASED.txt"}
+  }
+}

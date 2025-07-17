@@ -77,7 +77,9 @@ class SummarizerNode(AsyncNode):
         if context.get("error"):
             return f"Error: {context['error']}"
         
-        print(f"Step 3: Generating dialogue summary (Round {context['round_num']})...")
+        print(f"{'='*60}")
+        print(f"STEP 3: Generating Dialogue Summary (Round {context['round_num']})")
+        print(f"{'='*60}")
         
         # Simple file operation instruction (identical pattern to Architects)
         summary_instruction = f"""Read {context['dialogue_abs']} then read {context['summary_abs']} then use Edit ONCE to replace the entire summary file with an updated version containing key information from the dialogue."""

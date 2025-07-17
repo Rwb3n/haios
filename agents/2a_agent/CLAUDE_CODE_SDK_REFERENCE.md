@@ -276,3 +276,107 @@ Step 2: Getting Architect-1 response...
 - Tools marked "Permission Required: Yes" need explicit allowance
 - Tools marked "Permission Required: No" are generally safe
 - Use principle of least privilege - only grant tools needed for specific tasks
+
+## Critical Gap: Hook System Implementation Required
+
+### **ARCHITECTURAL_HARDENING_INITIATIVE**
+
+**Problem Identified**: "Benevolent Misalignment" - Claude Code agents helpfully refactor code while destroying architectural patterns, representing an existential threat to the HAiOS "Certainty Ratchet" philosophy.
+
+**Root Cause**: Claude Code SDK v0.0.14 lacks hook support that exists in the CLI, making tool-level interception impossible.
+
+### **Immediate Solution: PocketFlow Hook Validation Nodes**
+
+Since SDK-level hooks are unavailable, implement workflow-level validation through specialized PocketFlow nodes:
+
+#### **Hook Node Architecture Pattern**
+
+```python
+# Next Session Implementation Target
+from pocketflow import AsyncNode
+from typing import List, Dict, Any
+from dataclasses import dataclass
+
+@dataclass
+class ValidationRule:
+    name: str
+    pattern: str  # regex or JSON schema
+    error_message: str
+    rule_type: str  # "pattern", "structure", "business", "performance"
+
+@dataclass  
+class ValidationResult:
+    is_valid: bool
+    rule_violations: List[str]
+    performance_metrics: Dict[str, Any]
+    recommended_actions: List[str]
+
+class BaseHookNode(AsyncNode):
+    """Base class for all validation hook nodes."""
+    
+    def __init__(self, validation_rules: List[ValidationRule]):
+        super().__init__(max_retries=1, wait=0)
+        self.validation_rules = validation_rules
+    
+    async def exec_async(self, context: Dict[str, Any]) -> ValidationResult:
+        """Execute validation rules and return structured result."""
+        # Implementation in next session
+        pass
+
+class PreValidationHookNode(BaseHookNode):
+    """Validates inputs before expensive operations."""
+    pass
+
+class PostValidationHookNode(BaseHookNode):
+    """Validates outputs after operations with rollback capability."""
+    pass
+```
+
+#### **Target Flow Integration**
+
+```python
+# Enhanced flow with validation hooks
+def create_hardened_2a_flow():
+    # Standard nodes
+    consensus_check = ConsensusCheckNode()
+    summarizer = SummarizerNode()
+    
+    # Validation hooks
+    pre_summarizer_hook = PreValidationHookNode(validation_rules=[
+        ValidationRule("file_access", r".*\.json$", "Invalid file access", "pattern"),
+        ValidationRule("round_check", "round_num > 0", "Invalid round number", "business")
+    ])
+    
+    post_summarizer_hook = PostValidationHookNode(validation_rules=[
+        ValidationRule("content_quality", r".{100,}", "Summary too short", "business"),
+        ValidationRule("format_check", "markdown_valid", "Invalid format", "structure")
+    ])
+    
+    # Hardened flow with validation
+    consensus_check - "continue" >> pre_summarizer_hook
+    pre_summarizer_hook - "valid" >> summarizer
+    pre_summarizer_hook - "invalid" >> error_handler
+    
+    summarizer - "default" >> post_summarizer_hook
+    post_summarizer_hook - "valid" >> read_prompt_a1
+    post_summarizer_hook - "invalid" >> rollback_handler
+```
+
+#### **Next Session Objectives**
+
+1. **Implement BaseHookNode class** with validation rule engine
+2. **Create PreValidationHookNode** for input validation
+3. **Create PostValidationHookNode** with rollback capability
+4. **Design validation rule DSL** for pattern definitions
+5. **Integrate hook nodes** into existing 2A flow
+6. **Test architectural pattern protection** against "benevolent misalignment"
+
+#### **Expected Benefits**
+
+- **Deterministic Pattern Protection**: Prevents architectural regression
+- **Immediate Implementation**: No dependency on SDK hook support
+- **Workflow-Level Governance**: Complements future SDK-level hooks
+- **Rollback Capability**: Safe recovery from validation failures
+- **Audit Trail**: Complete validation logging for compliance
+
+This initiative addresses the critical architectural hardening requirement identified in HAiOS feedback while providing an immediately actionable solution within current SDK constraints.

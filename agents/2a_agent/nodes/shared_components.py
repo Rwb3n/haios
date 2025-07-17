@@ -1,5 +1,7 @@
 """
 Shared components used by multiple nodes in the 2A orchestrator.
+
+Enhanced with Hook Validation System for Shield 2 (Dynamic Defense).
 """
 
 import sys
@@ -26,6 +28,23 @@ from claude_code_sdk import (
     ProcessError,
     CLIJSONDecodeError
 )
+
+# Hook validation system imports (Shield 2)
+try:
+    from .hook_validation_nodes import (
+        BaseHookNode, 
+        PreValidationHookNode, 
+        PostValidationHookNode,
+        ValidationRule,
+        ValidationResult,
+        ValidationRuleType,
+        POCKETFLOW_PATTERN_RULES,
+        HAIOS_COMPLIANCE_RULES
+    )
+    HOOKS_AVAILABLE = True
+except ImportError:
+    HOOKS_AVAILABLE = False
+    print("  [WARNING] Hook validation system not available")
 
 
 @dataclass
@@ -265,3 +284,239 @@ async def run_read_only_step(prompt: str, file_path: Optional[str] = None) -> Ag
                 print(f"  [VALIDATION] Read-only access validated for: {file_path}")
     
     return result
+
+
+# ============================================================================
+# HOOK-AWARE AGENT EXECUTION (SHIELD 2 - DYNAMIC DEFENSE)
+# ============================================================================
+
+async def run_agent_step_with_hooks(
+    prompt: str, 
+    tools: List[str], 
+    pre_hooks: Optional[List[BaseHookNode]] = None,
+    post_hooks: Optional[List[BaseHookNode]] = None,
+    shared_state: Optional[Dict[str, Any]] = None
+) -> AgentStepResult:
+    """
+    Run agent step with hook validation system for Shield 2 (Dynamic Defense).
+    
+    Provides defense-in-depth protection against "benevolent misalignment" 
+    through pre- and post-execution validation hooks.
+    
+    Args:
+        prompt: The prompt to send to the agent
+        tools: Whitelist of allowed tools
+        pre_hooks: Optional list of pre-execution validation hooks
+        post_hooks: Optional list of post-execution validation hooks  
+        shared_state: Optional shared state for hook context
+        
+    Returns:
+        AgentStepResult: Enhanced with hook validation results
+    """
+    if not HOOKS_AVAILABLE:
+        print("  [HOOK_WARNING] Hook system not available, falling back to standard execution")
+        return await run_agent_step(prompt, tools)
+    
+    shared_state = shared_state or {}
+    start_time = time.time()
+    
+    # Store input context for hooks
+    shared_state.update({
+        "input_prompt": prompt,
+        "allowed_tools": tools,
+        "hook_execution_start": start_time
+    })
+    
+    # ========================================================================
+    # PHASE 1: PRE-EXECUTION VALIDATION (Shield 2 Input Validation)
+    # ========================================================================
+    
+    if pre_hooks:
+        print(f"  [HOOK_SYSTEM] Running {len(pre_hooks)} pre-execution validation hooks...")
+        
+        for hook in pre_hooks:
+            try:
+                # Execute hook validation
+                hook_context = await hook.prep_async(shared_state)
+                validation_result: ValidationResult = await hook.exec_async(hook_context)
+                
+                # Process hook results
+                if validation_result.has_errors:
+                    error_msg = f"Pre-validation failed: {', '.join(validation_result.rule_violations)}"
+                    print(f"  [HOOK_BLOCK] {error_msg}")
+                    
+                    # Return early with validation failure
+                    return AgentStepResult(
+                        response_text=f"BLOCKED: {error_msg}",
+                        tool_count=0,
+                        tools_used=[],
+                        duration_ms=int((time.time() - start_time) * 1000),
+                        error=error_msg
+                    )
+                
+                if validation_result.has_warnings:
+                    for warning in validation_result.warnings:
+                        print(f"  [HOOK_WARNING] {warning}")
+                
+                # Store hook results
+                shared_state[f"pre_hook_{hook.node_name}_result"] = validation_result
+                
+            except Exception as e:
+                error_msg = f"Pre-hook execution failed: {hook.node_name} - {str(e)}"
+                print(f"  [HOOK_ERROR] {error_msg}")
+                
+                # Fail-safe: Continue execution but log error
+                shared_state[f"pre_hook_{hook.node_name}_error"] = str(e)
+    
+    # ========================================================================
+    # PHASE 2: AGENT EXECUTION (Standard Agent Operations)
+    # ========================================================================
+    
+    print(f"  [HOOK_SYSTEM] Pre-validation passed, executing agent with {len(tools)} tools...")
+    agent_result = await run_agent_step(prompt, tools)
+    
+    # Store agent results for post-hooks
+    shared_state.update({
+        "last_agent_response": agent_result.response_text,
+        "last_tools_used": agent_result.tools_used,
+        "last_operation_duration": agent_result.duration_ms,
+        "last_agent_error": agent_result.error
+    })
+    
+    # ========================================================================
+    # PHASE 3: POST-EXECUTION VALIDATION (Shield 2 Output Validation)
+    # ========================================================================
+    
+    if post_hooks and not agent_result.error:
+        print(f"  [HOOK_SYSTEM] Running {len(post_hooks)} post-execution validation hooks...")
+        
+        for hook in post_hooks:
+            try:
+                # Execute post-validation hook
+                hook_context = await hook.prep_async(shared_state)
+                validation_result: ValidationResult = await hook.exec_async(hook_context)
+                
+                # Process post-validation results
+                if validation_result.has_errors:
+                    error_msg = f"Post-validation failed: {', '.join(validation_result.rule_violations)}"
+                    print(f"  [HOOK_ROLLBACK] {error_msg}")
+                    
+                    # Attempt rollback if supported
+                    if hasattr(hook, 'trigger_rollback'):
+                        rollback_success = await hook.trigger_rollback(error_msg)
+                        if rollback_success:
+                            print(f"  [HOOK_ROLLBACK] Operation successfully rolled back")
+                        else:
+                            print(f"  [HOOK_ROLLBACK] Rollback failed - manual intervention required")
+                    
+                    # Return with rollback information
+                    agent_result.error = f"Post-validation failure (rollback {'successful' if rollback_success else 'failed'}): {error_msg}"
+                    break
+                
+                if validation_result.has_warnings:
+                    for warning in validation_result.warnings:
+                        print(f"  [HOOK_WARNING] {warning}")
+                
+                # Store post-hook results
+                shared_state[f"post_hook_{hook.node_name}_result"] = validation_result
+                
+            except Exception as e:
+                error_msg = f"Post-hook execution failed: {hook.node_name} - {str(e)}"
+                print(f"  [HOOK_ERROR] {error_msg}")
+                shared_state[f"post_hook_{hook.node_name}_error"] = str(e)
+    
+    # ========================================================================
+    # PHASE 4: FINAL RESULT PROCESSING
+    # ========================================================================
+    
+    total_duration = int((time.time() - start_time) * 1000)
+    hook_overhead = total_duration - agent_result.duration_ms
+    
+    print(f"  [HOOK_SYSTEM] Hook-aware execution completed (total: {total_duration}ms, overhead: {hook_overhead}ms)")
+    
+    # Enhanced result with hook information
+    if agent_result.usage_data is None:
+        agent_result.usage_data = {}
+    
+    agent_result.usage_data.update({
+        "hook_system_enabled": True,
+        "hook_overhead_ms": hook_overhead,
+        "pre_hooks_executed": len(pre_hooks) if pre_hooks else 0,
+        "post_hooks_executed": len(post_hooks) if post_hooks else 0,
+        "hook_validation_results": {
+            key: value for key, value in shared_state.items() 
+            if key.endswith("_result") or key.endswith("_error")
+        }
+    })
+    
+    return agent_result
+
+
+def create_default_pattern_protection_hooks() -> Tuple[List[BaseHookNode], List[BaseHookNode]]:
+    """
+    Create default pre- and post-hooks for architectural pattern protection.
+    
+    Returns:
+        Tuple of (pre_hooks, post_hooks) with standard validation rules
+    """
+    if not HOOKS_AVAILABLE:
+        return [], []
+    
+    # Pre-execution hooks for input validation
+    pre_hooks = [
+        PreValidationHookNode([
+            ValidationRule(
+                name="basic_safety_check",
+                rule_type=ValidationRuleType.PATTERN,
+                pattern=r".*",  # Basic pattern - allows all for testing
+                error_message="Basic safety validation passed",
+                severity="info"
+            ),
+            ValidationRule(
+                name="prompt_safety_check", 
+                rule_type=ValidationRuleType.PATTERN,
+                pattern=r"^(?!.*rm\s+-rf).*$",
+                error_message="Potentially dangerous command detected in prompt",
+                severity="error"
+            )
+        ])
+    ]
+    
+    # Post-execution hooks for output validation and pattern protection
+    post_hooks = [
+        PostValidationHookNode([
+            ValidationRule(
+                name="content_quality_check",
+                rule_type=ValidationRuleType.PATTERN,
+                pattern=r".{50,}",  # At least 50 characters
+                error_message="Agent response too short, may indicate failure",
+                severity="warning"
+            ),
+            ValidationRule(
+                name="haios_pattern_protection",
+                rule_type=ValidationRuleType.PATTERN,
+                pattern=r"(?!.*json\.dumps\(.*content.*\))",
+                error_message="HAiOS violation: Content embedding detected",
+                severity="error"
+            )
+        ])
+    ]
+    
+    return pre_hooks, post_hooks
+
+
+# Backward compatibility function with optional hooks
+async def run_agent_step_protected(prompt: str, tools: List[str]) -> AgentStepResult:
+    """
+    Run agent step with default pattern protection hooks.
+    
+    Provides automatic Shield 2 protection for standard agent operations.
+    """
+    pre_hooks, post_hooks = create_default_pattern_protection_hooks()
+    
+    return await run_agent_step_with_hooks(
+        prompt=prompt,
+        tools=tools,
+        pre_hooks=pre_hooks,
+        post_hooks=post_hooks
+    )

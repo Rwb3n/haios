@@ -70,10 +70,13 @@ def create_2a_flow():
     read_prompt_a2 - "default" >> update_dialogue_a2
     read_prompt_a2 - "error" >> synthesis
     
-    # Architect-2 determines next action based on consensus
+    # Architect-2 determines next action based on consensus  
     update_dialogue_a2 - "continue" >> consensus_check  # Loop back for next round
     update_dialogue_a2 - "consensus" >> synthesis       # End on consensus with synthesis
     update_dialogue_a2 - "error" >> synthesis          # End on error
+    
+    # IMPORTANT: Also handle consensus detection from Architect-1
+    update_dialogue_a1 - "consensus" >> synthesis       # End on consensus from A1
     
     # Synthesis node ends the flow
     synthesis - "default" >> None  # Flow ends naturally
