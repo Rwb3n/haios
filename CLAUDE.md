@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+Ruben is the Operator. You are Cody, running on the Claude Code platform.
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
@@ -8,57 +10,12 @@ HAIOS (Hybrid AI Operating System) is a **Trust Engine** that transforms low-tru
 
 The system implements a "Certainty Ratchet" architecture - a one-way mechanism that only allows movement from ambiguity toward verified truth. HAIOS positions itself as the "Admiralty" commanding fleets of commodity AI agents, focusing on governance, planning, and synthesis rather than direct task execution.
 
-### MCP Server Configuration
 The project includes MCP (Model Context Protocol) servers for enhanced Claude Code integration:
 - **Filesystem Server**: Full access to the HAIOS project directory
 - **Memory Server**: Knowledge graph for context persistence
 - **SQLite Server**: Direct access to NocoDB and Langflow databases
 - **Playwright Server**: Browser automation capabilities
 
-Configure MCP servers:
-```bash
-./mcp-config.sh setup     # Add all HAIOS MCP servers
-./mcp-config.sh remove    # Remove HAIOS MCP servers
-./mcp-config.sh info      # Show configuration
-claude mcp list           # List all configured servers
-```
-
-#### SQLite MCP Tool Usage Pattern
-**CRITICAL**: SQLite MCP servers (`nocodb-sqlite`, `langflow-sqlite`) cannot be accessed directly by Claude Code. Use this pattern:
-
-```
-1. Use Task tool to delegate SQL queries to an agent
-2. Agent accesses MCP servers and executes queries
-3. Results returned in agent's final report
-
-Example:
-Task: "Query nocodb-sqlite to list all tables and show data from ingestion_queue"
-```
-
-**Quick Reference - NocoDB Tables**:
-- `nc__b20___ingestion_queue` - Research paper processing queue
-- `nc__b20___raw_research` - Raw research data storage
-- `nc__b20___concept_reports` - Processed concept reports
-- Research pipeline: ingestion_queue → raw_research → concept_reports
-
-### Service URLs
-- n8n (workflow automation): http://localhost:5678
-- NocoDB (no-code database): http://localhost:8081
-- Langflow (visual flow builder): http://localhost:7860
-
-### Python Development (agents/rhiza_agent)
-```bash
-cd agents/rhiza_agent
-pip install -r requirements.txt
-
-# Test Rhiza MVP (v3 architecture)
-./test_mvp_v3.sh
-
-# Test individual phases
-python3 adapters/phase1_strategic_triage_v3.py  # v3 with MCP
-python3 adapters/phase2_tactical_ingestion.py   # v2 (v3 pending)
-python3 adapters/phase3_crystal_seed.py         # v2 (v3 pending)
-```
 
 ## Architecture & Critical Patterns
 
@@ -80,19 +37,6 @@ python3 adapters/phase3_crystal_seed.py         # v2 (v3 pending)
 - **Zero-Trust security** for agent communication
 - **Vector clocks** for event ordering
 - **Partition tolerance** with split-brain handling
-
-### Error Handling
-```python
-# Exit codes
-0 = Success
-1 = Errors (recoverable)
-2 = Security violations (non-recoverable)
-
-# All errors must:
-- Include trace_id in structured logs
-- Output to both structlog AND stderr
-- Propagate security exceptions to engine level
-```
 
 ### File Operations
 - Use atomic operations for concurrent access safety
@@ -128,12 +72,6 @@ python3 adapters/phase3_crystal_seed.py         # v2 (v3 pending)
 - Reference ADR numbers in commits
 - JSON-schema validation for all data
 
-### Agent System
-- Multiple personas: CODING_ASSISTANT, TESTING_VALIDATOR, CRITIQUE_AGENT
-- Dynamic registration in agent registry
-- Strict role-based permissions
-- No self-validation allowed
-
 ### Agent Patterns
 1. **2A System (Architect Dialogue)**: Evaluator-optimizer pattern with feedback loops
 2. **Rhiza Agent**: Three-phase research mining (Strategic Triage → Tactical Ingestion → Crystal Seed Extraction)
@@ -146,7 +84,7 @@ python3 adapters/phase3_crystal_seed.py         # v2 (v3 pending)
 ## Project Structure
 ```
 haios/
-├── _legacy/        # Historical Python engine implementation
+├── __legacy/        # Historical Python engine implementation
 ├── agents/         # Agent configurations and implementations
 ├── data/          # Docker volume data (gitignored)
 ├── docs/          # Comprehensive documentation
@@ -176,9 +114,6 @@ HAIOS serves as a **Vertical Model Context Protocol (MCP) Foundry**:
 
 ### Integration Points
 - **Claude Code**: Validates durable context approach, serves as primary builder/executor
-- **n8n**: Workflow orchestration layer
-- **NocoDB**: State management and persistence
-- **Langflow**: Agent intelligence configuration
 
 ### Development Priorities
 1. Integrate Claude Code as primary builder/executor agent

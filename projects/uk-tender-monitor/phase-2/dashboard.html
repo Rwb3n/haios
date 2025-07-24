@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK Tender Monitor - Opportunity Dashboard</title>
+    
+    <!-- CSS Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e1e8ed;
+        }
+        
+        .card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: #34495e;
+        }
+        
+        /* Status indicators */
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .status-operational { background-color: #27ae60; }
+        .status-warning { background-color: #f39c12; }
+        .status-error { background-color: #e74c3c; }
+        
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .control-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        select, input, button {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+        
+        button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Opportunity cards */
+        .opportunity-card {
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            background: white;
+            transition: all 0.2s;
+        }
+        
+        .opportunity-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .opportunity-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+        
+        .opportunity-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+            line-height: 1.3;
+        }
+        
+        .opportunity-org {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .opportunity-metrics {
+            display: flex;
+            gap: 1rem;
+            margin: 0.75rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .metric {
+            background: #f8f9fa;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .score-excellent { background: #d4edda; color: #155724; }
+        .score-good { background: #cce7ff; color: #004085; }
+        .score-moderate { background: #fff3cd; color: #856404; }
+        .score-low { background: #f8d7da; color: #721c24; }
+        
+        .recommendation-pursue { background: #d4edda; color: #155724; }
+        .recommendation-consider { background: #cce7ff; color: #004085; }
+        .recommendation-monitor { background: #fff3cd; color: #856404; }
+        .recommendation-avoid { background: #f8d7da; color: #721c24; }
+        
+        .opportunity-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 4px;
+        }
+        
+        .btn-primary { background: #667eea; }
+        .btn-secondary { background: #6c757d; }
+        .btn-success { background: #28a745; }
+        
+        /* Statistics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Loading states */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+        
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Expert validation */
+        .validation-form {
+            display: none;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #e9ecef;
+        }
+        
+        .validation-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+        
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-weight: normal;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: -1;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .opportunity-metrics {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 UK Tender Monitor</h1>
+        <p>Digital Transformation Opportunity Dashboard</p>
+    </div>
+    
+    <div class="container">
+        <div class="dashboard-grid">
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Controls -->
+                <div class="card">
+                    <h2>🔍 Opportunity Discovery</h2>
+                    <div class="controls">
+                        <div class="control-group">
+                            <label>Minimum Score</label>
+                            <select id="minScore">
+                                <option value="0">All (0+)</option>
+                                <option value="40">Moderate (40+)</option>
+                                <option value="60" selected>Good (60+)</option>
+                                <option value="80">Excellent (80+)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Filter Profile</label>
+                            <select id="filterProfile">
+                                <option value="">All Profiles</option>
+                                <option value="balanced" selected>Balanced</option>
+                                <option value="aggressive">Aggressive</option>
+                                <option value="conservative">Conservative</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Results</label>
+                            <select id="resultLimit">
+                                <option value="10">10 Results</option>
+                                <option value="20" selected>20 Results</option>
+                                <option value="50">50 Results</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Filter Status</label>
+                            <select id="filterPassed">
+                                <option value="true" selected>Passed Filters Only</option>
+                                <option value="false">All Opportunities</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>&nbsp;</label>
+                            <button onclick="loadOpportunities()" id="searchBtn">
+                                🔍 Search Opportunities
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Opportunities List -->
+                <div class="card">
+                    <h2>📋 Top Opportunities</h2>
+                    <div id="opportunitiesContainer">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            Loading opportunities...
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- System Health -->
+                <div class="card">
+                    <h2>⚡ System Health</h2>
+                    <div id="systemHealth">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            Checking system status...
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dashboard Statistics -->
+                <div class="card">
+                    <h2>📊 Dashboard Stats</h2>
+                    <div id="dashboardStats">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            Loading statistics...
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Expert Validation -->
+                <div class="card">
+                    <h2>👨‍💼 Expert Validation</h2>
+                    <div id="validationStats">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            Loading validation data...
+                        </div>
+                    </div>
+                    <button onclick="loadValidationQueue()" class="btn-small btn-primary" style="margin-top: 1rem;">
+                        📝 Validation Queue
+                    </button>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="card">
+                    <h2>⚡ Quick Actions</h2>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <button onclick="refreshDashboard()" class="btn-small btn-primary">
+                            🔄 Refresh Dashboard
+                        </button>
+                        <button onclick="exportOpportunities()" class="btn-small btn-secondary">
+                            📥 Export Opportunities
+                        </button>
+                        <button onclick="showClassificationForm()" class="btn-small btn-success">
+                            🎯 Classify Tender
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Classification Form Modal (hidden by default) -->
+    <div id="classificationModal" class="hidden">
+        <!-- Modal implementation would go here -->
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // API Configuration
+        const API_URL = 'http://localhost:8000/api';
+        
+        // Global state
+        let currentOpportunities = [];
+        let systemHealthData = null;
+        let dashboardStatsData = null;
+        
+        // Utility functions
+        function formatCurrency(value) {
+            if (!value) return 'Not specified';
+            return new Intl.NumberFormat('en-GB', {
+                style: 'currency',
+                currency: 'GBP',
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+        
+        function formatDate(dateString) {
+            if (!dateString) return 'Not specified';
+            return new Date(dateString).toLocaleDateString('en-GB', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+        
+        function getScoreClass(score) {
+            if (score >= 80) return 'score-excellent';
+            if (score >= 60) return 'score-good';
+            if (score >= 40) return 'score-moderate';
+            return 'score-low';
+        }
+        
+        function getRecommendationClass(recommendation) {
+            return `recommendation-${recommendation.toLowerCase()}`;
+        }
+        
+        function showError(message) {
+            const container = document.getElementById('opportunitiesContainer');
+            container.innerHTML = `
+                <div class="error-message">
+                    ⚠️ Error: ${message}
+                </div>
+            `;
+        }
+        
+        function showSuccess(message) {
+            // You could implement a toast notification here
+            console.log('Success:', message);
+        }
+        
+        // API Functions
+        async function apiCall(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_URL}${endpoint}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('API call failed:', error);
+                throw error;
+            }
+        }
+        
+        // Load opportunities
+        async function loadOpportunities() {
+            const container = document.getElementById('opportunitiesContainer');
+            const button = document.getElementById('searchBtn');
+            
+            // Show loading state
+            container.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Searching opportunities...
+                </div>
+            `;
+            button.disabled = true;
+            
+            try {
+                // Get filter parameters
+                const minScore = document.getElementById('minScore').value;
+                const profile = document.getElementById('filterProfile').value;
+                const limit = document.getElementById('resultLimit').value;
+                const filterPassed = document.getElementById('filterPassed').value;
+                
+                // Build query parameters
+                const params = new URLSearchParams({
+                    min_score: minScore,
+                    limit: limit,
+                    filter_passed_only: filterPassed
+                });
+                
+                if (profile) {
+                    params.append('profile', profile);
+                }
+                
+                // Fetch opportunities
+                const opportunities = await apiCall(`/opportunities/top?${params}`);
+                currentOpportunities = opportunities;
+                
+                // Render opportunities
+                renderOpportunities(opportunities);
+                
+            } catch (error) {
+                showError(`Failed to load opportunities: ${error.message}`);
+            } finally {
+                button.disabled = false;
+            }
+        }
+        
+        // Render opportunities
+        function renderOpportunities(opportunities) {
+            const container = document.getElementById('opportunitiesContainer');
+            
+            if (opportunities.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #6c757d;">
+                        <h3>No opportunities found</h3>
+                        <p>Try adjusting your search criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const opportunitiesHtml = opportunities.map(opp => `
+                <div class="opportunity-card">
+                    <div class="opportunity-header">
+                        <div style="flex: 1;">
+                            <div class="opportunity-title">${opp.title}</div>
+                            <div class="opportunity-org">${opp.organisation_name}</div>
+                        </div>
+                        <div style="text-align: right; font-size: 0.9rem; color: #6c757d;">
+                            ${formatCurrency(opp.value_high)}
+                        </div>
+                    </div>
+                    
+                    <div class="opportunity-metrics">
+                        <span class="metric ${getScoreClass(opp.final_relevance_score)}">
+                            Score: ${Math.round(opp.final_relevance_score)}
+                        </span>
+                        <span class="metric ${getRecommendationClass(opp.final_recommendation)}">
+                            ${opp.final_recommendation}
+                        </span>
+                        ${opp.filter_passes ? '<span class="metric score-excellent">✓ Passed Filters</span>' : '<span class="metric score-low">✗ Failed Filters</span>'}
+                        ${opp.bid_probability ? `<span class="metric">Bid Prob: ${Math.round(opp.bid_probability * 100)}%</span>` : ''}
+                    </div>
+                    
+                    <div style="margin: 0.75rem 0; font-size: 0.9rem; color: #555;">
+                        <strong>Closing:</strong> ${formatDate(opp.closing_date)} | 
+                        <strong>Status:</strong> ${opp.status || 'Open'}
+                    </div>
+                    
+                    <div class="opportunity-actions">
+                        <button class="btn-small btn-primary" onclick="viewOpportunityDetails('${opp.notice_identifier}')">
+                            📄 View Details
+                        </button>
+                        <button class="btn-small btn-secondary" onclick="showValidationForm('${opp.notice_identifier}')">
+                            ✍️ Validate
+                        </button>
+                        <button class="btn-small btn-success" onclick="getClassificationExplanation('${opp.notice_identifier}')">
+                            🧠 Explain
+                        </button>
+                    </div>
+                    
+                    <!-- Validation form (hidden by default) -->
+                    <div id="validation-${opp.notice_identifier}" class="validation-form">
+                        <h4>Expert Validation</h4>
+                        <div class="form-group">
+                            <label>Relevance Assessment</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="label-${opp.notice_identifier}" value="relevant"> Relevant</label>
+                                <label><input type="radio" name="label-${opp.notice_identifier}" value="not_relevant"> Not Relevant</label>
+                                <label><input type="radio" name="label-${opp.notice_identifier}" value="unsure"> Unsure</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Confidence (1-5)</label>
+                            <select id="confidence-${opp.notice_identifier}">
+                                <option value="1">1 - Very Low</option>
+                                <option value="2">2 - Low</option>
+                                <option value="3" selected>3 - Medium</option>
+                                <option value="4">4 - High</option>
+                                <option value="5">5 - Very High</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Notes (optional)</label>
+                            <textarea id="notes-${opp.notice_identifier}" placeholder="Add your reasoning or additional notes..."></textarea>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn-small btn-success" onclick="submitValidation('${opp.notice_identifier}')">
+                                ✅ Submit
+                            </button>
+                            <button class="btn-small btn-secondary" onclick="hideValidationForm('${opp.notice_identifier}')">
+                                ❌ Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = opportunitiesHtml;
+        }
+        
+        // Load system health
+        async function loadSystemHealth() {
+            try {
+                const health = await apiCall('/performance/system-health');
+                systemHealthData = health;
+                
+                const container = document.getElementById('systemHealth');
+                container.innerHTML = `
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                            <span class="status-indicator ${health.database_operational ? 'status-operational' : 'status-error'}"></span>
+                            Database: ${health.database_operational ? 'Operational' : 'Error'}
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                            <span class="status-indicator ${health.classification_pipeline_status === 'operational' ? 'status-operational' : 'status-warning'}"></span>
+                            Pipeline: ${health.classification_pipeline_status}
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-value">${health.recent_classifications_count}</span>
+                            <span class="stat-label">7-Day Classifications</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">${health.expert_validations_count}</span>
+                            <span class="stat-label">Expert Validations</span>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('systemHealth').innerHTML = `
+                    <div style="color: #e74c3c; text-align: center;">
+                        ⚠️ Failed to load system health
+                    </div>
+                `;
+            }
+        }
+        
+        // Load dashboard statistics
+        async function loadDashboardStats() {
+            try {
+                const stats = await apiCall('/opportunities/dashboard-data?period_days=30');
+                dashboardStatsData = stats;
+                
+                const container = document.getElementById('dashboardStats');
+                const summary = stats.summary_stats;
+                
+                container.innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-value">${summary.total_opportunities || 0}</span>
+                            <span class="stat-label">Total Opportunities</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">${Math.round(summary.avg_score || 0)}</span>
+                            <span class="stat-label">Avg Score</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">${summary.pursue_count || 0}</span>
+                            <span class="stat-label">Pursue</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">${summary.consider_count || 0}</span>
+                            <span class="stat-label">Consider</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; font-size: 0.9rem; color: #6c757d;">
+                        Last 30 days analysis
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('dashboardStats').innerHTML = `
+                    <div style="color: #e74c3c; text-align: center;">
+                        ⚠️ Failed to load statistics
+                    </div>
+                `;
+            }
+        }
+        
+        // Load validation statistics
+        async function loadValidationStats() {
+            try {
+                const stats = await apiCall('/validation/stats?period_days=30');
+                
+                const container = document.getElementById('validationStats');
+                container.innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-value">${stats.total_validations}</span>
+                            <span class="stat-label">Total Validations</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">${Math.round(stats.agreement_rate * 100)}%</span>
+                            <span class="stat-label">Agreement Rate</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; font-size: 0.85rem;">
+                        <div><strong>Recent:</strong> ${stats.recent_validations} (7 days)</div>
+                        <div><strong>Avg Confidence:</strong> ${stats.avg_confidence.toFixed(1)}/5</div>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('validationStats').innerHTML = `
+                    <div style="color: #e74c3c; text-align: center;">
+                        ⚠️ Failed to load validation stats
+                    </div>
+                `;
+            }
+        }
+        
+        // View opportunity details
+        async function viewOpportunityDetails(noticeId) {
+            try {
+                const details = await apiCall(`/opportunities/${noticeId}/details`);
+                
+                // Create modal or new window to show details
+                const detailsWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes');
+                detailsWindow.document.write(`
+                    <html>
+                    <head>
+                        <title>Opportunity Details - ${details.title}</title>
+                        <style>
+                            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 2rem; line-height: 1.6; }
+                            .detail-section { margin-bottom: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px; }
+                            .metric { background: #e9ecef; padding: 0.25rem 0.5rem; border-radius: 4px; margin: 0.25rem; display: inline-block; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>${details.title}</h1>
+                        <div class="detail-section">
+                            <h3>Basic Information</h3>
+                            <p><strong>Organization:</strong> ${details.organisation_name}</p>
+                            <p><strong>Value:</strong> ${formatCurrency(details.value_high)}</p>
+                            <p><strong>Closing Date:</strong> ${formatDate(details.closing_date)}</p>
+                            <p><strong>Status:</strong> ${details.status}</p>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <h3>Classification Results</h3>
+                            <p><strong>Relevance Score:</strong> ${Math.round(details.final_relevance_score || 0)}</p>
+                            <p><strong>Recommendation:</strong> ${details.final_recommendation || 'Not available'}</p>
+                            <p><strong>Filter Status:</strong> ${details.filter_passes ? 'Passed' : 'Failed'}</p>
+                            ${details.bid_probability ? `<p><strong>Bid Probability:</strong> ${Math.round(details.bid_probability * 100)}%</p>` : ''}
+                        </div>
+                        
+                        <div class="detail-section">
+                            <h3>Description</h3>
+                            <p>${details.description || 'No description available'}</p>
+                        </div>
+                        
+                        ${details.risk_factors && details.risk_factors.length > 0 ? `
+                            <div class="detail-section">
+                                <h3>Risk Factors</h3>
+                                <ul>
+                                    ${details.risk_factors.map(risk => `<li>${risk}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        
+                        ${details.success_factors && details.success_factors.length > 0 ? `
+                            <div class="detail-section">
+                                <h3>Success Factors</h3>
+                                <ul>
+                                    ${details.success_factors.map(factor => `<li>${factor}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </body>
+                    </html>
+                `);
+            } catch (error) {
+                alert(`Failed to load opportunity details: ${error.message}`);
+            }
+        }
+        
+        // Show/hide validation form
+        function showValidationForm(noticeId) {
+            const form = document.getElementById(`validation-${noticeId}`);
+            form.classList.add('active');
+        }
+        
+        function hideValidationForm(noticeId) {
+            const form = document.getElementById(`validation-${noticeId}`);
+            form.classList.remove('active');
+        }
+        
+        // Submit validation
+        async function submitValidation(noticeId) {
+            try {
+                const labelRadio = document.querySelector(`input[name="label-${noticeId}"]:checked`);
+                const confidence = document.getElementById(`confidence-${noticeId}`).value;
+                const notes = document.getElementById(`notes-${noticeId}`).value;
+                
+                if (!labelRadio) {
+                    alert('Please select a relevance assessment');
+                    return;
+                }
+                
+                const validation = {
+                    notice_identifier: noticeId,
+                    expert_label: labelRadio.value,
+                    confidence: parseInt(confidence),
+                    notes: notes || null
+                };
+                
+                await apiCall('/validation/submit', {
+                    method: 'POST',
+                    body: JSON.stringify(validation)
+                });
+                
+                hideValidationForm(noticeId);
+                showSuccess('Validation submitted successfully');
+                
+                // Refresh validation stats
+                loadValidationStats();
+                
+            } catch (error) {
+                alert(`Failed to submit validation: ${error.message}`);
+            }
+        }
+        
+        // Get classification explanation
+        async function getClassificationExplanation(noticeId) {
+            try {
+                const explanation = await apiCall(`/classify/${noticeId}/explain`);
+                
+                // Show explanation in new window
+                const explanationWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
+                explanationWindow.document.write(`
+                    <html>
+                    <head>
+                        <title>Classification Explanation - ${noticeId}</title>
+                        <style>
+                            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 2rem; line-height: 1.6; }
+                            .step { margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea; }
+                            .metric { background: #e9ecef; padding: 0.25rem 0.5rem; border-radius: 4px; margin: 0.25rem; display: inline-block; font-family: monospace; }
+                            .score-high { background: #d4edda; color: #155724; }
+                            .score-medium { background: #cce7ff; color: #004085; }
+                            .score-low { background: #f8d7da; color: #721c24; }
+                            pre { background: #f1f3f4; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Classification Explanation</h1>
+                        <p><strong>Tender ID:</strong> ${explanation.notice_identifier}</p>
+                        <p><strong>Final Score:</strong> ${Math.round(explanation.final_relevance_score)}/100</p>
+                        <p><strong>Recommendation:</strong> ${explanation.final_recommendation}</p>
+                        
+                        <div class="step">
+                            <h3>Step 1: Basic Classification</h3>
+                            <div class="metric">Keyword Score: ${explanation.keyword_score}</div>
+                            <div class="metric">Context Score: ${explanation.context_score}</div>
+                            <div class="metric">ML Confidence: ${Math.round(explanation.ml_confidence * 100)}%</div>
+                            <div class="metric">Composite Score: ${explanation.composite_score}</div>
+                            ${explanation.technical_terms && explanation.technical_terms.length > 0 ? `
+                                <p><strong>Technical Terms:</strong> ${explanation.technical_terms.join(', ')}</p>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="step">
+                            <h3>Step 2: Enhanced Scoring</h3>
+                            <div class="metric">Metadata Score: ${explanation.metadata_score}</div>
+                            <div class="metric">Business Alignment: ${explanation.business_alignment_score}</div>
+                            <div class="metric">Urgency Multiplier: ${explanation.urgency_multiplier}x</div>
+                            <div class="metric">Value Multiplier: ${explanation.value_multiplier}x</div>
+                            <div class="metric">Department Multiplier: ${explanation.department_multiplier}x</div>
+                            <div class="metric">Priority: ${explanation.priority_level}</div>
+                        </div>
+                        
+                        <div class="step">
+                            <h3>Step 3: Advanced Filtering</h3>
+                            <div class="metric">Filter Passes: ${explanation.filter_passes ? 'Yes' : 'No'}</div>
+                            <div class="metric">Overall Filter Score: ${Math.round((explanation.overall_filter_score || 0) * 100)}%</div>
+                            <div class="metric">Bid Probability: ${Math.round((explanation.bid_probability || 0) * 100)}%</div>
+                            <div class="metric">Competition Level: ${explanation.competition_level}/10</div>
+                        </div>
+                        
+                        <div class="step">
+                            <h3>System Information</h3>
+                            <div class="metric">Model Version: ${explanation.model_version}</div>
+                            <div class="metric">Pipeline Version: ${explanation.pipeline_version}</div>
+                            <div class="metric">Processing Time: ${explanation.processing_time_ms}ms</div>
+                            <div class="metric">Classification Date: ${formatDate(explanation.classification_timestamp)}</div>
+                        </div>
+                        
+                        ${explanation.explanation ? `
+                            <div class="step">
+                                <h3>Explanation</h3>
+                                <p>${explanation.explanation}</p>
+                            </div>
+                        ` : ''}
+                    </body>
+                    </html>
+                `);
+            } catch (error) {
+                alert(`Failed to load classification explanation: ${error.message}`);
+            }
+        }
+        
+        // Load validation queue
+        async function loadValidationQueue() {
+            try {
+                const queue = await apiCall('/validation/queue?limit=10&min_score=40');
+                
+                if (queue.length === 0) {
+                    alert('No tenders in validation queue');
+                    return;
+                }
+                
+                // Show validation queue in modal or new section
+                const queueWindow = window.open('', '_blank', 'width=1000,height=700,scrollbars=yes');
+                const queueHtml = queue.map(tender => `
+                    <div style="border: 1px solid #ddd; padding: 1rem; margin: 1rem 0; border-radius: 8px;">
+                        <h3>${tender.title}</h3>
+                        <p><strong>Organization:</strong> ${tender.organisation_name}</p>
+                        <p><strong>Score:</strong> ${Math.round(tender.final_relevance_score)}</p>
+                        <p><strong>Recommendation:</strong> ${tender.final_recommendation}</p>
+                        <p><strong>Description:</strong> ${tender.description?.substring(0, 200)}...</p>
+                    </div>
+                `).join('');
+                
+                queueWindow.document.write(`
+                    <html>
+                    <head><title>Validation Queue</title></head>
+                    <body style="font-family: system-ui; margin: 2rem;">
+                        <h1>Expert Validation Queue</h1>
+                        <p>${queue.length} tenders awaiting validation</p>
+                        ${queueHtml}
+                    </body>
+                    </html>
+                `);
+            } catch (error) {
+                alert(`Failed to load validation queue: ${error.message}`);
+            }
+        }
+        
+        // Refresh dashboard
+        function refreshDashboard() {
+            loadSystemHealth();
+            loadDashboardStats();
+            loadValidationStats();
+            loadOpportunities();
+        }
+        
+        // Export opportunities
+        function exportOpportunities() {
+            if (currentOpportunities.length === 0) {
+                alert('No opportunities to export. Please search first.');
+                return;
+            }
+            
+            // Create CSV content
+            const headers = ['Notice ID', 'Title', 'Organization', 'Value', 'Score', 'Recommendation', 'Filter Passes', 'Closing Date'];
+            const csv = [
+                headers.join(','),
+                ...currentOpportunities.map(opp => [
+                    opp.notice_identifier,
+                    `"${opp.title.replace(/"/g, '""')}"`,
+                    `"${opp.organisation_name.replace(/"/g, '""')}"`,
+                    opp.value_high || '',
+                    Math.round(opp.final_relevance_score),
+                    opp.final_recommendation,
+                    opp.filter_passes ? 'Yes' : 'No',
+                    opp.closing_date || ''
+                ].join(','))
+            ].join('\n');
+            
+            // Download CSV
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `uk-tender-opportunities-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎯 UK Tender Monitor Dashboard Initializing...');
+            
+            // Load initial data
+            loadSystemHealth();
+            loadDashboardStats();
+            loadValidationStats();
+            loadOpportunities();
+            
+            console.log('✅ Dashboard initialization completed');
+        });
+        
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'r':
+                        e.preventDefault();
+                        refreshDashboard();
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        document.getElementById('minScore').focus();
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

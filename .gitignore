@@ -5,6 +5,7 @@
 _legacy/
 data/
 mcp-config.sh
+GEMINI.md
 
 # Claude Code specific
 .claude/settings.local.json

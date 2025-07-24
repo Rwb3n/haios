@@ -11,7 +11,11 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'PocketFlow'))
 
 from pocketflow import AsyncNode
-# Using standard print logging like other nodes
+from .shared_components import (
+    run_agent_step, AgentStepResult, AGENT_CONFIGS,
+    start_step_tracking, finalize_step_tracking, log_step_summary,
+    add_step_to_round
+)
 
 
 class ConsensusSynthesisNode(AsyncNode):
@@ -117,10 +121,17 @@ class ConsensusSynthesisNode(AsyncNode):
 
 You are a synthesis specialist creating the final architectural summary after consensus. Analyze the complete dialogue and replace all [TO BE FILLED...] placeholders with detailed content. Follow the same structured approach used in summary.md. Focus on actionable outcomes and professional stakeholder communication."""
 
+        # Phase 1: Start step tracking
+        step_metrics = start_step_tracking("Creating Consensus Synthesis", "ConsensusSynthesisNode")
+        
         # Call agent using shared_components pattern (same as other nodes)
-        from .shared_components import run_agent_step, AgentStepResult
         result: AgentStepResult = await run_agent_step(synthesis_instruction, ["Read", "Edit"])
-        print(f"  [DEBUG] Synthesis agent used {result.tool_count} tools: {result.tools_used}")
+        
+        # Phase 1: Finalize tracking but don't log yet
+        step_metrics = finalize_step_tracking(step_metrics, result)
+        
+        # Store step metrics for post_async to use in round tracking
+        context["step_metrics"] = step_metrics
         
         if result.error:
             return f"ERROR: {result.error}"
@@ -132,14 +143,11 @@ You are a synthesis specialist creating the final architectural summary after co
         else:
             print(f"  [VALIDATION] Tool usage validated: Synthesis agent used {result.tool_count} tools correctly")
         
-        # Log cost information if available
-        if result.cost_usd:
-            print(f"  [COST] Synthesis operation cost: ${result.cost_usd:.4f}")
-        
-        print(f"  [OK] Synthesis agent response ({len(result.response_text)} chars, {result.duration_ms}ms)")
-        
         # Validation log for operation completion
         print(f"  [VALIDATION] Synthesis generation completed successfully ({len(result.response_text)} chars)")
+        
+        # Phase 1: Log summary as final line
+        log_step_summary(step_metrics)
         
         return result.response_text
     
@@ -155,6 +163,12 @@ You are a synthesis specialist creating the final architectural summary after co
         if exec_res.startswith("ERROR:"):
             print(f"  [ERROR] Synthesis execution failed: {exec_res}")
             return "error"
+        
+        # Phase 2: Add step to current round metrics (if available)
+        step_metrics = prep_res.get("step_metrics")
+        current_round_metrics = shared.get("current_round_metrics")
+        if step_metrics and current_round_metrics:
+            add_step_to_round(current_round_metrics, step_metrics)
         
         # Check if synthesis file was created and filled
         synthesis_path = prep_res.get("synthesis_path")

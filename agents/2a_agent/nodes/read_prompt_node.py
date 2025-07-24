@@ -12,7 +12,11 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'PocketFlow'))
 
 from pocketflow import AsyncNode
-from .shared_components import run_read_only_step, AgentStepResult
+from .shared_components import (
+    run_read_only_step, AgentStepResult,
+    start_step_tracking, finalize_step_tracking, log_step_summary,
+    add_step_to_round
+)
 
 
 class ReadPromptNode(AsyncNode):
@@ -45,17 +49,29 @@ class ReadPromptNode(AsyncNode):
         print(f"STEP {self.step_number}: {step_desc}")
         print(f"{'='*60}")
         
+        # Phase 1: Start step tracking
+        step_metrics = start_step_tracking(step_desc, "ReadPromptNode")
+        
         # Single atomic operation: read prompt file with absolute path
         result: AgentStepResult = await run_read_only_step(
             f"Read {context['prompt_file']}", 
             context['prompt_file']
         )
         
+        # Phase 1: Finalize tracking but don't log yet
+        step_metrics = finalize_step_tracking(step_metrics, result)
+        
+        # Store step metrics for post_async to use in round tracking
+        context["step_metrics"] = step_metrics
+        
         if result.error:
             return f"ERROR: {result.error}"
         
         # Validation log for file access
         print(f"  [VALIDATION] Prompt file read access validated: {context['prompt_file']}")
+        
+        # Phase 1: Log summary as final line
+        log_step_summary(step_metrics)
         
         return result.response_text
     
@@ -71,6 +87,12 @@ class ReadPromptNode(AsyncNode):
             shared["prompt_error"] = exec_res
             return "error"
         else:
+            # Phase 2: Add step to current round metrics (if available)
+            step_metrics = prep_res.get("step_metrics")
+            current_round_metrics = shared.get("current_round_metrics")
+            if step_metrics and current_round_metrics:
+                add_step_to_round(current_round_metrics, step_metrics)
+            
             shared["prompt_content"] = exec_res
             shared["prompt_error"] = None
             return "default"

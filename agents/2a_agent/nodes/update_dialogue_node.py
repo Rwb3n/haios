@@ -15,9 +15,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'Pocke
 
 from pocketflow import AsyncNode
 from .shared_components import (
-    run_agent_step, AgentStepResult, AGENT_CONFIGS
-    # start_step_tracking, finalize_step_tracking, update_round_metrics,
-    # finalize_round_metrics, generate_round_summary, add_violation
+    run_agent_step, AgentStepResult, AGENT_CONFIGS,
+    start_step_tracking, finalize_step_tracking, log_step_summary,
+    add_step_to_round, finalize_round_tracking, log_round_summary
 )
 
 
@@ -98,9 +98,17 @@ class UpdateDialogueNode(AsyncNode):
 
 IMPORTANT: If you believe consensus has been reached, also set the "consensus" field to true in your entry. Only set consensus=true if you are certain the architectural question has been fully resolved and no further discussion is needed."""
         
+        # Phase 1: Start step tracking
+        step_metrics = start_step_tracking(f"Get {context['persona_name']} Response", "UpdateDialogueNode")
+        
         # Single atomic operation: get agent response
         result: AgentStepResult = await run_agent_step(instruction, ["Read", "Edit"])
-        print(f"  [DEBUG] {context['persona_name']} used {result.tool_count} tools: {result.tools_used}")
+        
+        # Phase 1: Finalize tracking but don't log yet
+        step_metrics = finalize_step_tracking(step_metrics, result)
+        
+        # Store step metrics for post_async to use in round tracking
+        context["step_metrics"] = step_metrics
         
         if result.error:
             return f"ERROR: {result.error}"
@@ -112,12 +120,11 @@ IMPORTANT: If you believe consensus has been reached, also set the "consensus" f
         else:
             print(f"  [VALIDATION] Tool usage validated: {context['persona_name']} used {result.tool_count} tools correctly")
         
-        # Log cost information if available
-        if result.cost_usd:
-            print(f"  [COST] {context['persona_name']} operation cost: ${result.cost_usd:.4f}")
-        
         # Validation log for operation completion
         print(f"  [VALIDATION] {context['persona_name']} dialogue update completed successfully")
+        
+        # Phase 1: Log summary as final line
+        log_step_summary(step_metrics)
         
         return result.response_text
     
@@ -132,6 +139,11 @@ IMPORTANT: If you believe consensus has been reached, also set the "consensus" f
             shared["last_error"] = exec_res
             return "error"
         
+        # Phase 2: Add step to current round metrics (if available)
+        step_metrics = prep_res.get("step_metrics")
+        current_round_metrics = shared.get("current_round_metrics")
+        if step_metrics and current_round_metrics:
+            add_step_to_round(current_round_metrics, step_metrics)
         
         # Read dialogue file to get updated entry count and check consensus
         dialogue_path = prep_res["dialogue_path"]
@@ -153,6 +165,12 @@ IMPORTANT: If you believe consensus has been reached, also set the "consensus" f
             
             if consensus_boolean:
                 print(f"  [CONSENSUS] Detected consensus signal (boolean field) from {prep_res['persona_name']}")
+                
+                # Phase 2: Finalize round metrics on consensus
+                if current_round_metrics:
+                    finalize_round_tracking(current_round_metrics, consensus_reached=True, consensus_architect=prep_res['persona_name'])
+                    log_round_summary(current_round_metrics)
+                
                 shared["consensus_reached"] = True
                 return "consensus"
             
@@ -174,13 +192,22 @@ IMPORTANT: If you believe consensus has been reached, also set the "consensus" f
             
             if consensus_found:
                 print(f"  [CONSENSUS] Detected consensus signal (pattern fallback) from {prep_res['persona_name']}")
+                
+                # Phase 2: Finalize round metrics on consensus
+                if current_round_metrics:
+                    finalize_round_tracking(current_round_metrics, consensus_reached=True, consensus_architect=prep_res['persona_name'])
+                    log_round_summary(current_round_metrics)
+                
                 shared["consensus_reached"] = True
                 return "consensus"
             
-            # TODO: Re-implement round metrics tracking after fixing flow issues
-            
-            # Only increment round after Architect-2 responses (complete round finished)
+            # Phase 2: Finalize round metrics when round completes without consensus
             if prep_res['persona_name'] == "Architect-2":
+                # Round completed without consensus - finalize metrics
+                if current_round_metrics:
+                    finalize_round_tracking(current_round_metrics, consensus_reached=False)
+                    log_round_summary(current_round_metrics)
+                
                 completed_round = shared.get("round_num", 1)
                 shared["round_num"] = completed_round + 1
             

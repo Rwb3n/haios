@@ -10,7 +10,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'PocketFlow'))
 
 from pocketflow import AsyncNode
-# from .shared_components import init_round_tracking, generate_round_summary, finalize_round_metrics
+from .shared_components import init_round_tracking, log_round_summary
 
 
 class ConsensusCheckNode(AsyncNode):
@@ -74,9 +74,9 @@ class ConsensusCheckNode(AsyncNode):
         # Starting new round - initialize round tracking
         round_num = prep_res.get("round_num", 1)
         
-        # Initialize new round metrics
-        # round_metrics = init_round_tracking(round_num)
-        # shared["current_round_metrics"] = round_metrics
+        # Phase 2: Initialize new round metrics
+        round_metrics = init_round_tracking(round_num)
+        shared["current_round_metrics"] = round_metrics
         
         print(f"\n{'='*80}")
         print(f"ROUND {round_num} START")

@@ -8,7 +8,7 @@ import sys
 import os
 import time
 from typing import Optional, Dict, Any, List, Tuple, Union
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'PocketFlow'))
 
@@ -58,6 +58,58 @@ class AgentStepResult:
     cost_usd: Optional[float] = None
     usage_data: Optional[Dict[str, Any]] = None
     error: Optional[str] = None
+
+
+@dataclass
+class StepMetrics:
+    """Minimal step metrics for tracking (Phase 1)."""
+    
+    step_name: str
+    node_name: str
+    start_time: float
+    end_time: Optional[float] = None
+    
+    # Performance tracking
+    duration_ms: int = 0
+    cost_usd: float = 0.0
+    chars_generated: int = 0
+    
+    # Tool usage
+    tools_used: List[str] = field(default_factory=list)
+    tool_count: int = 0
+    
+    # Status
+    success: bool = True
+    error_message: Optional[str] = None
+
+
+@dataclass
+class RoundMetrics:
+    """Round-level metrics aggregation (Phase 2)."""
+    
+    round_number: int
+    start_time: float
+    end_time: Optional[float] = None
+    
+    # Tool usage aggregation
+    tools_used: Dict[str, int] = field(default_factory=dict)  # {"Read": 3, "Edit": 2}
+    total_tools: int = 0
+    
+    # Performance aggregation
+    total_duration_ms: int = 0
+    total_cost_usd: float = 0.0
+    total_chars_generated: int = 0
+    
+    # Step-level breakdown
+    step_metrics: List[StepMetrics] = field(default_factory=list)
+    
+    # Round outcome
+    consensus_reached: bool = False
+    consensus_architect: Optional[str] = None
+    
+    # Status tracking
+    successful_steps: int = 0
+    failed_steps: int = 0
 
 
 @dataclass
@@ -244,10 +296,8 @@ async def _execute_agent_step(prompt: str, options: ClaudeCodeOptions, allowed_t
         error = f"Unexpected error: {e}"
         print(f"  [ERROR] Unexpected error: {error}")
     
-    # Log final response character count and duration for observability
+    # Calculate final duration
     duration_ms = int((time.time() - start_time) * 1000)
-    if response_text:
-        print(f"  [OK] Agent response ({len(response_text)} chars, {duration_ms}ms)")
     
     return AgentStepResult(
         response_text=response_text,
@@ -520,3 +570,110 @@ async def run_agent_step_protected(prompt: str, tools: List[str]) -> AgentStepRe
         pre_hooks=pre_hooks,
         post_hooks=post_hooks
     )
+
+
+# ============================================================================
+# PHASE 1: MINIMAL STEP METRICS TRACKING
+# ============================================================================
+
+def start_step_tracking(step_name: str, node_name: str) -> StepMetrics:
+    """Start minimal step tracking (Phase 1)."""
+    return StepMetrics(
+        step_name=step_name,
+        node_name=node_name,
+        start_time=time.time()
+    )
+
+
+def finalize_step_tracking(step_metrics: StepMetrics, result: AgentStepResult) -> StepMetrics:
+    """Finalize step tracking with agent results (Phase 1)."""
+    step_metrics.end_time = time.time()
+    step_metrics.duration_ms = result.duration_ms
+    step_metrics.cost_usd = result.cost_usd or 0.0
+    step_metrics.chars_generated = len(result.response_text) if result.response_text else 0
+    step_metrics.tools_used = result.tools_used.copy()
+    step_metrics.tool_count = result.tool_count
+    step_metrics.success = not bool(result.error)
+    step_metrics.error_message = result.error
+    
+    return step_metrics
+
+
+def log_step_summary(step_metrics: StepMetrics) -> None:
+    """Log minimal step summary (Phase 1)."""
+    duration_s = step_metrics.duration_ms / 1000.0
+    status = "SUCCESS" if step_metrics.success else "FAILED"
+    tools_str = ", ".join(step_metrics.tools_used) if step_metrics.tools_used else "0 tools"
+    
+    print(f"  [METRICS] {step_metrics.step_name}: {status} | {duration_s:.1f}s | {tools_str} | ${step_metrics.cost_usd:.4f} | {step_metrics.chars_generated} chars")
+
+
+# ============================================================================
+# PHASE 2: ROUND-LEVEL AGGREGATION AND TRACKING
+# ============================================================================
+
+def init_round_tracking(round_number: int) -> RoundMetrics:
+    """Initialize round tracking (Phase 2)."""
+    return RoundMetrics(
+        round_number=round_number,
+        start_time=time.time()
+    )
+
+
+def add_step_to_round(round_metrics: RoundMetrics, step_metrics: StepMetrics) -> None:
+    """Add completed step to round metrics (Phase 2)."""
+    # Add step to round
+    round_metrics.step_metrics.append(step_metrics)
+    
+    # Aggregate tool usage
+    for tool in step_metrics.tools_used:
+        round_metrics.tools_used[tool] = round_metrics.tools_used.get(tool, 0) + 1
+    
+    # Aggregate performance
+    round_metrics.total_tools += step_metrics.tool_count
+    round_metrics.total_duration_ms += step_metrics.duration_ms
+    round_metrics.total_cost_usd += step_metrics.cost_usd
+    round_metrics.total_chars_generated += step_metrics.chars_generated
+    
+    # Update status counters
+    if step_metrics.success:
+        round_metrics.successful_steps += 1
+    else:
+        round_metrics.failed_steps += 1
+
+
+def finalize_round_tracking(round_metrics: RoundMetrics, consensus_reached: bool = False, consensus_architect: str = None) -> RoundMetrics:
+    """Finalize round tracking (Phase 2)."""
+    round_metrics.end_time = time.time()
+    round_metrics.consensus_reached = consensus_reached
+    round_metrics.consensus_architect = consensus_architect
+    return round_metrics
+
+
+def format_tool_summary(tools_used: Dict[str, int]) -> str:
+    """Format tool usage summary as '3x Read, 2x Edit' (Phase 2)."""
+    if not tools_used:
+        return "0 tools"
+    
+    tool_strings = [f"{count}x {tool}" for tool, count in sorted(tools_used.items())]
+    return ", ".join(tool_strings)
+
+
+def log_round_summary(round_metrics: RoundMetrics) -> None:
+    """Log comprehensive round summary (Phase 2)."""
+    duration_s = round_metrics.total_duration_ms / 1000.0
+    tools_summary = format_tool_summary(round_metrics.tools_used)
+    
+    status = "CONSENSUS" if round_metrics.consensus_reached else "CONTINUE"
+    if round_metrics.consensus_reached and round_metrics.consensus_architect:
+        status += f" ({round_metrics.consensus_architect})"
+    
+    print(f"")
+    print(f"{'='*80}")
+    print(f"ROUND {round_metrics.round_number} SUMMARY")
+    print(f"{'='*80}")
+    print(f"Steps: {len(round_metrics.step_metrics)} ({round_metrics.successful_steps} success, {round_metrics.failed_steps} failed)")
+    print(f"Duration: {duration_s:.1f}s | Cost: ${round_metrics.total_cost_usd:.4f} | Tools: {tools_summary}")
+    print(f"Characters: {round_metrics.total_chars_generated:,} | Status: {status}")
+    print(f"{'='*80}")
+    print(f"")

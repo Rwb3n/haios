@@ -1,29 +1,3 @@
-# ANNOTATION_BLOCK_START
-{
-    "artifact_annotation_header": {
-        "artifact_id_of_host": "adr_os_035_md",
-        "g_annotation_created": 251,
-        "version_tag_of_host_at_annotation": "1.0.0"
-    },
-    "payload": {
-        "description": "Defines the Crystallization Protocol and Gatekeeper Agent for formal knowledge validation and canonization.",
-        "artifact_type": "DOCUMENTATION",
-        "purpose_statement": "To establish a formal two-space system that safely isolates exploratory work from canonical system state while providing auditable knowledge integration.",
-        "authors_and_contributors": [
-            { "g_contribution": 251, "identifier": "Hybrid_AI_OS" },
-            { "g_contribution": 250, "identifier": "Third_Party_Architectural_Review" }
-        ],
-        "internal_dependencies": [
-            "adr_os_template_md",
-            "adr_os_032_md",
-            "adr_os_021_md",
-            "3rdpartyeval-10.md"
-        ],
-        "linked_issue_ids": []
-    }
-}
-# ANNOTATION_BLOCK_END
-
 # ADR-OS-035: The Crystallization Protocol & Gatekeeper Agent
 
 * **Status**: SUPERSEDED 

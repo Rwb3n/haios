@@ -1,4 +1,4 @@
-# ADR-OS-041: Rhiza Agent - Research Ingestion and Analysis Protocol
+# ADR-OS-041: The Scientific Research Mining Agent ("Rhiza")
 
 **Status**: Proposed  
 **Date**: 2025-07-11  

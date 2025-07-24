@@ -11,7 +11,11 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'PocketFlow'))
 
 from pocketflow import AsyncNode
-from .shared_components import run_agent_step, run_read_only_step, AgentStepResult, AGENT_CONFIGS
+from .shared_components import (
+    run_agent_step, run_read_only_step, AgentStepResult, AGENT_CONFIGS,
+    start_step_tracking, finalize_step_tracking, log_step_summary,
+    add_step_to_round
+)
 
 
 class SummarizerNode(AsyncNode):
@@ -88,9 +92,17 @@ class SummarizerNode(AsyncNode):
         print(f"  [VALIDATION] Summary file access validated: {context['summary_abs']}")
         print(f"  [VALIDATION] Dialogue file access validated: {context['dialogue_abs']}")
         
+        # Phase 1: Start step tracking
+        step_metrics = start_step_tracking(f"Generating Dialogue Summary (Round {context['round_num']})", "SummarizerNode")
+        
         # Standard Read + Edit pattern (identical to Architects)
         result: AgentStepResult = await run_agent_step(summary_instruction, ["Read", "Edit"])
-        print(f"  [DEBUG] Scribe used {result.tool_count} tools: {result.tools_used}")
+        
+        # Phase 1: Finalize tracking but don't log yet
+        step_metrics = finalize_step_tracking(step_metrics, result)
+        
+        # Store step metrics for post_async to use in round tracking
+        context["step_metrics"] = step_metrics
         
         if result.error:
             return f"Error: {result.error}"
@@ -102,12 +114,11 @@ class SummarizerNode(AsyncNode):
         else:
             print(f"  [VALIDATION] Tool usage validated: Scribe used {result.tool_count} tools correctly")
         
-        # Log cost information if available
-        if result.cost_usd:
-            print(f"  [COST] Scribe operation cost: ${result.cost_usd:.4f}")
-        
         # Validation log for operation completion
         print(f"  [VALIDATION] Summary generation completed successfully ({len(result.response_text)} chars)")
+        
+        # Phase 1: Log summary as final line
+        log_step_summary(step_metrics)
         
         return result.response_text
     
@@ -118,6 +129,13 @@ class SummarizerNode(AsyncNode):
     
     async def post_async(self, shared: Dict[str, Any], prep_res: Dict[str, Any], exec_res: str) -> str:
         """Store summary in shared state (file already written by Scribe)."""
+        
+        # Phase 2: Add step to current round metrics (if available)
+        step_metrics = prep_res.get("step_metrics")
+        current_round_metrics = shared.get("current_round_metrics")
+        if step_metrics and current_round_metrics:
+            add_step_to_round(current_round_metrics, step_metrics)
+        
         # Store in shared state for backwards compatibility
         shared["dialogue_summary"] = exec_res
         
