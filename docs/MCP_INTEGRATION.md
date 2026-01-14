@@ -1,5 +1,5 @@
 # generated: 2025-12-05
-# System Auto: last updated on: 2025-12-08 21:51:16
+# System Auto: last updated on: 2026-01-14T21:19:05
 # MCP Integration Guide (PROPOSED UPDATE)
 
 > **Progressive Disclosure:** [Quick Reference](README.md) -> [Strategic Overview](epistemic_state.md) -> **MCP Integration (YOU ARE HERE)**
@@ -43,17 +43,17 @@ To use the `haios-memory` server, add the following configuration to your MCP cl
         "-m",
         "haios_etl.mcp_server"
       ],
-      "cwd": "D:\\PROJECTS\\haios",
+      "cwd": "/path/to/haios",
       "env": {
         "GOOGLE_API_KEY": "your-api-key-here",
-        "DB_PATH": "D:\\PROJECTS\\haios\\haios_memory.db"
+        "DB_PATH": "/path/to/haios/haios_memory.db"
       }
     }
   }
 }
 ```
 
-**Note:** Replace `D:\\PROJECTS\\haios` with the actual absolute path to your project if different.
+**Note:** Replace `/path/to/haios` with the actual absolute path to your project.
 
 ## Available Tools
 

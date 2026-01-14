@@ -1,5 +1,5 @@
 # generated: 2025-11-30
-# System Auto: last updated on: 2026-01-14T20:29:05
+# System Auto: last updated on: 2026-01-14T21:19:48
 # HAIOS Documentation - Quick Reference
 
 > **Progressive Disclosure:** Quick Reference (YOU ARE HERE) -> [Strategic Overview](epistemic_state.md) -> [Detailed Specs](specs/)
@@ -15,8 +15,7 @@ If you're a new agent or resuming after context loss:
 1. **CRITICAL - Vision Alignment:** [vision/VISION-INTERPRETATION-SESSION.md](vision/2025-11-30-VISION-INTERPRETATION-SESSION.md) - MANDATORY FIRST READ
 2. **Technical Vision:** [VISION_ANCHOR.md](VISION_ANCHOR.md) - Architecture (ReasoningBank + LangExtract)
 3. **Current State:** [epistemic_state.md](epistemic_state.md) - What's done, what's next
-4. **Latest Handoff:** [Investigation Handoff](handoff/2025-11-30-INVESTIGATION-HANDOFF-vision-gap-analysis.md) - Gap analysis mission
-5. **Run Tests:** `pytest` - Verify system integrity (154 tests should pass)
+4. **Run Tests:** `pytest` - Verify system integrity (747 tests)
 
 ---
 
@@ -33,7 +32,7 @@ If you're a new agent or resuming after context loss:
 | MCP Server | ONLINE | 13 tools exposed |
 | Schema v3 | AUTHORITATIVE | 17 tables |
 
-**Test:** `python -m pytest tests/ -v` (154 passing)
+**Test:** `pytest` (747 tests)
 
 ---
 

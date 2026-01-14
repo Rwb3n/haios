@@ -1,5 +1,5 @@
 # generated: 2025-11-25
-# System Auto: last updated on: 2025-12-21 14:09:00
+# System Auto: last updated on: 2026-01-14T21:19:12
 # HAIOS Test Suite
 
 > **Navigation:** [Quick Reference](../docs/README.md) | [Strategic Overview](../docs/epistemic_state.md) | [Library](../.claude/lib/README.md)
@@ -8,8 +8,8 @@ This directory contains the test suite for the HAIOS Cognitive Memory System.
 
 ## Status
 
-**Current Passing Tests:** 321 (+1 skipped)
-**Coverage:** Core ETL, Synthesis, Retrieval, MCP, Agents, Plugin Structure, Hooks, Status, Scaffold, Validate
+**Current Tests:** 747
+**Coverage:** Core ETL, Synthesis, Retrieval, MCP, Agents, Plugin Structure, Hooks, Status, Scaffold, Validate, Config, Manifest
 **Governance:** Slash command verification included in manual test loops.
 
 ---

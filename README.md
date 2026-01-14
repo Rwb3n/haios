@@ -1,5 +1,5 @@
 # generated: 2025-11-30
-# System Auto: last updated on: 2026-01-14T21:11:54
+# System Auto: last updated on: 2026-01-14T21:19:19
 ```
 
         ██╗  ██╗ █████╗ ██╗ ██████╗ ███████╗
@@ -159,7 +159,7 @@ Schema:           v3 (SQLite with embeddings)
 | [Vision Anchor](docs/VISION_ANCHOR.md) | Technical architecture (ReasoningBank + LangExtract) |
 | [MCP Integration](docs/MCP_INTEGRATION.md) | Connect to agent ecosystem |
 | [Operations Manual](docs/OPERATIONS.md) | ETL and synthesis runbook |
-| [Investigation Handoff](docs/handoff/2025-11-30-INVESTIGATION-HANDOFF-vision-gap-analysis.md) | Gap analysis mission |
+| [Handoffs](docs/handoff/) | Session handoff documents |
 | [ETL Package](haios_etl/README.md) | Module documentation |
 | [Test Suite](tests/README.md) | 747 tests |
 | [Anti-Patterns](docs/anti-patterns/) | Known failure modes to avoid |
