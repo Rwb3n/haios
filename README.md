@@ -1,5 +1,5 @@
 # generated: 2025-11-30
-# System Auto: last updated on: 2026-01-14T21:19:19
+# System Auto: last updated on: 2026-01-14T21:24:01
 ```
 
         ██╗  ██╗ █████╗ ██╗ ██████╗ ███████╗
@@ -64,6 +64,23 @@ HAIOS is an experimental **governance and memory system for AI agents**, built a
 This is a personal research project exploring AI agent reliability, context management, and human-AI collaboration patterns. It's opinionated, evolving, and very much a work in progress.
 
 > **For Claude Code users:** The `.claude/` directory contains the plugin infrastructure - hooks, skills, commands, and agents that extend Claude Code's capabilities.
+
+### A Note on the Codebase
+
+This project evolved over 190 sessions (~3 months). It's a Ship of Theseus - the architecture has been rebuilt multiple times while preserving historical artifacts. You'll find:
+
+| Location | Status | Notes |
+|----------|--------|-------|
+| `.claude/haios/` | **Current** | Manifesto, epochs, chapters - the live architecture |
+| `.claude/lib/` | **Current** | Python modules powering the plugin |
+| `.claude/skills/`, `agents/`, `commands/`, `hooks/` | **Current** | Plugin components |
+| `haios_etl/` | **Legacy** | Original ETL package - still works but being migrated to `.claude/lib/` |
+| `docs/` | **Mixed** | Some current (epistemic_state, specs), some historical (checkpoints, old plans) |
+| `docs/checkpoints/` | **Historical** | 190 session summaries - archaeological record |
+| `docs/work/` | **Mixed** | Active work items and archived completed work |
+| `scripts/` | **Mixed** | Some still useful, some obsolete |
+
+**Don't expect consistency.** Documents reference things that have been renamed, reorganized, or deprecated. The manifesto corpus (`.claude/haios/manifesto/`) and epoch definition (`.claude/haios/epochs/E2/`) are the authoritative sources for current architecture.
 
 ---
 
