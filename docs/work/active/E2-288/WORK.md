@@ -2,10 +2,10 @@
 template: work_item
 id: E2-288
 title: Add just set-cycle recipe for skill entry/exit
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-11
-closed: null
+closed: '2026-01-14'
 milestone: null
 priority: medium
 effort: medium
@@ -22,7 +22,10 @@ node_history:
   entered: 2026-01-11 22:20:09
   exited: null
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 81348
+- 81349
+- 81350
 operator_decisions: []
 documents:
   investigations: []

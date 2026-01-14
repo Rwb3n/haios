@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2025-12-27T22:11:36
+# System Auto: last updated on: 2026-01-14T21:32:22
 """Tests for .claude/lib/status.py - Core status module.
 
 TDD tests for E2-120 Phase 2a (CORE functions only).
@@ -307,6 +307,48 @@ class TestGenerateSlimStatus:
         assert "milestone" in slim
         assert "session_delta" in slim
         assert "active_work" in slim
+        assert "counts" in slim
+        assert "infrastructure" in slim
+
+    def test_session_state_in_slim_status(self):
+        """E2-286: Verify generate_slim_status() includes session_state section."""
+        from status import generate_slim_status
+
+        slim = generate_slim_status()
+
+        assert "session_state" in slim
+        assert isinstance(slim["session_state"], dict)
+        # Verify all required fields present
+        assert "active_cycle" in slim["session_state"]
+        assert "current_phase" in slim["session_state"]
+        assert "work_id" in slim["session_state"]
+        assert "entered_at" in slim["session_state"]
+
+    def test_session_state_default_values(self):
+        """E2-286: Verify session_state fields default to None when no cycle active."""
+        from status import generate_slim_status
+
+        slim = generate_slim_status()
+
+        # Default state: no active cycle
+        assert slim["session_state"]["active_cycle"] is None
+        assert slim["session_state"]["current_phase"] is None
+        assert slim["session_state"]["work_id"] is None
+        assert slim["session_state"]["entered_at"] is None
+
+    def test_existing_fields_unchanged(self):
+        """E2-286: Verify existing slim status fields are not affected."""
+        from status import generate_slim_status
+
+        slim = generate_slim_status()
+
+        # All existing top-level keys must be present
+        assert "generated" in slim
+        assert "milestone" in slim
+        assert "session_delta" in slim
+        assert "work_cycle" in slim
+        assert "active_work" in slim
+        assert "blocked_items" in slim
         assert "counts" in slim
         assert "infrastructure" in slim
 

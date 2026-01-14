@@ -2,10 +2,10 @@
 template: work_item
 id: E2-287
 title: Add UserPromptSubmit warning for work outside cycle
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-11
-closed: null
+closed: '2026-01-14'
 milestone: null
 priority: medium
 effort: medium
@@ -22,7 +22,13 @@ node_history:
   entered: 2026-01-11 22:20:02
   exited: null
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 81340
+- 81341
+- 81342
+- 65046
+- 81346
+- 81347
 operator_decisions: []
 documents:
   investigations: []

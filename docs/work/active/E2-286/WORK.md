@@ -2,10 +2,10 @@
 template: work_item
 id: E2-286
 title: Add session_state to haios-status-slim.json
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-11
-closed: null
+closed: '2026-01-14'
 milestone: null
 priority: medium
 effort: medium
@@ -27,6 +27,12 @@ memory_refs:
 - 81335
 - 81336
 - 81337
+- 81338
+- 81339
+- 65046
+- 81343
+- 81344
+- 81345
 operator_decisions: []
 documents:
   investigations: []

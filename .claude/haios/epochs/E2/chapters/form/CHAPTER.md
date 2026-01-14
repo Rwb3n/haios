@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-12T01:12:58
+# System Auto: last updated on: 2026-01-14T23:55:28
 # Chapter: Form
 
 ## Chapter Definition
@@ -62,7 +62,7 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
 | ARC-002 | CategoryRouting | Planned | Route by category, not prefix |
 | ARC-003 | TemplateSimplification | **Complete** | E2-281: Checkpoint 112→24, E2-284: Observations 105→26 |
 | ARC-004 | SkillAtomization | **Active** | ~~E2-283~~, ~~E2-284~~, E2-285: Prune verbose skills |
-| ARC-005 | SoftEnforcement | **Active** | E2-286/287/288: Observability + warnings (INV-062 spawned) |
+| ARC-005 | SoftEnforcement | **Complete** | E2-286/287/288: Observability + warnings (Session 190) |
 
 ---
 
@@ -73,7 +73,7 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
 - [x] Skills decomposed into single-responsibility units (E2-283 DONE, E2-284 DONE, E2-285 pending)
 - [ ] UNIX philosophy applied: each skill does one thing well
 - [ ] Skill template defaults to single-phase (E2-285)
-- [ ] Soft enforcement operational (E2-286/287/288)
+- [x] Soft enforcement operational (E2-286/287/288 DONE Session 190)
 
 ---
 
@@ -86,7 +86,11 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
 - E2-283: Survey-Cycle Prune to Minimal Routing (DONE)
 - E2-284: Observation-Capture Simplify to 3 Questions (DONE)
 - E2-285: Skill Template Single-Phase Default
-- E2-286/287/288: Soft Enforcement (session_state, warnings, set-cycle)
+- E2-286/287/288: Soft Enforcement (DONE Session 190)
+  - E2-286: session_state schema in haios-status-slim.json
+  - E2-287: UserPromptSubmit warning when no active cycle
+  - E2-288: just set-cycle/clear-cycle recipes
 - INV-062: Session State Tracking investigation (SDK discovery)
 - Memory 81211-81266: Session 186 architecture correction
 - Memory 81299-81333: Session 188 enforcement gap + SDK discovery
+- Memory 81343-81350: Session 190 soft enforcement implementation

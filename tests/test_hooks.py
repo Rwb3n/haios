@@ -1,5 +1,5 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-01-05T20:36:21
+# System Auto: last updated on: 2026-01-14T22:10:45
 """
 Tests for Python hook dispatcher (E2-085).
 
@@ -105,8 +105,8 @@ class TestDispatcherRouting:
 class TestUserPromptSubmitVitals:
     """Test 2: UserPromptSubmit vitals injection."""
 
-    def test_vitals_injection_with_slim_json(self):
-        """Verify vitals block is injected when haios-status-slim.json exists."""
+    def test_vitals_disabled_session_179(self):
+        """Verify vitals are disabled per Session 179 (E2.2 chapter redesign)."""
         from hook_dispatcher import dispatch_hook
 
         hook_input = {
@@ -115,8 +115,11 @@ class TestUserPromptSubmitVitals:
             "cwd": TEST_CWD
         }
         result = dispatch_hook(hook_input)
-        assert "HAIOS Vitals" in result
-        assert "Milestone:" in result
+        # Vitals disabled in Session 179 - should NOT contain HAIOS Vitals
+        # Instead, should contain session state warning (E2-287)
+        assert "HAIOS Vitals" not in result
+        # But should have date
+        assert "Today is" in result
 
     def test_vitals_graceful_fail_no_slim(self):
         """Verify no crash if slim.json missing."""
@@ -145,6 +148,71 @@ class TestUserPromptSubmitVitals:
         # Should have day of week
         days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         assert any(day in result for day in days)
+
+
+class TestSessionStateWarning:
+    """E2-287: Session state warning injection tests."""
+
+    def test_session_state_warning_when_no_cycle(self, tmp_path):
+        """E2-287: Inject warning when session_state.active_cycle is null."""
+        # Add hooks directory to path
+        hooks_path = Path(__file__).parent.parent / ".claude" / "hooks" / "hooks"
+        if str(hooks_path) not in sys.path:
+            sys.path.insert(0, str(hooks_path))
+
+        from user_prompt_submit import _get_session_state_warning
+
+        # Create slim status with null active_cycle
+        slim = {"session_state": {"active_cycle": None}}
+        slim_dir = tmp_path / ".claude"
+        slim_dir.mkdir(parents=True)
+        slim_path = slim_dir / "haios-status-slim.json"
+        slim_path.write_text(json.dumps(slim))
+
+        warning = _get_session_state_warning(str(tmp_path))
+
+        assert warning is not None
+        assert "No active governance cycle" in warning
+        assert "skill" in warning.lower()
+
+    def test_no_warning_when_cycle_active(self, tmp_path):
+        """E2-287: No warning when session_state.active_cycle is set."""
+        hooks_path = Path(__file__).parent.parent / ".claude" / "hooks" / "hooks"
+        if str(hooks_path) not in sys.path:
+            sys.path.insert(0, str(hooks_path))
+
+        from user_prompt_submit import _get_session_state_warning
+
+        # Create slim status with active cycle
+        slim = {"session_state": {"active_cycle": "implementation-cycle"}}
+        slim_dir = tmp_path / ".claude"
+        slim_dir.mkdir(parents=True)
+        slim_path = slim_dir / "haios-status-slim.json"
+        slim_path.write_text(json.dumps(slim))
+
+        warning = _get_session_state_warning(str(tmp_path))
+
+        assert warning is None
+
+    def test_no_warning_when_session_state_missing(self, tmp_path):
+        """E2-287: Handle missing session_state gracefully (backward compat)."""
+        hooks_path = Path(__file__).parent.parent / ".claude" / "hooks" / "hooks"
+        if str(hooks_path) not in sys.path:
+            sys.path.insert(0, str(hooks_path))
+
+        from user_prompt_submit import _get_session_state_warning
+
+        # Create slim status without session_state (old format)
+        slim = {"generated": "2026-01-14"}
+        slim_dir = tmp_path / ".claude"
+        slim_dir.mkdir(parents=True)
+        slim_path = slim_dir / "haios-status-slim.json"
+        slim_path.write_text(json.dumps(slim))
+
+        warning = _get_session_state_warning(str(tmp_path))
+
+        # Should not crash, should return None (no warning for old format)
+        assert warning is None
 
 
 class TestPreToolUseSqlBlocking:

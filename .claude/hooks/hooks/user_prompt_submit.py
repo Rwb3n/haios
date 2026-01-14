@@ -1,5 +1,5 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-01-06T22:23:11
+# System Auto: last updated on: 2026-01-14T22:10:00
 """
 UserPromptSubmit Hook Handler (E2-085, E2-119).
 
@@ -86,6 +86,12 @@ def handle(hook_data: dict) -> str:
     cwd = hook_data.get("cwd", "")
     # vitals disabled - no append
 
+    # Part 2.5: Session state warning (E2-287)
+    session_warning = _get_session_state_warning(cwd)
+    if session_warning:
+        output_parts.append("")
+        output_parts.append(session_warning)
+
     # Part 3: Dynamic thresholds
     thresholds = _get_thresholds(cwd)
     if thresholds:
@@ -113,6 +119,49 @@ def _get_datetime_context() -> str:
     day_of_week = now.strftime("%A")
     datetime_str = now.strftime("%Y-%m-%d %I:%M %p")
     return f"Today is {day_of_week}, {datetime_str}"
+
+
+def _get_session_state_warning(cwd: str) -> Optional[str]:
+    """
+    Check if agent is working outside an active governance cycle.
+
+    E2-287: Soft enforcement - inject warning when session_state.active_cycle is null.
+    This creates friction for governance bypass without blocking.
+
+    Args:
+        cwd: Working directory path
+
+    Returns:
+        Warning message if no active cycle, None otherwise.
+    """
+    if not cwd:
+        return None
+
+    slim_path = Path(cwd) / ".claude" / "haios-status-slim.json"
+    if not slim_path.exists():
+        return None
+
+    try:
+        slim = json.loads(slim_path.read_text(encoding="utf-8-sig"))
+
+        # If session_state key doesn't exist, this is old format - no warning (backward compat)
+        if "session_state" not in slim:
+            return None
+
+        session_state = slim["session_state"]
+
+        # If active_cycle is null, warn
+        if session_state.get("active_cycle") is None:
+            return (
+                "--- Session State Warning (E2-287) ---\n"
+                "No active governance cycle detected.\n"
+                "Invoke a skill (/coldstart, /implement, /close) to enter a cycle.\n"
+                "Working outside cycles bypasses governance gates.\n"
+                "---"
+            )
+        return None
+    except Exception:
+        return None
 
 
 def _get_vitals(cwd: str) -> Optional[str]:
