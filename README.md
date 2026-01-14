@@ -1,5 +1,5 @@
 # generated: 2025-11-30
-# System Auto: last updated on: 2026-01-14T20:28:18
+# System Auto: last updated on: 2026-01-14T21:11:54
 ```
 
         ██╗  ██╗ █████╗ ██╗ ██████╗ ███████╗
@@ -69,25 +69,29 @@ This is a personal research project exploring AI agent reliability, context mana
 
 ## 🚀 Quick Start
 
-### 1. Setup
+### For Claude Code Users
+The easiest way to use HAIOS is as a Claude Code plugin:
+
+1. Copy the `.claude/` directory to your project
+2. Run `/coldstart` to initialize
+3. Explore with `/haios` (dashboard) or `/status` (quick health check)
+
+### For Developers
 ```bash
 # Install dependencies
 pip install -r requirements.txt
 
-# Set up environment (requires Google Gemini API Key)
-# Create .env file with: GOOGLE_API_KEY=your_key_here
-```
+# Run tests
+pytest
 
-### 2. Run ETL Pipeline
-Process the raw corpus to build the memory database:
-```bash
-python -m haios_etl.cli process HAIOS-RAW
-```
-
-### 3. Check Status
-View system statistics and processing health:
-```bash
+# Check system status
 python -m haios_etl.cli status
+```
+
+### MCP Server (for Claude Desktop)
+```bash
+# Start the memory MCP server
+python -m haios_etl.mcp_server
 ```
 
 ---
@@ -157,7 +161,7 @@ Schema:           v3 (SQLite with embeddings)
 | [Operations Manual](docs/OPERATIONS.md) | ETL and synthesis runbook |
 | [Investigation Handoff](docs/handoff/2025-11-30-INVESTIGATION-HANDOFF-vision-gap-analysis.md) | Gap analysis mission |
 | [ETL Package](haios_etl/README.md) | Module documentation |
-| [Test Suite](tests/README.md) | 154 tests passing |
+| [Test Suite](tests/README.md) | 747 tests |
 | [Anti-Patterns](docs/anti-patterns/) | Known failure modes to avoid |
 
 ---

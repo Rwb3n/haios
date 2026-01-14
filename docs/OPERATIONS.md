@@ -1,5 +1,5 @@
 # generated: 2025-11-27
-# System Auto: last updated on: 2025-11-30 19:45:47
+# System Auto: last updated on: 2026-01-14T21:13:19
 # HAiOS ETL Operations Manual
 
 > **Progressive Disclosure:** [Quick Reference](README.md) -> [Strategic Overview](epistemic_state.md) -> **Operations (YOU ARE HERE)**
@@ -12,14 +12,12 @@
 
 | Task | Command |
 |------|---------|
-| **Process Corpus** | `python -m haios_etl.cli process HAIOS-RAW` |
 | **Check Status** | `python -m haios_etl.cli status` |
-| **Reset Database** | `python -m haios_etl.cli reset` |
 | **Run Synthesis** | `python -m haios_etl.cli synthesis run --dry-run` |
 | **Synthesis Stats** | `python -m haios_etl.cli synthesis stats` |
 | **Run Tests** | `pytest` |
 | **Ingest File** | `python -m haios_etl.cli ingest <path>` |
-| **Diagnostics** | `python scripts/query_progress.py` |
+| **Start MCP Server** | `python -m haios_etl.mcp_server` |
 
 ---
 
@@ -35,8 +33,8 @@ This document provides definitive operational procedures for the HAiOS ETL pipel
 ### Session Management
 *   **Initialize:** `/coldstart` (Load instructions & context)
 *   **Check Health:** `/haios` (System dashboard) or `/status` (Quick check)
-*   **Save Progress:** `/checkpoint <session_num> <title>`
-*   **Switch Context:** `/handoff <type> <name>`
+*   **Save Progress:** `/new-checkpoint`
+*   **Create Work Item:** `/new-work`
 
 ### Artifact Creation (Scaffolding)
 *   **Plan:** `/new-plan <name>` (Creates TRD-compliant plan)
@@ -47,11 +45,8 @@ This document provides definitive operational procedures for the HAiOS ETL pipel
 
 ## 2. Core Execution (ETL Pipeline)
 
-### Standard Run
-To process the corpus (idempotent - skips already processed files):
-```powershell
-python -m haios_etl.cli process HAIOS-RAW
-```
+### Ingesting Content
+To ingest content into memory:
 
 ### Checking Status
 To view processing statistics and errors:
@@ -211,8 +206,9 @@ Shows cluster details including member IDs and synthesized content.
 5. **PRUNE** - Archive redundant entries (optional)
 
 ## 5. File Locations
-*   **Source Corpus:** `HAIOS-RAW/`
-*   **Database:** `haios_memory.db` (Root directory)
+*   **Database:** `haios_memory.db` (Root directory, gitignored)
+*   **Plugin Code:** `.claude/lib/`
+*   **Skills/Agents/Commands:** `.claude/skills/`, `.claude/agents/`, `.claude/commands/`
 *   **Logs:** `logs/` (if configured) or stdout.
 
 ---
@@ -230,4 +226,4 @@ Shows cluster details including member IDs and synthesized content.
 
 ---
 
-*Last Updated: 2025-11-27*
+*Last Updated: 2026-01-14 (Session 190)*
