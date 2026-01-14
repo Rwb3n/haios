@@ -1,0 +1,43 @@
+# generated: 2026-01-03
+# System Auto: last updated on: 2026-01-06T22:39:17
+# HAIOS System Configuration
+# Consolidates: governance-toggles.yaml, routing-thresholds.yaml
+# Version: 2.0 (Session 179 - E2.2 Chapters)
+
+# Plugin manifest (for portable plugin spec)
+manifest:
+  name: haios
+  version: "2.2"
+  description: "Hybrid AI Operating System - Trust Engine"
+
+# Current epoch context (Session 179)
+epoch:
+  current: E2
+  subversion: "2.2"  # The Refinement
+  epoch_file: ".claude/haios/epochs/E2/EPOCH.md"
+  architecture_dir: ".claude/haios/epochs/E2/architecture"
+  chapters_dir: ".claude/haios/epochs/E2/chapters"
+  # Foundational architecture (MUST load)
+  foundational:
+    - S20-pressure-dynamics.md
+    - S21-cognitive-notation.md
+    - S22-skill-patterns.md
+  # Active chapters
+  active_chapters:
+    - chariot
+    - breath
+    - form
+    - ground
+
+# Governance toggles (from governance-toggles.yaml)
+toggles:
+  block_powershell: true  # PowerShell through bash mangles $_ variables
+  # block_sql: true       # Future: migrate from hardcoded
+
+# Routing thresholds (from routing-thresholds.yaml)
+thresholds:
+  observation_pending:
+    enabled: true
+    max_count: 10
+    divert_to: observation-triage-cycle
+    escape_priorities: [critical]

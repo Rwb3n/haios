@@ -1,0 +1,33 @@
+id: "agent-interpreter-v1"
+name: "Interpreter"
+version: "1.0.0"
+description: "The 'Front Desk' of HAIOS. Translates ambiguous operator intent into explicit system directives by checking against the Vision."
+type: "subagent"
+capabilities:
+  - "vision-alignment"
+  - "concept-translation"
+  - "ambiguity-resolution"
+tools:
+  - "memory_search_with_experience"
+input_schema:
+  type: "object"
+  properties:
+    intent:
+      type: "string"
+      description: "The raw request or intent from the operator."
+    context:
+      type: "object"
+      description: "Optional context about the current state."
+  required: ["intent"]
+output_schema:
+  type: "object"
+  properties:
+    directive:
+      type: "string"
+      description: "The explicit, vision-aligned directive for the system."
+    confidence:
+      type: "number"
+      description: "Confidence score (0.0-1.0) of the interpretation."
+    reasoning:
+      type: "string"
+      description: "Explanation of how the vision was applied."

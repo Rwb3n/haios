@@ -1,0 +1,56 @@
+# generated: 2026-01-03
+# System Auto: last updated on: 2026-01-03T14:30:06
+# HAIOS Cycle Configuration
+# Consolidates: node-cycle-bindings.yaml
+# Version: 1.0 (E2-246)
+#
+# Note: Cycle definitions and gates will be added by E2-240 (GovernanceLayer).
+# This file starts with node_bindings only (migrating existing config).
+
+# Node-to-cycle bindings (from node-cycle-bindings.yaml)
+nodes:
+  backlog:
+    cycle: null
+    scaffold: []
+    exit_criteria: []
+
+  discovery:
+    cycle: investigation-cycle
+    scaffold:
+      - type: investigation
+        command: '/new-investigation {id} "{title}"'
+        pattern: "docs/investigations/INVESTIGATION-{id}-*.md"
+    exit_criteria:
+      - type: file_status
+        pattern: "docs/investigations/INVESTIGATION-{id}-*.md"
+        field: status
+        value: complete
+        message: "Investigation status not complete"
+      - type: section_content
+        pattern: "docs/investigations/INVESTIGATION-{id}-*.md"
+        section: "## Findings"
+        min_length: 50
+        message: "Findings section is empty or placeholder"
+
+  plan:
+    cycle: plan-cycle
+    scaffold:
+      - type: plan
+        command: '/new-plan {id} "{title}"'
+        pattern: "docs/work/active/{id}/plans/PLAN.md"
+    exit_criteria:
+      - type: file_status
+        pattern: "docs/work/active/{id}/plans/PLAN.md"
+        field: status
+        value: approved
+        message: "Plan status not approved (still draft)"
+
+  implement:
+    cycle: implementation-cycle
+    scaffold: []
+    exit_criteria: []
+
+  close:
+    cycle: closure-cycle
+    scaffold: []
+    exit_criteria: []

@@ -1,0 +1,74 @@
+---
+template: work_item
+id: E2-234
+title: Auto Session-Start in Coldstart
+status: active
+owner: Hephaestus
+created: 2025-12-30
+closed: null
+milestone: M7b-WorkInfra
+priority: high
+effort: low
+category: implementation
+spawned_by: INV-052
+spawned_by_investigation: INV-052
+blocked_by: []
+blocks: []
+enables: []
+related: []
+current_node: backlog
+node_history:
+- node: backlog
+  entered: 2025-12-30 20:18:39
+  exited: null
+cycle_docs: {}
+memory_refs: []
+documents:
+  investigations: []
+  plans: []
+  checkpoints: []
+version: '1.0'
+generated: 2025-12-30
+last_updated: '2025-12-30T20:19:08'
+---
+# WORK-E2-234: Auto Session-Start in Coldstart
+
+@docs/README.md
+@docs/epistemic_state.md
+
+---
+
+## Context
+
+**Problem:** Coldstart.md instructs agent to "run `just session-start N`" but doesn't automate it. Agent must manually compute N = current_session + 1 and run the command. This leads to missed session-start events and inconsistent session tracking.
+
+**Root cause:** Session-start is documented as a manual step rather than an automated action in the coldstart workflow.
+
+**Source:** INV-052 Issue 2 (Session-Start Not Automated)
+
+---
+
+## Current State
+
+Work item created from INV-052 findings. Ready for implementation.
+
+---
+
+## Deliverables
+
+- [ ] Update `.claude/commands/coldstart.md` to include automated session-start
+- [ ] Add step after "Read haios-status-slim.json" to run `just session-start N` where N = current_session + 1
+- [ ] Test coldstart with new automation
+
+---
+
+## History
+
+### 2025-12-30 - Created (Session 150)
+- Initial creation
+
+---
+
+## References
+
+- [Related documents]

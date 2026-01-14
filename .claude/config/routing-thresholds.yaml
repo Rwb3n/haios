@@ -1,0 +1,26 @@
+# generated: 2025-12-28
+# System Auto: last updated on: 2025-12-28T20:39:11
+# Routing Thresholds Configuration (E2-222)
+#
+# Configures system health thresholds for routing-gate.
+# Thresholds trigger diversions before work-type routing.
+#
+# Schema defined in INV-048.
+
+thresholds:
+  observation_pending:
+    enabled: true
+    max_count: 10  # Trigger triage if pending observations > this value
+    divert_to: observation-triage-cycle
+    escape_priorities: [critical]  # Skip threshold for these priorities
+
+  # Future thresholds (not yet implemented):
+  # memory_stale:
+  #   enabled: false
+  #   max_days: 7
+  #   divert_to: memory-refresh-cycle
+  #
+  # plan_incomplete:
+  #   enabled: false
+  #   max_count: 5
+  #   divert_to: plan-audit-cycle

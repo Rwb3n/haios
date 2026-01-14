@@ -1,0 +1,47 @@
+# Status: REVIEW
+# langextract_schema_v1.yml
+# A lean, focused schema for the initial ETL process (v1).
+# The goal is to capture only the most fundamental conversational and architectural elements.
+
+# 1. Core Entities
+entities:
+  - name: "User"
+    # Matches the speaker role for the human operator.
+    pattern: "(?i)(user|human|operator):"
+  - name: "Agent"
+    # Matches the speaker role for the AI.
+    pattern: "(?i)(cody|gemini|claude|agent):"
+  - name: "ADR"
+    # Matches references to our core architectural artifacts.
+    pattern: "ADR-OS-\d{3}"
+  - name: "Filepath"
+    # Matches references to files, grounding the conversation.
+    pattern: "[\w/\\.]+\.(py|md|json|yml|sh|bat|txt)"
+  - name: "AntiPattern"
+    # Matches references to our defined anti-patterns.
+    pattern: "AP-\d{3}"
+
+# 2. Core Concepts
+concepts:
+  - name: "Directive"
+    # A user giving a direct command or instruction.
+    pattern: "(?i)(user says:|directive:|your task is to)"
+    examples:
+      - "user says: generate the full remediated file"
+  - name: "Critique"
+    # A user or agent providing corrective feedback or identifying a flaw.
+    pattern: "(?i)(no,|nah,|that's wrong|you failed|the flaw is|the weakness is|the problem is)"
+    examples:
+      - "user says: no, the path is wrong"
+      - "The flaw is that the logic lives in the n8n database"
+  - name: "Proposal"
+    # An agent proposing a plan, solution, or next step.
+    pattern: "(?i)(i propose|the plan is|my recommendation is|the solution is|we should)"
+    examples:
+      - "agent says: I propose a new execution plan"
+      - "My recommendation is to implement a Decoupled Adapter Pattern"
+  - name: "Decision"
+    # A formal decision being made.
+    pattern: "(?i)decision:"
+    examples:
+      - "Decision: ADOPT AND CANONIZE THIS POLICY."

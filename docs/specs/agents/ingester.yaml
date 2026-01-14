@@ -1,0 +1,34 @@
+id: "agent-ingester-v1"
+name: "Ingester"
+version: "1.0.0"
+description: "The 'Mouth' of HAIOS. Reads, classifies, and chunks content for the Memory Engine."
+type: "subagent"
+capabilities:
+  - "content-ingestion"
+  - "knowledge-classification"
+  - "chunking"
+tools:
+  - "extract_content"
+  - "memory_store"
+input_schema:
+  type: "object"
+  properties:
+    source_url:
+      type: "string"
+      description: "URL or file path to ingest."
+    source_type:
+      type: "string"
+      enum: ["file", "url", "text"]
+  required: ["source_url"]
+output_schema:
+  type: "object"
+  properties:
+    artifact_id:
+      type: "string"
+      description: "ID of the created artifact."
+    classification:
+      type: "string"
+      description: "Episteme, Techne, or Doxa."
+    chunks_created:
+      type: "integer"
+      description: "Number of chunks generated."

@@ -1,0 +1,20 @@
+# generated: 2025-10-19
+# System Auto: last updated on: 2025-10-19 17:17:38
+# HAIOS ETL Pipeline Dependencies
+# Python 3.9+
+
+# Core extraction library
+langextract>=1.0.0
+
+# YAML parsing for schema
+PyYAML>=6.0
+
+# Testing framework
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Code quality
+black>=23.0.0
+ruff>=0.1.0
+python-dotenv>=1.0.0
+mcp>=0.1.0

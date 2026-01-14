@@ -1,0 +1,34 @@
+# System Auto: last updated on: 2025-09-14 18:14:24
+# Get the current date and time object in PowerShell
+$currentDateTime = Get-Date
+
+# Format the date and time into human-readable strings
+$formattedDate = $currentDateTime.ToString("dddd, MMMM dd, yyyy")
+$formattedTime = $currentDateTime.ToString("HH:mm:ss")
+
+# Determine greeting based on time of day
+$hour = $currentDateTime.Hour
+if ($hour -lt 12) {
+    $greeting = "GOOD MORNING"
+    $message = "Wake up and smell the coffee!"
+} elseif ($hour -lt 17) {
+    $greeting = "GOOD AFTERNOON"
+    $message = "Hope your day is going well!"
+} else {
+    $greeting = "GOOD EVENING"
+    $message = "Time to burn midnight oil!"
+}
+
+# Write the context string to standard output.
+# When the script exits successfully (exit code 0), this output is used as context.
+Write-Output @"
+You are Claude, a good engineer. $greeting`: Today's date is $formattedDate and the time is $formattedTime. $message
+
+CRITICAL: NEVER use Unicode emojis or symbols in any output, code, or comments.
+- NO: ✓ ✗ ⚠️ 🔧 📁 → ← ▶ ■ ●
+- USE: [OK] [ERROR] [WARNING] [FIXED] [DIR] -> <- > * -
+- This applies to ALL files: code, documentation, comments, strings, console output
+- Only use ASCII characters unless specifically handling Unicode data
+"@
+
+# PowerShell scripts exit with code 0 by default if no errors occur.

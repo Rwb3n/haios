@@ -1,0 +1,16 @@
+# generated: 2026-01-03
+# System Auto: last updated on: 2026-01-03T14:30:20
+# HAIOS Component Registry
+# Version: 1.0 (E2-246)
+#
+# Note: These registries will be populated by E2-240 (GovernanceLayer).
+# This file starts as placeholder with empty structures.
+
+# Skill registry (populated by E2-240)
+skills: {}
+
+# Agent registry (populated by E2-240)
+agents: {}
+
+# Hook handler registry (populated by E2-240)
+hooks: {}

@@ -1,0 +1,12 @@
+﻿{
+    "timestamp":  "2025-12-20 22:44:41",
+    "validation_failures":  [
+                                {
+                                    "errors":  [
+                                                   "ERROR: Missing required fields: directive_id"
+                                               ],
+                                    "file":  "D:\\PROJECTS\\haios\\docs\\plans\\PLAN-E2-085-hook-system-migration-powershell-to-python.md",
+                                    "type":  "implementation_plan"
+                                }
+                            ]
+}

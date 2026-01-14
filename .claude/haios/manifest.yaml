@@ -1,0 +1,184 @@
+# generated: 2026-01-05
+# System Auto: last updated on: 2026-01-08T22:09:16
+# .claude/haios/manifest.yaml
+# Plugin manifest - declares everything HAIOS provides
+# Schema: SECTION-18-PORTABLE-PLUGIN-SPEC.md
+# Created: E2-269 (Session 173)
+
+# Plugin metadata
+plugin:
+  name: "haios"
+  version: "2.0.0"
+  description: "Hybrid AI Operating System - Trust Engine for AI agents"
+  author: "Ruben Perez"
+  license: "Proprietary"
+  min_cli_version: "1.0.0"
+
+# Target LLM declarations
+targets:
+  - id: "claude"
+    name: "Claude CLI"
+    version: ">=1.0.0"
+    output_path: ".claude/"
+
+# Component declarations
+components:
+  # Commands (18 total)
+  commands:
+    - id: "close"
+      source: "commands/close/"
+    - id: "coldstart"
+      source: "commands/coldstart/"
+    - id: "haios"
+      source: "commands/haios/"
+    - id: "implement"
+      source: "commands/implement/"
+    - id: "new-adr"
+      source: "commands/new-adr/"
+    - id: "new-checkpoint"
+      source: "commands/new-checkpoint/"
+    - id: "new-handoff"
+      source: "commands/new-handoff/"
+    - id: "new-investigation"
+      source: "commands/new-investigation/"
+    - id: "new-plan"
+      source: "commands/new-plan/"
+    - id: "new-report"
+      source: "commands/new-report/"
+    - id: "new-work"
+      source: "commands/new-work/"
+    - id: "ready"
+      source: "commands/ready/"
+    - id: "reason"
+      source: "commands/reason/"
+    - id: "schema"
+      source: "commands/schema/"
+    - id: "status"
+      source: "commands/status/"
+    - id: "tree"
+      source: "commands/tree/"
+    - id: "validate"
+      source: "commands/validate/"
+    - id: "workspace"
+      source: "commands/workspace/"
+
+  # Skills (18 total)
+  skills:
+    - id: "audit"
+      source: "skills/audit/"
+      category: "utility"
+    - id: "checkpoint-cycle"
+      source: "skills/checkpoint-cycle/"
+      category: "cycle"
+    - id: "close-work-cycle"
+      source: "skills/close-work-cycle/"
+      category: "cycle"
+    - id: "design-review-validation"
+      source: "skills/design-review-validation/"
+      category: "bridge"
+    - id: "dod-validation-cycle"
+      source: "skills/dod-validation-cycle/"
+      category: "bridge"
+    - id: "extract-content"
+      source: "skills/extract-content/"
+      category: "utility"
+    - id: "ground-cycle"
+      source: "skills/ground-cycle/"
+      category: "cycle"
+    - id: "implementation-cycle"
+      source: "skills/implementation-cycle/"
+      category: "cycle"
+    - id: "investigation-cycle"
+      source: "skills/investigation-cycle/"
+      category: "cycle"
+    - id: "memory-agent"
+      source: "skills/memory-agent/"
+      category: "utility"
+    - id: "observation-capture-cycle"
+      source: "skills/observation-capture-cycle/"
+      category: "cycle"
+    - id: "observation-triage-cycle"
+      source: "skills/observation-triage-cycle/"
+      category: "cycle"
+    - id: "plan-authoring-cycle"
+      source: "skills/plan-authoring-cycle/"
+      category: "cycle"
+    - id: "plan-validation-cycle"
+      source: "skills/plan-validation-cycle/"
+      category: "bridge"
+    - id: "routing-gate"
+      source: "skills/routing-gate/"
+      category: "bridge"
+    - id: "schema-ref"
+      source: "skills/schema-ref/"
+      category: "utility"
+    - id: "survey-cycle"
+      source: "skills/survey-cycle/"
+      category: "cycle"
+    - id: "work-creation-cycle"
+      source: "skills/work-creation-cycle/"
+      category: "cycle"
+
+  # Agents (7 total)
+  agents:
+    - id: "anti-pattern-checker"
+      source: "agents/anti-pattern-checker/"
+      required: false
+    - id: "investigation-agent"
+      source: "agents/investigation-agent/"
+      required: false
+    - id: "preflight-checker"
+      source: "agents/preflight-checker/"
+      required: true
+    - id: "schema-verifier"
+      source: "agents/schema-verifier/"
+      required: true
+    - id: "test-runner"
+      source: "agents/test-runner/"
+      required: false
+    - id: "validation-agent"
+      source: "agents/validation-agent/"
+      required: false
+    - id: "why-capturer"
+      source: "agents/why-capturer/"
+      required: false
+
+  # Hooks (4 handlers)
+  hooks:
+    - event: "PreToolUse"
+      handler: "hooks/handlers/pre_tool_use.py"
+    - event: "PostToolUse"
+      handler: "hooks/handlers/post_tool_use.py"
+    - event: "UserPromptSubmit"
+      handler: "hooks/handlers/user_prompt_submit.py"
+    - event: "Stop"
+      handler: "hooks/handlers/stop.py"
+
+  # Configuration files
+  config:
+    - source: "config/"
+
+  # Context files (manifesto)
+  context:
+    - source: "manifesto/"
+
+# Dependencies
+dependencies:
+  mcp_servers:
+    - name: "haios-memory"
+      required: true
+      config_path: ".mcp.json"
+    - name: "context7"
+      required: false
+      config_path: ".mcp.json"
+
+  python:
+    version: ">=3.10"
+    packages:
+      - "ruamel.yaml>=0.17"
+      - "litellm>=1.0"
+
+# Versioning
+versioning:
+  strategy: "semver"
+  changelog: "CHANGELOG.md"

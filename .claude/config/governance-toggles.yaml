@@ -1,0 +1,25 @@
+# generated: 2025-12-28
+# System Auto: last updated on: 2025-12-28T12:13:46
+# Governance Toggle Configuration
+#
+# Controls feature flags for PreToolUse governance checks.
+# Edit this file to enable/disable specific checks.
+#
+# Usage:
+#   - Set to true to BLOCK the behavior
+#   - Set to false to ALLOW the behavior
+#
+# Why toggles exist:
+#   - Some governance rules need temporary bypass
+#   - Allows operator control without code changes
+
+# PowerShell Blocking (added Session 133)
+# Blocks: powershell, powershell.exe, pwsh commands through Bash tool
+# Reason: PowerShell through bash mangles $_ and $variable references
+# Mitigation: Use just recipes, Glob/Grep/Read tools, or Python scripts
+block_powershell: true
+
+# SQL Blocking (E2-020)
+# Blocks: Direct SQL queries without schema-verifier subagent
+# Note: This is hardcoded in pre_tool_use.py, not yet configurable
+# block_sql: true  # Future: migrate to toggle

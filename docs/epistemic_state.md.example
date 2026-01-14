@@ -1,0 +1,321 @@
+# generated: 2025-09-24
+# System Auto: last updated on: 2025-09-24 14:38:46
+# Epistemic State Analysis: [PROJECT_NAME]
+## Generated: [YYYY-MM-DD HH:MM]
+## Updated: [YYYY-MM-DD HH:MM] - [Update Description]
+
+## Table of Contents
+
+1. [System Architecture Overview](#i-system-architecture-overview)
+2. [Knowledge State Matrix](#ii-knowledge-state-matrix)
+3. [File System State](#iii-file-system-state)
+4. [System Flow Diagrams](#iv-system-flow-diagrams)
+5. [Component Analysis](#v-component-analysis)
+6. [Operational State](#vi-operational-state)
+7. [Inferred Purpose & Design](#vii-inferred-purpose--design)
+8. [Confidence Assessment](#viii-confidence-assessment)
+9. [Action Recommendations](#ix-action-recommendations)
+10. [System Uncertainties](#x-system-uncertainties)
+11. [Architecture Specifics](#xi-architecture-specifics)
+12. [Validation & Constraints](#xii-validation--constraints)
+13. [Naming Conventions](#xiii-naming-conventions)
+14. [Recent Accomplishments](#xiv-recent-accomplishments)
+15. [Summary](#summary)
+16. [Platform-Specific Constraints](#platform-specific-constraints)
+
+---
+
+## I. SYSTEM ARCHITECTURE OVERVIEW
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         [SYSTEM NAME] ARCHITECTURE                      │
+│                              ([PLATFORM]/[PATH])                        │
+└─────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      │
+                    ┌─────────────────┴─────────────────┐
+                    │                                   │
+             ┌──────▼──────┐                    ┌──────▼──────┐
+             │   [COMPONENT │                    │   [COMPONENT │
+             │      A]      │◄───────────────────│      B]      │
+             │             │                    │              │
+             └──────┬──────┘                    └──────┬──────┘
+                    │                                  │
+        ┌───────────┴────────────┐          ┌──────────┴────────────┐
+        │                        │          │                       │
+  ┌─────▼─────┐          ┌──────▼──────┐    │   ┌─────────────┐     │
+  │ [MODULE 1] │          │ [MODULE 2]  │    │   │ [CONFIG]    │     │
+  │           │          │             │    │   │             │     │
+  └───────────┘          └─────────────┘    │   └──────┬──────┘     │
+                                            │          │            │
+                                            └──────────┴────────────┘
+```
+
+## II. KNOWLEDGE STATE MATRIX
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                         EPISTEMIC CERTAINTY MAP                     │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  KNOWN (100% Certain)           │  INFERRED (80% Confident)         │
+│  ════════════════════           │  ═══════════════════════          │
+│  • [Verified fact 1]            │  • [Logical conclusion 1]          │
+│  • [Verified fact 2]            │  • [Logical conclusion 2]          │
+│  • [Verified fact 3]            │  • [Pattern observation]           │
+│  • [Configuration detail]       │  • [Architecture inference]        │
+│  • [Explicit requirement]       │  • [Design decision]               │
+│                                 │                                   │
+├─────────────────────────────────┴───────────────────────────────────┤
+│                                                                     │
+│  UNKNOWN (Requires Discovery)   │  ASSUMPTIONS (Need Validation)    │
+│  ════════════════════════════   │  ═══════════════════════════════  │
+│  • [Missing information 1]      │  • [Working hypothesis 1]          │
+│  • [Missing information 2]      │  • [Working hypothesis 2]          │
+│  • [Unclear requirement]        │  • [Default behavior guess]        │
+│  • [Integration detail]         │  • [Convention assumption]         │
+│  • [Configuration value]        │  • [Pattern assumption]            │
+│                                 │                                   │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+## III. FILE SYSTEM STATE
+
+```
+[PROJECT_ROOT]/
+│
+├── [PRIMARY_CONFIG_FILE] ─────────┐    [Description]
+│   └─ [Key configuration]         │    [Details]
+│                                 │
+├── [SOURCE_DIRECTORY]/ ──────────┐    [Code organization]
+│   ├─ [Component A]              │    [Purpose & state]
+│   ├─ [Component B]              │    [Dependencies]
+│   └─ [Component C]              │    [Status]
+│                                 │
+├── [DOCS_DIRECTORY]/ ────────────┤    [Documentation]
+│   ├─ [Doc type 1]               │    [Coverage]
+│   └─ [Doc type 2]               │    [Last updated]
+│                                 │
+├── [TESTS_DIRECTORY]/ ───────────┤    [Test coverage]
+│   ├─ [Unit tests]               │    [Status]
+│   └─ [Integration tests]        │    [Coverage %]
+│                                 │
+└── [CONFIG_DIRECTORY]/ ──────────┤    [Configuration]
+    ├─ [Environment configs]      │    [Environments]
+    └─ [Service configs]          │    [Services]
+```
+
+## IV. SYSTEM FLOW DIAGRAMS
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                        [PROCESS NAME] FLOW                     │
+└────────────────────────────────────────────────────────────────┘
+
+  [Input/Trigger]          [Processing Step]         [Output/Result]
+       │                        │                         │
+       ▼                        ▼                         ▼
+┌─────────────┐          ┌─────────────┐         ┌─────────────┐
+│   [STEP 1]  │ ───────▶ │  [STEP 2]   │ ──────▶ │  [STEP 3]   │
+│             │          │             │         │             │
+└─────────────┘          └─────────────┘         └─────────────┘
+                                │
+                                ├──► [Side Effect 1]
+                                │
+                                └──► [Side Effect 2]
+```
+
+## V. COMPONENT ANALYSIS
+
+```
+Component Dependencies and Relationships:
+┌─────────────────────────────────────────────────────────┐
+│ [COMPONENT NAME]      → [Dependencies]                  │
+│ [Another Component]   → [Its Dependencies]              │
+│ [Service Name]        → [External APIs/Services]        │
+│ [Module Name]         → [Internal Dependencies]         │
+│ [Configuration]       → [Environment Variables]         │
+└─────────────────────────────────────────────────────────┘
+```
+
+## VI. OPERATIONAL STATE
+
+```
+┌──────────────────────────────────────────────────────────┐
+│               CURRENT OPERATIONAL STATUS                  │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  ✓ ACTIVE & READY          ⚠ NEEDS ATTENTION            │
+│  ─────────────────         ──────────────────           │
+│  • [Working feature 1]      • [Issue needing fix 1]     │
+│  • [Working feature 2]      • [Issue needing fix 2]     │
+│  • [Operational system]     • [Missing configuration]    │
+│  • [Validated component]    • [Incomplete feature]       │
+│                            • [Performance concern]      │
+│                                                          │
+│  ✗ BROKEN/MISSING          ◊ OBSERVATIONS               │
+│  ─────────────────         ──────────────────           │
+│  • [Failed component]       • [Pattern noticed 1]        │
+│  • [Missing feature]        • [Pattern noticed 2]        │
+│  • [Error state]           • [Behavioral observation]    │
+│  • [Unavailable service]   • [Performance metric]       │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+```
+
+## VII. INFERRED PURPOSE & DESIGN
+
+```
+         ┌────────────────────────────────────┐
+         │     [SYSTEM PURPOSE STATEMENT]      │
+         └────────────────────────────────────┘
+                         │
+            ┌────────────┴────────────┐
+            │                         │
+    ┌───────▼────────┐      ┌────────▼───────┐
+    │   [ROLE A]     │      │   [ROLE B]      │
+    │                │      │                 │
+    │ • [Function 1] │      │ • [Function 1]  │
+    │ • [Function 2] │◄────▶│ • [Function 2]  │
+    │ • [Function 3] │      │ • [Function 3]  │
+    │                │      │                 │
+    └────────────────┘      └─────────────────┘
+            │                         │
+            └────────────┬────────────┘
+                         │
+                   ┌─────▼─────┐
+                   │  [OUTPUT/  │
+                   │   RESULT]  │
+                   └───────────┘
+```
+
+## VIII. CONFIDENCE ASSESSMENT
+
+```
+Knowledge Confidence Distribution:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[Category 1]        ████████████████████ 100%
+[Category 2]        ████████████████░░░░  80%
+[Category 3]        ████████████░░░░░░░░  60%
+[Category 4]        ████████░░░░░░░░░░░░  40%
+[Category 5]        ████░░░░░░░░░░░░░░░░  20%
+[Category 6]        ██░░░░░░░░░░░░░░░░░░  10%
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+## IX. ACTION RECOMMENDATIONS
+
+```
+┌─────────────────────────────────────────────────────┐
+│           RECOMMENDED NEXT ACTIONS                  │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│  1. IMMEDIATE (Critical Path)                       │
+│     └─► [Specific action 1]                        │
+│     └─► [Specific action 2]                        │
+│     └─► [Specific action 3]                        │
+│                                                     │
+│  2. SHORT-TERM (This Session)                      │
+│     └─► [Task 1]                                   │
+│     └─► [Task 2]                                   │
+│     └─► [Task 3]                                   │
+│                                                     │
+│  3. MEDIUM-TERM (Next Session)                     │
+│     └─► [Future task 1]                            │
+│     └─► [Future task 2]                            │
+│     └─► [Future task 3]                            │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+## X. SYSTEM UNCERTAINTIES
+
+```
+Open Questions Requiring Clarification:
+┌──────────────────────────────────────────────────┐
+│ • [Specific question about requirement]         │
+│ • [Specific question about architecture]        │
+│ • [Specific question about integration]         │
+│ • [Specific question about configuration]       │
+│ • [Specific question about deployment]          │
+│ • [Specific question about testing]             │
+│ • [Specific question about performance]         │
+│ • [Specific question about security]            │
+└──────────────────────────────────────────────────┘
+```
+
+## XI. ARCHITECTURE SPECIFICS
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                    [ARCHITECTURE PATTERN NAME]               │
+└──────────────────────────────────────────────────────────────┘
+
+    [Layer/Component 1]
+            │
+            ▼
+    ┌───────────────┐
+    │ [Details]     │
+    └───────┬───────┘
+            │
+            ├──► [Feature A]
+            ├──► [Feature B]
+            └──► [Feature C]
+```
+
+## XII. VALIDATION & CONSTRAINTS
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              VALIDATION RULES & CONSTRAINTS                  │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│ Rule Type        │ Requirement              │ Status       │
+│ ─────────────────┼──────────────────────────┼───────────────│
+│ [Validation 1]   │ [Specific requirement]   │ ✓ Pass       │
+│ [Validation 2]   │ [Specific requirement]   │ ✗ Fail       │
+│ [Constraint 1]   │ [Limitation]             │ ⚠ Warning    │
+│ [Constraint 2]   │ [Boundary condition]     │ ✓ Within     │
+│                  │                          │              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## XIII. NAMING CONVENTIONS
+
+```
+Naming Pattern: [pattern-description]
+
+┌──────────────────────────────────────────────┐
+│ Type   │ Pattern                │ Example    │
+├────────┼────────────────────────┼────────────┤
+│ [Type1]│ [Pattern]              │ [Example]  │
+│ [Type2]│ [Pattern]              │ [Example]  │
+│ [Type3]│ [Pattern]              │ [Example]  │
+│ [Type4]│ [Pattern]              │ [Example]  │
+└──────────────────────────────────────────────┘
+```
+
+## XIV. RECENT ACCOMPLISHMENTS
+
+1. **[Achievement 1]** - [Description and impact]
+2. **[Achievement 2]** - [Description and impact]
+3. **[Achievement 3]** - [Description and impact]
+4. **[Achievement 4]** - [Description and impact]
+5. **[Achievement 5]** - [Description and impact]
+
+---
+
+## Summary
+
+[Concise paragraph summarizing the overall state of the system, its purpose, readiness level, and key characteristics]
+
+**Certainty Level:** [Assessment of knowledge completeness]
+**Readiness:** [Current state and what's needed]
+**Next Evolution:** [Future considerations]
+
+---
+
+## Platform-Specific Constraints
+
+*Note: [Any platform-specific issues, limitations, or special considerations that affect the system]*

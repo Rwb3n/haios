@@ -1,0 +1,21 @@
+{
+  "name": "haios",
+  "description": "Hybrid AI Operating System - Governance and Memory for AI Development",
+  "version": "0.2.0",
+  "author": {
+    "name": "Ruben + Claude"
+  },
+  "requires": {
+    "python": ">=3.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/user/haios"
+  },
+  "keywords": [
+    "ai-governance",
+    "memory-system",
+    "claude-code",
+    "development-workflow"
+  ]
+}

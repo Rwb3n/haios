@@ -1,0 +1,95 @@
+{
+    "generated": "2026-01-12T01:32:54",
+    "milestone": {
+        "id": "M7b-WorkInfra",
+        "name": "WorkInfra",
+        "progress": 77,
+        "prior_progress": 77,
+        "delta_source": null
+    },
+    "session_delta": {
+        "prior_session": 187,
+        "current_session": 188,
+        "prior_date": "2026-01-10",
+        "completed": [],
+        "completed_count": 0,
+        "added": [],
+        "added_count": 0,
+        "milestone_delta": null
+    },
+    "work_cycle": {
+        "id": "E2-279",
+        "title": "WorkEngine Decomposition",
+        "current_node": "plan",
+        "cycle_type": "implementation",
+        "lifecycle_phase": null
+    },
+    "active_work": [],
+    "blocked_items": {},
+    "counts": {
+        "concepts": 81145,
+        "entities": 9000,
+        "backlog_pending": 0
+    },
+    "infrastructure": {
+        "commands": [
+            "/close",
+            "/coldstart",
+            "/haios",
+            "/implement",
+            "/new-adr",
+            "/new-checkpoint",
+            "/new-handoff",
+            "/new-investigation",
+            "/new-plan",
+            "/new-report",
+            "/new-work",
+            "/ready",
+            "/reason",
+            "/schema",
+            "/status",
+            "/tree",
+            "/validate",
+            "/workspace"
+        ],
+        "skills": [
+            "audit",
+            "checkpoint-cycle",
+            "close-work-cycle",
+            "design-review-validation",
+            "dod-validation-cycle",
+            "extract-content",
+            "ground-cycle",
+            "implementation-cycle",
+            "investigation-cycle",
+            "memory-agent",
+            "observation-capture-cycle",
+            "observation-triage-cycle",
+            "plan-authoring-cycle",
+            "plan-validation-cycle",
+            "routing-gate",
+            "schema-ref",
+            "survey-cycle",
+            "work-creation-cycle"
+        ],
+        "agents": [
+            "anti-pattern-checker",
+            "investigation-agent",
+            "preflight-checker",
+            "schema-verifier",
+            "test-runner",
+            "validation-agent",
+            "why-capturer"
+        ],
+        "mcps": [
+            {
+                "name": "haios-memory",
+                "tools": 13
+            },
+            {
+                "name": "context7",
+                "tools": 2
+            }
+        ]
+    }
+}

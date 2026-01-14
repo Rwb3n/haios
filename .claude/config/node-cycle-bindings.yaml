@@ -1,0 +1,68 @@
+# generated: 2025-12-23
+# System Auto: last updated on: 2025-12-28T11:03:02
+# Node-Cycle Bindings (INV-022, E2-154, E2-155)
+# Maps lifecycle nodes to their cycle skills, scaffold requirements, and exit criteria
+#
+# Usage:
+#   - Entry (E2-154): When current_node changes, PostToolUse scaffolds required docs
+#   - Exit (E2-155): When leaving a node, PreToolUse checks exit criteria (soft gate)
+#
+# Fields:
+#   cycle: Name of the skill that guides this node's workflow (or null)
+#   scaffold: List of documents to create when entering this node
+#     - type: Document type (matches template name)
+#     - command: Slash command to execute (with {id} and {title} placeholders)
+#     - pattern: Glob pattern to check if doc already exists
+#   exit_criteria: List of conditions to check when leaving this node
+#     - type: Criterion type (file_status, section_content)
+#     - pattern: Glob pattern to find the file (with {id} placeholder)
+#     - field/section: What to check in the file
+#     - value/min_length: Expected value or minimum content length
+#     - message: User-friendly failure message
+
+nodes:
+  backlog:
+    cycle: null
+    scaffold: []
+    exit_criteria: []  # Manual decision only
+
+  discovery:
+    cycle: investigation-cycle
+    scaffold:
+      - type: investigation
+        command: '/new-investigation {id} "{title}"'
+        pattern: "docs/investigations/INVESTIGATION-{id}-*.md"
+    exit_criteria:
+      - type: file_status
+        pattern: "docs/investigations/INVESTIGATION-{id}-*.md"
+        field: status
+        value: complete
+        message: "Investigation status not complete"
+      - type: section_content
+        pattern: "docs/investigations/INVESTIGATION-{id}-*.md"
+        section: "## Findings"
+        min_length: 50
+        message: "Findings section is empty or placeholder"
+
+  plan:
+    cycle: plan-cycle
+    scaffold:
+      - type: plan
+        command: '/new-plan {id} "{title}"'
+        pattern: "docs/work/active/{id}/plans/PLAN.md"
+    exit_criteria:
+      - type: file_status
+        pattern: "docs/work/active/{id}/plans/PLAN.md"
+        field: status
+        value: approved
+        message: "Plan status not approved (still draft)"
+
+  implement:
+    cycle: implementation-cycle
+    scaffold: []  # Plan already exists, tests created during DO phase
+    exit_criteria: []  # Tests verified via /close command
+
+  close:
+    cycle: closure-cycle
+    scaffold: []  # Inline in work file
+    exit_criteria: []  # DoD verified via /close command
