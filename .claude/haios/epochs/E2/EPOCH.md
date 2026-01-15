@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-12T01:09:41
+# System Auto: last updated on: 2026-01-15T00:02:05
 # STATUS: STUB - Copy-paste from INV-052. Refined through work item implementation.
 # Session 178: Chapters replace Milestones. Epoch→Chapter→Arc→Work Item is the hierarchy.
 # Epoch 2: Governance Suite
@@ -223,6 +223,22 @@ SURVEY [volumous] → CHOOSE [tight] → EXECUTE [mixed] → SURVEY [volumous]
 - Agent may comply; at minimum we have observability
 
 **The Bridge:** See `architecture/S25-sdk-path-to-autonomy.md` for technical path to Epoch 4.
+
+---
+
+## Session 190 Observation: Untapped Just Recipe Potential
+
+**Observation:** Just recipes are underutilized as an execution layer.
+
+`just session-start` works reliably because it's called at a predictable point in coldstart. The same pattern could apply more broadly:
+
+- `just set-cycle` / `just clear-cycle` could be wired into entry-point skills (coldstart, /implement, /close)
+- Recipes are the actual execution - skills are just prompts
+- Pattern: "If it needs to reliably happen, make it a recipe call in a skill step"
+
+**Current gap:** E2-288 built the recipes, but they're not yet wired into skills. Integration deferred.
+
+**Future consideration:** Audit which skill steps should be recipe calls vs prose instructions.
 
 ---
 
