@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-14T23:07:10
+# System Auto: last updated on: 2026-01-15T20:37:42
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -263,6 +263,18 @@ tree-current:
 # Show what's ready to work on (unblocked items)
 ready:
     python scripts/plan_tree.py --ready
+
+# Show work queue (E2-290: Priority ordered)
+queue name="default":
+    python -c "import sys; sys.path.insert(0, '.claude/haios/modules'); from work_engine import WorkEngine; from governance_layer import GovernanceLayer; e=WorkEngine(governance=GovernanceLayer()); items=e.get_queue('{{name}}'); print(f'Queue: {{name}} ({len(items)} items)'); [print(f'  {i+1}. {x.id}: {x.title} (priority={x.priority})') for i,x in enumerate(items[:10])]"
+
+# Show next item from queue (E2-290)
+queue-next name="default":
+    python -c "import sys; sys.path.insert(0, '.claude/haios/modules'); from work_engine import WorkEngine; from governance_layer import GovernanceLayer; e=WorkEngine(governance=GovernanceLayer()); n=e.get_next('{{name}}'); print(f'Next: {n.id}: {n.title}' if n else 'Queue empty')"
+
+# Check if cycle is allowed for queue (E2-290)
+queue-check name cycle:
+    python -c "import sys; sys.path.insert(0, '.claude/haios/modules'); from work_engine import WorkEngine; from governance_layer import GovernanceLayer; e=WorkEngine(governance=GovernanceLayer()); ok=e.is_cycle_allowed('{{name}}', '{{cycle}}'); print(f'{{cycle}} allowed on {{name}}: {ok}')"
 
 # Show spawn tree for an ID (E2-251: Uses WorkEngine)
 spawns id:
