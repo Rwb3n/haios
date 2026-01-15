@@ -2,10 +2,10 @@
 template: work_item
 id: E2-285
 title: Skill Template Single-Phase Default
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-10
-closed: null
+closed: 2026-01-15
 milestone: null
 priority: medium
 effort: medium

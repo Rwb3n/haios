@@ -22,6 +22,7 @@ Templates for scaffolding commands. Used by `ScaffoldTemplate.ps1` to create new
 | `architecture_decision_record` | ADR | NUMBER, TITLE, DATE | Active |
 | `investigation` | Investigation (DISCOVERY phase) | BACKLOG_ID, TITLE, DATE | **NEW (ADR-034)** |
 | `work_item` | Work item file (M6-WorkCycle) | BACKLOG_ID, TITLE, TIMESTAMP | **NEW (E2-150)** |
+| `skill` | Skill implementation | SKILL_NAME, DESCRIPTION, DATE | **NEW (E2-285)** |
 | `report` | Report document | TITLE, DATE | Active |
 | `readme` | README template | COMPONENT | Active |
 | `backlog_item` | Backlog entry | ID, TITLE | Active |
