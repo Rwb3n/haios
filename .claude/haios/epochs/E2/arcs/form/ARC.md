@@ -1,10 +1,10 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-15T00:17:58
-# Chapter: Form
+# System Auto: last updated on: 2026-01-15T20:11:17
+# Arc: Form
 
-## Chapter Definition
+## Arc Definition
 
-**Chapter ID:** Form
+**Arc ID:** Form
 **Epoch:** E2.2 (The Refinement)
 **Name:** Skill Decomposition
 **Status:** Active

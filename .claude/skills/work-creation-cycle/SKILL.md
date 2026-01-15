@@ -5,7 +5,7 @@ description: HAIOS Work Creation Cycle for structured work item population. Use 
 recipes:
 - work
 generated: 2025-12-25
-last_updated: '2026-01-12T01:32:18'
+last_updated: '2026-01-15T20:44:15'
 ---
 # Work Creation Cycle
 
@@ -58,6 +58,7 @@ VERIFY --> POPULATE --> READY --> CHAIN
 **Guardrails (MUST follow):**
 1. **Context section MUST be populated** - Replace `[Problem and root cause]` with actual problem description
 2. **Deliverables MUST be actionable** - Replace placeholders with specific checkboxes
+3. **MUST validate against source investigation** (Session 192 - see below)
 
 **Actions:**
 1. Prompt for Context: "What problem does this work item solve?"
@@ -65,13 +66,38 @@ VERIFY --> POPULATE --> READY --> CHAIN
 3. Prompt for Deliverables: "What are the specific outputs?"
 4. Fill in Deliverables as checklist items
 5. Optionally set: milestone, priority, spawned_by, blocked_by
+6. **MUST:** Run Investigation Design Validation (see below)
+
+**MUST Gate: Investigation Design Validation (Session 192 - E2-290 Learning)**
+
+IF `spawned_by` or `spawned_by_investigation` is populated:
+1. **MUST** read the source investigation: `docs/work/active/{inv_id}/investigations/*.md`
+2. **MUST** find the `## Design Outputs` section
+3. **MUST** verify coverage:
+   - For each schema/structure in Design Outputs → deliverable exists
+   - For each "Integration Mechanism" description → deliverable exists
+   - For each "Key Design Decision" that implies implementation → deliverable exists
+4. **If gap found:** Add missing deliverables before proceeding
+
+**Example (E2-290 gap that prompted this gate):**
+```
+Investigation INV-064 had:
+  Design Outputs:
+    - Queue Schema (work_queues.yaml) ✓ → deliverable existed
+    - Queue Integration Mechanism ✗ → NO deliverable for wiring into survey-cycle
+
+Result: Infrastructure built, but no governance integration.
+```
+
+> **Anti-pattern prevented:** "Design without Deliverable" - Investigation designs integration but work item only lists infrastructure. Implementation completes infrastructure, never wires it in.
 
 **Exit Criteria:**
 - [ ] Context section has real content (not placeholder)
 - [ ] Deliverables have specific items (not placeholders)
+- [ ] **MUST:** If spawned by investigation, deliverables cover all Design Outputs
 - [ ] Optional: milestone assigned
 
-**Tools:** Edit, AskUserQuestion
+**Tools:** Edit, AskUserQuestion, Read
 
 ---
 
@@ -145,6 +171,7 @@ VERIFY --> POPULATE --> READY --> CHAIN
 | VERIFY | Does work file exist? | Re-run /new-work |
 | POPULATE | Is Context filled? | Prompt user for problem statement |
 | POPULATE | Are Deliverables defined? | Prompt user for outputs |
+| POPULATE | **If spawned by INV: Do deliverables cover all Design Outputs?** | **Add missing deliverables** |
 | READY | Is work item actionable? | Return to POPULATE |
 
 ---

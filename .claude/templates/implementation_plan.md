@@ -389,6 +389,18 @@ Grep(pattern="old_path|OldName", path=".", glob="**/*.{md,py,json}")
 > **MUST** read each file below and verify state before marking plan complete.
 > This forces actual verification - not claims, but evidence.
 
+### WORK.md Deliverables Check (MUST - Session 192)
+
+**MUST** read `docs/work/active/{{BACKLOG_ID}}/WORK.md` and verify ALL deliverables:
+
+| Deliverable | Complete | Evidence |
+|-------------|----------|----------|
+| [Copy each deliverable from WORK.md] | [ ] | [How you verified it] |
+
+> **Anti-pattern prevented:** "Tests pass = Done" (E2-290). Tests verify code works. Deliverables verify scope is complete. Both required.
+
+### File Verification
+
 | File | Expected State | Verified | Notes |
 |------|---------------|----------|-------|
 | `[path/to/implementation.py]` | [Function X exists, does Y] | [ ] | |
@@ -416,6 +428,7 @@ pytest [test_file] -v
 
 **Completion Criteria (DoD per ADR-033):**
 - [ ] Tests pass
+- [ ] **MUST:** All WORK.md deliverables verified complete (Session 192)
 - [ ] **Runtime consumer exists** (code is called by system, not just tests)
 - [ ] WHY captured (reasoning stored to memory)
 - [ ] **MUST:** READMEs updated in all modified directories (upstream and downstream)
@@ -424,6 +437,7 @@ pytest [test_file] -v
 - [ ] Ground Truth Verification completed above
 
 > **E2-250 Learning:** "Tests pass" proves code works. "Runtime consumer exists" proves code is used. Code without consumers is a prototype, not done.
+> **E2-290 Learning (Session 192):** "Tests pass" ≠ "Deliverables complete". Agent declared victory after tests passed but skipped 2 of 7 deliverables.
 
 ---
 

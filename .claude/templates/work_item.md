@@ -53,6 +53,19 @@ Work item in BACKLOG node. Awaiting prioritization.
 
 ## Deliverables
 
+<!-- VERIFICATION REQUIREMENT (Session 192 - E2-290 Learning)
+
+     These checkboxes are the SOURCE OF TRUTH for work completion.
+
+     During CHECK phase of implementation-cycle:
+     - Agent MUST read this section
+     - Agent MUST verify EACH checkbox can be marked complete
+     - If ANY deliverable is incomplete, work is NOT done
+
+     "Tests pass" ≠ "Deliverables complete"
+     Tests verify code works. Deliverables verify scope is complete.
+-->
+
 - [ ] [Deliverable 1]
 - [ ] [Deliverable 2]
 

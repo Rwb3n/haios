@@ -1,10 +1,10 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-15T00:18:15
-# Chapter: Ground
+# System Auto: last updated on: 2026-01-15T20:11:23
+# Arc: Ground
 
-## Chapter Definition
+## Arc Definition
 
-**Chapter ID:** Ground
+**Arc ID:** Ground
 **Epoch:** E2.2 (The Refinement)
 **Name:** Context Loading
 **Status:** Active

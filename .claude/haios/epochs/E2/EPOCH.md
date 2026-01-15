@@ -1,7 +1,7 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-15T00:02:05
+# System Auto: last updated on: 2026-01-15T19:52:27
 # STATUS: STUB - Copy-paste from INV-052. Refined through work item implementation.
-# Session 178: Chapters replace Milestones. Epoch→Chapter→Arc→Work Item is the hierarchy.
+# Session 191 (ADR-042): Hierarchy is Epoch→Arc→Chapter→Work Item (story semantics)
 # Epoch 2: Governance Suite
 
 ## L4 Object Definition
@@ -55,28 +55,31 @@ Build the trust infrastructure that enables autonomous agent operation with huma
 
 ---
 
-## Chapters
+## Arcs (ADR-042)
+
+> **Note (Session 191):** Hierarchy renamed per ADR-042 to align with story semantics.
+> Arcs span chapters. Epoch → Arc → Chapter → Work Item.
 
 ### Epoch 2.0-2.1: The Building (Complete)
 
-| Chapter | Name | Status | Work Items |
-|---------|------|--------|------------|
-| C1 | HookMigration | Complete | E2-001 through E2-120 |
-| C2 | MemoryIntegration | Complete | E2-121 through E2-180 |
+| Arc | Name | Status | Work Items |
+|-----|------|--------|------------|
+| A1 | HookMigration | Complete | E2-001 through E2-120 |
+| A2 | MemoryIntegration | Complete | E2-121 through E2-180 |
 
 ### Epoch 2.2: The Refinement (Active)
 
 Distill the sprawling governance suite into leaner architecture.
 
-| Chapter | Name | Theme | Status |
-|---------|------|-------|--------|
-| **Chariot** | Module Architecture | 5 modules, boundaries, wiring | Active |
+| Arc | Name | Theme | Status |
+|-----|------|-------|--------|
+| **Chariot** | Module Architecture | 9 modules, boundaries, wiring | Active |
 | **Breath** | Pressure Dynamics | Rhythm, inhale/exhale, phase design | Active |
 | **Tongue** | Cognitive Notation | RFC 2119, operators, pidgin | Planned |
 | **Form** | Skill Decomposition | Smaller containers, category routing | Active |
 | **Ground** | Context Loading | ground-cycle, portals, provenance | Active |
 
-**Pressure pattern:** Chapters are [volumous] - thematic exploration. Arcs within are [tight] - bounded delivery.
+**Pressure pattern:** Arcs are [volumous] - thematic exploration. Chapters within are [tight] - bounded delivery.
 
 ---
 

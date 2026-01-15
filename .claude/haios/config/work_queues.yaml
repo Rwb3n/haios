@@ -1,0 +1,45 @@
+# generated: 2026-01-15
+# System Auto: last updated on: 2026-01-15T21:02:20
+# Work Queue Configuration (E2-290, INV-064 design)
+# Provides typed queues with cycle-locking for structured work execution
+version: "1.0"
+
+# Queue type definitions
+queue_types:
+  fifo:
+    ordering: "creation_date ASC"
+  priority:
+    ordering: "priority DESC, creation_date ASC"
+  batch:
+    phases: [plan_all, review, implement_all, validate_all]
+  chapter_aligned:
+    ordering: "chapter_priority DESC, priority DESC"
+
+# Active queues
+queues:
+  # GOVERNANCE queue - Session 193 priority (governance hardening focus)
+  governance:
+    type: priority
+    items:
+      - E2-291   # Wire Queue into Survey-Cycle and Routing-Gate (critical gap S192)
+      - INV-054  # Validation Cycle Fitness for Purpose (semantic L4 alignment)
+      - INV-041  # Single Source Path Constants Architecture (drift prevention)
+      - E2-164   # Coldstart L1 Context Review (agent efficiency)
+    allowed_cycles: [implementation-cycle, investigation-cycle]
+    rationale: "Session 193: Governance hardening per S192 learnings"
+
+  # Default queue - everything else, priority ordering
+  default:
+    type: priority
+    items: auto  # Populated from get_ready() excluding governance queue
+    allowed_cycles: [implementation-cycle, investigation-cycle, work-creation-cycle]
+
+# Policies
+policies:
+  assignment:
+    default_queue: default
+    auto_batch_threshold: 3  # Suggest batch for 3+ related items
+  cross_arc:
+    allowed: true  # Queues can span arcs
+  cycle_enforcement:
+    strict: true  # Block cycles not in allowed_cycles

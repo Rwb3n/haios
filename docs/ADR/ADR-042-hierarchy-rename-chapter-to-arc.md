@@ -1,29 +1,29 @@
 ---
 template: architecture_decision_record
-status: proposed
+status: accepted
 date: 2026-01-15
 adr_id: ADR-042
 title: Hierarchy Rename Chapter to Arc
 author: Hephaestus
 session: 191
 lifecycle_phase: decide
-decision: pending
+decision: accepted
 spawned_by: INV-064
 memory_refs:
 - 81366
 - 81367
 version: '1.1'
 generated: 2026-01-15
-last_updated: '2026-01-15T19:45:18'
+last_updated: '2026-01-15T19:48:47'
 ---
 # ADR-042: Hierarchy Rename Chapter to Arc
 
 @docs/README.md
 @docs/work/active/INV-064/investigations/001-work-hierarchy-rename-and-queue-architecture.md
 
-> **Status:** Proposed
+> **Status:** Accepted
 > **Date:** 2026-01-15
-> **Decision:** Pending operator approval
+> **Decision:** Approved (Session 191)
 
 ---
 

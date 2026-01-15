@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-09T22:06:03
+# System Auto: last updated on: 2026-01-15T20:26:35
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -89,10 +89,25 @@ class WorkState:
     node_history: List[Dict[str, Any]] = field(default_factory=list)
     memory_refs: List[int] = field(default_factory=list)
     path: Optional[Path] = None
+    priority: str = "medium"  # E2-290: For queue ordering
+
+
+@dataclass
+class QueueConfig:
+    """Queue configuration from work_queues.yaml (E2-290)."""
+
+    name: str
+    type: str  # fifo, priority, batch, chapter_aligned
+    items: Any  # Work IDs list or "auto"
+    allowed_cycles: List[str] = field(default_factory=list)
+    phases: Optional[List[str]] = None  # For batch type
 
 
 # Trigger statuses for cascade (shared constant)
 TRIGGER_STATUSES = {"complete", "completed", "done", "closed", "accepted"}
+
+# Queue config path (E2-290)
+QUEUE_CONFIG_PATH = Path(".claude/haios/config/work_queues.yaml")
 
 
 class WorkEngine:
@@ -280,6 +295,119 @@ class WorkEngine:
                         ready.append(work)
         return ready
 
+    # ========== Queue Methods (E2-290) ==========
+
+    def _get_queue_config_path(self) -> Path:
+        """Get path to queue config file (for testing injection)."""
+        return QUEUE_CONFIG_PATH
+
+    def load_queues(self) -> Dict[str, QueueConfig]:
+        """
+        Load queue configuration from work_queues.yaml.
+
+        Returns:
+            Dict mapping queue name to QueueConfig
+        """
+        config_path = self._get_queue_config_path()
+        if not config_path.exists():
+            # Default queue if no config exists
+            return {"default": QueueConfig("default", "priority", "auto", [])}
+
+        with open(config_path) as f:
+            config = yaml.safe_load(f)
+
+        queues = {}
+        for name, q in config.get("queues", {}).items():
+            queues[name] = QueueConfig(
+                name=name,
+                type=q.get("type", "priority"),
+                items=q.get("items", "auto"),
+                allowed_cycles=q.get("allowed_cycles", []),
+                phases=q.get("phases"),
+            )
+        return queues
+
+    def get_queue(self, queue_name: str = "default") -> List[WorkState]:
+        """
+        Get ordered work items from a specific queue.
+
+        Args:
+            queue_name: Name of queue to retrieve (default: "default")
+
+        Returns:
+            List of WorkState ordered according to queue type
+        """
+        queues = self.load_queues()
+        if queue_name not in queues:
+            return self.get_ready()  # Fallback to flat list
+
+        q = queues[queue_name]
+
+        # Get items
+        if q.items == "auto" or q.items == ["auto"]:
+            items = self.get_ready()
+        else:
+            items = []
+            for work_id in q.items:
+                if self._work_exists(work_id):
+                    work = self.get_work(work_id)
+                    if work:
+                        items.append(work)
+
+        # Sort by queue type
+        if q.type == "priority":
+            # Sort by priority (high first), then by id
+            priority_order = {"high": 0, "medium": 1, "low": 2}
+            items.sort(key=lambda x: (priority_order.get(x.priority, 1), x.id))
+        elif q.type == "fifo":
+            # Sort by creation date (earliest first)
+            items.sort(
+                key=lambda x: x.node_history[0]["entered"] if x.node_history else ""
+            )
+
+        return items
+
+    def get_next(self, queue_name: str = "default") -> Optional[WorkState]:
+        """
+        Get next item from queue head.
+
+        Args:
+            queue_name: Name of queue (default: "default")
+
+        Returns:
+            First WorkState from queue, or None if empty
+        """
+        queue = self.get_queue(queue_name)
+        return queue[0] if queue else None
+
+    def is_cycle_allowed(self, queue_name: str, cycle_name: str) -> bool:
+        """
+        Check if cycle is allowed for this queue (cycle-locking).
+
+        Args:
+            queue_name: Name of queue to check
+            cycle_name: Name of cycle to verify
+
+        Returns:
+            True if cycle is allowed, False if blocked
+        """
+        queues = self.load_queues()
+        if queue_name not in queues:
+            return True  # No queue = no restrictions
+
+        q = queues[queue_name]
+        if not q.allowed_cycles:
+            return True  # Empty list = all allowed
+
+        return cycle_name in q.allowed_cycles
+
+    def _work_exists(self, work_id: str) -> bool:
+        """Check if work item exists."""
+        work_dir = self.active_dir / work_id
+        return (work_dir / "WORK.md").exists()
+
+    # ========== End Queue Methods ==========
+
     def close(self, id: str) -> Path:
         """
         Close work item: set status=complete, closed date.
@@ -450,6 +578,7 @@ class WorkEngine:
             node_history=fm.get("node_history", []),
             memory_refs=fm.get("memory_refs", []) or [],
             path=path,
+            priority=fm.get("priority", "medium"),  # E2-290: Queue ordering
         )
 
     def _write_work_file(self, work: WorkState) -> None:

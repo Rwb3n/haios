@@ -3,7 +3,7 @@ allowed-tools: Read, Glob, Bash, mcp__haios-memory__memory_search_with_experienc
   mcp__haios-memory__db_query
 description: Initialize session by loading essential context files
 generated: '2025-12-25'
-last_updated: '2026-01-12T01:27:10'
+last_updated: '2026-01-15T19:53:08'
 ---
 
 # Cold Start Initialization
@@ -18,8 +18,8 @@ Read `.claude/haios/config/haios.yaml` first - this drives everything else.
 
 Extract:
 - `epoch.epoch_file` - path to current epoch
-- `epoch.active_chapters` - list of active chapters
-- `epoch.chapters_dir` - path to chapters directory
+- `epoch.active_arcs` - list of active arcs (ADR-042: arcs > chapters)
+- `epoch.arcs_dir` - path to arcs directory
 
 ---
 
@@ -40,8 +40,8 @@ Extract:
 **MUST** read from paths in haios.yaml:
 
 1. Read `epoch.epoch_file` - current epoch definition
-2. For each chapter in `epoch.active_chapters`:
-   - Read `{epoch.chapters_dir}/{chapter}/CHAPTER.md`
+2. For each arc in `epoch.active_arcs`:
+   - Read `{epoch.arcs_dir}/{arc}/ARC.md`
 
 ---
 
@@ -106,7 +106,7 @@ Where N = last_session + 1 from `.claude/haios-status.json`.
 
 Provide brief summary:
 - **Manifesto loaded:** L0-L4 (confirm read)
-- **Epoch context:** Which epoch + which chapters loaded
+- **Epoch context:** Which epoch + which arcs loaded
 - **Principles loaded:** Which files from `load_principles`
 - **Memory loaded:** Count of concepts from `load_memory_refs`
 - **Drift warnings:** Any `drift_observed` items

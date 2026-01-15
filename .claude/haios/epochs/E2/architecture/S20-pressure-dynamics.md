@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-06T22:10:33
+# System Auto: last updated on: 2026-01-15T20:07:32
 # Section 20: Pressure Dynamics
 
 Generated: 2026-01-06 (Session 179)
@@ -160,14 +160,14 @@ The 5 modules map to the breath:
 
 ---
 
-## Fractal Hierarchy (Session 179)
+## Fractal Hierarchy (Session 179, ADR-042 Session 191)
 
 The pressure alternation applies at EVERY level of the hierarchy:
 
 ```
 Epoch     [tight]     - bounded vision, has completion criteria
-Chapter   [volumous]  - thematic space, exploration
-Arc       [tight]     - bounded delivery, commit
+Arc       [volumous]  - thematic space, exploration
+Chapter   [tight]     - bounded delivery, commit
 Work Item [volumous]  - space to figure it out
   Phases  [tight]     - gates, exit criteria
 ```
@@ -176,8 +176,8 @@ Work Item [volumous]  - space to figure it out
 
 ```
 Epoch [exhale]
-  └── Chapter [inhale]
-        └── Arc [exhale]
+  └── Arc [inhale]
+        └── Chapter [exhale]
               └── Work Item [inhale]
                     └── Phases [exhale]
 ```
@@ -189,12 +189,12 @@ Tight → Volumous → Tight → Volumous → Tight
 | Level | Pressure | Why |
 |-------|----------|-----|
 | Epoch | [MUST] | "Governance Suite" - specific goal, closes when done |
-| Chapter | [MAY] | Thematic exploration - discover arcs as you go |
-| Arc | [MUST] | "ground-cycle implementation" - ship it or don't |
+| Arc | [MAY] | Thematic exploration - discover chapters as you go |
+| Chapter | [MUST] | "ground-cycle implementation" - ship it or don't |
 | Work Item | [MAY] | Space to investigate, plan, figure out approach |
 | Phases | [MUST] | Gates - PLAN done? DO done? CHECK passed? |
 
-**Key insight:** Chapters are volumous because context is volatile. We constantly adapt. Arcs are tight because delivery must commit. Work items are volumous because figuring things out takes space. Phases are tight because gates are binary.
+**Key insight:** Arcs are volumous because context is volatile. We constantly adapt. Chapters are tight because delivery must commit. Work items are volumous because figuring things out takes space. Phases are tight because gates are binary.
 
 ---
 

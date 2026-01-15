@@ -5,8 +5,9 @@ description: HAIOS Survey Cycle for structured session-level work selection. Use
   with volumous exploration before tight commitment.
 recipes:
 - ready
+- queue
 generated: 2026-01-11
-last_updated: '2026-01-12T01:27:33'
+last_updated: '2026-01-15T21:29:51'
 ---
 # Survey Cycle
 
@@ -19,8 +20,9 @@ Select work after coldstart. Invoked automatically or via `Skill(skill="survey-c
    - If work in_progress from prior session, continue it
 
 2. **Otherwise, present options**
-   - Run `just ready` for unblocked items
-   - Select top 3 by priority + chapter alignment
+   - Run `just queue [name]` for ordered items (default: "default" queue)
+   - Alternatively: `just ready` for flat unordered list (backward compat)
+   - Select top 3 from queue head
    - Present via `AskUserQuestion` (or auto-select if autonomous)
 
 3. **Route**

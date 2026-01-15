@@ -2,10 +2,10 @@
 template: work_item
 id: E2-291
 title: Wire Queue into Survey-Cycle and Routing-Gate
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-15
-closed: null
+closed: '2026-01-15'
 milestone: null
 priority: medium
 effort: medium
@@ -22,7 +22,14 @@ node_history:
   entered: 2026-01-15 20:44:55
   exited: null
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 81376
+- 81377
+- 81378
+- 81379
+- 81380
+- 81381
+- 81382
 operator_decisions: []
 documents:
   investigations: []

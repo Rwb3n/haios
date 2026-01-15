@@ -6,7 +6,7 @@ description: HAIOS Implementation Cycle for structured work item implementation.
 recipes:
 - node
 generated: 2025-12-22
-last_updated: '2026-01-12T01:29:37'
+last_updated: '2026-01-15T20:35:37'
 ---
 # Implementation Cycle
 
@@ -155,8 +155,20 @@ This verifies implementation aligns with Detailed Design. CHECK phase is blocked
 3. **DEMO the feature** - Exercise the new code path to surface bugs (Session 90)
 4. Run plan's Ground Truth Verification
 5. Check DoD criteria (ADR-033)
-6. **If creating discoverable artifact:** Verify runtime discovery (see below)
-7. **(Optional) Invoke validation-agent** for unbiased review: `Task(subagent_type='validation-agent')`
+6. **MUST: Verify WORK.md Deliverables** (Session 192 - E2-290 Learning)
+7. **If creating discoverable artifact:** Verify runtime discovery (see below)
+8. **(Optional) Invoke validation-agent** for unbiased review: `Task(subagent_type='validation-agent')`
+
+**MUST Gate: Deliverables Verification (Session 192)**
+Before declaring CHECK complete:
+1. **MUST** read `docs/work/active/{backlog_id}/WORK.md`
+2. **MUST** find the `## Deliverables` section
+3. **MUST** verify EACH deliverable checkbox can be checked:
+   - For each `- [ ]` item, confirm the work is actually done
+   - If ANY deliverable is incomplete, **BLOCK** - return to DO phase
+4. **MUST** also check plan's Implementation Steps are all complete
+
+> **Anti-pattern prevented:** "Tests pass = Done" (E2-290 Session 192). Agent declared victory after tests passed but skipped 2 of 7 deliverables. Tests verify code works, deliverables verify scope is complete. Both are required.
 
 **Demo Step (Session 90 - TDD Gap Discovery):**
 - Demo **MUST** exercise the happy path at minimum
@@ -193,6 +205,8 @@ foresight_prep:
 - [ ] All tests pass (or N/A for non-code)
 - [ ] Ground Truth Verification complete
 - [ ] No regressions in full test suite (or N/A)
+- [ ] **MUST:** All WORK.md deliverables verified complete
+- [ ] **MUST:** All plan Implementation Steps checked off
 - [ ] Discoverable artifacts appear in runtime status (or N/A)
 - [ ] (Optional) foresight_prep calibration fields updated
 
@@ -268,6 +282,8 @@ foresight_prep:
 | DO    | Is file manifest created? | List files first |
 | DO    | Is implementation done? | One change at a time |
 | CHECK | Is verification complete? | Fix issues, retest |
+| CHECK | **Are ALL WORK.md deliverables done?** | **BLOCK - return to DO** |
+| CHECK | **Are ALL plan steps checked off?** | **BLOCK - return to DO** |
 | CHECK | Is artifact discoverable? | Run update-status, verify in slim JSON |
 | DONE  | Is WHY captured? | Store learnings |
 | CHAIN | Is work item closed? | Run /close {backlog_id} |

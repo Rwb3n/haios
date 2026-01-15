@@ -2,8 +2,11 @@
 name: routing-gate
 description: Bridge skill for work-type routing in CHAIN phase. Use to determine next
   cycle skill based on work item signals.
+recipes:
+- queue
+- is-cycle-allowed
 generated: 2025-12-28
-last_updated: '2026-01-07T20:18:40'
+last_updated: '2026-01-15T23:05:12'
 ---
 # Routing-Gate (Bridge Skill)
 
@@ -39,10 +42,29 @@ Input (next_work_id, has_plan)
 
 ---
 
+## Cycle-Locking Check (E2-291)
+
+**Before applying the decision table, check cycle-locking:**
+
+1. Determine active queue (from survey-cycle context or "default")
+2. Run `just is-cycle-allowed [queue] [cycle]`
+3. If BLOCKED:
+   - Return `{action: "blocked", reason: "Queue [name] only allows [cycles]"}`
+   - Display warning:
+     ```
+     WARNING: Cycle '[cycle]' is blocked for queue '[queue]'.
+     Allowed cycles: [list from config]
+     Queue rationale: "[from work_queues.yaml]"
+     ```
+4. If ALLOWED: continue to decision table
+
+---
+
 ## Routing Decision Table
 
 | Signal | Action | Skill to Invoke |
 |--------|--------|-----------------|
+| Cycle blocked by queue | `blocked` | None - display warning |
 | `next_work_id` is None | `await_operator` | None - wait for operator |
 | ID starts with `INV-` | `invoke_investigation` | `investigation-cycle` |
 | `has_plan` is True | `invoke_implementation` | `implementation-cycle` |
@@ -54,18 +76,21 @@ Input (next_work_id, has_plan)
 
 **From cycle skill CHAIN phase:**
 
-1. Query next work: `just ready`
+1. Query next work: `just queue [name]` (or `just ready` for backward compat)
 2. Read first work file, check `documents.plans` field
-3. Apply the decision table above:
+3. **Check cycle-locking:** `just is-cycle-allowed [queue] [cycle]`
+   - If BLOCKED: display warning and stop
+4. Apply the decision table above:
    - `next_work_id` is None → `await_operator`
    - ID starts with `INV-` → `invoke_investigation`
    - `has_plan` is True → `invoke_implementation`
    - Otherwise → `invoke_work_creation`
-4. Execute the corresponding skill invocation:
+5. Execute the corresponding skill invocation:
    - `invoke_investigation` → `Skill(skill="investigation-cycle")`
    - `invoke_implementation` → `Skill(skill="implementation-cycle")`
    - `invoke_work_creation` → `Skill(skill="work-creation-cycle")`
    - `await_operator` → Report "No unblocked work. Awaiting operator direction."
+   - `blocked` → Report warning with allowed cycles and rationale
 
 ---
 

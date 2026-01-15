@@ -1,10 +1,10 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-06T22:19:46
-# Chapter: Tongue
+# System Auto: last updated on: 2026-01-15T20:11:31
+# Arc: Tongue
 
-## Chapter Definition
+## Arc Definition
 
-**Chapter ID:** Tongue
+**Arc ID:** Tongue
 **Epoch:** E2.2 (The Refinement)
 **Name:** Cognitive Notation
 **Status:** Planned

@@ -1,5 +1,5 @@
 # generated: 2026-01-01
-# System Auto: last updated on: 2026-01-11T23:58:49
+# System Auto: last updated on: 2026-01-15T20:04:56
 # L4: Implementation - Technical Specifications
 
 Level: L4
@@ -24,17 +24,16 @@ Execution layer. Contains rules, configs, and time-bound objectives.
 
 **Theme:** Distill sprawling governance suite into leaner architecture
 
-**What Changed (Session 179):**
-> Milestones (M7b-WorkInfra, M7c-Governance, etc.) replaced by Chapters.
-> Chapters are [volumous] - thematic exploration. Arcs within are [tight] - bounded delivery.
-> This matches the fractal pressure pattern: Epoch[tight] → Chapter[volumous] → Arc[tight] → Work[volumous] → Phase[tight]
+**What Changed (Session 179, updated Session 191 ADR-042):**
+> Milestones replaced by Arcs (ADR-042: hierarchy renamed for universal story semantics).
+> Arcs are [volumous] - thematic exploration. Chapters within are [tight] - bounded delivery.
+> This matches the fractal pressure pattern: Epoch[tight] → Arc[volumous] → Chapter[tight] → Work[volumous] → Phase[tight]
 
-**Active Chapters:**
-| Chapter | Theme | Status |
-|---------|-------|--------|
+**Active Arcs:**
+| Arc | Theme | Status |
+|-----|-------|--------|
 | **Chariot** | 5 modules, boundaries, wiring | Active |
 | **Breath** | Pressure dynamics, rhythm | Active |
-| **Tongue** | Cognitive notation, RFC 2119 | Planned |
 | **Form** | Skill decomposition, category routing | Active |
 | **Ground** | Context loading, portals, provenance | Active |
 

@@ -1,8 +1,8 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-06T22:39:17
+# System Auto: last updated on: 2026-01-15T19:50:49
 # HAIOS System Configuration
 # Consolidates: governance-toggles.yaml, routing-thresholds.yaml
-# Version: 2.0 (Session 179 - E2.2 Chapters)
+# Version: 2.1 (Session 191 - ADR-042 Hierarchy Rename)
 
 # Plugin manifest (for portable plugin spec)
 manifest:
@@ -10,20 +10,20 @@ manifest:
   version: "2.2"
   description: "Hybrid AI Operating System - Trust Engine"
 
-# Current epoch context (Session 179)
+# Current epoch context (ADR-042: Arc > Chapter in hierarchy)
 epoch:
   current: E2
   subversion: "2.2"  # The Refinement
   epoch_file: ".claude/haios/epochs/E2/EPOCH.md"
   architecture_dir: ".claude/haios/epochs/E2/architecture"
-  chapters_dir: ".claude/haios/epochs/E2/chapters"
+  arcs_dir: ".claude/haios/epochs/E2/arcs"
   # Foundational architecture (MUST load)
   foundational:
     - S20-pressure-dynamics.md
     - S21-cognitive-notation.md
     - S22-skill-patterns.md
-  # Active chapters
-  active_chapters:
+  # Active arcs (formerly chapters - ADR-042)
+  active_arcs:
     - chariot
     - breath
     - form

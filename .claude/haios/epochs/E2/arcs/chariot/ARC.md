@@ -1,10 +1,10 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-15T00:17:50
-# Chapter: Chariot
+# System Auto: last updated on: 2026-01-15T20:08:57
+# Arc: Chariot
 
-## Chapter Definition
+## Arc Definition
 
-**Chapter ID:** Chariot
+**Arc ID:** Chariot
 **Epoch:** E2.2 (The Refinement)
 **Name:** Module Architecture
 **Status:** Active

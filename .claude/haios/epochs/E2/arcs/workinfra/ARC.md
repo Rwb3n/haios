@@ -1,10 +1,10 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-06T19:46:48
-# Chapter: WorkInfra
+# System Auto: last updated on: 2026-01-15T20:12:07
+# Arc: WorkInfra
 
-## Chapter Definition
+## Arc Definition
 
-**Chapter ID:** C3-WorkInfra
+**Arc ID:** workinfra
 **Epoch:** E2
 **Name:** Work Infrastructure
 **Status:** Active

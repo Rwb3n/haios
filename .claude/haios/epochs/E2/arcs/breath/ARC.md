@@ -1,10 +1,10 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-15T00:18:07
-# Chapter: Breath
+# System Auto: last updated on: 2026-01-15T20:10:14
+# Arc: Breath
 
-## Chapter Definition
+## Arc Definition
 
-**Chapter ID:** Breath
+**Arc ID:** Breath
 **Epoch:** E2.2 (The Refinement)
 **Name:** Pressure Dynamics
 **Status:** Active

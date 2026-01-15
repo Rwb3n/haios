@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-15T20:37:42
+# System Auto: last updated on: 2026-01-15T21:23:05
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -275,6 +275,10 @@ queue-next name="default":
 # Check if cycle is allowed for queue (E2-290)
 queue-check name cycle:
     python -c "import sys; sys.path.insert(0, '.claude/haios/modules'); from work_engine import WorkEngine; from governance_layer import GovernanceLayer; e=WorkEngine(governance=GovernanceLayer()); ok=e.is_cycle_allowed('{{name}}', '{{cycle}}'); print(f'{{cycle}} allowed on {{name}}: {ok}')"
+
+# Check if cycle is allowed - returns ALLOWED/BLOCKED (E2-291)
+is-cycle-allowed queue_name cycle_name:
+    python -c "import sys; sys.path.insert(0, '.claude/haios/modules'); from work_engine import WorkEngine; from governance_layer import GovernanceLayer; e=WorkEngine(governance=GovernanceLayer()); allowed=e.is_cycle_allowed('{{queue_name}}', '{{cycle_name}}'); print('ALLOWED' if allowed else 'BLOCKED')"
 
 # Show spawn tree for an ID (E2-251: Uses WorkEngine)
 spawns id:
