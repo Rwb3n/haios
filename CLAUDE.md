@@ -1,5 +1,5 @@
 # generated: 2025-09-23
-# System Auto: last updated on: 2026-01-06T21:17:46
+# System Auto: last updated on: 2026-01-15T19:17:40
 # Code Implementation & Engineering Guide
 
 ## RFC 2119 Keywords
@@ -191,6 +191,18 @@ System health thresholds configured in `.claude/haios/config/haios.yaml` (thresh
 
 > **E2-250 Learning:** "Tests pass" ≠ "Code is used". Modules without runtime consumers are prototypes.
 
+### Work Item Location (ADR-041)
+
+**MUST NOT** move work items from `docs/work/active/` to `archive/` on completion.
+
+| Principle | Rule |
+|-----------|------|
+| **Status over location** | `status: complete` marks closure, not directory path |
+| **References stay valid** | Portals, memory_refs, @ links all point to paths |
+| **Epoch-level cleanup** | Archive move happens at epoch boundary, not work item close |
+
+**Rationale:** Moving files breaks portal links, memory references, and embedded @ references. The close-work-cycle "ARCHIVE" phase means "mark complete", not "move to archive directory".
+
 ---
-*Last Updated: 2025-12-25 | Version: Epoch 2 (M8-SkillArch Complete)*
+*Last Updated: 2026-01-15 | Version: Epoch 2.2 (The Refinement)*
 *See `docs/epistemic_state.md` for detailed status*
