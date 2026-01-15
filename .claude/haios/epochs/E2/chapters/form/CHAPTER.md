@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-14T23:55:28
+# System Auto: last updated on: 2026-01-15T00:17:58
 # Chapter: Form
 
 ## Chapter Definition
@@ -9,7 +9,7 @@
 **Name:** Skill Decomposition
 **Status:** Active
 **Pressure:** [volumous] - thematic exploration
-**Memory Refs:** 81211-81221 (skills as procedural theater), 81248-81266 (drift diagnosis)
+**Memory Refs:** 81211-81221 (skills as procedural theater), 81248-81266 (drift diagnosis), 81351-81365 (S190 arc discussion)
 
 ---
 
@@ -63,6 +63,8 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
 | ARC-003 | TemplateSimplification | **Complete** | E2-281: Checkpoint 112→24, E2-284: Observations 105→26 |
 | ARC-004 | SkillAtomization | **Active** | ~~E2-283~~, ~~E2-284~~, E2-285: Prune verbose skills |
 | ARC-005 | SoftEnforcement | **Complete** | E2-286/287/288: Observability + warnings (Session 190) |
+| ARC-006 | WorkUniversality | Planned | Work items universal - type is field, not prefix (S190) |
+| ARC-007 | MultiPartPlans | Planned | All work types have plans; plans can be multi-part (S190) |
 
 ---
 

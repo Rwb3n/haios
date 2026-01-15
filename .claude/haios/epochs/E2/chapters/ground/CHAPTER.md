@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-12T01:13:28
+# System Auto: last updated on: 2026-01-15T00:18:15
 # Chapter: Ground
 
 ## Chapter Definition
@@ -9,7 +9,7 @@
 **Name:** Context Loading
 **Status:** Active
 **Pressure:** [volumous] - thematic exploration
-**Memory Refs:** 81222-81247 (checkpoint as manifest)
+**Memory Refs:** 81222-81247 (checkpoint as manifest), 81351-81365 (S190 arc discussion)
 
 ---
 
@@ -50,7 +50,8 @@ Load architectural context before cognitive work begins.
 | ARC-001 | GroundCycle | Complete | Design ground-cycle skill (E2-276 complete) |
 | ARC-002 | PortalSystem | Complete | Implement portals in work items (E2-277 complete, S179) |
 | ARC-003 | SessionManifest | **Complete** | E2-281/E2-282: Checkpoint as loading manifest |
-| TBD | CycleWiring | Planned | Wire ground-cycle to calling cycles |
+| ARC-004 | CycleWiring | Planned | Wire ground-cycle to calling cycles |
+| ARC-005 | ObservationCentralization | Planned | Epoch-level observation location for pattern review (S190) |
 
 ---
 

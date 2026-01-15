@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-10T12:39:41
+# System Auto: last updated on: 2026-01-15T00:18:07
 # Chapter: Breath
 
 ## Chapter Definition
@@ -9,7 +9,7 @@
 **Name:** Pressure Dynamics
 **Status:** Active
 **Pressure:** [volumous] - thematic exploration
-**Memory Refs:** 81222-81247 (checkpoint redesign), 81248-81266 (drift diagnosis)
+**Memory Refs:** 81222-81247 (checkpoint redesign), 81248-81266 (drift diagnosis), 81351-81365 (S190 arc discussion)
 
 ---
 
@@ -45,6 +45,7 @@ The rhythm of agent cognition: inhale (explore) and exhale (commit).
 | ARC-002 | SessionCeremony | **Complete** | E2-281/282: Checkpoint as loading manifest (24 lines) |
 | ARC-003 | MemoryRefEnforcement | **Active** | Coldstart MUST query load_memory_refs |
 | ARC-004 | PhaseAnnotation | Planned | Add [MAY]/[MUST] to all skill phases |
+| ARC-005 | BatchCycleExecution | Planned | Related work items: plan all → review → implement all (S190) |
 
 ---
 

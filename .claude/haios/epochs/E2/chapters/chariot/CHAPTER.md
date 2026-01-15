@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-12T00:49:36
+# System Auto: last updated on: 2026-01-15T00:17:50
 # Chapter: Chariot
 
 ## Chapter Definition
@@ -9,7 +9,7 @@
 **Name:** Module Architecture
 **Status:** Active
 **Pressure:** [volumous] - thematic exploration
-**Memory Refs:** 81194-81198 (E2-279 decomposition), 81199-81210 (closure)
+**Memory Refs:** 81194-81198 (E2-279 decomposition), 81199-81210 (closure), 81351-81365 (S190 arc discussion)
 
 ---
 
@@ -51,6 +51,8 @@ The 9 Chariot modules that make HAIOS portable and LLM-agnostic:
 | ARC-001 | ModuleWiring | **Complete** | E2-279: WorkEngine delegates to satellites |
 | ARC-002 | BoundaryEnforcement | Planned | Enforce module boundaries (hooks?) |
 | ARC-003 | SDKMigration | Vision | Claude Agent SDK enables hard enforcement (S25, Epoch 4) |
+| ARC-004 | PathAuthority | Planned | Recipes own paths - agent doesn't hardcode (S190) - **INV-041 exists** |
+| ARC-005 | FileTypeLocking | Planned | PreToolUse enforces what file types go where (S190) |
 
 ---
 

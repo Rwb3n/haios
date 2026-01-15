@@ -29,7 +29,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2025-12-28
-last_updated: '2025-12-28T11:27:40'
+last_updated: '2026-01-15T00:16:53'
 ---
 # WORK-INV-041: Single Source Path Constants Architecture
 
@@ -86,3 +86,4 @@ Work item in BACKLOG node. Awaiting prioritization.
 - Spawned by: E2-212 (Work Directory Structure Migration)
 - Related: INV-040 (Automated Stale Reference Detection) - would benefit from centralized patterns
 - Related: E2-076 (DAG Governance Architecture) - mentions pattern fields
+- **Arc:** Chariot ARC-004 (PathAuthority) - recipes own paths, agent doesn't hardcode (S190)
