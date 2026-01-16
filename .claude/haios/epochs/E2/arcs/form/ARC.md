@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-15T20:11:17
+# System Auto: last updated on: 2026-01-15T23:36:30
 # Arc: Form
 
 ## Arc Definition
@@ -23,7 +23,7 @@ Smaller containers, harder boundaries. Each skill does ONE thing.
 |-----|-----------|-----------|
 | ~~survey-cycle (5 phases, 241 lines)~~ | Minimal routing (42 lines) | **E2-283 DONE** |
 | ~~observation-capture-cycle (3 phases, 134 lines)~~ | 3 questions, hard gate (41 lines) | **E2-284 DONE** |
-| skill template (phases default) | Single-phase default | E2-285 |
+| ~~skill template (phases default)~~ | Single-phase default | **E2-285 DONE** |
 | checkpoint template (112 lines) | Loading manifest (24 lines) | **E2-281 DONE** |
 
 **Session 186 Drift Diagnosis:**
@@ -61,10 +61,12 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
 | ARC-001 | ConfigDrivenGeneration | Planned | haios.yaml is source of truth; plumbing regenerates from config |
 | ARC-002 | CategoryRouting | Planned | Route by category, not prefix |
 | ARC-003 | TemplateSimplification | **Complete** | E2-281: Checkpoint 112→24, E2-284: Observations 105→26 |
-| ARC-004 | SkillAtomization | **Active** | ~~E2-283~~, ~~E2-284~~, E2-285: Prune verbose skills |
+| ARC-004 | SkillAtomization | **Complete** | ~~E2-283~~, ~~E2-284~~, ~~E2-285~~: Prune verbose skills |
 | ARC-005 | SoftEnforcement | **Complete** | E2-286/287/288: Observability + warnings (Session 190) |
 | ARC-006 | WorkUniversality | Planned | Work items universal - type is field, not prefix (S190) |
 | ARC-007 | MultiPartPlans | Planned | All work types have plans; plans can be multi-part (S190) |
+| ARC-008 | JustfileAudit | Planned | 70 recipes need audit/organization; missing `new-investigation` recipe (S193) |
+| ARC-009 | SessionStateCascade | **Active** | INV-065: Hook cascade for live session_state (S193) |
 
 ---
 
@@ -72,9 +74,9 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
 
 - [ ] Category field drives routing (not ID prefix)
 - [x] Templates simplified (checkpoint 112→24 lines, observations 105→26 lines)
-- [x] Skills decomposed into single-responsibility units (E2-283 DONE, E2-284 DONE, E2-285 pending)
-- [ ] UNIX philosophy applied: each skill does one thing well
-- [ ] Skill template defaults to single-phase (E2-285)
+- [x] Skills decomposed into single-responsibility units (E2-283 DONE, E2-284 DONE, E2-285 DONE)
+- [x] UNIX philosophy applied: each skill does one thing well
+- [x] Skill template defaults to single-phase (E2-285 DONE)
 - [x] Soft enforcement operational (E2-286/287/288 DONE Session 190)
 
 ---

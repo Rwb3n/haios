@@ -1,18 +1,22 @@
 ---
 template: investigation
-status: active
+status: complete
 date: 2026-01-15
 backlog_id: INV-065
 title: Session State Cascade Architecture
 author: Hephaestus
 session: 193
-lifecycle_phase: hypothesize
+lifecycle_phase: conclude
 spawned_by: null
 related: []
-memory_refs: []
+memory_refs:
+- 81383
+- 81386
+- 81389
+- 81392
 version: '2.0'
 generated: 2025-12-22
-last_updated: '2026-01-15T23:31:58'
+last_updated: '2026-01-16T20:46:20'
 ---
 # Investigation: Session State Cascade Architecture
 
@@ -169,18 +173,18 @@ last_updated: '2026-01-15T23:31:58'
      MUST invoke investigation-agent for each major step -->
 
 ### Phase 1: Evidence Gathering
-1. [ ] Query memory for prior learnings on topic
-2. [ ] Search codebase for relevant patterns (Grep/Glob)
-3. [ ] Read identified files and document findings
+1. [x] Query memory for prior learnings on topic (concepts 78846, 79130, 81303, 81329)
+2. [x] Search codebase for relevant patterns (post_tool_use.py, settings.local.json, status.py)
+3. [x] Read identified files and document findings
 
 ### Phase 2: Hypothesis Testing
-4. [ ] Test H1: [Specific actions]
-5. [ ] Test H2: [Specific actions]
-6. [ ] Test H3: [Specific actions]
+4. [x] Test H1: Read post_tool_use.py, settings.local.json hook matcher - Skill NOT in list
+5. [x] Test H2: Grep session_state consumers (21 files), verify defensive checks
+6. [x] Test H3: Grep skills for "just set-cycle" (no matches), verify phase ambiguity
 
 ### Phase 3: Synthesis
-7. [ ] Compile evidence table
-8. [ ] Determine verdict for each hypothesis
+7. [x] Compile evidence table
+8. [x] Determine verdict for each hypothesis
 9. [ ] Identify spawned work items
 
 ---
@@ -194,19 +198,28 @@ last_updated: '2026-01-15T23:31:58'
 
 | Finding | Source (file:line) | Supports Hypothesis | Notes |
 |---------|-------------------|---------------------|-------|
-| [What was found] | `path/file.py:123-145` | H1/H2/H3 | [Context] |
+| PostToolUse hook matcher excludes Skill | `.claude/settings.local.json:130` | H1 No | Only Edit/Write/Bash/Read/etc. - no Skill |
+| INV-062: "No hook fires for Skill tool" | `INV-062:252` | H1 No | Skills are markdown reads, not tool events |
+| INV-062: "Skill() is not hookable" | `INV-062:197` | H1 No | Claude reads markdown directly |
+| session_state structure exists with nulls | `.claude/haios-status-slim.json:27-32` | H2 Yes | Schema designed for extension |
+| status.py generates hardcoded nulls | `.claude/lib/status.py:940-945` | H2 Yes | Write path missing, not schema |
+| UserPromptSubmit has defensive check | `.claude/hooks/hooks/user_prompt_submit.py:147-149` | H2 Yes | `if "session_state" not in slim: return None` |
+| Skills do NOT contain `just set-cycle` | Grep .claude/skills - no matches | H3 Yes | Design exists but not implemented |
+| `just set-cycle` recipe works | `justfile:244-245` | H3 Yes | JSON manipulation via Python |
+| EPOCH.md: "recipe call in skill step" | `.claude/haios/epochs/E2/EPOCH.md:240` | H3 Yes | Architecture endorses pattern |
 
 ### Memory Evidence
 
 | Concept ID | Content | Supports Hypothesis | Notes |
 |------------|---------|---------------------|-------|
-| [ID] | [Summary] | H1/H2/H3 | [How it applies] |
+| 78846 | PostToolUse cascade detection logs events but never acts | H1 partial | Cascade triggers logged, not actioned |
+| 81329 | CycleRunner must be stateless, hooks can't track state | H1 No | Confirms hooks are wrong locus |
+| 81303 | Investigation into session state tracking (INV-062) | All | Prior work foundation |
+| 80783 | PostToolUse handler can bridge this gap | H3 Yes | But for non-Skill tools |
 
 ### External Evidence (if applicable)
 
-| Source | Finding | Supports Hypothesis | URL/Reference |
-|--------|---------|---------------------|---------------|
-| [Doc/Article] | [Summary] | H1/H2/H3 | [Link] |
+**SKIPPED:** Internal architecture investigation, no external sources needed.
 
 ---
 
@@ -221,33 +234,73 @@ last_updated: '2026-01-15T23:31:58'
 
 | Hypothesis | Verdict | Key Evidence | Confidence |
 |------------|---------|--------------|------------|
-| H1 | Confirmed/Refuted/Inconclusive | [1-2 sentence summary with source] | [High/Med/Low] |
-| H2 | Confirmed/Refuted/Inconclusive | [1-2 sentence summary with source] | [High/Med/Low] |
-| H3 | Confirmed/Refuted/Inconclusive | [1-2 sentence summary with source] | [High/Med/Low] |
+| H1 (PostToolUse detects Skill) | **Refuted** | Skill NOT in hook matcher (`settings.local.json:130`). INV-062 confirmed: "No hook fires for Skill tool" - Skills are markdown reads, not tool events. | High |
+| H2 (session_state extensible) | **Confirmed** | Schema exists (`haios-status-slim.json:27-32`), consumers use defensive checks (`user_prompt_submit.py:147-149`). Adding active_queue is safe. | High |
+| H3 (Phase needs explicit markers) | **Confirmed** | Skills do NOT call `just set-cycle` (Grep: no matches). INV-062 designed this but never implemented. Tool patterns ambiguous across phases. | High |
 
 ### Detailed Findings
 
-#### [Finding 1 Title]
+#### Finding 1: Skill() Is Fundamentally Unhookable
 
 **Evidence:**
+```json
+// settings.local.json:128-137
+"PostToolUse": [{
+  "matcher": "Edit|Write|MultiEdit|Bash|Read|Grep|Glob|mcp__haios-memory__ingester_ingest",
+  // Note: NO "Skill" in this list
+}]
 ```
-[Code snippet, query result, or observation with source reference]
-```
 
-**Analysis:** [What this evidence means]
+From INV-062:197:
+> "Skills are markdown files in .claude/skills/"
+> "Skill(skill="X") causes Claude to read the markdown file"
+> "No PreToolUse/PostToolUse hook fires for Skill tool"
 
-**Implication:** [What action or design this suggests]
+**Analysis:** Skills are not tools in the Claude Code hook sense. When agent invokes `Skill(skill="implementation-cycle")`, Claude reads the markdown file. This is a Read operation, not a distinct tool event. Hooks cannot distinguish "Read skill file" from "Read any file."
 
-#### [Finding 2 Title]
+**Implication:** PostToolUse-based cascade is architecturally impossible. Cascade MUST use explicit recipe calls within skill prose.
+
+#### Finding 2: session_state Schema Is Safely Extensible
 
 **Evidence:**
-```
-[Code snippet, query result, or observation]
+```json
+// haios-status-slim.json:27-32 - Current schema
+"session_state": {
+    "active_cycle": null,
+    "current_phase": null,
+    "work_id": null,
+    "entered_at": null
+}
 ```
 
-**Analysis:** [What this evidence means]
+```python
+# user_prompt_submit.py:147-149 - Defensive consumer
+if "session_state" not in slim:
+    return None  # Backward compat
+```
 
-**Implication:** [What action or design this suggests]
+**Analysis:** session_state schema was designed in E2-286 with nullability built in. All consumers check key existence before access. Adding active_queue or phase_history will not break existing functionality.
+
+**Implication:** Schema extension is safe. Implementation work is adding the write path, not modifying schema.
+
+#### Finding 3: Recipe Calls Are The Only Viable Cascade Mechanism
+
+**Evidence:**
+```bash
+# justfile:244-245 - Working recipe
+set-cycle cycle phase work_id:
+    @python -c "import json; from datetime import datetime; p='.claude/haios-status-slim.json'; ..."
+```
+
+From EPOCH.md:240:
+> "If it needs to reliably happen, make it a recipe call in a skill step"
+
+From INV-062 (designed but NOT implemented):
+> "Skill markdown includes Python callout at start: `just set-cycle {cycle_id} {phase} {work_id}`"
+
+**Analysis:** Architecture is sound - just never implemented. Skills need Bash calls to `just set-cycle` at phase entry points. This is "soft enforcement" - relies on Claude following instructions but creates signal path for observability.
+
+**Implication:** Implementation needs to add `just set-cycle` calls to skill prose at skill entry, phase transitions, and skill exit.
 
 ---
 
@@ -256,38 +309,82 @@ last_updated: '2026-01-15T23:31:58'
 <!-- If investigation produces architectural designs, document them here
      SKIP this section if investigation is pure discovery with no design outputs -->
 
-### Schema Design (if applicable)
+### Schema Design: Extended session_state
 
 ```yaml
-# [Name of schema]
-field_name: type
-  description: [What this field does]
+# Extended session_state in haios-status-slim.json
+session_state:
+  active_cycle: string | null     # e.g., "implementation-cycle"
+  current_phase: string | null    # e.g., "PLAN", "DO", "CHECK", "DONE"
+  work_id: string | null          # e.g., "E2-291"
+  entered_at: ISO8601 | null      # When cycle was entered
+  active_queue: string | null     # NEW: e.g., "default", "governance"
+  phase_history:                  # NEW: Recent phase transitions (last 5)
+    - phase: string
+      at: ISO8601
 ```
 
-### Mapping Table (if applicable)
-
-| Source | Target | Relationship | Notes |
-|--------|--------|--------------|-------|
-| [A] | [B] | [How A relates to B] | |
-
-### Mechanism Design (if applicable)
+### Mechanism Design: Skill Prose Recipe Calls
 
 ```
-TRIGGER: [What initiates the mechanism]
+TRIGGER: Skill invocation / phase transition
 
-ACTION:
-    1. [Step 1]
-    2. [Step 2]
-    3. [Step 3]
+PATTERN FOR CYCLE SKILLS:
 
-OUTCOME: [What results from the mechanism]
+# skill-name/SKILL.md
+
+## Entry (always first)
+```bash
+just set-cycle {skill-name} {first_phase} {work_id}
+just set-queue {queue_name}  # if survey-cycle selected a queue
 ```
+
+## PHASE_1 Phase
+[phase content]
+
+**Exit Gate:** [gate criteria]
+```bash
+just set-cycle {skill-name} {next_phase} {work_id}
+```
+
+## PHASE_N Phase (final)
+[phase content]
+
+**On Complete:**
+```bash
+just clear-cycle
+```
+
+OUTCOME:
+- session_state.active_cycle = "{skill-name}"
+- session_state.current_phase = "{current_phase}"
+- session_state.active_queue = "{queue}" (if set)
+- UserPromptSubmit displays cycle/phase context
+- Observability: agents see "currently in X cycle, Y phase"
+```
+
+### Mapping Table: Skill Entry Points Needing Recipe Calls
+
+| Skill | Entry Point | Phase Transitions | Exit Point |
+|-------|-------------|-------------------|------------|
+| coldstart | N/A (utility) | N/A | N/A |
+| survey-cycle | After queue selection | GATHER→SELECT | Before routing-gate |
+| routing-gate | N/A (bridge) | N/A | N/A |
+| implementation-cycle | On invocation | PLAN→DO→CHECK→DONE | After CHAIN or await |
+| investigation-cycle | On invocation | HYPOTHESIZE→EXPLORE→CONCLUDE | After CHAIN or await |
+| close-work-cycle | On invocation | VALIDATE→OBSERVE→ARCHIVE | After MEMORY |
+| work-creation-cycle | On invocation | VERIFY→POPULATE→READY | After READY |
 
 ### Key Design Decisions
 
 | Decision | Choice | Rationale (WHY) |
 |----------|--------|-----------------|
-| [Decision point] | [What was chosen] | [Why this choice - most important part] |
+| Cascade via skill prose | Bash `just set-cycle` calls in markdown | PostToolUse cannot intercept Skill() - only viable mechanism |
+| Schema extension | Add active_queue, phase_history | Enables queue context propagation (E2-291 gap) and phase observability |
+| Phase markers | Explicit in skill prose | Tool patterns ambiguous - same tools in PLAN/DO/CHECK |
+| phase_history limit | Last 5 entries | Prevent unbounded growth; enough for debugging |
+| Clear-cycle timing | At skill exit or chain | Prevents state accumulation across context windows |
+| Soft enforcement | Warn, don't block | Hard enforcement impossible (Skill unhookable); warnings create affordance |
 
 ---
 
@@ -301,20 +398,18 @@ OUTCOME: [What results from the mechanism]
 
 ### Immediate (Can implement now)
 
-- [ ] **{ID}: {Title}**
-  - Description: [What this item does]
-  - Fixes: [What problem from investigation this addresses]
-  - Spawned via: `/new-plan {ID} "{Title}"`
+- [x] **E2-292: Wire set-cycle Recipe Calls into Cycle Skills**
+  - Description: Add `just set-cycle`, `just set-queue`, `just clear-cycle` calls to cycle skill prose at entry, phase transitions, and exit
+  - Fixes: session_state dead code, queue context propagation, phase observability
+  - Created: `docs/work/active/E2-292/WORK.md`
 
 ### Future (Requires more work first)
 
-- [ ] **{ID}: {Title}**
-  - Description: [What this item does]
-  - Blocked by: [What must happen first]
+- N/A - all spawned work is immediately implementable
 
 ### Not Spawned Rationale (if no items)
 
-**RATIONALE:** [Why this investigation produced no spawned items - rare, explain thoroughly]
+N/A - item spawned above.
 
 ---
 
@@ -325,7 +420,7 @@ OUTCOME: [What results from the mechanism]
 | Session | Date | Phase | Progress | Notes |
 |---------|------|-------|----------|-------|
 | 193 | 2026-01-15 | HYPOTHESIZE | Started | Initial context and hypotheses |
-| - | - | - | - | No additional sessions yet |
+| 194 | 2026-01-16 | EXPLORE→CONCLUDE | Complete | Full investigation completed |
 
 ---
 
@@ -336,20 +431,20 @@ OUTCOME: [What results from the mechanism]
 
 | Item to Verify | Expected State | Verified | Notes |
 |----------------|---------------|----------|-------|
-| Hypothesis verdicts documented | All H1-HN have verdict | [ ] | |
-| Evidence has sources | All findings have file:line or concept ID | [ ] | |
-| Spawned items created | Items exist in backlog or via /new-* | [ ] | |
-| Memory stored | ingester_ingest called, memory_refs populated | [ ] | |
+| Hypothesis verdicts documented | All H1-HN have verdict | [x] | H1 Refuted, H2 Confirmed, H3 Confirmed |
+| Evidence has sources | All findings have file:line or concept ID | [x] | All evidence sourced |
+| Spawned items created | Items exist in backlog or via /new-* | [x] | E2-292 created |
+| Memory stored | ingester_ingest called, memory_refs populated | [x] | 81383, 81386, 81389, 81392 |
 
 **Binary Verification (Yes/No):**
 
 | Question | Answer | If NO, explain |
 |----------|--------|----------------|
-| Did you invoke investigation-agent for EXPLORE phase? | [Yes/No] | |
-| Are all evidence sources cited with file:line or concept ID? | [Yes/No] | |
-| Were all hypotheses tested with documented verdicts? | [Yes/No] | |
-| Are spawned items created (not just listed)? | [Yes/No] | |
-| Is memory_refs populated in frontmatter? | [Yes/No] | |
+| Did you invoke investigation-agent for EXPLORE phase? | Yes | |
+| Are all evidence sources cited with file:line or concept ID? | Yes | |
+| Were all hypotheses tested with documented verdicts? | Yes | |
+| Are spawned items created (not just listed)? | Yes | E2-292 at docs/work/active/E2-292/WORK.md |
+| Is memory_refs populated in frontmatter? | Yes | 81383, 81386, 81389, 81392 |
 
 ---
 
@@ -358,18 +453,18 @@ OUTCOME: [What results from the mechanism]
 <!-- CONCLUDE PHASE: Complete ALL items before /close -->
 
 ### Required (MUST complete)
-- [ ] **Findings synthesized** - Answer to objective documented in Findings section
-- [ ] **Evidence sourced** - All findings have file:line or concept ID citations
-- [ ] **Hypotheses resolved** - All hypotheses have Confirmed/Refuted/Inconclusive verdict
-- [ ] **Spawned items created** - Via /new-* commands with `spawned_by` field (or rationale if none)
-- [ ] **Memory stored** - `ingester_ingest` called with findings summary
-- [ ] **memory_refs populated** - Frontmatter updated with concept IDs
-- [ ] **lifecycle_phase updated** - Set to `conclude`
-- [ ] **Ground Truth Verification complete** - All items checked above
+- [x] **Findings synthesized** - Answer to objective documented in Findings section
+- [x] **Evidence sourced** - All findings have file:line or concept ID citations
+- [x] **Hypotheses resolved** - All hypotheses have Confirmed/Refuted/Inconclusive verdict
+- [x] **Spawned items created** - E2-292 created with `spawned_by: INV-065`
+- [x] **Memory stored** - `ingester_ingest` called with findings summary
+- [x] **memory_refs populated** - Frontmatter updated with concept IDs (81383, 81386, 81389, 81392)
+- [x] **lifecycle_phase updated** - Set to `conclude`
+- [x] **Ground Truth Verification complete** - All items checked above
 
 ### Optional
-- [ ] Design outputs documented (if applicable)
-- [ ] Session progress updated (if multi-session)
+- [x] Design outputs documented (schema + mechanism design)
+- [x] Session progress updated (S193 HYPOTHESIZE, S194 EXPLORE→CONCLUDE)
 
 ---
 
