@@ -24,7 +24,16 @@ node_history:
   entered: 2026-01-03 23:21:49
   exited: null
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 81419
+- 81420
+- 81421
+- 81422
+- 81423
+- 81424
+- 81425
+- 81427
+- 81428
 documents:
   investigations: []
   plans: []

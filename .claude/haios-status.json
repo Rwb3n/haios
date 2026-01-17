@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-17T14:01:33",
+    "generated": "2026-01-17T14:56:45",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 196,
-        "current_session": 197,
+        "prior_session": 197,
+        "current_session": 198,
         "prior_date": "2026-01-17",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 81230,
-        "entities": 9033,
+        "concepts": 81243,
+        "entities": 9036,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -2487,6 +2487,15 @@
             "status": null,
             "date": "2026-01-17",
             "last_updated": "2026-01-17T12:27:05",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-17-03-SESSION-198-inv-067-closure-and-epoch2-readme-styling.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-17",
+            "last_updated": "2026-01-17T14:17:02",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6283,9 +6292,9 @@
         }
     ],
     "workspace": {
-        "total_files": 434,
+        "total_files": 435,
         "by_template": {
-            "checkpoint": 187,
+            "checkpoint": 188,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -6297,7 +6306,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 23,
+            "unknown": 24,
             "draft": 2,
             "approved": 6,
             "ready": 1,

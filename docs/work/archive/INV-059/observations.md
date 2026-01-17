@@ -2,12 +2,12 @@
 template: observations
 work_id: INV-059
 status: pending
-triage_status: pending
+triage_status: triaged
 captured_by: null
 captured_session: null
 version: '1.1'
 generated: '2026-01-08'
-last_updated: '2026-01-08T18:47:39'
+last_updated: '2026-01-17T14:52:39'
 ---
 # Observations: INV-059
 

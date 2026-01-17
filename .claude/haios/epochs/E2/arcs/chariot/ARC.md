@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-17T12:06:50
+# System Auto: last updated on: 2026-01-17T15:15:01
 # Arc: Chariot
 
 ## Arc Definition
@@ -51,6 +51,7 @@ The 9 Chariot modules that make HAIOS portable and LLM-agnostic:
 | ARC-001 | ModuleWiring | **Complete** | E2-279: WorkEngine delegates to satellites |
 | ARC-002 | BoundaryEnforcement | Planned | Enforce module boundaries (hooks?) |
 | ARC-003 | SDKMigration | Vision | Claude Agent SDK enables hard enforcement (S25, Epoch 4) |
+| ARC-006 | CycleDelegation | **Active** | INV-068: Subagents execute cycles, main track routes (S199) |
 | ARC-004 | PathAuthority | Planned | Recipes own paths - agent doesn't hardcode (S190) - **INV-041 exists** |
 | ARC-005 | FileTypeLocking | Planned | PreToolUse enforces what file types go where (S190) |
 
@@ -73,5 +74,7 @@ The 9 Chariot modules that make HAIOS portable and LLM-agnostic:
 - E2-293: session_state schema extension (active_queue, phase_history)
 - INV-065: Session State Cascade Architecture (Session 194)
 - INV-062: Session State Tracking (enforcement gaps)
+- INV-068: Cycle Delegation Architecture (Session 199)
 - Memory 81194-81210: Decomposition learnings
 - Memory 81309-81324: SDK discovery
+- Memory 81433-81435: Session boundary pattern (S199)

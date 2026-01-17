@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-17T14:08:02
+# System Auto: last updated on: 2026-01-17T15:14:43
 # Arc: Form
 
 ## Arc Definition
@@ -65,7 +65,7 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
 | ARC-005 | SoftEnforcement | **Complete** | E2-286/287/288: Observability + warnings (Session 190) |
 | ARC-006 | WorkUniversality | Planned | Work items universal - type is field, not prefix (S190) |
 | ARC-007 | MultiPartPlans | Planned | All work types have plans; plans can be multi-part (S190) |
-| ARC-008 | JustfileAudit | Planned | 70 recipes need audit/organization; missing `new-investigation` recipe (S193) |
+| ARC-008 | JustfileAudit | **Active** | 70 recipes need audit/organization; `new-investigation` recipe added (S199) |
 | ARC-009 | SessionStateCascade | **Complete** | INV-065→E2-293/294/295: All skills wired with set-cycle (S196) |
 | ARC-010 | TriageOperationalization | **Active** | E2-296: observation-triage-cycle exists but isn't triggered (INV-067 S198) |
 
@@ -107,3 +107,4 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
 - Memory 81343-81350: Session 190 soft enforcement implementation
 - Memory 81396-81401: Session 195 plan decomposition learnings
 - Memory 81412-81418: INV-067 closure - "re-discovery reveals process gaps" pattern (S198)
+- Memory 81433-81435: Session boundary pattern - planning/doing split (S199)

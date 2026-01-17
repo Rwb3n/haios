@@ -2,10 +2,10 @@
 template: work_item
 id: E2-296
 title: Observation Triage Batch - Chariot Arc
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-17
-closed: null
+closed: '2026-01-17'
 milestone: null
 priority: medium
 effort: medium
@@ -22,7 +22,11 @@ node_history:
   entered: 2026-01-17 14:00:07
   exited: null
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 81429
+- 81430
+- 81431
+- 81432
 operator_decisions: []
 documents:
   investigations: []
@@ -30,7 +34,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-17
-last_updated: '2026-01-17T14:00:49'
+last_updated: '2026-01-17T14:54:19'
 ---
 # WORK-E2-296: Observation Triage Batch - Chariot Arc
 
@@ -70,9 +74,9 @@ Work item in BACKLOG node. Awaiting prioritization.
      Tests verify code works. Deliverables verify scope is complete.
 -->
 
-- [ ] Run observation-triage-cycle on archived Chariot-related work items
-- [ ] Triage each pending observation: promote to backlog / dismiss / defer
-- [ ] Document triage decisions for audit trail
+- [x] Run observation-triage-cycle on archived Chariot-related work items
+- [x] Triage each pending observation: promote to backlog / dismiss / defer
+- [x] Document triage decisions for audit trail
 
 ---
 
@@ -80,6 +84,17 @@ Work item in BACKLOG node. Awaiting prioritization.
 
 ### 2026-01-17 - Created (Session 198)
 - Initial creation
+
+### 2026-01-17 - Populated (Session 199)
+- work-creation-cycle VERIFY/POPULATE/READY complete
+- Validated against INV-067 Design Outputs (no design outputs - pure verification investigation)
+- Deliverables confirmed: triage scope covers 15 observations from archived Chariot-related work
+
+### 2026-01-17 - Completed (Session 199)
+- Triaged 35 observations across 12 archived work items
+- Results: 25 DISMISS, 5 MEMORY (concepts 81419-81428), 3 SPAWN:WORK (E2-298, E2-299, E2-300)
+- All observations.md files updated to triage_status: triaged
+- `just triage-observations` returns 0 pending
 
 ---
 

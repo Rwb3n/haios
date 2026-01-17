@@ -2,12 +2,12 @@
 template: observations
 work_id: E2-238
 status: pending
-triage_status: pending
+triage_status: triaged
 captured_by: null
 captured_session: null
 version: '1.1'
 generated: '2026-01-05'
-last_updated: '2026-01-05T20:57:37'
+last_updated: '2026-01-17T14:51:53'
 ---
 # Observations: E2-238
 
