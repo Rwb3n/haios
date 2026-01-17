@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-15T21:23:05
+# System Auto: last updated on: 2026-01-16T21:38:09
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -244,9 +244,14 @@ session-end session:
 set-cycle cycle phase work_id:
     @python -c "import json; from datetime import datetime; p='.claude/haios-status-slim.json'; d=json.load(open(p)); d['session_state']={'active_cycle':'{{cycle}}','current_phase':'{{phase}}','work_id':'{{work_id}}','entered_at':datetime.now().isoformat()}; json.dump(d,open(p,'w'),indent=4); print(f'Set: {{cycle}}/{{phase}}/{{work_id}}')"
 
-# Clear session_state after cycle exit (E2-288)
+# Clear session_state after cycle exit (E2-288, E2-293)
 clear-cycle:
-    @python -c "import json; p='.claude/haios-status-slim.json'; d=json.load(open(p)); d['session_state']={'active_cycle':None,'current_phase':None,'work_id':None,'entered_at':None}; json.dump(d,open(p,'w'),indent=4); print('Cleared session_state')"
+    @python -c "import json; p='.claude/haios-status-slim.json'; d=json.load(open(p)); d['session_state']={'active_cycle':None,'current_phase':None,'work_id':None,'entered_at':None,'active_queue':None,'phase_history':[]}; json.dump(d,open(p,'w'),indent=4); print('Cleared session_state')"
+
+# Set active_queue in session_state (E2-293)
+# Usage: just set-queue governance
+set-queue queue_name:
+    @python -c "import json; p='.claude/haios-status-slim.json'; d=json.load(open(p)); d['session_state']['active_queue']='{{queue_name}}'; json.dump(d,open(p,'w'),indent=4); print(f'Set queue: {{queue_name}}')"
 
 # =============================================================================
 # PLAN TREE RECIPES (E2-084)

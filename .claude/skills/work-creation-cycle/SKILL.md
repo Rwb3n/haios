@@ -5,7 +5,7 @@ description: HAIOS Work Creation Cycle for structured work item population. Use 
 recipes:
 - work
 generated: 2025-12-25
-last_updated: '2026-01-15T20:44:15'
+last_updated: '2026-01-17T11:59:42'
 ---
 # Work Creation Cycle
 
@@ -34,6 +34,11 @@ VERIFY --> POPULATE --> READY --> CHAIN
 
 ### 1. VERIFY Phase
 
+**On Entry:**
+```bash
+just set-cycle work-creation-cycle VERIFY {work_id}
+```
+
 **Goal:** Confirm work file was created and is valid.
 
 **Actions:**
@@ -52,6 +57,11 @@ VERIFY --> POPULATE --> READY --> CHAIN
 ---
 
 ### 2. POPULATE Phase
+
+**On Entry:**
+```bash
+just set-cycle work-creation-cycle POPULATE {work_id}
+```
 
 **Goal:** Fill in essential work item fields.
 
@@ -103,6 +113,11 @@ Result: Infrastructure built, but no governance integration.
 
 ### 3. READY Phase
 
+**On Entry:**
+```bash
+just set-cycle work-creation-cycle READY {work_id}
+```
+
 **Goal:** Validate work item is actionable.
 
 **Guardrails (MUST follow - E2-191):**
@@ -126,6 +141,11 @@ Result: Infrastructure built, but no governance integration.
 ---
 
 ### 4. CHAIN Phase (Post-READY)
+
+**On Entry:**
+```bash
+just set-cycle work-creation-cycle CHAIN {work_id}
+```
 
 **Goal:** Route to appropriate next cycle based on confidence.
 

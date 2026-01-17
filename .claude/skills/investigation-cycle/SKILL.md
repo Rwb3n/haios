@@ -6,7 +6,7 @@ description: HAIOS Investigation Cycle for structured research and discovery. Us
 recipes:
 - inv
 generated: 2025-12-22
-last_updated: '2026-01-12T01:31:48'
+last_updated: '2026-01-16T22:00:54'
 ---
 # Investigation Cycle
 
@@ -49,6 +49,11 @@ HYPOTHESIZE --> EXPLORE --> CONCLUDE --> CHAIN
 
 ### 1. HYPOTHESIZE Phase
 
+**On Entry:**
+```bash
+just set-cycle investigation-cycle HYPOTHESIZE {work_id}
+```
+
 **Goal:** Verify investigation exists and is ready for exploration.
 
 **Actions:**
@@ -71,6 +76,11 @@ HYPOTHESIZE --> EXPLORE --> CONCLUDE --> CHAIN
 ---
 
 ### 2. EXPLORE Phase
+
+**On Entry:**
+```bash
+just set-cycle investigation-cycle EXPLORE {work_id}
+```
 
 **Goal:** Execute investigation steps and document findings.
 
@@ -100,6 +110,11 @@ HYPOTHESIZE --> EXPLORE --> CONCLUDE --> CHAIN
 
 ### 3. CONCLUDE Phase
 
+**On Entry:**
+```bash
+just set-cycle investigation-cycle CONCLUDE {work_id}
+```
+
 **Goal:** Synthesize findings and spawn work items.
 
 **Actions:**
@@ -120,6 +135,11 @@ HYPOTHESIZE --> EXPLORE --> CONCLUDE --> CHAIN
 ---
 
 ### 4. CHAIN Phase (Post-CONCLUDE)
+
+**On Entry:**
+```bash
+just set-cycle investigation-cycle CHAIN {work_id}
+```
 
 **Goal:** Close investigation and route to next work item.
 
@@ -144,6 +164,11 @@ HYPOTHESIZE --> EXPLORE --> CONCLUDE --> CHAIN
 - [ ] Investigation closed via /close
 - [ ] Next work item identified (or none available)
 - [ ] Appropriate cycle skill invoked (or awaiting operator)
+
+**On Complete:**
+```bash
+just clear-cycle
+```
 
 **Tools:** /close, Bash(just ready), Read, Skill(routing-gate)
 

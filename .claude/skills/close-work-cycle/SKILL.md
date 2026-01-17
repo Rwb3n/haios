@@ -6,7 +6,7 @@ recipes:
 - close-work
 - update-status
 generated: 2025-12-25
-last_updated: '2026-01-12T01:27:59'
+last_updated: '2026-01-17T11:58:58'
 ---
 # Close Work Cycle
 
@@ -51,6 +51,11 @@ This skill defines the VALIDATE-ARCHIVE-MEMORY cycle for closing work items with
 
 ### 1. VALIDATE Phase
 
+**On Entry:**
+```bash
+just set-cycle close-work-cycle VALIDATE {work_id}
+```
+
 **Goal:** Verify work item meets Definition of Done criteria.
 
 **Guardrails (MUST follow):**
@@ -76,6 +81,11 @@ This skill defines the VALIDATE-ARCHIVE-MEMORY cycle for closing work items with
 ---
 
 ### 2. ARCHIVE Phase
+
+**On Entry:**
+```bash
+just set-cycle close-work-cycle ARCHIVE {work_id}
+```
 
 **Goal:** Update work item status to complete.
 
@@ -103,6 +113,11 @@ This skill defines the VALIDATE-ARCHIVE-MEMORY cycle for closing work items with
 ---
 
 ### 3. MEMORY Phase
+
+**On Entry:**
+```bash
+just set-cycle close-work-cycle MEMORY {work_id}
+```
 
 **Goal:** Store closure summary to memory and verify governance events.
 
@@ -141,6 +156,11 @@ This skill defines the VALIDATE-ARCHIVE-MEMORY cycle for closing work items with
 
 ### 4. CHAIN Phase (Post-MEMORY)
 
+**On Entry:**
+```bash
+just set-cycle close-work-cycle CHAIN {work_id}
+```
+
 **Goal:** Route to next work item.
 
 **Actions:**
@@ -163,6 +183,11 @@ This skill defines the VALIDATE-ARCHIVE-MEMORY cycle for closing work items with
 **Exit Criteria:**
 - [ ] Next work item identified (or none available)
 - [ ] Appropriate cycle skill invoked (or awaiting operator)
+
+**On Complete:**
+```bash
+just clear-cycle
+```
 
 **Tools:** Bash(just ready), Read, Skill(routing-gate)
 

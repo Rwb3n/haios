@@ -6,7 +6,7 @@ description: HAIOS Implementation Cycle for structured work item implementation.
 recipes:
 - node
 generated: 2025-12-22
-last_updated: '2026-01-15T20:35:37'
+last_updated: '2026-01-16T21:51:18'
 ---
 # Implementation Cycle
 
@@ -38,6 +38,11 @@ PLAN --> DO --> CHECK --> DONE --> CHAIN
 ```
 
 ### 1. PLAN Phase
+
+**On Entry:**
+```bash
+just set-cycle implementation-cycle PLAN {work_id}
+```
 
 **Goal:** Verify plan exists and is ready for implementation.
 
@@ -96,6 +101,11 @@ This validates plan completeness and file scope. DO phase is blocked until prefl
 
 ### 2. DO Phase
 
+**On Entry:**
+```bash
+just set-cycle implementation-cycle DO {work_id}
+```
+
 **Goal:** Implement the design from the plan.
 
 **Guardrails (SHOULD follow):**
@@ -146,6 +156,11 @@ This verifies implementation aligns with Detailed Design. CHECK phase is blocked
 ---
 
 ### 3. CHECK Phase
+
+**On Entry:**
+```bash
+just set-cycle implementation-cycle CHECK {work_id}
+```
 
 **Goal:** Verify implementation meets quality bar.
 
@@ -216,6 +231,11 @@ foresight_prep:
 
 ### 4. DONE Phase
 
+**On Entry:**
+```bash
+just set-cycle implementation-cycle DONE {work_id}
+```
+
 **Goal:** Complete implementation and prepare for closure.
 
 **Actions:**
@@ -233,6 +253,11 @@ foresight_prep:
 ---
 
 ### 5. CHAIN Phase (Post-DONE)
+
+**On Entry:**
+```bash
+just set-cycle implementation-cycle CHAIN {work_id}
+```
 
 **Goal:** Close work item and route to next work item.
 
@@ -257,6 +282,11 @@ foresight_prep:
 - [ ] Work item closed via /close
 - [ ] Next work item identified (or none available)
 - [ ] Appropriate cycle skill invoked (or awaiting operator)
+
+**On Complete:**
+```bash
+just clear-cycle
+```
 
 **Tools:** /close, Bash(just ready), Read, Skill(routing-gate)
 

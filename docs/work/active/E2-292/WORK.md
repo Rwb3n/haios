@@ -2,7 +2,7 @@
 template: work_item
 id: E2-292
 title: Wire set-cycle Recipe Calls into Cycle Skills
-status: active
+status: deferred
 owner: Hephaestus
 created: 2026-01-16
 closed: null
@@ -14,12 +14,18 @@ spawned_by: INV-065
 spawned_by_investigation: INV-065
 blocked_by: []
 blocks: []
-enables: []
+enables:
+- E2-293
+- E2-294
+- E2-295
 related:
 - E2-286
 - E2-287
 - E2-288
 - E2-291
+- E2-293
+- E2-294
+- E2-295
 current_node: backlog
 node_history:
 - node: backlog
@@ -34,7 +40,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-16
-last_updated: '2026-01-16T20:54:25'
+last_updated: '2026-01-16T21:12:43'
 ---
 # WORK-E2-292: Wire set-cycle Recipe Calls into Cycle Skills
 
@@ -95,6 +101,11 @@ Work item in BACKLOG node. Awaiting prioritization.
 
 ### 2026-01-16 - Created (Session 194)
 - Initial creation
+
+### 2026-01-16 - Deferred (Session 195)
+- Scope exceeded 3-file threshold (7 files)
+- Operator requested split into smaller PRs
+- Split into: E2-293 (schema), E2-294 (impl+inv cycles), E2-295 (survey+close+work cycles)
 
 ---
 

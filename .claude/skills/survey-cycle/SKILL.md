@@ -7,7 +7,7 @@ recipes:
 - ready
 - queue
 generated: 2026-01-11
-last_updated: '2026-01-15T21:29:51'
+last_updated: '2026-01-17T11:55:36'
 ---
 # Survey Cycle
 
@@ -24,6 +24,11 @@ Select work after coldstart. Invoked automatically or via `Skill(skill="survey-c
    - Alternatively: `just ready` for flat unordered list (backward compat)
    - Select top 3 from queue head
    - Present via `AskUserQuestion` (or auto-select if autonomous)
+
+**After queue selection:**
+```bash
+just set-queue {queue_name}
+```
 
 3. **Route**
    - Use routing decision table:
