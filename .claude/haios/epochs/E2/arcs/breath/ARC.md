@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-17T12:06:32
+# System Auto: last updated on: 2026-01-17T14:07:48
 # Arc: Breath
 
 ## Arc Definition
@@ -47,6 +47,7 @@ The rhythm of agent cognition: inhale (explore) and exhale (commit).
 | ARC-004 | PhaseAnnotation | Planned | Add [MAY]/[MUST] to all skill phases |
 | ARC-005 | BatchCycleExecution | Planned | Related work items: plan all → review → implement all (S190) |
 | ARC-006 | SessionStateWiring | **Complete** | E2-293/294/295: All skills call set-cycle/clear-cycle (S196) |
+| ARC-007 | ObservationTriageOperationalization | **Active** | E2-296: Triage happens but isn't triggered (INV-067 S198) |
 
 ---
 
@@ -81,6 +82,22 @@ Operator owns `/clear` and `/coldstart`. System handles the rest.
 
 ---
 
+## Session 198 Insight (INV-067)
+
+**Observation capture works. Observation triage doesn't happen.**
+
+INV-067 discovered that Session 197's observation extraction "re-discovered" 15 observations already captured in `docs/work/archive/*/observations.md`. The capture mechanism (close-work-cycle OBSERVE phase) works correctly. The gap is:
+
+1. **No trigger** - observation-triage-cycle exists (E2-218) but nothing invokes it
+2. **No schedule** - no session-end prompt or threshold routing to triage
+3. **Accumulation** - observations pile up without review
+
+**Pattern learned:** "Re-discovery" investigations reveal process gaps, not content gaps. When investigation "finds" existing things, the real finding is underutilized infrastructure.
+
+**Spawned work:** E2-296 (Observation Triage Batch - Chariot Arc)
+
+---
+
 ## References
 
 - S20: Pressure Dynamics (FOUNDATIONAL)
@@ -88,6 +105,9 @@ Operator owns `/clear` and `/coldstart`. System handles the rest.
 - E2-281: Checkpoint Loading Manifest Redesign
 - E2-282: Coldstart Hook Manifest Loading
 - E2-293/294/295: Session State Cascade Wiring (Session 196)
+- E2-296: Observation Triage Batch (Session 198, spawned by INV-067)
 - INV-065: Session State Cascade Architecture (Session 194)
+- INV-067: Observation Backlog Verification and Triage (Session 197-198)
 - Memory 81222-81266: Session 186 architecture correction
 - Memory 81396-81401: Session 195 plan decomposition learnings
+- Memory 81412-81418: INV-067 closure learnings (S198)
