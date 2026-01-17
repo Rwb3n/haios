@@ -1,15 +1,15 @@
 {
-    "generated": "2026-01-17T14:56:45",
+    "generated": "2026-01-17T15:40:31",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
-        "progress": 77,
-        "prior_progress": 77,
+        "progress": 79,
+        "prior_progress": 79,
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 197,
-        "current_session": 198,
+        "prior_session": 198,
+        "current_session": 199,
         "prior_date": "2026-01-17",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 81243,
-        "entities": 9036,
+        "concepts": 81259,
+        "entities": 9039,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -219,6 +219,7 @@
                 "INV-044"
             ],
             "complete": [
+                "E2-234",
                 "E2-151",
                 "E2-152",
                 "E2-163",
@@ -261,8 +262,8 @@
                 "INV-043",
                 "INV-044"
             ],
-            "progress": 77,
-            "prior_progress": 77,
+            "progress": 79,
+            "prior_progress": 79,
             "delta_source": null
         },
         "M7c-Governance": {
@@ -2496,6 +2497,15 @@
             "status": null,
             "date": "2026-01-17",
             "last_updated": "2026-01-17T14:17:02",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-17-04-SESSION-199-inv-068-spawn-and-session-boundary-discovery.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-17",
+            "last_updated": "2026-01-17T15:14:02",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6292,9 +6302,9 @@
         }
     ],
     "workspace": {
-        "total_files": 435,
+        "total_files": 436,
         "by_template": {
-            "checkpoint": 188,
+            "checkpoint": 189,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -6306,7 +6316,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 24,
+            "unknown": 25,
             "draft": 2,
             "approved": 6,
             "ready": 1,

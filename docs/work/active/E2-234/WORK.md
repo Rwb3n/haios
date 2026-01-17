@@ -2,10 +2,10 @@
 template: work_item
 id: E2-234
 title: Auto Session-Start in Coldstart
-status: active
+status: complete
 owner: Hephaestus
 created: 2025-12-30
-closed: null
+closed: '2026-01-17'
 milestone: M7b-WorkInfra
 priority: high
 effort: low
@@ -22,14 +22,18 @@ node_history:
   entered: 2025-12-30 20:18:39
   exited: null
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 81445
+- 81446
+- 81447
+- 81448
 documents:
   investigations: []
   plans: []
   checkpoints: []
 version: '1.0'
 generated: 2025-12-30
-last_updated: '2025-12-30T20:19:08'
+last_updated: '2026-01-17T15:39:32'
 ---
 # WORK-E2-234: Auto Session-Start in Coldstart
 
@@ -50,15 +54,15 @@ last_updated: '2025-12-30T20:19:08'
 
 ## Current State
 
-Work item created from INV-052 findings. Ready for implementation.
+COMPLETE. Coldstart.md Step 8 implements automated session-start. Verified working in Session 200.
 
 ---
 
 ## Deliverables
 
-- [ ] Update `.claude/commands/coldstart.md` to include automated session-start
-- [ ] Add step after "Read haios-status-slim.json" to run `just session-start N` where N = current_session + 1
-- [ ] Test coldstart with new automation
+- [x] Update `.claude/commands/coldstart.md` to include automated session-start
+- [x] Add step after "Read haios-status-slim.json" to run `just session-start N` where N = current_session + 1
+- [x] Test coldstart with new automation
 
 ---
 
@@ -66,6 +70,11 @@ Work item created from INV-052 findings. Ready for implementation.
 
 ### 2025-12-30 - Created (Session 150)
 - Initial creation
+
+### 2026-01-17 - Completed (Session 200)
+- Verified coldstart.md Step 8 implements automated session-start
+- Tested: Session 200 started successfully via `just session-start 200`
+- Note: Implementation predates work item closure - likely added during coldstart refactoring
 
 ---
 
