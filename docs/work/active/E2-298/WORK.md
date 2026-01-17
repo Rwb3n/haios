@@ -2,10 +2,10 @@
 template: work_item
 id: E2-298
 title: Consumer Migration to WorkEngine
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-17
-closed: null
+closed: '2026-01-17'
 milestone: null
 priority: medium
 effort: medium
@@ -22,7 +22,11 @@ node_history:
   entered: 2026-01-17 14:49:39
   exited: null
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 81458
+- 81459
+- 81460
+- 81461
 operator_decisions: []
 documents:
   investigations: []
@@ -30,7 +34,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-17
-last_updated: '2026-01-17T14:50:23'
+last_updated: '2026-01-17T15:48:04'
 ---
 # WORK-E2-298: Consumer Migration to WorkEngine
 
@@ -41,11 +45,16 @@ last_updated: '2026-01-17T14:50:23'
 
 ## Context
 
-**Problem:** WorkEngine (E2-242) is implemented but existing consumers still use the old work_item.py patterns. Specifically: plan_tree.py, node_cycle.py, and /close command need migration to use WorkEngine for full strangler fig completion.
+**Problem:** WorkEngine (E2-242) is implemented but test files still import the old work_item.py module. The observation mentioned "plan_tree.py, node_cycle.py, and /close command" but investigation reveals:
+- `plan_tree.py` doesn't exist
+- `node_cycle.py` provides hook-specific functionality (node transitions), not work item CRUD
+- `/close` is a markdown skill that chains to close-work-cycle, doesn't import Python
+
+Actual migration needed: Test files `test_work_item.py` and `test_close_work_item.py` still import from `work_item.py` instead of using WorkEngine.
 
 **Trigger:** E2-242 observations.md noted "Consumer migration work items" as future work.
 
-**Root Cause:** E2-242 scope was limited to WorkEngine implementation, not consumer migration.
+**Root Cause:** E2-242 scope was limited to WorkEngine implementation, not consumer migration. Observation was written before full analysis of actual consumers.
 
 ---
 
@@ -70,10 +79,10 @@ Work item in BACKLOG node. Awaiting prioritization.
      Tests verify code works. Deliverables verify scope is complete.
 -->
 
-- [ ] Migrate plan_tree.py to use WorkEngine
-- [ ] Migrate node_cycle.py to use WorkEngine
-- [ ] Migrate /close command to use WorkEngine
-- [ ] Verify no remaining imports from work_item.py
+- [ ] Migrate test_work_item.py to test WorkEngine methods instead of work_item.py
+- [ ] Migrate test_close_work_item.py to test WorkEngine methods instead of work_item.py
+- [ ] Add deprecation notice to work_item.py header
+- [ ] Verify no runtime (non-test) imports from work_item.py exist
 
 ---
 
@@ -88,3 +97,5 @@ Work item in BACKLOG node. Awaiting prioritization.
 
 - @docs/work/archive/E2-242/observations.md (source observation)
 - @docs/work/archive/E2-242/WORK.md (WorkEngine implementation)
+- @.claude/lib/work_item.py (old module to deprecate)
+- @.claude/haios/modules/work_engine.py (new module)

@@ -26,11 +26,12 @@ memory_refs: []
 operator_decisions: []
 documents:
   investigations: []
-  plans: []
+  plans:
+  - docs/work/active/E2-300/plans/PLAN.md
   checkpoints: []
 version: '1.0'
 generated: 2026-01-17
-last_updated: '2026-01-17T14:51:33'
+last_updated: '2026-01-17T16:13:59'
 ---
 # WORK-E2-300: ContextLoader S17.3 Spec Alignment
 

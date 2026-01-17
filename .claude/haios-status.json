@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-17T15:40:31",
+    "generated": "2026-01-17T16:06:58",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 198,
-        "current_session": 199,
+        "prior_session": 199,
+        "current_session": 200,
         "prior_date": "2026-01-17",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 81259,
-        "entities": 9039,
+        "concepts": 81269,
+        "entities": 9041,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -2506,6 +2506,15 @@
             "status": null,
             "date": "2026-01-17",
             "last_updated": "2026-01-17T15:14:02",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-17-05-SESSION-200-e2-299-e2-234-typo-fix-and-stale-work-cleanup.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-17",
+            "last_updated": "2026-01-17T15:42:02",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6302,9 +6311,9 @@
         }
     ],
     "workspace": {
-        "total_files": 436,
+        "total_files": 437,
         "by_template": {
-            "checkpoint": 189,
+            "checkpoint": 190,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -6316,7 +6325,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 25,
+            "unknown": 26,
             "draft": 2,
             "approved": 6,
             "ready": 1,
