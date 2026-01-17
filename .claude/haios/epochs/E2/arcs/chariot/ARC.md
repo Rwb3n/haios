@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-15T20:08:57
+# System Auto: last updated on: 2026-01-17T12:06:50
 # Arc: Chariot
 
 ## Arc Definition
@@ -70,6 +70,8 @@ The 9 Chariot modules that make HAIOS portable and LLM-agnostic:
 - S20: Pressure Dynamics (breath mapping)
 - S25: SDK Path to Autonomy (Epoch 4 migration)
 - E2-279: WorkEngine Decomposition (Session 185-186)
+- E2-293: session_state schema extension (active_queue, phase_history)
+- INV-065: Session State Cascade Architecture (Session 194)
 - INV-062: Session State Tracking (enforcement gaps)
 - Memory 81194-81210: Decomposition learnings
 - Memory 81309-81324: SDK discovery

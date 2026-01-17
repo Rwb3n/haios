@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-15T20:10:14
+# System Auto: last updated on: 2026-01-17T12:06:32
 # Arc: Breath
 
 ## Arc Definition
@@ -46,6 +46,7 @@ The rhythm of agent cognition: inhale (explore) and exhale (commit).
 | ARC-003 | MemoryRefEnforcement | **Active** | Coldstart MUST query load_memory_refs |
 | ARC-004 | PhaseAnnotation | Planned | Add [MAY]/[MUST] to all skill phases |
 | ARC-005 | BatchCycleExecution | Planned | Related work items: plan all → review → implement all (S190) |
+| ARC-006 | SessionStateWiring | **Complete** | E2-293/294/295: All skills call set-cycle/clear-cycle (S196) |
 
 ---
 
@@ -74,6 +75,7 @@ Operator owns `/clear` and `/coldstart`. System handles the rest.
 - [x] Observation capture is standalone skill (E2-280)
 - [x] Checkpoint thinned (24 lines, manifest not log) (E2-281)
 - [x] memory_refs enforced via load_memory_refs (E2-282)
+- [x] Session state wiring complete - all skills update session_state (E2-293/294/295)
 - [ ] All skills annotated with pressure ([MAY]/[MUST])
 - [ ] Agent actually breathes (doesn't skip volumous phases)
 
@@ -85,4 +87,7 @@ Operator owns `/clear` and `/coldstart`. System handles the rest.
 - S22: Skill Patterns (composable)
 - E2-281: Checkpoint Loading Manifest Redesign
 - E2-282: Coldstart Hook Manifest Loading
+- E2-293/294/295: Session State Cascade Wiring (Session 196)
+- INV-065: Session State Cascade Architecture (Session 194)
 - Memory 81222-81266: Session 186 architecture correction
+- Memory 81396-81401: Session 195 plan decomposition learnings

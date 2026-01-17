@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-15T23:36:30
+# System Auto: last updated on: 2026-01-17T12:05:54
 # Arc: Form
 
 ## Arc Definition
@@ -66,7 +66,7 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
 | ARC-006 | WorkUniversality | Planned | Work items universal - type is field, not prefix (S190) |
 | ARC-007 | MultiPartPlans | Planned | All work types have plans; plans can be multi-part (S190) |
 | ARC-008 | JustfileAudit | Planned | 70 recipes need audit/organization; missing `new-investigation` recipe (S193) |
-| ARC-009 | SessionStateCascade | **Active** | INV-065: Hook cascade for live session_state (S193) |
+| ARC-009 | SessionStateCascade | **Complete** | INV-065→E2-293/294/295: All skills wired with set-cycle (S196) |
 
 ---
 
@@ -78,6 +78,7 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
 - [x] UNIX philosophy applied: each skill does one thing well
 - [x] Skill template defaults to single-phase (E2-285 DONE)
 - [x] Soft enforcement operational (E2-286/287/288 DONE Session 190)
+- [x] Session state cascade wiring complete (E2-293/294/295 DONE Session 196)
 
 ---
 
@@ -94,7 +95,13 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
   - E2-286: session_state schema in haios-status-slim.json
   - E2-287: UserPromptSubmit warning when no active cycle
   - E2-288: just set-cycle/clear-cycle recipes
+- E2-293/294/295: Session State Cascade Wiring (DONE Session 196)
+  - E2-293: set-queue recipe, active_queue/phase_history schema extension
+  - E2-294: implementation-cycle + investigation-cycle wiring
+  - E2-295: survey-cycle + close-work-cycle + work-creation-cycle wiring
+- INV-065: Session State Cascade Architecture investigation (S194)
 - INV-062: Session State Tracking investigation (SDK discovery)
 - Memory 81211-81266: Session 186 architecture correction
 - Memory 81299-81333: Session 188 enforcement gap + SDK discovery
 - Memory 81343-81350: Session 190 soft enforcement implementation
+- Memory 81396-81401: Session 195 plan decomposition learnings

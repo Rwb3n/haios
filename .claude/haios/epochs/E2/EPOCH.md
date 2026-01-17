@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-15T19:52:27
+# System Auto: last updated on: 2026-01-17T12:05:14
 # STATUS: STUB - Copy-paste from INV-052. Refined through work item implementation.
 # Session 191 (ADR-042): Hierarchy is Epoch→Arc→Chapter→Work Item (story semantics)
 # Epoch 2: Governance Suite
@@ -239,9 +239,12 @@ SURVEY [volumous] → CHOOSE [tight] → EXECUTE [mixed] → SURVEY [volumous]
 - Recipes are the actual execution - skills are just prompts
 - Pattern: "If it needs to reliably happen, make it a recipe call in a skill step"
 
-**Current gap:** E2-288 built the recipes, but they're not yet wired into skills. Integration deferred.
+**Session 196: RESOLVED** - Full session_state cascade wiring complete:
+- E2-293: Added `just set-queue` recipe, extended session_state schema with `active_queue` and `phase_history`
+- E2-294: Wired implementation-cycle (5 phases) and investigation-cycle (4 phases) with set-cycle/clear-cycle
+- E2-295: Wired survey-cycle (set-queue), close-work-cycle (4 phases), work-creation-cycle (4 phases)
 
-**Future consideration:** Audit which skill steps should be recipe calls vs prose instructions.
+All 5 cycle skills now update session_state, enabling queue context propagation and phase observability.
 
 ---
 
