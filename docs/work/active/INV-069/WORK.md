@@ -2,10 +2,10 @@
 template: work_item
 id: INV-069
 title: Architecture File Consistency Audit
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-18
-closed: null
+closed: '2026-01-18'
 milestone: null
 priority: high
 effort: high
@@ -22,7 +22,21 @@ node_history:
   entered: 2026-01-18 11:10:23
   exited: null
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 81482
+- 81483
+- 81484
+- 81485
+- 81486
+- 81487
+- 81488
+- 81489
+- 81490
+- 81491
+- 81492
+- 81493
+- 81494
+- 81495
 operator_decisions: []
 documents:
   investigations:

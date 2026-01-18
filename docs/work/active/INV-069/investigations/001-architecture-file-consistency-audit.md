@@ -6,13 +6,24 @@ backlog_id: INV-069
 title: Architecture File Consistency Audit
 author: Hephaestus
 session: 202
-lifecycle_phase: hypothesize
+lifecycle_phase: conclude
 spawned_by: null
 related: []
-memory_refs: []
+memory_refs:
+- 81482
+- 81483
+- 81484
+- 81485
+- 81486
+- 81487
+- 81488
+- 81489
+- 81490
+- 81491
+- 81492
 version: '2.0'
 generated: 2025-12-22
-last_updated: '2026-01-18T11:13:20'
+last_updated: '2026-01-18T11:26:55'
 ---
 # Investigation: Architecture File Consistency Audit
 
@@ -163,44 +174,44 @@ Which architecture files in `.claude/haios/epochs/E2/architecture/` contain spec
      MUST invoke investigation-agent for each major step -->
 
 ### Phase 1: Context Loading (MUST before exploration)
-1. [ ] Load full Epoch 2.2 context: EPOCH.md, all 4 arc ARC.md files
-2. [ ] Load foundational architecture: S20, S21, S22
-3. [ ] Read manifesto files to establish ground truth: L0-L4
+1. [x] Load full Epoch 2.2 context: EPOCH.md, all 4 arc ARC.md files
+2. [x] Load foundational architecture: S20, S21, S22
+3. [x] Read manifesto files to establish ground truth: L0-L4
 
 ### Phase 2: Batch 1 - Bootstrap/Context (S14, S15)
-4. [ ] Read S14-bootstrap-architecture.md
-5. [ ] Read S15-information-architecture.md
-6. [ ] Compare against manifesto L0-L4 naming and structure
+4. [x] Read S14-bootstrap-architecture.md
+5. [x] Read S15-information-architecture.md
+6. [x] Compare against manifesto L0-L4 naming and structure - **VALID (updated S156)**
 
 ### Phase 3: Batch 2 - Modular Architecture (S17)
-7. [ ] Read S17-modular-architecture.md
-8. [ ] Compare each module interface against actual implementation
-9. [ ] Document all inconsistencies (confirmed: S17.3 ContextLoader stale)
+7. [x] Read S17-modular-architecture.md
+8. [x] Compare each module interface against actual implementation
+9. [x] Document all inconsistencies - **STALE: L0-L4 naming, module count, config paths**
 
 ### Phase 4: Batch 3 - Taxonomy (S10, S12, S19)
-10. [ ] Read S10-skills-taxonomy.md - compare against actual skills
-11. [ ] Read S12-invocation-paradigm.md - compare against current practice
-12. [ ] Read S19-skill-work-unification.md - compare against current structure
+10. [x] Read S10-skills-taxonomy.md - **VALID**
+11. [x] Read S12-invocation-paradigm.md - **VALID**
+12. [x] Read S19-skill-work-unification.md - **VALID (intentionally DRAFT)**
 
 ### Phase 5: Batch 4 - Foundational (S20, S21, S22)
-13. [ ] Read S20-pressure-dynamics.md - verify still valid
-14. [ ] Read S21-cognitive-notation.md - verify still valid
-15. [ ] Read S22-skill-patterns.md - verify still valid
+13. [x] Read S20-pressure-dynamics.md - **VALID (foundational)**
+14. [x] Read S21-cognitive-notation.md - **VALID (foundational)**
+15. [x] Read S22-skill-patterns.md - **VALID (foundational)**
 
 ### Phase 6: Batch 5 - Lifecycle/Patterns (S2, S2C, S23, S24)
-16. [ ] Read S2-lifecycle-diagram.md
-17. [ ] Read S2C-work-item-directory.md
-18. [ ] Read S23-files-as-context.md
-19. [ ] Read S24-staging-pattern.md
+16. [x] Read S2-lifecycle-diagram.md - **STALE: orphaned TODO list**
+17. [x] Read S2C-work-item-directory.md - **VALID**
+18. [x] Read S23-files-as-context.md - **VALID (foundational)**
+19. [x] Read S24-staging-pattern.md - **VALID**
 
 ### Phase 7: Batch 6 - Vision (S25, S26)
-20. [ ] Read S25-sdk-path-to-autonomy.md
-21. [ ] Read S26-skill-recipe-binding.md
+20. [x] Read S25-sdk-path-to-autonomy.md - **VALID (vision)**
+21. [x] Read S26-skill-recipe-binding.md - **VALID**
 
 ### Phase 8: Synthesis
-22. [ ] Build inconsistency manifest in findings.md
-23. [ ] Categorize each finding
-24. [ ] Spawn work items E2-301 through E2-306
+22. [x] Build inconsistency manifest in findings.md
+23. [x] Categorize each finding
+24. [x] Spawn work items - **Reduced: E2-301, E2-302 only (13/15 files valid)**
 
 ---
 
@@ -213,19 +224,27 @@ Which architecture files in `.claude/haios/epochs/E2/architecture/` contain spec
 
 | Finding | Source (file:line) | Supports Hypothesis | Notes |
 |---------|-------------------|---------------------|-------|
-| [What was found] | `path/file.py:123-145` | H1/H2/H3 | [Context] |
+| S17 uses wrong L0-L3 naming (`l0_north_star`, `l1_invariants`) | `S17-modular-architecture.md:125-129` | H1 | Actual uses `l0_telos`, `l1_principal` |
+| context_loader.py has correct naming | `context_loader.py:30-34` | H1 | Implementation is correct, spec is stale |
+| S17 references legacy config paths | `S17-modular-architecture.md:136-139, 438-446` | H1 | References `.claude/config/north-star.md` which doesn't exist |
+| S17 claims 5 modules, now 9 | `S17-modular-architecture.md:14` vs `L4-implementation.md:221-235` | H1 | E2-279 decomposed WorkEngine |
+| S14 already aligned with manifesto | `S14-bootstrap-architecture.md:43-54` | H2 | Updated Session 156 |
+| S15 already aligned with manifesto | `S15-information-architecture.md:36-84` | H2 | Updated Session 156 |
+| S20/S21/S22 referenced in L3/L4 | `L3-requirements.md:47-76`, `L4-implementation.md:55-66` | H3 | Still foundational |
+| S2 has stale TODO list | `S2-lifecycle-diagram.md:342-347` | N/A | Orphaned work items |
 
 ### Memory Evidence
 
 | Concept ID | Content | Supports Hypothesis | Notes |
 |------------|---------|---------------------|-------|
-| [ID] | [Summary] | H1/H2/H3 | [How it applies] |
+| 81479 | Architecture files can drift from implementation reality | H1 | Session 202 discovery |
+| 81480 | Architecture files need periodic audit | All | Motivation for this investigation |
+| 65145 | Misalignment between README and ADR content | Pattern | Similar drift pattern |
+| 66753 | Architectural docs require continuous upkeep | Pattern | Principle confirmed |
 
 ### External Evidence (if applicable)
 
-| Source | Finding | Supports Hypothesis | URL/Reference |
-|--------|---------|---------------------|---------------|
-| [Doc/Article] | [Summary] | H1/H2/H3 | [Link] |
+**SKIPPED:** Pure codebase investigation, no external sources needed.
 
 ---
 
@@ -240,73 +259,79 @@ Which architecture files in `.claude/haios/epochs/E2/architecture/` contain spec
 
 | Hypothesis | Verdict | Key Evidence | Confidence |
 |------------|---------|--------------|------------|
-| H1 | Confirmed/Refuted/Inconclusive | [1-2 sentence summary with source] | [High/Med/Low] |
-| H2 | Confirmed/Refuted/Inconclusive | [1-2 sentence summary with source] | [High/Med/Low] |
-| H3 | Confirmed/Refuted/Inconclusive | [1-2 sentence summary with source] | [High/Med/Low] |
+| H1 | **CONFIRMED** | S17:125-129 uses `l0_north_star`, `l1_invariants` vs actual `l0_telos`, `l1_principal` in context_loader.py:30-34 | High |
+| H2 | **REFUTED** | S14 and S15 were already updated in Session 156 to match manifesto naming | High |
+| H3 | **CONFIRMED** | S20, S21, S22 are referenced as foundational in L3-requirements.md:47-76 and L4-implementation.md:55-66 | High |
 
 ### Detailed Findings
 
-#### [Finding 1 Title]
+#### Finding 1: S17 Has Stale GroundedContext Interface
 
 **Evidence:**
 ```
-[Code snippet, query result, or observation with source reference]
+S17-modular-architecture.md:125-129:
+  l0_north_star: Path   # from north-star.md
+  l1_invariants: Path   # from invariants.md
+  l2_operational: Path  # from operational-state.md
+  l3_session: Path      # from session context
+
+context_loader.py:30-34:
+  l0_telos: Optional[str] = None
+  l1_principal: Optional[str] = None
+  l2_intent: Optional[str] = None
+  l3_requirements: Optional[str] = None
+  l4_implementation: Optional[str] = None
 ```
 
-**Analysis:** [What this evidence means]
+**Analysis:** S17 spec was written before the Manifesto Corpus (L0-L4) was established. The naming and field structure diverged when manifesto files were created with different names.
 
-**Implication:** [What action or design this suggests]
+**Implication:** S17 needs revision to match current GroundedContext implementation.
 
-#### [Finding 2 Title]
+#### Finding 2: S17 Module Count Outdated
 
 **Evidence:**
 ```
-[Code snippet, query result, or observation]
+S17-modular-architecture.md:14:
+  "5 discrete modules"
+
+L4-implementation.md:221-235:
+  9 modules: GovernanceLayer, MemoryBridge, WorkEngine,
+  CascadeEngine, PortalManager, SpawnTree, BackfillEngine,
+  ContextLoader, CycleRunner
 ```
 
-**Analysis:** [What this evidence means]
+**Analysis:** E2-279 (Session 185-186) decomposed WorkEngine from 1197 to 585 lines, extracting 4 satellite modules. S17 predates this decomposition.
 
-**Implication:** [What action or design this suggests]
+**Implication:** S17 module architecture section needs update to reflect 9-module structure.
+
+#### Finding 3: S2 Has Orphaned TODO List
+
+**Evidence:**
+```
+S2-lifecycle-diagram.md:342-347:
+  ## REMAINING WORK
+  - [ ] Create .claude/config/cycle-definitions.yaml
+  - [ ] Create .claude/config/gates.yaml
+  - [ ] Update CLAUDE.md with new config locations
+```
+
+**Analysis:** These TODOs are from Session 150. Config consolidation happened differently (into haios.yaml, cycles.yaml, components.yaml). The checklist is stale.
+
+**Implication:** Remove or update the REMAINING WORK section to reflect current state.
+
+#### Finding 4: 13 of 15 Files Are Valid
+
+**Evidence:** S14, S15, S20, S21, S22, S23, S24, S25, S26, S10, S12, S2C are all consistent with current implementation. S19 is intentionally DRAFT.
+
+**Analysis:** The architecture documentation is largely healthy. Only S17 and S2 need revision.
+
+**Implication:** Batch process (E2-301 through E2-306) not needed. Only 2 targeted work items required.
 
 ---
 
 ## Design Outputs
 
-<!-- If investigation produces architectural designs, document them here
-     SKIP this section if investigation is pure discovery with no design outputs -->
-
-### Schema Design (if applicable)
-
-```yaml
-# [Name of schema]
-field_name: type
-  description: [What this field does]
-```
-
-### Mapping Table (if applicable)
-
-| Source | Target | Relationship | Notes |
-|--------|--------|--------------|-------|
-| [A] | [B] | [How A relates to B] | |
-
-### Mechanism Design (if applicable)
-
-```
-TRIGGER: [What initiates the mechanism]
-
-ACTION:
-    1. [Step 1]
-    2. [Step 2]
-    3. [Step 3]
-
-OUTCOME: [What results from the mechanism]
-```
-
-### Key Design Decisions
-
-| Decision | Choice | Rationale (WHY) |
-|----------|--------|-----------------|
-| [Decision point] | [What was chosen] | [Why this choice - most important part] |
+**SKIPPED:** Pure discovery investigation. Design outputs are the spawned work items below.
 
 ---
 
@@ -318,18 +343,17 @@ OUTCOME: [What results from the mechanism]
      DoD: This section MUST have entries, not "None yet"
      If truly no spawns, explain why in rationale -->
 
-### Planned Work Items (One per batch)
+### Spawned Work Items (Reduced Scope)
 
-| ID | Batch | Files | Description |
-|----|-------|-------|-------------|
-| E2-301 | 1 | S14, S15 | Bootstrap/Context architecture revision |
-| E2-302 | 2 | S17 | Modular architecture revision |
-| E2-303 | 3 | S10, S12, S19 | Taxonomy revision |
-| E2-304 | 4 | S20, S21, S22 | Foundational methodology verification |
-| E2-305 | 5 | S2, S2C, S23, S24 | Lifecycle/patterns revision |
-| E2-306 | 6 | S25, S26 | Vision docs verification |
+**Original plan:** 6 batch work items (E2-301 through E2-306)
+**Actual need:** Only 2 targeted work items required
 
-**Creation deferred to:** After investigation CONCLUDE phase, in separate session per batch process design.
+| ID | File | Description | Priority |
+|----|------|-------------|----------|
+| E2-301 | S17-modular-architecture.md | Update GroundedContext schema (L0-L4 fields), module count (5→9), config paths | High |
+| E2-302 | S2-lifecycle-diagram.md | Remove or update stale REMAINING WORK checklist | Medium |
+
+**Why reduced scope:** 13 of 15 files are valid. S14/S15 already fixed in Session 156. S20/S21/S22 foundational and current. Only S17 (stale interfaces) and S2 (orphaned TODOs) need revision.
 
 ### Additional Observations (Potential Future Work)
 
@@ -347,8 +371,8 @@ OUTCOME: [What results from the mechanism]
 
 | Session | Date | Phase | Progress | Notes |
 |---------|------|-------|----------|-------|
-| 202 | 2026-01-18 | HYPOTHESIZE | Started | Initial context and hypotheses |
-| - | - | - | - | No additional sessions yet |
+| 202 | 2026-01-18 | HYPOTHESIZE | Complete | Initial context and hypotheses |
+| 203 | 2026-01-18 | EXPLORE→CONCLUDE | Complete | All 15 files audited, 2 stale, 13 valid |
 
 ---
 
@@ -359,20 +383,20 @@ OUTCOME: [What results from the mechanism]
 
 | Item to Verify | Expected State | Verified | Notes |
 |----------------|---------------|----------|-------|
-| Hypothesis verdicts documented | All H1-HN have verdict | [ ] | |
-| Evidence has sources | All findings have file:line or concept ID | [ ] | |
-| Spawned items created | Items exist in backlog or via /new-* | [ ] | |
-| Memory stored | ingester_ingest called, memory_refs populated | [ ] | |
+| Hypothesis verdicts documented | All H1-HN have verdict | [x] | H1 CONFIRMED, H2 REFUTED, H3 CONFIRMED |
+| Evidence has sources | All findings have file:line or concept ID | [x] | All in Evidence Collection section |
+| Spawned items created | Items exist in backlog or via /new-* | [x] | E2-301, E2-302 created |
+| Memory stored | ingester_ingest called, memory_refs populated | [x] | 11 concepts (81482-81492) |
 
 **Binary Verification (Yes/No):**
 
 | Question | Answer | If NO, explain |
 |----------|--------|----------------|
-| Did you invoke investigation-agent for EXPLORE phase? | [Yes/No] | |
-| Are all evidence sources cited with file:line or concept ID? | [Yes/No] | |
-| Were all hypotheses tested with documented verdicts? | [Yes/No] | |
-| Are spawned items created (not just listed)? | [Yes/No] | |
-| Is memory_refs populated in frontmatter? | [Yes/No] | |
+| Did you invoke investigation-agent for EXPLORE phase? | Yes | Task subagent used |
+| Are all evidence sources cited with file:line or concept ID? | Yes | See Evidence Collection |
+| Were all hypotheses tested with documented verdicts? | Yes | See Hypothesis Verdicts |
+| Are spawned items created (not just listed)? | Yes | E2-301, E2-302 in backlog |
+| Is memory_refs populated in frontmatter? | Yes | 11 concept IDs |
 
 ---
 
@@ -381,18 +405,18 @@ OUTCOME: [What results from the mechanism]
 <!-- CONCLUDE PHASE: Complete ALL items before /close -->
 
 ### Required (MUST complete)
-- [ ] **Findings synthesized** - Answer to objective documented in Findings section
-- [ ] **Evidence sourced** - All findings have file:line or concept ID citations
-- [ ] **Hypotheses resolved** - All hypotheses have Confirmed/Refuted/Inconclusive verdict
-- [ ] **Spawned items created** - Via /new-* commands with `spawned_by` field (or rationale if none)
-- [ ] **Memory stored** - `ingester_ingest` called with findings summary
-- [ ] **memory_refs populated** - Frontmatter updated with concept IDs
-- [ ] **lifecycle_phase updated** - Set to `conclude`
-- [ ] **Ground Truth Verification complete** - All items checked above
+- [x] **Findings synthesized** - Answer to objective documented in Findings section
+- [x] **Evidence sourced** - All findings have file:line or concept ID citations
+- [x] **Hypotheses resolved** - All hypotheses have Confirmed/Refuted/Inconclusive verdict
+- [x] **Spawned items created** - E2-301, E2-302 created with `spawned_by: INV-069`
+- [x] **Memory stored** - `ingester_ingest` called, 11 concepts created
+- [x] **memory_refs populated** - Frontmatter updated with concept IDs 81482-81492
+- [x] **lifecycle_phase updated** - Set to `conclude`
+- [x] **Ground Truth Verification complete** - All items checked above
 
 ### Optional
-- [ ] Design outputs documented (if applicable)
-- [ ] Session progress updated (if multi-session)
+- [x] Design outputs documented - SKIPPED (pure discovery)
+- [x] Session progress updated - Updated for Session 203
 
 ---
 
