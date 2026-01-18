@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-18T16:50:50
+# System Auto: last updated on: 2026-01-18T20:20:38
 # HAIOS System Configuration
 # Consolidates: governance-toggles.yaml, routing-thresholds.yaml
 # Version: 2.3 (Session 206 - The Pipeline)
@@ -31,6 +31,7 @@ epoch:
     - pipeline
     - workuniversal
     - migration
+    - observations
 
 # Governance toggles (from governance-toggles.yaml)
 toggles:
