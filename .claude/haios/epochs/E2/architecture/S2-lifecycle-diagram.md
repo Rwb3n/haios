@@ -1,5 +1,5 @@
 # generated: 2025-12-30
-# System Auto: last updated on: 2025-12-30T21:24:14
+# System Auto: last updated on: 2026-01-18T13:00:45
 # Section 2: Lifecycle Architecture Diagram
 
 Generated: 2025-12-30 (Session 150)
@@ -339,10 +339,10 @@ Purpose: Visual summary of lifecycle architecture from Sections 2A-2F
 │                                                                             │
 │  REMAINING WORK:                                                            │
 │  ───────────────                                                            │
-│  - [ ] Create .claude/config/cycle-definitions.yaml                         │
-│  - [ ] Create .claude/config/gates.yaml                                     │
-│  - [ ] Implement .claude/lib/cycle_executor.py                              │
-│  - [ ] Spawn E2-* implementation items                                      │
+│  None - superseded by Epoch 2.2 config consolidation.                       │
+│  See .claude/haios/config/ for current config architecture.                 │
+│  See .claude/haios/modules/cycle_runner.py for cycle execution.             │
+│                                                                             │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
