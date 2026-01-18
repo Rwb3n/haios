@@ -2,7 +2,7 @@
 template: work_item
 id: INV-045
 title: Memory Retrieval UX and Trigger Design
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-28
 closed: null
@@ -31,7 +31,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2025-12-28
-last_updated: '2025-12-28T11:37:06'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-INV-045: Memory Retrieval UX and Trigger Design
 

@@ -2,7 +2,7 @@
 template: work_item
 id: E2-295
 title: Wire survey, close, and work-creation cycles with set-cycle
-status: active
+status: archived
 owner: Hephaestus
 created: 2026-01-16
 closed: null
@@ -46,7 +46,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-16
-last_updated: '2026-01-17T12:01:08'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-E2-295: Wire survey, close, and work-creation cycles with set-cycle
 

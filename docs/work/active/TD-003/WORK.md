@@ -2,7 +2,7 @@
 template: work_item
 id: TD-003
 title: "Multi-Index Architecture"
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-23
 closed: null

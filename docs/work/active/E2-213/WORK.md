@@ -2,7 +2,7 @@
 template: work_item
 id: E2-213
 title: Investigation Subtype Field
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-27
 closed: null
@@ -30,7 +30,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2025-12-27
-last_updated: '2025-12-27T18:13:34'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-E2-213: Investigation Subtype Field
 

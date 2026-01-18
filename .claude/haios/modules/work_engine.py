@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-18T12:09:56
+# System Auto: last updated on: 2026-01-18T21:57:42
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -277,22 +277,27 @@ class WorkEngine:
 
     def get_ready(self) -> List[WorkState]:
         """
-        Get all unblocked, non-complete work items from active directory.
+        Get all unblocked, active work items from active directory.
 
         Returns:
-            List of WorkState with empty blocked_by and status != 'complete'
+            List of WorkState with empty blocked_by and status in ('active', 'in_progress')
         """
         ready = []
         if not self.active_dir.exists():
             return ready
+
+        # WORK-002 (Session 208): Query by tag, not location
+        # Only include items with active statuses, exclude terminal states
+        terminal_statuses = {"complete", "archived", "dismissed", "invalid", "deferred"}
 
         for subdir in self.active_dir.iterdir():
             if subdir.is_dir():
                 work_md = subdir / "WORK.md"
                 if work_md.exists():
                     work = self._parse_work_file(work_md)
-                    # INV-070: Filter out complete items (status check was missing)
-                    if work and not work.blocked_by and work.status != "complete":
+                    # INV-070: Filter out complete items
+                    # WORK-002: Also filter archived, dismissed, invalid, deferred
+                    if work and not work.blocked_by and work.status not in terminal_statuses:
                         ready.append(work)
         return ready
 

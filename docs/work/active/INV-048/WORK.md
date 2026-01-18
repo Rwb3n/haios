@@ -2,7 +2,7 @@
 template: work_item
 id: INV-048
 title: "Investigation Spawn Gate Improvement"
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-29
 closed: null

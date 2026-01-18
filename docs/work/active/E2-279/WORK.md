@@ -2,7 +2,7 @@
 template: work_item
 id: E2-279
 title: WorkEngine Decomposition
-status: complete
+status: dismissed
 owner: Hephaestus
 created: 2026-01-08
 closed: '2026-01-09'
@@ -62,7 +62,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-08
-last_updated: '2026-01-08T23:50:44'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-E2-279: WorkEngine Decomposition
 

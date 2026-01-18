@@ -2,7 +2,7 @@
 template: work_item
 id: E2-161
 title: "Auto-link Documents to Work File"
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-24
 closed: null

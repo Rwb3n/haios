@@ -2,7 +2,7 @@
 template: work_item
 id: E2-231
 title: Add just validate-refs Recipe
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-29
 closed: null
@@ -29,7 +29,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2025-12-29
-last_updated: '2025-12-29T10:55:49'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-E2-231: Add just validate-refs Recipe
 

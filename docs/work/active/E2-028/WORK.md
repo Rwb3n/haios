@@ -2,7 +2,7 @@
 template: work_item
 id: E2-028
 title: "Greek Triad Classification Gap"
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-23
 closed: null

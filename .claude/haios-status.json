@@ -1,21 +1,21 @@
 {
-    "generated": "2026-01-18T13:18:09",
+    "generated": "2026-01-18T22:04:22",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
-        "progress": 79,
-        "prior_progress": 79,
+        "progress": 87,
+        "prior_progress": 86,
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 203,
-        "current_session": 204,
+        "prior_session": 206,
+        "current_session": 207,
         "prior_date": "2026-01-18",
         "completed": [],
         "completed_count": 0,
         "added": [],
         "added_count": 0,
-        "milestone_delta": null
+        "milestone_delta": "+1%"
     },
     "work_cycle": {
         "id": "E2-279",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 81342,
-        "entities": 9058,
+        "concepts": 81418,
+        "entities": 9077,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -123,12 +123,22 @@
                 "INV-027"
             ],
             "complete": [
+                "E2-017",
+                "E2-018",
+                "E2-019",
+                "E2-028",
+                "E2-124",
+                "INV-014",
+                "INV-015",
+                "INV-023",
+                "INV-045",
+                "TD-003",
                 "E2-021",
                 "E2-211",
                 "INV-027"
             ],
-            "progress": 18,
-            "prior_progress": 17,
+            "progress": 76,
+            "prior_progress": 76,
             "delta_source": null
         },
         "Epoch3-FORESIGHT": {
@@ -138,9 +148,11 @@
                 "E2-139",
                 "E2-137"
             ],
-            "complete": [],
-            "progress": 0,
-            "prior_progress": 0,
+            "complete": [
+                "E2-139"
+            ],
+            "progress": 33,
+            "prior_progress": 33,
             "delta_source": null
         },
         "M7e-Hygiene": {
@@ -155,10 +167,13 @@
                 "INV-031"
             ],
             "complete": [
+                "E2-087",
+                "E2-127",
+                "INV-016",
                 "E2-004"
             ],
-            "progress": 14,
-            "prior_progress": 14,
+            "progress": 57,
+            "prior_progress": 57,
             "delta_source": null
         },
         "M7b-WorkInfra": {
@@ -219,7 +234,11 @@
                 "INV-044"
             ],
             "complete": [
-                "E2-234",
+                "E2-106",
+                "E2-161",
+                "E2-164",
+                "E2-213",
+                "E2-214",
                 "E2-151",
                 "E2-152",
                 "E2-163",
@@ -262,8 +281,8 @@
                 "INV-043",
                 "INV-044"
             ],
-            "progress": 79,
-            "prior_progress": 79,
+            "progress": 87,
+            "prior_progress": 86,
             "delta_source": null
         },
         "M7c-Governance": {
@@ -335,9 +354,11 @@
             "items": [
                 "INV-051"
             ],
-            "complete": [],
-            "progress": 0,
-            "prior_progress": 0,
+            "complete": [
+                "INV-051"
+            ],
+            "progress": 100,
+            "prior_progress": 100,
             "delta_source": null
         },
         "M7d-Plumbing": {
@@ -2551,6 +2572,33 @@
             "status": null,
             "date": "2026-01-18",
             "last_updated": "2026-01-18T13:06:56",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-18-04-SESSION-205-e2-303-hierarchy-fix-and-observation-triage.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-18",
+            "last_updated": "2026-01-18T15:45:48",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-18-05-SESSION-206-e23-epoch-creation-and-strategic-review.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-18",
+            "last_updated": "2026-01-18T21:22:10",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-18-06-SESSION-207-work-002-triage-plan-created.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-18",
+            "last_updated": "2026-01-18T21:38:45",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -5673,12 +5721,12 @@
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-21-gap-audit-preflight.md",
             "last_updated": "2025-12-03T20:58:26",
-            "days_stale": 45
+            "days_stale": 46
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-22-gap-b3-complete.md",
             "last_updated": "2025-12-03T21:54:50",
-            "days_stale": 45
+            "days_stale": 46
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-23-docs-ingestion-embedding-gap.md",
@@ -5698,7 +5746,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-25-embedding-fix-research-synthesis.md",
             "last_updated": "2025-12-04T22:02:49",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
@@ -6362,9 +6410,9 @@
         }
     ],
     "workspace": {
-        "total_files": 441,
+        "total_files": 444,
         "by_template": {
-            "checkpoint": 194,
+            "checkpoint": 197,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -6376,7 +6424,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 30,
+            "unknown": 33,
             "draft": 2,
             "approved": 6,
             "ready": 1,

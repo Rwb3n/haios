@@ -2,7 +2,7 @@
 template: work_item
 id: E2-087
 title: "Plan Forward-Maintenance Automation"
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-23
 closed: null

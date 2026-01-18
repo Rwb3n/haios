@@ -2,7 +2,7 @@
 template: work_item
 id: E2-291
 title: Wire Queue into Survey-Cycle and Routing-Gate
-status: complete
+status: dismissed
 owner: Hephaestus
 created: 2026-01-15
 closed: '2026-01-15'
@@ -37,7 +37,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-15
-last_updated: '2026-01-15T20:45:24'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-E2-291: Wire Queue into Survey-Cycle and Routing-Gate
 

@@ -2,7 +2,7 @@
 template: work_item
 id: E2-019
 title: "Concept Type Normalization"
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-23
 closed: null

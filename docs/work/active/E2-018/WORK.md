@@ -2,7 +2,7 @@
 template: work_item
 id: E2-018
 title: "Entity Embedding Generation"
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-23
 closed: null

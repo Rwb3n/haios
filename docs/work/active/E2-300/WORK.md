@@ -2,7 +2,7 @@
 template: work_item
 id: E2-300
 title: ContextLoader S17.3 Spec Alignment
-status: invalid
+status: dismissed
 owner: Hephaestus
 created: 2026-01-17
 closed: null
@@ -32,7 +32,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-17
-last_updated: '2026-01-18T10:45:05'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-E2-300: ContextLoader S17.3 Spec Alignment
 

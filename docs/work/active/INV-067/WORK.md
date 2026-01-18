@@ -2,7 +2,7 @@
 template: work_item
 id: INV-067
 title: Observation Backlog Verification and Triage
-status: complete
+status: dismissed
 owner: Hephaestus
 created: 2026-01-17
 closed: '2026-01-17'
@@ -53,7 +53,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-17
-last_updated: '2026-01-17T14:01:03'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-INV-067: Observation Backlog Verification and Triage
 

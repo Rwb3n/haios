@@ -2,10 +2,10 @@
 template: work_item
 id: WORK-002
 title: E2.3 Triage - Strategic triage of E2 arcs and work items
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-18
-closed: null
+closed: '2026-01-18'
 milestone: null
 priority: high
 effort: medium
@@ -22,7 +22,18 @@ node_history:
   entered: 2026-01-18 21:25:58
   exited: null
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 81601
+- 81602
+- 81603
+- 81604
+- 81605
+- 81606
+- 81607
+- 81608
+- 81609
+- 81610
+- 81611
 operator_decisions: []
 documents:
   investigations: []
@@ -30,7 +41,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-18
-last_updated: '2026-01-18T21:28:00'
+last_updated: '2026-01-18T22:01:43'
 ---
 # WORK-WORK-002: E2.3 Triage - Strategic triage of E2 arcs and work items
 
@@ -81,11 +92,11 @@ Work item in BACKLOG node. Awaiting prioritization.
      Tests verify code works. Deliverables verify scope is complete.
 -->
 
-- [ ] Arc triage manifest: Disposition for each E2 arc (chariot, breath, form, ground, tongue, workinfra)
-- [ ] Work item triage: Each of 57 active items marked as transfer/archive/dismiss
-- [ ] Architecture doc classification: S1-S26 categorized as pipeline-relevant or HAIOS-specific
-- [ ] Queue cleanup: `just queue default` reflects only transferred items
-- [ ] Migration manifest: Document all decisions with rationale in `epochs/E2_3/arcs/migration/MANIFEST.md`
+- [x] Arc triage manifest: Disposition for each E2 arc (chariot, breath, form, ground, tongue, workinfra)
+- [x] Work item triage: Each of 59 active items marked as transfer/archive/dismiss
+- [x] Architecture doc classification: S1-S26 categorized as pipeline-relevant or HAIOS-specific
+- [x] Queue cleanup: `just queue default` reflects only transferred items (16 from 54)
+- [x] Migration manifest: Document all decisions with rationale in `epochs/E2_3/arcs/migration/MANIFEST.md`
 
 ---
 
@@ -95,6 +106,15 @@ Work item in BACKLOG node. Awaiting prioritization.
 - Initial creation
 - Work-creation-cycle VERIFY/POPULATE/READY complete
 - Context and deliverables populated
+
+### 2026-01-18 - Completed (Session 208)
+- Created MANIFEST.md with all triage decisions
+- Triaged 6 E2 arcs (3 transfer, 3 archive)
+- Classified 16 architecture docs (7 pipeline, 4 infra, 5 HAIOS)
+- Triaged 59 work items (28 archived, 15 dismissed, 14 transfer, 2 keep)
+- Updated WorkEngine.get_ready() to filter terminal statuses
+- Queue reduced from 54 to 16 items
+- Discovered "query by tag, not location" principle
 
 ---
 

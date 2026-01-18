@@ -2,7 +2,7 @@
 template: work_item
 id: E2-292
 title: Wire set-cycle Recipe Calls into Cycle Skills
-status: deferred
+status: dismissed
 owner: Hephaestus
 created: 2026-01-16
 closed: null
@@ -40,7 +40,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-16
-last_updated: '2026-01-16T21:12:43'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-E2-292: Wire set-cycle Recipe Calls into Cycle Skills
 

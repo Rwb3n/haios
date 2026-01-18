@@ -2,7 +2,7 @@
 template: work_item
 id: E2-289
 title: Execute Hierarchy Rename Chapter to Arc
-status: active
+status: archived
 owner: Hephaestus
 created: 2026-01-15
 closed: null
@@ -31,7 +31,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-15
-last_updated: '2026-01-15T19:46:01'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-E2-289: Execute Hierarchy Rename Chapter to Arc
 

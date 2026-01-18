@@ -2,7 +2,7 @@
 template: work_item
 id: E2-237
 title: Cycle Definitions Config File
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-30
 closed: null
@@ -33,7 +33,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2025-12-30
-last_updated: '2025-12-30T21:41:18'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-E2-237: Cycle Definitions Config File
 

@@ -2,7 +2,7 @@
 template: work_item
 id: INV-070
 title: Queue Ready Filter Bug - Complete Items Returned
-status: complete
+status: dismissed
 owner: Hephaestus
 created: 2026-01-18
 closed: '2026-01-18'
@@ -31,7 +31,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-18
-last_updated: '2026-01-18T12:11:39'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-INV-070: Queue Ready Filter Bug - Complete Items Returned
 

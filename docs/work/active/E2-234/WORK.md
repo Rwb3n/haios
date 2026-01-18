@@ -2,7 +2,7 @@
 template: work_item
 id: E2-234
 title: Auto Session-Start in Coldstart
-status: complete
+status: dismissed
 owner: Hephaestus
 created: 2025-12-30
 closed: '2026-01-17'
@@ -33,7 +33,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2025-12-30
-last_updated: '2026-01-17T15:39:32'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-E2-234: Auto Session-Start in Coldstart
 

@@ -2,7 +2,7 @@
 template: work_item
 id: INV-064
 title: Work Hierarchy Rename and Queue Architecture
-status: active
+status: archived
 owner: Hephaestus
 created: 2026-01-15
 closed: null
@@ -35,7 +35,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-15
-last_updated: '2026-01-15T19:36:15'
+last_updated: '2026-01-18T21:56:50'
 ---
 # WORK-INV-064: Work Hierarchy Rename and Queue Architecture
 

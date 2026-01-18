@@ -2,7 +2,7 @@
 template: work_item
 id: INV-015
 title: "Retrieval Algorithm Intelligence"
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-23
 closed: null

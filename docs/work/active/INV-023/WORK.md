@@ -2,7 +2,7 @@
 template: work_item
 id: INV-023
 title: "ReasoningBank Feedback Loop Architecture"
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-23
 closed: null

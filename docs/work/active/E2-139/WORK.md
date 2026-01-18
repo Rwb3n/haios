@@ -2,7 +2,7 @@
 template: work_item
 id: E2-139
 title: "Insight Crystallization Trigger"
-status: active
+status: archived
 owner: Hephaestus
 created: 2025-12-23
 closed: null
