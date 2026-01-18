@@ -59,10 +59,11 @@ load_memory_refs:
 - 81590
 - 81591
 pending:
+- '**E2.2 TRIAGE** - Comprehensive triage of E2 arcs/chapters/work before migration'
 - Observations arc - implement CAPTURE→PROMOTE→TRIAGE three-phase flow
 - WorkUniversality design approval - TRD exists but needs WHY rationale
 - Provenance arc - fix ingester_ingest to populate concept_occurrences
-- Migration arc - triage E2 artifacts, move work to epochs
+- Migration arc - move work to epochs (after triage)
 drift_observed:
 - 'OBS-206-001: Mode overlap - agent built TRD and WORK-001 without design approval'
 - 'OBS-206-002: WHY not traced - decisions queried but rationale not looked up'
@@ -77,5 +78,5 @@ completed:
 - Work items belong in epochs not docs/ (obs-206-008)
 - We've been building builder mode only (obs-206-007)
 generated: '2026-01-18'
-last_updated: '2026-01-18T21:13:23'
+last_updated: '2026-01-18T21:22:10'
 ---
