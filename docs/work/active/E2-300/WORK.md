@@ -2,7 +2,7 @@
 template: work_item
 id: E2-300
 title: ContextLoader S17.3 Spec Alignment
-status: active
+status: invalid
 owner: Hephaestus
 created: 2026-01-17
 closed: null
@@ -22,7 +22,8 @@ node_history:
   entered: 2026-01-17 14:49:46
   exited: null
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 81478
 operator_decisions: []
 documents:
   investigations: []
@@ -31,7 +32,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-17
-last_updated: '2026-01-17T16:13:59'
+last_updated: '2026-01-18T10:45:05'
 ---
 # WORK-E2-300: ContextLoader S17.3 Spec Alignment
 
@@ -47,6 +48,27 @@ last_updated: '2026-01-17T16:13:59'
 **Trigger:** E2-254 observations.md triage - "Fix ContextLoader to match spec".
 
 **Root Cause:** E2-254 designed against manifesto files instead of INV-052 S17.3 spec's layer definitions.
+
+## Resolution (Session 202)
+
+**CLOSED AS INVALID.** The S17.3 spec was stale and incorrect.
+
+The actual manifesto file naming is:
+- L0-telos.md (WHY)
+- L1-principal.md (WHO)
+- L2-intent.md (WHAT)
+- L3-requirements.md (HOW)
+- L4-implementation.md (WHAT to build)
+
+The S17.3 spec used different names (`north_star`, `invariants`, `operational`, `session`) that don't match the file names or conceptual layer hierarchy. The original ContextLoader implementation was correct.
+
+Changes made in Session 202:
+- Reverted GroundedContext to use l0_telos, l1_principal, l2_intent, l3_requirements, l4_implementation
+- Fixed cli.py to use correct field names
+- Updated README.md to reflect original naming
+- Removed obsolete S17.3 alignment tests
+
+The architecture file (SECTION-17-MODULAR-ARCHITECTURE.md) needs review and correction.
 
 ---
 
@@ -71,9 +93,9 @@ Work item in BACKLOG node. Awaiting prioritization.
      Tests verify code works. Deliverables verify scope is complete.
 -->
 
-- [ ] Review S17.3 spec layer definitions (north_star/invariants/operational/session)
-- [ ] Align ContextLoader implementation with spec
-- [ ] Document discrepancies or rationale for deviations
+- [x] Review S17.3 spec layer definitions (north_star/invariants/operational/session)
+- [x] Align ContextLoader implementation with spec
+- [x] Document discrepancies or rationale for deviations
 
 ---
 

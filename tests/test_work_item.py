@@ -1,5 +1,5 @@
 # generated: 2025-12-23
-# System Auto: last updated on: 2025-12-27T21:33:55
+# System Auto: last updated on: 2026-01-17T15:57:26
 """Tests for work_item template and infrastructure.
 
 E2-150: Work-Item Infrastructure
@@ -130,46 +130,11 @@ id: {{BACKLOG_ID}}
         finally:
             scaffold_template.__globals__["PROJECT_ROOT"] = original_root
 
-    def test_find_work_file_resolves_directory(self, tmp_path):
-        """find_work_file finds WORK.md in directory structure."""
-        from work_item import find_work_file, ACTIVE_DIR
-        import work_item
+    # NOTE: test_find_work_file_resolves_directory removed (E2-298)
+    # Coverage now in test_work_engine.py: test_get_work_returns_work_state
 
-        # Temporarily override ACTIVE_DIR
-        original_active = work_item.ACTIVE_DIR
-        work_item.ACTIVE_DIR = tmp_path
-
-        try:
-            # Create directory structure
-            work_dir = tmp_path / "E2-TEST"
-            work_dir.mkdir(parents=True)
-            (work_dir / "WORK.md").write_text("---\nid: E2-TEST\n---\n# Test")
-
-            result = find_work_file("E2-TEST")
-            assert result is not None, "find_work_file returned None"
-            assert result.name == "WORK.md", f"Expected WORK.md, got {result.name}"
-            assert result.parent.name == "E2-TEST", f"Expected E2-TEST dir, got {result.parent.name}"
-        finally:
-            work_item.ACTIVE_DIR = original_active
-
-    def test_find_work_file_falls_back_to_flat(self, tmp_path):
-        """find_work_file falls back to flat file pattern for backward compat."""
-        from work_item import find_work_file
-        import work_item
-
-        # Temporarily override ACTIVE_DIR
-        original_active = work_item.ACTIVE_DIR
-        work_item.ACTIVE_DIR = tmp_path
-
-        try:
-            # Create flat file (old format)
-            (tmp_path / "WORK-E2-LEGACY-old-item.md").write_text("---\nid: E2-LEGACY\n---\n# Test")
-
-            result = find_work_file("E2-LEGACY")
-            assert result is not None, "find_work_file returned None for flat file"
-            assert "WORK-E2-LEGACY" in result.name, f"Expected flat file, got {result.name}"
-        finally:
-            work_item.ACTIVE_DIR = original_active
+    # NOTE: test_find_work_file_falls_back_to_flat removed (E2-298)
+    # Coverage now in test_work_engine.py: test_get_work_returns_work_state
 
     def test_plan_scaffolds_into_work_directory(self, tmp_path):
         """Plan creates inside work item's plans/ subdirectory."""
@@ -216,79 +181,9 @@ backlog_id: {{BACKLOG_ID}}
         assert len(flat_files) >= 0  # Just checking pattern works
 
 
-class TestNodeTransitions:
-    """Tests for E2-162: Node transition functions."""
-
-    def test_update_node_changes_current_node(self, tmp_path):
-        """Verify update_node changes current_node field."""
-        from work_item import update_node
-
-        work_file = tmp_path / "WORK-TEST-001.md"
-        work_file.write_text("""---
-current_node: backlog
-node_history:
-  - node: backlog
-    entered: 2025-12-24T10:00:00
-    exited: null
----
-# Test
-""")
-        update_node(work_file, "plan")
-        content = work_file.read_text()
-        assert "current_node: plan" in content
-
-    def test_update_node_appends_history(self, tmp_path):
-        """Verify update_node adds new entry to node_history."""
-        from work_item import update_node
-
-        work_file = tmp_path / "WORK-TEST-001.md"
-        work_file.write_text("""---
-current_node: backlog
-node_history:
-  - node: backlog
-    entered: 2025-12-24T10:00:00
-    exited: null
----
-# Test
-""")
-        update_node(work_file, "plan")
-        content = work_file.read_text()
-        assert "node: plan" in content
-        assert content.count("- node:") == 2
-
-    def test_add_document_link_adds_plan(self, tmp_path):
-        """Verify add_document_link adds to documents.plans."""
-        from work_item import add_document_link
-
-        work_file = tmp_path / "WORK-TEST-001.md"
-        work_file.write_text("""---
-current_node: plan
-documents:
-  investigations: []
-  plans: []
-  checkpoints: []
-cycle_docs: {}
----
-# Test
-""")
-        add_document_link(work_file, "plan", "docs/plans/PLAN-TEST.md")
-        content = work_file.read_text()
-        assert "PLAN-TEST.md" in content
-
-    def test_add_document_link_updates_cycle_docs(self, tmp_path):
-        """Verify add_document_link updates cycle_docs for current node."""
-        from work_item import add_document_link
-
-        work_file = tmp_path / "WORK-TEST-001.md"
-        work_file.write_text("""---
-current_node: plan
-documents:
-  plans: []
-cycle_docs: {}
----
-# Test
-""")
-        add_document_link(work_file, "plan", "docs/plans/PLAN-TEST.md")
-        content = work_file.read_text()
-        # cycle_docs should have plan: docs/plans/PLAN-TEST.md
-        assert "plan:" in content.split("cycle_docs:")[1].split("---")[0]
+# NOTE: TestNodeTransitions class removed (E2-298)
+# Coverage now in test_work_engine.py:
+# - test_update_node_changes_current_node -> test_transition_updates_node_history
+# - test_update_node_appends_history -> test_transition_updates_node_history
+# - test_add_document_link_adds_plan -> tests via WorkEngine.add_document_link
+# - test_add_document_link_updates_cycle_docs -> tests via WorkEngine.add_document_link

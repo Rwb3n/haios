@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-09T22:11:10
+# System Auto: last updated on: 2026-01-18T10:44:13
 # HAIOS Modules
 
 Core modules for HAIOS Chariot Architecture (L4-implementation.md).
@@ -399,13 +399,14 @@ Programmatic bootstrap module for L0-L4 context loading.
 ```python
 @dataclass
 class GroundedContext:
+    """Result of context loading - L0-L4 grounding."""
     session_number: int
     prior_session: Optional[int] = None
-    l0_telos: str = ""         # WHY - Mission, Prime Directive
-    l1_principal: str = ""     # WHO - Operator constraints
-    l2_intent: str = ""        # WHAT - Goals, trade-offs
-    l3_requirements: str = ""  # HOW - Principles, boundaries
-    l4_implementation: str = "" # WHAT to build - Architecture
+    l0_telos: str = ""           # WHY - Mission, Prime Directive
+    l1_principal: str = ""       # WHO - Operator constraints
+    l2_intent: str = ""          # WHAT - Goals, trade-offs
+    l3_requirements: str = ""    # HOW - Principles, boundaries
+    l4_implementation: str = ""  # WHAT to build - Architecture
     checkpoint_summary: str = ""
     strategies: List[Dict[str, Any]] = []
     ready_work: List[str] = []

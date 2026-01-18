@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-01-04T19:59:31
+# System Auto: last updated on: 2026-01-18T10:42:20
 """
 ContextLoader Module (E2-254)
 
@@ -8,9 +8,9 @@ Programmatic bootstrap for HAIOS sessions. Provides:
 - Session number computation
 - Integration with WorkEngine and MemoryBridge
 
-Per INV-052 S17.3:
+Interface:
 - INPUT: trigger ("coldstart" | "session_recovery")
-- OUTPUT: GroundedContext dataclass
+- OUTPUT: GroundedContext dataclass with L0-L4 manifesto content
 """
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -27,11 +27,11 @@ class GroundedContext:
 
     session_number: int
     prior_session: Optional[int] = None
-    l0_telos: str = ""         # WHY - Mission, Prime Directive
-    l1_principal: str = ""     # WHO - Operator constraints
-    l2_intent: str = ""        # WHAT - Goals, trade-offs
-    l3_requirements: str = ""  # HOW - Principles, boundaries
-    l4_implementation: str = "" # WHAT to build - Architecture
+    l0_telos: str = ""           # WHY - Mission, Prime Directive
+    l1_principal: str = ""       # WHO - Operator constraints
+    l2_intent: str = ""          # WHAT - Goals, trade-offs
+    l3_requirements: str = ""    # HOW - Principles, boundaries
+    l4_implementation: str = ""  # WHAT to build - Architecture
     checkpoint_summary: str = ""
     strategies: List[Dict[str, Any]] = field(default_factory=list)
     ready_work: List[str] = field(default_factory=list)

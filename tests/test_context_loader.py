@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-01-04T19:57:37
+# System Auto: last updated on: 2026-01-18T10:43:22
 """
 Tests for ContextLoader Module (E2-254)
 
@@ -95,6 +95,7 @@ class TestGroundedContext:
         assert ctx.session_number == 1
         assert ctx.prior_session is None
         assert ctx.l0_telos == ""
+        assert ctx.l1_principal == ""
         assert ctx.strategies == []
         assert ctx.ready_work == []
 
