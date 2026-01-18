@@ -1,33 +1,36 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-15T19:50:49
+# System Auto: last updated on: 2026-01-18T16:50:50
 # HAIOS System Configuration
 # Consolidates: governance-toggles.yaml, routing-thresholds.yaml
-# Version: 2.1 (Session 191 - ADR-042 Hierarchy Rename)
+# Version: 2.3 (Session 206 - The Pipeline)
 
 # Plugin manifest (for portable plugin spec)
 manifest:
   name: haios
-  version: "2.2"
-  description: "Hybrid AI Operating System - Trust Engine"
+  version: "2.3"
+  description: "Hybrid AI Operating System - Doc-to-Product Pipeline"
 
 # Current epoch context (ADR-042: Arc > Chapter in hierarchy)
 epoch:
-  current: E2
-  subversion: "2.2"  # The Refinement
-  epoch_file: ".claude/haios/epochs/E2/EPOCH.md"
-  architecture_dir: ".claude/haios/epochs/E2/architecture"
-  arcs_dir: ".claude/haios/epochs/E2/arcs"
-  # Foundational architecture (MUST load)
+  current: E2.3
+  subversion: "2.3"  # The Pipeline
+  epoch_file: ".claude/haios/epochs/E2_3/EPOCH.md"
+  architecture_dir: ".claude/haios/epochs/E2_3/architecture"
+  arcs_dir: ".claude/haios/epochs/E2_3/arcs"
+  observations_dir: ".claude/haios/epochs/E2_3/observations"
+  # Prior epoch (for reference)
+  prior_epoch: ".claude/haios/epochs/E2/EPOCH.md"
+  # Foundational architecture (MUST load) - carries forward from E2
   foundational:
     - S20-pressure-dynamics.md
     - S21-cognitive-notation.md
     - S22-skill-patterns.md
-  # Active arcs (formerly chapters - ADR-042)
+  # Active arcs
   active_arcs:
-    - chariot
-    - breath
-    - form
-    - ground
+    - provenance
+    - pipeline
+    - workuniversal
+    - migration
 
 # Governance toggles (from governance-toggles.yaml)
 toggles:

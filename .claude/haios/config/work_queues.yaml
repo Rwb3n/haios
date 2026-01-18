@@ -1,5 +1,5 @@
 # generated: 2026-01-15
-# System Auto: last updated on: 2026-01-15T21:02:20
+# System Auto: last updated on: 2026-01-18T16:30:37
 # Work Queue Configuration (E2-290, INV-064 design)
 # Provides typed queues with cycle-locking for structured work execution
 version: "1.0"
@@ -17,6 +17,15 @@ queue_types:
 
 # Active queues
 queues:
+  # PIPELINE queue - Epoch 2.3 (Session 206: Doc-to-Product Pipeline)
+  pipeline:
+    type: fifo  # Ordered execution - each step enables the next
+    items:
+      - WORK-001  # WorkUniversality - define canonical work item structure
+      # Migration and pipeline work items will be added using new structure
+    allowed_cycles: [implementation-cycle, investigation-cycle]
+    rationale: "Session 206: Building the doc-to-product pipeline. FIFO because steps are sequential."
+
   # GOVERNANCE queue - Session 193 priority (governance hardening focus)
   governance:
     type: priority

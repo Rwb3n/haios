@@ -1,5 +1,5 @@
 # generated: 2026-01-01
-# System Auto: last updated on: 2026-01-15T20:04:56
+# System Auto: last updated on: 2026-01-18T16:17:36
 # L4: Implementation - Technical Specifications
 
 Level: L4
@@ -14,6 +14,51 @@ Mutability: DYNAMIC (changes frequently)
 **What are the current technical specifications and temporal goals?**
 
 Execution layer. Contains rules, configs, and time-bound objectives.
+
+---
+
+## The Mission (Session 206 Strategic Review)
+
+**What HAIOS actually is:**
+
+```
+INPUT:  Corpus of documents (specs, designs, requirements)
+PROCESS: Multi-agent operational framework
+OUTPUT: Functional product (aligned to L0-L2 manifesto)
+```
+
+**The portability test:**
+> Can you drop `.claude/haios/` into a fresh workspace with a corpus of docs and have it produce a working product?
+
+Today: **No.** The plugin assumes HAIOS context, not arbitrary projects. We've built PM infrastructure that tracks itself.
+
+**What's required for "let it rip":**
+
+| Capability | Purpose | Current State |
+|------------|---------|---------------|
+| **Corpus Loader** | Read arbitrary docs, not hardcoded paths | No - ContextLoader is HAIOS-specific |
+| **Requirement Extractor** | Parse docs → actionable work items | No - manual operator extraction |
+| **Planner Agent** | Decompose requirements → ordered tasks | No - operator writes plans |
+| **Builder Agent** | Execute tasks → produce code/artifacts | Partial - cycles guide, but need steering |
+| **Validator Agent** | Check output against source specs | No - manual review |
+| **Orchestrator** | Route between agents, manage state | Partial - CycleRunner exists |
+
+**What we've built that's reusable:**
+- Memory system (store/retrieve learnings)
+- Work item structure (WORK.md, lifecycle)
+- Hooks (governance enforcement)
+- Session state tracking
+
+**What's HAIOS-specific cruft:**
+- L0-L4 manifesto (our corpus, not the framework)
+- Epochs/Arcs/Chapters (PM for HAIOS development)
+- Many recipes (HAIOS-specific operations)
+
+**The pivot (Session 206):**
+> Stop building PM infrastructure for HAIOS development.
+> Start building the **doc-to-product pipeline** that HAIOS *is*.
+
+**Architecture:** See `architecture/S26-pipeline-architecture.md` for full pipeline design.
 
 ---
 
