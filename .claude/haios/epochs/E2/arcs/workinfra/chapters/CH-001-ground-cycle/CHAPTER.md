@@ -1,11 +1,11 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-06T21:21:25
-# Arc: ground-cycle
+# System Auto: last updated on: 2026-01-18T15:31:57
+# Chapter: ground-cycle
 
-## Arc Definition
+## Chapter Definition
 
-**Arc ID:** ARC-001
-**Chapter:** C3-WorkInfra
+**Chapter ID:** CH-001
+**Arc:** WorkInfra
 **Epoch:** E2
 **Name:** ground-cycle Implementation
 **Status:** Active
@@ -105,7 +105,7 @@ Output:
 
 ---
 
-## Arc Completion Criteria
+## Chapter Completion Criteria
 
 - [ ] ground-cycle skill exists and is tested
 - [ ] All 4 phases implemented

@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-18T13:04:58",
+    "generated": "2026-01-18T13:18:09",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 202,
-        "current_session": 203,
+        "prior_session": 203,
+        "current_session": 204,
         "prior_date": "2026-01-18",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 81339,
-        "entities": 9056,
+        "concepts": 81342,
+        "entities": 9058,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -2542,6 +2542,15 @@
             "status": null,
             "date": "2026-01-18",
             "last_updated": "2026-01-18T12:20:48",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-18-03-SESSION-204-e2-302-s2-lifecycle-diagram-cleanup.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-18",
+            "last_updated": "2026-01-18T13:06:56",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6353,9 +6362,9 @@
         }
     ],
     "workspace": {
-        "total_files": 440,
+        "total_files": 441,
         "by_template": {
-            "checkpoint": 193,
+            "checkpoint": 194,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -6367,7 +6376,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 29,
+            "unknown": 30,
             "draft": 2,
             "approved": 6,
             "ready": 1,

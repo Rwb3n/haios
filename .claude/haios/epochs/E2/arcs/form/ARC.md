@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-17T15:14:43
+# System Auto: last updated on: 2026-01-18T15:34:33
 # Arc: Form
 
 ## Arc Definition
@@ -54,24 +54,25 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
 
 ---
 
-## Arcs
+## Chapters
 
-| Arc | Name | Status | Purpose |
-|-----|------|--------|---------|
-| ARC-001 | ConfigDrivenGeneration | Planned | haios.yaml is source of truth; plumbing regenerates from config |
-| ARC-002 | CategoryRouting | Planned | Route by category, not prefix |
-| ARC-003 | TemplateSimplification | **Complete** | E2-281: Checkpoint 112→24, E2-284: Observations 105→26 |
-| ARC-004 | SkillAtomization | **Complete** | ~~E2-283~~, ~~E2-284~~, ~~E2-285~~: Prune verbose skills |
-| ARC-005 | SoftEnforcement | **Complete** | E2-286/287/288: Observability + warnings (Session 190) |
-| ARC-006 | WorkUniversality | Planned | Work items universal - type is field, not prefix (S190) |
-| ARC-007 | MultiPartPlans | Planned | All work types have plans; plans can be multi-part (S190) |
-| ARC-008 | JustfileAudit | **Active** | 70 recipes need audit/organization; `new-investigation` recipe added (S199) |
-| ARC-009 | SessionStateCascade | **Complete** | INV-065→E2-293/294/295: All skills wired with set-cycle (S196) |
-| ARC-010 | TriageOperationalization | **Active** | E2-296: observation-triage-cycle exists but isn't triggered (INV-067 S198) |
+| Chapter | Name | Status | Purpose |
+|---------|------|--------|---------|
+| CH-001 | ConfigDrivenGeneration | Planned | haios.yaml is source of truth; plumbing regenerates from config. **S205 gap:** YAML schema validation missing - typos like `planss:` accepted silently (E2-299) |
+| CH-002 | CategoryRouting | Planned | Route by category, not prefix |
+| CH-003 | TemplateSimplification | **Complete** | E2-281: Checkpoint 112→24, E2-284: Observations 105→26 |
+| CH-004 | SkillAtomization | **Complete** | ~~E2-283~~, ~~E2-284~~, ~~E2-285~~: Prune verbose skills |
+| CH-005 | SoftEnforcement | **Complete** | E2-286/287/288: Observability + warnings (Session 190) |
+| CH-006 | WorkUniversality | Planned | Work items universal - type is field, not prefix (S190) |
+| CH-007 | MultiPartPlans | Planned | All work types have plans; plans can be multi-part (S190) |
+| ~~CH-008~~ | ~~JustfileAudit~~ | **Moved** | → Chariot CH-008 (ToolDiscoverability) - recipes are machinery, not cognition (S203) |
+| CH-009 | SessionStateCascade | **Complete** | INV-065→E2-293/294/295: All skills wired with set-cycle (S196) |
+| CH-010 | TriageOperationalization | **Active** | E2-296: observation-triage-cycle exists but isn't triggered (INV-067 S198) |
+| CH-011 | TemplateCommentStripping | Planned | Strip HTML comments from populated templates to reduce reader context (S203) |
 
 ---
 
-## Chapter Completion Criteria
+## Arc Completion Criteria
 
 - [ ] Category field drives routing (not ID prefix)
 - [x] Templates simplified (checkpoint 112→24 lines, observations 105→26 lines)
@@ -108,3 +109,46 @@ Within Claude Code, Skill() is not hookable. Hard enforcement requires SDK migra
 - Memory 81396-81401: Session 195 plan decomposition learnings
 - Memory 81412-81418: INV-067 closure - "re-discovery reveals process gaps" pattern (S198)
 - Memory 81433-81435: Session boundary pattern - planning/doing split (S199)
+- Memory 81482-81495: INV-069 observations - template comments as context pollution
+
+---
+
+## CH-011: Template Comment Stripping (Session 203)
+
+**Problem:** After a templated file is populated, HTML comments remain as dead weight. Instructions meant for the author consume tokens when the next agent reads the file.
+
+**Example (current):**
+```markdown
+<!-- VERIFICATION REQUIREMENT (Session 192 - E2-290 Learning)
+     These checkboxes are the SOURCE OF TRUTH...
+     [50+ tokens of instructions]
+-->
+```
+
+This is written once, read many times. Context pollution compounds.
+
+**Implementation Options:**
+
+| Option | Mechanism | Pros | Cons |
+|--------|-----------|------|------|
+| **A: PostToolUse Hook** | Strip comments after Write to governed paths | Immediate, automatic | May strip from incomplete files |
+| **B: Close-Work-Cycle** | Strip during ARCHIVE phase | Only affects "done" docs | Requires cycle completion |
+| **C: Template Redesign** | Move instructions to separate file | Cleanest long-term | Biggest change |
+
+**Recommended:** Option B (Close-Work-Cycle ARCHIVE phase)
+- Semantically correct: only strip when work is complete
+- Integrates with existing governance
+- Minimal risk of stripping prematurely
+
+**Implementation Sketch:**
+```python
+# In close-work-cycle ARCHIVE phase or just close-work recipe
+def strip_template_comments(file_path):
+    """Remove HTML comments from populated template."""
+    content = read_file(file_path)
+    stripped = re.sub(r'<!--.*?-->', '', content, flags=re.DOTALL)
+    write_file(file_path, stripped)
+```
+
+**Priority:** Low - enhancement that compounds over time
+**Depends On:** Nothing - can be implemented independently

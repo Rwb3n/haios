@@ -2,6 +2,8 @@
 template: observations
 work_id: E2-298
 captured_session: '201'
+triage_status: triaged
+triage_session: '204'
 generated: '2026-01-17'
 last_updated: '2026-01-17T16:02:36'
 ---

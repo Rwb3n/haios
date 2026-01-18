@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-15T20:11:23
+# System Auto: last updated on: 2026-01-18T15:30:12
 # Arc: Ground
 
 ## Arc Definition
@@ -43,19 +43,19 @@ Load architectural context before cognitive work begins.
 
 ---
 
-## Arcs
+## Chapters
 
-| Arc | Name | Status | Purpose |
-|-----|------|--------|---------|
-| ARC-001 | GroundCycle | Complete | Design ground-cycle skill (E2-276 complete) |
-| ARC-002 | PortalSystem | Complete | Implement portals in work items (E2-277 complete, S179) |
-| ARC-003 | SessionManifest | **Complete** | E2-281/E2-282: Checkpoint as loading manifest |
-| ARC-004 | CycleWiring | Planned | Wire ground-cycle to calling cycles |
-| ARC-005 | ObservationCentralization | Planned | Epoch-level observation location for pattern review (S190) |
+| Chapter | Name | Status | Purpose |
+|---------|------|--------|---------|
+| CH-001 | GroundCycle | Complete | Design ground-cycle skill (E2-276 complete) |
+| CH-002 | PortalSystem | Complete | Implement portals in work items (E2-277 complete, S179) |
+| CH-003 | SessionManifest | **Complete** | E2-281/E2-282: Checkpoint as loading manifest |
+| CH-004 | CycleWiring | Planned | Wire ground-cycle to calling cycles |
+| CH-005 | ObservationCentralization | Planned | Epoch-level observation location for pattern review (S190) |
 
 ---
 
-## Chapter Completion Criteria
+## Arc Completion Criteria
 
 - [x] ground-cycle designed and implemented (E2-276)
 - [x] Portal system (references/REFS.md) in work items (E2-277, S179)

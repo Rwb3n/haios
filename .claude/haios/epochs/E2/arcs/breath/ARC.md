@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-17T14:07:48
+# System Auto: last updated on: 2026-01-18T15:34:14
 # Arc: Breath
 
 ## Arc Definition
@@ -23,7 +23,7 @@ The rhythm of agent cognition: inhale (explore) and exhale (commit).
 ```
 
 **The fractal pattern:**
-- Epoch [tight] → Chapter [volumous] → Arc [tight] → Work Item [volumous] → Phases [tight]
+- Epoch [tight] → Arc [volumous] → Chapter [tight] → Work Item [volumous] → Phases [tight]
 
 ---
 
@@ -37,17 +37,17 @@ The rhythm of agent cognition: inhale (explore) and exhale (commit).
 
 ---
 
-## Arcs
+## Chapters
 
-| Arc | Name | Status | Purpose |
-|-----|------|--------|---------|
-| ARC-001 | ObservationIsolation | **Complete** | observation-capture-cycle standalone (INV-059) |
-| ARC-002 | SessionCeremony | **Complete** | E2-281/282: Checkpoint as loading manifest (24 lines) |
-| ARC-003 | MemoryRefEnforcement | **Active** | Coldstart MUST query load_memory_refs |
-| ARC-004 | PhaseAnnotation | Planned | Add [MAY]/[MUST] to all skill phases |
-| ARC-005 | BatchCycleExecution | Planned | Related work items: plan all → review → implement all (S190) |
-| ARC-006 | SessionStateWiring | **Complete** | E2-293/294/295: All skills call set-cycle/clear-cycle (S196) |
-| ARC-007 | ObservationTriageOperationalization | **Active** | E2-296: Triage happens but isn't triggered (INV-067 S198) |
+| Chapter | Name | Status | Purpose |
+|---------|------|--------|---------|
+| CH-001 | ObservationIsolation | **Complete** | observation-capture-cycle standalone (INV-059) |
+| CH-002 | SessionCeremony | **Complete** | E2-281/282: Checkpoint as loading manifest (24 lines) |
+| CH-003 | MemoryRefEnforcement | **Active** | Coldstart MUST query load_memory_refs |
+| CH-004 | PhaseAnnotation | Planned | Add [MAY]/[MUST] to all skill phases |
+| CH-005 | BatchCycleExecution | Planned | Related work items: plan all → review → implement all (S190) |
+| CH-006 | SessionStateWiring | **Complete** | E2-293/294/295: All skills call set-cycle/clear-cycle (S196) |
+| CH-007 | ObservationTriageOperationalization | **Active** | E2-296: Triage happens but isn't triggered (INV-067 S198) |
 
 ---
 
@@ -71,7 +71,7 @@ Operator owns `/clear` and `/coldstart`. System handles the rest.
 
 ---
 
-## Chapter Completion Criteria
+## Arc Completion Criteria
 
 - [x] Observation capture is standalone skill (E2-280)
 - [x] Checkpoint thinned (24 lines, manifest not log) (E2-281)
@@ -94,7 +94,19 @@ INV-067 discovered that Session 197's observation extraction "re-discovered" 15 
 
 **Pattern learned:** "Re-discovery" investigations reveal process gaps, not content gaps. When investigation "finds" existing things, the real finding is underutilized infrastructure.
 
-**Spawned work:** E2-296 (Observation Triage Batch - Chariot Arc)
+**Spawned work:** E2-296 (Observation Triage Batch)
+
+---
+
+## Session 205 Observations (triaged from E2-296, E2-299)
+
+**CH-007 (ObservationTriageOperationalization) gaps identified:**
+- Gap: Triage log missing in observations.md - files get `triage_status: triaged` but no structured log of decisions (E2-296)
+- Gap: Batch triage automation needed - processing 35 observations manually is time-consuming (E2-296)
+- Gap: Triage should follow capture - observation-triage-cycle exists but has no trigger (E2-296)
+
+**Insight validated:**
+- The observation->triage->fix pipeline WORKS when exercised: typo caught during E2-253 -> documented in observations.md -> triaged by INV-067 -> spawned as E2-299 -> fixed in S200 (E2-299)
 
 ---
 

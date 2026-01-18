@@ -1,9 +1,9 @@
 # generated: 2025-12-31
-# System Auto: last updated on: 2025-12-31T17:22:27
+# System Auto: last updated on: 2026-01-18T11:58:25
 # Section 17: Modular Black Box Architecture
 
 Generated: 2025-12-31 (Session 153)
-Purpose: Restructure INV-052 findings into 5 discrete modules with explicit I/O contracts
+Purpose: Restructure INV-052 findings into 9 discrete modules (5 core + 4 WorkEngine satellites from E2-279) with explicit I/O contracts
 Status: DESIGN
 Authority: ADR-040 (Accepted)
 
@@ -11,7 +11,19 @@ Authority: ADR-040 (Accepted)
 
 ## 17.1 Module Overview
 
-Per ADR-040, HAIOS is decomposed into 5 black-box modules:
+Per ADR-040, HAIOS is decomposed into 9 black-box modules (5 core modules + 4 WorkEngine satellites from E2-279 decomposition):
+
+| Module | Type | Purpose |
+|--------|------|---------|
+| ContextLoader | Core | L0-L4 bootstrap |
+| WorkEngine | Core | WORK.md CRUD |
+| CycleRunner | Core | Phase execution |
+| MemoryBridge | Core | MCP wrapper |
+| GovernanceLayer | Core | Policy enforcement |
+| CascadeEngine | Satellite | Completion cascade |
+| PortalManager | Satellite | REFS.md management |
+| SpawnTree | Satellite | Tree traversal |
+| BackfillEngine | Satellite | Backlog backfill |
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────┐
@@ -121,10 +133,12 @@ OUTPUT:
   GroundedContext:
     session_number: int
     prior_session: int | null
-    l0_north_star: str           # Mission, principles
-    l1_invariants: str           # Patterns, anti-patterns
-    l2_operational: dict         # Status, phase, milestone
-    l3_session: dict             # Checkpoint, work context
+    l0_telos: str                # WHY - Mission, Prime Directive
+    l1_principal: str            # WHO - Operator constraints
+    l2_intent: str               # WHAT - Goals, trade-offs
+    l3_requirements: str         # HOW - Principles, boundaries
+    l4_implementation: str       # WHAT to build - Architecture
+    checkpoint_summary: str      # Latest checkpoint content
     strategies: list[Strategy]   # From memory query
     ready_work: list[WorkItem]   # From `just ready`
 ```
@@ -133,10 +147,13 @@ OUTPUT:
 
 | File | Description |
 |------|-------------|
-| `.claude/config/north-star.md` | L0 context (read-only) |
-| `.claude/config/invariants.md` | L1 context (read-only) |
-| `.claude/config/roadmap.md` | Strategic direction |
-| `docs/checkpoints/*.md` | Session history (read for session number) |
+| `.claude/haios/manifesto/L0-telos.md` | L0 WHY - Mission, Prime Directive (read-only) |
+| `.claude/haios/manifesto/L1-principal.md` | L1 WHO - Operator constraints (read-only) |
+| `.claude/haios/manifesto/L2-intent.md` | L2 WHAT - Goals, trade-offs (read-only) |
+| `.claude/haios/manifesto/L3-requirements.md` | L3 HOW - Principles, boundaries (read-only) |
+| `.claude/haios/manifesto/L4-implementation.md` | L4 BUILD - Architecture (read-only) |
+| `.claude/haios-status.json` | Session number source |
+| `docs/checkpoints/*.md` | Session history |
 
 ### Dependencies
 
@@ -433,17 +450,12 @@ These sections don't map cleanly to a single module:
 
 ### Configuration Ownership
 
-| Config File | Owning Module |
-|-------------|---------------|
-| north-star.md | ContextLoader |
-| invariants.md | ContextLoader |
-| roadmap.md | ContextLoader |
-| governance-toggles.yaml | GovernanceLayer |
-| hook-handlers.yaml | GovernanceLayer |
-| gates.yaml | GovernanceLayer |
-| node-bindings.yaml | GovernanceLayer |
-| cycle-definitions.yaml | CycleRunner |
-| thresholds.yaml | GovernanceLayer |
+| Config File | Owning Module | Notes |
+|-------------|---------------|-------|
+| `.claude/haios/manifesto/L0-L4-*.md` | ContextLoader | Manifesto corpus |
+| `.claude/haios/config/haios.yaml` | GovernanceLayer | Toggles + thresholds |
+| `.claude/haios/config/cycles.yaml` | CycleRunner | Node bindings |
+| `.claude/haios/config/components.yaml` | GovernanceLayer | Registries |
 
 ---
 

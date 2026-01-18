@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-15T20:26:35
+# System Auto: last updated on: 2026-01-18T12:09:56
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -277,10 +277,10 @@ class WorkEngine:
 
     def get_ready(self) -> List[WorkState]:
         """
-        Get all unblocked work items from active directory.
+        Get all unblocked, non-complete work items from active directory.
 
         Returns:
-            List of WorkState with empty blocked_by
+            List of WorkState with empty blocked_by and status != 'complete'
         """
         ready = []
         if not self.active_dir.exists():
@@ -291,7 +291,8 @@ class WorkEngine:
                 work_md = subdir / "WORK.md"
                 if work_md.exists():
                     work = self._parse_work_file(work_md)
-                    if work and not work.blocked_by:
+                    # INV-070: Filter out complete items (status check was missing)
+                    if work and not work.blocked_by and work.status != "complete":
                         ready.append(work)
         return ready
 

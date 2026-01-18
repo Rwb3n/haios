@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-15T20:12:07
+# System Auto: last updated on: 2026-01-18T15:30:36
 # Arc: WorkInfra
 
 ## Arc Definition
@@ -30,17 +30,17 @@ All work in this chapter MUST load these before planning:
 
 ---
 
-## Arcs
+## Chapters
 
-| Arc | Name | Status | Work Items |
-|-----|------|--------|------------|
-| ARC-001 | GroundCycle | Active | TBD |
-| ARC-002 | PortalSystem | Planned | TBD |
-| ARC-003 | ChariotWiring | Planned | TBD |
+| Chapter | Name | Status | Work Items |
+|---------|------|--------|------------|
+| CH-001 | GroundCycle | Active | TBD |
+| CH-002 | PortalSystem | Planned | TBD |
+| CH-003 | ChariotWiring | Planned | TBD |
 
 ---
 
-## Chapter Completion Criteria
+## Arc Completion Criteria
 
 - [ ] ground-cycle designed and implemented
 - [ ] Portal system (references/REFS.md) in all work items
@@ -54,7 +54,7 @@ All work in this chapter MUST load these before planning:
 
 | Decision | Choice | Arc/Work Item |
 |----------|--------|---------------|
-| Hierarchy naming | Epoch → Chapter → Arc → Work Item | Session 177 |
+| Hierarchy naming | Epoch → Arc → Chapter → Work Item | ADR-042 (Session 191) |
 | Context loading | ground-cycle as standalone cycle | Session 177 |
 
 ---

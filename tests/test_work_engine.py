@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-06T23:10:09
+# System Auto: last updated on: 2026-01-18T12:10:42
 """
 Tests for WorkEngine module (E2-242).
 
@@ -346,6 +346,51 @@ def test_get_ready_excludes_archived(tmp_path, engine, setup_work_item):
     assert len(result) == 1
     assert result[0].id == "E2-ACTIVE"
     assert all("archive" not in str(w.path) for w in result)
+
+
+# =============================================================================
+# INV-070: get_ready excludes complete items
+# =============================================================================
+
+SAMPLE_COMPLETE_WORK_MD = """---
+template: work_item
+id: E2-COMPLETE
+title: Already Complete Item
+status: complete
+owner: Hephaestus
+created: 2026-01-03
+closed: '2026-01-18'
+milestone: null
+priority: high
+category: implementation
+blocked_by: []
+blocks: []
+current_node: backlog
+node_history:
+- node: backlog
+  entered: '2026-01-03T10:00:00'
+  exited: null
+memory_refs: []
+---
+# E2-COMPLETE
+"""
+
+def test_get_ready_excludes_complete_items(tmp_path, engine, setup_work_item):
+    """Test that get_ready excludes items with status: complete (INV-070 fix)."""
+    # Create active unblocked item
+    setup_work_item("E2-ACTIVE", SAMPLE_WORK_MD)
+
+    # Create complete item (should be excluded)
+    setup_work_item("E2-COMPLETE", SAMPLE_COMPLETE_WORK_MD)
+
+    result = engine.get_ready()
+
+    # Should only return active items, not complete ones
+    assert len(result) == 1
+    assert result[0].id == "E2-ACTIVE"
+    assert result[0].status == "active"
+    # Verify the complete item was excluded
+    assert not any(w.id == "E2-COMPLETE" for w in result)
 
 
 # =============================================================================

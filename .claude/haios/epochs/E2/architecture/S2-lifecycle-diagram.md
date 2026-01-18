@@ -1,5 +1,5 @@
 # generated: 2025-12-30
-# System Auto: last updated on: 2026-01-18T13:00:45
+# System Auto: last updated on: 2026-01-18T13:15:08
 # Section 2: Lifecycle Architecture Diagram
 
 Generated: 2025-12-30 (Session 150)
@@ -277,28 +277,30 @@ Purpose: Visual summary of lifecycle architecture from Sections 2A-2F
 
 ## 7. CONFIG FILES (Extensibility Layer)
 
+**Note:** Superseded by Epoch 2.2 config consolidation (E2-246, INV-053).
+See `.claude/haios/config/README.md` for authoritative reference.
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                      CONFIGURATION ARCHITECTURE                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  .claude/haios/config/                                                      │
-│  ├── cycle-definitions.yaml    ◄── Cycle phases, gates, memory, routing     │
-│  ├── gates.yaml                ◄── Gate check definitions (incl objective_  │
-│  │                                  complete)                               │
-│  ├── hook-handlers.yaml        ◄── Handler dispatch config                  │
-│  └── thresholds.yaml           ◄── Context %, stale days, observation count │
+│  ├── haios.yaml          ◄── System config: manifest, toggles, thresholds   │
+│  ├── cycles.yaml         ◄── Node bindings: node → cycle mappings           │
+│  ├── components.yaml     ◄── Component registry: skills, agents, hooks      │
+│  └── work_queues.yaml    ◄── Queue definitions: priority ordering (E2-290)  │
 │                                                                             │
 │  ┌─────────────────────────────────────────────────────────────────────┐    │
 │  │                        EXECUTION LAYER                               │    │
 │  │  ─────────────────────────────────────────────────────────────────  │    │
 │  │                                                                     │    │
-│  │  cycle-definitions.yaml                                             │    │
+│  │  cycles.yaml (node_bindings)                                        │    │
 │  │         │                                                           │    │
 │  │         ▼                                                           │    │
 │  │  ┌─────────────────────┐                                            │    │
-│  │  │  cycle_executor.py  │  ◄── Thin orchestrator                     │    │
-│  │  │  (future impl)      │                                            │    │
+│  │  │  cycle_runner.py    │  ◄── Orchestrates phase transitions         │    │
+│  │  │  (haios/modules/)   │                                            │    │
 │  │  └──────────┬──────────┘                                            │    │
 │  │             │                                                       │    │
 │  │             ▼                                                       │    │

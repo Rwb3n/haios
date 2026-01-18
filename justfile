@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-17T15:13:25
+# System Auto: last updated on: 2026-01-18T15:36:56
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -79,6 +79,12 @@ scan-observations:
 # Scans archived work items for untriaged observations and reports them
 triage-observations:
     python -c "import sys; sys.path.insert(0, '.claude/lib'); from observations import scan_archived_observations; r = scan_archived_observations(); print(f'Found {len(r)} archived items with untriaged observations:'); [print(f'  {i[\"work_id\"]}: {len(i[\"observations\"])} observations') for i in r] if r else print('No untriaged observations found.')"
+
+# Mark observation files as triaged (S205)
+# Usage: just mark-triaged E2-303 E2-302 E2-301
+# Adds triage_status: triaged and triage_session to frontmatter
+mark-triaged +work_ids:
+    python -c "import sys, json; sys.path.insert(0, '.claude/lib'); from observations import mark_triaged; data = json.load(open('.claude/haios-status.json')); session = str(data.get('session_delta', {}).get('current_session', 'unknown')); [print(f'{wid}: {mark_triaged(wid, session)}') for wid in '{{work_ids}}'.split()]"
 
 # Show governance metrics from cycle events (E2-108)
 governance-metrics:
