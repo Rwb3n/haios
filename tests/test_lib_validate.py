@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-01-05T23:15:18
+# System Auto: last updated on: 2026-01-19T16:37:40
 """Tests for .claude/lib/validate.py - Template validation module.
 
 TDD tests for E2-120 Phase 2c.
@@ -953,3 +953,108 @@ class TestPlanValidationCycleSkill:
 
         # Should reference Gate 4
         assert "Gate 4" in content, "Must be labeled as Gate 4"
+
+
+# =============================================================================
+# WORK-001: Universal Work Item Type Validation Tests
+# =============================================================================
+
+class TestWorkItemTypeValidation:
+    """Tests for work_item type field validation (WORK-001)."""
+
+    def test_valid_type_passes_validation(self, tmp_path):
+        """Valid type values should pass validation."""
+        from validate import validate_template
+
+        content = """---
+template: work_item
+id: WORK-001
+title: Test
+type: feature
+status: active
+current_node: backlog
+---
+# WORK-001: Test
+
+@docs/README.md
+@docs/epistemic_state.md
+
+## Context
+Test
+
+## Deliverables
+- [ ] Test
+"""
+        test_file = tmp_path / "WORK.md"
+        test_file.write_text(content)
+
+        result = validate_template(str(test_file))
+        # Should not have type-related errors
+        type_errors = [e for e in result.get("errors", []) if "type" in e.lower()]
+        assert len(type_errors) == 0
+
+    def test_invalid_type_fails_validation(self, tmp_path):
+        """Invalid type values should fail validation."""
+        from validate import validate_template
+
+        content = """---
+template: work_item
+id: WORK-001
+title: Test
+type: invalid_type
+status: active
+current_node: backlog
+---
+# WORK-001: Test
+
+@docs/README.md
+@docs/epistemic_state.md
+
+## Context
+Test
+
+## Deliverables
+- [ ] Test
+"""
+        test_file = tmp_path / "WORK.md"
+        test_file.write_text(content)
+
+        result = validate_template(str(test_file))
+        # Should have type-related error
+        assert not result["is_valid"]
+        type_errors = [e for e in result["errors"] if "type" in e.lower()]
+        assert len(type_errors) > 0
+        assert "invalid_type" in type_errors[0]
+
+    def test_all_five_types_are_valid(self, tmp_path):
+        """All 5 type values (feature, investigation, bug, chore, spike) should be valid."""
+        from validate import validate_template
+
+        valid_types = ["feature", "investigation", "bug", "chore", "spike"]
+
+        for work_type in valid_types:
+            content = f"""---
+template: work_item
+id: WORK-001
+title: Test
+type: {work_type}
+status: active
+current_node: backlog
+---
+# WORK-001: Test
+
+@docs/README.md
+@docs/epistemic_state.md
+
+## Context
+Test
+
+## Deliverables
+- [ ] Test
+"""
+            test_file = tmp_path / "WORK.md"
+            test_file.write_text(content)
+
+            result = validate_template(str(test_file))
+            type_errors = [e for e in result.get("errors", []) if "type" in e.lower()]
+            assert len(type_errors) == 0, f"Type '{work_type}' should be valid"
