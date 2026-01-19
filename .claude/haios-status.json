@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-19T13:29:15",
+    "generated": "2026-01-19T16:45:44",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 207,
-        "current_session": 208,
+        "prior_session": 208,
+        "current_session": 209,
         "prior_date": "2026-01-18",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 81947,
-        "entities": 9080,
+        "concepts": 81960,
+        "entities": 9083,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -783,28 +783,34 @@
                 "status",
                 "id",
                 "title",
-                "current_node"
+                "current_node",
+                "type"
             ],
             "optional_fields": [
                 "owner",
                 "created",
                 "closed",
-                "milestone",
                 "priority",
                 "effort",
-                "category",
-                "spawned_by",
-                "spawned_by_investigation",
+                "requirement_refs",
+                "source_files",
+                "acceptance_criteria",
+                "artifacts",
+                "extensions",
                 "blocked_by",
                 "blocks",
                 "enables",
-                "related",
                 "node_history",
                 "cycle_docs",
                 "memory_refs",
-                "documents",
                 "version",
-                "operator_decisions"
+                "milestone",
+                "category",
+                "spawned_by",
+                "spawned_by_investigation",
+                "operator_decisions",
+                "documents",
+                "related"
             ],
             "allowed_status": [
                 "active",
@@ -814,7 +820,6 @@
             ],
             "expected_sections": [
                 "Context",
-                "Current State",
                 "Deliverables"
             ]
         }
@@ -2608,6 +2613,15 @@
             "status": null,
             "date": "2026-01-18",
             "last_updated": "2026-01-18T22:18:57",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-19-01-SESSION-209-workitem-evolution-queue-and-e3-setup.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-19",
+            "last_updated": "2026-01-19T13:30:08",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6469,9 +6483,9 @@
         }
     ],
     "workspace": {
-        "total_files": 445,
+        "total_files": 446,
         "by_template": {
-            "checkpoint": 198,
+            "checkpoint": 199,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -6483,7 +6497,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 34,
+            "unknown": 35,
             "draft": 2,
             "approved": 6,
             "ready": 1,
