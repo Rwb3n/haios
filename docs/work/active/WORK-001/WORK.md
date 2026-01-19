@@ -41,10 +41,17 @@ memory_refs:
 - 81551
 - 81552
 - 81553
+- 82142
+- 82143
+- 82144
+- 82145
+- 82146
+- 82147
+- 82148
 extensions: {}
 version: '2.0'
 generated: 2026-01-18
-last_updated: '2026-01-18T16:33:01'
+last_updated: '2026-01-19T16:41:54'
 ---
 # WORK-001: Implement Universal Work Item Structure
 
@@ -64,25 +71,34 @@ This work item implements the universal work item structure defined in TRD-WORK-
 
 ## Acceptance Criteria
 
-- [ ] `work_item.md` template updated with universal structure
-- [ ] WorkEngine handles new fields (requirement_refs, source_files, artifacts, extensions)
-- [ ] ID generation uses WORK-XXX format
-- [ ] Validation checks new required fields
-- [ ] First work item (this one) successfully created and tracked
+- [x] `work_item.md` template updated with universal structure
+- [x] WorkEngine handles new fields (requirement_refs, source_files, artifacts, extensions)
+- [x] ID generation uses WORK-XXX format
+- [x] Validation checks new required fields
+- [x] First work item (this one) successfully created and tracked
 
 ---
 
 ## Deliverables
 
-- [ ] `.claude/templates/work_item.md` - Updated template
-- [ ] `.claude/haios/modules/work_engine.py` - Handle new fields
-- [ ] `.claude/lib/scaffold.py` - New ID generation
-- [ ] `.claude/lib/validate.py` - New validation rules
-- [ ] Tests pass
+- [x] `.claude/templates/work_item.md` - Updated template
+- [x] `.claude/haios/modules/work_engine.py` - Handle new fields
+- [x] `.claude/lib/scaffold.py` - New ID generation
+- [x] `.claude/lib/validate.py` - New validation rules
+- [x] Tests pass (80 tests in related files)
 
 ---
 
 ## History
+
+### 2026-01-19 - Implemented (Session 210)
+- WorkState dataclass extended with 6 new fields (type, requirement_refs, etc.)
+- _parse_work_file updated with backward compat (type fallback to category)
+- get_next_work_id() added to scaffold for sequential WORK-XXX IDs
+- Template updated to v2.0 with universal structure
+- Validation rules added for type enum
+- All tests pass (80 in related files)
+- Operator decisions resolved: Sequential IDs, 5 types, frontmatter-only acceptance_criteria
 
 ### 2026-01-18 - Created (Session 206)
 - First work item using universal structure
