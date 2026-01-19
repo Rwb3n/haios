@@ -1,8 +1,8 @@
 ---
 template: work_item
 id: INV-021
-title: "Work Item Taxonomy and Schema Semantics"
-status: active
+title: Work Item Taxonomy and Schema Semantics
+status: dismissed
 owner: Hephaestus
 created: 2025-12-23
 closed: null
@@ -10,7 +10,7 @@ milestone: M7b-WorkInfra
 priority: medium
 effort: medium
 category: implementation
-spawned_by: "Session 64 observation"
+spawned_by: Session 64 observation
 spawned_by_investigation: null
 blocked_by: []
 blocks: []
@@ -18,18 +18,18 @@ enables: []
 related: []
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2025-12-23T19:06:12
-    exited: null
+- node: backlog
+  entered: 2025-12-23 19:06:12
+  exited: null
 cycle_docs: {}
 memory_refs: []
 documents:
   investigations: []
   plans: []
   checkpoints: []
-version: "1.0"
+version: '1.0'
 generated: 2025-12-23
-last_updated: 2025-12-23T18:04:04
+last_updated: '2026-01-19T13:28:00'
 ---
 # WORK-INV-021: Work Item Taxonomy and Schema Semantics
 

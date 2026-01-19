@@ -1,5 +1,5 @@
 # generated: 2026-01-15
-# System Auto: last updated on: 2026-01-18T16:30:37
+# System Auto: last updated on: 2026-01-19T13:28:21
 # Work Queue Configuration (E2-290, INV-064 design)
 # Provides typed queues with cycle-locking for structured work execution
 version: "1.0"
@@ -17,12 +17,19 @@ queue_types:
 
 # Active queues
 queues:
+  # WORKITEM-EVOLUTION queue - Session 208 (Pre-E2.3 Migration Focus)
+  workitem-evolution:
+    type: fifo  # Ordered execution - spec first, then implementation
+    items:
+      - WORK-001  # Universal Work Item Structure (TRD-WORK-ITEM-UNIVERSAL spec)
+      - E2-179    # Scaffold Recipe Optional Frontmatter Args (spawn_by etc)
+    allowed_cycles: [implementation-cycle, work-creation-cycle]
+    rationale: "Session 208: Solidify work item schema before E2.3 migration. WORK-001 defines spec, E2-179 improves tooling."
+
   # PIPELINE queue - Epoch 2.3 (Session 206: Doc-to-Product Pipeline)
   pipeline:
     type: fifo  # Ordered execution - each step enables the next
-    items:
-      - WORK-001  # WorkUniversality - define canonical work item structure
-      # Migration and pipeline work items will be added using new structure
+    items: []   # Populated after workitem-evolution complete
     allowed_cycles: [implementation-cycle, investigation-cycle]
     rationale: "Session 206: Building the doc-to-product pipeline. FIFO because steps are sequential."
 
