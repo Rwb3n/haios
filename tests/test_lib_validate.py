@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-01-19T16:37:40
+# System Auto: last updated on: 2026-01-19T16:40:16
 """Tests for .claude/lib/validate.py - Template validation module.
 
 TDD tests for E2-120 Phase 2c.
@@ -87,22 +87,33 @@ class TestGetTemplateRegistry:
 
 
 class TestWorkItemTemplate:
-    """Tests for work_item.md template structure (E2-272)."""
+    """Tests for work_item.md template structure (E2-272, WORK-001 updated)."""
 
-    def test_work_item_template_has_operator_decisions_field(self):
-        """Work item template file should have operator_decisions in frontmatter."""
+    def test_work_item_template_has_type_field(self):
+        """WORK-001: Work item template should have type in frontmatter."""
         template_path = Path(__file__).parent.parent / ".claude" / "templates" / "work_item.md"
         content = template_path.read_text()
 
-        assert "operator_decisions:" in content
+        assert "type:" in content
 
-    def test_operator_decisions_defaults_to_empty_list(self):
-        """New work items should have operator_decisions: [] by default."""
+    def test_work_item_template_has_universal_fields(self):
+        """WORK-001: Work item template should have universal pipeline fields."""
         template_path = Path(__file__).parent.parent / ".claude" / "templates" / "work_item.md"
         content = template_path.read_text()
 
-        # Template should have empty list as default
-        assert "operator_decisions: []" in content
+        # Universal fields from TRD-WORK-ITEM-UNIVERSAL
+        assert "requirement_refs:" in content
+        assert "source_files:" in content
+        assert "acceptance_criteria:" in content
+        assert "artifacts:" in content
+        assert "extensions:" in content
+
+    def test_work_item_template_version_is_2(self):
+        """WORK-001: Work item template should be version 2.0."""
+        template_path = Path(__file__).parent.parent / ".claude" / "templates" / "work_item.md"
+        content = template_path.read_text()
+
+        assert 'version: "2.0"' in content
 
 
 class TestImplementationPlanTemplate:
