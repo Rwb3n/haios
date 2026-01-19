@@ -1,16 +1,16 @@
 {
-    "generated": "2026-01-19T16:45:44",
+    "generated": "2026-01-19T20:32:31",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
-        "progress": 87,
-        "prior_progress": 86,
+        "progress": 89,
+        "prior_progress": 88,
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 208,
-        "current_session": 209,
-        "prior_date": "2026-01-18",
+        "prior_session": 210,
+        "current_session": 211,
+        "prior_date": "2026-01-19",
         "completed": [],
         "completed_count": 0,
         "added": [],
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 81960,
-        "entities": 9083,
+        "concepts": 81970,
+        "entities": 9086,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -239,6 +239,7 @@
                 "E2-164",
                 "E2-213",
                 "E2-214",
+                "E2-235",
                 "E2-151",
                 "E2-152",
                 "E2-163",
@@ -281,8 +282,8 @@
                 "INV-043",
                 "INV-044"
             ],
-            "progress": 87,
-            "prior_progress": 86,
+            "progress": 89,
+            "prior_progress": 88,
             "delta_source": null
         },
         "M7c-Governance": {
@@ -2622,6 +2623,24 @@
             "status": null,
             "date": "2026-01-19",
             "last_updated": "2026-01-19T13:30:08",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-19-02-SESSION-210-work-001-universal-work-item-structure-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-19",
+            "last_updated": "2026-01-19T16:47:44",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-19-03-SESSION-211-getqueue-bugfix-obs-209-001.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-19",
+            "last_updated": "2026-01-19T18:03:33",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6483,9 +6502,9 @@
         }
     ],
     "workspace": {
-        "total_files": 446,
+        "total_files": 448,
         "by_template": {
-            "checkpoint": 199,
+            "checkpoint": 201,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -6497,7 +6516,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 35,
+            "unknown": 37,
             "draft": 2,
             "approved": 6,
             "ready": 1,
