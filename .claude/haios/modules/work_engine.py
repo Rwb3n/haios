@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-18T21:57:42
+# System Auto: last updated on: 2026-01-19T16:32:50
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -79,15 +79,24 @@ class WorkNotFoundError(Exception):
 
 @dataclass
 class WorkState:
-    """Typed work item state from parsed WORK.md."""
+    """Typed work item state from parsed WORK.md.
+
+    WORK-001: Extended with universal work item fields for pipeline portability.
+    """
 
     id: str
     title: str
     status: str
     current_node: str
+    type: str = "feature"  # WORK-001: feature|investigation|bug|chore|spike
     blocked_by: List[str] = field(default_factory=list)
     node_history: List[Dict[str, Any]] = field(default_factory=list)
     memory_refs: List[int] = field(default_factory=list)
+    requirement_refs: List[str] = field(default_factory=list)  # WORK-001: Links to source requirements
+    source_files: List[str] = field(default_factory=list)  # WORK-001: Provenance
+    acceptance_criteria: List[str] = field(default_factory=list)  # WORK-001: Verifiable statements
+    artifacts: List[str] = field(default_factory=list)  # WORK-001: Build outputs
+    extensions: Dict[str, Any] = field(default_factory=dict)  # WORK-001: Project-specific fields
     path: Optional[Path] = None
     priority: str = "medium"  # E2-290: For queue ordering
 
@@ -568,7 +577,12 @@ class WorkEngine:
         return None
 
     def _parse_work_file(self, path: Path) -> Optional[WorkState]:
-        """Parse WORK.md into WorkState."""
+        """Parse WORK.md into WorkState.
+
+        WORK-001: Extended to parse universal work item fields with backward compat.
+        - type falls back to category field for legacy items
+        - New fields default to empty list/dict if missing
+        """
         content = path.read_text(encoding="utf-8")
         parts = content.split("---", 2)
         if len(parts) < 3:
@@ -580,9 +594,17 @@ class WorkEngine:
             title=fm.get("title", ""),
             status=fm.get("status", ""),
             current_node=fm.get("current_node", "backlog"),
+            # WORK-001: type with fallback to category for backward compat
+            type=fm.get("type", fm.get("category", "feature")),
             blocked_by=fm.get("blocked_by", []) or [],
             node_history=fm.get("node_history", []),
             memory_refs=fm.get("memory_refs", []) or [],
+            # WORK-001: Universal work item fields
+            requirement_refs=fm.get("requirement_refs", []) or [],
+            source_files=fm.get("source_files", []) or [],
+            acceptance_criteria=fm.get("acceptance_criteria", []) or [],
+            artifacts=fm.get("artifacts", []) or [],
+            extensions=fm.get("extensions", {}) or {},
             path=path,
             priority=fm.get("priority", "medium"),  # E2-290: Queue ordering
         )

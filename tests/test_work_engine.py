@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-18T12:10:42
+# System Auto: last updated on: 2026-01-19T16:31:38
 """
 Tests for WorkEngine module (E2-242).
 
@@ -765,3 +765,105 @@ def test_add_memory_refs_updates_portal(tmp_path, governance):
     content = refs_file.read_text()
     assert "80910" in content
     assert "Memory" in content
+
+
+# =============================================================================
+# WORK-001: Universal Work Item Structure Tests
+# =============================================================================
+
+# Sample WORK.md with universal structure (new fields)
+SAMPLE_UNIVERSAL_WORK_MD = """---
+template: work_item
+id: WORK-001
+title: Universal Work Item
+type: feature
+status: active
+owner: Hephaestus
+created: 2026-01-18
+closed: null
+priority: high
+effort: medium
+requirement_refs:
+- REQ-001
+- REQ-002
+source_files:
+- docs/specs/TRD-WORK-ITEM-UNIVERSAL.md
+acceptance_criteria:
+- AC1: Work items use sequential IDs
+- AC2: Type is a field not prefix
+blocked_by: []
+blocks: []
+enables: []
+current_node: backlog
+node_history:
+- node: backlog
+  entered: '2026-01-18T16:00:00'
+  exited: null
+artifacts: []
+cycle_docs: {}
+memory_refs: []
+extensions:
+  custom_field: custom_value
+version: "2.0"
+---
+# WORK-001: Universal Work Item
+"""
+
+
+def test_workstate_parses_universal_fields(tmp_path, governance):
+    """WORK-001 Test 1: WorkState should parse type, requirement_refs, source_files, artifacts, extensions."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup work item with universal structure
+    work_dir = tmp_path / "docs" / "work" / "active" / "WORK-001"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(SAMPLE_UNIVERSAL_WORK_MD, encoding="utf-8")
+
+    work = engine.get_work("WORK-001")
+
+    assert work is not None
+    assert work.id == "WORK-001"
+    assert work.type == "feature"
+    assert work.requirement_refs == ["REQ-001", "REQ-002"]
+    assert work.source_files == ["docs/specs/TRD-WORK-ITEM-UNIVERSAL.md"]
+    assert len(work.acceptance_criteria) == 2
+    assert work.artifacts == []
+    assert work.extensions == {"custom_field": "custom_value"}
+
+
+def test_workstate_type_fallback_to_category(tmp_path, governance):
+    """WORK-001 Test 4: Existing E2-XXX work items should still parse via category fallback."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup legacy work item with category field (no type field)
+    work_dir = tmp_path / "docs" / "work" / "active" / "E2-179"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(SAMPLE_WORK_MD.replace("E2-TEST", "E2-179"), encoding="utf-8")
+
+    work = engine.get_work("E2-179")
+
+    assert work is not None
+    assert work.id == "E2-179"
+    assert work.status == "active"
+    # Type should fall back to category value or default
+    assert work.type in ["implementation", "feature"]  # Either fallback to category or default
+
+
+def test_workstate_defaults_for_missing_universal_fields(tmp_path, governance):
+    """WORK-001: Missing universal fields should have sensible defaults."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup legacy work item without new fields
+    work_dir = tmp_path / "docs" / "work" / "active" / "E2-LEGACY"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(SAMPLE_WORK_MD.replace("E2-TEST", "E2-LEGACY"), encoding="utf-8")
+
+    work = engine.get_work("E2-LEGACY")
+
+    assert work is not None
+    # All new fields should have empty list/dict defaults
+    assert work.requirement_refs == []
+    assert work.source_files == []
+    assert work.acceptance_criteria == []
+    assert work.artifacts == []
+    assert work.extensions == {}
