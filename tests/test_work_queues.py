@@ -1,5 +1,5 @@
 # generated: 2026-01-15
-# System Auto: last updated on: 2026-01-15T21:22:13
+# System Auto: last updated on: 2026-01-19T18:00:29
 """
 Tests for Work Queue functionality (E2-290).
 
@@ -125,3 +125,76 @@ queues:
             assert engine.is_cycle_allowed("governance", "investigation-cycle") == True
             # This should be blocked
             assert engine.is_cycle_allowed("governance", "work-creation-cycle") == False
+
+    def test_explicit_list_filters_completed_items(self, engine):
+        """Session 211 Bug 1: Explicit item lists filter out completed items."""
+        # Create mock work items - one active, one complete
+        active_item = WorkState(
+            id="E2-179", title="Active", status="active", current_node="backlog", priority="medium"
+        )
+        complete_item = WorkState(
+            id="WORK-001", title="Complete", status="complete", current_node="backlog", priority="critical"
+        )
+
+        # Mock the work existence and get_work for explicit list
+        with patch.object(engine, 'load_queues', return_value={
+            "test-queue": MagicMock(type="fifo", items=["WORK-001", "E2-179"], allowed_cycles=[])
+        }):
+            with patch.object(engine, '_work_exists', return_value=True):
+                with patch.object(engine, 'get_work', side_effect=lambda id: complete_item if id == "WORK-001" else active_item):
+                    items = engine.get_queue("test-queue")
+
+        # Complete item should be filtered out
+        assert len(items) == 1
+        assert items[0].id == "E2-179"
+
+    def test_fifo_explicit_list_preserves_yaml_order(self, engine):
+        """Session 211 Bug 2: FIFO with explicit items preserves YAML order."""
+        # Create items with different creation dates
+        first = WorkState(
+            id="E2-001", title="First in YAML", status="active", current_node="backlog",
+            node_history=[{"entered": "2026-01-19T10:00:00", "exited": None}]  # Later date
+        )
+        second = WorkState(
+            id="E2-002", title="Second in YAML", status="active", current_node="backlog",
+            node_history=[{"entered": "2026-01-18T10:00:00", "exited": None}]  # Earlier date
+        )
+
+        # Mock FIFO queue with explicit order [E2-001, E2-002]
+        with patch.object(engine, 'load_queues', return_value={
+            "fifo-queue": MagicMock(type="fifo", items=["E2-001", "E2-002"], allowed_cycles=[])
+        }):
+            with patch.object(engine, '_work_exists', return_value=True):
+                # Return items in YAML order when called
+                def mock_get_work(id):
+                    return first if id == "E2-001" else second
+                with patch.object(engine, 'get_work', side_effect=mock_get_work):
+                    items = engine.get_queue("fifo-queue")
+
+        # Should preserve YAML order, not sort by creation date
+        assert len(items) == 2
+        assert items[0].id == "E2-001"  # First in YAML, despite later creation date
+        assert items[1].id == "E2-002"  # Second in YAML, despite earlier creation date
+
+    def test_fifo_auto_list_sorts_by_creation_date(self, engine):
+        """FIFO with auto items still sorts by creation date."""
+        # Create items with different creation dates
+        earlier = WorkState(
+            id="E2-002", title="Earlier", status="active", current_node="backlog",
+            node_history=[{"entered": "2026-01-18T10:00:00", "exited": None}]
+        )
+        later = WorkState(
+            id="E2-001", title="Later", status="active", current_node="backlog",
+            node_history=[{"entered": "2026-01-19T10:00:00", "exited": None}]
+        )
+
+        # Mock get_ready to return items in wrong order
+        with patch.object(engine, 'get_ready', return_value=[later, earlier]):
+            with patch.object(engine, 'load_queues', return_value={
+                "fifo-queue": MagicMock(type="fifo", items="auto", allowed_cycles=[])
+            }):
+                items = engine.get_queue("fifo-queue")
+
+        # Should sort by creation date - earlier first
+        assert items[0].id == "E2-002"  # Earlier creation date
+        assert items[1].id == "E2-001"  # Later creation date

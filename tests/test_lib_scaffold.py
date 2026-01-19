@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-01-19T16:34:11
+# System Auto: last updated on: 2026-01-19T21:59:15
 """Tests for .claude/lib/scaffold.py - Template scaffolding module.
 
 TDD tests for E2-120 Phase 2b.
@@ -624,5 +624,131 @@ class TestGetNextWorkId:
             from scaffold import get_next_work_id
             result = get_next_work_id()
             assert result == "WORK-003"  # Based only on WORK-* items
+        finally:
+            scaffold.PROJECT_ROOT = original_root
+
+
+# =============================================================================
+# E2-179: Spawned_by Variable Tests
+# =============================================================================
+
+class TestSpawnedByVariable:
+    """Tests for E2-179: spawned_by optional variable support."""
+
+    def test_scaffold_work_item_without_spawned_by(self, tmp_path):
+        """Scaffolding work item without spawned_by should default to null."""
+        import scaffold
+
+        original_root = scaffold.PROJECT_ROOT
+        scaffold.PROJECT_ROOT = tmp_path
+
+        # Set up directory structure
+        (tmp_path / ".claude" / "templates").mkdir(parents=True)
+        (tmp_path / "docs" / "work" / "active").mkdir(parents=True)
+
+        # Create work_item template with spawned_by placeholder
+        template = """---
+template: work_item
+id: {{BACKLOG_ID}}
+title: "{{TITLE}}"
+spawned_by: {{SPAWNED_BY}}
+priority: medium
+---
+# {{BACKLOG_ID}}: {{TITLE}}
+"""
+        (tmp_path / ".claude" / "templates" / "work_item.md").write_text(template)
+
+        try:
+            result = scaffold.scaffold_template(
+                template="work_item",
+                backlog_id="E2-999",
+                title="Test Work Item"
+            )
+
+            assert result is not None
+            content = Path(result).read_text()
+            # Should default to null when not provided
+            assert "spawned_by: null" in content
+        finally:
+            scaffold.PROJECT_ROOT = original_root
+
+    def test_scaffold_work_item_with_spawned_by(self, tmp_path):
+        """Scaffolding with variables dict should populate spawned_by."""
+        import scaffold
+
+        original_root = scaffold.PROJECT_ROOT
+        scaffold.PROJECT_ROOT = tmp_path
+
+        # Set up directory structure
+        (tmp_path / ".claude" / "templates").mkdir(parents=True)
+        (tmp_path / "docs" / "work" / "active").mkdir(parents=True)
+
+        # Create work_item template with spawned_by placeholder
+        template = """---
+template: work_item
+id: {{BACKLOG_ID}}
+title: "{{TITLE}}"
+spawned_by: {{SPAWNED_BY}}
+priority: medium
+---
+# {{BACKLOG_ID}}: {{TITLE}}
+"""
+        (tmp_path / ".claude" / "templates" / "work_item.md").write_text(template)
+
+        try:
+            result = scaffold.scaffold_template(
+                template="work_item",
+                backlog_id="E2-999",
+                title="Test Work Item",
+                variables={"SPAWNED_BY": "INV-033"}
+            )
+
+            assert result is not None
+            content = Path(result).read_text()
+            assert "spawned_by: INV-033" in content
+        finally:
+            scaffold.PROJECT_ROOT = original_root
+
+    def test_scaffold_with_multiple_optional_variables(self, tmp_path):
+        """Multiple optional variables should all be substituted."""
+        import scaffold
+
+        original_root = scaffold.PROJECT_ROOT
+        scaffold.PROJECT_ROOT = tmp_path
+
+        # Set up directory structure
+        (tmp_path / ".claude" / "templates").mkdir(parents=True)
+        (tmp_path / "docs" / "work" / "active").mkdir(parents=True)
+
+        # Create work_item template with multiple optional placeholders
+        template = """---
+template: work_item
+id: {{BACKLOG_ID}}
+title: "{{TITLE}}"
+spawned_by: {{SPAWNED_BY}}
+priority: {{PRIORITY}}
+milestone: {{MILESTONE}}
+---
+# {{BACKLOG_ID}}: {{TITLE}}
+"""
+        (tmp_path / ".claude" / "templates" / "work_item.md").write_text(template)
+
+        try:
+            result = scaffold.scaffold_template(
+                template="work_item",
+                backlog_id="E2-999",
+                title="Test Work Item",
+                variables={
+                    "SPAWNED_BY": "INV-033",
+                    "PRIORITY": "high",
+                    "MILESTONE": "M8-Memory"
+                }
+            )
+
+            assert result is not None
+            content = Path(result).read_text()
+            assert "spawned_by: INV-033" in content
+            assert "priority: high" in content
+            assert "milestone: M8-Memory" in content
         finally:
             scaffold.PROJECT_ROOT = original_root

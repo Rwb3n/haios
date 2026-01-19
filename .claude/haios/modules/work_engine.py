@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-19T16:32:50
+# System Auto: last updated on: 2026-01-19T17:59:47
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -351,6 +351,10 @@ class WorkEngine:
 
         Returns:
             List of WorkState ordered according to queue type
+
+        Session 211 fixes:
+        - Bug 1: Filter completed items for explicit item lists (not just auto)
+        - Bug 2: FIFO with explicit items preserves YAML order
         """
         queues = self.load_queues()
         if queue_name not in queues:
@@ -358,15 +362,20 @@ class WorkEngine:
 
         q = queues[queue_name]
 
+        # Terminal statuses to filter out (same as get_ready)
+        terminal_statuses = {"complete", "archived", "dismissed", "invalid", "deferred"}
+
         # Get items
-        if q.items == "auto" or q.items == ["auto"]:
+        is_explicit_list = q.items != "auto" and q.items != ["auto"]
+        if not is_explicit_list:
             items = self.get_ready()
         else:
             items = []
             for work_id in q.items:
                 if self._work_exists(work_id):
                     work = self.get_work(work_id)
-                    if work:
+                    # Session 211 Bug 1 fix: Filter terminal statuses for explicit lists
+                    if work and work.status not in terminal_statuses:
                         items.append(work)
 
         # Sort by queue type
@@ -375,10 +384,13 @@ class WorkEngine:
             priority_order = {"high": 0, "medium": 1, "low": 2}
             items.sort(key=lambda x: (priority_order.get(x.priority, 1), x.id))
         elif q.type == "fifo":
-            # Sort by creation date (earliest first)
-            items.sort(
-                key=lambda x: x.node_history[0]["entered"] if x.node_history else ""
-            )
+            # Session 211 Bug 2 fix: For explicit lists, preserve YAML order
+            # For auto lists, sort by creation date
+            if not is_explicit_list:
+                items.sort(
+                    key=lambda x: x.node_history[0]["entered"] if x.node_history else ""
+                )
+            # Explicit FIFO lists already in correct order from the loop above
 
         return items
 

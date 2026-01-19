@@ -6,7 +6,7 @@ recipes:
 - close-work
 - update-status
 generated: 2025-12-25
-last_updated: '2026-01-17T11:58:58'
+last_updated: '2026-01-19T17:31:34'
 ---
 # Close Work Cycle
 
@@ -161,26 +161,40 @@ just set-cycle close-work-cycle MEMORY {work_id}
 just set-cycle close-work-cycle CHAIN {work_id}
 ```
 
-**Goal:** Route to next work item.
+**Goal:** Checkpoint context then route to next work item.
+
+#### 4a. Checkpoint (MUST - E2-287)
+
+**MUST** invoke checkpoint-cycle before routing to next work:
+
+```
+Skill(skill="checkpoint-cycle")
+```
+
+**Rationale:** Work complexity within hardened gating system makes context limits per work item likely. Checkpointing after closure ensures context from completed work is preserved before starting new work. Next session picks up with full context of decisions made.
+
+#### 4b. Route to Next Work
 
 **Actions:**
 1. (Closure already completed in MEMORY phase)
-2. Query next work: `just ready`
-3. If items returned, read first work file to check `documents.plans`
-4. **Apply routing decision table** (see `routing-gate` skill):
+2. (Checkpoint completed in 4a)
+3. Query next work: `just ready`
+4. If items returned, read first work file to check `documents.plans`
+5. **Apply routing decision table** (see `routing-gate` skill):
    - If `next_work_id` is None → `await_operator`
    - If ID starts with `INV-` → `invoke_investigation`
    - If `has_plan` is True → `invoke_implementation`
    - Else → `invoke_work_creation`
-5. Execute the action:
+6. Execute the action:
    - `invoke_investigation` -> `Skill(skill="investigation-cycle")`
    - `invoke_implementation` -> `Skill(skill="implementation-cycle")`
    - `invoke_work_creation` -> `Skill(skill="work-creation-cycle")`
    - `await_operator` -> Report "No unblocked work. Awaiting operator direction."
 
-**MUST:** Do not pause for acknowledgment - execute routing immediately.
+**MUST:** Do not pause for acknowledgment - checkpoint then execute routing immediately.
 
 **Exit Criteria:**
+- [ ] **MUST:** checkpoint-cycle invoked (E2-287)
 - [ ] Next work item identified (or none available)
 - [ ] Appropriate cycle skill invoked (or awaiting operator)
 
@@ -189,7 +203,7 @@ just set-cycle close-work-cycle CHAIN {work_id}
 just clear-cycle
 ```
 
-**Tools:** Bash(just ready), Read, Skill(routing-gate)
+**Tools:** Bash(just ready), Read, Skill(checkpoint-cycle, routing-gate)
 
 ---
 
@@ -201,7 +215,7 @@ just clear-cycle
 | VALIDATE | Read, Glob, Grep | Query for prior work (optional) |
 | ARCHIVE | Bash(just close-work) | - |
 | MEMORY | ingester_ingest | Closure summary |
-| CHAIN | Bash, Skill | - |
+| CHAIN | Skill (checkpoint-cycle, routing) | Context preservation (E2-287) |
 
 ---
 

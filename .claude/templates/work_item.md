@@ -6,6 +6,7 @@ type: {{TYPE}}
 status: active
 owner: Hephaestus
 created: {{DATE}}
+spawned_by: {{SPAWNED_BY}}
 closed: null
 priority: medium
 effort: medium

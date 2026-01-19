@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-01-19T16:34:48
+# System Auto: last updated on: 2026-01-19T22:00:08
 """
 DEPRECATED: Use GovernanceLayer.scaffold_template() instead.
 
@@ -420,6 +420,10 @@ def scaffold_template(
     # Initialize BACKLOG_IDS if not set
     if "BACKLOG_IDS" not in variables:
         variables["BACKLOG_IDS"] = "[]"
+
+    # E2-179: Default optional frontmatter variables to "null" if not provided
+    if "SPAWNED_BY" not in variables:
+        variables["SPAWNED_BY"] = "null"
 
     # Substitute variables
     content = substitute_variables(content, variables)

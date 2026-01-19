@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-18T15:36:56
+# System Auto: last updated on: 2026-01-19T22:01:31
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -16,17 +16,18 @@ default:
 validate file:
     python .claude/haios/modules/cli.py validate {{file}}
 
-# Scaffold a new document from template (E2-252: via cli.py)
+# Scaffold a new document from template (E2-252: via cli.py, E2-179: optional --spawned-by)
 # Types: checkpoint, implementation_plan, investigation, report, architecture_decision_record
-scaffold type id title:
-    python .claude/haios/modules/cli.py scaffold {{type}} {{id}} {{title}}
+# Usage: just scaffold work_item E2-999 "Title" --spawned-by INV-033
+scaffold type id title *args:
+    python .claude/haios/modules/cli.py scaffold {{type}} {{id}} "{{title}}" {{args}}
 
-# Aliases for common scaffold types
-plan id title:
-    just scaffold implementation_plan {{id}} "{{title}}"
+# Aliases for common scaffold types (E2-179: pass optional args through)
+plan id title *args:
+    just scaffold implementation_plan {{id}} "{{title}}" {{args}}
 
-inv id title:
-    just scaffold investigation {{id}} "{{title}}"
+inv id title *args:
+    just scaffold investigation {{id}} "{{title}}" {{args}}
 
 # Create work item + investigation document in one step (S193, ARC-008)
 # Usage: just new-investigation INV-068 "My Investigation Title"
@@ -37,8 +38,9 @@ new-investigation id title:
 adr id title:
     just scaffold architecture_decision_record {{id}} "{{title}}"
 
-work id title:
-    just scaffold work_item {{id}} "{{title}}"
+# E2-179: work recipe accepts optional args like --spawned-by
+work id title *args:
+    just scaffold work_item {{id}} "{{title}}" {{args}}
 
 checkpoint session title:
     just scaffold checkpoint {{session}} "{{title}}"

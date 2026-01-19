@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-18T10:43:56
+# System Auto: last updated on: 2026-01-19T22:00:54
 """
 HAIOS Modules CLI Entry Point
 
@@ -249,8 +249,11 @@ def cmd_validate(file_path: str) -> int:
     return 0 if result["is_valid"] else 1
 
 
-def cmd_scaffold(template: str, backlog_id: str, title: str, output_path: str = None) -> int:
-    """Scaffold a new document from template."""
+def cmd_scaffold(template: str, backlog_id: str, title: str, output_path: str = None, variables: dict = None) -> int:
+    """Scaffold a new document from template.
+
+    E2-179: Added variables parameter for optional frontmatter args like spawned_by.
+    """
     layer = GovernanceLayer()
     try:
         path = layer.scaffold_template(
@@ -258,6 +261,7 @@ def cmd_scaffold(template: str, backlog_id: str, title: str, output_path: str = 
             backlog_id=backlog_id,
             title=title,
             output_path=output_path,
+            variables=variables,
         )
         print(f"Created: {path}")
         return 0
@@ -360,23 +364,30 @@ def main():
         return cmd_validate(sys.argv[2])
 
     elif cmd == "scaffold":
-        # Handle --output option
+        # Handle optional flags (E2-179: added --spawned-by)
         output_path = None
-        if "--output" in sys.argv:
-            output_idx = sys.argv.index("--output")
-            output_path = sys.argv[output_idx + 1]
-            # Remove --output and path from args for parsing
-            args = [a for i, a in enumerate(sys.argv) if i != output_idx and i != output_idx + 1]
-        else:
-            args = sys.argv
+        variables = {}
+        args = list(sys.argv)  # Copy to avoid modifying original
+
+        # Extract --output flag
+        if "--output" in args:
+            output_idx = args.index("--output")
+            output_path = args[output_idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (output_idx, output_idx + 1)]
+
+        # E2-179: Extract --spawned-by flag
+        if "--spawned-by" in args:
+            idx = args.index("--spawned-by")
+            variables["SPAWNED_BY"] = args[idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
 
         if len(args) < 5:
-            print("Usage: cli.py scaffold <template> <backlog_id> <title> [--output <path>]")
+            print("Usage: cli.py scaffold <template> <backlog_id> <title> [--output <path>] [--spawned-by <id>]")
             return 1
         template = args[2]
         backlog_id = args[3]
         title = " ".join(args[4:])
-        return cmd_scaffold(template, backlog_id, title, output_path)
+        return cmd_scaffold(template, backlog_id, title, output_path, variables if variables else None)
 
     # E2-254: Context Load
     elif cmd == "context-load":

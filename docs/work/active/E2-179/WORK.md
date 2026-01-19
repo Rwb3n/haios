@@ -2,10 +2,10 @@
 template: work_item
 id: E2-179
 title: Scaffold Recipe Optional Frontmatter Args
-status: active
+status: complete
 owner: Hephaestus
 created: 2025-12-25
-closed: null
+closed: '2026-01-19'
 milestone: null
 priority: medium
 effort: medium
@@ -24,7 +24,8 @@ node_history:
   entered: 2025-12-25 08:58:01
   exited: null
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 82170
 documents:
   investigations: []
   plans: []

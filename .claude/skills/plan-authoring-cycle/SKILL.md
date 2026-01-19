@@ -5,7 +5,7 @@ description: HAIOS Plan Authoring Cycle for structured plan population. Use when
 recipes:
 - plan
 generated: 2025-12-25
-last_updated: '2026-01-12T01:32:54'
+last_updated: '2026-01-19T17:31:15'
 ---
 # Plan Authoring Cycle
 
@@ -252,9 +252,23 @@ For each identified risk, document mitigation:
 
 ### 4. CHAIN Phase (Post-VALIDATE)
 
-**Goal:** Chain to plan-validation-cycle for independent verification.
+**Goal:** Checkpoint context then chain to plan-validation-cycle.
 
-After VALIDATE phase completes (plan status is `approved`), **MUST** invoke plan-validation-cycle:
+After VALIDATE phase completes (plan status is `approved`):
+
+#### 4a. Checkpoint (MUST - E2-287)
+
+**MUST** invoke checkpoint-cycle to preserve context before context limit hit:
+
+```
+Skill(skill="checkpoint-cycle")
+```
+
+**Rationale:** Work complexity within hardened gating system makes context limits per work item likely. Checkpointing after plan authoring ensures continuity if context exhausts during validation or implementation.
+
+#### 4b. Chain to Validation
+
+After checkpoint completes, **MUST** invoke plan-validation-cycle:
 
 ```
 Skill(skill="plan-validation-cycle")
@@ -263,10 +277,11 @@ Skill(skill="plan-validation-cycle")
 This provides independent validation before implementation-cycle can begin.
 
 **Exit Criteria:**
+- [ ] **MUST:** checkpoint-cycle invoked (E2-287)
 - [ ] plan-validation-cycle invoked
 - [ ] Plan passes validation gate
 
-**Tools:** Skill
+**Tools:** Skill (checkpoint-cycle, plan-validation-cycle)
 
 ---
 
@@ -278,7 +293,7 @@ This provides independent validation before implementation-cycle can begin.
 | ANALYZE | Read | - |
 | AUTHOR | Read, Edit, Glob | Query for prior patterns |
 | VALIDATE | Read, Edit | - |
-| CHAIN | Skill | - |
+| CHAIN | Skill (checkpoint-cycle, plan-validation-cycle) | Context preservation (E2-287) |
 
 ---
 

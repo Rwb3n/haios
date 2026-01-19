@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-19T20:32:31",
+    "generated": "2026-01-19T22:07:32",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 210,
-        "current_session": 211,
+        "prior_session": 213,
+        "current_session": 214,
         "prior_date": "2026-01-19",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 81970,
-        "entities": 9086,
+        "concepts": 81981,
+        "entities": 9091,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -2641,6 +2641,42 @@
             "status": null,
             "date": "2026-01-19",
             "last_updated": "2026-01-19T18:03:33",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-19-04-SESSION-212-e2-235-closed-statusline-context-visibility.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-19",
+            "last_updated": "2026-01-19T20:36:20",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-19-05-SESSION-212-e2-179-plan-authoring-in-progress.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-19",
+            "last_updated": "2026-01-19T21:09:08",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-19-06-SESSION-213-e2-179-plan-authoring-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-19",
+            "last_updated": "2026-01-19T21:23:46",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-19-07-SESSION-214-e2-179-plan-validated-entering-do-phase.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-19",
+            "last_updated": "2026-01-19T21:33:20",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -5763,12 +5799,12 @@
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-21-gap-audit-preflight.md",
             "last_updated": "2025-12-03T20:58:26",
-            "days_stale": 46
+            "days_stale": 47
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-22-gap-b3-complete.md",
             "last_updated": "2025-12-03T21:54:50",
-            "days_stale": 46
+            "days_stale": 47
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-23-docs-ingestion-embedding-gap.md",
@@ -5788,7 +5824,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-25-embedding-fix-research-synthesis.md",
             "last_updated": "2025-12-04T22:02:49",
-            "days_stale": 45
+            "days_stale": 46
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
@@ -6502,9 +6538,9 @@
         }
     ],
     "workspace": {
-        "total_files": 448,
+        "total_files": 452,
         "by_template": {
-            "checkpoint": 201,
+            "checkpoint": 205,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -6516,7 +6552,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 37,
+            "unknown": 41,
             "draft": 2,
             "approved": 6,
             "ready": 1,

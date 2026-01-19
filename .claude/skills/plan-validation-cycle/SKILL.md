@@ -3,7 +3,7 @@ name: plan-validation-cycle
 description: HAIOS Plan Validation Bridge for validating plan readiness. Use before
   entering DO phase. Guides CHECK->VALIDATE->APPROVE workflow.
 generated: 2025-12-25
-last_updated: '2026-01-05T23:18:16'
+last_updated: '2026-01-19T17:31:24'
 ---
 # Plan Validation Cycle (Bridge Skill)
 
@@ -157,17 +157,28 @@ CHECK --> SPEC_ALIGN --> VALIDATE --> L4_ALIGN --> APPROVE
 
 ### 5. APPROVE Phase
 
-**Goal:** Mark plan as validated and ready.
+**Goal:** Mark plan as validated and ready, checkpoint context.
 
 **Actions:**
 1. If all checks pass, plan is approved
 2. Report validation summary
-3. Return to calling cycle immediately
+3. **MUST** invoke checkpoint-cycle (E2-287)
+4. Return to calling cycle
 
-**On PASS:** Return to implementation-cycle - it will invoke preflight-checker next.
-**On FAIL:** Return to plan-authoring-cycle or report blockers.
+#### 5a. Checkpoint (MUST - E2-287)
 
-**MUST:** Do not pause for acknowledgment - return to calling cycle immediately.
+**MUST** invoke checkpoint-cycle after validation passes:
+
+```
+Skill(skill="checkpoint-cycle")
+```
+
+**Rationale:** Work complexity within hardened gating system makes context limits per work item likely. Checkpointing after plan validation ensures continuity if context exhausts during implementation.
+
+**On PASS:** Checkpoint then return to implementation-cycle - it will invoke preflight-checker next.
+**On FAIL:** Return to plan-authoring-cycle or report blockers (no checkpoint needed for failures).
+
+**MUST:** Do not pause for acknowledgment - checkpoint then return to calling cycle immediately.
 
 **Exit Criteria:**
 - [ ] All CHECK criteria passed
@@ -175,9 +186,10 @@ CHECK --> SPEC_ALIGN --> VALIDATE --> L4_ALIGN --> APPROVE
 - [ ] All VALIDATE criteria passed
 - [ ] L4_ALIGN passed or gaps accepted
 - [ ] Plan ready for implementation
+- [ ] **MUST:** checkpoint-cycle invoked (E2-287)
 - [ ] Returned to calling cycle (no pause)
 
-**Tools:** -
+**Tools:** Skill (checkpoint-cycle)
 
 ---
 
@@ -189,7 +201,7 @@ CHECK --> SPEC_ALIGN --> VALIDATE --> L4_ALIGN --> APPROVE
 | SPEC_ALIGN | Read, Grep | Spec vs plan comparison (MUST gate) |
 | VALIDATE | Read | Quality assessment |
 | L4_ALIGN | Read | Gap report (L4 vs plan) |
-| APPROVE | - | Validation summary |
+| APPROVE | Skill (checkpoint-cycle) | Validation summary + context preserved (E2-287) |
 
 ---
 
