@@ -2,37 +2,33 @@
 template: work_item
 id: {{BACKLOG_ID}}
 title: "{{TITLE}}"
+type: {{TYPE}}
 status: active
 owner: Hephaestus
 created: {{DATE}}
 closed: null
-milestone: null
 priority: medium
 effort: medium
-category: implementation
-spawned_by: null
-spawned_by_investigation: null
+requirement_refs: []
+source_files: []
+acceptance_criteria: []
 blocked_by: []
 blocks: []
 enables: []
-related: []
 current_node: backlog
 node_history:
   - node: backlog
     entered: {{TIMESTAMP}}
     exited: null
+artifacts: []
 cycle_docs: {}
 memory_refs: []
-operator_decisions: []
-documents:
-  investigations: []
-  plans: []
-  checkpoints: []
-version: "1.0"
+extensions: {}
+version: "2.0"
 generated: {{DATE}}
-last_updated: 2025-12-23T18:04:04
+last_updated: {{TIMESTAMP}}
 ---
-# WORK-{{BACKLOG_ID}}: {{TITLE}}
+# {{BACKLOG_ID}}: {{TITLE}}
 
 @docs/README.md
 @docs/epistemic_state.md
@@ -42,12 +38,6 @@ last_updated: 2025-12-23T18:04:04
 ## Context
 
 [Problem and root cause]
-
----
-
-## Current State
-
-Work item in BACKLOG node. Awaiting prioritization.
 
 ---
 
@@ -64,6 +54,9 @@ Work item in BACKLOG node. Awaiting prioritization.
 
      "Tests pass" ≠ "Deliverables complete"
      Tests verify code works. Deliverables verify scope is complete.
+
+     NOTE (WORK-001): Acceptance criteria are in frontmatter (machine-parseable).
+     Deliverables are implementation outputs, not requirements.
 -->
 
 - [ ] [Deliverable 1]
