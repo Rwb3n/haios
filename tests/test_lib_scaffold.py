@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2025-12-27T22:12:28
+# System Auto: last updated on: 2026-01-19T16:34:11
 """Tests for .claude/lib/scaffold.py - Template scaffolding module.
 
 TDD tests for E2-120 Phase 2b.
@@ -558,5 +558,71 @@ class TestWorkFilePrerequisiteGate:
             )
             assert result is not None
             assert "SESSION-110" in result
+        finally:
+            scaffold.PROJECT_ROOT = original_root
+
+
+# =============================================================================
+# WORK-001: Sequential Work ID Generation Tests
+# =============================================================================
+
+class TestGetNextWorkId:
+    """Tests for get_next_work_id() function (WORK-001)."""
+
+    def test_get_next_work_id_empty_directory(self, tmp_path):
+        """Should return WORK-001 when no WORK items exist."""
+        import scaffold
+
+        original_root = scaffold.PROJECT_ROOT
+        scaffold.PROJECT_ROOT = tmp_path
+
+        # Create empty work directory
+        (tmp_path / "docs" / "work" / "active").mkdir(parents=True)
+
+        try:
+            from scaffold import get_next_work_id
+            result = get_next_work_id()
+            assert result == "WORK-001"
+        finally:
+            scaffold.PROJECT_ROOT = original_root
+
+    def test_get_next_work_id_sequential(self, tmp_path):
+        """Should return next ID after highest existing."""
+        import scaffold
+
+        original_root = scaffold.PROJECT_ROOT
+        scaffold.PROJECT_ROOT = tmp_path
+
+        # Create work directories
+        work_dir = tmp_path / "docs" / "work" / "active"
+        work_dir.mkdir(parents=True)
+        (work_dir / "WORK-001").mkdir()
+        (work_dir / "WORK-003").mkdir()  # Gap is OK
+
+        try:
+            from scaffold import get_next_work_id
+            result = get_next_work_id()
+            assert result == "WORK-004"  # Next after highest (003)
+        finally:
+            scaffold.PROJECT_ROOT = original_root
+
+    def test_get_next_work_id_ignores_legacy_ids(self, tmp_path):
+        """Should ignore E2-XXX and INV-XXX directories."""
+        import scaffold
+
+        original_root = scaffold.PROJECT_ROOT
+        scaffold.PROJECT_ROOT = tmp_path
+
+        # Create work directories with mixed IDs
+        work_dir = tmp_path / "docs" / "work" / "active"
+        work_dir.mkdir(parents=True)
+        (work_dir / "E2-179").mkdir()  # Legacy - should be ignored
+        (work_dir / "INV-041").mkdir()  # Legacy - should be ignored
+        (work_dir / "WORK-002").mkdir()
+
+        try:
+            from scaffold import get_next_work_id
+            result = get_next_work_id()
+            assert result == "WORK-003"  # Based only on WORK-* items
         finally:
             scaffold.PROJECT_ROOT = original_root
