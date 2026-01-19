@@ -25,10 +25,12 @@
         "lifecycle_phase": null
     },
     "session_state": {
-        "active_cycle": "close-work-cycle",
-        "current_phase": "MEMORY",
-        "work_id": "WORK-001",
-        "entered_at": "2026-01-19T16:45:54.845567"
+        "active_cycle": null,
+        "current_phase": null,
+        "work_id": null,
+        "entered_at": null,
+        "active_queue": null,
+        "phase_history": []
     },
     "active_work": [],
     "blocked_items": {},
