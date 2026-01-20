@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-18T20:20:38
+# System Auto: last updated on: 2026-01-20T20:03:08
 # HAIOS System Configuration
 # Consolidates: governance-toggles.yaml, routing-thresholds.yaml
 # Version: 2.3 (Session 206 - The Pipeline)
@@ -27,6 +27,7 @@ epoch:
     - S22-skill-patterns.md
   # Active arcs
   active_arcs:
+    - configuration
     - provenance
     - pipeline
     - workuniversal

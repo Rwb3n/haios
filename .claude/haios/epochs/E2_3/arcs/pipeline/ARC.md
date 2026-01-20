@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-18T16:51:22
+# System Auto: last updated on: 2026-01-20T21:14:49
 # Arc: Pipeline
 
 ## Arc Definition
@@ -32,6 +32,7 @@ CORPUS → INGEST → PLAN → BUILD → VALIDATE → PRODUCT
 | CH-004 | BuilderInterface | Planned | Clean interface for existing build capability |
 | CH-005 | ValidatorAgent | Planned | Check output against source specs |
 | CH-006 | Orchestrator | Planned | Pipeline state machine, routing |
+| CH-007 | [ChapterTriage](CH-007-chapter-triage.md) | Planned | Design → work item decomposition |
 
 ---
 
