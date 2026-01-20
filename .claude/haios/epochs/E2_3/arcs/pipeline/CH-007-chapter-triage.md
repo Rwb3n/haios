@@ -1,5 +1,5 @@
 # generated: 2026-01-20
-# System Auto: last updated on: 2026-01-20T21:14:20
+# System Auto: last updated on: 2026-01-20T21:58:41
 # Chapter: Chapter Triage
 
 ## Definition
@@ -125,3 +125,19 @@ Process:
 - Automatic work item creation (always needs operator)
 - Requirement tracking beyond chapter reference
 - Test generation from requirements
+
+---
+
+## Process Notes
+
+**Expectation:** Requirement → Work Item mapping will be messy. This is acceptable.
+
+**Calibration approach:**
+1. Pick a chapter (start with CH-002 Session Simplify)
+2. Review requirements
+3. Triage → propose work items
+4. Implement
+5. Review: Did requirements map cleanly? What was messy?
+6. Feed learnings back into this chapter's design
+
+First pass is calibration, not perfection.

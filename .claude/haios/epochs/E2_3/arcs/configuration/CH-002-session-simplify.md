@@ -1,5 +1,5 @@
 # generated: 2026-01-20
-# System Auto: last updated on: 2026-01-20T21:05:19
+# System Auto: last updated on: 2026-01-20T21:58:58
 # Chapter: Session Simplify
 
 ## Definition
@@ -104,3 +104,13 @@ Side effect: .claude/session updated
 - Session history
 - Session metadata
 - Multi-agent session handling
+
+---
+
+## Triage Notes
+
+**Selected as first chapter for triage calibration** (Session 215).
+
+Purpose: Test the chapter → work item process on a small, contained scope before applying to larger chapters.
+
+Learnings from triage will feed back into pipeline/CH-007 (Chapter Triage) design.
