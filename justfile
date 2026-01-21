@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-21T12:11:06
+# System Auto: last updated on: 2026-01-21T23:07:18
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -170,6 +170,15 @@ migrate-backlog:
 # Execute backlog migration (after dry-run review)
 migrate-backlog-execute:
     python scripts/migrate_backlog.py
+
+# =============================================================================
+# LOADER RECIPES (WORK-007: Configuration Arc)
+# =============================================================================
+
+# Load identity context from manifesto files (CH-004)
+# Extracts ~50 lines of mission, principles, constraints, epoch
+identity:
+    python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from identity_loader import IdentityLoader; print(IdentityLoader().load())"
 
 # =============================================================================
 # TESTING RECIPES

@@ -1,0 +1,55 @@
+# generated: 2026-01-21
+# System Auto: last updated on: 2026-01-21T23:04:47
+# Identity extraction config per CH-004 spec
+#
+# WORK-007: Implement Identity Loader for Configuration Arc
+# Extracts ~50 lines of identity context from manifesto files
+# for token-efficient coldstart loading.
+
+# Base path relative to PROJECT_ROOT (per loader.py:354)
+base_path: ".claude/haios/manifesto"
+
+# Extraction rules
+extract:
+  mission:
+    file: L0-telos.md
+    section: "## The Prime Directive"
+    type: blockquote
+
+  companion:
+    file: L0-telos.md
+    section: "## The Companion Relationship"
+    type: numbered_list
+
+  constraints:
+    file: L1-principal.md
+    section: "**Known Constraints:**"
+    type: numbered_list
+
+  principles:
+    file: L3-requirements.md
+    section: "## Core Behavioral Principles"
+    type: all_h3
+
+  epoch_name:
+    file: "../epochs/E2_3/EPOCH.md"
+    section: "## L4 Object Definition"
+    type: first_paragraph
+
+# Output formatting
+output:
+  template: |
+    === IDENTITY ===
+    Mission: {mission}
+
+    Companion Relationship:
+    {companion}
+
+    Constraints:
+    {constraints}
+
+    Principles:
+    {principles}
+
+    Epoch: {epoch_name}
+  list_separator: "\n- "
