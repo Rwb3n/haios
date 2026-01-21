@@ -1,5 +1,5 @@
 # generated: 2025-10-19
-# System Auto: last updated on: 2026-01-14T21:00:10
+# System Auto: last updated on: 2026-01-21T22:23:43
 #################################################
 ########## codebase specific ####################
 #################################################
@@ -92,6 +92,8 @@ downloads/
 eggs/
 .eggs/
 lib/
+!.claude/lib/
+!.claude/haios/lib/
 lib64/
 parts/
 sdist/
