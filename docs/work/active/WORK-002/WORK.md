@@ -1,125 +1,82 @@
 ---
 template: work_item
 id: WORK-002
-title: E2.3 Triage - Strategic triage of E2 arcs and work items
+title: Create .claude/session File
+type: implementation
 status: complete
 owner: Hephaestus
-created: 2026-01-18
-closed: '2026-01-18'
-milestone: null
+created: 2026-01-21
+spawned_by: CH-002
+chapter: CH-002
+arc: configuration
+closed: '2026-01-21'
 priority: high
-effort: medium
-category: strategic
-spawned_by: null
-spawned_by_investigation: null
+effort: small
+requirement_refs:
+- R1
+- R2
+source_files:
+- .claude/haios/epochs/E2_3/arcs/configuration/CH-002-session-simplify.md
+acceptance_criteria:
+- .claude/session file exists
+- File contains single integer (current session number)
+- File is readable via cat
 blocked_by: []
-blocks: []
+blocks:
+- WORK-003
 enables: []
-related: []
 current_node: backlog
 node_history:
 - node: backlog
-  entered: 2026-01-18 21:25:58
+  entered: 2026-01-21 11:06:52
   exited: null
+artifacts: []
 cycle_docs: {}
 memory_refs:
-- 81601
-- 81602
-- 81603
-- 81604
-- 81605
-- 81606
-- 81607
-- 81608
-- 81609
-- 81610
-- 81611
-operator_decisions: []
-documents:
-  investigations: []
-  plans: []
-  checkpoints: []
-version: '1.0'
-generated: 2026-01-18
-last_updated: '2026-01-18T22:01:43'
+- 82174
+- 82175
+- 82176
+- 82177
+- 82178
+- 82179
+extensions: {}
+version: '2.0'
+generated: 2026-01-21
+last_updated: '2026-01-21T11:28:02'
 ---
-# WORK-WORK-002: E2.3 Triage - Strategic triage of E2 arcs and work items
+# WORK-002: Create .claude/session File
 
-@docs/README.md
-@docs/epistemic_state.md
+@docs/adr/ADR-043-runtime-vs-plugin-state-boundary.md
+@.claude/haios/epochs/E2_3/arcs/configuration/CH-002-session-simplify.md
 
 ---
 
 ## Context
 
-**Problem:** Session 206 reframed HAIOS as a doc-to-product pipeline, not PM infrastructure. This created Epoch 2.3 with new arcs (Provenance, Pipeline, WorkUniversal, Migration, Observations). However, E2.2 has 6 arcs (Chariot, Breath, Form, Ground, Tongue, WorkInfra) and 57 active work items that need disposition before E2.3 work can proceed cleanly.
+Agent reads 258KB JSON file (haios-status.json) to get one integer (session number). This is wasteful.
 
-**Root cause:** Epoch transition without triage creates ambiguity about what transfers forward vs. archives. Work items reference E2-specific milestones and arcs that may no longer exist in E2.3 context.
+CH-002 specifies a single-value file at `.claude/session` containing just the session number.
 
-**Scope:**
-- 6 E2 arcs to triage (chariot, breath, form, ground, tongue, workinfra)
-- 57 active work items in `docs/work/active/`
-- Architecture docs (S1-S26) to classify as pipeline-relevant vs. HAIOS-specific
-
-**Triage Categories (from Migration arc):**
-| Category | Action | Example |
-|----------|--------|---------|
-| Pipeline-relevant | Transfer to E2.3 | S26, S20, Ground arc |
-| Reusable-infra | Keep, reference | Memory system, hooks |
-| HAIOS-specific | Archive with summary | E2-235, INV-054 |
-| Obsolete | Archive, no action | Completed work |
-
----
-
-## Current State
-
-Work item in BACKLOG node. Awaiting prioritization.
+ADR-043 confirms this location is correct (runtime state at .claude/ level, not inside haios/).
 
 ---
 
 ## Deliverables
 
-<!-- VERIFICATION REQUIREMENT (Session 192 - E2-290 Learning)
-
-     These checkboxes are the SOURCE OF TRUTH for work completion.
-
-     During CHECK phase of implementation-cycle:
-     - Agent MUST read this section
-     - Agent MUST verify EACH checkbox can be marked complete
-     - If ANY deliverable is incomplete, work is NOT done
-
-     "Tests pass" ≠ "Deliverables complete"
-     Tests verify code works. Deliverables verify scope is complete.
--->
-
-- [x] Arc triage manifest: Disposition for each E2 arc (chariot, breath, form, ground, tongue, workinfra)
-- [x] Work item triage: Each of 59 active items marked as transfer/archive/dismiss
-- [x] Architecture doc classification: S1-S26 categorized as pipeline-relevant or HAIOS-specific
-- [x] Queue cleanup: `just queue default` reflects only transferred items (16 from 54)
-- [x] Migration manifest: Document all decisions with rationale in `epochs/E2_3/arcs/migration/MANIFEST.md`
+- [x] Create `.claude/session` file with current session value (216)
+- [x] Verify file is readable via `cat .claude/session` (use `tail -1` for just the number)
 
 ---
 
 ## History
 
-### 2026-01-18 - Created (Session 207)
-- Initial creation
-- Work-creation-cycle VERIFY/POPULATE/READY complete
-- Context and deliverables populated
-
-### 2026-01-18 - Completed (Session 208)
-- Created MANIFEST.md with all triage decisions
-- Triaged 6 E2 arcs (3 transfer, 3 archive)
-- Classified 16 architecture docs (7 pipeline, 4 infra, 5 HAIOS)
-- Triaged 59 work items (28 archived, 15 dismissed, 14 transfer, 2 keep)
-- Updated WorkEngine.get_ready() to filter terminal statuses
-- Queue reduced from 54 to 16 items
-- Discovered "query by tag, not location" principle
+### 2026-01-21 - Created (Session 216)
+- Triaged from CH-002 Session Simplify
+- First work item from chapter triage calibration
 
 ---
 
 ## References
 
-- @.claude/haios/epochs/E2_3/arcs/migration/ARC.md (Migration arc definition)
-- @.claude/haios/epochs/E2/EPOCH.md (Source epoch)
-- @docs/checkpoints/2026-01-18-05-SESSION-206-e23-epoch-creation-and-strategic-review.md (Strategic review)
+- ADR-043: Runtime vs Plugin State Boundary
+- CH-002: Session Simplify

@@ -1,12 +1,12 @@
 # generated: 2026-01-20
-# System Auto: last updated on: 2026-01-20T21:58:58
+# System Auto: last updated on: 2026-01-21T11:09:04
 # Chapter: Session Simplify
 
 ## Definition
 
 **Chapter ID:** CH-002
 **Arc:** configuration
-**Status:** Planned
+**Status:** Approved
 
 ---
 
@@ -114,3 +114,19 @@ Side effect: .claude/session updated
 Purpose: Test the chapter → work item process on a small, contained scope before applying to larger chapters.
 
 Learnings from triage will feed back into pipeline/CH-007 (Chapter Triage) design.
+
+---
+
+## Triage Result (Session 216)
+
+**Status:** Approved and triaged
+
+| Work Item | Requirements | Blocked By | Description |
+|-----------|--------------|------------|-------------|
+| WORK-002 | R1, R2 | None | Create `.claude/session` file |
+| WORK-003 | R3 | WORK-002 | Update `just session-start` |
+| WORK-004 | R3 | WORK-003 | Update coldstart |
+
+**Decisions made:**
+- ADR-043: Runtime state at `.claude/` level (not `.claude/haios/`)
+- R4 (Discoverable) deferred to CH-001 implementation

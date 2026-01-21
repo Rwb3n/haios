@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-19T22:01:31
+# System Auto: last updated on: 2026-01-21T12:11:06
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -245,9 +245,10 @@ events-stats:
 cycle-events:
     @python -c "import json; [print(f\"{e['backlog_id']}: {e.get('from_phase','?')} -> {e['to_phase']} (S{e.get('session',0)})\") for l in open('.claude/haios-events.jsonl', encoding='utf-8-sig') if (e:=json.loads(l))['type']=='cycle_transition'][-10:]"
 
-# Log session start event
+# Start new session: write to .claude/session, update status.json, log event
+# CH-002: Session Simplify - session number in simple file
 session-start session:
-    @python -c "import json,datetime; f=open('.claude/haios-events.jsonl','a'); f.write(json.dumps({'ts':datetime.datetime.now().isoformat(),'type':'session','action':'start','session':{{session}}})+'\n'); print('Session {{session}} start logged')"
+    @python -c "import json,datetime,os; sf='.claude/session'; jf='.claude/haios-status.json'; ef='.claude/haios-events.jsonl'; s={{session}}; lines=open(sf).readlines() if os.path.exists(sf) else []; hdr=[l for l in lines if l.startswith('#')]; open(sf,'w').write(''.join(hdr)+str(s)+chr(10)); j=json.load(open(jf)) if os.path.exists(jf) else {}; pr=j.get('session_delta',{}).get('current_session',s-1); j['session_delta']={'current_session':s,'prior_session':pr}; json.dump(j,open(jf,'w'),indent=2); open(ef,'a').write(json.dumps({'ts':datetime.datetime.now().isoformat(),'type':'session','action':'start','session':s})+chr(10)); print(f'Session {s} start logged')"
 
 # Log session end event
 session-end session:

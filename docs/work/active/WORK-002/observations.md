@@ -1,31 +1,30 @@
 ---
 template: observations
 work_id: WORK-002
-captured_session: '208'
-generated: '2026-01-18'
-last_updated: '2026-01-18T22:03:28'
+title: Create .claude/session File
+chapter: CH-002
+captured_session: 216
+generated: '2026-01-21'
+last_updated: '2026-01-21T11:29:57'
 ---
-# Observations: WORK-002
+# Observations: WORK-002 (Session 216)
 
 ## What surprised you?
 
-<!-- Unexpected behaviors, things easier/harder than expected -->
-
-- [x] Queue filter gap: WorkEngine.get_ready() only filtered `status != "complete"`, not other terminal states (archived, dismissed). Revealed "query by tag" principle wasn't fully implemented.
-- [x] Operator insight depth: Questions about epoch field and query-by-tag surfaced architectural thinking beyond immediate task - design pattern for WORK-001.
+PostToolUse hook adds timestamp headers to ALL files, including simple data files. The intended "single integer file" became a 3-line file. Not necessarily bad (consistency), but means `tail -1` required instead of raw `cat`.
 
 ## What's missing?
 
-<!-- Gaps, missing features, AgentUX friction -->
-
-- [x] Epoch field: Work items lack explicit `epoch:` field. Currently inferred from ID prefix. Needs `epoch: E2.3` for portability. Captured for WORK-001.
-- [x] Migration period concept: ADR-041 addresses work item closure, not epoch transitions. Need explicit "migration period" pattern.
-- [x] Batch status tooling: Updated 43 items via script. Could use `just batch-status` recipe.
+- Hook exclusion list: No way to exclude specific files from timestamp injection
+- Chapter triage skill: Process worked manually but isn't codified (pipeline/CH-007 defines it, skill doesn't exist)
 
 ## What should we remember?
 
-<!-- Learnings, patterns, warnings -->
+- ADR-043: Runtime state at `.claude/` level, plugin code in `.claude/haios/`. Enables portability.
+- Triage calibration: Requirements group by implementation unit, not 1:1. Process surfaces architectural questions naturally.
+- First chapter triage: 4 requirements → 3 work items with clear dependencies. Manual process worked.
 
-- [x] Terminal status set: `{complete, archived, dismissed, invalid, deferred}` - filter from queues. Now in WorkEngine.
-- [x] Query by tag, not location: Status determines visibility, not directory. Type is field, not prefix. Epoch is field, not inferred.
-- [x] Epoch transition pattern: Triage work item → MANIFEST.md with rationale → status updates → queue reflects decisions.
+## What drift did you notice?
+
+- WORK-002 collision: Old plan from prior WORK-002 (E2.3 triage) still in plans/. ID reuse without cleanup.
+- Acceptance criteria mismatch: CH-002 R2 says `cat` outputs integer. Reality: 3 lines due to hook.

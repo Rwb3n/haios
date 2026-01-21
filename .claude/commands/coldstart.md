@@ -3,7 +3,7 @@ allowed-tools: Read, Glob, Bash, mcp__haios-memory__memory_search_with_experienc
   mcp__haios-memory__db_query
 description: Initialize session by loading essential context files
 generated: '2025-12-25'
-last_updated: '2026-01-15T19:53:08'
+last_updated: '2026-01-21T12:16:38'
 ---
 
 # Cold Start Initialization
@@ -98,7 +98,9 @@ Read `CLAUDE.md` - agent bootstrap and quick reference.
 just session-start {N}
 ```
 
-Where N = last_session + 1 from `.claude/haios-status.json`.
+Where N = current session + 1 from `.claude/session` (read last line as integer, increment by 1).
+
+**Note (CH-002):** Session number now lives in `.claude/session` for simplicity. Use `tail -1 .claude/session` to read current value.
 
 ---
 
