@@ -1,12 +1,12 @@
 # generated: 2026-01-20
-# System Auto: last updated on: 2026-01-21T11:09:04
+# System Auto: last updated on: 2026-01-21T17:59:01
 # Chapter: Session Simplify
 
 ## Definition
 
 **Chapter ID:** CH-002
 **Arc:** configuration
-**Status:** Approved
+**Status:** Complete
 
 ---
 
@@ -130,3 +130,34 @@ Learnings from triage will feed back into pipeline/CH-007 (Chapter Triage) desig
 **Decisions made:**
 - ADR-043: Runtime state at `.claude/` level (not `.claude/haios/`)
 - R4 (Discoverable) deferred to CH-001 implementation
+
+---
+
+## Acceptance (Session 218)
+
+**Process:** CH-009 Chapter Acceptance (first application)
+
+### Checklist
+
+| Criterion | Status | Evidence |
+|-----------|--------|----------|
+| Acceptance criteria satisfied | **PASS** | All 4 criteria verified |
+| Requirements variance resolved | **PASS** | Spec updated (see below) |
+| Runtime integration exists | **PASS** | coldstart, just session-start, hooks |
+
+### Variance Observed
+
+**Issue:** Implementation updated prose (coldstart.md) instead of code (ContextLoader).
+
+**Root Cause:** Configuration Arc didn't mandate module-first pattern.
+
+**Resolution:** Added "Design Constraints (Session 218 Learning)" section to ARC.md.
+
+**Future Work:** CH-007 (Coldstart Orchestrator) will unify prose and modules.
+
+### Acceptance Record
+
+- **Accepted:** 2026-01-21
+- **Session:** 218
+- **Process:** CH-009 (first validation)
+- **Variance:** Documented in ARC.md Design Constraints

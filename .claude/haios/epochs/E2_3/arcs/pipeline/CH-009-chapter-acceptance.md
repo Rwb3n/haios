@@ -1,12 +1,12 @@
 # generated: 2026-01-21
-# System Auto: last updated on: 2026-01-21T13:21:12
+# System Auto: last updated on: 2026-01-21T17:41:36
 # Chapter: Chapter Acceptance
 
 ## Definition
 
 **Chapter ID:** CH-009
 **Arc:** pipeline
-**Status:** Planned
+**Status:** Approved
 **Depends:** CH-007 (Chapter Triage)
 **Work Items:** None
 

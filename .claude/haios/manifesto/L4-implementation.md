@@ -1,5 +1,5 @@
 # generated: 2026-01-01
-# System Auto: last updated on: 2026-01-18T16:17:36
+# System Auto: last updated on: 2026-01-21T18:01:49
 # L4: Implementation - Technical Specifications
 
 Level: L4
@@ -59,6 +59,79 @@ Today: **No.** The plugin assumes HAIOS context, not arbitrary projects. We've b
 > Start building the **doc-to-product pipeline** that HAIOS *is*.
 
 **Architecture:** See `architecture/S26-pipeline-architecture.md` for full pipeline design.
+
+---
+
+## Module-First Principle (Session 218 - MUST)
+
+**Commands and skills MUST call modules, not instruct agents to read files manually.**
+
+We have 11 modules in `.claude/haios/modules/`. They must be used.
+
+### The Correct Layer Stack
+
+```
+┌─────────────────────────────────────────┐
+│  Commands/Skills (prose)                │  Orchestration, user interaction
+│  - .claude/commands/*.md                │  MUST call: cli.py or just recipes
+│  - .claude/skills/*/*.md                │  MUST NOT: instruct file reads
+└─────────────────┬───────────────────────┘
+                  │
+┌─────────────────▼───────────────────────┐
+│  CLI / Just Recipes                     │  Command dispatch
+│  - .claude/haios/modules/cli.py         │  MUST call: modules/*.py
+│  - justfile                             │
+└─────────────────┬───────────────────────┘
+                  │
+┌─────────────────▼───────────────────────┐
+│  Modules                                │  Business logic
+│  - .claude/haios/modules/*.py           │  MUST call: lib/*.py, files
+│  (11 modules: WorkEngine, ContextLoader,│
+│   GovernanceLayer, MemoryBridge, etc.)  │
+└─────────────────┬───────────────────────┘
+                  │
+┌─────────────────▼───────────────────────┐
+│  Library                                │  Utilities, low-level ops
+│  - .claude/lib/*.py                     │
+└─────────────────────────────────────────┘
+```
+
+### Anti-Pattern (MUST NOT)
+
+```markdown
+# coldstart.md (WRONG)
+## Step 8: Session Start
+Read `.claude/session` to get session number...
+```
+
+Agent interprets prose → reads file manually → bypasses ContextLoader.
+
+### Correct Pattern (MUST)
+
+```markdown
+# coldstart.md (RIGHT)
+## Step 8: Session Start
+Run: `just coldstart` or `python -m cli context-load`
+```
+
+Agent calls cli.py → cli.py calls ContextLoader → module does the work.
+
+### Why This Matters
+
+| Without Module-First | With Module-First |
+|---------------------|-------------------|
+| 11 modules collecting dust | Modules are runtime consumers |
+| Prose duplicates code | Prose orchestrates code |
+| No testability | Modules are unit-testable |
+| Agent re-interprets on every run | Behavior is deterministic |
+
+### Enforcement
+
+Every chapter, arc, skill, and command design MUST answer:
+
+> **"Which module does the work? If none, why not?"**
+
+If the answer is "agent reads files manually" - the design is wrong.
 
 ---
 

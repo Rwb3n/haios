@@ -1,5 +1,5 @@
 # generated: 2025-09-23
-# System Auto: last updated on: 2026-01-19T22:12:48
+# System Auto: last updated on: 2026-01-21T18:02:08
 # Code Implementation & Engineering Guide
 
 ## RFC 2119 Keywords
@@ -33,6 +33,32 @@ When searching files or content, agents **SHOULD** prefer dedicated tools over s
 | 3 | **Read** | Reading specific files |
 | 4 | **Python scripts** | Complex logic (`.claude/lib/`) |
 | 5 | **Inline shell** | Last resort |
+
+---
+
+## CRITICAL: Module-First Principle (Session 218 - MUST)
+
+**Commands and skills MUST call modules, not instruct agents to read files manually.**
+
+```
+Commands/Skills (prose) → cli.py / just recipes → modules/*.py → lib/*.py
+```
+
+We have **11 modules** in `.claude/haios/modules/`. They MUST be used.
+
+| Module | Purpose |
+|--------|---------|
+| `ContextLoader` | L0-L4 loading, session bootstrap |
+| `WorkEngine` | WORK.md CRUD, lifecycle |
+| `GovernanceLayer` | Gates, transitions |
+| `MemoryBridge` | MCP wrapper |
+| `CycleRunner` | Phase execution |
+| + 6 more | See modules/README.md |
+
+**Design Gate:** Every chapter/arc/skill design MUST answer:
+> "Which module does the work? If none, why not?"
+
+If answer is "agent reads files manually" → design is WRONG.
 
 ---
 

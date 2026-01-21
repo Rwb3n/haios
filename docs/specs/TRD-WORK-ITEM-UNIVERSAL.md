@@ -1,9 +1,10 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-18T16:31:39
+# System Auto: last updated on: 2026-01-21T18:25:49
 # TRD: Universal Work Item Structure
 
-Status: DRAFT
+Status: APPROVED
 Created: Session 206
+Approved: Session 218
 Purpose: Define the canonical work item structure for the doc-to-product pipeline
 
 ---
@@ -29,6 +30,45 @@ The pipeline needs work items that:
 3. **Requirements are first-class** - `requirement_refs` links to source specs
 4. **Portable** - No HAIOS-specific fields in core structure
 5. **Extensible** - Project-specific fields go in `extensions` block
+
+---
+
+## Rationale (Session 218 Deep-Dive)
+
+### WHY Sequential IDs?
+
+| Approach | Pros | Cons |
+|----------|------|------|
+| **Semantic (E2-XXX)** | Type visible | Type encoded twice, refactoring changes IDs, epoch coupling |
+| **UUID** | Globally unique | Not human-readable, hard to reference |
+| **Sequential (WORK-001)** | Human-readable, simple | No semantic info (but type is queryable) |
+
+**Decision:** Sequential because:
+- **Type as field** - Queryable, changeable without ID change
+- **Epoch as field** - Work items survive epoch transitions
+- **Human-readable** - Easy to reference in conversation
+
+Memory refs: 82144, 81612
+
+### WHY This Type Taxonomy?
+
+5 types: `feature`, `investigation`, `bug`, `chore`, `spike`
+
+**Evidence:** WorkEngine already implements this (line 91). Backward compatible with `category` field.
+
+**Actual usage (62 items):**
+- 48 `implementation` → maps to `feature`
+- 9 `investigation` → same
+- Others unused but needed for pipeline portability
+
+### Acceptance Criteria vs Deliverables
+
+| Field | Location | Purpose | Consumer |
+|-------|----------|---------|----------|
+| `acceptance_criteria` | Frontmatter | Validation target | Automated tools |
+| `## Deliverables` | Body | Work tracking | Agent checkboxes |
+
+**They serve different purposes.** Not duplication.
 
 ---
 

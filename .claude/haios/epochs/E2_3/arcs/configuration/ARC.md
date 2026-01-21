@@ -1,5 +1,5 @@
 # generated: 2026-01-20
-# System Auto: last updated on: 2026-01-20T21:07:45
+# System Auto: last updated on: 2026-01-21T18:32:58
 # Arc: Configuration
 
 ## Definition
@@ -120,6 +120,46 @@ extract:
 | `bulleted_list` | All `- ` items |
 | `frontmatter` | YAML frontmatter field |
 | `code_block` | First fenced code block |
+
+---
+
+## Design Constraints (Session 218 Learning)
+
+**Module-First Principle:**
+
+Commands and skills MUST call modules, not instruct agents to read files manually.
+
+**Content Injection Principle:**
+
+Loaders MUST inject extracted content, not just filenames.
+
+| Anti-Pattern | Correct Pattern |
+|--------------|-----------------|
+| `load_principles: [L0-telos.md]` | Inject: "PRIME DIRECTIVE: The system's success..." |
+| Agent makes Read tool calls | Agent receives content in context |
+| Token waste on file reads | Extracted content ready to use |
+
+Files are structured for extraction. Extraction DSL selects content. Loaders format and inject.
+
+| Layer | Does | Calls |
+|-------|------|-------|
+| Commands/Skills (prose) | Orchestration, user interaction | cli.py or just recipes |
+| cli.py | Command dispatch | modules/*.py |
+| modules/*.py | Business logic | lib/*.py, files |
+
+**Anti-Pattern (CH-002 variance):**
+```markdown
+# coldstart.md (WRONG)
+Read `.claude/session` to get session number
+```
+
+**Correct Pattern:**
+```markdown
+# coldstart.md (RIGHT)
+Run `just coldstart` or call ContextLoader
+```
+
+**Rationale:** We have 11 modules collecting dust because prose commands bypass them.
 
 ---
 
