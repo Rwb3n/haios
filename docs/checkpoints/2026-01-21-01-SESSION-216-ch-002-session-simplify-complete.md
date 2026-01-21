@@ -21,7 +21,9 @@ pending:
 - configuration arc CH-001 (Discovery Root) - awaiting triage
 - configuration arc CH-003 through CH-008 - awaiting triage
 - pipeline CH-007 chapter-triage-cycle formalization
+- pipeline CH-009 chapter-acceptance (NEW - awaiting approval)
 - context_loader.py migration to .claude/session
+- CH-002 acceptance (apply CH-009 process once defined)
 drift_observed:
 - context_loader.py still reads from haios-status.json (backward compat, eventual
   migration)
@@ -33,11 +35,14 @@ completed:
 - WORK-002 Created .claude/session file
 - WORK-003 Updated just session-start
 - WORK-004 Updated coldstart
+- pipeline/CH-009 Chapter Acceptance (design)
 key_discoveries:
 - Foundation → Writer → Reader pattern for data location migrations
 - Dual-write pattern for backward compatibility during transitions
 - Chapter triage process works manually (calibration successful)
 - Justfile inline Python needs compression or external script
+- Chapter acceptance = verify criteria + resolve requirements variance + mark complete
+- Observations vs discoveries distinction needs formalization
 generated: '2026-01-21'
-last_updated: '2026-01-21T12:21:39'
+last_updated: '2026-01-21T13:21:41'
 ---

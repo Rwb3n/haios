@@ -25,10 +25,12 @@
         "lifecycle_phase": null
     },
     "session_state": {
-        "active_cycle": "close-work-cycle",
-        "current_phase": "CHAIN",
-        "work_id": "WORK-004",
-        "entered_at": "2026-01-21T12:19:45.910726"
+        "active_cycle": null,
+        "current_phase": null,
+        "work_id": null,
+        "entered_at": null,
+        "active_queue": null,
+        "phase_history": []
     },
     "active_work": [],
     "blocked_items": {},
