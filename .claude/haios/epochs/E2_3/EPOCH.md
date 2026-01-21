@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-18T16:50:29
+# System Auto: last updated on: 2026-01-21T18:39:51
 # Epoch 2.3: The Pipeline
 
 ## L4 Object Definition
@@ -67,10 +67,12 @@ OUTPUT: Functional product (aligned to source specs)
 
 | Arc | Theme | Status |
 |-----|-------|--------|
+| **Configuration** | Object-oriented, discoverable config system | Active |
 | **Provenance** | Fix ingestion to capture source links | Planned |
 | **Pipeline** | Build INGEST→PLAN→BUILD→VALIDATE stages | Planned |
-| **WorkUniversal** | Universal work item structure | Active |
+| **WorkUniversal** | Universal work item structure | Active (CH-001-004 complete) |
 | **Migration** | Triage E2 artifacts, archive stale | Planned |
+| **Observations** | Three-phase observation lifecycle | Active |
 
 ---
 
@@ -82,6 +84,9 @@ OUTPUT: Functional product (aligned to source specs)
 | Observations at epoch level | Capture learnings with traceability | OBS-206-002 (WHY not traced) |
 | Universal work items | Portability requires generic structure | S26 pipeline requirements |
 | Provenance first | Can't trace WHY without source links | Session 206 analysis |
+| Module-First Principle | 11 modules unused - prose bypasses code | Session 218 |
+| Content Injection | Loaders inject content, not filenames | Session 218 |
+| Sequential work IDs | Type as field, not prefix | Session 218 TRD approval |
 
 ---
 
@@ -93,9 +98,14 @@ OUTPUT: Functional product (aligned to source specs)
 - S26: Pipeline Architecture (new, Session 206)
 
 **New for E2.3:**
-- TRD-WORK-ITEM-UNIVERSAL (draft, needs approval)
+- TRD-WORK-ITEM-UNIVERSAL (**APPROVED** Session 218)
 - Provenance wiring spec (needed)
 - Pipeline stage specs (needed)
+
+**Session 218 Principles (L4 MUST):**
+- **Module-First:** Commands/skills MUST call modules via cli.py, not instruct manual file reads
+- **Content Injection:** Loaders MUST inject extracted content, not just filenames
+- **Design Gate:** "Which module does the work? If none, why not?"
 
 ---
 

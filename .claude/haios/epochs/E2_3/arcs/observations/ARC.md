@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-18T20:20:28
+# System Auto: last updated on: 2026-01-21T18:40:33
 # Arc: Observations
 
 ## Arc Definition
@@ -26,6 +26,16 @@ Rewire observation lifecycle for three-phase flow and new file structure.
 - Work observations in `epochs/E2_3/work/{id}/observations.md`
 - Atomic promoted obs at `epochs/E2_3/observations/obs-{session}-{seq}.md`
 - Triage acts on promoted obs, not raw captures
+
+---
+
+## Design Constraints (L4 MUST - Session 218)
+
+**Module-First:** Observation operations MUST go through `observations.py` module.
+- Skills call `lib/observations.py` functions
+- No direct file manipulation in prose
+
+**Design Gate:** "Which module does the work? If none, why not?"
 
 ---
 

@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-21T10:34:32
+# System Auto: last updated on: 2026-01-21T18:40:18
 # Arc: Pipeline
 
 ## Arc Definition
@@ -34,6 +34,20 @@ CORPUS → INGEST → PLAN → BUILD → VALIDATE → PRODUCT
 | CH-006 | Orchestrator | Planned | Pipeline state machine, routing |
 | CH-007 | [ChapterTriage](CH-007-chapter-triage.md) | Planned | Design → work item decomposition |
 | CH-008 | [CalibrationCycle](CH-008-calibration-cycle.md) | Planned | Post-implementation feedback loop |
+
+---
+
+## Design Constraints (L4 MUST - Session 218)
+
+**Module-First:** Each stage MUST be a module in `.claude/haios/modules/`.
+- CorpusLoader → `modules/corpus_loader.py`
+- RequirementExtractor → `modules/requirement_extractor.py`
+- PlannerAgent → `modules/planner_agent.py`
+- etc.
+
+**Content Injection:** Stage outputs MUST be injectable content, not file references.
+
+**Design Gate:** "Which module does the work? If none, why not?"
 
 ---
 
