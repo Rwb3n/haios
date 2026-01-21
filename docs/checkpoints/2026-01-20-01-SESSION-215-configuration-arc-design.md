@@ -13,6 +13,8 @@ load_memory_refs:
 pending:
 - configuration arc CH-001 through CH-008 (design complete, awaiting approval + triage)
 - pipeline arc CH-007 chapter-triage (design complete)
+- pipeline arc CH-008 calibration-cycle (design complete, speculative - validate after
+  CH-002 triage)
 drift_observed:
 - obs-214-003 - Work items lack epoch field (partially addressed via chapter/arc fields)
 - haios-status.json bloat (156KB unused sections identified)
@@ -20,6 +22,7 @@ drift_observed:
 completed:
 - Configuration arc created with 8 chapters
 - Chapter triage process designed (pipeline CH-007)
+- Calibration cycle conceptualized (pipeline CH-008)
 - Templates created (arc.md, chapter.md)
 - work_item.md updated with chapter/arc fields
 - epochs/README.md documenting design vs implementation
@@ -30,6 +33,8 @@ key_discoveries:
 - Coldstart should inject via recipe output not manual reads
 - haios-status.json has 156KB unused sections
 - haios/modules ARE wired via sys.path.insert (initial audit was lazy)
+- Calibration closes feedback loop between design and execution
+- First pass is calibration not perfection - messiness expected
 generated: '2026-01-20'
-last_updated: '2026-01-20T21:52:19'
+last_updated: '2026-01-21T10:35:14'
 ---
