@@ -1,5 +1,5 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-01-05T20:49:59
+# System Auto: last updated on: 2026-01-21T20:12:01
 """
 PostToolUse Hook Handler (E2-085).
 
@@ -383,8 +383,9 @@ def _validate_template(path: Path) -> Optional[str]:
         return None
 
     try:
-        # Import Python validate module from .claude/lib/
-        lib_dir = Path(__file__).parent.parent.parent / "lib"
+        # Import Python validate module
+        # WORK-006: Use lib inside haios/ for portability
+        lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
         if str(lib_dir) not in sys.path:
             sys.path.insert(0, str(lib_dir))
 
@@ -429,8 +430,9 @@ def _refresh_discoverable_artifacts(path: Path) -> Optional[str]:
         return None
 
     try:
-        # Import Python status module from .claude/lib/
-        lib_dir = Path(__file__).parent.parent.parent / "lib"
+        # Import Python status module
+        # WORK-006: Use lib inside haios/ for portability
+        lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
         if str(lib_dir) not in sys.path:
             sys.path.insert(0, str(lib_dir))
 
@@ -855,7 +857,8 @@ def _scaffold_on_node_entry(path: Path, hook_data: dict) -> Optional[str]:
 
     try:
         # E2-264: Import from lib for helpers, module for build_scaffold_command
-        lib_dir = Path(__file__).parent.parent.parent / "lib"
+        # WORK-006: Use lib inside haios/ for portability
+        lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
         if str(lib_dir) not in sys.path:
             sys.path.insert(0, str(lib_dir))
 

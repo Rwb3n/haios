@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-04T20:40:11
+# System Auto: last updated on: 2026-01-21T20:31:48
 """
 MemoryBridge Module (E2-241)
 
@@ -369,8 +369,9 @@ Query: {query}"""
         Returns:
             True only for actual failures, False for successes or false positives.
         """
+        # WORK-006: Use lib inside haios/ for portability
         import sys
-        lib_path = str(Path(__file__).parent.parent.parent / "lib")
+        lib_path = str(Path(__file__).parent.parent / "lib")  # .claude/haios/lib (sibling to modules/)
         if lib_path not in sys.path:
             sys.path.insert(0, lib_path)
 
@@ -391,8 +392,9 @@ Query: {query}"""
         Returns:
             {"success": True, "concept_id": N} or {"success": False, "error": "..."}
         """
+        # WORK-006: Use lib inside haios/ for portability
         import sys
-        lib_path = str(Path(__file__).parent.parent.parent / "lib")
+        lib_path = str(Path(__file__).parent.parent / "lib")  # .claude/haios/lib (sibling to modules/)
         if lib_path not in sys.path:
             sys.path.insert(0, lib_path)
 

@@ -1,12 +1,14 @@
 # generated: 2026-01-20
-# System Auto: last updated on: 2026-01-20T21:05:38
+# System Auto: last updated on: 2026-01-21T21:17:54
 # Chapter: Loader Base
 
 ## Definition
 
 **Chapter ID:** CH-003
 **Arc:** configuration
-**Status:** Planned
+**Status:** Complete
+**Work Item:** WORK-005
+**Implementation:** `.claude/haios/lib/loader.py`
 
 ---
 
@@ -92,10 +94,10 @@ Methods:
 
 ## Success Criteria
 
-- [ ] Extraction DSL documented
-- [ ] All extraction types implemented
-- [ ] Output is injection-ready (not file paths)
-- [ ] Config-driven (no hardcoded extractions)
+- [x] Extraction DSL documented
+- [x] All extraction types implemented (8 types, 24 tests)
+- [x] Output is injection-ready (not file paths)
+- [x] Config-driven (no hardcoded extractions)
 
 ---
 

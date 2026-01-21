@@ -3,13 +3,13 @@ template: work_item
 id: WORK-005
 title: Implement Loader Base for Configuration Arc
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-21
 spawned_by: null
 chapter: CH-003
 arc: configuration
-closed: null
+closed: '2026-01-21'
 priority: medium
 effort: medium
 requirement_refs: []
@@ -33,11 +33,24 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 82257
+- 82258
+- 82259
+- 82260
+- 82261
+- 82262
+- 82263
+- 82264
+- 82265
+- 82266
+- 82267
+- 82268
+- 82269
 extensions: {}
 version: '2.0'
 generated: 2026-01-21
-last_updated: '2026-01-21T19:05:04'
+last_updated: '2026-01-21T21:02:40'
 ---
 # WORK-005: Implement Loader Base for Configuration Arc
 
@@ -89,19 +102,19 @@ This is the foundation for CH-004 (Identity Loader), CH-005 (Session Loader), an
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] `.claude/lib/loader.py` - Base Loader class with extract(), format(), load() methods
-- [ ] Extraction DSL implementation supporting 8 types:
-  - [ ] `blockquote` - First `> ` block in section
-  - [ ] `first_paragraph` - Text until blank line
-  - [ ] `all_h3` - All `### ` headings with first line
-  - [ ] `numbered_list` - All `1. ` items
-  - [ ] `bulleted_list` - All `- ` items
-  - [ ] `frontmatter` - YAML field extraction
-  - [ ] `code_block` - First fenced code block
-  - [ ] `full_section` - Everything under heading
-- [ ] Output template system for formatting extracted content
-- [ ] Unit tests: `tests/test_loader.py`
-- [ ] Example config: `.claude/haios/config/loaders/example.yaml`
+- [x] `.claude/haios/lib/loader.py` - Base Loader class with extract(), format(), load() methods
+- [x] Extraction DSL implementation supporting 8 types:
+  - [x] `blockquote` - First `> ` block in section
+  - [x] `first_paragraph` - Text until blank line
+  - [x] `all_h3` - All `### ` headings with first line
+  - [x] `numbered_list` - All `1. ` items
+  - [x] `bulleted_list` - All `- ` items
+  - [x] `frontmatter` - YAML field extraction
+  - [x] `code_block` - First fenced code block
+  - [x] `full_section` - Everything under heading
+- [x] Output template system for formatting extracted content
+- [x] Unit tests: `tests/test_loader.py`
+- [x] Example config: `.claude/haios/config/loaders/example.yaml`
 
 ---
 

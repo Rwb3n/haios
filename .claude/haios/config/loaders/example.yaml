@@ -1,0 +1,60 @@
+# generated: 2026-01-21
+# System Auto: last updated on: 2026-01-21T20:59:46
+# Example loader config for Configuration arc
+# WORK-005: Implement Loader Base for Configuration Arc
+#
+# This config demonstrates extraction of content from L0-telos.md
+# for injection into agent context during coldstart.
+#
+# Usage:
+#   from loader import Loader
+#   loader = Loader(Path(".claude/haios/config/loaders/example.yaml"))
+#   content = loader.load()
+
+# Base path for source files (relative to project root)
+base_path: .claude/haios/manifesto
+
+# Extractions to perform
+extract:
+  # Extract the Prime Directive blockquote
+  mission:
+    file: L0-telos.md
+    section: "## The Prime Directive"
+    type: blockquote
+
+  # Extract companion relationship principles
+  companion:
+    file: L0-telos.md
+    section: "## The Companion Relationship"
+    type: numbered_list
+
+  # Extract operator constraints
+  constraints:
+    file: L1-principal.md
+    section: "**Known Constraints:**"
+    type: numbered_list
+
+  # Extract status from frontmatter
+  status:
+    file: L0-telos.md
+    type: frontmatter
+    field: Status
+
+# Output formatting
+output:
+  template: |
+    === IDENTITY CONTEXT ===
+
+    PRIME DIRECTIVE:
+    {mission}
+
+    COMPANION PRINCIPLES:
+    {companion}
+
+    OPERATOR CONSTRAINTS:
+    {constraints}
+
+    STATUS: {status}
+
+    === END IDENTITY CONTEXT ===
+  list_separator: "\n- "

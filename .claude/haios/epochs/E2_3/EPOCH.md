@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-21T18:39:51
+# System Auto: last updated on: 2026-01-21T21:18:25
 # Epoch 2.3: The Pipeline
 
 ## L4 Object Definition
@@ -67,7 +67,7 @@ OUTPUT: Functional product (aligned to source specs)
 
 | Arc | Theme | Status |
 |-----|-------|--------|
-| **Configuration** | Object-oriented, discoverable config system | Active |
+| **Configuration** | Object-oriented, discoverable config system | Active (CH-002, CH-003 complete) |
 | **Provenance** | Fix ingestion to capture source links | Planned |
 | **Pipeline** | Build INGEST→PLAN→BUILD→VALIDATE stages | Planned |
 | **WorkUniversal** | Universal work item structure | Active (CH-001-004 complete) |

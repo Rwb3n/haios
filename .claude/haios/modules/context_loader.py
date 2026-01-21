@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-01-18T10:42:20
+# System Auto: last updated on: 2026-01-21T20:31:33
 """
 ContextLoader Module (E2-254)
 
@@ -181,8 +181,9 @@ class ContextLoader:
             The delegation pattern maintains backward compatibility while
             enabling module-first imports per Epoch 2.2.
         """
+        # WORK-006: Use lib inside haios/ for portability
         import sys
-        lib_path = str(self._project_root / ".claude" / "lib")
+        lib_path = str(Path(__file__).parent.parent / "lib")  # .claude/haios/lib
         if lib_path not in sys.path:
             sys.path.insert(0, lib_path)
 

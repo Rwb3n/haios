@@ -1,5 +1,5 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-01-04T21:25:24
+# System Auto: last updated on: 2026-01-21T20:11:14
 """
 PreToolUse Hook Handler (E2-085).
 
@@ -450,7 +450,8 @@ def _check_exit_gate(file_path: str, old_string: str, new_string: str) -> Option
 
     try:
         # Import node_cycle library (lazy import)
-        lib_dir = Path(__file__).parent.parent.parent / "lib"
+        # WORK-006: Use lib inside haios/ for portability
+        lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
         if str(lib_dir) not in sys.path:
             sys.path.insert(0, str(lib_dir))
 

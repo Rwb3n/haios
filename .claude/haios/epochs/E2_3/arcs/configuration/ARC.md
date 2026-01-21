@@ -1,5 +1,5 @@
 # generated: 2026-01-20
-# System Auto: last updated on: 2026-01-21T18:32:58
+# System Auto: last updated on: 2026-01-21T21:17:25
 # Arc: Configuration
 
 ## Definition
@@ -120,6 +120,7 @@ extract:
 | `bulleted_list` | All `- ` items |
 | `frontmatter` | YAML frontmatter field |
 | `code_block` | First fenced code block |
+| `full_section` | Everything under heading until next same-level |
 
 ---
 
@@ -172,7 +173,7 @@ Run `just coldstart` or call ContextLoader
 | `config/loaders/identity.yaml` | Manifesto extraction rules | 2 |
 | `config/loaders/session.yaml` | Session context rules | 2 |
 | `config/loaders/work.yaml` | Work queue rules | 2 |
-| `.claude/lib/loader.py` | Base loader + extraction | 2 |
+| `.claude/haios/lib/loader.py` | Base loader + extraction | 2 |
 | `.claude/session` | Single integer file | 1 |
 
 ---
@@ -182,8 +183,8 @@ Run `just coldstart` or call ContextLoader
 | Chapter | File | Status |
 |---------|------|--------|
 | CH-001 | [Discovery Root](CH-001-discovery-root.md) | Planned |
-| CH-002 | [Session Simplify](CH-002-session-simplify.md) | Planned |
-| CH-003 | [Loader Base](CH-003-loader-base.md) | Planned |
+| CH-002 | [Session Simplify](CH-002-session-simplify.md) | Complete |
+| CH-003 | [Loader Base](CH-003-loader-base.md) | Complete |
 | CH-004 | [Identity Loader](CH-004-identity-loader.md) | Planned |
 | CH-005 | [Session Loader](CH-005-session-loader.md) | Planned |
 | CH-006 | [Work Loader](CH-006-work-loader.md) | Planned |

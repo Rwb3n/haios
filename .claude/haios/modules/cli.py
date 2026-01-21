@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-19T22:00:54
+# System Auto: last updated on: 2026-01-21T20:31:59
 """
 HAIOS Modules CLI Entry Point
 
@@ -18,6 +18,11 @@ from pathlib import Path
 _modules_path = Path(__file__).parent
 if str(_modules_path) not in sys.path:
     sys.path.insert(0, str(_modules_path))
+
+# WORK-006: Also add lib path for modules that import from lib
+_lib_path = Path(__file__).parent.parent / "lib"  # .claude/haios/lib (sibling to modules/)
+if str(_lib_path) not in sys.path:
+    sys.path.insert(0, str(_lib_path))
 
 from governance_layer import GovernanceLayer
 from work_engine import WorkEngine, WorkNotFoundError, InvalidTransitionError

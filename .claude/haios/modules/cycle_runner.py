@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-01-04T20:53:09
+# System Auto: last updated on: 2026-01-21T20:31:23
 """
 CycleRunner Module (E2-255)
 
@@ -43,9 +43,10 @@ except ImportError:
     from governance_layer import GovernanceLayer, GateResult
 
 # Import event logging from lib
+# WORK-006: Use lib inside haios/ for portability
 import sys
 
-_lib_path = Path(__file__).parent.parent.parent / "lib"
+_lib_path = Path(__file__).parent.parent / "lib"  # .claude/haios/lib (sibling to modules/)
 if str(_lib_path) not in sys.path:
     sys.path.insert(0, str(_lib_path))
 
