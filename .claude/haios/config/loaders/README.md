@@ -1,5 +1,5 @@
 # generated: 2026-01-21
-# System Auto: last updated on: 2026-01-21T21:00:36
+# System Auto: last updated on: 2026-01-22T22:43:26
 # Loader Configurations
 
 YAML configuration files for the Loader extraction system (WORK-005).
@@ -46,12 +46,50 @@ output:
 
 ## Files
 
-| File | Purpose |
-|------|---------|
-| `example.yaml` | Example extracting from L0-telos.md and L1-principal.md |
-| `identity.yaml` | (Future) Identity loader for coldstart |
-| `session.yaml` | (Future) Session context loader |
-| `work.yaml` | (Future) Work queue loader |
+| File | Purpose | Status |
+|------|---------|--------|
+| `example.yaml` | Example extracting from L0-telos.md and L1-principal.md | Reference |
+| `identity.yaml` | Identity loader for coldstart - extracts L0-L4 essence | **Implemented (WORK-007)** |
+| `session.yaml` | Session context loader (checkpoint, memory) | Planned (CH-005) |
+| `work.yaml` | Work queue loader | Planned (CH-006) |
+
+## Integration with ContextLoader (WORK-008, WORK-009)
+
+Loaders are invoked by `ContextLoader` based on role configuration in `haios.yaml`:
+
+```yaml
+# .claude/haios/config/haios.yaml
+context:
+  roles:
+    main:
+      loaders: [identity]  # Which loaders to run for this role
+    builder:
+      loaders: [identity]
+  loader_registry:
+    identity:
+      module: identity_loader
+      class: IdentityLoader
+```
+
+### Call Chain
+
+```
+just coldstart
+  → cli.py context-load
+    → ContextLoader.load_context(role="main")
+      → For each loader in roles[role].loaders:
+          → LoaderClass().load()
+      → Returns GroundedContext with loaded_context dict
+```
+
+### Adding a New Loader
+
+1. Create `loaders/{name}.yaml` with extraction rules
+2. Create `.claude/haios/lib/{name}_loader.py` implementing `load() -> str`
+3. Register in `haios.yaml` under `context.loader_registry`
+4. Add to appropriate roles under `context.roles`
+
+No code changes to ContextLoader required - fully config-driven.
 
 ## Usage
 

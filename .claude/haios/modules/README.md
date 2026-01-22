@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-18T10:44:13
+# System Auto: last updated on: 2026-01-22T22:44:13
 # HAIOS Modules
 
 Core modules for HAIOS Chariot Architecture (L4-implementation.md).
@@ -382,16 +382,16 @@ engine = BackfillEngine(work_engine=work_engine, base_path=Path("."))
 success = engine.backfill("E2-001")
 ```
 
-## ContextLoader (E2-254)
+## ContextLoader (E2-254, WORK-008, WORK-009)
 
-Programmatic bootstrap module for L0-L4 context loading.
+Programmatic bootstrap module for config-driven, role-based context loading.
 
 ### Functions
 
 | Function | Input | Output |
 |----------|-------|--------|
 | `compute_session_number()` | None | `Tuple[int, Optional[int]]` (current, prior) |
-| `load_context(trigger)` | "coldstart" or "session_recovery" | `GroundedContext` dataclass |
+| `load_context(role, trigger)` | role name + trigger type | `GroundedContext` dataclass |
 | `generate_status(slim)` | bool (default True) | Dict with status data (E2-259) |
 
 ### GroundedContext Dataclass
@@ -399,9 +399,12 @@ Programmatic bootstrap module for L0-L4 context loading.
 ```python
 @dataclass
 class GroundedContext:
-    """Result of context loading - L0-L4 grounding."""
+    """Result of context loading - role-based composition (WORK-008)."""
     session_number: int
     prior_session: Optional[int] = None
+    role: str = "main"                           # WORK-008: Role that was loaded
+    loaded_context: Dict[str, str] = {}          # WORK-008: loader_name -> content
+    # DEPRECATED fields (kept for backward compat when no loaders configured)
     l0_telos: str = ""           # WHY - Mission, Prime Directive
     l1_principal: str = ""       # WHO - Operator constraints
     l2_intent: str = ""          # WHAT - Goals, trade-offs
@@ -420,22 +423,48 @@ class GroundedContext:
 | `memory_bridge` | MemoryBridge | None | For strategy retrieval |
 | `project_root` | Path | Auto-detect | Project root path |
 
+### Role-Based Loading (WORK-008)
+
+Loaders are configured in `haios.yaml`:
+
+```yaml
+context:
+  roles:
+    main:
+      loaders: [identity]        # List of loaders to run
+      description: "Main agent"
+    builder:
+      loaders: [identity]
+  loader_registry:
+    identity:
+      module: identity_loader
+      class: IdentityLoader
+```
+
+When `load_context(role="main")` is called:
+1. Look up `context.roles.main.loaders` → `[identity]`
+2. For each loader name, get class from `loader_registry`
+3. Instantiate and call `loader.load()`
+4. Store result in `loaded_context[loader_name]`
+
 ### Invariants
 
 - MUST gracefully handle missing dependencies (WorkEngine, MemoryBridge)
+- MUST gracefully degrade if no config or no roles (backward compat)
 - MUST truncate checkpoint to 2000 chars for token efficiency
 - MUST use session_delta format from haios-status.json
+- MUST raise ValueError for unknown role if roles are configured
 
 ### Usage
 
 ```python
 from context_loader import ContextLoader, GroundedContext
 
-# Basic usage
+# Role-based loading (WORK-008)
 loader = ContextLoader()
-ctx = loader.load_context()
-print(f"Session {ctx.session_number}, prior: {ctx.prior_session}")
-print(f"L0: {len(ctx.l0_telos)} chars")
+ctx = loader.load_context(role="main")
+print(f"Role: {ctx.role}")
+print(f"Identity content: {ctx.loaded_context.get('identity', '')[:100]}...")
 
 # With dependencies
 from work_engine import WorkEngine
@@ -444,7 +473,7 @@ from memory_bridge import MemoryBridge
 engine = WorkEngine(governance=GovernanceLayer())
 bridge = MemoryBridge()
 loader = ContextLoader(work_engine=engine, memory_bridge=bridge)
-ctx = loader.load_context()
+ctx = loader.load_context(role="main")
 print(f"Ready: {ctx.ready_work}")
 print(f"Strategies: {len(ctx.strategies)}")
 
@@ -457,12 +486,28 @@ full_status = loader.generate_status(slim=False)
 print(f"Live files: {len(full_status['live_files'])}")
 ```
 
-### CLI Integration (E2-254)
+### CLI Integration (E2-254, WORK-009)
 
 ```bash
-# Load context via justfile recipe
-just context-load
+# Load context and output identity content (WORK-009)
+just coldstart
+
+# Output includes:
+# === IDENTITY ===
+# Mission: ...
+# Constraints: ...
+# Principles: ...
+# [SESSION]
+# Number: 228
+# Prior: 227
 ```
+
+The `just coldstart` recipe calls `cli.py context-load` which:
+1. Calls `ContextLoader.load_context(role="main")`
+2. Prints `loaded_context` content (identity essence ~50 lines)
+3. Prints session info and ready work
+
+This eliminates Read tool calls for L0-L4 manifesto files during coldstart.
 
 ## CycleRunner (E2-255)
 
