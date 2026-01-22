@@ -1,5 +1,5 @@
 # generated: 2026-01-21
-# System Auto: last updated on: 2026-01-21T21:00:19
+# System Auto: last updated on: 2026-01-22T20:48:24
 # HAIOS Library
 
 Portable plugin utilities for the HAIOS system.
@@ -14,6 +14,67 @@ the portable plugin directory (`.claude/haios/`) to function independently.
 | Module | Purpose |
 |--------|---------|
 | `loader.py` | Config-driven content extraction from markdown (WORK-005) |
+| `identity_loader.py` | Identity context extraction from manifesto files (WORK-007). Runtime consumer: ContextLoader (WORK-008) |
+
+## Adding New Loaders (WORK-008 Pattern)
+
+ContextLoader uses config-driven, role-based loading. To add a new loader:
+
+### 1. Create the loader class
+
+```python
+# .claude/haios/lib/my_loader.py
+from loader import Loader
+
+class MyLoader:
+    def __init__(self, config_path=None):
+        self._loader = Loader(config_path or DEFAULT_CONFIG)
+
+    def load(self) -> str:
+        return self._loader.load()
+```
+
+### 2. Create config file
+
+```yaml
+# .claude/haios/config/loaders/my_loader.yaml
+loader:
+  name: my_loader
+  description: "What this loader extracts"
+sources:
+  - path: "path/to/source.md"
+    extract:
+      field_name:
+        section: "## Section Header"
+        type: blockquote
+format:
+  template: |
+    === MY CONTENT ===
+    {field_name}
+```
+
+### 3. Register in ContextLoader
+
+```python
+# .claude/haios/modules/context_loader.py
+def _register_default_loaders(self):
+    from identity_loader import IdentityLoader
+    from my_loader import MyLoader  # Add import
+    self._loader_registry["identity"] = IdentityLoader
+    self._loader_registry["my_loader"] = MyLoader  # Add registration
+```
+
+### 4. Add to role config
+
+```yaml
+# .claude/haios/config/haios.yaml
+context:
+  roles:
+    builder:
+      loaders: [identity, my_loader]  # Add to role
+```
+
+**Key principle:** Config defines which loaders run for each role. Code just registers the mapping.
 | `database.py` | Database connection and query utilities (DatabaseManager class) |
 | `scaffold.py` | File scaffolding for templates |
 | `work_item.py` | Work item parsing and manipulation |
