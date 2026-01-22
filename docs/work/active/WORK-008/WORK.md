@@ -3,13 +3,13 @@ template: work_item
 id: WORK-008
 title: ContextLoader Identity Integration
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-22
 spawned_by: WORK-007
 chapter: CH-004
 arc: configuration
-closed: null
+closed: '2026-01-22'
 priority: medium
 effort: small
 requirement_refs:
@@ -19,9 +19,10 @@ source_files:
 - .claude/haios/lib/identity_loader.py
 - .claude/haios/modules/context_loader.py
 acceptance_criteria:
-- ContextLoader calls IdentityLoader during load_context()
-- Coldstart receives identity context automatically
-- No manual file reads for manifesto content
+- ContextLoader is config-driven per L4 principles
+- Role parameter enables selective loading
+- haios.yaml defines role→loaders mapping
+- Extensible without code changes
 blocked_by: []
 blocks: []
 enables:
@@ -39,10 +40,13 @@ memory_refs:
 - 82293
 - 82294
 - 82295
+- 82299
+- 82300
+- 82301
 extensions: {}
 version: '2.0'
 generated: 2026-01-22
-last_updated: '2026-01-22T19:50:06'
+last_updated: '2026-01-22T20:34:57'
 ---
 # WORK-008: ContextLoader Identity Integration
 
@@ -86,13 +90,16 @@ l1_principal=self._read_manifesto_file("L1-principal.md"),  # 147 lines
 
      NOTE (WORK-001): Acceptance criteria are in frontmatter (machine-parseable).
      Deliverables are implementation outputs, not requirements.
+
+     Session 226: Revised to config-driven per L4 principles
 -->
 
-- [ ] `.claude/haios/modules/context_loader.py` modified to import IdentityLoader
-- [ ] `load_context()` calls `IdentityLoader().load()` instead of direct file reads
-- [ ] GroundedContext has `identity_context` field (or equivalent)
-- [ ] Integration test: `just coldstart` receives identity context automatically
-- [ ] Update `context_loader.py` docstring to reflect identity integration
+- [x] `haios.yaml` has `context.roles` section defining role→loaders mapping
+- [x] `ContextLoader.load_context()` accepts `role` parameter
+- [x] `GroundedContext` has `loaded_context` dict field (loader_name → content)
+- [x] Loader registry is extensible (new loaders via config)
+- [x] 5 tests covering role-based loading
+- [x] Docstrings updated to reflect config-driven design
 
 ---
 

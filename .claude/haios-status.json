@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-22T19:44:36",
+    "generated": "2026-01-22T20:40:08",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 224,
-        "current_session": 222,
+        "prior_session": 222,
+        "current_session": 226,
         "prior_date": "2026-01-21",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82103,
-        "entities": 9150,
+        "concepts": 82110,
+        "entities": 9154,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -2785,6 +2785,15 @@
             "status": null,
             "date": "2026-01-21",
             "last_updated": "2026-01-21T21:08:39.177099",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-22-01-SESSION-226-work-007-closed-identity-loader-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-22",
+            "last_updated": "2026-01-22T19:46:17",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6362,7 +6371,7 @@
         {
             "path": "docs/checkpoints/2025-12-22-04-SESSION-99-e2-114-e2-112-investigation-infrastructure-complete.md",
             "last_updated": "2025-12-22T20:25:03",
-            "days_stale": 30
+            "days_stale": 31
         },
         {
             "path": "docs/checkpoints/2025-12-22-05-SESSION-100-m4-complete-inv-020-channeling-patterns.md",
@@ -6402,6 +6411,11 @@
         {
             "path": "docs/checkpoints/2025-12-23-08-SESSION-107-e2-152-complete-e2-154-planned.md",
             "last_updated": "2025-12-23T19:42:27",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/checkpoints/2025-12-23-09-SESSION-108-e2-154-e2-155-e2-117-dag-automation-complete.md",
+            "last_updated": "2025-12-23T20:36:57",
             "days_stale": 30
         },
         {
@@ -6572,7 +6586,7 @@
         {
             "path": "docs/plans/PLAN-E2-112-investigation-agent.md",
             "last_updated": "2025-12-22T19:54:01",
-            "days_stale": 30
+            "days_stale": 31
         },
         {
             "path": "docs/plans/PLAN-E2-113-investigation-events.md",
@@ -6588,6 +6602,11 @@
             "path": "docs/plans/PLAN-E2-115-investigation-closure.md",
             "last_updated": "2025-12-22T17:53:46",
             "days_stale": 31
+        },
+        {
+            "path": "docs/plans/PLAN-E2-117-milestone-auto-discovery.md",
+            "last_updated": "2025-12-23T20:23:54",
+            "days_stale": 30
         },
         {
             "path": "docs/plans/PLAN-E2-120-complete-powershell-to-python-migration.md",
@@ -6637,6 +6656,16 @@
         {
             "path": "docs/plans/PLAN-E2-150-work-item-infrastructure.md",
             "last_updated": "2025-12-23T18:13:44",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/plans/PLAN-E2-154-scaffold-on-entry-hook.md",
+            "last_updated": "2025-12-23T19:59:53",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/plans/PLAN-E2-155-node-exit-gates.md",
+            "last_updated": "2025-12-23T20:14:34",
             "days_stale": 30
         },
         {
@@ -6945,15 +6974,30 @@
             "days_stale": 30
         },
         {
+            "path": "docs/work/archive/WORK-E2-117-milestone-auto-discovery.md",
+            "last_updated": "2025-12-23T20:29:37",
+            "days_stale": 30
+        },
+        {
             "path": "docs/work/archive/WORK-E2-135-close-command-enforcement.md",
             "last_updated": "2025-12-23T18:04:04",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/work/archive/WORK-E2-154-scaffold-on-entry-hook-inv-022-phase-2.md",
+            "last_updated": "2025-12-23T19:59:38",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/work/archive/WORK-E2-155-node-exit-gates-inv-022-phase-2.md",
+            "last_updated": "2025-12-23T20:15:12",
             "days_stale": 30
         }
     ],
     "workspace": {
-        "total_files": 466,
+        "total_files": 467,
         "by_template": {
-            "checkpoint": 217,
+            "checkpoint": 218,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -6965,7 +7009,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 53,
+            "unknown": 54,
             "draft": 2,
             "approved": 6,
             "ready": 1,
@@ -6980,7 +7024,7 @@
             "duplicate": 1,
             "deferred": 1
         },
-        "stale_count": 205
+        "stale_count": 212
     },
     "alignment": {
         "aligned": [
