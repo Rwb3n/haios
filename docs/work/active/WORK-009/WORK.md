@@ -3,13 +3,13 @@ template: work_item
 id: WORK-009
 title: Coldstart Orchestrator - Wire ContextLoader
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-22
 spawned_by: WORK-008
 chapter: CH-007
 arc: configuration
-closed: null
+closed: '2026-01-22'
 priority: high
 effort: medium
 requirement_refs:
@@ -37,6 +37,14 @@ cycle_docs: {}
 memory_refs:
 - 82298
 - 82299
+- 65046
+- 82307
+- 82308
+- 79066
+- 82309
+- 82310
+- 82311
+- 82312
 extensions: {}
 version: '2.0'
 generated: 2026-01-22

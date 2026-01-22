@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-21T23:07:18
+# System Auto: last updated on: 2026-01-22T22:25:33
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -179,6 +179,12 @@ migrate-backlog-execute:
 # Extracts ~50 lines of mission, principles, constraints, epoch
 identity:
     python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from identity_loader import IdentityLoader; print(IdentityLoader().load())"
+
+# Coldstart context loading for injection (WORK-009)
+# Outputs identity content for /coldstart skill to consume
+# Usage: just coldstart
+coldstart:
+    python .claude/haios/modules/cli.py context-load
 
 # =============================================================================
 # TESTING RECIPES
