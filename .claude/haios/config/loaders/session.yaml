@@ -1,0 +1,54 @@
+# generated: 2026-01-24
+# System Auto: last updated on: 2026-01-24T18:39:46
+# Session context extraction config per CH-005 spec
+# Extracts checkpoint frontmatter + queries memory refs
+#
+# CH-005: Implements Session Loader for Configuration Arc
+# Extracts session context from latest checkpoint for
+# token-efficient coldstart Phase 2 loading.
+
+# Checkpoint is found dynamically (latest in directory)
+checkpoint_dir: "docs/checkpoints/"
+
+# Fields to extract from checkpoint frontmatter
+extract:
+  prior_session:
+    field: session
+    type: frontmatter
+  completed:
+    field: completed
+    type: frontmatter
+  pending:
+    field: pending
+    type: frontmatter
+  drift_observed:
+    field: drift_observed
+    type: frontmatter
+  memory_refs:
+    field: load_memory_refs
+    type: frontmatter
+
+# Memory query (uses MCP tool)
+memory:
+  method: query_ids
+  ids_field: memory_refs
+  query_fields: [id, type, content]
+
+# Output formatting
+output:
+  template: |
+    === SESSION CONTEXT ===
+    Prior Session: {prior_session}
+
+    Completed last session:
+    {completed}
+
+    === DRIFT WARNINGS ===
+    {drift_observed}
+
+    Memory from prior session:
+    {memory_content}
+
+    Pending:
+    {pending}
+  list_separator: "\n- "

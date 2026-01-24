@@ -3,7 +3,7 @@ allowed-tools: Read, Glob, Bash, mcp__haios-memory__memory_search_with_experienc
   mcp__haios-memory__db_query
 description: Initialize session by loading essential context files
 generated: '2025-12-25'
-last_updated: '2026-01-21T12:16:38'
+last_updated: '2026-01-24T18:42:52'
 ---
 
 # Cold Start Initialization
@@ -23,15 +23,20 @@ Extract:
 
 ---
 
-## Step 2: Load Manifesto (MUST)
+## Step 2: Identity Context (Injected - WORK-009)
 
-**MUST** read the foundational context - immutable philosophy:
+The identity context is loaded by `just coldstart` and injected into context.
 
-1. `.claude/haios/manifesto/L0-telos.md` - Why HAIOS exists (IMMUTABLE)
-2. `.claude/haios/manifesto/L1-principal.md` - Who the operator is
-3. `.claude/haios/manifesto/L2-intent.md` - What serving the operator means
-4. `.claude/haios/manifesto/L3-requirements.md` - Behavioral principles (IMMUTABLE)
-5. `.claude/haios/manifesto/L4-implementation.md` - Technical specifications (dynamic)
+**No Read calls needed** - identity content appears in the `=== IDENTITY ===` block above.
+
+Extract from the injected content:
+- **Mission:** The Prime Directive (from L0-telos)
+- **Companion Relationship:** Trust principles (from L0-telos)
+- **Constraints:** Known operator constraints (from L1-principal)
+- **Principles:** Core behavioral principles (from L3-requirements)
+- **L4 Context Loading:** Technical patterns (from L4-implementation)
+
+This replaces manual reads of L0-L4 manifesto files with extracted essence (~50 lines vs 1137 lines).
 
 ---
 
@@ -45,54 +50,41 @@ Extract:
 
 ---
 
-## Step 4: Load Checkpoint Manifest
+## Step 4: Load Session Context (CH-005)
 
-Find the most recent checkpoint in `docs/checkpoints/` and read its frontmatter.
+Session context is loaded by `just session-context` and provides:
+- Prior session number and completed work
+- Memory refs from checkpoint (queried automatically)
+- Drift warnings (PROMINENT - cannot be missed)
+- Pending items for work selection
 
 ```bash
-ls -t docs/checkpoints/*.md | head -1
+just session-context
 ```
 
-The checkpoint is a **loading manifest** with these fields:
+**No manual checkpoint/memory queries needed** - SessionLoader extracts and formats everything.
 
-| Field | Action |
-|-------|--------|
-| `load_principles` | **MUST** read each file listed |
-| `load_memory_refs` | **MUST** query each concept ID |
-| `pending` | Surface as work options |
-| `drift_observed` | **MUST** surface as warnings before work selection |
-
-**If `drift_observed` is non-empty:** Display warnings prominently before proceeding.
+The output includes a `=== DRIFT WARNINGS ===` section. If non-empty, note these before proceeding.
 
 ---
 
 ## Step 5: Load Principles (from manifest)
 
-For each file in `load_principles`:
+For each file in checkpoint's `load_principles`:
 - Read the file
 - Note key principles that govern this session's work
 
----
-
-## Step 6: Load Memory (from manifest)
-
-For each concept ID in `load_memory_refs`:
-
-```sql
-SELECT id, type, content FROM concepts WHERE id IN ({load_memory_refs})
-```
-
-These are the learnings from the prior session. Inject into context.
+**Note:** Memory refs are already loaded by Step 4. Only `load_principles` requires manual reads.
 
 ---
 
-## Step 7: Load Agent Instructions
+## Step 6: Load Agent Instructions
 
 Read `CLAUDE.md` - agent bootstrap and quick reference.
 
 ---
 
-## Step 8: Session Start
+## Step 7: Session Start
 
 ```bash
 just session-start {N}
@@ -104,18 +96,18 @@ Where N = current session + 1 from `.claude/session` (read last line as integer,
 
 ---
 
-## Step 9: Summary Output
+## Step 8: Summary Output
 
 Provide brief summary:
 - **Manifesto loaded:** L0-L4 (confirm read)
 - **Epoch context:** Which epoch + which arcs loaded
 - **Principles loaded:** Which files from `load_principles`
-- **Memory loaded:** Count of concepts from `load_memory_refs`
-- **Drift warnings:** Any `drift_observed` items
+- **Memory loaded:** From `just session-context` output
+- **Drift warnings:** Any from session context output
 
 ---
 
-## Step 10: Invoke Survey Cycle
+## Step 9: Invoke Survey Cycle
 
 **MUST** chain to survey-cycle for work selection:
 

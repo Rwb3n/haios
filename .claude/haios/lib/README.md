@@ -1,5 +1,5 @@
 # generated: 2026-01-21
-# System Auto: last updated on: 2026-01-22T20:48:24
+# System Auto: last updated on: 2026-01-24T18:45:02
 # HAIOS Library
 
 Portable plugin utilities for the HAIOS system.
@@ -15,6 +15,7 @@ the portable plugin directory (`.claude/haios/`) to function independently.
 |--------|---------|
 | `loader.py` | Config-driven content extraction from markdown (WORK-005) |
 | `identity_loader.py` | Identity context extraction from manifesto files (WORK-007). Runtime consumer: ContextLoader (WORK-008) |
+| `session_loader.py` | Session context extraction from checkpoint (CH-005). Extracts prior session, memory refs, drift warnings, pending |
 
 ## Adding New Loaders (WORK-008 Pattern)
 
