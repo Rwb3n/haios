@@ -3,7 +3,7 @@ allowed-tools: Read, Glob, Bash, mcp__haios-memory__memory_search_with_experienc
   mcp__haios-memory__db_query
 description: Initialize session by loading essential context files
 generated: '2025-12-25'
-last_updated: '2026-01-24T18:42:52'
+last_updated: '2026-01-24T20:49:21'
 ---
 
 # Cold Start Initialization
@@ -23,20 +23,28 @@ Extract:
 
 ---
 
-## Step 2: Identity Context (Injected - WORK-009)
+## Step 2: Load Context via Orchestrator (WORK-011)
 
-The identity context is loaded by `just coldstart` and injected into context.
+Run the unified coldstart orchestrator:
 
-**No Read calls needed** - identity content appears in the `=== IDENTITY ===` block above.
+```bash
+just coldstart-orchestrator
+```
 
-Extract from the injected content:
-- **Mission:** The Prime Directive (from L0-telos)
-- **Companion Relationship:** Trust principles (from L0-telos)
-- **Constraints:** Known operator constraints (from L1-principal)
-- **Principles:** Core behavioral principles (from L3-requirements)
-- **L4 Context Loading:** Technical patterns (from L4-implementation)
+This invokes ColdstartOrchestrator which runs all three loaders in sequence:
+1. **[PHASE: IDENTITY]** - Mission, principles, constraints from manifesto
+2. **[BREATHE]** - Process before continuing
+3. **[PHASE: SESSION]** - Prior session, memory refs, drift warnings, pending
+4. **[BREATHE]** - Process before continuing
+5. **[PHASE: WORK]** - Queue items, epoch alignment warnings
 
-This replaces manual reads of L0-L4 manifesto files with extracted essence (~50 lines vs 1137 lines).
+**No manual Read calls needed** - all context is injected by the orchestrator.
+
+The output includes:
+- `=== IDENTITY ===` block with extracted manifesto essence (~50 lines)
+- `=== SESSION CONTEXT ===` with drift warnings PROMINENT
+- `=== WORK OPTIONS ===` with queue and pending items
+- `[READY FOR SELECTION]` marker when complete
 
 ---
 
@@ -50,41 +58,23 @@ This replaces manual reads of L0-L4 manifesto files with extracted essence (~50 
 
 ---
 
-## Step 4: Load Session Context (CH-005)
+## Step 4: Query Memory Refs
 
-Session context is loaded by `just session-context` and provides:
-- Prior session number and completed work
-- Memory refs from checkpoint (queried automatically)
-- Drift warnings (PROMINENT - cannot be missed)
-- Pending items for work selection
+If the SESSION CONTEXT output shows "Memory IDs to query: [...]":
 
-```bash
-just session-context
-```
+Query those IDs via db_query or let the orchestrator handle it.
 
-**No manual checkpoint/memory queries needed** - SessionLoader extracts and formats everything.
-
-The output includes a `=== DRIFT WARNINGS ===` section. If non-empty, note these before proceeding.
+**Note:** SessionLoader extracts memory_refs from checkpoint but doesn't query them automatically. Manual query may still be needed.
 
 ---
 
-## Step 5: Load Principles (from manifest)
-
-For each file in checkpoint's `load_principles`:
-- Read the file
-- Note key principles that govern this session's work
-
-**Note:** Memory refs are already loaded by Step 4. Only `load_principles` requires manual reads.
-
----
-
-## Step 6: Load Agent Instructions
+## Step 5: Load Agent Instructions
 
 Read `CLAUDE.md` - agent bootstrap and quick reference.
 
 ---
 
-## Step 7: Session Start
+## Step 6: Session Start
 
 ```bash
 just session-start {N}
@@ -92,22 +82,19 @@ just session-start {N}
 
 Where N = current session + 1 from `.claude/session` (read last line as integer, increment by 1).
 
-**Note (CH-002):** Session number now lives in `.claude/session` for simplicity. Use `tail -1 .claude/session` to read current value.
-
 ---
 
-## Step 8: Summary Output
+## Step 7: Summary Output
 
 Provide brief summary:
-- **Manifesto loaded:** L0-L4 (confirm read)
+- **Context loaded:** Via orchestrator (identity, session, work phases)
 - **Epoch context:** Which epoch + which arcs loaded
-- **Principles loaded:** Which files from `load_principles`
-- **Memory loaded:** From `just session-context` output
+- **Memory loaded:** From orchestrator output
 - **Drift warnings:** Any from session context output
 
 ---
 
-## Step 9: Invoke Survey Cycle
+## Step 8: Invoke Survey Cycle
 
 **MUST** chain to survey-cycle for work selection:
 
@@ -124,6 +111,6 @@ Survey-cycle owns routing:
 
 ## Key Principle
 
-**Ground yourself first. Config → Manifesto → Epoch → Checkpoint → Survey.**
+**Ground yourself first. Config -> Orchestrator -> Epoch -> Survey.**
 
 Coldstart loads context. Survey-cycle selects work. Agent doesn't skip the chain.

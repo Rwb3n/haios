@@ -1,5 +1,5 @@
 # generated: 2025-12-25
-# System Auto: last updated on: 2026-01-03T14:41:12
+# System Auto: last updated on: 2026-01-24T21:21:02
 # Plan Validation Cycle Skill (Bridge)
 
 Validates implementation plan readiness before entering DO phase.
@@ -13,9 +13,11 @@ This is a **Validation Skill** (bridge) that acts as a quality gate between plan
 | Phase | Purpose |
 |-------|---------|
 | CHECK | Verify required sections exist |
+| SPEC_ALIGN | Verify plan matches referenced specs |
 | VALIDATE | Check section content quality |
-| L4_ALIGN | Match plan against L4 functional requirements |
 | APPROVE | Confirm plan is ready |
+
+> **Note (Session 233):** L4_ALIGN removed (was non-functional). SPEC_ALIGN provides requirements traceability via plan's References section.
 
 ## Usage
 
@@ -41,13 +43,17 @@ Skill(skill="plan-validation-cycle")
 - Design: File paths and code snippets
 - Steps: Actionable checklist items
 
-## L4 Alignment (E2-247)
+## Requirements Traceability
 
-L4_ALIGN phase reads `.claude/haios/manifesto/L4-implementation.md` and checks:
-1. Find work_id in L4 (pattern: `### ModuleName (work_id)`)
-2. Extract function requirements from table
-3. Match against plan deliverables
-4. Report gaps for operator acceptance
+SPEC_ALIGN phase provides requirements traceability by:
+1. Reading plan's `## References` section
+2. Reading each referenced specification
+3. Comparing plan's Detailed Design against spec interface
+4. Blocking on mismatch (prevents "assume over verify" anti-pattern)
+
+**L4 Requirements:** Now in `L4/` directory (Session 233 consolidation):
+- `L4/functional_requirements.md` - Module function specs (for module work)
+- `L4/technical_requirements.md` - How-to-enable patterns
 
 ## Related
 

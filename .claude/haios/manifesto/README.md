@@ -1,5 +1,5 @@
 # generated: 2026-01-01
-# System Auto: last updated on: 2026-01-03T13:48:35
+# System Auto: last updated on: 2026-01-24T21:19:58
 # HAIOS Manifesto Corpus
 
 ## What This Is
@@ -35,7 +35,17 @@ L7: PROMPT        - What's this command        - EPHEMERAL  - Seconds
 
 | Level | File | Question | Lifespan |
 |-------|------|----------|----------|
-| **L4** | `L4-implementation.md` | What are we building? | Epoch |
+| **L4** | `L4/` (directory) | What are we building? | Epoch |
+
+**L4 Structure (Session 233 consolidation):**
+```
+L4/
+├── README.md                    # Index
+├── project_requirements.md      # WHAT we're building
+├── agent_user_requirements.md   # WHAT users/agents can DO
+├── technical_requirements.md    # HOW to enable capabilities
+└── functional_requirements.md   # MODULE function specs
+```
 
 ### Runtime (Ephemeral)
 

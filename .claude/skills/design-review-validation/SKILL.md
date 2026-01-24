@@ -3,7 +3,7 @@ name: design-review-validation
 description: HAIOS Design Review Validation for verifying implementation alignment.
   Use during DO phase. Guides COMPARE->VERIFY->APPROVE workflow.
 generated: 2025-12-25
-last_updated: '2026-01-03T14:49:27'
+last_updated: '2026-01-24T21:19:03'
 ---
 # Design Review Validation (Bridge Skill)
 
@@ -19,8 +19,10 @@ This is a **Validation Skill** (bridge) that verifies implementation aligns with
 ## The Cycle
 
 ```
-COMPARE --> VERIFY --> L4_ALIGN --> APPROVE
+COMPARE --> VERIFY --> APPROVE
 ```
+
+> **Note (Session 233):** L4_ALIGN phase removed. L4 requirements consolidated to `L4/` directory. SPEC_ALIGN in plan-validation-cycle provides requirements traceability.
 
 ### 1. COMPARE Phase
 
@@ -70,31 +72,7 @@ COMPARE --> VERIFY --> L4_ALIGN --> APPROVE
 
 ---
 
-### 3. L4_ALIGN Phase
-
-**Goal:** Verify implementation covers L4 functional requirements.
-
-**Prerequisite:** Get work_id from plan frontmatter `backlog_id` field.
-
-**Actions:**
-1. Read `.claude/haios/manifesto/L4-implementation.md`
-2. Search for work_id in L4 (pattern: `### ModuleName (work_id)`)
-3. If found, extract function requirements from table
-4. Check implementation files for each required function
-5. Report gaps (L4 requires X but implementation doesn't have X)
-
-**Exit Criteria:**
-- [ ] L4 section found for work_id (or skip with note if not found)
-- [ ] All L4 functions implemented (or gaps accepted by operator)
-
-**On Gap Found:** Report gap, ask operator: "Accept gaps or fix implementation?"
-**On No L4 Entry:** Skip with note: "No L4 requirements found for {work_id}"
-
-**Tools:** Read, Grep
-
----
-
-### 4. APPROVE Phase
+### 3. APPROVE Phase
 
 **Goal:** Confirm implementation is aligned or document deviations.
 
@@ -115,7 +93,6 @@ COMPARE --> VERIFY --> L4_ALIGN --> APPROVE
 **Exit Criteria:**
 - [ ] Implementation approved, OR
 - [ ] Deviations documented and addressed
-- [ ] L4_ALIGN passed or gaps accepted
 - [ ] Returned to calling cycle (no pause)
 
 **Tools:** Edit (for plan updates)
@@ -128,7 +105,6 @@ COMPARE --> VERIFY --> L4_ALIGN --> APPROVE
 |-------|--------------|--------|
 | COMPARE | Read | Comparison checklist |
 | VERIFY | Read, Grep | Deviation report |
-| L4_ALIGN | Read, Grep | L4 gap report |
 | APPROVE | Edit (optional) | Approval status |
 
 ---
@@ -141,8 +117,6 @@ COMPARE --> VERIFY --> L4_ALIGN --> APPROVE
 | COMPARE | Are implementation files read? | Read manifested files |
 | VERIFY | Do signatures match? | Flag deviation |
 | VERIFY | Does logic flow match? | Flag deviation |
-| L4_ALIGN | Does L4 have entry for work_id? | Skip with note |
-| L4_ALIGN | All L4 functions implemented? | Report gaps, ask to accept |
 | APPROVE | Is implementation aligned? | Document and fix |
 
 ---
@@ -151,11 +125,10 @@ COMPARE --> VERIFY --> L4_ALIGN --> APPROVE
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
-| Four phases | COMPARE -> VERIFY -> L4_ALIGN -> APPROVE | L4_ALIGN added for requirements traceability |
+| Three phases | COMPARE -> VERIFY -> APPROVE | L4_ALIGN removed Session 233 (non-functional) |
 | Optional gate | Not required | Some implementations may be straightforward |
 | Deviation handling | Document and decide | Not all deviations are errors |
 | Read-only except APPROVE | Only modifies if updating plan | Validation doesn't change implementation |
-| L4_ALIGN gaps = warning | Operator can accept | Iterative implementation may defer functions |
 
 ---
 

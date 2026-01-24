@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-03T14:42:46
+# System Auto: last updated on: 2026-01-24T20:50:10
 
 # HAIOS Configuration
 
@@ -12,6 +12,7 @@ E2-246: Unified configuration files for HAIOS modules.
 | `haios.yaml` | System config: manifest, toggles, thresholds | Consolidated from `governance-toggles.yaml`, `routing-thresholds.yaml` |
 | `cycles.yaml` | Cycle config: node bindings, cycle definitions | Consolidated from `node-cycle-bindings.yaml` |
 | `components.yaml` | Component registry: skills, agents, hooks | Placeholder for E2-240 |
+| `coldstart.yaml` | Coldstart phase orchestration config (CH-007, WORK-011) | Defines phase sequence and breathing room |
 
 ## Usage
 

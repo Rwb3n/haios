@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-24T19:48:33
+# System Auto: last updated on: 2026-01-24T20:48:00
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -195,6 +195,11 @@ session-context:
 # Extracts ~20 lines of queue items, pending work, epoch alignment warning
 work-options:
     python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from work_loader import WorkLoader; print(WorkLoader().load())"
+
+# WORK-011: Unified coldstart with ColdstartOrchestrator
+# Runs all three loaders (identity, session, work) with [BREATHE] markers
+coldstart-orchestrator:
+    python .claude/haios/modules/cli.py coldstart
 
 # =============================================================================
 # TESTING RECIPES

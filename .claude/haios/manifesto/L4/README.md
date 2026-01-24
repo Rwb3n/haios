@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-18T19:54:30
+# System Auto: last updated on: 2026-01-24T21:14:47
 # L4: Implementation Layer
 
 ## Structure
@@ -11,7 +11,8 @@ L4/
 ├── README.md                    # This file
 ├── project_requirements.md      # What the project IS
 ├── agent_user_requirements.md   # What users/agents must be able to DO
-└── technical_requirements.md    # HOW to enable those capabilities
+├── technical_requirements.md    # HOW to enable those capabilities
+└── functional_requirements.md   # Module function specifications (DoD criteria)
 ```
 
 ## Derivation Chain
@@ -22,6 +23,8 @@ project_requirements (WHAT we're building)
 agent_user_requirements (WHAT users/agents can DO with it)
          ↓
 technical_requirements (HOW to enable those capabilities)
+         ↓
+functional_requirements (MODULE function specs + DoD criteria)
 ```
 
 ## Loading Responsibility

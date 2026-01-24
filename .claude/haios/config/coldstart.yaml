@@ -1,0 +1,14 @@
+# generated: 2026-01-24
+# System Auto: last updated on: 2026-01-24T20:46:20
+# Coldstart phase orchestration config per CH-007 spec
+# WORK-011: Wires IdentityLoader, SessionLoader, WorkLoader into unified coldstart
+
+phases:
+  - id: identity
+    breathe: true
+
+  - id: session
+    breathe: true
+
+  - id: work
+    breathe: false

@@ -3,7 +3,7 @@ name: plan-validation-cycle
 description: HAIOS Plan Validation Bridge for validating plan readiness. Use before
   entering DO phase. Guides CHECK->VALIDATE->APPROVE workflow.
 generated: 2025-12-25
-last_updated: '2026-01-19T17:31:24'
+last_updated: '2026-01-24T21:17:13'
 ---
 # Plan Validation Cycle (Bridge Skill)
 
@@ -19,8 +19,10 @@ This is a **Validation Skill** (bridge) that validates implementation plans are 
 ## The Cycle
 
 ```
-CHECK --> SPEC_ALIGN --> VALIDATE --> L4_ALIGN --> APPROVE
+CHECK --> SPEC_ALIGN --> VALIDATE --> APPROVE
 ```
+
+> **Note (Session 233):** L4_ALIGN phase removed. L4 requirements are now in `L4/functional_requirements.md` for module work only. SPEC_ALIGN provides requirements traceability for all work via plan References section.
 
 ### 1. CHECK Phase
 
@@ -130,32 +132,7 @@ CHECK --> SPEC_ALIGN --> VALIDATE --> L4_ALIGN --> APPROVE
 
 ---
 
-### 4. L4_ALIGN Phase
-
-**Goal:** Verify plan deliverables align with L4 functional requirements.
-
-**Prerequisite:** Get work_id from plan frontmatter `backlog_id` field.
-
-**Actions:**
-1. Read `.claude/haios/manifesto/L4-implementation.md`
-2. Search for work_id in L4 (pattern: `### ModuleName (work_id)`)
-3. If found, extract function requirements from table under that section
-4. Parse plan "Implementation Steps" for deliverables mentioned
-5. Match: For each L4 function, check if plan mentions it
-6. Report gaps (L4 requires X but plan doesn't cover X)
-
-**Exit Criteria:**
-- [ ] L4 section found for work_id (or skip with note if not found)
-- [ ] All L4 functions mentioned in plan steps (or gaps accepted by operator)
-
-**On Gap Found:** Report gap, ask operator: "Accept gaps or revise plan?"
-**On No L4 Entry:** Skip with note: "No L4 requirements found for {work_id}"
-
-**Tools:** Read
-
----
-
-### 5. APPROVE Phase
+### 4. APPROVE Phase
 
 **Goal:** Mark plan as validated and ready, checkpoint context.
 
@@ -165,7 +142,7 @@ CHECK --> SPEC_ALIGN --> VALIDATE --> L4_ALIGN --> APPROVE
 3. **MUST** invoke checkpoint-cycle (E2-287)
 4. Return to calling cycle
 
-#### 5a. Checkpoint (MUST - E2-287)
+#### 4a. Checkpoint (MUST - E2-287)
 
 **MUST** invoke checkpoint-cycle after validation passes:
 
@@ -184,7 +161,6 @@ Skill(skill="checkpoint-cycle")
 - [ ] All CHECK criteria passed
 - [ ] **MUST:** SPEC_ALIGN passed (plan matches spec interface)
 - [ ] All VALIDATE criteria passed
-- [ ] L4_ALIGN passed or gaps accepted
 - [ ] Plan ready for implementation
 - [ ] **MUST:** checkpoint-cycle invoked (E2-287)
 - [ ] Returned to calling cycle (no pause)
@@ -200,7 +176,6 @@ Skill(skill="checkpoint-cycle")
 | CHECK | Read | List of missing sections |
 | SPEC_ALIGN | Read, Grep | Spec vs plan comparison (MUST gate) |
 | VALIDATE | Read | Quality assessment |
-| L4_ALIGN | Read | Gap report (L4 vs plan) |
 | APPROVE | Skill (checkpoint-cycle) | Validation summary + context preserved (E2-287) |
 
 ---
@@ -216,8 +191,6 @@ Skill(skill="checkpoint-cycle")
 | VALIDATE | Is Goal measurable? | Flag for revision |
 | VALIDATE | Are Tests concrete? | Flag for revision |
 | **VALIDATE** | Any `[BLOCKED]` in Open Decisions? | **BLOCK** - resolve decisions first (Gate 4) |
-| L4_ALIGN | Does L4 have entry for work_id? | Skip with note |
-| L4_ALIGN | All L4 functions in plan? | Report gaps, ask to accept |
 | APPROVE | All checks passed? | Return to authoring |
 
 ---
@@ -226,12 +199,11 @@ Skill(skill="checkpoint-cycle")
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
-| Five phases | CHECK -> SPEC_ALIGN -> VALIDATE -> L4_ALIGN -> APPROVE | SPEC_ALIGN added after E2-254 learning |
+| Four phases | CHECK -> SPEC_ALIGN -> VALIDATE -> APPROVE | L4_ALIGN removed Session 233 (non-functional) |
 | SPEC_ALIGN = MUST gate | BLOCK if mismatch | Prevents "Assume over verify" anti-pattern |
 | Validation not authoring | Separate from plan-authoring-cycle | Different concerns |
 | Read-only | No modifications | Bridge skills validate, don't modify |
 | Optional gate | Not required | Some plans may be pre-validated |
-| L4_ALIGN gaps = warning | Operator can accept | Iterative implementation may defer functions |
 
 ---
 

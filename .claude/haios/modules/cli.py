@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-21T20:31:59
+# System Auto: last updated on: 2026-01-24T20:47:32
 """
 HAIOS Modules CLI Entry Point
 
@@ -193,28 +193,77 @@ def cmd_memory_query(query: str, mode: str = "semantic") -> int:
 # =============================================================================
 
 
-def cmd_context_load(project_root: Path = None) -> int:
-    """Load L0-L4 context and display summary."""
+def cmd_context_load(project_root: Path = None, role: str = "main") -> int:
+    """
+    Load context based on role and output loaded content.
+
+    WORK-009: Outputs identity content for coldstart injection.
+    Previously output char counts only.
+
+    Args:
+        project_root: Project root path (default: auto-detect)
+        role: Role defining which loaders to use (default: "main")
+
+    Returns:
+        0 on success
+    """
+    import sys
+    import io
     from context_loader import ContextLoader
 
+    # WORK-009: Ensure UTF-8 output on Windows (fix Unicode arrows in identity content)
+    if sys.stdout.encoding != 'utf-8':
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+
     loader = ContextLoader(project_root=project_root)
-    ctx = loader.load_context()
+    ctx = loader.load_context(role=role)
 
-    print(f"Session: {ctx.session_number} (prior: {ctx.prior_session})")
-    print(f"L0 Telos: {len(ctx.l0_telos)} chars")
-    print(f"L1 Principal: {len(ctx.l1_principal)} chars")
-    print(f"L2 Intent: {len(ctx.l2_intent)} chars")
-    print(f"L3 Requirements: {len(ctx.l3_requirements)} chars")
-    print(f"L4 Implementation: {len(ctx.l4_implementation)} chars")
-    print(f"Checkpoint: {len(ctx.checkpoint_summary)} chars")
-    print(f"Strategies: {len(ctx.strategies)}")
-    print(f"Ready work: {len(ctx.ready_work)}")
+    # Output loaded_context from role-based loaders (WORK-009)
+    for loader_name, content in ctx.loaded_context.items():
+        if content:
+            print(content)
 
+    # Session info
+    print(f"\n[SESSION]")
+    print(f"Number: {ctx.session_number}")
+    print(f"Prior: {ctx.prior_session or 'None'}")
+
+    # Ready work summary
     if ctx.ready_work:
-        print("\nReady items:")
-        for item in ctx.ready_work[:5]:
-            print(f"  - {item}")
+        print(f"\n[READY WORK]")
+        for work_id in ctx.ready_work[:5]:
+            print(f"- {work_id}")
 
+    return 0
+
+
+# =============================================================================
+# WORK-011: Coldstart Orchestrator Command
+# =============================================================================
+
+
+def cmd_coldstart() -> int:
+    """
+    Run coldstart orchestrator - unified context loading with breathing room.
+
+    WORK-011 (CH-007): Wires IdentityLoader, SessionLoader, WorkLoader into
+    unified coldstart with [BREATHE] markers between phases.
+
+    Returns:
+        0 on success
+    """
+    import sys
+    import io
+    from coldstart_orchestrator import ColdstartOrchestrator
+
+    # Ensure UTF-8 output on Windows (same pattern as cmd_context_load)
+    if sys.stdout.encoding != "utf-8":
+        sys.stdout = io.TextIOWrapper(
+            sys.stdout.buffer, encoding="utf-8", errors="replace"
+        )
+
+    orch = ColdstartOrchestrator()
+    print(orch.run())
     return 0
 
 
@@ -280,7 +329,7 @@ def main():
         print("Usage: cli.py <command> [args...]")
         print("Commands: transition, close, archive, get-ready, get-work, link, link-spawn,")
         print("          cascade, spawn-tree, backfill, backfill-all, memory-query,")
-        print("          validate, scaffold, context-load, cycle-phases")
+        print("          validate, scaffold, context-load, coldstart, cycle-phases")
         return 1
 
     cmd = sys.argv[1]
@@ -397,6 +446,10 @@ def main():
     # E2-254: Context Load
     elif cmd == "context-load":
         return cmd_context_load()
+
+    # WORK-011: Coldstart Orchestrator
+    elif cmd == "coldstart":
+        return cmd_coldstart()
 
     # E2-255: Cycle Phases
     elif cmd == "cycle-phases":
