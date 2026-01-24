@@ -1,0 +1,34 @@
+# generated: 2026-01-24
+# System Auto: last updated on: 2026-01-24T19:45:38
+# Work extraction config per CH-006 spec
+# Extracts queue, pending, and epoch alignment for coldstart Phase 3
+#
+# CH-006: Implements Work Loader for Configuration Arc
+# Extracts work context from queue and checkpoint for
+# token-efficient coldstart Phase 3 loading.
+
+# Queue extraction
+queue:
+  limit: 5
+
+# Checkpoint for pending items
+checkpoint_dir: "docs/checkpoints/"
+
+# Epoch alignment check
+epoch:
+  current_field: "current"
+  config_path: ".claude/haios/config/haios.yaml"
+
+# Output formatting
+output:
+  template: |
+    === WORK OPTIONS ===
+
+    {epoch_warning}
+
+    Queue (top {queue_limit}):
+    {queue}
+
+    Pending from checkpoint:
+    {pending}
+  list_separator: "\n  "

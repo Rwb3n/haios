@@ -3,13 +3,13 @@ template: work_item
 id: WORK-010
 title: Work Loader for Coldstart Phase 3
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-24
 spawned_by: null
 chapter: CH-006
 arc: configuration
-closed: null
+closed: '2026-01-24'
 priority: medium
 effort: medium
 requirement_refs: []
@@ -30,10 +30,12 @@ memory_refs:
 - 82323
 - 82324
 - 82327
+- 65046
+- 82331
 extensions: {}
 version: '2.0'
 generated: 2026-01-24
-last_updated: '2026-01-24T19:29:01'
+last_updated: '2026-01-24T19:53:45'
 ---
 # WORK-010: Work Loader for Coldstart Phase 3
 
@@ -78,13 +80,13 @@ Survey-cycle skill currently performs work extraction inline: runs `just queue`,
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] `config/loaders/work.yaml` - Work extraction config (queue source, pending source, epoch alignment check)
-- [ ] `.claude/haios/lib/work_loader.py` - WorkLoader class following SessionLoader pattern
-- [ ] Tests for WorkLoader in `tests/test_work_loader.py`
-- [ ] Register WorkLoader in ContextLoader._register_default_loaders()
-- [ ] `just work-options` recipe in justfile
-- [ ] Epoch alignment warning when queue items from prior epochs
-- [ ] Formatted output with top 5 queue items + pending from checkpoint
+- [x] `config/loaders/work.yaml` - Work extraction config (queue source, pending source, epoch alignment check)
+- [x] `.claude/haios/lib/work_loader.py` - WorkLoader class following SessionLoader pattern
+- [x] Tests for WorkLoader in `tests/test_work_loader.py`
+- [x] Register WorkLoader in ContextLoader._register_default_loaders()
+- [x] `just work-options` recipe in justfile
+- [x] Epoch alignment warning when queue items from prior epochs
+- [x] Formatted output with top 5 queue items + pending from checkpoint
 
 ---
 
@@ -92,6 +94,14 @@ Survey-cycle skill currently performs work extraction inline: runs `just queue`,
 
 ### 2026-01-24 - Created (Session 231)
 - Initial creation
+
+### 2026-01-24 - Implemented (Session 231)
+- Created work.yaml config
+- Created WorkLoader class following SessionLoader pattern
+- 5 tests pass
+- Registered in ContextLoader
+- Added `just work-options` recipe
+- All 7 deliverables complete
 
 ---
 
