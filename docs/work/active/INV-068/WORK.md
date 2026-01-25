@@ -12,6 +12,7 @@ effort: medium
 category: investigation
 spawned_by: null
 spawned_by_investigation: null
+arc: pipeline
 blocked_by: []
 blocks: []
 enables: []
@@ -32,7 +33,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-17
-last_updated: '2026-01-17T15:07:50'
+last_updated: '2026-01-25T00:39:01'
 ---
 # WORK-INV-068: Cycle Delegation Architecture - Subagents for Cycle Execution
 

@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: INV-017
-title: "Observability Gap Analysis"
+title: Observability Gap Analysis
 status: active
 owner: Hephaestus
 created: 2025-12-23
@@ -10,26 +10,27 @@ milestone: M7e-Hygiene
 priority: medium
 effort: medium
 category: implementation
-spawned_by: "Session 64 observation"
+spawned_by: Session 64 observation
 spawned_by_investigation: null
+arc: observations
 blocked_by: []
 blocks: []
 enables: []
 related: []
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2025-12-23T19:06:12
-    exited: null
+- node: backlog
+  entered: 2025-12-23 19:06:12
+  exited: null
 cycle_docs: {}
 memory_refs: []
 documents:
   investigations: []
   plans: []
   checkpoints: []
-version: "1.0"
+version: '1.0'
 generated: 2025-12-23
-last_updated: 2025-12-23T18:04:04
+last_updated: '2026-01-25T00:38:03'
 ---
 # WORK-INV-017: Observability Gap Analysis
 

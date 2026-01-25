@@ -12,6 +12,7 @@ effort: medium
 category: investigation
 spawned_by: null
 spawned_by_investigation: null
+arc: pipeline
 blocked_by: []
 blocks: []
 enables: []
@@ -37,7 +38,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-16
-last_updated: '2026-01-16T21:26:28'
+last_updated: '2026-01-25T00:38:26'
 ---
 # WORK-INV-066: Plan Decomposition Traceability Pattern
 

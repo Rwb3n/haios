@@ -12,6 +12,7 @@ effort: medium
 category: investigation
 spawned_by: E2-212
 spawned_by_investigation: null
+arc: configuration
 blocked_by: []
 blocks: []
 enables: []
@@ -29,7 +30,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2025-12-28
-last_updated: '2026-01-15T00:16:53'
+last_updated: '2026-01-25T00:38:19'
 ---
 # WORK-INV-041: Single Source Path Constants Architecture
 

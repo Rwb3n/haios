@@ -12,6 +12,7 @@ effort: small
 category: implementation
 spawned_by: E2-292
 spawned_by_investigation: INV-065
+arc: configuration
 blocked_by: []
 blocks:
 - E2-294
@@ -48,7 +49,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-16
-last_updated: '2026-01-16T21:40:09'
+last_updated: '2026-01-25T00:37:14'
 ---
 # WORK-E2-293: Add set-queue Recipe and Extend session_state Schema
 

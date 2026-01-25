@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-24T20:58:36",
+    "generated": "2026-01-25T00:40:57",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82149,
-        "entities": 9176,
+        "concepts": 82166,
+        "entities": 9192,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -2865,7 +2865,7 @@
             "template": "checkpoint",
             "status": null,
             "date": "2026-01-24",
-            "last_updated": "2026-01-24T20:44:35",
+            "last_updated": "2026-01-24T23:05:51",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6008,12 +6008,12 @@
         {
             "path": "docs/checkpoints/2025-12-02-SESSION-19-collaboration-dogfood.md",
             "last_updated": "2025-12-02T23:39:43",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/checkpoints/2025-12-02-SESSION-20-gap-a5-fix-reingest.md",
             "last_updated": "2025-12-02T23:39:25",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-21-gap-audit-preflight.md",
@@ -6023,377 +6023,377 @@
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-22-gap-b3-complete.md",
             "last_updated": "2025-12-03T21:54:50",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-23-docs-ingestion-embedding-gap.md",
             "last_updated": "2025-12-03",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-24-gap-b3-llm-classification.md",
             "last_updated": "2025-12-04",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-24b-docs-synchronization.md",
             "last_updated": "2025-12-04",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-25-embedding-fix-research-synthesis.md",
             "last_updated": "2025-12-04T22:02:49",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
             "last_updated": "2025-12-04T22:47:20",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-prototype-consolidation.md",
             "last_updated": "2025-12-04T22:30:47",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-comprehensive-checkpoint.md",
             "last_updated": "2025-12-04",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-extraction-improvement-complete.md",
             "last_updated": "2025-12-04T22:58:40",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-final.md",
             "last_updated": "2025-12-04",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/checkpoints/2025-12-05-SESSION-28-embedding-completion.md",
             "last_updated": "2025-12-05",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-05-SESSION-29-reasoningbank-analysis.md",
             "last_updated": "2025-12-05",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-05-SESSION-30-reasoningbank-gap-closure.md",
             "last_updated": "2025-12-05",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-05-SESSION-31-HANDOFF.md",
             "last_updated": "2025-12-05",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-05-SESSION-31-memory-agent-skill.md",
             "last_updated": "2025-12-05",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-05-SESSION-32-FINAL.md",
             "last_updated": "2025-12-05",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-05-SESSION-32-memory-hook.md",
             "last_updated": "2025-12-05",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-05-SESSION-33-EXTENDED.md",
             "last_updated": "2025-12-05",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-05-SESSION-33.md",
             "last_updated": "2025-12-05",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-06-SESSION-34-documentation-hardening.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/checkpoints/2025-12-06-SESSION-35-epoch2-verification.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/checkpoints/2025-12-06-SESSION-36-epoch2-documentation-sync.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/checkpoints/2025-12-06-SESSION-37-memory-leverage-architecture.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/checkpoints/2025-12-07-01-SESSION-38-governance-pm-structure.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/checkpoints/2025-12-07-02-SESSION-39-lifecycle-governance-design.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/checkpoints/2025-12-07-03-SESSION-40-e2-005-e2-008-complete.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/checkpoints/2025-12-07-04-SESSION-41-e2-006-template-fix-readme.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/checkpoints/2025-12-07-05-SESSION-42-synthesis-enhancement-plan.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/checkpoints/2025-12-07-06-SESSION-43-observability-cross-pollination.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/checkpoints/2025-12-07-07-SESSION-44-e2-011-governance-foundation.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/checkpoints/2025-12-08-01-SESSION-45-legacy-adr-archaeology-adr031.md",
             "last_updated": "2025-12-08",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/checkpoints/2025-12-08-02-SESSION-46-adr031-operational-self-awareness.md",
             "last_updated": "2025-12-08",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/checkpoints/2025-12-08-03-SESSION-47-adr031-implementation-complete.md",
             "last_updated": "2025-12-08",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/checkpoints/2025-12-08-04-SESSION-48-e2-001-mcp-consolidation-e2-015-lifecycle.md",
             "last_updated": "2025-12-08",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/checkpoints/2025-12-08-05-SESSION-49-e2-015-lifecycle-id-complete.md",
             "last_updated": "2025-12-08",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/checkpoints/2025-12-09-01-SESSION-50-memory-investigation-backlog-governance.md",
             "last_updated": "2025-12-09",
-            "days_stale": 46
+            "days_stale": 47
         },
         {
             "path": "docs/checkpoints/2025-12-09-02-SESSION-53-e2-027-checkpoint-memory.md",
             "last_updated": "2025-12-09",
-            "days_stale": 46
+            "days_stale": 47
         },
         {
             "path": "docs/checkpoints/2025-12-09-03-SESSION-54-readme-sync.md",
             "last_updated": "2025-12-09",
-            "days_stale": 46
+            "days_stale": 47
         },
         {
             "path": "docs/checkpoints/2025-12-10-01-SESSION-55-synthesis-overnight-run.md",
             "last_updated": "2025-12-10",
-            "days_stale": 45
+            "days_stale": 46
         },
         {
             "path": "docs/checkpoints/2025-12-10-02-SESSION-56-work-item-lifecycle-governance.md",
             "last_updated": "2025-12-10",
-            "days_stale": 45
+            "days_stale": 46
         },
         {
             "path": "docs/checkpoints/2025-12-10-03-SESSION-57-adr033-work-item-lifecycle.md",
             "last_updated": "2025-12-10",
-            "days_stale": 45
+            "days_stale": 46
         },
         {
             "path": "docs/checkpoints/2025-12-11-01-SESSION-58-close-command-backlog-audit.md",
             "last_updated": "2025-12-11",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/checkpoints/2025-12-11-02-SESSION-59-inv005-e2fix001.md",
             "last_updated": "2025-12-11",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/checkpoints/2025-12-11-03-SESSION-60-ontology-lifecycle-audit.md",
             "last_updated": "2025-12-11",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/checkpoints/2025-12-11-04-SESSION-61-adr034-ontology-lifecycle.md",
             "last_updated": "2025-12-11",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/checkpoints/2025-12-11-05-SESSION-62-inv007-e2032-ontology.md",
             "last_updated": "2025-12-11",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/checkpoints/2025-12-12-01-SESSION-63-e2009-lifecycle-enforcement.md",
             "last_updated": "2025-12-12",
-            "days_stale": 43
+            "days_stale": 44
         },
         {
             "path": "docs/checkpoints/2025-12-13-01-SESSION-64-e2fix002-ingester-embedding.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2025-12-13-02-SESSION-65-rfc2119-governance-signaling.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2025-12-13-03-SESSION-66-rfc2119-phase1-governance-constellation.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2025-12-13-04-SESSION-67-rfc2119-phase2-complete.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2025-12-13-05-SESSION-68-e2021-memory-governance.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2025-12-13-06-SESSION-69-e2014-e2007-error-capture.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2025-12-14-01-SESSION-70-adr036-pm-data-architecture.md",
             "last_updated": "2025-12-14",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/checkpoints/2025-12-14-01-SESSION-72-adr037-hybrid-retrieval.md",
             "last_updated": "2025-12-14",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/checkpoints/2025-12-14-02-SESSION-71-architecture-investigations.md",
             "last_updated": "2025-12-14",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/checkpoints/2025-12-14-03-SESSION-73-retrieval-algorithm-investigation.md",
             "last_updated": "2025-12-14",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/checkpoints/2025-12-14-04-SESSION-74-e2-063-query-rewriting-complete.md",
             "last_updated": "2025-12-14",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/checkpoints/2025-12-15-01-SESSION-76-e2076-family-justfile-architecture.md",
             "last_updated": "2025-12-15",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/checkpoints/2025-12-16-01-SESSION-77-plan-tree-justfile-integration.md",
             "last_updated": "2025-12-16",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2025-12-16-02-SESSION-78-e2080-justfile-prototype.md",
             "last_updated": "2025-12-16",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2025-12-16-03-SESSION-79-e2076b-frontmatter-schema.md",
             "last_updated": "2025-12-16",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2025-12-16-04-SESSION-80-e2076d-e2081-vitals-heartbeat.md",
             "last_updated": "2025-12-16",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2025-12-16-05-SESSION-81-e2076e-cascade-hooks-complete.md",
             "last_updated": "2025-12-16",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2025-12-17-06-SESSION-82-e2078-e2079-cascade-refs.md",
             "last_updated": "2025-12-17",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/checkpoints/2025-12-18-01-SESSION-83-m2-complete-m3-foundation.md",
             "last_updated": "2025-12-18",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/checkpoints/2025-12-18-02-SESSION-84-e2091-implementation-cycle-skill.md",
             "last_updated": "2025-12-18",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/checkpoints/2025-12-18-03-SESSION-85-m3-plans-symphony-integration.md",
             "last_updated": "2025-12-18",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/checkpoints/2025-12-19-01-SESSION-86-epoch-vision-foresight-preparation.md",
             "last_updated": "2025-12-19",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/checkpoints/2025-12-19-02-SESSION-87-m3-cycles-agents-and-heartbeat.md",
             "last_updated": "2025-12-19",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/checkpoints/2025-12-20-01-SESSION-88-synthesis-query-fix-and-memory-introspection.md",
             "last_updated": "2025-12-20",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-20-02-SESSION-88-synthesis-query-fix-and-memory-expansion.md",
             "last_updated": "2025-12-20",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-20-03-SESSION-89-m3-complete-and-m4-research-definition.md",
             "last_updated": "2025-12-20",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-20-04-SESSION-90-e2-110-spawn-governance-and-tdd-enforcement.md",
             "last_updated": "2025-12-20",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-20-06-SESSION-91-e2-085-recovery-and-e2-120-powershell-elimination-decision.md",
             "last_updated": "2025-12-20",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-21-01-SESSION-92-e2-120-phase-1-plugin-architecture-migration.md",
@@ -6418,12 +6418,12 @@
         {
             "path": "docs/checkpoints/2025-12-21-05-SESSION-94-m5-complete-e2-125-e2-129-migration.md",
             "last_updated": "2025-12-21T21:32:14",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/checkpoints/2025-12-21-06-SESSION-95-e2-130-error-capture-rebuild-and-taxonomy-discussion.md",
             "last_updated": "2025-12-21T23:04:37",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/checkpoints/2025-12-22-01-SESSION-96-synthesis-review-and-backlog-archival.md",
@@ -6448,7 +6448,7 @@
         {
             "path": "docs/checkpoints/2025-12-22-05-SESSION-100-m4-complete-inv-020-channeling-patterns.md",
             "last_updated": "2025-12-22T21:41:04",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/checkpoints/2025-12-23-01-SESSION-101-inv-022-work-cycle-dag-architecture-complete.md",
@@ -6493,7 +6493,7 @@
         {
             "path": "docs/checkpoints/2025-12-23-10-SESSION-109-e2-153-m6-workcycle-complete.md",
             "last_updated": "2025-12-23T21:06:09",
-            "days_stale": 31
+            "days_stale": 32
         },
         {
             "path": "docs/checkpoints/2025-12-24-01-SESSION-109-e2-160-m7-tooling-milestone-created.md",
@@ -6556,164 +6556,169 @@
             "days_stale": 30
         },
         {
+            "path": "docs/checkpoints/2025-12-25-07-SESSION-120-inv-036-audit-and-e2-165-checkpoint-skill.md",
+            "last_updated": "2025-12-25T21:34:08",
+            "days_stale": 30
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "last_updated": "2025-12-08",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/plans/PLAN-ADR-031-WORKSPACE-AWARENESS.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/plans/PLAN-ADR-037-HYBRID-RETRIEVAL-ARCHITECTURE.md",
             "last_updated": "2025-12-14",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/plans/PLAN-AGENT-ECOSYSTEM-002.md",
             "last_updated": "2025-11-30T23:54:59",
-            "days_stale": 54
+            "days_stale": 55
         },
         {
             "path": "docs/plans/PLAN-E2-001-MCP-TOOL-CONSOLIDATION.md",
             "last_updated": "2025-12-08",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/plans/PLAN-E2-003-ADDITIONAL-GOVERNED-PATHS.md",
             "last_updated": "2025-12-09",
-            "days_stale": 46
+            "days_stale": 47
         },
         {
             "path": "docs/plans/PLAN-E2-007-ERROR-CAPTURE-HOOK.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/plans/PLAN-E2-009-LIFECYCLE-SEQUENCE-ENFORCEMENT.md",
             "last_updated": "2025-12-11",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/plans/PLAN-E2-015-LIFECYCLE-ID-PROPAGATION.md",
             "last_updated": "2025-12-08",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/plans/PLAN-E2-020-SCHEMA-DISCOVERY.md",
             "last_updated": "2025-12-09",
-            "days_stale": 46
+            "days_stale": 47
         },
         {
             "path": "docs/plans/PLAN-E2-023-CLOSE-COMMAND.md",
             "last_updated": "2025-12-10",
-            "days_stale": 45
+            "days_stale": 46
         },
         {
             "path": "docs/plans/PLAN-E2-032-ADR034-IMPLEMENTATION.md",
             "last_updated": "2025-12-11",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/plans/PLAN-E2-041-haios-status-work-items-removal.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/plans/PLAN-E2-042-close-runtime-query.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/plans/PLAN-E2-043-backlog-archival-migration.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/plans/PLAN-E2-044-close-auto-archive.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/plans/PLAN-E2-063-query-rewriting-layer.md",
             "last_updated": "2025-12-14",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/plans/PLAN-E2-078-coldstart-work-delta.md",
             "last_updated": "2025-12-15",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/plans/PLAN-E2-080-justfile-execution-toolkit.md",
             "last_updated": "2025-12-15",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/plans/PLAN-E2-081-heartbeat-scheduler.md",
             "last_updated": "2025-12-16",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/plans/PLAN-E2-083-proactive-memory-query.md",
             "last_updated": "2025-12-16",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/plans/PLAN-E2-085-hook-system-migration-powershell-to-python.md",
             "last_updated": "2025-12-20",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/plans/PLAN-E2-091-implementation-cycle-skill.md",
             "last_updated": "2025-12-17",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-092-implement-command.md",
             "last_updated": "2025-12-17",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-093-preflight-checker-subagent.md",
             "last_updated": "2025-12-17",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-094-test-runner-subagent.md",
             "last_updated": "2025-12-17",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-095-why-capturer-subagent.md",
             "last_updated": "2025-12-17",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-096-cycle-state-frontmatter.md",
             "last_updated": "2025-12-17",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-097-cycle-events-integration.md",
             "last_updated": "2025-12-17",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-102-execute-heartbeat-scheduler-setup.md",
             "last_updated": "2025-12-19",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/plans/PLAN-E2-103-populate-failurereason-in-stop-hook.md",
             "last_updated": "2025-12-20",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/plans/PLAN-E2-110-spawn-field-governance.md",
             "last_updated": "2025-12-20",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/plans/PLAN-E2-111-investigation-cycle-skill.md",
@@ -6763,7 +6768,7 @@
         {
             "path": "docs/plans/PLAN-E2-130-error-capture-rebuild.md",
             "last_updated": "2025-12-21T23:02:26",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/plans/PLAN-E2-140-investigation-status-sync-hook.md",
@@ -6826,6 +6831,11 @@
             "days_stale": 31
         },
         {
+            "path": "docs/plans/PLAN-E2-165-checkpoint-skill-with-git-commit.md",
+            "last_updated": "2025-12-25T21:26:46",
+            "days_stale": 30
+        },
+        {
             "path": "docs/plans/PLAN-E2-170-backfill-work-items-from-archived-backlog.md",
             "last_updated": "2025-12-24T11:57:50",
             "days_stale": 31
@@ -6838,7 +6848,7 @@
         {
             "path": "docs/plans/PLAN-E2-173-work-file-milestone-discovery.md",
             "last_updated": "2025-12-24T21:28:42",
-            "days_stale": 30
+            "days_stale": 31
         },
         {
             "path": "docs/plans/PLAN-E2-176-document-gate-contract-pattern.md",
@@ -6898,97 +6908,97 @@
         {
             "path": "docs/plans/PLAN-E2-FIX-001-SYNTHESIS-EMBEDDING-GAP.md",
             "last_updated": "2025-12-11",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/plans/PLAN-E2-FIX-002-ingester-embedding-fix.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/plans/PLAN-E2-FIX-004-fix-synthesis-query-ordering-bug.md",
             "last_updated": "2025-12-20",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/plans/PLAN-EPOCH2-001-HOOKS-WIRING.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/plans/PLAN-EPOCH2-002-COMMAND-VALIDATE.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/plans/PLAN-EPOCH2-003-MEMORY-INTEGRATION.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/plans/PLAN-EPOCH2-004-TEMPLATE-SCAFFOLDING.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/plans/PLAN-EPOCH2-005-UTILITY-COMMANDS.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/plans/PLAN-EPOCH2-006-SYSTEM-AWARENESS.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/plans/PLAN-EPOCH2-007-VERIFICATION.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/plans/PLAN-EPOCH2-008-MEMORY-LEVERAGE.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/plans/PLAN-FILE-LIFECYCLE-AND-STATUS-AUTOMATION.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/plans/PLAN-INV-005-MEMORY-SYSTEM-REALITY-CHECK.md",
             "last_updated": "2025-12-11",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/plans/PLAN-INVESTIGATION-MEMORY-PROCESS-OBSERVABILITY.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/plans/PLAN-PM-SELF-AWARENESS.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/plans/PLAN-REASONINGBANK-001-strategy-extraction.md",
             "last_updated": "2025-11-28",
-            "days_stale": 57
+            "days_stale": 58
         },
         {
             "path": "docs/plans/PLAN-SYNTHESIS-001-memory-consolidation.md",
             "last_updated": "2025-11-29",
-            "days_stale": 56
+            "days_stale": 57
         },
         {
             "path": "docs/plans/PLAN-SYNTHESIS-CROSS-POLLINATION-ENHANCEMENT.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-030-template-registry-audit.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-037-governance-framework-constellation.md",
@@ -7008,7 +7018,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-E2-099-vitals-approaching-100-percent-bug.md",
             "last_updated": "2025-12-18",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-116-at-reference-necessity-in-checkpoints.md",
@@ -7018,32 +7028,32 @@
         {
             "path": "docs/investigations/INVESTIGATION-E2-FIX-002-ingester-embedding-gap.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-008-haios-status-json-optimization.md",
             "last_updated": "2025-12-22T22:37:14",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-009-backlog-archival-governance.md",
             "last_updated": "2025-12-22T22:37:32",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-010-memory-retrieval-architecture-mismatch.md",
             "last_updated": "2025-12-14",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-011-command-skill-architecture-gap.md",
             "last_updated": "2025-12-22T22:45:09",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-012-static-registration-anti-pattern-mitigation.md",
             "last_updated": "2025-12-18",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-014-memory-context-injection-architecture.md",
@@ -7058,7 +7068,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-016-haios-operational-infrastructure-audit.md",
             "last_updated": "2025-12-14",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-017-observability-gap-analysis.md",
@@ -7068,17 +7078,17 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-018-adaptive-coldstart-query-formulation.md",
             "last_updated": "2025-12-22T22:39:13",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-019-synthesis-coverage-gap-query-ordering-bug.md",
             "last_updated": "2025-12-20",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-020-llm-energy-channeling-patterns.md",
             "last_updated": "2025-12-22T21:21:33",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-022-work-cycle-dag-unified-architecture.md",
@@ -7138,7 +7148,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-034-backlog-archival-and-status-rewiring.md",
             "last_updated": "2025-12-22T23:16:24",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-035-skill-architecture-refactoring.md",
@@ -7153,42 +7163,42 @@
         {
             "path": "docs/ADR/ADR-030-document-taxonomy.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/ADR/ADR-031-workspace-awareness.md",
             "last_updated": "2025-12-08",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/ADR/ADR-032-memory-linked-work-governance.md",
             "last_updated": "2025-12-09",
-            "days_stale": 46
+            "days_stale": 47
         },
         {
             "path": "docs/ADR/ADR-033-work-item-lifecycle.md",
             "last_updated": "2025-12-10",
-            "days_stale": 45
+            "days_stale": 46
         },
         {
             "path": "docs/ADR/ADR-034-document-ontology-work-lifecycle.md",
             "last_updated": "2025-12-11",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/ADR/ADR-035-rfc-2119-governance-signaling.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/ADR/ADR-036-pm-data-architecture.md",
             "last_updated": "2025-12-13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/ADR/ADR-037-hybrid-retrieval-architecture.md",
             "last_updated": "2025-12-14",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/ADR/ADR-039-work-item-as-file-architecture.md",
@@ -7198,37 +7208,37 @@
         {
             "path": "docs/reports/2025-11-30-EVALUATION-synthesis-pipeline.md",
             "last_updated": "2025-11-30",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/reports/2025-11-30-INVESTIGATION-001-synthesis-schema-findings.md",
             "last_updated": "2025-11-30",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/reports/2025-11-30-REPORT-vision-gap-analysis.md",
             "last_updated": "2025-11-30",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/reports/2025-12-06-REPORT-epoch-2-enablement.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/reports/2025-12-06-REPORT-session-36-governance-enhancements.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/reports/2025-12-06-REPORT-session-37-loop-verification.md",
             "last_updated": "2025-12-06",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/reports/2025-12-07-01-REPORT-haios-status-auto-update-investigation.md",
             "last_updated": "2025-12-07",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/work/archive/WORK-E2-035-checkpoint-lifecycle-enhancement.md",
@@ -7311,6 +7321,11 @@
             "days_stale": 31
         },
         {
+            "path": "docs/work/archive/WORK-E2-165-checkpoint-skill-with-git-commit.md",
+            "last_updated": "2025-12-25T21:27:39",
+            "days_stale": 30
+        },
+        {
             "path": "docs/work/archive/WORK-E2-167-git-just-recipes.md",
             "last_updated": "2025-12-24T18:51:18",
             "days_stale": 31
@@ -7338,7 +7353,7 @@
         {
             "path": "docs/work/archive/WORK-E2-173-work-file-milestone-discovery.md",
             "last_updated": "2025-12-24T21:29:09",
-            "days_stale": 30
+            "days_stale": 31
         },
         {
             "path": "docs/work/archive/WORK-E2-176-document-gate-contract-pattern.md",
@@ -7466,7 +7481,7 @@
             "duplicate": 1,
             "deferred": 1
         },
-        "stale_count": 286
+        "stale_count": 289
     },
     "alignment": {
         "aligned": [
