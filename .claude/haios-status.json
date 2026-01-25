@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-25T21:46:49",
+    "generated": "2026-01-25T22:17:15",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 238,
-        "current_session": 239,
+        "prior_session": 239,
+        "current_session": 240,
         "prior_date": "2026-01-25",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82227,
-        "entities": 9226,
+        "concepts": 82237,
+        "entities": 9229,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -113,7 +113,6 @@
                 "E2-124",
                 "INV-014",
                 "INV-015",
-                "INV-019",
                 "INV-023",
                 "INV-045",
                 "TD-001",
@@ -139,8 +138,8 @@
                 "E2-211",
                 "INV-027"
             ],
-            "progress": 76,
-            "prior_progress": 76,
+            "progress": 81,
+            "prior_progress": 81,
             "delta_source": null
         },
         "Epoch3-FORESIGHT": {
@@ -2936,6 +2935,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-01-25-08-SESSION-240-work-014-type-based-routing-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-25",
+            "last_updated": "2026-01-25T21:48:06",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "template": "implementation_plan",
             "status": "complete",
@@ -3966,8 +3974,8 @@
             "template": "investigation",
             "status": "complete",
             "date": "2025-12-20",
-            "last_updated": null,
-            "backlog_id": "INV-019",
+            "last_updated": "2026-01-25T22:07:04",
+            "backlog_id": "null",
             "spawned_by": null
         },
         {
@@ -6089,7 +6097,7 @@
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-22-gap-b3-complete.md",
             "last_updated": "2025-12-03T21:54:50",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-23-docs-ingestion-embedding-gap.md",
@@ -6109,7 +6117,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-25-embedding-fix-research-synthesis.md",
             "last_updated": "2025-12-04T22:02:49",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
@@ -7182,11 +7190,6 @@
             "days_stale": 33
         },
         {
-            "path": "docs/investigations/INVESTIGATION-INV-019-synthesis-coverage-gap-query-ordering-bug.md",
-            "last_updated": "2025-12-20",
-            "days_stale": 36
-        },
-        {
             "path": "docs/investigations/INVESTIGATION-INV-020-llm-energy-channeling-patterns.md",
             "last_updated": "2025-12-22T21:21:33",
             "days_stale": 34
@@ -7648,9 +7651,9 @@
         }
     ],
     "workspace": {
-        "total_files": 482,
+        "total_files": 483,
         "by_template": {
-            "checkpoint": 233,
+            "checkpoint": 234,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7662,7 +7665,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 69,
+            "unknown": 70,
             "draft": 2,
             "approved": 6,
             "ready": 1,
@@ -7677,7 +7680,7 @@
             "duplicate": 1,
             "deferred": 1
         },
-        "stale_count": 315
+        "stale_count": 314
     },
     "alignment": {
         "aligned": [
@@ -8131,7 +8134,7 @@
             },
             {
                 "path": "docs/investigations/INVESTIGATION-INV-019-synthesis-coverage-gap-query-ordering-bug.md",
-                "backlog_id": "INV-019"
+                "backlog_id": "null"
             },
             {
                 "path": "docs/investigations/INVESTIGATION-INV-020-llm-energy-channeling-patterns.md",
