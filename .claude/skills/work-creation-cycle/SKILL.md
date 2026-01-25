@@ -5,7 +5,7 @@ description: HAIOS Work Creation Cycle for structured work item population. Use 
 recipes:
 - work
 generated: 2025-12-25
-last_updated: '2026-01-25T09:06:29'
+last_updated: '2026-01-25T21:38:00'
 ---
 # Work Creation Cycle
 
@@ -170,8 +170,8 @@ just set-cycle work-creation-cycle CHAIN {work_id}
 
 | Signal | Confidence | Action |
 |--------|------------|--------|
-| ID starts with `INV-` | HIGH | Auto-chain: `/new-investigation {id} {title}` |
-| `spawned_by_investigation` is populated | HIGH | Auto-chain: `/new-plan {id} {title}` (discovery done) |
+| `type: investigation` OR ID starts with `INV-` | HIGH | Auto-chain: `/new-investigation {id} {title}` |
+| `spawned_by` points to investigation | HIGH | Auto-chain: `/new-plan {id} {title}` (discovery done) |
 | Clear technical deliverables, small scope | HIGH | Auto-chain: `/new-plan {id} {title}` |
 | Complex/architectural work | LOW | Chain to `/reason` for structured decision |
 | Unclear if needs investigation first | LOW | Chain to `/reason` for structured decision |

@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-21T20:31:48
+# System Auto: last updated on: 2026-01-25T21:28:16
 """
 MemoryBridge Module (E2-241)
 
@@ -208,7 +208,8 @@ class MemoryBridge:
             return match.group(1)
 
         # Fallback: bare work ID patterns
-        for pattern in [r"E2-\d+", r"INV-\d+", r"TD-\d+"]:
+        # WORK-014: Added WORK-* as first pattern (new canonical format)
+        for pattern in [r"WORK-\d+", r"E2-\d+", r"INV-\d+", r"TD-\d+"]:
             match = re.search(pattern, source_path)
             if match:
                 return match.group(0)

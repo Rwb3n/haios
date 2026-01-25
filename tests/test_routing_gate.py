@@ -1,5 +1,5 @@
 # generated: 2025-12-28
-# System Auto: last updated on: 2025-12-28T18:37:11
+# System Auto: last updated on: 2026-01-25T21:25:47
 """Tests for routing.py routing-gate logic (E2-221).
 
 Tests the pure work-type routing logic. Threshold checks are in OBSERVE phase (E2-224).
@@ -54,3 +54,40 @@ class TestDetermineRoute:
         assert "reason" in result
         assert isinstance(result["action"], str)
         assert isinstance(result["reason"], str)
+
+    # WORK-014: Type-based routing tests
+    def test_route_investigation_by_type_field(self):
+        """WORK-XXX with type: investigation routes to investigation-cycle."""
+        result = determine_route(
+            next_work_id="WORK-014",
+            has_plan=False,
+            work_type="investigation"
+        )
+        assert result["action"] == "invoke_investigation"
+
+    def test_route_legacy_inv_prefix_without_type(self):
+        """INV-XXX still routes to investigation-cycle (backward compat)."""
+        result = determine_route(
+            next_work_id="INV-017",
+            has_plan=False,
+            work_type=None  # Legacy items may not have type
+        )
+        assert result["action"] == "invoke_investigation"
+
+    def test_route_feature_type_without_plan(self):
+        """Feature type without plan goes to work-creation."""
+        result = determine_route(
+            next_work_id="WORK-015",
+            has_plan=False,
+            work_type="feature"
+        )
+        assert result["action"] == "invoke_work_creation"
+
+    def test_route_work_type_none_fallback(self):
+        """work_type=None with non-INV prefix falls back to plan check."""
+        result = determine_route(
+            next_work_id="WORK-016",
+            has_plan=True,
+            work_type=None
+        )
+        assert result["action"] == "invoke_implementation"

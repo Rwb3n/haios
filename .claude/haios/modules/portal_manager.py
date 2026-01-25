@@ -1,5 +1,5 @@
 # generated: 2026-01-09
-# System Auto: last updated on: 2026-01-09T21:32:17
+# System Auto: last updated on: 2026-01-25T21:28:00
 """
 PortalManager Module (E2-279)
 
@@ -222,8 +222,10 @@ last_updated: {now.isoformat()}
 
                 fm = yaml.safe_load(parts[1]) or {}
                 fm["spawned_by"] = spawned_by
-                if spawned_by.startswith("INV-"):
-                    fm["spawned_by_investigation"] = spawned_by
+                # WORK-014: spawned_by_investigation is DEPRECATED per TRD-WORK-ITEM-UNIVERSAL
+                # Legacy field preserved for existing items but not set for new items
+                # if spawned_by.startswith("INV-"):
+                #     fm["spawned_by_investigation"] = spawned_by
                 if milestone:
                     fm["milestone"] = milestone
 

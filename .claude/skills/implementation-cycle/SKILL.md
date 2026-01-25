@@ -6,7 +6,7 @@ description: HAIOS Implementation Cycle for structured work item implementation.
 recipes:
 - node
 generated: 2025-12-22
-last_updated: '2026-01-16T21:51:18'
+last_updated: '2026-01-25T21:31:07'
 ---
 # Implementation Cycle
 
@@ -31,10 +31,11 @@ PLAN --> DO --> CHECK --> DONE --> CHAIN
   |       +-------+ (if tests fail)  [route next]
   +-- (if no plan)                   |
                               /-------------\
-                             INV-*    has plan?   else
-                               |         |          |
-                          investigation  implement  work-creation
-                             -cycle      -cycle     -cycle
+                        type=investigation  has plan?   else
+                        OR INV-* prefix        |          |
+                               |          implement  work-creation
+                          investigation    -cycle     -cycle
+                             -cycle
 ```
 
 ### 1. PLAN Phase
@@ -265,9 +266,10 @@ just set-cycle implementation-cycle CHAIN {work_id}
 1. Close work item: `/close {backlog_id}`
 2. Query next work: `just ready`
 3. If items returned, read first work file to check `documents.plans`
-4. **Apply routing decision table** (see `routing-gate` skill):
+4. Read work item `type` field from WORK.md
+5. **Apply routing decision table** (see `routing-gate` skill):
    - If `next_work_id` is None → `await_operator`
-   - If ID starts with `INV-` → `invoke_investigation`
+   - If `type` == "investigation" OR ID starts with `INV-` → `invoke_investigation`
    - If `has_plan` is True → `invoke_implementation`
    - Else → `invoke_work_creation`
 5. Execute the action:

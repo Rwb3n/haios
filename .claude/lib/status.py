@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-01-16T21:37:59
+# System Auto: last updated on: 2026-01-25T21:27:48
 """Core status module for HAIOS plugin.
 
 E2-120 Phase 2a: Core functions for haios-status-slim.json generation.
@@ -815,8 +815,10 @@ def get_active_work_cycle() -> Optional[dict[str, Any]]:
                 cycle_type = "implementation"
                 break
 
-            # Check for associated investigation (INV-* items)
-            if item_id.startswith("INV-"):
+            # Check for investigation type (type field OR legacy INV-* prefix)
+            # WORK-014: Type field takes precedence over ID prefix
+            work_type = metadata.get("type", "")
+            if work_type == "investigation" or item_id.startswith("INV-"):
                 cycle_type = "investigation"
                 for inv_file in inv_dir.glob(f"INVESTIGATION-{item_id}*.md"):
                     inv_content = inv_file.read_text(encoding="utf-8-sig")

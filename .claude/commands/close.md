@@ -3,7 +3,7 @@ allowed-tools: Bash, Edit, Read, Grep, Glob, mcp__haios-memory__ingester_ingest
 description: Close a work item with DoD validation
 argument-hint: <backlog_id>
 generated: 2025-12-22
-last_updated: '2026-01-08T21:34:40'
+last_updated: '2026-01-25T21:35:05'
 ---
 # Close Work Item
 
@@ -35,8 +35,8 @@ Glob(pattern="docs/work/active/WORK-{backlog_id}-*.md")
 2. Proceed to Step 1b (find associated documents)
 
 **If NO work file found:**
-- Check if it's an investigation (INV-*) without a work file
-- If INV-*, proceed to Step 1.5 (Investigation DoD)
+- Check if it's an investigation (`type: investigation` or legacy INV-*) without a work file
+- If investigation type, proceed to Step 1.5 (Investigation DoD)
 - Otherwise: Inform user "Work item {backlog_id} not found in docs/work/active/"
 - STOP
 
@@ -96,9 +96,9 @@ Plans are relevant for DoD validation (must be complete).
 
 ---
 
-## Step 1.5: Investigation-Specific DoD (INV-* only)
+## Step 1.5: Investigation-Specific DoD (type: investigation OR INV-* prefix)
 
-**If backlog_id starts with `INV-`**, apply investigation-specific DoD before standard DoD:
+**If work item has `type: investigation` OR backlog_id starts with `INV-`**, apply investigation-specific DoD before standard DoD:
 
 ### 1.5a. Find investigation file
 

@@ -7,7 +7,7 @@ recipes:
 - ready
 - queue
 generated: 2026-01-11
-last_updated: '2026-01-17T11:55:36'
+last_updated: '2026-01-25T21:28:38'
 ---
 # Survey Cycle
 
@@ -31,8 +31,9 @@ just set-queue {queue_name}
 ```
 
 3. **Route**
-   - Use routing decision table:
-     - `INV-*` prefix → `investigation-cycle`
+   - Read work item WORK.md to get `type` field
+   - Use routing decision table (WORK-014: type field takes precedence):
+     - `type: investigation` OR `INV-*` prefix → `investigation-cycle`
      - Has plan → `implementation-cycle`
      - Otherwise → `work-creation-cycle`
 

@@ -6,7 +6,7 @@ recipes:
 - queue
 - is-cycle-allowed
 generated: 2025-12-28
-last_updated: '2026-01-15T23:05:12'
+last_updated: '2026-01-25T21:29:51'
 ---
 # Routing-Gate (Bridge Skill)
 
@@ -28,12 +28,12 @@ This is a **Bridge Skill** that provides pure work-type routing logic for cycle 
 ## The Flow
 
 ```
-Input (next_work_id, has_plan)
+Input (next_work_id, has_plan, work_type)
     |
-    +-> Work-Type Routing
+    +-> Work-Type Routing (WORK-014: type field takes precedence)
             next_work_id is None?
                 ├─ YES → await_operator
-                └─ NO  → starts with "INV-"?
+                └─ NO  → type == "investigation" OR starts with "INV-"?
                             ├─ YES → invoke_investigation
                             └─ NO  → has_plan?
                                         ├─ YES → invoke_implementation
@@ -66,7 +66,7 @@ Input (next_work_id, has_plan)
 |--------|--------|-----------------|
 | Cycle blocked by queue | `blocked` | None - display warning |
 | `next_work_id` is None | `await_operator` | None - wait for operator |
-| ID starts with `INV-` | `invoke_investigation` | `investigation-cycle` |
+| `type` == "investigation" OR ID starts with `INV-` | `invoke_investigation` | `investigation-cycle` |
 | `has_plan` is True | `invoke_implementation` | `implementation-cycle` |
 | Otherwise | `invoke_work_creation` | `work-creation-cycle` |
 
@@ -80,9 +80,10 @@ Input (next_work_id, has_plan)
 2. Read first work file, check `documents.plans` field
 3. **Check cycle-locking:** `just is-cycle-allowed [queue] [cycle]`
    - If BLOCKED: display warning and stop
-4. Apply the decision table above:
+4. Read work item `type` field from WORK.md frontmatter
+5. Apply the decision table above (WORK-014: type field takes precedence):
    - `next_work_id` is None → `await_operator`
-   - ID starts with `INV-` → `invoke_investigation`
+   - `type` == "investigation" OR ID starts with `INV-` → `invoke_investigation`
    - `has_plan` is True → `invoke_implementation`
    - Otherwise → `invoke_work_creation`
 5. Execute the corresponding skill invocation:
