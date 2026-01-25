@@ -6,7 +6,7 @@ recipes:
 - close-work
 - update-status
 generated: 2025-12-25
-last_updated: '2026-01-19T17:31:34'
+last_updated: '2026-01-25T09:07:23'
 ---
 # Close Work Cycle
 
@@ -63,17 +63,23 @@ just set-cycle close-work-cycle VALIDATE {work_id}
 2. **WHY MUST be captured** - Check for memory_refs in associated docs
 3. **Docs MUST be current** - CLAUDE.md, READMEs updated
 4. **Traced files MUST be complete** - Associated plans have status: complete
+5. **Traced requirement MUST be addressed** (REQ-TRACE-003) - Verify work item's `traces_to:` requirement was satisfied
 
 **Actions:**
 1. Read work file: `docs/work/active/{id}/WORK.md` (or `docs/work/active/WORK-{id}-*.md` for legacy)
 2. Check work directory for plans: `docs/work/active/{id}/plans/`
 3. Check plan statuses - all must be `complete`
 4. For INV-* items: Apply investigation-specific DoD
-5. Prompt user for DoD confirmation
+5. **Validate traced requirement addressed (REQ-TRACE-003):**
+   - Read `traces_to:` from work item frontmatter
+   - For each requirement ID, verify deliverables demonstrate requirement satisfaction
+   - If requirement cannot be verified as addressed, BLOCK closure
+6. Prompt user for DoD confirmation
 
 **Exit Criteria:**
 - [ ] Work file exists and has status: active
 - [ ] All associated plans have status: complete
+- [ ] **MUST:** Traced requirement(s) verified as addressed (REQ-TRACE-003)
 - [ ] User confirms: tests pass, WHY captured, docs current
 
 **Tools:** Read, Glob, Grep
@@ -226,6 +232,7 @@ just clear-cycle
 | (Entry) | Observations captured? | Invoke observation-capture-cycle first |
 | VALIDATE | Does work file exist? | STOP - not found |
 | VALIDATE | Are all plans complete? | STOP or warn user |
+| VALIDATE | **Is traced requirement addressed? (REQ-TRACE-003)** | **STOP - requirement not satisfied** |
 | VALIDATE | Does user confirm DoD? | STOP - DoD not met |
 | ARCHIVE | Is work file archived? | Run `just close-work` |
 | MEMORY | Is closure stored? | Store via ingester |

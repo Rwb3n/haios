@@ -1,10 +1,13 @@
 # generated: 2026-01-21
-# System Auto: last updated on: 2026-01-21T23:04:47
+# System Auto: last updated on: 2026-01-25T09:34:10
 # Identity extraction config per CH-004 spec
 #
 # WORK-007: Implement Identity Loader for Configuration Arc
-# Extracts ~50 lines of identity context from manifesto files
+# Extracts identity context from manifesto files (L0-L3 + L4)
 # for token-efficient coldstart loading.
+#
+# Session 226: Added L4 technical principles extraction
+# Session 237: Updated for enumerated manifesto (L0.1, L1.5, etc.)
 
 # Base path relative to PROJECT_ROOT (per loader.py:354)
 base_path: ".claude/haios/manifesto"
@@ -19,17 +22,28 @@ extract:
   companion:
     file: L0-telos.md
     section: "## The Companion Relationship"
-    type: numbered_list
+    type: bold_items  # Session 237: Changed from numbered_list for enumerated format
 
   constraints:
     file: L1-principal.md
-    section: "**Known Constraints:**"
-    type: numbered_list
+    section: "## Life Context and Constraints"  # Session 237: Changed section name
+    type: bold_items  # Session 237: Changed from numbered_list for enumerated format
 
   principles:
     file: L3-requirements.md
     section: "## Core Behavioral Principles"
     type: all_h3
+
+  # L4 Technical Principles (Session 226 - Path A alignment)
+  l4_context_loading:
+    file: L4/technical_requirements.md
+    section: "## Context Loading (enables: separation of concerns)"
+    type: full_section
+
+  l4_what_built:
+    file: L4/technical_requirements.md
+    section: "## What's Built vs Needed"
+    type: full_section
 
   epoch_name:
     file: "../epochs/E2_3/EPOCH.md"
@@ -50,6 +64,12 @@ output:
 
     Principles:
     {principles}
+
+    L4 Context Loading:
+    {l4_context_loading}
+
+    L4 What's Built vs Needed:
+    {l4_what_built}
 
     Epoch: {epoch_name}
   list_separator: "\n- "

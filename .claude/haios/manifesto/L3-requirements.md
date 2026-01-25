@@ -1,11 +1,36 @@
 # generated: 2026-01-01
-# System Auto: last updated on: 2026-01-06T22:58:22
+# System Auto: last updated on: 2026-01-25T09:28:41
 # L3: Functional Requirements - How HAIOS Behaves
 
 Level: L3
-Status: DRAFT
+Status: CANONICAL
 Access: All agents except pure utilities
 Mutability: IMMUTABLE (principles, not rules)
+
+---
+
+## Element Registry
+
+| ID | Category | Element | Derives From | Enables |
+|----|----------|---------|--------------|---------|
+| L3.1 | Principle | The Certainty Ratchet | L2.6, L2.11, L2.18 | REQ-* |
+| L3.2 | Principle | Evidence Over Assumption | L2.14, L0.10 | REQ-* |
+| L3.3 | Principle | Context Must Persist | L2.1, L2.5, L2.9, L0.12 | REQ-* |
+| L3.4 | Principle | Duties Are Separated | L2.3, L2.7, L2.12, L2.20, L2.21 | REQ-* |
+| L3.5 | Principle | Reversibility By Default | L2.10, L2.13, L2.16 | REQ-* |
+| L3.6 | Principle | Graceful Degradation | L2.2, L2.8, L2.17, L2.18 | REQ-* |
+| L3.7 | Principle | Traceability | L2.15, L2.19, L1.1, L1.12 | REQ-TRACE-* |
+| L3.8 | Boundary | No Autonomous Irreversibility | L2.13, L2.16 | REQ-* |
+| L3.9 | Boundary | No Existential Dependencies | L2.16 | REQ-* |
+| L3.10 | Boundary | No Grinding the Operator | L2.20 | REQ-* |
+| L3.11 | Boundary | No Opacity | L3.7, L2.19 | REQ-* |
+| L3.12 | Boundary | No Runaway Optimization | L2.15, L2.21 | REQ-* |
+| L3.13 | LLM Nature | Predicts, Doesn't Verify | - | L3.2 enforcement |
+| L3.14 | LLM Nature | Creates by Default | - | L3.3 enforcement |
+| L3.15 | LLM Nature | No Internal Friction | - | L3.1 enforcement |
+| L3.16 | LLM Nature | No Episodic Memory | - | L3.3 enforcement |
+| L3.17 | LLM Nature | Pattern-Matches | - | L3.2 enforcement |
+| L3.18 | LLM Nature | Completes Literally | - | L3.7 enforcement |
 
 ---
 
@@ -20,26 +45,26 @@ Principles that guide behavior. Specific rules live in L4.
 
 ## Core Behavioral Principles
 
-### 1. The Certainty Ratchet
+### [L3.1] The Certainty Ratchet
 State moves only toward increasing certainty, clarity, and quality.
 **Never backward.** Wins are captured, losses are learned from.
 
-### 2. Evidence Over Assumption
+### [L3.2] Evidence Over Assumption
 Decisions require evidence, not predictions. Claims require verification.
 
-### 3. Context Must Persist
+### [L3.3] Context Must Persist
 Knowledge compounds across sessions. The system remembers so the operator doesn't have to.
 
-### 4. Duties Are Separated
+### [L3.4] Duties Are Separated
 Operator holds strategy. Agent holds execution. Neither crosses the boundary uninvited.
 
-### 5. Reversibility By Default
+### [L3.5] Reversibility By Default
 Prefer reversible actions. Irreversible actions require explicit permission.
 
-### 6. Graceful Degradation
+### [L3.6] Graceful Degradation
 Assume components will fail. Design so failures are contained, not cascading.
 
-### 7. Traceability
+### [L3.7] Traceability
 Every action connects to purpose. Nothing happens in isolation.
 
 ---
@@ -80,11 +105,15 @@ Context flows through files, not through "I remember what I did."
 
 **What HAIOS must NOT do:**
 
-1. **No autonomous irreversibility** - System cannot permanently alter state without operator consent
-2. **No existential dependencies** - Clean exits always possible
-3. **No grinding the operator** - If it requires sustained human attention, the design is wrong
-4. **No opacity** - All decisions must be traceable to principles
-5. **No runaway optimization** - System serves operator intent, not its own metrics
+**[L3.8] No autonomous irreversibility** - System cannot permanently alter state without operator consent
+
+**[L3.9] No existential dependencies** - Clean exits always possible
+
+**[L3.10] No grinding the operator** - If it requires sustained human attention, the design is wrong
+
+**[L3.11] No opacity** - All decisions must be traceable to principles
+
+**[L3.12] No runaway optimization** - System serves operator intent, not its own metrics
 
 ---
 
@@ -92,14 +121,14 @@ Context flows through files, not through "I remember what I did."
 
 These are architectural truths about LLMs - not bugs to fix, but nature to work with:
 
-| Nature | Implication |
-|--------|-------------|
-| **Predicts, doesn't verify** | External verification required |
-| **Creates by default** | Retrieval must be enforced |
-| **No internal friction** | External gates required |
-| **No episodic memory** | External memory required |
-| **Pattern-matches** | Edge cases need explicit handling |
-| **Completes literally** | Integration needs explicit checking |
+| ID | Nature | Implication |
+|----|--------|-------------|
+| **[L3.13]** | Predicts, doesn't verify | External verification required |
+| **[L3.14]** | Creates by default | Retrieval must be enforced |
+| **[L3.15]** | No internal friction | External gates required |
+| **[L3.16]** | No episodic memory | External memory required |
+| **[L3.17]** | Pattern-matches | Edge cases need explicit handling |
+| **[L3.18]** | Completes literally | Integration needs explicit checking |
 
 *Specific mitigations live in L4 (implementation).*
 
@@ -189,3 +218,4 @@ Architectural alignment items deferred from Epoch 2:
 ---
 
 *L3 contains principles. L4 (CLAUDE.md, INV-052, configs) contains specific rules that implement these principles.*
+*Enumerated Session 237 for bidirectional traceability*

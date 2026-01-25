@@ -5,7 +5,7 @@ description: HAIOS Work Creation Cycle for structured work item population. Use 
 recipes:
 - work
 generated: 2025-12-25
-last_updated: '2026-01-17T11:59:42'
+last_updated: '2026-01-25T09:06:29'
 ---
 # Work Creation Cycle
 
@@ -51,6 +51,7 @@ just set-cycle work-creation-cycle VERIFY {work_id}
 - [ ] Work file exists at expected path
 - [ ] Frontmatter valid (template: work_item)
 - [ ] Status is `active`
+- [ ] `traces_to:` field exists in frontmatter
 
 **Tools:** Read, Glob
 
@@ -76,7 +77,8 @@ just set-cycle work-creation-cycle POPULATE {work_id}
 3. Prompt for Deliverables: "What are the specific outputs?"
 4. Fill in Deliverables as checklist items
 5. Optionally set: milestone, priority, spawned_by, blocked_by
-6. **MUST:** Run Investigation Design Validation (see below)
+6. **MUST:** Populate `traces_to:` with L4 requirement IDs (see Traceability Validation below)
+7. **MUST:** Run Investigation Design Validation (see below)
 
 **MUST Gate: Investigation Design Validation (Session 192 - E2-290 Learning)**
 
@@ -100,6 +102,20 @@ Result: Infrastructure built, but no governance integration.
 ```
 
 > **Anti-pattern prevented:** "Design without Deliverable" - Investigation designs integration but work item only lists infrastructure. Implementation completes infrastructure, never wires it in.
+
+**MUST Gate: Traceability Validation (Session 237 - REQ-TRACE-002)**
+
+Every work item MUST trace to at least one L4 requirement. This is governance, not documentation.
+
+1. **MUST** prompt: "Which L4 requirement(s) does this work implement?"
+2. **MUST** read: `.claude/haios/manifesto/L4/functional_requirements.md` for valid IDs
+3. **MUST** validate: Each `traces_to:` entry matches pattern `REQ-{DOMAIN}-{NNN}`
+4. **MUST** verify: Each ID exists in the Requirement ID Registry
+5. **If no valid requirement:** BLOCK - work cannot proceed without traceability
+
+**Valid requirement domains:** TRACE, GOVERNANCE, MEMORY, WORK, CONFIG, CONTEXT, CYCLE (registry in functional_requirements.md)
+
+> **Anti-pattern prevented:** "Work without justification" - Work items created that don't trace to any requirement. Implementation happens, but no one can answer "why does this exist?"
 
 **Exit Criteria:**
 - [ ] Context section has real content (not placeholder)
@@ -134,6 +150,7 @@ just set-cycle work-creation-cycle READY {work_id}
 **Exit Criteria:**
 - [ ] Context populated with meaningful content (no placeholders)
 - [ ] Deliverables has actionable checklist (no placeholders)
+- [ ] **MUST:** `traces_to:` contains at least one valid L4 requirement ID (REQ-TRACE-002)
 - [ ] Work item ready for further lifecycle progression
 
 **Tools:** Read, Edit
@@ -189,10 +206,13 @@ just set-cycle work-creation-cycle CHAIN {work_id}
 | Phase | Question to Ask | If NO |
 |-------|-----------------|-------|
 | VERIFY | Does work file exist? | Re-run /new-work |
+| VERIFY | Does `traces_to:` field exist? | Template outdated - add field |
 | POPULATE | Is Context filled? | Prompt user for problem statement |
 | POPULATE | Are Deliverables defined? | Prompt user for outputs |
+| POPULATE | **Is `traces_to:` populated with valid REQ-* IDs?** | **BLOCK - prompt for requirement ID** |
 | POPULATE | **If spawned by INV: Do deliverables cover all Design Outputs?** | **Add missing deliverables** |
 | READY | Is work item actionable? | Return to POPULATE |
+| READY | Does `traces_to:` have at least one valid ID? | **BLOCK - cannot proceed (REQ-TRACE-002)** |
 
 ---
 

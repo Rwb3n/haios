@@ -12,7 +12,8 @@ arc: null
 closed: null
 priority: medium
 effort: medium
-requirement_refs: []
+traces_to: []  # REQUIRED: L4 requirement IDs (e.g., REQ-TRACE-001) - enforced by REQ-TRACE-002
+requirement_refs: []  # DEPRECATED: use traces_to instead
 source_files: []
 acceptance_criteria: []
 blocked_by: []

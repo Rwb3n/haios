@@ -1,5 +1,5 @@
 # generated: 2026-01-21
-# System Auto: last updated on: 2026-01-21T22:21:25
+# System Auto: last updated on: 2026-01-25T09:34:52
 """
 Config-driven content extractor for structured markdown files.
 
@@ -226,6 +226,34 @@ def extract_bulleted_list(content: str, section: str) -> List[str]:
     return matches
 
 
+def extract_bold_items(content: str, section: str) -> List[str]:
+    """
+    Extract all enumerated bold items with L-prefix ID.
+
+    Matches patterns like:
+    - **[L0.1] Text** - Description
+    - **[L1.5] Text** - Description
+
+    Session 237: Specifically for enumerated manifesto items.
+
+    Args:
+        content: Full markdown content
+        section: Section heading
+
+    Returns:
+        List of item texts (ID + text, e.g., "[L0.1] Text - Description")
+    """
+    section_content = _find_section(content, section)
+    if not section_content:
+        return []
+
+    # Match lines starting with **[LX.Y] pattern (enumerated manifesto items)
+    pattern = r'^\*\*(\[L[0-9]+\.[0-9]+\][^*]+)\*\*\s*[-–]?\s*(.*)$'
+    matches = re.findall(pattern, section_content, re.MULTILINE)
+    # Return as "ID - Description"
+    return [f"{m[0].strip()} - {m[1].strip()}" if m[1] else m[0].strip() for m in matches]
+
+
 def extract_frontmatter(content: str, field: str) -> Optional[Any]:
     """
     Extract YAML frontmatter field value.
@@ -318,6 +346,7 @@ class Loader:
         'all_h3': extract_all_h3,
         'numbered_list': extract_numbered_list,
         'bulleted_list': extract_bulleted_list,
+        'bold_items': extract_bold_items,  # Session 237: For enumerated manifesto items
         'frontmatter': extract_frontmatter,
         'code_block': extract_code_block,
         'full_section': extract_full_section,

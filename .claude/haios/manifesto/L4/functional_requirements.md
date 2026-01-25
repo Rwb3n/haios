@@ -1,8 +1,53 @@
 # generated: 2026-01-24
-# System Auto: last updated on: 2026-01-24T21:14:13
+# System Auto: last updated on: 2026-01-25T09:29:21
 # L4: Functional Requirements
 
-Derived from agent_user_requirements.md. Specifies what each module MUST do.
+Level: L4
+Status: DYNAMIC (evolves with implementation)
+Derived from: L3 principles + agent_user_requirements.md
+
+---
+
+## Requirement ID Registry (Master)
+
+*All L4 requirements with bidirectional traceability to L3*
+
+| ID | Domain | Description | Derives From | Implemented By |
+|----|--------|-------------|--------------|----------------|
+| REQ-TRACE-001 | Traceability | Work items include `traces_to:` field | L3.7, L3.11 | WORK.md template |
+| REQ-TRACE-002 | Traceability | Work creation validates `traces_to:` | L3.7, L3.15, L3.18 | work-creation-cycle |
+| REQ-TRACE-003 | Traceability | Close validates requirement addressed | L3.7, L3.18 | close-work-cycle |
+| REQ-CONTEXT-001 | Context | Coldstart MUST inject prior session context | L3.3, L3.16 | ColdstartOrchestrator |
+| REQ-CONTEXT-002 | Context | Files are context windows for next node | L3.3 | Gate output files |
+| REQ-CONTEXT-003 | Context | Memory refs MUST be queried on document load | L3.3, L3.14 | Memory refs rule |
+| REQ-GOVERN-001 | Governance | Gates MUST block invalid transitions | L3.1, L3.15 | GovernanceLayer |
+| REQ-GOVERN-002 | Governance | Irreversible actions require explicit permission | L3.5, L3.8 | PreToolUse hooks |
+| REQ-GOVERN-003 | Governance | SQL queries MUST use schema-verifier | L3.2, L3.13 | PreToolUse hook |
+| REQ-MEMORY-001 | Memory | Store learnings with provenance | L3.3, L3.7 | MemoryBridge |
+| REQ-MEMORY-002 | Memory | Query before deciding (retrieval over generation) | L3.2, L3.14 | memory-agent skill |
+| REQ-WORK-001 | Work | Work items track lifecycle via node_history | L3.1, L3.7 | WorkEngine |
+| REQ-WORK-002 | Work | Status over location (ADR-041) | L3.1 | Work item structure |
+
+*Registry grows as requirements are enumerated from L3 principles.*
+
+---
+
+## Traceability Requirements
+
+*Derived from L3.7 (Traceability) + L3 LLM Nature (enforcement principle)*
+
+| ID | Requirement | Derives From | Acceptance Test |
+|----|-------------|--------------|-----------------|
+| **REQ-TRACE-001** | Work items MUST include `traces_to:` field in frontmatter | L3.7, L3.11 | WORK.md template includes field |
+| **REQ-TRACE-002** | Work creation MUST validate `traces_to:` references a valid requirement ID | L3.7, L3.15, L3.18 | `work-creation-cycle` blocks on empty/invalid `traces_to:` |
+| **REQ-TRACE-003** | Close-work-cycle MUST verify the traced requirement was addressed | L3.7, L3.18 | DoD validation includes requirement satisfaction check |
+
+**Invariants:**
+- Traceability is governance, not documentation (enforcement over enablement)
+- Invalid requirement IDs MUST block, not warn
+- Requirement IDs follow pattern: `REQ-{DOMAIN}-{NNN}` (e.g., `REQ-TRACE-001`)
+
+---
 
 ## Module Function Specifications
 
