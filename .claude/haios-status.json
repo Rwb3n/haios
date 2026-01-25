@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-25T00:40:57",
+    "generated": "2026-01-25T02:00:16",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,9 +8,9 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 232,
-        "current_session": 233,
-        "prior_date": "2026-01-24",
+        "prior_session": 234,
+        "current_session": 235,
+        "prior_date": "2026-01-25",
         "completed": [],
         "completed_count": 0,
         "added": [],
@@ -35,14 +35,15 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82166,
-        "entities": 9192,
+        "concepts": 82189,
+        "entities": 9203,
         "backlog_pending": 0
     },
     "infrastructure": {
         "commands": [
             "/close",
             "/coldstart",
+            "/critique",
             "/haios",
             "/implement",
             "/new-adr",
@@ -82,6 +83,7 @@
         ],
         "agents": [
             "anti-pattern-checker",
+            "critique-agent",
             "investigation-agent",
             "preflight-checker",
             "schema-verifier",
@@ -149,10 +151,11 @@
                 "E2-137"
             ],
             "complete": [
+                "E2-072",
                 "E2-139"
             ],
-            "progress": 33,
-            "prior_progress": 33,
+            "progress": 67,
+            "prior_progress": 66,
             "delta_source": null
         },
         "M7e-Hygiene": {
@@ -2866,6 +2869,24 @@
             "status": null,
             "date": "2026-01-24",
             "last_updated": "2026-01-24T23:05:51",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-25-01-SESSION-234-e2-072-plan-authored-critique-subagent-design.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-25",
+            "last_updated": "2026-01-25T01:08:08",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-25-02-SESSION-235-e2-072-plan-validated-entering-do-phase.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-25",
+            "last_updated": "2026-01-25T01:29:02",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -7452,9 +7473,9 @@
         }
     ],
     "workspace": {
-        "total_files": 475,
+        "total_files": 477,
         "by_template": {
-            "checkpoint": 226,
+            "checkpoint": 228,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7466,7 +7487,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 62,
+            "unknown": 64,
             "draft": 2,
             "approved": 6,
             "ready": 1,

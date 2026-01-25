@@ -2,10 +2,10 @@
 template: work_item
 id: E2-072
 title: Critique Subagent (Assumption Surfacing)
-status: active
+status: complete
 owner: Hephaestus
 created: 2025-12-23
-closed: null
+closed: '2026-01-25'
 milestone: Epoch3-FORESIGHT
 priority: medium
 effort: medium
@@ -23,7 +23,19 @@ node_history:
   entered: 2025-12-23 19:06:12
   exited: null
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 82370
+- 82371
+- 82372
+- 82373
+- 82374
+- 82375
+- 82376
+- 82377
+- 82378
+- 82379
+- 82380
+- 82381
 documents:
   investigations: []
   plans: []

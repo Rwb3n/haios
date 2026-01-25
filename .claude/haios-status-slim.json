@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-25T00:41:00",
+    "generated": "2026-01-25T02:00:16",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,9 +8,9 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 232,
-        "current_session": 233,
-        "prior_date": "2026-01-24",
+        "prior_session": 234,
+        "current_session": 235,
+        "prior_date": "2026-01-25",
         "completed": [],
         "completed_count": 0,
         "added": [],
@@ -25,24 +25,23 @@
         "lifecycle_phase": null
     },
     "session_state": {
-        "active_cycle": null,
-        "current_phase": null,
-        "work_id": null,
-        "entered_at": null,
-        "active_queue": null,
-        "phase_history": []
+        "active_cycle": "close-work-cycle",
+        "current_phase": "CHAIN",
+        "work_id": "E2-072",
+        "entered_at": "2026-01-25T02:00:48.221891"
     },
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82166,
-        "entities": 9192,
+        "concepts": 82189,
+        "entities": 9203,
         "backlog_pending": 0
     },
     "infrastructure": {
         "commands": [
             "/close",
             "/coldstart",
+            "/critique",
             "/haios",
             "/implement",
             "/new-adr",
@@ -82,6 +81,7 @@
         ],
         "agents": [
             "anti-pattern-checker",
+            "critique-agent",
             "investigation-agent",
             "preflight-checker",
             "schema-verifier",
