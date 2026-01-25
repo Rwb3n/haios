@@ -3,13 +3,13 @@ template: work_item
 id: WORK-014
 title: Type-Based Routing Migration
 type: chore
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-25
 spawned_by: WORK-013
 chapter: null
 arc: workuniversal
-closed: null
+closed: '2026-01-25'
 priority: high
 effort: medium
 traces_to: []
@@ -33,7 +33,12 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 82414
+- 82415
+- 82416
+- 82417
+- 82418
 extensions: {}
 version: '2.0'
 generated: 2026-01-25
