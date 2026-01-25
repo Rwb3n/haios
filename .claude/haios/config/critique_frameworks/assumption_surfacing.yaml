@@ -1,0 +1,57 @@
+# generated: 2026-01-25
+# System Auto: last updated on: 2026-01-25T01:25:09
+# E2-072: Critique Subagent - Assumption Surfacing Framework
+# Default framework for surfacing implicit assumptions in designs
+
+name: assumption_surfacing
+version: "1.0"
+description: "Surface implicit assumptions in designs before implementation"
+
+# Categories of assumptions to examine
+# Each category has a prompt that guides the critique agent
+categories:
+  - id: dependency
+    label: "External Dependencies"
+    prompt: "What external systems, APIs, or components does this assume will work?"
+
+  - id: data
+    label: "Data Assumptions"
+    prompt: "What data availability, format, or quality is assumed?"
+
+  - id: user_behavior
+    label: "User/Agent Behavior"
+    prompt: "What behaviors are assumed from users or other agents?"
+
+  - id: environment
+    label: "Environment"
+    prompt: "What runtime environment characteristics are assumed?"
+
+  - id: scope
+    label: "Scope Boundaries"
+    prompt: "What is assumed to be out of scope that might actually matter?"
+
+# Output schema for critique results
+# Critique agent MUST produce output matching this schema
+output_schema:
+  assumptions:
+    - id: string          # Unique ID (A1, A2, ...)
+      statement: string   # The assumption being made
+      category: enum      # One of: dependency, data, user_behavior, environment, scope
+      confidence: enum    # high, medium, low
+      risk_if_wrong: string  # What happens if this assumption is wrong
+      mitigation: string  # How to mitigate the risk
+      related_requirement: string  # L4 requirement traceability (optional)
+      related_deliverable: string  # Work item deliverable traceability (optional)
+
+# Verdict rules - criteria for each verdict
+# Critique agent evaluates assumptions against these rules
+verdict_rules:
+  BLOCK: "Any assumption with confidence=low and no mitigation"
+  REVISE: "Any assumption with risk_if_wrong containing 'silent' or 'fail'"
+  PROCEED: "All assumptions have mitigations or are high confidence"
+
+# Gate integration (how this framework is used)
+integration:
+  phase: plan-validation-cycle.CRITIQUE
+  trigger: pre-DO
+  required: true  # Cannot skip critique in validation

@@ -1,14 +1,15 @@
 # generated: 2025-12-29
-# System Auto: last updated on: 2025-12-29T11:31:32
+# System Auto: last updated on: 2026-01-25T01:28:17
 # HAIOS Agents
 
 Subagents for isolated, focused operations within the HAIOS governance framework.
 
-## Available Agents (7)
+## Available Agents (8)
 
 | Agent | Requirement | Purpose |
 |-------|-------------|---------|
 | **anti-pattern-checker** | SHOULD/MUST | Verify claims against 6 L1 anti-patterns before acceptance |
+| **critique-agent** | Optional | Pre-implementation assumption surfacing (E2-072) |
 | **investigation-agent** | Optional | EXPLORE phase evidence gathering for investigations |
 | **preflight-checker** | REQUIRED | Plan readiness + >3 file gate (E2-186) |
 | **schema-verifier** | REQUIRED | Isolated schema queries (blocks direct SQL) |
@@ -30,6 +31,7 @@ Task(subagent_type='<agent-name>', prompt='<task description>')
 
 ### Verification Agents
 - **anti-pattern-checker**: Verify claims against L1 anti-patterns
+- **critique-agent**: Pre-implementation assumption surfacing
 - **validation-agent**: Unbiased CHECK phase validation
 
 ### Utility Agents
