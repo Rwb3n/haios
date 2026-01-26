@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-26T18:58:46",
+    "generated": "2026-01-26T19:33:49",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -9,7 +9,7 @@
     },
     "session_delta": {
         "prior_session": 243,
-        "current_session": 243,
+        "current_session": 244,
         "prior_date": "2026-01-26",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82258,
-        "entities": 9238,
+        "concepts": 82270,
+        "entities": 9244,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -2976,6 +2976,15 @@
             "status": null,
             "date": "2026-01-26",
             "last_updated": "2026-01-26T18:47:15",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-26-03-SESSION-244-work-015-closure-requirementextractor-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-26",
+            "last_updated": "2026-01-26T19:00:27",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6523,7 +6532,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-04-SESSION-94-m5-progress-e2-126-complete-distribution-discussion.md",
             "last_updated": "2025-12-21T19:11:15",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-21-05-SESSION-94-m5-complete-e2-125-e2-129-migration.md",
@@ -6588,7 +6597,7 @@
         {
             "path": "docs/checkpoints/2025-12-23-07-SESSION-106-e2-150-e2-151-work-item-infrastructure-migration.md",
             "last_updated": "2025-12-23T19:12:34",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/checkpoints/2025-12-23-08-SESSION-107-e2-152-complete-e2-154-planned.md",
@@ -6628,7 +6637,7 @@
         {
             "path": "docs/checkpoints/2025-12-24-05-SESSION-113-m7a-recipes-governance-workflow.md",
             "last_updated": "2025-12-24T19:15:58",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/checkpoints/2025-12-24-06-SESSION-114-m7a-complete-and-yaml-fix.md",
@@ -6893,7 +6902,7 @@
         {
             "path": "docs/plans/PLAN-E2-114-spawn-tree-query.md",
             "last_updated": "2025-12-22T19:29:29",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/plans/PLAN-E2-115-investigation-closure.md",
@@ -6943,7 +6952,7 @@
         {
             "path": "docs/plans/PLAN-E2-143-audit-recipe-suite.md",
             "last_updated": "2025-12-24T19:13:58",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/plans/PLAN-E2-145-validate-script-section-enforcement.md",
@@ -7048,7 +7057,7 @@
         {
             "path": "docs/plans/PLAN-E2-186-promote-preflight-checker-to-required.md",
             "last_updated": "2025-12-25T19:29:13",
-            "days_stale": 31
+            "days_stale": 32
         },
         {
             "path": "docs/plans/PLAN-E2-189-dod-validation-cycle-skill.md",
@@ -7583,7 +7592,7 @@
         {
             "path": "docs/work/archive/WORK-E2-143-audit-recipe-suite.md",
             "last_updated": "2025-12-24T19:14:11",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/work/archive/WORK-E2-153-unified-metaphor-section-in-architecturemd.md",
@@ -7698,7 +7707,7 @@
         {
             "path": "docs/work/archive/WORK-E2-186-promote-preflight-checker-to-required.md",
             "last_updated": "2025-12-25T19:29:22",
-            "days_stale": 31
+            "days_stale": 32
         },
         {
             "path": "docs/work/archive/WORK-E2-187-async-validator-agent.md",
@@ -7837,9 +7846,9 @@
         }
     ],
     "workspace": {
-        "total_files": 487,
+        "total_files": 488,
         "by_template": {
-            "checkpoint": 238,
+            "checkpoint": 239,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7851,7 +7860,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 74,
+            "unknown": 75,
             "draft": 2,
             "approved": 6,
             "ready": 1,

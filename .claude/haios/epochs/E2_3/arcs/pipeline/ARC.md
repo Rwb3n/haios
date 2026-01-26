@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-21T18:40:18
+# System Auto: last updated on: 2026-01-25T22:39:32
 # Arc: Pipeline
 
 ## Arc Definition
@@ -27,7 +27,7 @@ CORPUS → INGEST → PLAN → BUILD → VALIDATE → PRODUCT
 | Chapter | Name | Status | Purpose |
 |---------|------|--------|---------|
 | CH-001 | CorpusLoader | Planned | Read arbitrary docs, not hardcoded paths |
-| CH-002 | RequirementExtractor | Planned | Parse docs → structured requirements |
+| CH-002 | [RequirementExtractor](CH-002-requirement-extractor.md) | Active | Parse docs → structured requirements |
 | CH-003 | PlannerAgent | Planned | Decompose requirements → work items |
 | CH-004 | BuilderInterface | Planned | Clean interface for existing build capability |
 | CH-005 | ValidatorAgent | Planned | Check output against source specs |
