@@ -1,15 +1,15 @@
 {
-    "generated": "2026-01-26T22:21:37",
+    "generated": "2026-01-26T23:18:18",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
-        "progress": 89,
-        "prior_progress": 88,
+        "progress": 91,
+        "prior_progress": 90,
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 244,
-        "current_session": 245,
+        "prior_session": 245,
+        "current_session": 246,
         "prior_date": "2026-01-26",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82287,
-        "entities": 9258,
+        "concepts": 82302,
+        "entities": 9264,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -244,6 +244,7 @@
                 "E2-214",
                 "E2-235",
                 "E2-236",
+                "E2-306",
                 "E2-151",
                 "E2-152",
                 "E2-163",
@@ -286,8 +287,8 @@
                 "INV-043",
                 "INV-044"
             ],
-            "progress": 89,
-            "prior_progress": 88,
+            "progress": 91,
+            "prior_progress": 90,
             "delta_source": null
         },
         "M7c-Governance": {
@@ -3005,6 +3006,15 @@
             "status": null,
             "date": "2026-01-26",
             "last_updated": "2026-01-26T20:26:00",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-26-06-SESSION-246-inv-072-spawn-id-collision-e2-305-mitigation-e2-306-plan.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-26",
+            "last_updated": "2026-01-26T22:30:07",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6187,12 +6197,12 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
             "last_updated": "2025-12-04T22:47:20",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-prototype-consolidation.md",
             "last_updated": "2025-12-04T22:30:47",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-comprehensive-checkpoint.md",
@@ -6202,7 +6212,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-extraction-improvement-complete.md",
             "last_updated": "2025-12-04T22:58:40",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-final.md",
@@ -6562,7 +6572,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-06-SESSION-95-e2-130-error-capture-rebuild-and-taxonomy-discussion.md",
             "last_updated": "2025-12-21T23:04:37",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-22-01-SESSION-96-synthesis-review-and-backlog-archival.md",
@@ -6962,7 +6972,7 @@
         {
             "path": "docs/plans/PLAN-E2-130-error-capture-rebuild.md",
             "last_updated": "2025-12-21T23:02:26",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/plans/PLAN-E2-140-investigation-status-sync-hook.md",
@@ -7262,12 +7272,12 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-008-haios-status-json-optimization.md",
             "last_updated": "2025-12-22T22:37:14",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-009-backlog-archival-governance.md",
             "last_updated": "2025-12-22T22:37:32",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-010-memory-retrieval-architecture-mismatch.md",
@@ -7277,7 +7287,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-011-command-skill-architecture-gap.md",
             "last_updated": "2025-12-22T22:45:09",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-012-static-registration-anti-pattern-mitigation.md",
@@ -7307,7 +7317,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-018-adaptive-coldstart-query-formulation.md",
             "last_updated": "2025-12-22T22:39:13",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-020-llm-energy-channeling-patterns.md",
@@ -7377,7 +7387,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-034-backlog-archival-and-status-rewiring.md",
             "last_updated": "2025-12-22T23:16:24",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-035-skill-architecture-refactoring.md",
@@ -7891,9 +7901,9 @@
         }
     ],
     "workspace": {
-        "total_files": 490,
+        "total_files": 491,
         "by_template": {
-            "checkpoint": 241,
+            "checkpoint": 242,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7905,7 +7915,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 77,
+            "unknown": 78,
             "draft": 2,
             "approved": 6,
             "ready": 1,

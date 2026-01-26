@@ -9,3 +9,6 @@
 {"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-01-26T18:39:55.527646"}
 {"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-01-26T18:39:55.529319"}
 {"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-01-26T18:39:55.569295"}
+{"type": "SessionStarted", "session": 999, "agent": "Hephaestus", "timestamp": "2026-01-26T23:14:01.575710"}
+{"type": "SessionEnded", "session": 999, "agent": "Hephaestus", "timestamp": "2026-01-26T23:14:18.272912"}
+{"type": "SessionStarted", "session": 247, "agent": "Hephaestus", "timestamp": "2026-01-26T23:14:33.072417"}

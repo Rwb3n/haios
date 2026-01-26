@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-24T20:48:00
+# System Auto: last updated on: 2026-01-26T23:13:55
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -277,12 +277,14 @@ cycle-events:
 
 # Start new session: write to .claude/session, update status.json, log event
 # CH-002: Session Simplify - session number in simple file
+# E2-306: Now calls log_session_start() for orphan detection support
 session-start session:
-    @python -c "import json,datetime,os; sf='.claude/session'; jf='.claude/haios-status.json'; ef='.claude/haios-events.jsonl'; s={{session}}; lines=open(sf).readlines() if os.path.exists(sf) else []; hdr=[l for l in lines if l.startswith('#')]; open(sf,'w').write(''.join(hdr)+str(s)+chr(10)); j=json.load(open(jf)) if os.path.exists(jf) else {}; pr=j.get('session_delta',{}).get('current_session',s-1); j['session_delta']={'current_session':s,'prior_session':pr}; json.dump(j,open(jf,'w'),indent=2); open(ef,'a').write(json.dumps({'ts':datetime.datetime.now().isoformat(),'type':'session','action':'start','session':s})+chr(10)); print(f'Session {s} start logged')"
+    @python -c "import json,os,sys; sys.path.insert(0,'.claude/haios/lib'); from governance_events import log_session_start; sf='.claude/session'; jf='.claude/haios-status.json'; s={{session}}; lines=open(sf).readlines() if os.path.exists(sf) else []; hdr=[l for l in lines if l.startswith('#')]; open(sf,'w').write(''.join(hdr)+str(s)+chr(10)); j=json.load(open(jf)) if os.path.exists(jf) else {}; pr=j.get('session_delta',{}).get('current_session',s-1); j['session_delta']={'current_session':s,'prior_session':pr}; json.dump(j,open(jf,'w'),indent=2); log_session_start(s,'Hephaestus'); print(f'Session {s} start logged')"
 
 # Log session end event
+# E2-306: Now calls log_session_end() for orphan detection support
 session-end session:
-    @python -c "import json,datetime; f=open('.claude/haios-events.jsonl','a'); f.write(json.dumps({'ts':datetime.datetime.now().isoformat(),'type':'session','action':'end','session':{{session}}})+'\n'); print('Session {{session}} end logged')"
+    @python -c "import sys; sys.path.insert(0,'.claude/haios/lib'); from governance_events import log_session_end; log_session_end({{session}},'Hephaestus'); print('Session {{session}} end logged')"
 
 # Set session_state for cycle tracking (E2-288)
 # Usage: just set-cycle implementation-cycle DO E2-288

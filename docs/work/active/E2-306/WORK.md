@@ -3,14 +3,14 @@ template: work_item
 id: E2-306
 title: Wire Session Event Logging into Lifecycle
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-26
 spawned_by: E2-236
 chapter: null
 arc: configuration
 milestone: M7b-WorkInfra
-closed: null
+closed: '2026-01-26'
 priority: high
 effort: small
 traces_to:
@@ -23,14 +23,26 @@ acceptance_criteria: []
 blocked_by: []
 blocks: []
 enables: []
-current_node: backlog
+current_node: implement
 node_history:
 - node: backlog
   entered: 2026-01-26 22:20:22
+  exited: '2026-01-26T23:04:06.104600'
+- node: plan
+  entered: '2026-01-26T23:04:06.104600'
+  exited: '2026-01-26T23:13:17.607562'
+- node: implement
+  entered: '2026-01-26T23:13:17.607562'
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 82480
+- 82481
+- 82482
+- 82491
+- 82492
+- 82493
 extensions: {}
 version: '2.0'
 generated: 2026-01-26
