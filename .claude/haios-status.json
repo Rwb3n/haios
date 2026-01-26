@@ -1,15 +1,15 @@
 {
-    "generated": "2026-01-26T19:33:49",
+    "generated": "2026-01-26T20:22:58",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
-        "progress": 89,
-        "prior_progress": 88,
+        "progress": 91,
+        "prior_progress": 90,
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 243,
-        "current_session": 244,
+        "prior_session": 244,
+        "current_session": 245,
         "prior_date": "2026-01-26",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82270,
-        "entities": 9244,
+        "concepts": 82277,
+        "entities": 9247,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -242,6 +242,7 @@
                 "E2-213",
                 "E2-214",
                 "E2-235",
+                "E2-236",
                 "E2-151",
                 "E2-152",
                 "E2-163",
@@ -284,8 +285,8 @@
                 "INV-043",
                 "INV-044"
             ],
-            "progress": 89,
-            "prior_progress": 88,
+            "progress": 91,
+            "prior_progress": 90,
             "delta_source": null
         },
         "M7c-Governance": {
@@ -2985,6 +2986,24 @@
             "status": null,
             "date": "2026-01-26",
             "last_updated": "2026-01-26T19:00:27",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-26-04-SESSION-244-observation-triage-complete-meta-observations-captured.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-26",
+            "last_updated": "2026-01-26T19:43:53",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-26-05-SESSION-245-e2-236-plan-authored-orphan-detection.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-26",
+            "last_updated": "2026-01-26T20:02:12",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6602,7 +6621,7 @@
         {
             "path": "docs/checkpoints/2025-12-23-08-SESSION-107-e2-152-complete-e2-154-planned.md",
             "last_updated": "2025-12-23T19:42:27",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/checkpoints/2025-12-23-09-SESSION-108-e2-154-e2-155-e2-117-dag-automation-complete.md",
@@ -6672,7 +6691,7 @@
         {
             "path": "docs/checkpoints/2025-12-25-06-SESSION-119-m8-skillarch-complete-bug-hunt-fixes.md",
             "last_updated": "2025-12-25T19:56:26",
-            "days_stale": 31
+            "days_stale": 32
         },
         {
             "path": "docs/checkpoints/2025-12-25-07-SESSION-120-inv-036-audit-and-e2-165-checkpoint-skill.md",
@@ -6722,6 +6741,11 @@
         {
             "path": "docs/checkpoints/2025-12-27-05-SESSION-129-inv-043-inv-044-directory-architecture-and-skill-chaining-design.md",
             "last_updated": "2025-12-27T18:58:14",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/checkpoints/2025-12-27-06-SESSION-130-e2-209-complete-e2-210-implementation-with-calibration-needed.md",
+            "last_updated": "2025-12-27T20:16:49",
             "days_stale": 30
         },
         {
@@ -6892,7 +6916,7 @@
         {
             "path": "docs/plans/PLAN-E2-112-investigation-agent.md",
             "last_updated": "2025-12-22T19:54:01",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/plans/PLAN-E2-113-investigation-events.md",
@@ -6977,12 +7001,12 @@
         {
             "path": "docs/plans/PLAN-E2-154-scaffold-on-entry-hook.md",
             "last_updated": "2025-12-23T19:59:53",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/plans/PLAN-E2-155-node-exit-gates.md",
             "last_updated": "2025-12-23T20:14:34",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/plans/PLAN-E2-160-work-file-prerequisite-gate.md",
@@ -6992,7 +7016,7 @@
         {
             "path": "docs/plans/PLAN-E2-162-node-transition-just-recipes.md",
             "last_updated": "2025-12-24T19:51:02",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/plans/PLAN-E2-165-checkpoint-skill-with-git-commit.md",
@@ -7067,7 +7091,7 @@
         {
             "path": "docs/plans/PLAN-E2-191-work-file-population-governance-gate.md",
             "last_updated": "2025-12-25T19:52:20",
-            "days_stale": 31
+            "days_stale": 32
         },
         {
             "path": "docs/plans/PLAN-E2-200-create-invariantsmd-with-extracted-evergreen-facts.md",
@@ -7502,7 +7526,7 @@
         {
             "path": "docs/work/archive/WORK-E2-081-heartbeat-scheduler-rhythm.md",
             "last_updated": "2025-12-25T20:20:59",
-            "days_stale": 31
+            "days_stale": 32
         },
         {
             "path": "docs/work/archive/WORK-E2-088-epistemic-state-slim-down.md",
@@ -7517,7 +7541,7 @@
         {
             "path": "docs/work/archive/WORK-E2-090-script-to-skill-migration.md",
             "last_updated": "2025-12-24T20:10:44",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/work/archive/WORK-E2-096-cycle-state-frontmatter.md",
@@ -7602,12 +7626,12 @@
         {
             "path": "docs/work/archive/WORK-E2-154-scaffold-on-entry-hook-inv-022-phase-2.md",
             "last_updated": "2025-12-23T19:59:38",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/work/archive/WORK-E2-155-node-exit-gates-inv-022-phase-2.md",
             "last_updated": "2025-12-23T20:15:12",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/work/archive/WORK-E2-160-work-file-prerequisite-gate.md",
@@ -7617,7 +7641,7 @@
         {
             "path": "docs/work/archive/WORK-E2-162-just-recipes-for-node-transitions.md",
             "last_updated": "2025-12-24T19:51:17",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/work/archive/WORK-E2-165-checkpoint-skill-with-git-commit.md",
@@ -7712,12 +7736,12 @@
         {
             "path": "docs/work/archive/WORK-E2-187-async-validator-agent.md",
             "last_updated": "2025-12-25T19:54:26",
-            "days_stale": 31
+            "days_stale": 32
         },
         {
             "path": "docs/work/archive/WORK-E2-188-batch-work-item-metadata-tool.md",
             "last_updated": "2025-12-25T19:34:15",
-            "days_stale": 31
+            "days_stale": 32
         },
         {
             "path": "docs/work/archive/WORK-E2-189-dod-validation-cycle-skill.md",
@@ -7727,12 +7751,12 @@
         {
             "path": "docs/work/archive/WORK-E2-190-close-command-full-status-update.md",
             "last_updated": "2025-12-25T19:47:21",
-            "days_stale": 31
+            "days_stale": 32
         },
         {
             "path": "docs/work/archive/WORK-E2-191-work-file-population-governance-gate.md",
             "last_updated": "2025-12-25T19:52:28",
-            "days_stale": 31
+            "days_stale": 32
         },
         {
             "path": "docs/work/archive/WORK-E2-200-create-invariantsmd-with-extracted-evergreen-facts.md",
@@ -7772,6 +7796,11 @@
         {
             "path": "docs/work/archive/WORK-E2-208-coldstart-work-routing.md",
             "last_updated": "2025-12-27T16:07:34",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/work/archive/WORK-E2-209-cycle-skill-chain-phases.md",
+            "last_updated": "2025-12-27T19:46:51",
             "days_stale": 30
         },
         {
@@ -7846,9 +7875,9 @@
         }
     ],
     "workspace": {
-        "total_files": 488,
+        "total_files": 490,
         "by_template": {
-            "checkpoint": 239,
+            "checkpoint": 241,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7860,7 +7889,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 75,
+            "unknown": 77,
             "draft": 2,
             "approved": 6,
             "ready": 1,
@@ -7875,7 +7904,7 @@
             "duplicate": 1,
             "deferred": 1
         },
-        "stale_count": 344
+        "stale_count": 346
     },
     "alignment": {
         "aligned": [

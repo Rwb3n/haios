@@ -1,9 +1,10 @@
 # generated: 2026-01-24
-# System Auto: last updated on: 2026-01-24T20:46:37
+# System Auto: last updated on: 2026-01-26T20:11:29
 """
 Coldstart Orchestrator for Configuration Arc.
 
 CH-007: Wires IdentityLoader, SessionLoader, WorkLoader into unified coldstart.
+E2-236: Adds orphan session detection before context loading phases.
 Follows sibling loader patterns (identity_loader.py, session_loader.py).
 
 Usage:
@@ -69,6 +70,42 @@ class ColdstartOrchestrator:
                 ]
             }
 
+    def _check_for_orphans(self) -> Optional[str]:
+        """
+        Check for orphan sessions and incomplete work (E2-236).
+
+        Returns:
+            Warning message if orphans found, else None
+        """
+        try:
+            # Import from sibling module (same directory)
+            from governance_events import detect_orphan_session, scan_incomplete_work, log_session_end
+
+            project_root = Path(__file__).parent.parent.parent.parent
+            warnings = []
+
+            # Check for orphan session
+            orphan = detect_orphan_session()
+            if orphan:
+                warnings.append("=== ORPHAN SESSION DETECTED ===")
+                warnings.append(f"Session {orphan['orphan_session']} started but never ended.")
+                warnings.append(f"Current session: {orphan['current_session']}")
+                # Log synthetic end for orphan
+                log_session_end(orphan['orphan_session'], "SYNTHETIC_RECOVERY")
+                warnings.append(f"(Logged synthetic session-end for session {orphan['orphan_session']})")
+
+            # Check for incomplete work transitions
+            incomplete = scan_incomplete_work(project_root)
+            if incomplete:
+                warnings.append("=== INCOMPLETE WORK DETECTED ===")
+                for item in incomplete:
+                    warnings.append(f"- {item['id']}: stuck in '{item['incomplete_node']}'")
+
+            return "\n".join(warnings) if warnings else None
+        except Exception as e:
+            logger.warning(f"Orphan detection failed: {e}")
+            return None
+
     def run(self) -> str:
         """
         Execute all phases with breathing room.
@@ -78,6 +115,14 @@ class ColdstartOrchestrator:
             [READY FOR SELECTION] markers.
         """
         output = []
+
+        # PHASE 0: Orphan detection (E2-236)
+        recovery_result = self._check_for_orphans()
+        if recovery_result:
+            output.append("[PHASE: RECOVERY]")
+            output.append(recovery_result)
+            output.append("\n[BREATHE]\n")
+
         phases = self.config.get("phases", [])
 
         for phase in phases:

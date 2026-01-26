@@ -1,5 +1,5 @@
 # generated: 2025-12-29
-# System Auto: last updated on: 2025-12-29T09:26:12
+# System Auto: last updated on: 2026-01-26T20:10:22
 """
 Governance event logging and threshold monitoring.
 
@@ -11,6 +11,8 @@ Thresholds trigger actions when patterns are detected.
 Event Types:
 - CyclePhaseEntered: Logged when agent enters a cycle phase (PLAN, DO, CHECK, DONE)
 - ValidationOutcome: Logged when validation gate passes/blocks (preflight, dod, observation)
+- SessionStarted: Logged when a session begins (E2-236)
+- SessionEnded: Logged when a session ends (E2-236)
 
 Usage:
     from governance_events import log_phase_transition, log_validation_outcome
@@ -84,6 +86,159 @@ def log_validation_outcome(
         _check_repeated_failure(gate, work_id)
 
     return event
+
+
+# =============================================================================
+# E2-236: Session Lifecycle Events and Orphan Detection
+# =============================================================================
+
+
+def log_session_start(session_number: int, agent: str) -> dict:
+    """
+    Log session start event.
+
+    Args:
+        session_number: Current session number
+        agent: Agent name (e.g., "Hephaestus")
+
+    Returns:
+        The logged event dict
+    """
+    event = {
+        "type": "SessionStarted",
+        "session": session_number,
+        "agent": agent,
+        "timestamp": datetime.now().isoformat(),
+    }
+    _append_event(event)
+    return event
+
+
+def log_session_end(session_number: int, agent: str) -> dict:
+    """
+    Log session end event.
+
+    Args:
+        session_number: Current session number
+        agent: Agent name
+
+    Returns:
+        The logged event dict
+    """
+    event = {
+        "type": "SessionEnded",
+        "session": session_number,
+        "agent": agent,
+        "timestamp": datetime.now().isoformat(),
+    }
+    _append_event(event)
+    return event
+
+
+def detect_orphan_session(events_file: Optional[Path] = None) -> Optional[dict]:
+    """
+    Detect orphan session (started but never ended).
+
+    Scans events for SessionStarted without matching SessionEnded.
+
+    Args:
+        events_file: Path to events JSONL (default: EVENTS_FILE constant)
+
+    Returns:
+        Dict with orphan_session, current_session if orphan found, else None
+    """
+    # Use read_events() which reads from EVENTS_FILE, or read custom path for testing
+    if events_file is None:
+        events = read_events()
+    else:
+        # For testing: read from custom path
+        events = []
+        if events_file.exists():
+            with open(events_file, encoding="utf-8") as f:
+                for line in f:
+                    if line.strip():
+                        try:
+                            events.append(json.loads(line))
+                        except json.JSONDecodeError:
+                            continue
+
+    # Track session starts and ends
+    started = set()
+    ended = set()
+    latest_start = None
+
+    for e in events:
+        if e.get("type") == "SessionStarted":
+            started.add(e.get("session"))
+            latest_start = e.get("session")
+        elif e.get("type") == "SessionEnded":
+            ended.add(e.get("session"))
+
+    # Find orphans (started but not ended, excluding current)
+    orphans = started - ended
+    if latest_start in orphans:
+        orphans.discard(latest_start)  # Current session isn't orphan yet
+
+    if orphans:
+        orphan_session = max(orphans)  # Most recent orphan
+        return {
+            "orphan_session": orphan_session,
+            "current_session": latest_start,
+        }
+    return None
+
+
+def scan_incomplete_work(project_root: Path) -> list[dict]:
+    """
+    Scan WORK.md files for incomplete transitions (exited: null).
+
+    Per INV-052 Section 2A: Scan for `exited: null` entries in node_history.
+
+    Args:
+        project_root: Project root path
+
+    Returns:
+        List of dicts with id, incomplete_node, path
+    """
+    import re
+
+    work_dirs = [
+        project_root / "docs" / "work" / "active",
+        project_root / "docs" / "work" / "blocked",
+    ]
+    incomplete = []
+
+    for dir_path in work_dirs:
+        if not dir_path.exists():
+            continue
+        for subdir in dir_path.iterdir():
+            if not subdir.is_dir():
+                continue
+            work_file = subdir / "WORK.md"
+            if not work_file.exists():
+                continue
+
+            content = work_file.read_text(encoding="utf-8", errors="ignore")
+            # Parse YAML frontmatter
+            match = re.match(r"^---\s*\n(.*?)\n---", content, re.DOTALL)
+            if not match:
+                continue
+
+            yaml_content = match.group(1)
+            # Check for exited: null in node_history
+            if "exited: null" in yaml_content or "exited: ~" in yaml_content:
+                # Extract id
+                id_match = re.search(r"id:\s*(\S+)", yaml_content)
+                # Extract current node
+                node_match = re.search(r"node:\s*(\S+)", yaml_content)
+                if id_match:
+                    incomplete.append({
+                        "id": id_match.group(1).strip(),
+                        "incomplete_node": node_match.group(1).strip() if node_match else "unknown",
+                        "path": str(work_file.relative_to(project_root)),
+                    })
+
+    return incomplete
 
 
 def get_threshold_warnings(work_id: str) -> list[str]:
