@@ -1,23 +1,21 @@
 ---
 template: work_item
 id: E2-305
-title: Mitigate E2-294 Collision
+title: Add PreToolUse Bash Guard for Scaffold Recipes
 type: implementation
-status: complete
+status: active
 owner: Hephaestus
-created: 2026-01-26
-spawned_by: INV-072
-chapter: null
-arc: workuniversal
-closed: '2026-01-26'
+created: 2026-01-27
+spawned_by: INV-070
+chapter: CH-004
+arc: migration
+closed: null
 priority: high
 effort: small
 traces_to:
-- REQ-CONTEXT-001
+- REQ-GOVERN-002
 requirement_refs: []
-source_files:
-- docs/work/active/E2-294/WORK.md
-- docs/work/active/E2-294/plans/PLAN.md
+source_files: []
 acceptance_criteria: []
 blocked_by: []
 blocks: []
@@ -25,18 +23,17 @@ enables: []
 current_node: backlog
 node_history:
 - node: backlog
-  entered: 2026-01-26 21:38:26
+  entered: 2026-01-27 22:12:16
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs:
-- 82476
+memory_refs: []
 extensions: {}
 version: '2.0'
-generated: 2026-01-26
-last_updated: '2026-01-26T22:21:20'
+generated: 2026-01-27
+last_updated: '2026-01-27T22:12:53'
 ---
-# E2-305: Mitigate E2-294 Collision
+# E2-305: Add PreToolUse Bash Guard for Scaffold Recipes
 
 @docs/README.md
 @docs/epistemic_state.md
@@ -45,40 +42,31 @@ last_updated: '2026-01-26T22:21:20'
 
 ## Context
 
-**Problem:** E2-294 currently has mismatched WORK.md and PLAN.md due to ID collision (INV-072). The WORK.md describes "Wire Session Event Logging into Lifecycle" but PLAN.md contains "Wire implementation-cycle and investigation-cycle with set-cycle" from Session 196.
+**Problem:** The PreToolUse hook blocks raw Write/Edit to governed paths but has NO guard for Bash calls to scaffold recipes (`just work`, `just plan`, `just inv`, `just scaffold`, `just new-investigation`). Agents can bypass governance by calling these recipes directly, producing files with unfilled template placeholders like `type: {{TYPE}}`.
 
-**Root cause:** Session 245 reused E2-294 ID which was already completed in Session 196.
+**Root cause:** Scaffold recipes predate cycle skills. The PreToolUse hook was designed to guard file writes, not Bash recipe invocations.
 
-**Decision needed:** Restore original E2-294 from git and create new E2-306 for session logging, OR keep current E2-294 and delete stale PLAN.md.
+**Fix:** Add a pattern match in the PreToolUse Bash handler that detects scaffold recipe calls and blocks them with a message redirecting to `/new-*` commands.
 
 ---
 
 ## Deliverables
 
-- [x] Decide: restore vs keep current (operator decision) - RESTORE chosen
-- [x] If restore: `git checkout 921c8c3 -- docs/work/active/E2-294/` and create E2-306
-- [x] Verify E2-294 has consistent WORK.md and PLAN.md (both now Session 196 set-cycle wiring)
-- [x] E2-236 does not reference E2-294 (verified via Grep)
+- [ ] PreToolUse Bash guard pattern matching `just (work|plan|inv|scaffold|new-investigation)` calls
+- [ ] Block message redirecting to appropriate `/new-*` command
+- [ ] Test coverage for the new guard
 
 ---
 
 ## History
 
-### 2026-01-26 - Created (Session 246)
-- Spawned from INV-072 (Spawn ID Collision investigation)
-- High priority: E2-294 is queue head but unusable
-
-### 2026-01-26 - Completed (Session 246)
-- Operator chose "Restore + Create E2-306" approach
-- Restored E2-294 to Session 196 state via `git checkout 921c8c3`
-- Created E2-306 for session logging work
-- E2-294 now consistent: set-cycle wiring (complete)
-- E2-306 now holds session logging work (pending)
+### 2026-01-27 - Created (Session 251)
+- Spawned from INV-070 Legacy Scaffold Recipe Audit
 
 ---
 
 ## References
 
-- @docs/work/active/INV-072/investigations/001-spawn-id-collision-completed-work-items-reused.md (source investigation)
-- @docs/work/active/E2-294/WORK.md (collision victim - current state)
-- @docs/work/active/E2-294/plans/PLAN.md (stale from Session 196)
+- @docs/work/active/INV-070/WORK.md (parent investigation)
+- @.claude/hooks/pre_tool_use.py (target file)
+- @.claude/haios/epochs/E2_3/arcs/migration/CH-004-recipe-audit.md

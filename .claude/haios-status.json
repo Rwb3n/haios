@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-27T21:25:19",
+    "generated": "2026-01-27T22:20:33",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 249,
-        "current_session": 249,
+        "prior_session": 250,
+        "current_session": 250,
         "prior_date": "2026-01-27",
         "completed": [],
         "completed_count": 0,
@@ -35,7 +35,7 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82348,
+        "concepts": 82350,
         "entities": 9287,
         "backlog_pending": 0
     },
@@ -190,7 +190,6 @@
                 "E2-235",
                 "E2-236",
                 "E2-249",
-                "E2-306",
                 "INV-021",
                 "E2-151",
                 "E2-152",
@@ -244,7 +243,6 @@
                 "E2-214",
                 "E2-235",
                 "E2-236",
-                "E2-306",
                 "E2-151",
                 "E2-152",
                 "E2-163",
@@ -3051,6 +3049,24 @@
             "status": null,
             "date": "2026-01-27",
             "last_updated": "2026-01-27T00:32:26",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-27-03-SESSION-250-work-027-test-import-migration-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-27",
+            "last_updated": "2026-01-27T21:27:17",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-27-04-SESSION-250-inv-069-timestamp-hook-investigation-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-27",
+            "last_updated": "2026-01-27T21:57:52",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6208,7 +6224,7 @@
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-22-gap-b3-complete.md",
             "last_updated": "2025-12-03T21:54:50",
-            "days_stale": 54
+            "days_stale": 55
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-23-docs-ingestion-embedding-gap.md",
@@ -6228,7 +6244,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-25-embedding-fix-research-synthesis.md",
             "last_updated": "2025-12-04T22:02:49",
-            "days_stale": 53
+            "days_stale": 54
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
@@ -6603,7 +6619,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-05-SESSION-94-m5-complete-e2-125-e2-129-migration.md",
             "last_updated": "2025-12-21T21:32:14",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/checkpoints/2025-12-21-06-SESSION-95-e2-130-error-capture-rebuild-and-taxonomy-discussion.md",
@@ -6633,7 +6649,7 @@
         {
             "path": "docs/checkpoints/2025-12-22-05-SESSION-100-m4-complete-inv-020-channeling-patterns.md",
             "last_updated": "2025-12-22T21:41:04",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-23-01-SESSION-101-inv-022-work-cycle-dag-architecture-complete.md",
@@ -6743,7 +6759,7 @@
         {
             "path": "docs/checkpoints/2025-12-25-07-SESSION-120-inv-036-audit-and-e2-165-checkpoint-skill.md",
             "last_updated": "2025-12-25T21:34:08",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/checkpoints/2025-12-26-01-SESSION-121-inv-037-context-level-architecture-and-invariants-implementation.md",
@@ -6798,7 +6814,7 @@
         {
             "path": "docs/checkpoints/2025-12-27-07-SESSION-131-e2-210-complete-e2-212-infrastructure-ready.md",
             "last_updated": "2025-12-27T22:04:17",
-            "days_stale": 30
+            "days_stale": 31
         },
         {
             "path": "docs/checkpoints/2025-12-28-01-SESSION-132-e2-212-consumer-verification-and-memory-ux-investigation.md",
@@ -6838,6 +6854,11 @@
         {
             "path": "docs/checkpoints/2025-12-28-08-SESSION-139-e2-223-e2-222-routing-gate-integration-and-threshold-config.md",
             "last_updated": "2025-12-28T20:55:23",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/checkpoints/2025-12-28-09-SESSION-140-e2-220-e2-225-e2-024-ground-truth-verification-and-dependency-validator.md",
+            "last_updated": "2025-12-28T21:42:56",
             "days_stale": 30
         },
         {
@@ -7113,7 +7134,7 @@
         {
             "path": "docs/plans/PLAN-E2-165-checkpoint-skill-with-git-commit.md",
             "last_updated": "2025-12-25T21:26:46",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/plans/PLAN-E2-170-backfill-work-items-from-archived-backlog.md",
@@ -7128,7 +7149,7 @@
         {
             "path": "docs/plans/PLAN-E2-173-work-file-milestone-discovery.md",
             "last_updated": "2025-12-24T21:28:42",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/plans/PLAN-E2-176-document-gate-contract-pattern.md",
@@ -7743,7 +7764,7 @@
         {
             "path": "docs/work/archive/WORK-E2-165-checkpoint-skill-with-git-commit.md",
             "last_updated": "2025-12-25T21:27:39",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/work/archive/WORK-E2-166-close-git-commit-step.md",
@@ -7783,7 +7804,7 @@
         {
             "path": "docs/work/archive/WORK-E2-173-work-file-milestone-discovery.md",
             "last_updated": "2025-12-24T21:29:09",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/work/archive/WORK-E2-176-document-gate-contract-pattern.md",
@@ -7977,9 +7998,9 @@
         }
     ],
     "workspace": {
-        "total_files": 495,
+        "total_files": 497,
         "by_template": {
-            "checkpoint": 246,
+            "checkpoint": 248,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7991,7 +8012,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 82,
+            "unknown": 84,
             "draft": 2,
             "approved": 6,
             "ready": 1,
@@ -8006,7 +8027,7 @@
             "duplicate": 1,
             "deferred": 1
         },
-        "stale_count": 357
+        "stale_count": 358
     },
     "alignment": {
         "aligned": [

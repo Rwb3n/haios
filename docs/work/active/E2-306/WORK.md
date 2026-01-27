@@ -1,54 +1,39 @@
 ---
 template: work_item
 id: E2-306
-title: Wire Session Event Logging into Lifecycle
+title: Remove Legacy new-investigation Compound Recipe
 type: implementation
-status: complete
+status: active
 owner: Hephaestus
-created: 2026-01-26
-spawned_by: E2-236
-chapter: null
-arc: configuration
-milestone: M7b-WorkInfra
-closed: '2026-01-26'
-priority: high
+created: 2026-01-27
+spawned_by: INV-070
+chapter: CH-004
+arc: migration
+closed: null
+priority: medium
 effort: small
 traces_to:
-- REQ-CONTEXT-001
+- REQ-GOVERN-002
 requirement_refs: []
-source_files:
-- .claude/haios/lib/governance_events.py
-- justfile
+source_files: []
 acceptance_criteria: []
 blocked_by: []
 blocks: []
 enables: []
-current_node: implement
+current_node: backlog
 node_history:
 - node: backlog
-  entered: 2026-01-26 22:20:22
-  exited: '2026-01-26T23:04:06.104600'
-- node: plan
-  entered: '2026-01-26T23:04:06.104600'
-  exited: '2026-01-26T23:13:17.607562'
-- node: implement
-  entered: '2026-01-26T23:13:17.607562'
+  entered: 2026-01-27 22:12:21
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs:
-- 82480
-- 82481
-- 82482
-- 82491
-- 82492
-- 82493
+memory_refs: []
 extensions: {}
 version: '2.0'
-generated: 2026-01-26
-last_updated: '2026-01-26T22:20:58'
+generated: 2026-01-27
+last_updated: '2026-01-27T22:13:12'
 ---
-# E2-306: Wire Session Event Logging into Lifecycle
+# E2-306: Remove Legacy new-investigation Compound Recipe
 
 @docs/README.md
 @docs/epistemic_state.md
@@ -57,38 +42,28 @@ last_updated: '2026-01-26T22:20:58'
 
 ## Context
 
-**Problem:** E2-236 implemented `log_session_start()` and `log_session_end()` functions in governance_events.py, but they are not wired into the actual session lifecycle. Without this wiring, `detect_orphan_session()` will never find orphans because no `SessionStarted` events exist.
+**Problem:** The `new-investigation` compound recipe in the justfile calls both `just work` and `just inv` sequentially. It is not called by any skill or module — it exists only for direct agent use, which bypasses governance. The `/new-investigation` command already exists and properly chains into work-creation-cycle.
 
-**Root cause:** Deferred during E2-236 to keep scope contained. The detection infrastructure exists but isn't triggered.
-
-**Source:** E2-236 plan Step 5 and checkpoint pending items
-
-**Note:** This work was originally spawned as E2-294 in Session 245, but that ID collided with completed Session 196 work. Renamed to E2-306 per INV-072 mitigation (E2-305).
+**Fix:** Remove the `new-investigation` recipe from the justfile. The `/new-investigation` command is the correct entry point.
 
 ---
 
 ## Deliverables
 
-- [ ] Modify `just session-start` to call `log_session_start(session_number, agent)`
-- [ ] Modify `just session-end` to call `log_session_end(session_number, agent)`
-- [ ] Verify events appear in `.claude/haios/governance-events.jsonl`
-- [ ] Test: run coldstart after session with events, verify no false orphan detection
+- [ ] Remove `new-investigation` recipe from justfile
+- [ ] Verify `/new-investigation` command still works without the recipe
+- [ ] Verify no skill/module references the removed recipe
 
 ---
 
 ## History
 
-### 2026-01-26 - Created (Session 246)
-- Originally created as E2-294 in Session 245
-- Renamed to E2-306 due to ID collision (INV-072, E2-305)
-- Spawned from E2-236 as follow-up work
-- High priority: completes orphan detection feature
+### 2026-01-27 - Created (Session 251)
+- Spawned from INV-070 Legacy Scaffold Recipe Audit
 
 ---
 
 ## References
 
-- @docs/work/active/E2-236/WORK.md (parent work)
-- @docs/work/active/E2-305/WORK.md (mitigation work that created this renaming)
-- @docs/work/active/INV-072/WORK.md (collision investigation)
-- @.claude/haios/lib/governance_events.py (functions exist at lines 96, 117)
+- @docs/work/active/INV-070/WORK.md (parent investigation)
+- @.claude/haios/epochs/E2_3/arcs/migration/CH-004-recipe-audit.md
