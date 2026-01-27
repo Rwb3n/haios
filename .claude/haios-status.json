@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-27T00:09:32",
+    "generated": "2026-01-27T00:31:44",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 247,
-        "current_session": 248,
+        "prior_session": 248,
+        "current_session": 249,
         "prior_date": "2026-01-26",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82329,
-        "entities": 9285,
+        "concepts": 82346,
+        "entities": 9287,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3033,6 +3033,15 @@
             "status": null,
             "date": "2026-01-26",
             "last_updated": "2026-01-26T23:55:35",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-27-01-SESSION-249-work-024-lib-path-investigation-complete-3-work-items-spawned.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-27",
+            "last_updated": "2026-01-27T00:10:53",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -7919,9 +7928,9 @@
         }
     ],
     "workspace": {
-        "total_files": 493,
+        "total_files": 494,
         "by_template": {
-            "checkpoint": 244,
+            "checkpoint": 245,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7933,7 +7942,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 80,
+            "unknown": 81,
             "draft": 2,
             "approved": 6,
             "ready": 1,

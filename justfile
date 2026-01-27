@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-26T23:13:55
+# System Auto: last updated on: 2026-01-27T00:28:42
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -67,44 +67,44 @@ close-work id:
 
 # Validate observation capture gate for work item (E2-217)
 validate-observations id:
-    python -c "import sys; sys.path.insert(0, '.claude/lib'); from observations import validate_observations; r = validate_observations('{{id}}'); print(f'Valid: {r[\"valid\"]}'); print(f'Message: {r[\"message\"]}'); sys.exit(0 if r['valid'] else 1)"
+    python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from observations import validate_observations; r = validate_observations('{{id}}'); print(f'Valid: {r[\"valid\"]}'); print(f'Message: {r[\"message\"]}'); sys.exit(0 if r['valid'] else 1)"
 
 # Scaffold observations.md for work item (E2-217)
 scaffold-observations id:
-    python -c "import sys; sys.path.insert(0, '.claude/lib'); from observations import scaffold_observations; r = scaffold_observations('{{id}}'); print(f'Created: {r}') if r else (print('Failed: Work directory not found'), sys.exit(1))"
+    python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from observations import scaffold_observations; r = scaffold_observations('{{id}}'); print(f'Created: {r}') if r else (print('Failed: Work directory not found'), sys.exit(1))"
 
 # Scan for work items with uncaptured observations (E2-217)
 scan-observations:
-    python -c "import sys; sys.path.insert(0, '.claude/lib'); from observations import scan_uncaptured_observations; r = scan_uncaptured_observations(); [print(f'{i[\"work_id\"]}: {i[\"status\"]} - {i[\"message\"]}') for i in r] if r else print('All observations captured.')"
+    python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from observations import scan_uncaptured_observations; r = scan_uncaptured_observations(); [print(f'{i[\"work_id\"]}: {i[\"status\"]} - {i[\"message\"]}') for i in r] if r else print('All observations captured.')"
 
 # Triage archived observations (E2-218)
 # Scans archived work items for untriaged observations and reports them
 triage-observations:
-    python -c "import sys; sys.path.insert(0, '.claude/lib'); from observations import scan_archived_observations; r = scan_archived_observations(); print(f'Found {len(r)} archived items with untriaged observations:'); [print(f'  {i[\"work_id\"]}: {len(i[\"observations\"])} observations') for i in r] if r else print('No untriaged observations found.')"
+    python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from observations import scan_archived_observations; r = scan_archived_observations(); print(f'Found {len(r)} archived items with untriaged observations:'); [print(f'  {i[\"work_id\"]}: {len(i[\"observations\"])} observations') for i in r] if r else print('No untriaged observations found.')"
 
 # Mark observation files as triaged (S205)
 # Usage: just mark-triaged E2-303 E2-302 E2-301
 # Adds triage_status: triaged and triage_session to frontmatter
 mark-triaged +work_ids:
-    python -c "import sys, json; sys.path.insert(0, '.claude/lib'); from observations import mark_triaged; data = json.load(open('.claude/haios-status.json')); session = str(data.get('session_delta', {}).get('current_session', 'unknown')); [print(f'{wid}: {mark_triaged(wid, session)}') for wid in '{{work_ids}}'.split()]"
+    python -c "import sys, json; sys.path.insert(0, '.claude/haios/lib'); from observations import mark_triaged; data = json.load(open('.claude/haios-status.json')); session = str(data.get('session_delta', {}).get('current_session', 'unknown')); [print(f'{wid}: {mark_triaged(wid, session)}') for wid in '{{work_ids}}'.split()]"
 
 # Show governance metrics from cycle events (E2-108)
 governance-metrics:
-    python -c "import sys, json; sys.path.insert(0, '.claude/lib'); from governance_events import get_governance_metrics; m = get_governance_metrics(); print(json.dumps(m, indent=2))"
+    python -c "import sys, json; sys.path.insert(0, '.claude/haios/lib'); from governance_events import get_governance_metrics; m = get_governance_metrics(); print(json.dumps(m, indent=2))"
 
 # Update haios-status.json with current system state (Python - E2-125)
 # Runs full status then slim status to keep both in sync
 update-status:
-    python -c "import sys; sys.path.insert(0, '.claude/lib'); from status import generate_full_status, write_full_status; full = generate_full_status(); write_full_status(full, '.claude/haios-status.json'); print('Full status updated')"
+    python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from status import generate_full_status, write_full_status; full = generate_full_status(); write_full_status(full, '.claude/haios-status.json'); print('Full status updated')"
     just update-status-slim
 
 # Update haios-status.json (dry run - preview without writing)
 update-status-dry:
-    python -c "import sys; sys.path.insert(0, '.claude/lib'); from status import generate_full_status; import json; full = generate_full_status(); print(json.dumps(full, indent=2)[:3000]); print('... (truncated)')"
+    python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from status import generate_full_status; import json; full = generate_full_status(); print(json.dumps(full, indent=2)[:3000]); print('... (truncated)')"
 
 # Update slim status only (Python - E2-120)
 update-status-slim:
-    python -c "import sys; sys.path.insert(0, '.claude/lib'); from status import generate_slim_status, write_slim_status; slim = generate_slim_status(); write_slim_status(slim, '.claude/haios-status-slim.json'); print('Slim status updated')"
+    python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from status import generate_slim_status, write_slim_status; slim = generate_slim_status(); write_slim_status(slim, '.claude/haios-status-slim.json'); print('Slim status updated')"
 
 # Cascade status change to dependent items (E2-251: Uses WorkEngine)
 cascade id status:
@@ -310,7 +310,7 @@ tree:
 
 # Show only current (active) milestone
 tree-current:
-    python -c "import sys, json; sys.path.insert(0, '.claude/lib'); s=json.load(open('.claude/haios-status-slim.json')); m=s.get('milestone',{}); print(f'{m.get(\"id\",\"?\")}: {m.get(\"progress\",0)}%'); import subprocess; subprocess.run(['python', 'scripts/plan_tree.py', '--milestone', m.get('id','')])"
+    python -c "import sys, json; sys.path.insert(0, '.claude/haios/lib'); s=json.load(open('.claude/haios-status-slim.json')); m=s.get('milestone',{}); print(f'{m.get(\"id\",\"?\")}: {m.get(\"progress\",0)}%'); import subprocess; subprocess.run(['python', 'scripts/plan_tree.py', '--milestone', m.get('id','')])"
 
 # Show what's ready to work on (unblocked items)
 ready:
@@ -386,12 +386,12 @@ stage-governance:
 
 # Audit: Find investigations active but work archived
 audit-sync:
-    @python -c "import sys; sys.path.insert(0, '.claude/lib'); from audit import audit_sync; [print(i) for i in audit_sync()]"
+    @python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from audit import audit_sync; [print(i) for i in audit_sync()]"
 
 # Audit: Find work items with complete plans but still active
 audit-gaps:
-    @python -c "import sys; sys.path.insert(0, '.claude/lib'); from audit import audit_gaps; [print(i) for i in audit_gaps()]"
+    @python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from audit import audit_gaps; [print(i) for i in audit_gaps()]"
 
 # Audit: Find investigations older than 10 sessions
 audit-stale:
-    @python -c "import sys; sys.path.insert(0, '.claude/lib'); from audit import audit_stale; [print(i) for i in audit_stale()]"
+    @python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from audit import audit_stale; [print(i) for i in audit_stale()]"
