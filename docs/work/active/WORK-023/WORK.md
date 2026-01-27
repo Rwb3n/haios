@@ -3,16 +3,17 @@ template: work_item
 id: WORK-023
 title: scan_incomplete_work false positives - ignores status field
 type: bug
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-26
 spawned_by: null
 chapter: null
 arc: configuration
-closed: null
+closed: '2026-01-26'
 priority: high
 effort: small
-traces_to: []
+traces_to:
+- REQ-CONTEXT-001
 requirement_refs: []
 source_files:
 - .claude/haios/lib/governance_events.py
@@ -27,11 +28,14 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 82509
+- 82510
+- 82512
 extensions: {}
 version: '2.0'
 generated: 2026-01-26
-last_updated: '2026-01-26T23:23:24'
+last_updated: '2026-01-26T23:50:52'
 ---
 # WORK-023: scan_incomplete_work false positives - ignores status field
 
@@ -55,9 +59,9 @@ last_updated: '2026-01-26T23:23:24'
 
 ## Deliverables
 
-- [ ] Fix `scan_incomplete_work()` to filter out `status: complete` and `status: archived`
-- [ ] Verify coldstart no longer reports completed work as "stuck"
-- [ ] Add test coverage for the fix
+- [x] Fix `scan_incomplete_work()` to filter out `status: complete` and `status: archived`
+- [x] Verify coldstart no longer reports completed work as "stuck"
+- [x] Add test coverage for the fix
 
 ---
 
