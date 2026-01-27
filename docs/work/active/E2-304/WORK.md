@@ -7,13 +7,14 @@ status: active
 owner: Hephaestus
 created: 2026-01-26
 spawned_by: INV-072
-chapter: null
+chapter: CH-005
 arc: workuniversal
 closed: null
 priority: high
 effort: small
 traces_to:
 - REQ-TRACE-004
+- REQ-VALID-001
 requirement_refs: []
 source_files:
 - .claude/haios/modules/work_engine.py
@@ -33,7 +34,7 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: 2026-01-26
-last_updated: '2026-01-26T21:39:02'
+last_updated: '2026-01-27T23:17:35'
 ---
 # E2-304: Add Status-Aware ID Validation to Work Creation
 

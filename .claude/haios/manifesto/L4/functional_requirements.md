@@ -1,5 +1,5 @@
 # generated: 2026-01-24
-# System Auto: last updated on: 2026-01-25T09:29:21
+# System Auto: last updated on: 2026-01-27T23:16:25
 # L4: Functional Requirements
 
 Level: L4
@@ -17,6 +17,8 @@ Derived from: L3 principles + agent_user_requirements.md
 | REQ-TRACE-001 | Traceability | Work items include `traces_to:` field | L3.7, L3.11 | WORK.md template |
 | REQ-TRACE-002 | Traceability | Work creation validates `traces_to:` | L3.7, L3.15, L3.18 | work-creation-cycle |
 | REQ-TRACE-003 | Traceability | Close validates requirement addressed | L3.7, L3.18 | close-work-cycle |
+| REQ-TRACE-004 | Traceability | Work items MUST trace to existing chapter file | L3.7, L3.11 | WorkEngine.get_ready() |
+| REQ-TRACE-005 | Traceability | Full chain: L4 → Epoch → Arc → Chapter → Work | L3.7 | work-creation-cycle |
 | REQ-CONTEXT-001 | Context | Coldstart MUST inject prior session context | L3.3, L3.16 | ColdstartOrchestrator |
 | REQ-CONTEXT-002 | Context | Files are context windows for next node | L3.3 | Gate output files |
 | REQ-CONTEXT-003 | Context | Memory refs MUST be queried on document load | L3.3, L3.14 | Memory refs rule |
@@ -27,6 +29,9 @@ Derived from: L3 principles + agent_user_requirements.md
 | REQ-MEMORY-002 | Memory | Query before deciding (retrieval over generation) | L3.2, L3.14 | memory-agent skill |
 | REQ-WORK-001 | Work | Work items track lifecycle via node_history | L3.1, L3.7 | WorkEngine |
 | REQ-WORK-002 | Work | Status over location (ADR-041) | L3.1 | Work item structure |
+| REQ-VALID-001 | Validation | Work creation MUST validate ID availability against terminal statuses | L3.1, L3.5 | WorkEngine, scaffold.py |
+| REQ-VALID-002 | Validation | Scaffold templates MUST produce files with all required fields populated | L3.2 | scaffold.py |
+| REQ-VALID-003 | Validation | Plan validation MUST check for unresolved decisions before DO phase | L3.1, L3.15 | plan-validation-cycle Gate 4 |
 
 *Registry grows as requirements are enumerated from L3 principles.*
 
@@ -41,11 +46,32 @@ Derived from: L3 principles + agent_user_requirements.md
 | **REQ-TRACE-001** | Work items MUST include `traces_to:` field in frontmatter | L3.7, L3.11 | WORK.md template includes field |
 | **REQ-TRACE-002** | Work creation MUST validate `traces_to:` references a valid requirement ID | L3.7, L3.15, L3.18 | `work-creation-cycle` blocks on empty/invalid `traces_to:` |
 | **REQ-TRACE-003** | Close-work-cycle MUST verify the traced requirement was addressed | L3.7, L3.18 | DoD validation includes requirement satisfaction check |
+| **REQ-TRACE-004** | Work items MUST trace to an existing chapter file. No chapter → BLOCKED. | L3.7, L3.11 | `WorkEngine.get_ready()` filters items without chapter file |
+| **REQ-TRACE-005** | Full traceability chain MUST exist: L4 Requirement → Epoch → Arc → Chapter → Work Item | L3.7 | `work-creation-cycle` validates chain before READY |
 
 **Invariants:**
 - Traceability is governance, not documentation (enforcement over enablement)
 - Invalid requirement IDs MUST block, not warn
 - Requirement IDs follow pattern: `REQ-{DOMAIN}-{NNN}` (e.g., `REQ-TRACE-001`)
+- **No chapter file → work item BLOCKED** (REQ-TRACE-004)
+- **Orphan work items are invalid** - every work item must trace up to L4 (REQ-TRACE-005)
+
+---
+
+## Validation Requirements
+
+*Derived from L3.1 (Certainty Ratchet) + L3.5 (Reversibility) + L3.2 (Evidence Over Assumption)*
+
+| ID | Requirement | Derives From | Acceptance Test |
+|----|-------------|--------------|-----------------|
+| **REQ-VALID-001** | Work creation MUST validate ID availability against terminal statuses (complete/archived) | L3.1, L3.5 | `create_work()` raises on ID with terminal status |
+| **REQ-VALID-002** | Scaffold templates MUST produce files with all required fields populated (no `{{PLACEHOLDER}}` in output) | L3.2 | Scaffolded files pass template validation |
+| **REQ-VALID-003** | Plan validation MUST check Open Decisions for `[BLOCKED]` entries before DO phase | L3.1, L3.15 | plan-validation-cycle Gate 4 blocks on unresolved decisions |
+
+**Invariants:**
+- Validation is enforcement, not documentation (L3.15: enforcement over enablement)
+- Terminal status collision MUST block, not warn (data loss is irreversible)
+- REQ-VALID-002 supersedes scaffold recipes — `/new-*` commands are the governed path
 
 ---
 

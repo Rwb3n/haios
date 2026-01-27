@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-27T22:20:33",
+    "generated": "2026-01-27T22:46:44",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -9,7 +9,7 @@
     },
     "session_delta": {
         "prior_session": 250,
-        "current_session": 250,
+        "current_session": 251,
         "prior_date": "2026-01-27",
         "completed": [],
         "completed_count": 0,
@@ -3067,6 +3067,15 @@
             "status": null,
             "date": "2026-01-27",
             "last_updated": "2026-01-27T21:57:52",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-27-05-SESSION-251-inv-070-legacy-scaffold-recipe-audit-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-27",
+            "last_updated": "2026-01-27T22:21:41",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6254,7 +6263,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-prototype-consolidation.md",
             "last_updated": "2025-12-04T22:30:47",
-            "days_stale": 53
+            "days_stale": 54
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-comprehensive-checkpoint.md",
@@ -7369,12 +7378,12 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-008-haios-status-json-optimization.md",
             "last_updated": "2025-12-22T22:37:14",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-009-backlog-archival-governance.md",
             "last_updated": "2025-12-22T22:37:32",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-010-memory-retrieval-architecture-mismatch.md",
@@ -7384,7 +7393,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-011-command-skill-architecture-gap.md",
             "last_updated": "2025-12-22T22:45:09",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-012-static-registration-anti-pattern-mitigation.md",
@@ -7414,7 +7423,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-018-adaptive-coldstart-query-formulation.md",
             "last_updated": "2025-12-22T22:39:13",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-020-llm-energy-channeling-patterns.md",
@@ -7998,9 +8007,9 @@
         }
     ],
     "workspace": {
-        "total_files": 497,
+        "total_files": 498,
         "by_template": {
-            "checkpoint": 248,
+            "checkpoint": 249,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8012,7 +8021,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 84,
+            "unknown": 85,
             "draft": 2,
             "approved": 6,
             "ready": 1,

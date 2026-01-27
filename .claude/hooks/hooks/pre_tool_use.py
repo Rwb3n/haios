@@ -1,12 +1,13 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-01-21T20:11:14
+# System Auto: last updated on: 2026-01-27T22:35:47
 """
 PreToolUse Hook Handler (E2-085).
 
 Governance enforcement:
 1. SQL blocking (E2-020) - blocks direct SQL without schema-verifier
 2. PowerShell blocking (Session 133) - blocks PowerShell through bash (toggle-controlled)
-3. Path governance - blocks raw writes to governed paths
+3. Scaffold recipe blocking (E2-305) - blocks just work/plan/inv/scaffold calls
+4. Path governance - blocks raw writes to governed paths
 4. Plan validation (E2-015) - requires backlog_id in plans
 5. Memory reference warning (E2-021) - warns on missing memory_refs
 6. Backlog ID uniqueness (E2-141) - blocks duplicate backlog_id values
@@ -78,6 +79,11 @@ def handle(hook_data: dict) -> Optional[dict]:
 
         # Check PowerShell (toggle-controlled)
         result = _check_powershell_governance(command)
+        if result:
+            return result
+
+        # Check scaffold recipes (E2-305)
+        result = _check_scaffold_governance(command)
         if result:
             return result
 
@@ -193,6 +199,38 @@ def _check_powershell_governance(command: str) -> Optional[dict]:
                 "Use instead: just recipes, Glob/Grep/Read tools, or Python scripts. "
                 "MUST NOT enable PowerShell bypass without operator permission. "
                 "Toggle: .claude/haios/config/haios.yaml (toggles.block_powershell)"
+            )
+
+    return None
+
+
+def _check_scaffold_governance(command: str) -> Optional[dict]:
+    """
+    Block direct scaffold recipe calls (E2-305).
+
+    Scaffold recipes predate cycle skills and produce files with unfilled
+    template placeholders. Agents must use /new-* commands instead.
+
+    Returns deny response if scaffold recipe detected, None otherwise.
+    """
+    if not command:
+        return None
+
+    # Detect scaffold recipe patterns
+    # Note: scaffold uses (?:\s|$) not \b to avoid matching scaffold-observations
+    scaffold_patterns = {
+        r'\bjust\s+work\b': "/new-work",
+        r'\bjust\s+plan\b': "/new-plan",
+        r'\bjust\s+inv\b': "/new-investigation",
+        r'\bjust\s+scaffold(?:\s|$)': "/new-work, /new-plan, or /new-investigation",
+        r'\bjust\s+new-investigation\b': "/new-investigation",
+    }
+
+    for pattern, redirect in scaffold_patterns.items():
+        if re.search(pattern, command, re.IGNORECASE):
+            return _deny(
+                f"BLOCKED: Direct scaffold recipe call. Use '{redirect}' command instead. "
+                "Scaffold recipes produce files with unfilled placeholders."
             )
 
     return None

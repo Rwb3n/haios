@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-21T18:28:40
+# System Auto: last updated on: 2026-01-27T23:17:50
 # Arc: WorkUniversal
 
 ## Arc Definition
@@ -37,7 +37,7 @@ Define and implement the universal work item structure for pipeline portability.
 | CH-002 | TemplateUpdate | **Complete** | Template matches TRD (verified Session 218) |
 | CH-003 | WorkEngineAdapt | **Complete** | WorkEngine has backward compat, `type` falls back to `category` |
 | CH-004 | ScaffoldUpdate | **Complete** | `get_next_work_id()` generates WORK-XXX |
-| CH-005 | ValidationRules | Deferred | Basic validation exists; advanced rules post-migration |
+| CH-005 | ValidationRules | **Active** | Status-aware ID validation (E2-304), scaffold validation |
 
 ---
 

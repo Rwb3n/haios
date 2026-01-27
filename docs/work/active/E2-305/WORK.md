@@ -3,13 +3,13 @@ template: work_item
 id: E2-305
 title: Add PreToolUse Bash Guard for Scaffold Recipes
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-27
 spawned_by: INV-070
 chapter: CH-004
 arc: migration
-closed: null
+closed: '2026-01-27'
 priority: high
 effort: small
 traces_to:

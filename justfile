@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-27T00:28:42
+# System Auto: last updated on: 2026-01-27T22:45:37
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -28,12 +28,6 @@ plan id title *args:
 
 inv id title *args:
     just scaffold investigation {{id}} "{{title}}" {{args}}
-
-# Create work item + investigation document in one step (S193, ARC-008)
-# Usage: just new-investigation INV-068 "My Investigation Title"
-new-investigation id title:
-    just work {{id}} "{{title}}"
-    just inv {{id}} "{{title}}"
 
 adr id title:
     just scaffold architecture_decision_record {{id}} "{{title}}"

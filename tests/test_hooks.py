@@ -1,5 +1,5 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-01-14T22:10:45
+# System Auto: last updated on: 2026-01-27T22:33:39
 """
 Tests for Python hook dispatcher (E2-085).
 
@@ -268,6 +268,52 @@ class TestPreToolUseSqlBlocking:
             "tool_input": {"file_path": "/some/file.py"}
         }
         result = dispatch_hook(hook_input)
+        assert result is None
+
+
+class TestPreToolUseScaffoldBlocking:
+    """Test: PreToolUse scaffold recipe blocking (E2-305)."""
+
+    def test_blocks_just_work_recipe(self):
+        """Verify 'just work' is blocked with redirect to /new-work."""
+        from hooks.pre_tool_use import handle
+        result = handle({"tool_name": "Bash", "tool_input": {"command": "just work E2-999 'test'"}})
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
+        assert "/new-work" in result["hookSpecificOutput"]["permissionDecisionReason"]
+
+    def test_blocks_just_plan_recipe(self):
+        """Verify 'just plan' is blocked with redirect to /new-plan."""
+        from hooks.pre_tool_use import handle
+        result = handle({"tool_name": "Bash", "tool_input": {"command": "just plan E2-999 'test'"}})
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
+        assert "/new-plan" in result["hookSpecificOutput"]["permissionDecisionReason"]
+
+    def test_blocks_just_inv_recipe(self):
+        """Verify 'just inv' is blocked."""
+        from hooks.pre_tool_use import handle
+        result = handle({"tool_name": "Bash", "tool_input": {"command": "just inv INV-999 'test'"}})
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
+
+    def test_blocks_just_scaffold_recipe(self):
+        """Verify 'just scaffold' is blocked."""
+        from hooks.pre_tool_use import handle
+        result = handle({"tool_name": "Bash", "tool_input": {"command": "just scaffold work E2-999 'test'"}})
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
+
+    def test_allows_non_scaffold_just_commands(self):
+        """Verify 'just ready' is not blocked."""
+        from hooks.pre_tool_use import handle
+        result = handle({"tool_name": "Bash", "tool_input": {"command": "just ready"}})
+        assert result is None
+
+    def test_allows_just_scaffold_observations(self):
+        """Verify 'just scaffold-observations' is not blocked (hyphenated, different recipe)."""
+        from hooks.pre_tool_use import handle
+        result = handle({"tool_name": "Bash", "tool_input": {"command": "just scaffold-observations E2-305"}})
         assert result is None
 
 
