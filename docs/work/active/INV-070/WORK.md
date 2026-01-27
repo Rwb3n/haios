@@ -1,39 +1,39 @@
 ---
 template: work_item
 id: INV-070
-title: Queue Ready Filter Bug - Complete Items Returned
-status: dismissed
+title: Legacy Scaffold Recipe Audit
+type: investigation
+status: active
 owner: Hephaestus
-created: 2026-01-18
-closed: '2026-01-18'
-milestone: null
-priority: critical
+created: 2026-01-27
+spawned_by: WORK-027
+chapter: CH-004
+arc: migration
+closed: null
+priority: high
 effort: medium
-category: investigation
-spawned_by: null
-spawned_by_investigation: null
+traces_to:
+- REQ-TRACE-005
+requirement_refs: []
+source_files: []
+acceptance_criteria: []
 blocked_by: []
 blocks: []
 enables: []
-related: []
 current_node: backlog
 node_history:
 - node: backlog
-  entered: 2026-01-18 12:08:30
+  entered: 2026-01-27 21:49:18
   exited: null
+artifacts: []
 cycle_docs: {}
-memory_refs:
-- 81521
-operator_decisions: []
-documents:
-  investigations: []
-  plans: []
-  checkpoints: []
-version: '1.0'
-generated: 2026-01-18
-last_updated: '2026-01-18T21:56:50'
+memory_refs: []
+extensions: {}
+version: '2.0'
+generated: 2026-01-27
+last_updated: '2026-01-27T21:50:02'
 ---
-# WORK-INV-070: Queue Ready Filter Bug - Complete Items Returned
+# INV-070: Legacy Scaffold Recipe Audit
 
 @docs/README.md
 @docs/epistemic_state.md
@@ -42,63 +42,38 @@ last_updated: '2026-01-18T21:56:50'
 
 ## Context
 
-**Problem:** `WorkEngine.get_ready()` returns work items with `status: complete`, polluting the queue with 10 already-closed items. This causes the survey-cycle to present completed work as options.
+**Problem:** Legacy `just` scaffold recipes (`just work`, `just inv`, `just scaffold`) produce WORK.md files with unfilled placeholders (`type: {{TYPE}}`, wrong session numbers, generic deliverables). These recipes predate the work-creation-cycle skill that properly populates fields. An agent calling `just work` directly (as happened in Session 250) creates a malformed artifact that appears syntactically valid but has garbage values.
 
-**Trigger:** Session 203 - `just queue default` showed E2-234 (closed 2026-01-17) as first item.
+**Risk:** Malformed work items can pass governance gates because YAML is structurally valid. The `{{TYPE}}` placeholder isn't caught by any hook. This violates the Module-First Principle (Session 218) and the traceability chain (REQ-TRACE-005).
 
-**Root Cause:** `get_ready()` only checks `blocked_by` is empty, but does not filter out `status: complete` items.
-
-**Location:** `.claude/haios/modules/work_engine.py:278-296`
-
-**Current buggy logic:**
-```python
-if work and not work.blocked_by:
-    ready.append(work)  # Missing: and work.status != 'complete'
-```
-
-**Impact:** 10 of 50 "ready" items are actually complete. Queue is 20% polluted.
-
----
-
-## Current State
-
-Work item in BACKLOG node. Awaiting prioritization.
+**Scope:**
+- Audit all `just` recipes that scaffold governed documents
+- Identify which recipes bypass cycle skills
+- Determine which should be removed, gated, or redirected to cycle skills
+- Assess whether PreToolUse hook should block direct scaffold calls
 
 ---
 
 ## Deliverables
 
-<!-- VERIFICATION REQUIREMENT (Session 192 - E2-290 Learning)
-
-     These checkboxes are the SOURCE OF TRUTH for work completion.
-
-     During CHECK phase of implementation-cycle:
-     - Agent MUST read this section
-     - Agent MUST verify EACH checkbox can be marked complete
-     - If ANY deliverable is incomplete, work is NOT done
-
-     "Tests pass" ≠ "Deliverables complete"
-     Tests verify code works. Deliverables verify scope is complete.
--->
-
-- [x] Identify root cause of status filtering gap
-- [x] Fix `get_ready()` to exclude `status: complete` items
-- [x] Verify queue shows only active items after fix
-- [x] Add test coverage for status filtering
+- [ ] Inventory of all scaffold-related recipes in justfile
+- [ ] Classification: safe (used by skills) vs unsafe (bypasses skills)
+- [ ] Recommendation per recipe: keep / remove / gate / redirect
+- [ ] If gate: spawn work item for PreToolUse hook enhancement
+- [ ] If remove: spawn cleanup work item
 
 ---
 
 ## History
 
-### 2026-01-18 - Fixed (Session 203)
-- Identified bug: `get_ready()` missing status check at work_engine.py:294
-- Fix: Added `and work.status != "complete"` to filter condition
-- Added test: `test_get_ready_excludes_complete_items`
-- Queue: 50→41 items (10 complete items removed)
+### 2026-01-27 - Created (Session 250)
+- Spawned after agent called `just work` directly, producing malformed WORK.md
+- Traced to migration arc, CH-004 (RecipeAudit)
 
 ---
 
 ## References
 
-- @.claude/haios/modules/work_engine.py - Location of `get_ready()` bug
-- Memory concept 78866: "Track complete items by status field" - confirms expected behavior
+- @.claude/haios/epochs/E2_3/arcs/migration/CH-004-recipe-audit.md
+- @.claude/haios/manifesto/L4/functional_requirements.md (REQ-TRACE-005)
+- Session 218: Module-First Principle
