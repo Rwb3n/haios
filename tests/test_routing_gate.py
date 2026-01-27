@@ -1,5 +1,5 @@
 # generated: 2025-12-28
-# System Auto: last updated on: 2026-01-25T21:25:47
+# System Auto: last updated on: 2026-01-27T20:59:09
 """Tests for routing.py routing-gate logic (E2-221).
 
 Tests the pure work-type routing logic. Threshold checks are in OBSERVE phase (E2-224).
@@ -9,8 +9,8 @@ import pytest
 import sys
 from pathlib import Path
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "lib"))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 from routing import determine_route
 

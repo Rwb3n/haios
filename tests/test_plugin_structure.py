@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2025-12-21 11:48:12
+# System Auto: last updated on: 2026-01-27T20:59:41
 """
 Phase 0 Tests: Plugin Structure Verification
 
@@ -15,13 +15,13 @@ class TestPluginStructure:
 
     def test_lib_directory_exists(self):
         """Library directory must exist."""
-        lib_dir = Path('.claude/lib')
-        assert lib_dir.is_dir(), "Missing .claude/lib/ directory"
+        lib_dir = Path('.claude/haios/lib')
+        assert lib_dir.is_dir(), "Missing .claude/haios/lib/ directory"
 
     def test_lib_has_init(self):
         """Library must be a proper Python package."""
-        init = Path('.claude/lib/__init__.py')
-        assert init.exists(), "Missing .claude/lib/__init__.py"
+        init = Path('.claude/haios/lib/__init__.py')
+        assert init.exists(), "Missing .claude/haios/lib/__init__.py"
 
     def test_plugin_manifest_exists(self):
         """Plugin manifest must exist."""
@@ -48,5 +48,5 @@ class TestPluginStructure:
 
     def test_lib_readme_exists(self):
         """Library should have README for module documentation."""
-        readme = Path('.claude/lib/README.md')
-        assert readme.exists(), "Missing .claude/lib/README.md"
+        readme = Path('.claude/haios/lib/README.md')
+        assert readme.exists(), "Missing .claude/haios/lib/README.md"

@@ -1,5 +1,5 @@
 # generated: 2025-12-24
-# System Auto: last updated on: 2025-12-24T11:16:29
+# System Auto: last updated on: 2026-01-27T20:57:55
 """Tests for backfill.py - Work file backfill from backlog entries."""
 
 import sys
@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-# Add .claude/lib to path
-sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "lib"))
+# Add .claude/haios/lib to path
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 
 # Sample backlog content for testing

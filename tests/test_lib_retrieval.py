@@ -1,22 +1,22 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2025-12-21 12:36:54
+# System Auto: last updated on: 2026-01-27T20:57:16
 """
-Phase 1b Tests: Retrieval Layer from .claude/lib/
+Phase 1b Tests: Retrieval Layer from .claude/haios/lib/
 
 Tests verify retrieval module works from new location.
 """
 import sys
 from pathlib import Path
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path('.claude/lib').resolve()))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 
 class TestRetrievalImport:
     """Tests for retrieval module importability."""
 
     def test_can_import_retrieval_service(self):
-        """RetrievalService must be importable from .claude/lib/."""
+        """RetrievalService must be importable from .claude/haios/lib/."""
         from retrieval import RetrievalService
         assert RetrievalService is not None
 

@@ -1,5 +1,5 @@
 # generated: 2025-12-29
-# System Auto: last updated on: 2025-12-29T09:25:04
+# System Auto: last updated on: 2026-01-27T20:58:00
 """
 Tests for governance event logging and threshold monitoring.
 
@@ -11,8 +11,10 @@ from pathlib import Path
 from unittest.mock import patch
 import sys
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "lib"))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
+# Add .claude/haios/lib for scan_incomplete_work (WORK-023)
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 
 @pytest.fixture
@@ -156,3 +158,65 @@ class TestAppendOnly:
 
             log_phase_transition("CHECK", "E2-108", "Hephaestus")
             assert len(read_events()) == 3
+
+
+class TestScanIncompleteWorkStatusFiltering:
+    """Tests for scan_incomplete_work status filtering (WORK-023)."""
+
+    def test_scan_incomplete_work_excludes_complete_status(self, tmp_path):
+        """Work items with status: complete should not appear in results."""
+        from governance_events import scan_incomplete_work
+
+        work_dir = tmp_path / "docs" / "work" / "active" / "E2-TEST"
+        work_dir.mkdir(parents=True)
+        (work_dir / "WORK.md").write_text("""---
+id: E2-TEST
+status: complete
+current_node: backlog
+node_history:
+- node: backlog
+  entered: 2026-01-01
+  exited: null
+---
+""")
+        result = scan_incomplete_work(tmp_path)
+        assert len(result) == 0, "Complete items should be excluded"
+
+    def test_scan_incomplete_work_excludes_archived_status(self, tmp_path):
+        """Work items with status: archived should not appear in results."""
+        from governance_events import scan_incomplete_work
+
+        work_dir = tmp_path / "docs" / "work" / "active" / "E2-TEST"
+        work_dir.mkdir(parents=True)
+        (work_dir / "WORK.md").write_text("""---
+id: E2-TEST
+status: archived
+current_node: complete
+node_history:
+- node: complete
+  entered: 2026-01-01
+  exited: null
+---
+""")
+        result = scan_incomplete_work(tmp_path)
+        assert len(result) == 0, "Archived items should be excluded"
+
+    def test_scan_incomplete_work_includes_active_status(self, tmp_path):
+        """Work items with status: active and exited: null should appear."""
+        from governance_events import scan_incomplete_work
+
+        work_dir = tmp_path / "docs" / "work" / "active" / "E2-TEST"
+        work_dir.mkdir(parents=True)
+        (work_dir / "WORK.md").write_text("""---
+id: E2-TEST
+status: active
+current_node: backlog
+node_history:
+- node: backlog
+  entered: 2026-01-01
+  exited: null
+---
+""")
+        result = scan_incomplete_work(tmp_path)
+        assert len(result) == 1, "Active items should be included"
+        assert result[0]["id"] == "E2-TEST"

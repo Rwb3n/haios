@@ -1,5 +1,5 @@
 # generated: 2025-12-23
-# System Auto: last updated on: 2026-01-17T15:57:26
+# System Auto: last updated on: 2026-01-27T20:59:16
 """Tests for work_item template and infrastructure.
 
 E2-150: Work-Item Infrastructure
@@ -11,8 +11,8 @@ E2-150: Work-Item Infrastructure
 import sys
 from pathlib import Path
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "lib"))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 
 class TestWorkItemValidation:

@@ -1,8 +1,9 @@
 # generated: 2025-11-30
-# System Auto: last updated on: 2025-12-27T16:42:25
+# System Auto: last updated on: 2026-01-27T21:04:06
 import pytest
 import sqlite3
 import os
+from pathlib import Path
 from haios_etl.database import DatabaseManager
 
 # Fixture for in-memory database
@@ -426,7 +427,7 @@ def test_database_busy_timeout_is_set():
     Synthesis operations can take 10+ seconds, so we need at least 30s.
     """
     import sys
-    sys.path.insert(0, '.claude/lib')
+    sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
     from database import DatabaseManager
 
     db = DatabaseManager(":memory:")

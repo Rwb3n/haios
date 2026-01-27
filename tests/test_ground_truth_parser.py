@@ -1,5 +1,5 @@
 # generated: 2025-12-28
-# System Auto: last updated on: 2025-12-28T16:54:21
+# System Auto: last updated on: 2026-01-27T20:59:21
 """Tests for Ground Truth Verification table parser.
 
 E2-219: Ground Truth Verification Parser
@@ -9,8 +9,8 @@ Tests the parse_ground_truth_table() and classify_verification_type() functions.
 import sys
 from pathlib import Path
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "lib"))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 from validate import parse_ground_truth_table, classify_verification_type
 

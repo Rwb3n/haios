@@ -1,5 +1,5 @@
 # generated: 2025-12-28
-# System Auto: last updated on: 2026-01-03T14:38:17
+# System Auto: last updated on: 2026-01-27T20:58:11
 """Tests for observations.py triage functions (E2-218).
 
 Tests the observation triage cycle: scan, parse, triage, promote.
@@ -9,8 +9,8 @@ import pytest
 import sys
 from pathlib import Path
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "lib"))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 from observations import (
     parse_observations,

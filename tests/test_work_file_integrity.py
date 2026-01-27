@@ -1,9 +1,9 @@
 # generated: 2025-12-29
-# System Auto: last updated on: 2025-12-29T20:00:54
+# System Auto: last updated on: 2026-01-27T20:59:12
 """Tests for work file integrity validation (E2-163).
 
 Tests validate_cycle_docs_consistency() and validate_node_history_integrity()
-functions added to .claude/lib/validate.py.
+functions added to .claude/haios/lib/validate.py.
 """
 
 import sys
@@ -11,8 +11,8 @@ from pathlib import Path
 
 import pytest
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "lib"))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 from validate import (
     validate_cycle_docs_consistency,

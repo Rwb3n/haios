@@ -1,5 +1,5 @@
 # generated: 2025-12-29
-# System Auto: last updated on: 2025-12-29T11:28:04
+# System Auto: last updated on: 2026-01-27T20:57:52
 """
 Tests for anti-pattern-checker agent.
 
@@ -9,8 +9,8 @@ Tests written FIRST per implementation-cycle methodology.
 from pathlib import Path
 import sys
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "lib"))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 
 class TestAntiPatternCheckerAgent:

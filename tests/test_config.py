@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-03T14:27:56
+# System Auto: last updated on: 2026-01-27T20:57:58
 """
 Tests for HAIOS unified configuration loader.
 
@@ -9,8 +9,8 @@ import pytest
 import sys
 from pathlib import Path
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "lib"))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 
 class TestConfigLoaderSingleton:

@@ -1,14 +1,14 @@
 # generated: 2025-12-24
-# System Auto: last updated on: 2025-12-24T19:11:12
-"""Tests for .claude/lib/audit.py"""
+# System Auto: last updated on: 2026-01-27T20:56:45
+"""Tests for .claude/haios/lib/audit.py"""
 import pytest
 import tempfile
 import os
 from pathlib import Path
 import sys
 
-# Import after path setup
-sys.path.insert(0, '.claude/lib')
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 
 def test_parse_frontmatter_valid():

@@ -1,7 +1,7 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2025-12-21 12:16:19
+# System Auto: last updated on: 2026-01-27T20:57:13
 """
-Phase 1a Tests: Database Layer from .claude/lib/
+Phase 1a Tests: Database Layer from .claude/haios/lib/
 
 Tests verify database module works from new location.
 Written FIRST per TDD methodology.
@@ -9,15 +9,15 @@ Written FIRST per TDD methodology.
 import sys
 from pathlib import Path
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path('.claude/lib').resolve()))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 
 class TestDatabaseImport:
     """Tests for database module importability."""
 
     def test_can_import_database_module(self):
-        """Database module must be importable from .claude/lib/."""
+        """Database module must be importable from .claude/haios/lib/."""
         from database import DatabaseManager
         assert DatabaseManager is not None
 

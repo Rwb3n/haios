@@ -1,6 +1,6 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-01-19T16:40:16
-"""Tests for .claude/lib/validate.py - Template validation module.
+# System Auto: last updated on: 2026-01-27T20:58:36
+"""Tests for .claude/haios/lib/validate.py - Template validation module.
 
 TDD tests for E2-120 Phase 2c.
 
@@ -17,8 +17,8 @@ from pathlib import Path
 
 import pytest
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "lib"))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 
 class TestGetTemplateRegistry:

@@ -1,6 +1,6 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-01-19T21:59:15
-"""Tests for .claude/lib/scaffold.py - Template scaffolding module.
+# System Auto: last updated on: 2026-01-27T20:58:31
+"""Tests for .claude/haios/lib/scaffold.py - Template scaffolding module.
 
 TDD tests for E2-120 Phase 2b.
 
@@ -21,8 +21,8 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "lib"))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 
 class TestGenerateOutputPath:

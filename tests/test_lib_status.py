@@ -1,6 +1,6 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-01-14T21:32:22
-"""Tests for .claude/lib/status.py - Core status module.
+# System Auto: last updated on: 2026-01-27T20:58:34
+"""Tests for .claude/haios/lib/status.py - Core status module.
 
 TDD tests for E2-120 Phase 2a (CORE functions only).
 Full status tests deferred to E2-125.
@@ -25,8 +25,8 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-# Add .claude/lib to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "lib"))
+# Add .claude/haios/lib to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 
 class TestGetAgents:

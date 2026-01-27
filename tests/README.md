@@ -1,8 +1,8 @@
 # generated: 2025-11-25
-# System Auto: last updated on: 2026-01-14T21:19:12
+# System Auto: last updated on: 2026-01-27T21:00:34
 # HAIOS Test Suite
 
-> **Navigation:** [Quick Reference](../docs/README.md) | [Strategic Overview](../docs/epistemic_state.md) | [Library](../.claude/lib/README.md)
+> **Navigation:** [Quick Reference](../docs/README.md) | [Strategic Overview](../docs/epistemic_state.md) | [Library](../.claude/haios/lib/README.md)
 
 This directory contains the test suite for the HAIOS Cognitive Memory System.
 
@@ -16,7 +16,7 @@ This directory contains the test suite for the HAIOS Cognitive Memory System.
 
 ## Test Overview
 
-### Core Library Tests (haios_etl/ and .claude/lib/)
+### Core Library Tests (haios_etl/ and .claude/haios/lib/)
 
 | Module | Tests | Coverage |
 |--------|-------|----------|
@@ -38,8 +38,8 @@ This directory contains the test suite for the HAIOS Cognitive Memory System.
 | Module | Tests | Coverage |
 |--------|-------|----------|
 | `test_plugin_structure.py` | 6 | Plugin manifest, lib directory, package init |
-| `test_lib_database.py` | 7 | Database module from .claude/lib/ |
-| `test_lib_retrieval.py` | 4 | Retrieval module from .claude/lib/ |
+| `test_lib_database.py` | 7 | Database module from .claude/haios/lib/ |
+| `test_lib_retrieval.py` | 4 | Retrieval module from .claude/haios/lib/ |
 | `test_lib_status.py` | 28 | Status module: agents, commands, skills, memory, backlog, session delta, milestones |
 | `test_lib_scaffold.py` | 23 | Scaffold module: path generation, template loading, variable substitution |
 | `test_lib_validate.py` | 22 | Validate module: YAML parsing, field validation, status enums, reference counting |
@@ -227,7 +227,7 @@ pytest --cov=haios_etl --cov-fail-under=80
 
 - [Quick Reference](../docs/README.md) - Documentation map
 - [Strategic Overview](../docs/epistemic_state.md) - Current system state
-- [Library Package](../.claude/lib/README.md) - Core modules (migrated from haios_etl/)
+- [Library Package](../.claude/haios/lib/README.md) - Core modules (migrated from haios_etl/)
 - [Operations Manual](../.claude/REFS/OPERATIONS.md) - Runbook
 
 ---

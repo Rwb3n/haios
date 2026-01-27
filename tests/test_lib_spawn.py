@@ -1,5 +1,5 @@
 # generated: 2025-12-22
-# System Auto: last updated on: 2025-12-22T18:47:21
+# System Auto: last updated on: 2026-01-27T20:56:52
 """Tests for spawn tree query module.
 
 Tests the spawn.py module that visualizes spawn relationships
@@ -17,7 +17,7 @@ class TestParseYamlFrontmatter:
         """Test extraction of spawned_by from frontmatter."""
         # Import here to test module exists
         import sys
-        sys.path.insert(0, '.claude/lib')
+        sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
         from spawn import parse_yaml_frontmatter
 
         content = "---\nspawned_by: INV-017\ntitle: Test\n---\n# Content"
@@ -27,7 +27,7 @@ class TestParseYamlFrontmatter:
     def test_parse_multiple_fields(self):
         """Test extraction of multiple frontmatter fields."""
         import sys
-        sys.path.insert(0, '.claude/lib')
+        sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
         from spawn import parse_yaml_frontmatter
 
         content = "---\nspawned_by: Session-84\nbacklog_id: E2-099\ntitle: Test Item\n---"
@@ -39,7 +39,7 @@ class TestParseYamlFrontmatter:
     def test_no_frontmatter(self):
         """Test handling of content without frontmatter."""
         import sys
-        sys.path.insert(0, '.claude/lib')
+        sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
         from spawn import parse_yaml_frontmatter
 
         content = "# Just a header\n\nSome content."
@@ -53,7 +53,7 @@ class TestFindChildren:
     def test_find_children_of_parent(self, tmp_path):
         """Test finding children by spawned_by field."""
         import sys
-        sys.path.insert(0, '.claude/lib')
+        sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
         from spawn import find_children
 
         # Create test directory structure
@@ -79,7 +79,7 @@ class TestFindChildren:
     def test_find_no_children(self, tmp_path):
         """Test when no children exist."""
         import sys
-        sys.path.insert(0, '.claude/lib')
+        sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
         from spawn import find_children
 
         children = find_children("NONEXISTENT", docs_path=tmp_path)
@@ -92,7 +92,7 @@ class TestBuildSpawnTree:
     def test_build_spawn_tree_single_level(self, tmp_path):
         """Test building tree with single level of children."""
         import sys
-        sys.path.insert(0, '.claude/lib')
+        sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
         from spawn import build_spawn_tree
 
         # Create test file
@@ -107,7 +107,7 @@ class TestBuildSpawnTree:
     def test_build_spawn_tree_multi_level(self, tmp_path):
         """Test building tree with multiple levels."""
         import sys
-        sys.path.insert(0, '.claude/lib')
+        sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
         from spawn import build_spawn_tree
 
         # INV-017 spawns E2-099, E2-099 spawns E2-100
@@ -126,7 +126,7 @@ class TestBuildSpawnTree:
     def test_no_spawns_returns_root_only(self, tmp_path):
         """Test that no spawns returns tree with just root."""
         import sys
-        sys.path.insert(0, '.claude/lib')
+        sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
         from spawn import build_spawn_tree
 
         tree = build_spawn_tree("NONEXISTENT", docs_path=tmp_path)
@@ -139,7 +139,7 @@ class TestFormatTree:
     def test_format_tree_output(self):
         """Test ASCII tree formatting."""
         import sys
-        sys.path.insert(0, '.claude/lib')
+        sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
         from spawn import format_tree
 
         tree = {"INV-017": {"E2-099": {}, "E2-102": {}}}
@@ -154,7 +154,7 @@ class TestFormatTree:
     def test_format_empty_tree(self):
         """Test formatting tree with no children."""
         import sys
-        sys.path.insert(0, '.claude/lib')
+        sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
         from spawn import format_tree
 
         tree = {"NONEXISTENT": {}}
