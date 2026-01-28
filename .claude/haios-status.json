@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-28T23:26:13",
+    "generated": "2026-01-28T23:48:43",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 253,
-        "current_session": 254,
+        "prior_session": 254,
+        "current_session": 255,
         "prior_date": "2026-01-28",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82353,
-        "entities": 9287,
+        "concepts": 82357,
+        "entities": 9289,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3103,6 +3103,15 @@
             "status": null,
             "date": "2026-01-28",
             "last_updated": "2026-01-28T22:59:54",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-01-28-03-SESSION-255-work-029-dead-mcp-cleanup.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-01-28",
+            "last_updated": "2026-01-28T23:27:59",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6245,12 +6254,12 @@
         {
             "path": "docs/checkpoints/2025-12-02-SESSION-19-collaboration-dogfood.md",
             "last_updated": "2025-12-02T23:39:43",
-            "days_stale": 56
+            "days_stale": 57
         },
         {
             "path": "docs/checkpoints/2025-12-02-SESSION-20-gap-a5-fix-reingest.md",
             "last_updated": "2025-12-02T23:39:25",
-            "days_stale": 56
+            "days_stale": 57
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-21-gap-audit-preflight.md",
@@ -6930,6 +6939,11 @@
         {
             "path": "docs/checkpoints/2025-12-29-06-SESSION-148-inv-052-session-state-system-audit-complete.md",
             "last_updated": "2025-12-29T21:32:25",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/checkpoints/2025-12-29-07-SESSION-149-inv-052-architecture-redesign-meta-design.md",
+            "last_updated": "2025-12-29T23:31:00",
             "days_stale": 30
         },
         {
@@ -8084,9 +8098,9 @@
         }
     ],
     "workspace": {
-        "total_files": 501,
+        "total_files": 502,
         "by_template": {
-            "checkpoint": 252,
+            "checkpoint": 253,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8098,7 +8112,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 88,
+            "unknown": 89,
             "draft": 2,
             "approved": 6,
             "ready": 1,
@@ -8113,7 +8127,7 @@
             "duplicate": 1,
             "deferred": 1
         },
-        "stale_count": 368
+        "stale_count": 369
     },
     "alignment": {
         "aligned": [

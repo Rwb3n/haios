@@ -2,10 +2,10 @@
 template: work_item
 id: E2-294
 title: Wire implementation-cycle and investigation-cycle with set-cycle
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-16
-closed: null
+closed: 2026-01-17
 milestone: null
 priority: medium
 effort: medium
@@ -46,7 +46,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-16
-last_updated: '2026-01-17T11:52:51'
+last_updated: '2026-01-28T23:41:18'
 ---
 # WORK-E2-294: Wire implementation-cycle and investigation-cycle with set-cycle
 

@@ -2,10 +2,10 @@
 template: work_item
 id: E2-293
 title: Add set-queue Recipe and Extend session_state Schema
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-16
-closed: null
+closed: 2026-01-16
 milestone: null
 priority: medium
 effort: small
@@ -49,7 +49,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-16
-last_updated: '2026-01-25T00:37:14'
+last_updated: '2026-01-28T23:41:16'
 ---
 # WORK-E2-293: Add set-queue Recipe and Extend session_state Schema
 
