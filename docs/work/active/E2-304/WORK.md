@@ -3,13 +3,13 @@ template: work_item
 id: E2-304
 title: Add Status-Aware ID Validation to Work Creation
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-26
 spawned_by: INV-072
 chapter: CH-005
 arc: workuniversal
-closed: null
+closed: '2026-01-28'
 priority: high
 effort: small
 traces_to:
@@ -34,7 +34,7 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: 2026-01-26
-last_updated: '2026-01-27T23:17:35'
+last_updated: '2026-01-28T21:28:54'
 ---
 # E2-304: Add Status-Aware ID Validation to Work Creation
 
@@ -55,12 +55,12 @@ last_updated: '2026-01-27T23:17:35'
 
 ## Deliverables
 
-- [ ] Add `_validate_id_available(id: str) -> bool` to work_engine.py
-- [ ] Function checks if WORK.md exists AND status is complete/archived
-- [ ] Raise error if ID exists with terminal status
-- [ ] Add same check to scaffold.py `scaffold_template()` for work_item template
-- [ ] Tests for validation logic (positive and negative cases)
-- [ ] Runtime consumer: `create_work()` calls validation before creating
+- [x] Add `_validate_id_available(id: str) -> None` to work_engine.py (line 195)
+- [x] Function checks if WORK.md exists AND status is complete/archived (TERMINAL_STATUSES)
+- [x] Raise error if ID exists with terminal status (WorkIDUnavailableError)
+- [x] Add same check to scaffold.py `scaffold_template()` for work_item template (line 478)
+- [x] Tests for validation logic (positive and negative cases) - 4 tests in test_work_engine.py
+- [x] Runtime consumer: `create_work()` calls validation before creating (line 246)
 
 ---
 

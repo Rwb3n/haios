@@ -3,13 +3,13 @@ template: work_item
 id: WORK-029
 title: Cleanup Dead MCP Code in .claude/haios/lib
 type: cleanup
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-28
 spawned_by: WORK-028
 chapter: null
 arc: null
-closed: null
+closed: '2026-01-28'
 priority: medium
 effort: medium
 traces_to: []
@@ -30,7 +30,7 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: 2026-01-28
-last_updated: '2026-01-28T22:28:17'
+last_updated: '2026-01-28T23:24:11'
 ---
 # WORK-029: Cleanup Dead MCP Code in .claude/haios/lib
 
@@ -69,14 +69,21 @@ Files to delete:
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Identify all dead MCP-related files in `.claude/haios/lib/`
-- [ ] Delete files with broken haios_etl dependencies
-- [ ] Verify no other code imports from deleted files
-- [ ] Update any references if found
+- [x] Identify all dead MCP-related files in `.claude/haios/lib/`
+- [x] Delete files with broken haios_etl dependencies
+- [x] Verify no other code imports from deleted files
+- [x] Update any references if found
 
 ---
 
 ## History
+
+### 2026-01-28 - Completed (Session 255)
+- Deleted 4 broken files: mcp_server.py, extraction.py, retrieval.py, synthesis.py
+- These were partial copies from haios_etl/ with broken bare imports
+- Deleted test_lib_retrieval.py (tested removed code)
+- Updated test_lib_migration.py to remove references to deleted files
+- Verified no runtime consumers imported from these files
 
 ### 2026-01-28 - Created (Session 247)
 - Initial creation
