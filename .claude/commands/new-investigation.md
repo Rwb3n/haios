@@ -1,9 +1,9 @@
 ---
 allowed-tools: Bash, mcp__haios-memory__memory_search_with_experience
 description: Create new Investigation document with template
-argument-hint: <backlog_id> <title>
+argument-hint: <title>
 generated: '2025-12-25'
-last_updated: '2025-12-26T12:15:09'
+last_updated: '2026-01-28T22:44:16'
 ---
 
 # Create Investigation
@@ -12,22 +12,33 @@ last_updated: '2025-12-26T12:15:09'
 
 Arguments: $ARGUMENTS
 
+## ID Policy (WORK-030)
+
+Investigations use **WORK-XXX** format with `type: investigation` in the work file.
+The INV-XXX prefix is deprecated. All work items use universal WORK-XXX IDs.
+
 Parse arguments:
-- First argument: backlog_id (e.g., INV-008, E2-033)
-- Remaining arguments: title
+- If one argument: title only (auto-assign WORK-XXX)
+- If two arguments: backlog_id and title (backwards compatible)
 
 ## Prerequisite: Work File Required
 
 **MUST** create work item before investigation document (L1 invariant: Work Before Plan).
 
 ```bash
-# Step 1: Create work item
-just work <backlog_id> "<title>"
+# Step 1: Get next ID and create work item with type: investigation
+python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from scaffold import get_next_work_id; print(get_next_work_id())"
+# Use that ID:
+just work WORK-031 "<title>"
 
-# Step 2: Run work-creation-cycle to populate Context/Deliverables
+# Step 2: Set type: investigation in the work file frontmatter
+# Edit docs/work/active/WORK-031/WORK.md to set type: investigation
+
+# Step 3: Run work-creation-cycle to populate Context/Deliverables
 Skill(skill="work-creation-cycle")
 
-# Step 3: Then create investigation (this command)
+# Step 4: Then create investigation document
+just inv WORK-031 "<title>"
 ```
 
 If work file doesn't exist, `just inv` will fail with guidance to run `/new-work` first.
@@ -52,8 +63,8 @@ just inv <backlog_id> "<title>"
 
 Example:
 ```bash
-just inv INV-017 "Observability Gap Analysis"
-# Creates: docs/investigations/INVESTIGATION-INV-017-observability-gap-analysis.md
+just inv WORK-031 "Observability Gap Analysis"
+# Creates: docs/work/active/WORK-031/investigations/001-observability-gap-analysis.md
 ```
 
 Report the created file path to the user.

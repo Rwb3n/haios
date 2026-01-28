@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-01-21T22:19:21
+# System Auto: last updated on: 2026-01-28T22:42:53
 """Core status module for HAIOS plugin.
 
 E2-120 Phase 2a: Core functions for haios-status-slim.json generation.
@@ -803,21 +803,21 @@ def get_active_work_cycle() -> Optional[dict[str, Any]]:
             if not item_id:
                 continue
 
-            # Determine cycle type from ID prefix or associated documents
-            cycle_type = "implementation"  # default
+            # Determine cycle type from type field (WORK-030: type field takes precedence)
+            work_type = metadata.get("type", "implementation")
+            cycle_type = work_type if work_type in ("investigation", "implementation") else "implementation"
             lifecycle_phase = None
 
-            # Check for associated plan
-            for plan_file in plans_dir.glob(f"PLAN-{item_id}*.md"):
-                plan_content = plan_file.read_text(encoding="utf-8-sig")
-                plan_meta = _parse_yaml_frontmatter(plan_content)
-                lifecycle_phase = plan_meta.get("lifecycle_phase")
-                cycle_type = "implementation"
-                break
+            # Check for associated plan (implementation cycle)
+            if cycle_type != "investigation":
+                for plan_file in plans_dir.glob(f"PLAN-{item_id}*.md"):
+                    plan_content = plan_file.read_text(encoding="utf-8-sig")
+                    plan_meta = _parse_yaml_frontmatter(plan_content)
+                    lifecycle_phase = plan_meta.get("lifecycle_phase")
+                    break
 
-            # Check for associated investigation (INV-* items)
-            if item_id.startswith("INV-"):
-                cycle_type = "investigation"
+            # Check for associated investigation (type: investigation)
+            if cycle_type == "investigation":
                 for inv_file in inv_dir.glob(f"INVESTIGATION-{item_id}*.md"):
                     inv_content = inv_file.read_text(encoding="utf-8-sig")
                     inv_meta = _parse_yaml_frontmatter(inv_content)

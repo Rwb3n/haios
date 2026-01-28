@@ -1,5 +1,5 @@
 # generated: 2025-12-23
-# System Auto: last updated on: 2026-01-17T15:57:51
+# System Auto: last updated on: 2026-01-28T22:43:22
 """
 DEPRECATED: This module is deprecated as of E2-298 (Session 201).
 Use WorkEngine from .claude/haios/modules/work_engine.py instead.
@@ -242,9 +242,10 @@ def link_spawned_items(spawned_by: str, ids: list, milestone: str = None) -> dic
     Returns:
         Dict with 'updated' and 'failed' lists
     """
+    # WORK-030: spawned_by_investigation deprecated - use spawned_by only
+    # Parent's type field indicates if it's an investigation
     fields = {
         "spawned_by": spawned_by,
-        "spawned_by_investigation": spawned_by if spawned_by.startswith("INV-") else None
     }
     if milestone:
         fields["milestone"] = milestone

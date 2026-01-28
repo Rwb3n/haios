@@ -2,10 +2,9 @@
   "mcpServers": {
     "haios-memory": {
       "command": "python",
-      "args": [".claude/lib/mcp_server.py"],
+      "args": ["-m", "haios_etl.mcp_server"],
       "env": {
-        "DB_PATH": "haios_memory.db",
-        "PYTHONPATH": ".claude/lib"
+        "DB_PATH": "haios_memory.db"
       }
     }
   }

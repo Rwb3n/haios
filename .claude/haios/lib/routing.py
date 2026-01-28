@@ -1,5 +1,5 @@
 # generated: 2025-12-28
-# System Auto: last updated on: 2025-12-28T18:38:55
+# System Auto: last updated on: 2026-01-28T22:42:24
 """Routing-gate module for HAIOS (E2-221).
 
 Provides pure work-type routing logic for cycle skill CHAIN phases.
@@ -27,24 +27,26 @@ VALID_ACTIONS = {
 
 def determine_route(
     next_work_id: Optional[str],
-    has_plan: bool
+    has_plan: bool,
+    work_type: Optional[str] = None
 ) -> dict:
     """
     Determine routing action based on work-type signals.
 
     Pure routing logic - no threshold checks (those live in OBSERVE phase per E2-224).
 
-    Routing Decision Table:
+    Routing Decision Table (WORK-030: type field takes precedence):
     | Signal | Action |
     |--------|--------|
     | next_work_id is None | await_operator |
-    | ID starts with INV- | invoke_investigation |
+    | type == "investigation" | invoke_investigation |
     | has_plan is True | invoke_implementation |
     | Otherwise | invoke_work_creation |
 
     Args:
         next_work_id: ID of next work item (None if no work available)
         has_plan: Whether work item has documents.plans populated
+        work_type: The `type` field from WORK.md (e.g., "investigation", "implementation")
 
     Returns:
         dict with keys:
@@ -59,11 +61,11 @@ def determine_route(
             "reason": "No unblocked work items. Awaiting operator direction."
         }
 
-    # Investigation routing (INV-* prefix)
-    if next_work_id.startswith("INV-"):
+    # Investigation routing (type field - WORK-030)
+    if work_type == "investigation":
         return {
             "action": "invoke_investigation",
-            "reason": f"ID prefix INV-* routes to investigation-cycle: {next_work_id}"
+            "reason": f"type: investigation routes to investigation-cycle: {next_work_id}"
         }
 
     # Implementation routing (has plan)

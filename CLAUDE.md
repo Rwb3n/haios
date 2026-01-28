@@ -1,5 +1,5 @@
 # generated: 2025-09-23
-# System Auto: last updated on: 2026-01-21T18:02:08
+# System Auto: last updated on: 2026-01-28T22:44:39
 # Code Implementation & Engineering Guide
 
 ## RFC 2119 Keywords
@@ -59,6 +59,36 @@ We have **11 modules** in `.claude/haios/modules/`. They MUST be used.
 > "Which module does the work? If none, why not?"
 
 If answer is "agent reads files manually" → design is WRONG.
+
+---
+
+## CRITICAL: Work Item ID Policy (WORK-030)
+
+**All new work items MUST use WORK-XXX format.**
+
+| Rule | Description |
+|------|-------------|
+| **Format** | `WORK-###` (e.g., WORK-031, WORK-032) |
+| **Auto-increment** | Use `get_next_work_id()` from `.claude/haios/lib/scaffold.py` |
+| **Type field** | Behavior determined by `type:` field, not ID prefix |
+
+### Type Values
+
+| Type | Cycle | Description |
+|------|-------|-------------|
+| `investigation` | investigation-cycle | Discovery/research work |
+| `implementation` | implementation-cycle | Code/feature work |
+| `cleanup` | implementation-cycle | Tech debt/refactoring |
+
+### Deprecated ID Formats
+
+| Format | Status | Migration |
+|--------|--------|-----------|
+| `E2-XXX` | Legacy (Epoch 2) | Existing items remain, new items use WORK-XXX |
+| `INV-XXX` | Deprecated | Use WORK-XXX with `type: investigation` |
+| `TD-XXX` | Deprecated | Use WORK-XXX with `type: cleanup` |
+
+**The `type` field determines routing, not the ID prefix.**
 
 ---
 
@@ -154,6 +184,13 @@ System health thresholds configured in `.claude/haios/config/haios.yaml` (thresh
 | Any SQL query | **MUST** use `schema-verifier` subagent |
 | Close work item | **MUST** use `/close <id>` |
 | Create governed document | **MUST** use `/new-*` command |
+| Create work item | **MUST** have chapter file first (REQ-TRACE-004) |
+
+### Traceability Chain (MUST - REQ-TRACE-005)
+```
+L4 Requirement → Epoch → Arc → Chapter → Work Item
+```
+**No chapter file → work item BLOCKED.** Every work item MUST trace up this chain. No orphan work.
 
 ### Memory Tools
 | Tool | Purpose |

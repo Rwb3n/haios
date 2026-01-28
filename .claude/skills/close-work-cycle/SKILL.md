@@ -6,7 +6,7 @@ recipes:
 - close-work
 - update-status
 generated: 2025-12-25
-last_updated: '2026-01-25T21:33:54'
+last_updated: '2026-01-28T22:45:47'
 ---
 # Close Work Cycle
 
@@ -28,7 +28,7 @@ This skill defines the VALIDATE-ARCHIVE-MEMORY cycle for closing work items with
    reflection first                                                                              |
    (RECALL->NOTICE->COMMIT)                                                             /-------------\
                                                                                   type=investigation  has plan?   else
-                                                                                  OR INV-* prefix        |          |
+                                                                                        |                  |          |
                                                                                          |          implement  work-creation
                                                                                     investigation    -cycle     -cycle
                                                                                        -cycle
@@ -70,7 +70,7 @@ just set-cycle close-work-cycle VALIDATE {work_id}
 1. Read work file: `docs/work/active/{id}/WORK.md` (or `docs/work/active/WORK-{id}-*.md` for legacy)
 2. Check work directory for plans: `docs/work/active/{id}/plans/`
 3. Check plan statuses - all must be `complete`
-4. For `type: investigation` items (or legacy INV-*): Apply investigation-specific DoD
+4. For `type: investigation` items: Apply investigation-specific DoD
 5. **Validate traced requirement addressed (REQ-TRACE-003):**
    - Read `traces_to:` from work item frontmatter
    - For each requirement ID, verify deliverables demonstrate requirement satisfaction
@@ -188,9 +188,9 @@ Skill(skill="checkpoint-cycle")
 3. Query next work: `just ready`
 4. If items returned, read first work file to check `documents.plans`
 5. Read work item `type` field from WORK.md
-6. **Apply routing decision table** (see `routing-gate` skill):
+6. **Apply routing decision table** (WORK-030: type field is authoritative):
    - If `next_work_id` is None → `await_operator`
-   - If `type` == "investigation" OR ID starts with `INV-` → `invoke_investigation`
+   - If `type` == "investigation" → `invoke_investigation`
    - If `has_plan` is True → `invoke_implementation`
    - Else → `invoke_work_creation`
 7. Execute the action:
