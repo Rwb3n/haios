@@ -1,17 +1,17 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-01-27T22:35:47
+# System Auto: last updated on: 2026-01-29T18:54:38
 """
 PreToolUse Hook Handler (E2-085).
 
 Governance enforcement:
 1. SQL blocking (E2-020) - blocks direct SQL without schema-verifier
 2. PowerShell blocking (Session 133) - blocks PowerShell through bash (toggle-controlled)
-3. Scaffold recipe blocking (E2-305) - blocks just work/plan/inv/scaffold calls
+3. Scaffold recipe blocking (E2-305, refined E2-304) - blocks just work/scaffold work_item only
 4. Path governance - blocks raw writes to governed paths
-4. Plan validation (E2-015) - requires backlog_id in plans
-5. Memory reference warning (E2-021) - warns on missing memory_refs
-6. Backlog ID uniqueness (E2-141) - blocks duplicate backlog_id values
-7. Exit gates (E2-155) - warns on node transitions with unmet criteria
+5. Plan validation (E2-015) - requires backlog_id in plans
+6. Memory reference warning (E2-021) - warns on missing memory_refs
+7. Backlog ID uniqueness (E2-141) - blocks duplicate backlog_id values
+8. Exit gates (E2-155) - warns on node transitions with unmet criteria
 """
 import re
 import subprocess
@@ -206,31 +206,33 @@ def _check_powershell_governance(command: str) -> Optional[dict]:
 
 def _check_scaffold_governance(command: str) -> Optional[dict]:
     """
-    Block direct scaffold recipe calls (E2-305).
+    Block direct scaffold recipe calls for work_item only (E2-305, E2-304 refinement).
 
-    Scaffold recipes predate cycle skills and produce files with unfilled
-    template placeholders. Agents must use /new-* commands instead.
+    Work items require full work-creation-cycle to populate placeholders.
+    Other scaffold types (plan, inv, checkpoint) are called by /new-* commands
+    which chain to their respective cycles for placeholder population.
 
-    Returns deny response if scaffold recipe detected, None otherwise.
+    Session 253 fix: Removed overly broad blocking that broke /new-plan and
+    /new-investigation commands. Only `just work` and `just scaffold work_item`
+    are blocked because work items have the most complex placeholder requirements.
+
+    Returns deny response if work_item scaffold detected, None otherwise.
     """
     if not command:
         return None
 
-    # Detect scaffold recipe patterns
-    # Note: scaffold uses (?:\s|$) not \b to avoid matching scaffold-observations
+    # Only block work_item scaffolding - other types are called by governed commands
+    # that chain to cycles which fill placeholders
     scaffold_patterns = {
         r'\bjust\s+work\b': "/new-work",
-        r'\bjust\s+plan\b': "/new-plan",
-        r'\bjust\s+inv\b': "/new-investigation",
-        r'\bjust\s+scaffold(?:\s|$)': "/new-work, /new-plan, or /new-investigation",
-        r'\bjust\s+new-investigation\b': "/new-investigation",
+        r'\bjust\s+scaffold\s+work_item\b': "/new-work",
     }
 
     for pattern, redirect in scaffold_patterns.items():
         if re.search(pattern, command, re.IGNORECASE):
             return _deny(
-                f"BLOCKED: Direct scaffold recipe call. Use '{redirect}' command instead. "
-                "Scaffold recipes produce files with unfilled placeholders."
+                f"BLOCKED: Direct work_item scaffold. Use '{redirect}' command instead. "
+                "Work items require work-creation-cycle to populate placeholders."
             )
 
     return None
@@ -331,14 +333,15 @@ def _check_path_governance(file_path: str) -> Optional[dict]:
     # Check for work directory paths - more specific patterns
     if "docs/work/active/" in normalized:
         # Block raw WORK.md creation - use /new-work
+        # Note: 'just work' is also blocked by scaffold recipe guard (E2-305)
         if file_name == "WORK.md":
             return _deny(
-                "BLOCKED: Governed path. Use '/new-work <id> <title>' or 'just work <id> <title>' instead of raw Write."
+                "BLOCKED: Governed path. Use '/new-work <id> <title>' instead of raw Write."
             )
-        # Block raw PLAN.md creation - use /new-plan or just plan
+        # Block raw PLAN.md creation - use /new-plan
         if "/plans/" in normalized and file_name == "PLAN.md":
             return _deny(
-                "BLOCKED: Governed path. Use '/new-plan <id> <title>' or 'just plan <id> <title>' instead of raw Write."
+                "BLOCKED: Governed path. Use '/new-plan <id> <title>' instead of raw Write."
             )
         # Block raw observations.md creation - use just scaffold-observations
         if file_name == "observations.md":
