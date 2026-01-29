@@ -1,5 +1,5 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-01-14T22:10:00
+# System Auto: last updated on: 2026-01-29T21:01:15
 """
 UserPromptSubmit Hook Handler (E2-085, E2-119).
 
@@ -93,9 +93,11 @@ def handle(hook_data: dict) -> str:
         output_parts.append(session_warning)
 
     # Part 3: Dynamic thresholds
-    thresholds = _get_thresholds(cwd)
-    if thresholds:
-        output_parts.append(thresholds)
+    # DISABLED Session 259: Thresholds read deprecated milestone data
+    # Milestones replaced by Arcs/Chapters in E2.3 - needs status redesign
+    # thresholds = _get_thresholds(cwd)
+    # if thresholds:
+    #     output_parts.append(thresholds)
 
     # Part 4: Lifecycle guidance
     prompt = hook_data.get("prompt", "")
