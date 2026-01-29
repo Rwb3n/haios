@@ -9,7 +9,7 @@ lifecycle_phase: plan
 session: 247
 version: '1.5'
 generated: 2025-12-21
-last_updated: '2026-01-29T20:22:02'
+last_updated: '2026-01-29T21:24:21'
 ---
 # Implementation Plan: PlannerAgent Module Implementation
 
@@ -67,7 +67,7 @@ PlannerAgent module will transform a RequirementSet into a WorkPlan with grouped
 | Files to modify | 1 | `cli.py` (add plan commands) |
 | Lines of code affected | ~30 | CLI dispatch additions |
 | New files to create | 2 | `planner_agent.py`, `tests/test_planner_agent.py` |
-| Tests to write | 8 | Based on CH-003 success criteria |
+| Tests to write | 10 | 8 core + Test 0 (empty input) + Test 3.5 (malformed IDs) |
 | Dependencies | 2 | RequirementExtractor (input), WorkEngine (future consumer) |
 
 ### Complexity Factors
@@ -143,6 +143,24 @@ class PlannerAgent:
      - Setup (if needed)
      - Assertion that defines success -->
 
+### Test 0: Empty RequirementSet Produces Empty WorkPlan (A4)
+```python
+def test_empty_requirement_set():
+    """Empty RequirementSet produces empty WorkPlan, not crash."""
+    reqs = RequirementSet(
+        source_corpus="empty",
+        extracted_at=datetime.now(),
+        extractor_version="1.0",
+        requirements=[]
+    )
+    planner = PlannerAgent(reqs)
+    plan = planner.plan()
+
+    assert isinstance(plan, WorkPlan)
+    assert len(plan.work_items) == 0
+    assert len(plan.execution_order) == 0
+```
+
 ### Test 1: WorkPlan Schema Validation
 ```python
 def test_work_plan_schema():
@@ -187,6 +205,30 @@ def test_suggest_groupings_by_domain():
     assert len(groupings) == 2  # TRACE and CONTEXT
     trace_group = next(g for g in groupings if g.domain == "TRACE")
     assert len(trace_group.requirements) == 2
+```
+
+### Test 3.5: Malformed Requirement IDs Fall Back to GENERAL (A3)
+```python
+def test_malformed_id_falls_back_to_general():
+    """Requirements without domain segment use GENERAL domain."""
+    reqs = RequirementSet(
+        source_corpus="test",
+        extracted_at=datetime.now(),
+        extractor_version="1.0",
+        requirements=[
+            Requirement(id="REQ-001", description="No domain segment", source=...),
+            Requirement(id="CUSTOM-123", description="Non-standard prefix", source=...),
+            Requirement(id="REQ-TRACE-001", description="Valid format", source=...)
+        ]
+    )
+    planner = PlannerAgent(reqs)
+    groupings = planner.suggest_groupings()
+
+    # REQ-001 and CUSTOM-123 should be in GENERAL, REQ-TRACE-001 in TRACE
+    general_group = next(g for g in groupings if g.domain == "GENERAL")
+    assert len(general_group.requirements) == 2
+    trace_group = next(g for g in groupings if g.domain == "TRACE")
+    assert len(trace_group.requirements) == 1
 ```
 
 ### Test 4: Estimate Dependencies from derives_from
@@ -336,17 +378,30 @@ class WorkPlan:
 
 **File 2: MODIFY `.claude/haios/modules/cli.py`**
 
-Add to main() dispatch (around line 425):
+Add to main() dispatch (after `extract-requirements` command block, before the `else` clause at end of dispatch chain):
 
 ```python
+    # WORK-032: Plan from Requirements
     elif cmd == "plan":
-        if len(sys.argv) < 3:
+        args = sys.argv[2:]
+        corpus_config = None
+        requirements_path = None
+
+        # Parse --from-corpus flag (A10: pattern-based, not line-number)
+        if "--from-corpus" in args:
+            idx = args.index("--from-corpus")
+            corpus_config = args[idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
+
+        if args:
+            requirements_path = args[0]
+
+        if not requirements_path and not corpus_config:
             print("Usage: cli.py plan <requirements_path>")
             print("       cli.py plan --from-corpus <corpus_config>")
             return 1
-        if sys.argv[2] == "--from-corpus":
-            return cmd_plan_from_corpus(sys.argv[3])
-        return cmd_plan(sys.argv[2])
+
+        return cmd_plan(requirements_path, corpus_config)
 ```
 
 ### Call Chain Context
@@ -451,6 +506,7 @@ RequirementSet + (optional approved groupings)
 | Topological sort | Kahn's algorithm | Standard, handles DAGs, warns on cycles |
 | Import pattern | try/except conditional | Matches sibling modules (work_engine.py lines 49-54) |
 | RequirementStrength sort | MUST before SHOULD | Higher priority requirements first within group |
+| Corpus name access | `loader._parsed.name` | Matches requirement_extractor.py line 342 (A5 - follow existing pattern) |
 
 ### Input/Output Examples
 
@@ -523,7 +579,7 @@ No - per CH-003 Non-Goals: "Work item creation (that's WorkEngine's job)". Plann
 
 ### Step 1: Write Failing Tests
 - [ ] Create `tests/test_planner_agent.py`
-- [ ] Add all 8 tests from Tests First section
+- [ ] Add all 10 tests from Tests First section (including Test 0 and Test 3.5)
 - [ ] Verify all tests fail (red) - module doesn't exist yet
 
 ### Step 2: Implement Data Classes
@@ -554,7 +610,7 @@ No - per CH-003 Non-Goals: "Work item creation (that's WorkEngine's job)". Plann
 - [ ] Test 8 passes (green)
 
 ### Step 7: Integration Verification
-- [ ] All tests pass: `pytest tests/test_planner_agent.py -v`
+- [ ] All 10 tests pass: `pytest tests/test_planner_agent.py -v`
 - [ ] Run full test suite: `pytest tests/ -v` (no regressions)
 
 ### Step 8: README Sync (MUST)
@@ -614,8 +670,8 @@ No - per CH-003 Non-Goals: "Work item creation (that's WorkEngine's job)". Plann
 | Grouping heuristics (by domain, strength, dependencies) | [ ] | Tests 3-4 pass |
 | CLI command: `plan <requirements_file>` | [ ] | Test 8 passes |
 | CLI command: `plan --from-corpus <corpus_config>` | [ ] | Manual test |
-| Unit tests: `tests/test_planner_agent.py` | [ ] | 8 tests exist |
-| Integration with WorkEngine for work item creation | [ ] | Future - document only |
+| Unit tests: `tests/test_planner_agent.py` | [ ] | 10 tests exist (8 core + 2 edge cases) |
+| Integration with WorkEngine for work item creation | [ ] | A9: Scope is interface documentation only - PlannerAgent produces WorkPlan, WorkEngine consumes it. Actual integration implemented in future CH-006 (Orchestrator). |
 
 > **Anti-pattern prevented:** "Tests pass = Done" (E2-290). Tests verify code works. Deliverables verify scope is complete. Both required.
 
@@ -625,7 +681,7 @@ No - per CH-003 Non-Goals: "Work item creation (that's WorkEngine's job)". Plann
 |------|---------------|----------|-------|
 | `.claude/haios/modules/planner_agent.py` | PlannerAgent class with plan(), suggest_groupings(), estimate_dependencies() | [ ] | |
 | `.claude/haios/modules/cli.py` | plan command added | [ ] | |
-| `tests/test_planner_agent.py` | 8 tests covering all acceptance criteria | [ ] | |
+| `tests/test_planner_agent.py` | 10 tests covering all acceptance criteria + edge cases | [ ] | |
 | `.claude/haios/modules/README.md` | **MUST:** Lists planner_agent.py | [ ] | |
 
 **Verification Commands:**
