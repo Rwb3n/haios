@@ -3,7 +3,7 @@ name: plan-validation-cycle
 description: HAIOS Plan Validation Bridge for validating plan readiness. Use before
   entering DO phase. Guides CHECK->VALIDATE->APPROVE workflow.
 generated: 2025-12-25
-last_updated: '2026-01-24T21:17:13'
+last_updated: '2026-01-25T01:49:39'
 ---
 # Plan Validation Cycle (Bridge Skill)
 
@@ -19,7 +19,7 @@ This is a **Validation Skill** (bridge) that validates implementation plans are 
 ## The Cycle
 
 ```
-CHECK --> SPEC_ALIGN --> VALIDATE --> APPROVE
+CHECK --> SPEC_ALIGN --> CRITIQUE --> VALIDATE --> APPROVE
 ```
 
 > **Note (Session 233):** L4_ALIGN phase removed. L4 requirements are now in `L4/functional_requirements.md` for module work only. SPEC_ALIGN provides requirements traceability for all work via plan References section.
@@ -87,7 +87,44 @@ CHECK --> SPEC_ALIGN --> VALIDATE --> APPROVE
 
 ---
 
-### 3. VALIDATE Phase
+### 3. CRITIQUE Phase (E2-072)
+
+**Goal:** Surface implicit assumptions before implementation.
+
+**MUST Gate:** This phase invokes the critique-agent subagent to examine the plan for unstated assumptions that could cause implementation failures.
+
+**Actions:**
+1. Invoke critique-agent subagent:
+   ```
+   Task(subagent_type='critique-agent', prompt='Critique plan: {plan_path}')
+   ```
+2. Agent loads framework from `haios.yaml` `agents.critique.frameworks_dir`
+3. Agent analyzes plan against framework categories
+4. Agent produces:
+   - `{work_dir}/critique/critique-report.md` - Human-readable findings
+   - `{work_dir}/critique/assumptions.yaml` - Machine-parseable output
+5. Read critique verdict from `assumptions.yaml`
+6. Apply verdict:
+   - **BLOCK**: Unmitigated low-confidence assumptions exist. STOP.
+   - **REVISE**: Risks identified. Ask operator to proceed or revise plan.
+   - **PROCEED**: All assumptions mitigated or high confidence. Continue.
+
+**Exit Criteria:**
+- [ ] Critique agent invoked
+- [ ] Verdict is PROCEED, or
+- [ ] Verdict is REVISE and operator approves continuation, or
+- [ ] Verdict is BLOCK and returned to plan-authoring-cycle
+
+**On BLOCK:** Return to plan-authoring-cycle to address assumptions.
+**On REVISE + operator declines:** Return to plan-authoring-cycle.
+**On REVISE + operator approves:** Continue to VALIDATE.
+**On PROCEED:** Continue to VALIDATE.
+
+**Tools:** Task(critique-agent), Read
+
+---
+
+### 4. VALIDATE Phase (renumbered from 3)
 
 **Goal:** Check section content quality.
 
@@ -132,7 +169,7 @@ CHECK --> SPEC_ALIGN --> VALIDATE --> APPROVE
 
 ---
 
-### 4. APPROVE Phase
+### 5. APPROVE Phase (renumbered from 4)
 
 **Goal:** Mark plan as validated and ready, checkpoint context.
 
@@ -160,6 +197,7 @@ Skill(skill="checkpoint-cycle")
 **Exit Criteria:**
 - [ ] All CHECK criteria passed
 - [ ] **MUST:** SPEC_ALIGN passed (plan matches spec interface)
+- [ ] **MUST:** CRITIQUE passed (verdict PROCEED or operator-approved REVISE)
 - [ ] All VALIDATE criteria passed
 - [ ] Plan ready for implementation
 - [ ] **MUST:** checkpoint-cycle invoked (E2-287)
@@ -175,6 +213,7 @@ Skill(skill="checkpoint-cycle")
 |-------|--------------|--------|
 | CHECK | Read | List of missing sections |
 | SPEC_ALIGN | Read, Grep | Spec vs plan comparison (MUST gate) |
+| CRITIQUE | Task(critique-agent), Read | Assumption analysis + verdict (E2-072) |
 | VALIDATE | Read | Quality assessment |
 | APPROVE | Skill (checkpoint-cycle) | Validation summary + context preserved (E2-287) |
 
@@ -188,6 +227,8 @@ Skill(skill="checkpoint-cycle")
 | CHECK | Any placeholders? | Report placeholder locations |
 | SPEC_ALIGN | Are referenced specs read? | **BLOCK** - read specs first |
 | SPEC_ALIGN | Does plan interface match spec? | **BLOCK** - revise plan |
+| CRITIQUE | Is verdict PROCEED? | Handle BLOCK/REVISE per rules |
+| CRITIQUE | Operator approves REVISE? | Return to plan-authoring |
 | VALIDATE | Is Goal measurable? | Flag for revision |
 | VALIDATE | Are Tests concrete? | Flag for revision |
 | **VALIDATE** | Any `[BLOCKED]` in Open Decisions? | **BLOCK** - resolve decisions first (Gate 4) |
@@ -199,8 +240,9 @@ Skill(skill="checkpoint-cycle")
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
-| Four phases | CHECK -> SPEC_ALIGN -> VALIDATE -> APPROVE | L4_ALIGN removed Session 233 (non-functional) |
+| Five phases | CHECK -> SPEC_ALIGN -> CRITIQUE -> VALIDATE -> APPROVE | CRITIQUE added E2-072 for assumption surfacing |
 | SPEC_ALIGN = MUST gate | BLOCK if mismatch | Prevents "Assume over verify" anti-pattern |
+| CRITIQUE = MUST gate | BLOCK/REVISE/PROCEED verdicts | Surfaces implicit assumptions before implementation |
 | Validation not authoring | Separate from plan-authoring-cycle | Different concerns |
 | Read-only | No modifications | Bridge skills validate, don't modify |
 | Optional gate | Not required | Some plans may be pre-validated |
