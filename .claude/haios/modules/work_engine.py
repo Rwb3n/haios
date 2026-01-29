@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-19T17:59:47
+# System Auto: last updated on: 2026-01-28T21:22:06
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -73,6 +73,12 @@ class InvalidTransitionError(Exception):
 
 class WorkNotFoundError(Exception):
     """Raised when work item doesn't exist."""
+
+    pass
+
+
+class WorkIDUnavailableError(Exception):
+    """Raised when work item ID exists with terminal status (E2-304, REQ-VALID-001)."""
 
     pass
 
@@ -186,6 +192,32 @@ class WorkEngine:
             return None
         return self._parse_work_file(path)
 
+    def _validate_id_available(self, id: str) -> None:
+        """
+        Validate that work ID is available for creation (E2-304, REQ-VALID-001).
+
+        Raises WorkIDUnavailableError if ID exists with terminal status.
+        Allows overwriting active/draft items for backward compatibility.
+
+        Args:
+            id: Work item ID to validate
+
+        Raises:
+            WorkIDUnavailableError: If ID exists with status complete/archived
+        """
+        TERMINAL_STATUSES = {"complete", "archived"}
+
+        work = self.get_work(id)
+        if work is None:
+            return  # ID available
+
+        if work.status in TERMINAL_STATUSES:
+            raise WorkIDUnavailableError(
+                f"Work item {id} already exists with status '{work.status}'. "
+                "Use a different ID."
+            )
+        # Allow overwriting active items (backward compat)
+
     def create_work(
         self,
         id: str,
@@ -206,7 +238,13 @@ class WorkEngine:
 
         Returns:
             Path to created WORK.md
+
+        Raises:
+            WorkIDUnavailableError: If ID exists with terminal status (E2-304)
         """
+        # REQ-VALID-001: Validate ID availability against terminal statuses
+        self._validate_id_available(id)
+
         work_dir = self.active_dir / id
         work_dir.mkdir(parents=True, exist_ok=True)
 

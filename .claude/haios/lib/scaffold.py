@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-01-21T22:18:23
+# System Auto: last updated on: 2026-01-28T21:23:30
 """
 DEPRECATED: Use GovernanceLayer.scaffold_template() instead.
 
@@ -137,6 +137,33 @@ def _work_file_exists(backlog_id: str) -> bool:
     # Fall back to flat file pattern (legacy)
     pattern = f"WORK-{backlog_id}-*.md"
     return len(list(work_dir.glob(pattern))) > 0
+
+
+def _get_work_status(backlog_id: str) -> Optional[str]:
+    """Get status of existing work item (E2-304, REQ-VALID-001).
+
+    Args:
+        backlog_id: Work item ID to check
+
+    Returns:
+        Status string if work item exists, None otherwise.
+    """
+    import yaml
+
+    work_path = PROJECT_ROOT / "docs" / "work" / "active" / backlog_id / "WORK.md"
+    if not work_path.exists():
+        return None
+
+    try:
+        content = work_path.read_text(encoding="utf-8")
+        parts = content.split("---", 2)
+        if len(parts) >= 3:
+            fm = yaml.safe_load(parts[1])
+            return fm.get("status")
+    except Exception:
+        pass
+
+    return None
 
 
 def _create_work_subdirs(work_dir: Path, subdirs: list[str]) -> None:
@@ -446,6 +473,15 @@ def scaffold_template(
         if not _work_file_exists(backlog_id):
             raise ValueError(
                 f"Work file required. Run '/new-work {backlog_id} \"{title}\"' first."
+            )
+
+    # REQ-VALID-001: Block scaffold for work_item if ID has terminal status (E2-304)
+    if template == "work_item" and backlog_id:
+        existing_status = _get_work_status(backlog_id)
+        if existing_status in ("complete", "archived"):
+            raise ValueError(
+                f"Work item {backlog_id} already exists with status '{existing_status}'. "
+                "Use a different ID."
             )
 
     # Ensure output directory exists

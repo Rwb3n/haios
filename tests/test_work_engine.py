@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-19T16:31:38
+# System Auto: last updated on: 2026-01-28T21:20:35
 """
 Tests for WorkEngine module (E2-242).
 
@@ -51,6 +51,14 @@ WorkEngine = work_engine.WorkEngine
 WorkState = work_engine.WorkState
 InvalidTransitionError = work_engine.InvalidTransitionError
 WorkNotFoundError = work_engine.WorkNotFoundError
+# E2-304: Import new exception for ID validation tests
+# Note: Will fail until work_engine.py is updated
+try:
+    WorkIDUnavailableError = work_engine.WorkIDUnavailableError
+except AttributeError:
+    # Define stub for TDD - tests will fail until implementation
+    class WorkIDUnavailableError(Exception):
+        pass
 
 
 # Sample WORK.md content for testing
@@ -108,6 +116,68 @@ documents:
   checkpoints: []
 ---
 # WORK-E2-BLOCKED: Blocked Work Item
+"""
+
+# E2-304: Sample content for complete status work item
+SAMPLE_COMPLETE_WORK_MD = """---
+template: work_item
+id: E2-COMPLETE
+title: Complete Work Item
+status: complete
+owner: Hephaestus
+created: 2026-01-03
+closed: 2026-01-05
+milestone: M7b-WorkInfra
+priority: medium
+category: implementation
+blocked_by: []
+blocks: []
+current_node: complete
+node_history:
+- node: backlog
+  entered: '2026-01-03T10:00:00'
+  exited: '2026-01-05T10:00:00'
+- node: complete
+  entered: '2026-01-05T10:00:00'
+  exited: null
+memory_refs: []
+documents:
+  plans: []
+  investigations: []
+  checkpoints: []
+---
+# WORK-E2-COMPLETE: Complete Work Item
+"""
+
+# E2-304: Sample content for archived status work item
+SAMPLE_ARCHIVED_WORK_MD = """---
+template: work_item
+id: E2-ARCHIVED
+title: Archived Work Item
+status: archived
+owner: Hephaestus
+created: 2026-01-03
+closed: 2026-01-05
+milestone: M7b-WorkInfra
+priority: medium
+category: implementation
+blocked_by: []
+blocks: []
+current_node: complete
+node_history:
+- node: backlog
+  entered: '2026-01-03T10:00:00'
+  exited: '2026-01-05T10:00:00'
+- node: complete
+  entered: '2026-01-05T10:00:00'
+  exited: null
+memory_refs: []
+documents:
+  plans: []
+  investigations: []
+  checkpoints: []
+---
+# WORK-E2-ARCHIVED: Archived Work Item
 """
 
 
@@ -867,3 +937,63 @@ def test_workstate_defaults_for_missing_universal_fields(tmp_path, governance):
     assert work.acceptance_criteria == []
     assert work.artifacts == []
     assert work.extensions == {}
+
+
+# =============================================================================
+# E2-304: ID Validation Tests (REQ-VALID-001)
+# Tests for status-aware ID validation in create_work()
+# =============================================================================
+
+def test_create_work_rejects_complete_status(tmp_path, governance):
+    """E2-304: create_work should reject IDs with status=complete."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup: Create work item with status=complete
+    work_dir = tmp_path / "docs" / "work" / "active" / "E2-COMPLETE"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(SAMPLE_COMPLETE_WORK_MD, encoding="utf-8")
+
+    # Action + Assert: Should raise WorkIDUnavailableError
+    with pytest.raises(WorkIDUnavailableError) as exc:
+        engine.create_work("E2-COMPLETE", "New Title")
+    assert "already exists with status 'complete'" in str(exc.value)
+
+
+def test_create_work_rejects_archived_status(tmp_path, governance):
+    """E2-304: create_work should reject IDs with status=archived."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup: Create work item with status=archived
+    work_dir = tmp_path / "docs" / "work" / "active" / "E2-ARCHIVED"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(SAMPLE_ARCHIVED_WORK_MD, encoding="utf-8")
+
+    # Action + Assert: Should raise WorkIDUnavailableError
+    with pytest.raises(WorkIDUnavailableError) as exc:
+        engine.create_work("E2-ARCHIVED", "New Title")
+    assert "already exists with status 'archived'" in str(exc.value)
+
+
+def test_create_work_allows_active_status(tmp_path, governance):
+    """E2-304: create_work should allow overwriting active items (backward compat)."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup: Create work item with status=active
+    work_dir = tmp_path / "docs" / "work" / "active" / "E2-ACTIVE"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(SAMPLE_WORK_MD.replace("E2-TEST", "E2-ACTIVE"), encoding="utf-8")
+
+    # Should succeed - overwriting active items is intentional (backward compat)
+    result = engine.create_work("E2-ACTIVE", "Updated Title")
+    assert result.exists()
+
+
+def test_create_work_new_id_succeeds(tmp_path, governance):
+    """E2-304: create_work should succeed for new IDs."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # No setup - ID doesn't exist
+    result = engine.create_work("E2-NEW", "New Work Item")
+
+    assert result.exists()
+    assert "WORK.md" in str(result)
