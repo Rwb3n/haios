@@ -30,7 +30,7 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: 2026-01-26
-last_updated: '2026-01-26T19:32:44'
+last_updated: '2026-01-28T23:54:36'
 ---
 # WORK-020: Discoverability Architecture
 
@@ -41,40 +41,95 @@ last_updated: '2026-01-26T19:32:44'
 
 ## Context
 
-[Problem and root cause]
+**Problem:** HAIOS has 125 entry points spread across 4 systems with no unified discovery:
+- 77 justfile recipes
+- 19 skills
+- 20 commands
+- 9 agents
+
+**Friction points:**
+1. Agent doesn't know when to use `just X` vs `/command` vs `Skill(skill="X")`
+2. Some recipes wrap skills, some call cli.py, some are standalone
+3. No `just help` or categorized listing
+4. Checkpoint scaffolding: tried `just scaffold-checkpoint`, `just new-checkpoint` before finding `just scaffold checkpoint`
+5. Skills are in agent's system prompt but recipes require discovery
+6. Commands and skills overlap (e.g., `/close` invokes `close-work-cycle` skill)
+
+**Root cause:** Organic growth without unified discovery layer. Each system was added to solve specific problems but the aggregate creates cognitive overhead.
+
+---
+
+## Hypotheses
+
+**H1: Three-tier model can simplify**
+```
+User-facing: /commands (10-15 total)
+Agent-facing: Skills via Skill() (18 total)
+Runtime: just recipes (consolidate to ~30 core)
+```
+
+**H2: Just recipes should be implementation details**
+Agent shouldn't need to know `just scaffold checkpoint` - the `/new-checkpoint` command should handle it.
+
+**H3: Discovery needs a single entry point**
+`/haios help` or `just help` that shows categorized capabilities.
+
+---
+
+## Scope
+
+**In Scope:**
+- Inventory all entry points
+- Identify overlap/redundancy
+- Design unified discovery pattern
+- Recommend consolidation strategy
+
+**Out of Scope:**
+- Implementing all consolidation (spawn follow-up work)
+- Removing working infrastructure
 
 ---
 
 ## Deliverables
 
-<!-- VERIFICATION REQUIREMENT (Session 192 - E2-290 Learning)
+- [ ] Complete inventory of all entry points (recipes, skills, commands, agents)
+- [ ] Friction map showing overlaps and gaps
+- [ ] Proposed three-tier architecture
+- [ ] Discovery mechanism design (`/haios help` or equivalent)
+- [ ] Spawn implementation work items
 
-     These checkboxes are the SOURCE OF TRUTH for work completion.
+---
 
-     During CHECK phase of implementation-cycle:
-     - Agent MUST read this section
-     - Agent MUST verify EACH checkbox can be marked complete
-     - If ANY deliverable is incomplete, work is NOT done
+## Exploration Plan
 
-     "Tests pass" ≠ "Deliverables complete"
-     Tests verify code works. Deliverables verify scope is complete.
+- [ ] Inventory all 77 just recipes by category
+- [ ] Map skill→recipe dependencies
+- [ ] Map command→skill→recipe chains
+- [ ] Identify redundant paths
+- [ ] Design discovery mechanism
+- [ ] Draft consolidation proposal
 
-     NOTE (WORK-001): Acceptance criteria are in frontmatter (machine-parseable).
-     Deliverables are implementation outputs, not requirements.
--->
+---
 
-- [ ] [Deliverable 1]
-- [ ] [Deliverable 2]
+## Findings
+
+(To be populated during EXPLORE phase)
 
 ---
 
 ## History
 
+### 2026-01-28 - Populated (Session 256)
+- Filled in context with friction analysis
+- Defined hypotheses and scope
+- Created exploration plan
+
 ### 2026-01-26 - Created (Session 244)
-- Initial creation
+- Initial creation from obs-222-001
 
 ---
 
 ## References
 
-- [Related documents]
+- @.claude/haios/epochs/E2_3/observations/obs-222-001.md (spawn source)
+- Memory: 71797, 81378, 82201, 82302 (recipe architecture)

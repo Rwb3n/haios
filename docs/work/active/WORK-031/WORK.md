@@ -40,10 +40,15 @@ cycle_docs: {}
 memory_refs:
 - 82554
 - 82555
+- 81334
+- 82581
+- 82582
+- 82583
+- 82584
 extensions: {}
 version: '2.0'
 generated: 2026-01-29
-last_updated: '2026-01-29T18:35:18'
+last_updated: '2026-01-29T19:43:15'
 ---
 # WORK-031: CorpusLoader Module Implementation
 
@@ -87,16 +92,16 @@ This enables the INGEST stage to work on arbitrary corpora, not just hardcoded H
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] `.claude/haios/modules/corpus_loader.py` - CorpusLoader class
-- [ ] Corpus schema definition (YAML format specification)
-- [ ] `discover()` method returns filtered file list
-- [ ] `filter_by_type()` method for document type filtering
-- [ ] Multi-source corpus definition support
-- [ ] Exclusion pattern support
-- [ ] CLI command: `corpus-list <corpus_config>`
-- [ ] CLI integration: `extract-requirements --corpus <corpus_config>`
-- [ ] Unit tests: `tests/test_corpus_loader.py`
-- [ ] Example corpus config: `.claude/haios/config/corpus/haios-requirements.yaml`
+- [x] `.claude/haios/modules/corpus_loader.py` - CorpusLoader class
+- [x] Corpus schema definition (YAML format specification)
+- [x] `discover()` method returns filtered file list
+- [x] `filter_by_type()` method for document type filtering
+- [x] Multi-source corpus definition support
+- [x] Exclusion pattern support
+- [x] CLI command: `corpus-list <corpus_config>`
+- [x] CLI integration: `extract-requirements --corpus <corpus_config>`
+- [x] Unit tests: `tests/test_corpus_loader.py`
+- [x] Example corpus config: `.claude/haios/config/corpus/haios-requirements.yaml`
 
 ---
 
