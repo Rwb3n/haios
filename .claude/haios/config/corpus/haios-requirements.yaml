@@ -1,0 +1,31 @@
+# generated: 2026-01-29
+# System Auto: last updated on: 2026-01-29T19:33:05
+# Example corpus configuration for HAIOS requirements extraction
+# Used by CorpusLoader (WORK-031, CH-001)
+
+corpus:
+  name: haios-requirements
+  version: "1.0"
+
+  # Multiple sources aggregated into single corpus
+  sources:
+    # Technical specifications (TRDs)
+    - path: docs/specs
+      pattern: "*.md"
+      include_subdirs: true
+
+    # L4 functional requirements
+    - path: .claude/haios/manifesto/L4
+      pattern: "*.md"
+      include_subdirs: false
+
+    # Architecture documents
+    - path: .claude/haios/epochs/E2/architecture
+      pattern: "S*.md"
+      include_subdirs: false
+
+  # Exclusion patterns (supports ** recursive matching)
+  exclude:
+    - "**/archive/**"
+    - "**/deprecated/**"
+    - "**/*DEPRECATED*"
