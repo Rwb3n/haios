@@ -1,5 +1,5 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-01-29T18:54:38
+# System Auto: last updated on: 2026-01-29T19:00:01
 """
 PreToolUse Hook Handler (E2-085).
 
@@ -223,13 +223,20 @@ def _check_scaffold_governance(command: str) -> Optional[dict]:
 
     # Only block work_item scaffolding - other types are called by governed commands
     # that chain to cycles which fill placeholders
+    #
+    # Session 257 fix: More specific patterns to avoid false positives on heredoc content.
+    # Pattern must match actual command invocation, not text in commit messages.
+    # - `just work WORK-XXX` or `just work "title"` = actual scaffold command
+    # - `removed 'just work' suggestion` = text in heredoc, not a command
     scaffold_patterns = {
-        r'\bjust\s+work\b': "/new-work",
-        r'\bjust\s+scaffold\s+work_item\b': "/new-work",
+        # Match: just work WORK-XXX "title" or just work "title"
+        # Requires argument after 'just work' to confirm it's a scaffold command
+        r'(?:^|&&|;|\|)\s*just\s+work\s+(?:WORK-\d+|"[^"]+"|\'[^\']+\')': "/new-work",
+        r'(?:^|&&|;|\|)\s*just\s+scaffold\s+work_item\b': "/new-work",
     }
 
     for pattern, redirect in scaffold_patterns.items():
-        if re.search(pattern, command, re.IGNORECASE):
+        if re.search(pattern, command, re.IGNORECASE | re.MULTILINE):
             return _deny(
                 f"BLOCKED: Direct work_item scaffold. Use '{redirect}' command instead. "
                 "Work items require work-creation-cycle to populate placeholders."
