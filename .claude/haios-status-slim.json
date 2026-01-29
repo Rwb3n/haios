@@ -25,12 +25,10 @@
         "lifecycle_phase": null
     },
     "session_state": {
-        "active_cycle": null,
-        "current_phase": null,
-        "work_id": null,
-        "entered_at": null,
-        "active_queue": null,
-        "phase_history": []
+        "active_cycle": "implementation-cycle",
+        "current_phase": "PLAN",
+        "work_id": "WORK-033",
+        "entered_at": "2026-01-29T22:44:21.335673"
     },
     "active_work": [],
     "blocked_items": {},

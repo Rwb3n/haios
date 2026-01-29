@@ -30,7 +30,7 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: 2026-01-29
-last_updated: '2026-01-29T22:40:02'
+last_updated: '2026-01-29T22:54:30'
 ---
 # WORK-033: Pipeline Orchestrator Module (CH-006)
 
@@ -69,7 +69,7 @@ The Orchestrator (CH-006) is the state machine that wires these stages together 
 -->
 
 - [ ] `PipelineOrchestrator` class in `modules/pipeline_orchestrator.py`
-- [ ] State machine with INGEST → PLAN → BUILD → VALIDATE transitions
+- [ ] State machine with INGEST → PLAN transitions (BUILD/VALIDATE in enum, deferred to CH-004/CH-005)
 - [ ] INGEST stage: CorpusLoader → RequirementExtractor integration
 - [ ] PLAN stage: PlannerAgent integration
 - [ ] CLI command: `just pipeline-run <corpus_config>`
