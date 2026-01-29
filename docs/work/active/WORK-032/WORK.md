@@ -3,13 +3,13 @@ template: work_item
 id: WORK-032
 title: PlannerAgent Module Implementation
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-29
 spawned_by: null
 chapter: CH-003
 arc: pipeline
-closed: null
+closed: '2026-01-29'
 priority: medium
 effort: large
 traces_to:

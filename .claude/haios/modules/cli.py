@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-24T20:47:32
+# System Auto: last updated on: 2026-01-29T21:29:01
 """
 HAIOS Modules CLI Entry Point
 
@@ -13,6 +13,7 @@ Usage:
 """
 import sys
 from pathlib import Path
+from typing import Optional
 
 # Ensure the modules directory is importable
 _modules_path = Path(__file__).parent
@@ -288,6 +289,157 @@ def cmd_cycle_phases(cycle_id: str) -> int:
 
 
 # =============================================================================
+# WORK-015: RequirementExtractor Commands
+# =============================================================================
+
+
+def cmd_corpus_list(corpus_config: str) -> int:
+    """List files discovered by a corpus configuration.
+
+    Args:
+        corpus_config: Path to corpus YAML configuration file.
+
+    Returns:
+        0 on success, 1 on error.
+    """
+    from corpus_loader import CorpusLoader
+
+    try:
+        loader = CorpusLoader(Path(corpus_config))
+        files = loader.discover()
+
+        print(f"Corpus: {loader._parsed.name}")
+        print(f"Files discovered: {len(files)}")
+        print("---")
+        for f in sorted(files):
+            print(f"  {f}")
+        return 0
+    except FileNotFoundError:
+        print(f"Config not found: {corpus_config}")
+        return 1
+    except Exception as e:
+        print(f"Error: {e}")
+        return 1
+
+
+def cmd_plan(requirements_path: Optional[str], corpus_config: Optional[str] = None) -> int:
+    """Generate a work plan from requirements.
+
+    Args:
+        requirements_path: Path to requirements file or corpus directory.
+        corpus_config: Optional path to corpus YAML configuration file.
+
+    Returns:
+        0 on success, 1 on error.
+    """
+    import json
+    from requirement_extractor import RequirementExtractor
+    from planner_agent import PlannerAgent
+
+    try:
+        # Extract requirements first
+        if corpus_config:
+            from corpus_loader import CorpusLoader
+            loader = CorpusLoader(Path(corpus_config))
+            extractor = RequirementExtractor(loader)
+        elif requirements_path:
+            extractor = RequirementExtractor(Path(requirements_path))
+        else:
+            print("Error: Either requirements_path or corpus_config required")
+            return 1
+
+        requirement_set = extractor.extract()
+
+        # Generate work plan
+        planner = PlannerAgent(requirement_set)
+        work_plan = planner.plan()
+
+        # Output as JSON for pipeline consumption
+        output = {
+            "planner_version": work_plan.planner_version,
+            "created_at": work_plan.created_at.isoformat(),
+            "source_corpus": work_plan.source_requirements.source_corpus,
+            "work_item_count": len(work_plan.work_items),
+            "work_items": [
+                {
+                    "id": item.id,
+                    "title": item.title,
+                    "type": item.type,
+                    "requirement_refs": item.requirement_refs,
+                    "dependencies": item.dependencies,
+                    "estimated_effort": item.estimated_effort,
+                    "priority": item.priority,
+                }
+                for item in work_plan.work_items
+            ],
+            "execution_order": work_plan.execution_order,
+        }
+        print(json.dumps(output, indent=2))
+        return 0
+    except FileNotFoundError as e:
+        print(f"Path not found: {e}")
+        return 1
+    except Exception as e:
+        print(f"Error: {e}")
+        return 1
+
+
+def cmd_extract_requirements(corpus_path: str, corpus_config: Optional[str] = None) -> int:
+    """Extract requirements from a corpus of documents.
+
+    Args:
+        corpus_path: Path to corpus root directory or single file.
+        corpus_config: Optional path to corpus YAML configuration file.
+
+    Returns:
+        0 on success, 1 on error.
+    """
+    import json
+    from requirement_extractor import RequirementExtractor
+
+    try:
+        # Use CorpusLoader if config provided (WORK-031)
+        if corpus_config:
+            from corpus_loader import CorpusLoader
+            loader = CorpusLoader(Path(corpus_config))
+            extractor = RequirementExtractor(loader)
+        else:
+            extractor = RequirementExtractor(Path(corpus_path))
+        result = extractor.extract()
+
+        # Output as JSON for pipeline consumption
+        output = {
+            "source_corpus": result.source_corpus,
+            "extracted_at": result.extracted_at.isoformat(),
+            "extractor_version": result.extractor_version,
+            "requirement_count": len(result.requirements),
+            "requirements": [
+                {
+                    "id": r.id,
+                    "description": r.description,
+                    "strength": r.strength.value,
+                    "type": r.type.value,
+                    "confidence": r.confidence,
+                    "source": {
+                        "file": r.source.file,
+                        "line_range": r.source.line_range,
+                        "document_type": r.source.document_type.value
+                    }
+                }
+                for r in result.requirements
+            ]
+        }
+        print(json.dumps(output, indent=2))
+        return 0
+    except FileNotFoundError:
+        print(f"Path not found: {corpus_path}")
+        return 1
+    except Exception as e:
+        print(f"Error: {e}")
+        return 1
+
+
+# =============================================================================
 # E2-252: Validate and Scaffold Commands
 # =============================================================================
 
@@ -457,6 +609,56 @@ def main():
             print("Usage: cli.py cycle-phases <cycle_id>")
             return 1
         return cmd_cycle_phases(sys.argv[2])
+
+    # WORK-031: Corpus List
+    elif cmd == "corpus-list":
+        if len(sys.argv) != 3:
+            print("Usage: cli.py corpus-list <corpus_config>")
+            return 1
+        return cmd_corpus_list(sys.argv[2])
+
+    # WORK-015: Extract Requirements (with WORK-031 --corpus option)
+    elif cmd == "extract-requirements":
+        args = sys.argv[2:]
+        corpus_config = None
+        corpus_path = None
+
+        # Parse --corpus flag
+        if "--corpus" in args:
+            idx = args.index("--corpus")
+            corpus_config = args[idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
+
+        if args:
+            corpus_path = args[0]
+
+        if not corpus_path and not corpus_config:
+            print("Usage: cli.py extract-requirements <corpus_path> [--corpus <config>]")
+            return 1
+
+        return cmd_extract_requirements(corpus_path or ".", corpus_config)
+
+    # WORK-032: Plan from Requirements
+    elif cmd == "plan":
+        args = sys.argv[2:]
+        corpus_config = None
+        requirements_path = None
+
+        # Parse --from-corpus flag (pattern-based, not line-number per A10)
+        if "--from-corpus" in args:
+            idx = args.index("--from-corpus")
+            corpus_config = args[idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
+
+        if args:
+            requirements_path = args[0]
+
+        if not requirements_path and not corpus_config:
+            print("Usage: cli.py plan <requirements_path>")
+            print("       cli.py plan --from-corpus <corpus_config>")
+            return 1
+
+        return cmd_plan(requirements_path, corpus_config)
 
     else:
         print(f"Unknown command: {cmd}")

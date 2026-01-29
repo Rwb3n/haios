@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-22T22:44:13
+# System Auto: last updated on: 2026-01-29T21:32:13
 # HAIOS Modules
 
 Core modules for HAIOS Chariot Architecture (L4-implementation.md).
@@ -19,6 +19,9 @@ This directory contains the black-box modules that form the HAIOS runtime:
 | `backfill_engine.py` | Extracted (E2-279) | ~220 | Backlog content backfill |
 | `context_loader.py` | Implemented (E2-254) | ~300 | L0-L4 context loading, session tracking |
 | `cycle_runner.py` | Implemented (E2-255) | ~350 | Phase gate validation, cycle phase lookup |
+| `requirement_extractor.py` | Implemented (WORK-015) | ~390 | Extract requirements from TRDs, manifesto, prose |
+| `corpus_loader.py` | Implemented (WORK-031) | ~180 | YAML-configurable file discovery for RequirementExtractor |
+| `planner_agent.py` | Implemented (WORK-032) | ~300 | PLAN stage: RequirementSet → WorkPlan with groupings and dependencies |
 
 ## GovernanceLayer (E2-240)
 
@@ -251,6 +254,16 @@ class WorkState:
     memory_refs: List[int]
     path: Optional[Path]
 ```
+
+### Exception Classes
+
+| Exception | Purpose | Raised By |
+|-----------|---------|-----------|
+| `InvalidTransitionError` | Invalid DAG node transition | `transition()` |
+| `WorkNotFoundError` | Work item doesn't exist | `transition()`, `close()`, `archive()` |
+| `WorkIDUnavailableError` | Work ID exists with terminal status (E2-304) | `create_work()` |
+
+The `WorkIDUnavailableError` (E2-304, REQ-VALID-001) prevents accidental overwrite of completed work items. Raised when attempting to create a work item with an ID that already exists with status `complete` or `archived`.
 
 ### Invariants
 
@@ -580,6 +593,65 @@ just cycle-phases implementation-cycle
 # ['PLAN', 'DO', 'CHECK', 'DONE', 'CHAIN']
 ```
 
+## PlannerAgent (WORK-032)
+
+PLAN stage component for the doc-to-product pipeline. Transforms RequirementSet into WorkPlan.
+
+### Functions
+
+| Function | Input | Output |
+|----------|-------|--------|
+| `suggest_groupings()` | None | `List[RequirementGroup]` (for operator review) |
+| `estimate_dependencies()` | None | `DependencyGraph` with topological sort |
+| `plan(approved_groupings)` | Optional groupings | `WorkPlan` with work items and execution order |
+
+### Data Classes
+
+| Class | Fields | Purpose |
+|-------|--------|---------|
+| `PlannedWorkItem` | id, title, requirement_refs, dependencies, priority | Suggested work item (WORK-PXXX prefix) |
+| `RequirementGroup` | domain, requirements, suggested_title | Group of requirements for one work item |
+| `DependencyGraph` | edges, nodes, topological_sort() | Dependency graph with cycle detection |
+| `WorkPlan` | source_requirements, work_items, execution_order | Output of PLAN stage per S26 |
+
+### Invariants
+
+- MUST group by domain (REQ-TRACE-*, REQ-CONTEXT-*, etc.)
+- MUST sort MUST requirements before SHOULD within groups
+- MUST use Kahn's algorithm for topological sort
+- MUST NOT create work items (that's WorkEngine's job)
+
+### Usage
+
+```python
+from planner_agent import PlannerAgent, WorkPlan
+from requirement_extractor import RequirementExtractor
+
+# Extract requirements
+extractor = RequirementExtractor(corpus_path)
+requirements = extractor.extract()
+
+# Generate work plan
+planner = PlannerAgent(requirements)
+groupings = planner.suggest_groupings()  # For operator review
+plan = planner.plan()  # Or planner.plan(approved_groupings)
+
+print(f"Work items: {len(plan.work_items)}")
+print(f"Execution order: {plan.execution_order}")
+```
+
+### CLI Integration
+
+```bash
+# Plan from requirements file
+python .claude/haios/modules/cli.py plan <requirements_path>
+
+# Plan from corpus config
+python .claude/haios/modules/cli.py plan --from-corpus <corpus_config>
+```
+
+---
+
 ## Files
 
 | File | Purpose |
@@ -594,7 +666,10 @@ just cycle-phases implementation-cycle
 | `backfill_engine.py` | BackfillEngine module - backlog backfill (E2-279) |
 | `context_loader.py` | ContextLoader module (E2-254) |
 | `cycle_runner.py` | CycleRunner module (E2-255) |
-| `cli.py` | CLI entry point for justfile recipes (E2-250 through E2-255) |
+| `requirement_extractor.py` | RequirementExtractor module (WORK-015) |
+| `corpus_loader.py` | CorpusLoader module (WORK-031) |
+| `planner_agent.py` | PlannerAgent module (WORK-032) |
+| `cli.py` | CLI entry point for justfile recipes |
 | `README.md` | This documentation |
 
 ## Consumers (E2-264)
