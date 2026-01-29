@@ -1,5 +1,5 @@
 # generated: 2026-01-21
-# System Auto: last updated on: 2026-01-21T20:14:16
+# System Auto: last updated on: 2026-01-28T23:23:13
 """
 Tests for lib migration from .claude/lib/ to .claude/haios/lib/
 
@@ -62,15 +62,10 @@ class TestLibModulesImportable:
                 "errors",
             ]
 
-            # Modules with haios_etl dependencies (pre-existing external deps)
-            # Just verify files exist, don't test import
-            etl_dependent_modules = [
-                "retrieval",
-                "synthesis",
-                "extraction",
-                "cli",
-                "mcp_server",
-            ]
+            # WORK-029: Removed broken ETL-dependent files from .claude/haios/lib/
+            # These modules now live ONLY in haios_etl/ with proper relative imports
+            # Deleted files: retrieval.py, synthesis.py, extraction.py, mcp_server.py
+            # cli.py in .claude/haios/lib/ is a separate CLI dispatcher, not haios_etl copy
 
             imported = []
             failed = []
@@ -84,11 +79,6 @@ class TestLibModulesImportable:
 
             assert len(failed) == 0, f"Failed to import core modules: {failed}"
             assert len(imported) >= 17, f"Expected at least 17 core modules, got {len(imported)}"
-
-            # Verify ETL-dependent module files exist (structural check only)
-            for mod in etl_dependent_modules:
-                mod_file = haios_lib / f"{mod}.py"
-                assert mod_file.exists(), f"Module file {mod_file} should exist"
         finally:
             # Clean up path
             sys.path.remove(str(haios_lib))

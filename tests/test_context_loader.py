@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-01-18T10:43:22
+# System Auto: last updated on: 2026-01-22T22:27:35
 """
 Tests for ContextLoader Module (E2-254)
 
@@ -228,6 +228,158 @@ class TestCLIIntegration:
         result = cmd_context_load(project_root=tmp_path)
 
         assert result == 0
+
+
+class TestRoleBasedLoading:
+    """Tests for role-based config-driven loading (WORK-008)."""
+
+    def test_load_context_accepts_role(self, tmp_path):
+        """load_context() accepts role parameter."""
+        from context_loader import ContextLoader
+
+        # Set up minimal config with context.roles
+        config_dir = tmp_path / ".claude" / "haios" / "config"
+        config_dir.mkdir(parents=True)
+        (config_dir / "haios.yaml").write_text("""
+context:
+  roles:
+    main:
+      loaders: []
+      description: "Test role"
+""")
+
+        # Set up manifesto for fallback
+        manifesto_dir = tmp_path / ".claude" / "haios" / "manifesto"
+        manifesto_dir.mkdir(parents=True)
+        for level in ["L0-telos", "L1-principal", "L2-intent", "L3-requirements", "L4-implementation"]:
+            (manifesto_dir / f"{level}.md").write_text(f"# {level}")
+
+        status_path = tmp_path / ".claude" / "haios-status.json"
+        status_path.write_text(json.dumps({"last_session": 1}))
+
+        loader = ContextLoader(project_root=tmp_path)
+        ctx = loader.load_context(role="main")
+
+        assert ctx is not None
+        assert ctx.role == "main"
+
+    def test_config_has_role_loader_mapping(self):
+        """haios.yaml has context.roles section."""
+        import yaml
+
+        config_path = Path(__file__).parent.parent / ".claude" / "haios" / "config" / "haios.yaml"
+        with open(config_path) as f:
+            config = yaml.safe_load(f)
+
+        assert "context" in config
+        assert "roles" in config["context"]
+        assert "main" in config["context"]["roles"]
+
+    def test_main_role_loads_identity(self):
+        """Role 'main' loads identity context from real project."""
+        from context_loader import ContextLoader
+
+        # Use real project root where IdentityLoader exists
+        project_root = Path(__file__).parent.parent
+        loader = ContextLoader(project_root=project_root)
+        ctx = loader.load_context(role="main")
+
+        assert "identity" in ctx.loaded_context
+        # Content should be from identity loader (contains IDENTITY header or Mission)
+        assert "IDENTITY" in ctx.loaded_context["identity"] or "Mission" in ctx.loaded_context["identity"]
+
+    def test_unknown_role_raises(self):
+        """Unknown role raises ValueError."""
+        from context_loader import ContextLoader
+
+        # Use real project root where config exists
+        project_root = Path(__file__).parent.parent
+        loader = ContextLoader(project_root=project_root)
+
+        with pytest.raises(ValueError):
+            loader.load_context(role="nonexistent_role")
+
+    def test_loader_registry_extensible(self):
+        """New loaders can be added to registry."""
+        from context_loader import ContextLoader
+
+        # Use real project root where IdentityLoader exists
+        project_root = Path(__file__).parent.parent
+        loader = ContextLoader(project_root=project_root)
+
+        # Should have identity loader registered
+        assert hasattr(loader, "_loader_registry")
+        assert "identity" in loader._loader_registry
+
+
+class TestCLIContextLoadIdentityOutput:
+    """Tests for CLI context-load outputting identity content (WORK-009)."""
+
+    def test_context_load_returns_zero_with_valid_config(self, tmp_path):
+        """context-load command returns 0 when config is valid."""
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "modules"))
+
+        from cli import cmd_context_load
+
+        # Set up config with identity loader
+        config_dir = tmp_path / ".claude" / "haios" / "config"
+        config_dir.mkdir(parents=True)
+        (config_dir / "haios.yaml").write_text("""
+context:
+  roles:
+    main:
+      loaders: []
+      description: "Main agent role"
+""")
+
+        # Set up manifesto
+        manifesto_dir = tmp_path / ".claude" / "haios" / "manifesto"
+        manifesto_dir.mkdir(parents=True)
+        for level in ["L0-telos", "L1-principal", "L2-intent", "L3-requirements", "L4-implementation"]:
+            (manifesto_dir / f"{level}.md").write_text(f"# {level}")
+
+        status_path = tmp_path / ".claude" / "haios-status.json"
+        status_path.write_text('{"last_session": 227}')
+
+        # Run CLI command - just verify it returns 0
+        result = cmd_context_load(project_root=tmp_path, role="main")
+
+        assert result == 0
+
+    def test_context_load_accepts_role_parameter(self, tmp_path):
+        """context-load accepts role parameter without error."""
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "modules"))
+
+        from cli import cmd_context_load
+
+        # Minimal setup
+        config_dir = tmp_path / ".claude" / "haios" / "config"
+        config_dir.mkdir(parents=True)
+        (config_dir / "haios.yaml").write_text("""
+context:
+  roles:
+    main:
+      loaders: []
+    builder:
+      loaders: []
+""")
+
+        manifesto_dir = tmp_path / ".claude" / "haios" / "manifesto"
+        manifesto_dir.mkdir(parents=True)
+        for level in ["L0-telos", "L1-principal", "L2-intent", "L3-requirements", "L4-implementation"]:
+            (manifesto_dir / f"{level}.md").write_text(f"# {level}")
+
+        status_path = tmp_path / ".claude" / "haios-status.json"
+        status_path.write_text('{"last_session": 227}')
+
+        # Test both roles work
+        result_main = cmd_context_load(project_root=tmp_path, role="main")
+        result_builder = cmd_context_load(project_root=tmp_path, role="builder")
+
+        assert result_main == 0
+        assert result_builder == 0
 
 
 class TestGenerateStatus:
