@@ -3,13 +3,13 @@ template: work_item
 id: WORK-031
 title: CorpusLoader Module Implementation
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-29
 spawned_by: null
 chapter: CH-001
 arc: pipeline
-closed: null
+closed: '2026-01-29'
 priority: medium
 effort: medium
 traces_to:
@@ -45,6 +45,16 @@ memory_refs:
 - 82582
 - 82583
 - 82584
+- 82589
+- 82590
+- 82591
+- 82592
+- 82593
+- 82594
+- 82595
+- 82596
+- 82597
+- 82598
 extensions: {}
 version: '2.0'
 generated: 2026-01-29
