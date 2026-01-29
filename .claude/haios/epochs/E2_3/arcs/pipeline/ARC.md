@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-29T18:30:02
+# System Auto: last updated on: 2026-01-29T22:38:29
 # Arc: Pipeline
 
 ## Arc Definition
@@ -7,7 +7,7 @@
 **Arc ID:** Pipeline
 **Epoch:** E2.3 (The Pipeline)
 **Name:** Doc-to-Product Stages
-**Status:** Planned
+**Status:** Active
 **Pressure:** [volumous] - thematic exploration
 
 ---
@@ -26,9 +26,9 @@ CORPUS → INGEST → PLAN → BUILD → VALIDATE → PRODUCT
 
 | Chapter | Name | Status | Purpose |
 |---------|------|--------|---------|
-| CH-001 | [CorpusLoader](CH-001-corpus-loader.md) | Planned | Read arbitrary docs, not hardcoded paths |
-| CH-002 | [RequirementExtractor](CH-002-requirement-extractor.md) | Complete | Parse docs → structured requirements |
-| CH-003 | [PlannerAgent](CH-003-planner-agent.md) | Planned | Decompose requirements → work items |
+| CH-001 | [CorpusLoader](CH-001-corpus-loader.md) | **Complete** | Read arbitrary docs, not hardcoded paths |
+| CH-002 | [RequirementExtractor](CH-002-requirement-extractor.md) | **Complete** | Parse docs → structured requirements |
+| CH-003 | [PlannerAgent](CH-003-planner-agent.md) | **Complete** | Decompose requirements → work items |
 | CH-004 | BuilderInterface | Planned | Clean interface for existing build capability |
 | CH-005 | ValidatorAgent | Planned | Check output against source specs |
 | CH-006 | Orchestrator | Planned | Pipeline state machine, routing |
@@ -77,9 +77,11 @@ validate(artifacts: Artifacts, requirements: RequirementSet) → ValidationRepor
 
 ## Exit Criteria
 
-- [ ] At least INGEST stage functional
-- [ ] Corpus loads from arbitrary path
-- [ ] Requirements extracted and structured
+- [x] At least INGEST stage functional (CorpusLoader + RequirementExtractor)
+- [x] Corpus loads from arbitrary path (CorpusLoader with YAML config)
+- [x] Requirements extracted and structured (RequirementSet schema)
+- [ ] PLAN stage functional (PlannerAgent needs runtime consumer)
+- [ ] Orchestrator wires stages together
 
 ---
 
