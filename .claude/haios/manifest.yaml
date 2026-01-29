@@ -1,5 +1,5 @@
 # generated: 2026-01-05
-# System Auto: last updated on: 2026-01-08T22:09:16
+# System Auto: last updated on: 2026-01-25T01:55:03
 # .claude/haios/manifest.yaml
 # Plugin manifest - declares everything HAIOS provides
 # Schema: SECTION-18-PORTABLE-PLUGIN-SPEC.md
@@ -29,6 +29,8 @@ components:
       source: "commands/close/"
     - id: "coldstart"
       source: "commands/coldstart/"
+    - id: "critique"
+      source: "commands/critique/"
     - id: "haios"
       source: "commands/haios/"
     - id: "implement"
@@ -119,10 +121,13 @@ components:
       source: "skills/work-creation-cycle/"
       category: "cycle"
 
-  # Agents (7 total)
+  # Agents (8 total)
   agents:
     - id: "anti-pattern-checker"
       source: "agents/anti-pattern-checker/"
+      required: false
+    - id: "critique-agent"
+      source: "agents/critique-agent/"
       required: false
     - id: "investigation-agent"
       source: "agents/investigation-agent/"

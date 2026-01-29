@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-20T20:03:08
+# System Auto: last updated on: 2026-01-25T01:48:14
 # HAIOS System Configuration
 # Consolidates: governance-toggles.yaml, routing-thresholds.yaml
 # Version: 2.3 (Session 206 - The Pipeline)
@@ -46,3 +46,35 @@ thresholds:
     max_count: 10
     divert_to: observation-triage-cycle
     escape_priorities: [critical]
+
+# Context loading configuration (WORK-008)
+# Role-based loader dispatch per L4 principles
+context:
+  roles:
+    main:
+      loaders: [identity]
+      description: "Main agent - philosophical grounding"
+    builder:
+      loaders: [identity]
+      description: "Builder agent - identity + work context"
+    validator:
+      loaders: [identity]
+      description: "Validator agent - identity + requirements"
+  loader_registry:
+    identity:
+      module: identity_loader
+      class: IdentityLoader
+
+# Agent configurations (E2-072: Phase-as-Subagent pattern)
+agents:
+  critique:
+    description: "Pre-implementation assumption surfacing"
+    framework: assumption_surfacing  # Default framework
+    frameworks_dir: ".claude/haios/config/critique_frameworks/"
+    integration:
+      gate: plan-validation-cycle.CRITIQUE
+      trigger: pre-DO
+    context_loading:
+      - manifesto/L4/agent_user_requirements.md
+      - work_item
+      - plan

@@ -2,18 +2,20 @@
 template: investigation
 status: complete
 date: 2025-12-20
-backlog_id: INV-019
-title: "Investigation: Synthesis Coverage Gap - Query Ordering Bug"
+backlog_id: null
+title: 'Investigation: Synthesis Coverage Gap - Query Ordering Bug'
 author: Hephaestus
 session: 88
 lifecycle_phase: discovery
-related: [PLAN-SYNTHESIS-001, E2-FIX-001]
+related:
+- PLAN-SYNTHESIS-001
+- E2-FIX-001
 milestone: M3-Cycles
 memory_refs: []
-version: "1.1"
+version: '1.1'
+generated: '2026-01-25'
+last_updated: '2026-01-25T22:07:04'
 ---
-# generated: 2025-12-20
-# System Auto: last updated on: 2025-12-20 10:53:06
 # Investigation: Synthesis Coverage Gap - Query Ordering Bug
 
 @docs/README.md

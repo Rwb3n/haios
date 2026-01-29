@@ -1,5 +1,5 @@
 # generated: 2025-12-29
-# System Auto: last updated on: 2026-01-26T20:10:22
+# System Auto: last updated on: 2026-01-26T23:48:26
 """
 Governance event logging and threshold monitoring.
 
@@ -225,6 +225,15 @@ def scan_incomplete_work(project_root: Path) -> list[dict]:
                 continue
 
             yaml_content = match.group(1)
+
+            # Extract status field and skip terminal statuses
+            # Uses same terminal set as WorkEngine.get_ready() (Session 211)
+            status_match = re.search(r"status:\s*(\S+)", yaml_content)
+            status = status_match.group(1).strip() if status_match else ""
+            terminal_statuses = {"complete", "archived", "dismissed", "invalid", "deferred"}
+            if status in terminal_statuses:
+                continue
+
             # Check for exited: null in node_history
             if "exited: null" in yaml_content or "exited: ~" in yaml_content:
                 # Extract id

@@ -1,8 +1,13 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-10T17:03:19
+# System Auto: last updated on: 2026-01-25T21:59:20
 #!/usr/bin/env python3
 """
 Plan Tree Viewer - Shows milestone progress and dependency status.
+
+DEPRECATION NOTICE (Session 241):
+    This script duplicates WorkEngine.get_ready() logic.
+    Prefer: just queue  (uses WorkEngine)
+    This script will be removed after E2.3.
 
 Usage:
     python scripts/plan_tree.py          # Show full tree
@@ -95,9 +100,11 @@ def main():
         print("READY (unblocked across all milestones):")
         # Scan ALL work files in active/, not just milestone-registered items
         # Session 187: Milestones deprecated, chapters are the new taxonomy
+        # Session 241: Match WorkEngine terminal statuses (was only filtering 'complete')
+        terminal_statuses = {"complete", "archived", "dismissed", "invalid", "deferred"}
         for item_id, plan in plans.items():
             status = plan.get("status", "")
-            if status == "complete":
+            if status in terminal_statuses:
                 continue
             blockers = plan.get("blocked_by", [])
             if not blockers or all(b in all_complete for b in blockers):

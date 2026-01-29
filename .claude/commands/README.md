@@ -4,7 +4,7 @@ status: active
 date: 2025-12-06
 component: commands
 generated: 2025-12-23
-last_updated: '2026-01-05T21:11:22'
+last_updated: '2026-01-25T01:50:11'
 ---
 # Slash Commands
 
@@ -31,6 +31,7 @@ Custom slash commands for HAIOS governance. Available via `/command` syntax.
 | `/schema [table]` | Quick schema lookup | MCP schema_info tool |
 | `/workspace` | Outstanding work status | Parses haios-status.json |
 | `/close <backlog_id>` | Close work item with DoD validation | ADR-033 enforcement |
+| `/critique <artifact>` | Invoke critique agent on artifact | critique-agent subagent |
 
 ## Scaffold Commands (Template-Based)
 
