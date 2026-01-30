@@ -3,13 +3,13 @@ template: work_item
 id: WORK-038
 title: Fix Content Truncation Bug in Ingester
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-30
 spawned_by: OBS-263-003
 chapter: null
 arc: null
-closed: null
+closed: '2026-01-30'
 priority: high
 effort: low
 traces_to:
@@ -32,11 +32,22 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 82669
+- 82670
+- 82671
+- 82672
+- 82673
+- 82674
+- 82683
+- 82684
+- 82685
+- 82686
+- 82687
 extensions: {}
 version: '2.0'
 generated: 2026-01-30
-last_updated: '2026-01-30T19:41:03'
+last_updated: '2026-01-30T20:24:18'
 ---
 # WORK-038: Fix Content Truncation Bug in Ingester
 
@@ -69,9 +80,9 @@ The truncated `name` is then mapped to the `content` column in the database, whi
 ## Deliverables
 
 - [x] Fix `haios_etl/agents/ingester.py:167` - remove [:100] truncation
-- [ ] Run data migration to recover 1,298 truncated concepts
-- [ ] Verify memory search returns full content
-- [ ] Add test to prevent regression
+- [x] Run data migration to recover truncated concepts (614 recovered via refined SQL)
+- [x] Verify memory search returns full content (0 truncation candidates remaining)
+- [x] Add test to prevent regression (test_ingester_preserves_full_content_no_truncation)
 
 ---
 
@@ -90,23 +101,78 @@ name=concept.get("content", ""),
 
 ### Data Migration
 
+**Step 1: Create backup** (MUST before migration)
+```sql
+CREATE TABLE concepts_backup_20260130 AS SELECT * FROM concepts;
+```
+
+**Step 2: Count candidates** (verify before migration)
+```sql
+-- Count concepts to be recovered
+SELECT COUNT(*) as affected FROM concepts
+WHERE LENGTH(content) = 100
+AND source_adr IS NOT NULL
+AND LENGTH(source_adr) > 100
+AND type NOT IN ('Decision')
+AND source_adr NOT LIKE '%/%'
+AND content = SUBSTR(source_adr, 1, 100);
+```
+
+**Step 3: Run migration** (refined per critique A1, A2)
 ```sql
 -- Recover truncated concepts from source_adr
+-- Filters: excludes Decision types, file paths, verifies truncation match
 UPDATE concepts
 SET content = source_adr
 WHERE LENGTH(content) = 100
 AND source_adr IS NOT NULL
-AND LENGTH(source_adr) > 100;
+AND LENGTH(source_adr) > 100
+AND type NOT IN ('Decision')
+AND source_adr NOT LIKE '%/%'
+AND content = SUBSTR(source_adr, 1, 100);
 ```
 
 ### Verification
 
 ```sql
--- Should return 0 after migration
+-- Should return 0 after migration (only verified truncations remain)
 SELECT COUNT(*) FROM concepts
 WHERE LENGTH(content) = 100
 AND source_adr IS NOT NULL
-AND LENGTH(source_adr) > 100;
+AND LENGTH(source_adr) > 100
+AND type NOT IN ('Decision')
+AND source_adr NOT LIKE '%/%'
+AND content = SUBSTR(source_adr, 1, 100);
+```
+
+### Regression Test (TDD - write first)
+
+```python
+def test_ingester_preserves_full_content():
+    """Regression test for WORK-038: content truncation bug.
+
+    Verifies end-to-end: ingester input -> database content verification.
+    Content over 100 chars MUST be stored completely, not truncated.
+    """
+    content = "A" * 200  # 200 chars, exceeds old 100-char truncation
+
+    with patch.object(ingester, '_extract_content') as mock_extract:
+        mock_extract.return_value = {
+            "entities": [],
+            "concepts": [{"type": "episteme", "content": content}]
+        }
+
+        result = ingester.ingest(content, "test.md", "episteme")
+
+    # Verify stored content is NOT truncated
+    conn = db_manager.get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT content FROM concepts WHERE id = ?", (result.concept_ids[0],))
+    row = cursor.fetchone()
+
+    assert row is not None, "Concept not found in database"
+    assert len(row[0]) == 200, f"Content truncated: expected 200 chars, got {len(row[0])}"
+    assert row[0] == content, "Content mismatch"
 ```
 
 ---

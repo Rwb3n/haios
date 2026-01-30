@@ -1,5 +1,5 @@
 # generated: 2025-12-01
-# System Auto: last updated on: 2025-12-13 15:56:50
+# System Auto: last updated on: 2026-01-30T20:09:02
 # Ingester Agent Tests (Session 18 - PLAN-AGENT-ECOSYSTEM-001)
 # Design Decisions: DD-015 (single-item), DD-016 (retry), DD-017 (provenance), DD-019 (timeout)
 
@@ -528,3 +528,47 @@ def test_ingest_creates_embedding_for_each_concept(ingester_with_extractor, db_m
         cursor.execute("SELECT concept_id FROM embeddings WHERE concept_id = ?", (concept_id,))
         row = cursor.fetchone()
         assert row is not None, f"Expected embedding for concept {concept_id}"
+
+
+# =============================================================================
+# REGRESSION TESTS
+# =============================================================================
+
+def test_ingester_preserves_full_content_no_truncation(ingester, db_manager):
+    """WORK-038: Regression test for content truncation bug.
+
+    Verifies end-to-end: ingester input -> database content verification.
+    Content over 100 chars MUST be stored completely, not truncated.
+
+    Bug: haios_etl/agents/ingester.py:167 had [:100] slice that truncated
+    the 'name' parameter passed to insert_concept, which maps to 'content' column.
+    """
+    # Content significantly longer than 100 chars
+    long_content = "A" * 200
+
+    with patch.object(ingester, '_extract_content') as mock_extract:
+        mock_extract.return_value = {
+            "entities": [],
+            "concepts": [{"type": "episteme", "content": long_content}]
+        }
+
+        result = ingester.ingest(
+            content=long_content,
+            source_path="test.md",
+            content_type_hint="episteme"
+        )
+
+    # Verify concept was stored
+    assert len(result.concept_ids) == 1, "Expected one concept to be stored"
+    concept_id = result.concept_ids[0]
+
+    # Verify stored content is NOT truncated
+    conn = db_manager.get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT content FROM concepts WHERE id = ?", (concept_id,))
+    row = cursor.fetchone()
+
+    assert row is not None, "Concept not found in database"
+    stored_content = row[0]
+    assert len(stored_content) == 200, f"Content truncated: expected 200 chars, got {len(stored_content)}"
+    assert stored_content == long_content, "Content mismatch - stored content differs from input"

@@ -1,5 +1,5 @@
 # generated: 2025-12-01
-# System Auto: last updated on: 2025-12-13 15:55:52
+# System Auto: last updated on: 2026-01-30T20:09:32
 """
 Ingester Agent - The "Mouth" of HAIOS
 
@@ -164,7 +164,7 @@ class Ingester:
                 try:
                     concept_id = self.db_manager.insert_concept(
                         type=concept.get("type", classification),
-                        name=concept.get("content", "")[:100],
+                        name=concept.get("content", ""),  # WORK-038: removed [:100] truncation
                         description=concept.get("content", "")
                     )
                     concept_ids.append(concept_id)
