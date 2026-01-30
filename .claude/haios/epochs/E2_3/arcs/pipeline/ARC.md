@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-29T22:38:29
+# System Auto: last updated on: 2026-01-30T17:46:02
 # Arc: Pipeline
 
 ## Arc Definition
@@ -31,7 +31,7 @@ CORPUS → INGEST → PLAN → BUILD → VALIDATE → PRODUCT
 | CH-003 | [PlannerAgent](CH-003-planner-agent.md) | **Complete** | Decompose requirements → work items |
 | CH-004 | BuilderInterface | Planned | Clean interface for existing build capability |
 | CH-005 | ValidatorAgent | Planned | Check output against source specs |
-| CH-006 | Orchestrator | Planned | Pipeline state machine, routing |
+| CH-006 | [Orchestrator](CH-006-orchestrator.md) | **Complete** | Pipeline state machine, routing |
 | CH-007 | [ChapterTriage](CH-007-chapter-triage.md) | Planned | Design → work item decomposition |
 | CH-008 | [CalibrationCycle](CH-008-calibration-cycle.md) | Planned | Post-implementation feedback loop |
 
@@ -80,8 +80,8 @@ validate(artifacts: Artifacts, requirements: RequirementSet) → ValidationRepor
 - [x] At least INGEST stage functional (CorpusLoader + RequirementExtractor)
 - [x] Corpus loads from arbitrary path (CorpusLoader with YAML config)
 - [x] Requirements extracted and structured (RequirementSet schema)
-- [ ] PLAN stage functional (PlannerAgent needs runtime consumer)
-- [ ] Orchestrator wires stages together
+- [x] PLAN stage functional (PlannerAgent has runtime consumer via Orchestrator)
+- [x] Orchestrator wires stages together (WORK-033, `just pipeline-run`)
 
 ---
 

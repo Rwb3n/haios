@@ -1,6 +1,6 @@
 ---
 template: implementation_plan
-status: approved
+status: complete
 date: 2026-01-29
 backlog_id: WORK-033
 title: Pipeline Orchestrator Module
@@ -9,7 +9,7 @@ lifecycle_phase: plan
 session: 247
 version: '1.5'
 generated: 2025-12-21
-last_updated: '2026-01-29T22:48:47'
+last_updated: '2026-01-30T17:47:57'
 ---
 # Implementation Plan: Pipeline Orchestrator Module
 
@@ -449,7 +449,11 @@ class PipelineOrchestrator:
 
         except Exception as e:
             logger.error(f"INGEST failed: {e}")
-            self._transition(PipelineState.ERROR)
+            # A9 defensive fix: Preserve original error if transition fails
+            try:
+                self._transition(PipelineState.ERROR)
+            except InvalidStateError:
+                logger.warning(f"Could not transition to ERROR state")
             raise
 
     def plan(self) -> WorkPlan:
@@ -476,7 +480,11 @@ class PipelineOrchestrator:
 
         except Exception as e:
             logger.error(f"PLAN failed: {e}")
-            self._transition(PipelineState.ERROR)
+            # A9 defensive fix: Preserve original error if transition fails
+            try:
+                self._transition(PipelineState.ERROR)
+            except InvalidStateError:
+                logger.warning(f"Could not transition to ERROR state")
             raise
 
     def run(self) -> PipelineResult:
@@ -666,6 +674,7 @@ Answer: Defined in PipelineState enum for forward compatibility, but not impleme
 | Empty corpus edge case | Low | Explicit test (Test 6), graceful empty results |
 | State machine complexity | Low | Explicit TRANSITIONS dict prevents invalid states |
 | Sibling module changes | Low | Depend only on public interfaces (discover, extract, plan) |
+| A9: Silent failure if ERROR transition fails | Low | Defensive try/except around ERROR transition (Session 262 critique) |
 
 ---
 
@@ -676,7 +685,8 @@ Answer: Defined in PipelineState enum for forward compatibility, but not impleme
 
 | Session | Date | Checkpoint | Status | Notes |
 |---------|------|------------|--------|-------|
-| - | - | - | - | No progress recorded yet |
+| 261 | 2026-01-29 | SESSION-261 | Plan authored | Plan approved with 10 TDD tests |
+| 262 | 2026-01-30 | SESSION-262 | Complete | Implementation done, all tests pass |
 
 ---
 

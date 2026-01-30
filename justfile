@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-27T22:45:37
+# System Auto: last updated on: 2026-01-30T17:44:53
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -234,6 +234,11 @@ context-load:
 # Usage: just cycle-phases implementation-cycle
 cycle-phases cycle_id:
     python .claude/haios/modules/cli.py cycle-phases {{cycle_id}}
+
+# Run doc-to-product pipeline (WORK-033, CH-006)
+# Usage: just pipeline-run .claude/haios/config/corpus/haios-requirements.yaml
+pipeline-run config:
+    python .claude/haios/modules/cli.py pipeline-run {{config}}
 
 # =============================================================================
 # RHYTHM RECIPES (E2-081: Symphony - Heartbeat Scheduler)

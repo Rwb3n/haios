@@ -3,13 +3,13 @@ template: work_item
 id: WORK-033
 title: Pipeline Orchestrator Module (CH-006)
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-29
 spawned_by: null
 chapter: CH-006
 arc: pipeline
-closed: null
+closed: '2026-01-30'
 priority: high
 effort: medium
 traces_to: []
@@ -26,11 +26,12 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 82638
 extensions: {}
 version: '2.0'
 generated: 2026-01-29
-last_updated: '2026-01-29T22:54:30'
+last_updated: '2026-01-30T17:47:48'
 ---
 # WORK-033: Pipeline Orchestrator Module (CH-006)
 
@@ -68,13 +69,13 @@ The Orchestrator (CH-006) is the state machine that wires these stages together 
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] `PipelineOrchestrator` class in `modules/pipeline_orchestrator.py`
-- [ ] State machine with INGEST → PLAN transitions (BUILD/VALIDATE in enum, deferred to CH-004/CH-005)
-- [ ] INGEST stage: CorpusLoader → RequirementExtractor integration
-- [ ] PLAN stage: PlannerAgent integration
-- [ ] CLI command: `just pipeline-run <corpus_config>`
-- [ ] Tests: 8+ covering state transitions and stage execution
-- [ ] Pipeline ARC.md updated with CH-006 complete
+- [x] `PipelineOrchestrator` class in `modules/pipeline_orchestrator.py`
+- [x] State machine with INGEST → PLAN transitions (BUILD/VALIDATE in enum, deferred to CH-004/CH-005)
+- [x] INGEST stage: CorpusLoader → RequirementExtractor integration
+- [x] PLAN stage: PlannerAgent integration
+- [x] CLI command: `just pipeline-run <corpus_config>`
+- [x] Tests: 10 covering state transitions and stage execution
+- [x] Pipeline ARC.md updated with CH-006 complete
 
 ---
 

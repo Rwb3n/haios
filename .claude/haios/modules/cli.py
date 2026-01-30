@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-29T21:29:01
+# System Auto: last updated on: 2026-01-30T17:44:08
 """
 HAIOS Modules CLI Entry Point
 
@@ -476,12 +476,52 @@ def cmd_scaffold(template: str, backlog_id: str, title: str, output_path: str = 
         return 1
 
 
+# =============================================================================
+# WORK-033: Pipeline Run Command
+# =============================================================================
+
+
+def cmd_pipeline_run(corpus_config: str, project_root: Path = None) -> int:
+    """Run the doc-to-product pipeline.
+
+    Args:
+        corpus_config: Path to corpus YAML config file.
+        project_root: Base path for resolving paths.
+
+    Returns:
+        0 on success, 1 on failure.
+    """
+    from pipeline_orchestrator import PipelineOrchestrator
+
+    root = project_root or Path.cwd()
+    config_path = root / corpus_config
+
+    if not config_path.exists():
+        print(f"Error: Corpus config not found: {config_path}")
+        return 1
+
+    try:
+        orchestrator = PipelineOrchestrator(config_path, base_path=root)
+        result = orchestrator.run()
+
+        print(f"Pipeline complete!")
+        print(f"  Requirements: {len(result.requirement_set.requirements)}")
+        print(f"  Work items: {len(result.work_plan.work_items)}")
+        print(f"  Execution order: {result.work_plan.execution_order}")
+        return 0
+
+    except Exception as e:
+        print(f"Pipeline failed: {e}")
+        return 1
+
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: cli.py <command> [args...]")
         print("Commands: transition, close, archive, get-ready, get-work, link, link-spawn,")
         print("          cascade, spawn-tree, backfill, backfill-all, memory-query,")
-        print("          validate, scaffold, context-load, coldstart, cycle-phases")
+        print("          validate, scaffold, context-load, coldstart, cycle-phases,")
+        print("          corpus-list, extract-requirements, plan, pipeline-run")
         return 1
 
     cmd = sys.argv[1]
@@ -659,6 +699,13 @@ def main():
             return 1
 
         return cmd_plan(requirements_path, corpus_config)
+
+    # WORK-033: Pipeline Run (doc-to-product)
+    elif cmd == "pipeline-run":
+        if len(sys.argv) != 3:
+            print("Usage: cli.py pipeline-run <corpus_config>")
+            return 1
+        return cmd_pipeline_run(sys.argv[2])
 
     else:
         print(f"Unknown command: {cmd}")
