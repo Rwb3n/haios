@@ -1,5 +1,5 @@
 # generated: 2025-09-23
-# System Auto: last updated on: 2026-01-28T22:44:39
+# System Auto: last updated on: 2026-01-30T22:01:48
 # Code Implementation & Engineering Guide
 
 ## RFC 2119 Keywords
@@ -267,5 +267,5 @@ L4 Requirement → Epoch → Arc → Chapter → Work Item
 **Rationale:** Moving files breaks portal links, memory references, and embedded @ references. The close-work-cycle "ARCHIVE" phase means "mark complete", not "move to archive directory".
 
 ---
-*Last Updated: 2026-01-15 | Version: Epoch 2.2 (The Refinement)*
+*Last Updated: 2026-01-30 | Version: Epoch 2.4 (The Activity Layer)*
 *See `docs/epistemic_state.md` for detailed status*

@@ -1,5 +1,5 @@
 # generated: 2025-12-09
-# System Auto: last updated on: 2026-01-14T21:12:24
+# System Auto: last updated on: 2026-01-30T22:02:05
 # Epistemic State: Operational Self-Awareness
 
 > **Purpose:** Surface known behavioral patterns and knowledge gaps. Not a history log.
@@ -9,18 +9,19 @@
 
 ## Current Status
 
-**Epoch:** 2.2 - The Refinement
-**Sessions:** 190 (October 2025 - January 2026)
-**Focus:** Skill decomposition, pressure dynamics, context loading
+**Epoch:** 2.4 - The Activity Layer
+**Sessions:** 265 (October 2025 - January 2026)
+**Focus:** Governed activities, fractured templates, universal flow
 
-### Active Chapters
+### Active Arcs
 
-| Chapter | Theme | Status |
-|---------|-------|--------|
-| **Chariot** | Module Architecture (9 modules) | Active |
-| **Breath** | Pressure Dynamics (inhale/exhale rhythm) | Active |
-| **Form** | Skill Decomposition (smaller containers) | Active |
-| **Ground** | Context Loading (session manifests) | Active |
+| Arc | Theme | Status |
+|-----|-------|--------|
+| **Activities** | Governed Activities (Primitive × State × Rules) | Planned |
+| **Templates** | Fractured Phase Templates (contracts) | Planned |
+| **Flow** | Universal Flow with Critique Gates | Planned |
+| **Configuration** | Loader System (carried from E2.3) | Active |
+| **WorkUniversal** | Mode Field Addition (carried from E2.3) | Active |
 
 ---
 

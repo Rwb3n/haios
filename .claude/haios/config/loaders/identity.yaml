@@ -1,5 +1,5 @@
 # generated: 2026-01-21
-# System Auto: last updated on: 2026-01-25T09:34:10
+# System Auto: last updated on: 2026-01-30T22:01:14
 # Identity extraction config per CH-004 spec
 #
 # WORK-007: Implement Identity Loader for Configuration Arc
@@ -46,7 +46,7 @@ extract:
     type: full_section
 
   epoch_name:
-    file: "../epochs/E2_3/EPOCH.md"
+    file: "../epochs/E2_4/EPOCH.md"
     section: "## L4 Object Definition"
     type: first_paragraph
 
