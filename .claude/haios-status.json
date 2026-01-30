@@ -1,5 +1,5 @@
 {
-    "generated": "2026-01-30T17:50:21",
+    "generated": "2026-01-30T19:32:00",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82449,
-        "entities": 9313,
+        "concepts": 82472,
+        "entities": 9317,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3174,7 +3174,7 @@
             "template": "checkpoint",
             "status": null,
             "date": "2026-01-30",
-            "last_updated": "2026-01-30T08:05:20",
+            "last_updated": "2026-01-30T19:08:15",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6722,7 +6722,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-04-SESSION-94-m5-progress-e2-126-complete-distribution-discussion.md",
             "last_updated": "2025-12-21T19:11:15",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2025-12-21-05-SESSION-94-m5-complete-e2-125-e2-129-migration.md",
@@ -6747,7 +6747,7 @@
         {
             "path": "docs/checkpoints/2025-12-22-03-SESSION-98-m4-investigation-infrastructure-complete.md",
             "last_updated": "2025-12-22T18:23:15",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/checkpoints/2025-12-22-04-SESSION-99-e2-114-e2-112-investigation-infrastructure-complete.md",
@@ -6782,12 +6782,12 @@
         {
             "path": "docs/checkpoints/2025-12-23-06-SESSION-105-inv-024-inv-026-m6-workcycle-definition.md",
             "last_updated": "2025-12-23T17:53:41",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/checkpoints/2025-12-23-07-SESSION-106-e2-150-e2-151-work-item-infrastructure-migration.md",
             "last_updated": "2025-12-23T19:12:34",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/checkpoints/2025-12-23-08-SESSION-107-e2-152-complete-e2-154-planned.md",
@@ -6822,12 +6822,12 @@
         {
             "path": "docs/checkpoints/2025-12-24-04-SESSION-112-orphan-review-and-milestone-reorganization.md",
             "last_updated": "2025-12-24T18:31:28",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/checkpoints/2025-12-24-05-SESSION-113-m7a-recipes-governance-workflow.md",
             "last_updated": "2025-12-24T19:15:58",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/checkpoints/2025-12-24-06-SESSION-114-m7a-complete-and-yaml-fix.md",
@@ -6852,12 +6852,12 @@
         {
             "path": "docs/checkpoints/2025-12-25-04-SESSION-117-m8-skillarch-4-skills-implemented.md",
             "last_updated": "2025-12-25T17:55:52",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-25-05-SESSION-118-e2-185-e2-189-validation-pipeline-complete.md",
             "last_updated": "2025-12-25T18:31:39",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-25-06-SESSION-119-m8-skillarch-complete-bug-hunt-fixes.md",
@@ -6912,7 +6912,7 @@
         {
             "path": "docs/checkpoints/2025-12-27-05-SESSION-129-inv-043-inv-044-directory-architecture-and-skill-chaining-design.md",
             "last_updated": "2025-12-27T18:58:14",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/checkpoints/2025-12-27-06-SESSION-130-e2-209-complete-e2-210-implementation-with-calibration-needed.md",
@@ -6952,7 +6952,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-06-SESSION-137-inv-048-complete-and-anti-pattern-architecture-revision.md",
             "last_updated": "2025-12-28T17:53:29",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/checkpoints/2025-12-28-07-SESSION-138-e2-224-e2-221-observation-threshold-and-routing-gate.md",
@@ -7197,17 +7197,17 @@
         {
             "path": "docs/plans/PLAN-E2-113-investigation-events.md",
             "last_updated": "2025-12-22T18:18:05",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-114-spawn-tree-query.md",
             "last_updated": "2025-12-22T19:29:29",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-115-investigation-closure.md",
             "last_updated": "2025-12-22T17:53:46",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-117-milestone-auto-discovery.md",
@@ -7252,7 +7252,7 @@
         {
             "path": "docs/plans/PLAN-E2-143-audit-recipe-suite.md",
             "last_updated": "2025-12-24T19:13:58",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/plans/PLAN-E2-145-validate-script-section-enforcement.md",
@@ -7267,7 +7267,7 @@
         {
             "path": "docs/plans/PLAN-E2-150-work-item-infrastructure.md",
             "last_updated": "2025-12-23T18:13:44",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/plans/PLAN-E2-153-unified-metaphor-section.md",
@@ -7352,17 +7352,17 @@
         {
             "path": "docs/plans/PLAN-E2-185-validation-agent-for-check-phase.md",
             "last_updated": "2025-12-25T18:10:30",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/plans/PLAN-E2-186-promote-preflight-checker-to-required.md",
             "last_updated": "2025-12-25T19:29:13",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/plans/PLAN-E2-189-dod-validation-cycle-skill.md",
             "last_updated": "2025-12-25T18:28:51",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/plans/PLAN-E2-191-work-file-population-governance-gate.md",
@@ -7697,12 +7697,12 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-043-work-item-directory-architecture.md",
             "last_updated": "2025-12-27T18:06:00",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-044-skill-chaining-mechanism-design.md",
             "last_updated": "2025-12-27T18:56:19",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/ADR/ADR-030-document-taxonomy.md",
@@ -7847,7 +7847,7 @@
         {
             "path": "docs/work/archive/WORK-E2-096-cycle-state-frontmatter.md",
             "last_updated": "2025-12-23T18:04:04",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-E2-098-hardcode-audit-and-enhancement.md",
@@ -7862,12 +7862,12 @@
         {
             "path": "docs/work/archive/WORK-E2-112-investigation-agent.md",
             "last_updated": "2025-12-23T18:04:04",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-E2-114-spawn-tree-query.md",
             "last_updated": "2025-12-23T18:04:04",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-E2-117-milestone-auto-discovery.md",
@@ -7902,7 +7902,7 @@
         {
             "path": "docs/work/archive/WORK-E2-135-close-command-enforcement.md",
             "last_updated": "2025-12-23T18:04:04",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-E2-136-status-generator-archive-reading.md",
@@ -7917,7 +7917,7 @@
         {
             "path": "docs/work/archive/WORK-E2-143-audit-recipe-suite.md",
             "last_updated": "2025-12-24T19:14:11",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-153-unified-metaphor-section-in-architecturemd.md",
@@ -7957,17 +7957,17 @@
         {
             "path": "docs/work/archive/WORK-E2-167-git-just-recipes.md",
             "last_updated": "2025-12-24T18:51:18",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-168-synthesis-just-recipes.md",
             "last_updated": "2025-12-24T18:38:59",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-169-manual-script-audit.md",
             "last_updated": "2025-12-24T18:48:44",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-170-backfill-work-items-from-archived-backlog.md",
@@ -8027,12 +8027,12 @@
         {
             "path": "docs/work/archive/WORK-E2-185-validation-agent-for-check-phase.md",
             "last_updated": "2025-12-25T18:11:27",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/work/archive/WORK-E2-186-promote-preflight-checker-to-required.md",
             "last_updated": "2025-12-25T19:29:22",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/work/archive/WORK-E2-187-async-validator-agent.md",
@@ -8047,7 +8047,7 @@
         {
             "path": "docs/work/archive/WORK-E2-189-dod-validation-cycle-skill.md",
             "last_updated": "2025-12-25T18:29:13",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/work/archive/WORK-E2-190-close-command-full-status-update.md",
@@ -8172,12 +8172,12 @@
         {
             "path": "docs/work/archive/WORK-INV-043-work-item-directory-architecture.md",
             "last_updated": "2025-12-27T18:05:54",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/work/archive/WORK-INV-044-skill-chaining-mechanism-design.md",
             "last_updated": "2025-12-27T18:56:35",
-            "days_stale": 33
+            "days_stale": 34
         }
     ],
     "workspace": {

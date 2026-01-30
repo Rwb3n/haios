@@ -3,13 +3,13 @@ template: work_item
 id: WORK-036
 title: Investigation Template vs Explore Agent Effectiveness
 type: investigation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-30
 spawned_by: null
 chapter: null
 arc: null
-closed: null
+closed: '2026-01-30'
 priority: medium
 effort: medium
 traces_to: []
@@ -26,7 +26,26 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 82646
+- 82647
+- 82648
+- 82649
+- 82650
+- 82651
+- 82652
+- 82653
+- 82654
+- 82655
+- 82656
+- 82661
+- 82662
+- 82663
+- 82664
+- 82665
+- 82666
+- 82667
+- 82668
 extensions: {}
 version: '2.0'
 generated: 2026-01-30
