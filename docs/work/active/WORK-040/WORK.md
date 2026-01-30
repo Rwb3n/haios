@@ -3,13 +3,13 @@ template: work_item
 id: WORK-040
 title: Design CH-002 StateDefinitions
 type: design
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-30
 spawned_by: null
 chapter: CH-002
 arc: activities
-closed: null
+closed: '2026-01-30'
 priority: high
 effort: medium
 traces_to:
@@ -29,11 +29,22 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 82783
+- 82784
+- 82785
+- 82786
+- 82787
+- 82788
+- 82793
+- 82794
+- 82795
+- 82796
+- 82797
 extensions: {}
 version: '2.0'
 generated: 2026-01-30
-last_updated: '2026-01-30T22:53:32'
+last_updated: '2026-01-30T23:25:30'
 ---
 # WORK-040: Design CH-002 StateDefinitions
 
@@ -83,12 +94,12 @@ CH-002 formalizes these so GovernanceLayer can implement state-aware governance.
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] **State Object Schema** - YAML schema defining state structure (name, posture, entry_conditions, exit_conditions, allowed_activities, blocked_activities)
-- [ ] **State Transition Diagram** - Valid transitions (EXPLORE→DESIGN→PLAN→DO→CHECK→DONE) with forbidden paths
-- [ ] **State Detection Logic** - Algorithm for `get_activity_state()` using cycle phase mapping
-- [ ] **Investigation Variant** - EXPLORE→HYPOTHESIZE→VALIDATE→CONCLUDE mapped to ActivityMatrix states
-- [ ] **Failure Mode Handling** - Behavior when state cannot be determined (fallback to EXPLORE per CH-001)
-- [ ] **CH-002-StateDefinitions.md** - Chapter file documenting all of the above
+- [x] **State Object Schema** - YAML schema defining state structure (name, posture, entry_conditions, exit_conditions, allowed_activities, blocked_activities)
+- [x] **State Transition Diagram** - Valid transitions (EXPLORE→DESIGN→PLAN→DO→CHECK→DONE) with forbidden paths
+- [x] **State Detection Logic** - Algorithm for `get_activity_state()` using cycle phase mapping
+- [x] **Investigation Variant** - EXPLORE→HYPOTHESIZE→VALIDATE→CONCLUDE mapped to ActivityMatrix states
+- [x] **Failure Mode Handling** - Behavior when state cannot be determined (fallback to EXPLORE per CH-001)
+- [x] **CH-002-StateDefinitions.md** - Chapter file documenting all of the above
 
 ---
 
@@ -101,6 +112,13 @@ CH-002 formalizes these so GovernanceLayer can implement state-aware governance.
 - Added context from CH-001 ActivityMatrix
 - Defined deliverables covering state schema, transitions, detection, variants
 - Linked to REQ-ACTIVITY-001, REQ-FLOW-001, REQ-FLOW-002
+
+### 2026-01-30 - Completed (Session 268)
+- Created CH-002-StateDefinitions.md with all 6 state definitions
+- State schema: 8 fields (name, posture, purpose, entry/exit conditions, transitions, allowed/blocked activities)
+- Phase-to-state mapping covers 10 cycles
+- Fail-permissive design: unknown state defaults to EXPLORE
+- All deliverables verified complete
 
 ---
 
