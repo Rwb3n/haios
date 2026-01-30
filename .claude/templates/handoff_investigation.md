@@ -14,9 +14,6 @@ version: "1.0"
 # System Auto: last updated on: 2025-12-07 13:57:29
 # Investigation: {{TITLE}}
 
-@docs/README.md
-@docs/epistemic_state.md
-
 ---
 
 ## Context

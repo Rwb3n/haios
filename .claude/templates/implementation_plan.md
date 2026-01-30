@@ -13,9 +13,6 @@ last_updated: 2025-12-22T12:41:28
 ---
 # Implementation Plan: {{TITLE}}
 
-@docs/README.md
-@docs/epistemic_state.md
-
 ---
 
 <!-- TEMPLATE GOVERNANCE (v1.4)
@@ -353,7 +350,7 @@ After fix:
 Grep(pattern="old_path|OldName", path=".", glob="**/*.{md,py,json}")
 ```
 
-> **Anti-pattern prevented:** "Ceremonial Completion" - code migrated but consumers still reference old location (see epistemic_state.md)
+> **Anti-pattern prevented:** "Ceremonial Completion" - code migrated but consumers still reference old location (L1 anti-pattern)
 
 ---
 

@@ -34,9 +34,6 @@ last_updated: {{TIMESTAMP}}
 ---
 # {{BACKLOG_ID}}: {{TITLE}}
 
-@docs/README.md
-@docs/epistemic_state.md
-
 ---
 
 ## Context

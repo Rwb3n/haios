@@ -21,9 +21,6 @@ version: "1.1"
 # System Auto: last updated on: 2025-12-16 18:17:14
 # ADR-{{ID}}: {{TITLE}}
 
-@docs/README.md
-@docs/epistemic_state.md
-
 > **Status:** Proposed
 > **Date:** {{DATE}}
 > **Decision:** Pending

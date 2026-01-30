@@ -19,9 +19,6 @@ version: "1.1"
 # System Auto: last updated on: 2025-12-16 18:17:40
 # {{TITLE}}
 
-@docs/README.md
-@docs/epistemic_state.md
-
 > **Date:** {{DATE}}
 > **Session:** {{SESSION}}
 > **Assignee:** {{AUTHOR}}

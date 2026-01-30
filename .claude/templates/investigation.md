@@ -16,9 +16,6 @@ last_updated: 2025-12-22T23:16:24
 ---
 # Investigation: {{TITLE}}
 
-@docs/README.md
-@docs/epistemic_state.md
-
 <!-- FILE REFERENCE REQUIREMENTS (MUST - Session 171 Learning)
 
      1. MUST use full @ paths for prior work:
