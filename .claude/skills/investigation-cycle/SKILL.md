@@ -6,7 +6,7 @@ description: HAIOS Investigation Cycle for structured research and discovery. Us
 recipes:
 - inv
 generated: 2025-12-22
-last_updated: '2026-02-01T16:03:50'
+last_updated: '2026-02-01T21:21:47'
 ---
 # Investigation Cycle
 
@@ -177,16 +177,46 @@ just set-cycle investigation-cycle VALIDATE {work_id}
 just set-cycle investigation-cycle CONCLUDE {work_id}
 ```
 
-**Goal:** Synthesize findings and spawn work items.
+**Goal:** Synthesize findings, spawn work items, and reconcile epoch artifacts.
 
 **Actions:**
 1. Review findings against original objective
 2. Synthesize answer to the investigation question
 3. Identify spawned work items (ADRs, backlog items, new investigations)
 4. Create spawned items using `/new-*` commands with `spawned_by: {this_investigation_id}`
-5. Store findings summary to memory via `ingester_ingest`
-6. Update investigation status: `status: complete`
-7. Populate `memory_refs` in work item frontmatter
+5. **Epoch Artifact Reconciliation (MUST - Session 276)** - see below
+6. Store findings summary to memory via `ingester_ingest`
+7. Update investigation status: `status: complete`
+8. Populate `memory_refs` in work item frontmatter
+
+#### 4a. Epoch Artifact Reconciliation (MUST)
+
+Investigations reveal ground truth. Before closing, reconcile findings with epoch structure:
+
+**Step 1: Check related chapters**
+
+For each chapter referenced in work item (`chapter:` field or `@` references):
+
+| If findings show... | Then update chapter... |
+|---------------------|------------------------|
+| Chapter questions answered | `status: Complete` |
+| Implementation exists and is correct | `status: Complete` + add evidence |
+| Implementation exists but is wrong/suboptimal | `status: Implemented-Deficient` + document deficiencies + link remediation work |
+| Chapter premise was wrong | `status: Invalid` + document why |
+
+**Step 2: Check related arc**
+
+- If new chapter needed → Add to arc chapters table
+- If investigation adds to arc theme → Update arc with findings summary
+- Add memory_refs from this investigation
+
+**Step 3: Check epoch**
+
+- If investigation introduces new decision → Add to EPOCH.md decisions section
+- If investigation marks exit criteria complete → Update EPOCH.md checklist
+- Add memory_refs from this investigation
+
+**Rationale (Session 276):** WORK-065/WORK-016 revealed that without this step, chapters stay "Planned" after code exists, findings get buried in WORK.md files, and epoch artifacts drift from reality. Investigations are the natural audit point.
 
 **Governed Activities (DONE state):**
 - file-read: allow
@@ -197,6 +227,7 @@ just set-cycle investigation-cycle CONCLUDE {work_id}
 **Exit Criteria:**
 - [ ] Findings synthesized (answer to objective documented)
 - [ ] Spawned work items created with `spawned_by` field linking to investigation
+- [ ] **MUST:** Epoch artifacts reconciled (chapters, arc, epoch updated if applicable)
 - [ ] Learnings stored to memory (`ingester_ingest` called)
 - [ ] `memory_refs` populated in work item frontmatter
 - [ ] Investigation marked complete
@@ -270,6 +301,7 @@ just clear-cycle
 | VALIDATE | Are verdicts supported by evidence? | Cite specific sources |
 | CONCLUDE | Are findings synthesized? | Write answer to objective |
 | CONCLUDE | Are spawned items created? | Create via /new-* commands |
+| CONCLUDE | **Are epoch artifacts reconciled?** | **Update chapters/arc/epoch per findings** |
 | CONCLUDE | Are learnings stored? | Run ingester_ingest |
 | CHAIN | Is investigation closed? | Run /close {backlog_id} |
 | CHAIN | Is next work identified? | Run `just ready` |
@@ -296,6 +328,7 @@ just clear-cycle
 | VALIDATE as separate phase | Focused verdict-rendering | Separates synthesis (HYPOTHESIZE) from verification (VALIDATE) |
 | Memory query at start | EXPLORE includes prior work check | Avoid re-investigating solved problems |
 | Spawned work items | Required exit criterion | Investigations should produce actionable output |
+| Epoch artifact reconciliation | MUST in CONCLUDE phase | Session 276: Without this, chapters stay "Planned" after code exists, findings buried in WORK.md |
 
 ---
 

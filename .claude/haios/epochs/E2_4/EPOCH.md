@@ -1,5 +1,5 @@
 # generated: 2026-01-30
-# System Auto: last updated on: 2026-01-30T21:27:41
+# System Auto: last updated on: 2026-02-01T21:05:15
 # Epoch 2.4: The Activity Layer
 
 ## L4 Object Definition
@@ -118,7 +118,26 @@ One template per phase with:
 | **Templates** | Fracture templates to phase contracts | Planned |
 | **Flow** | Implement universal flow with gates | Planned |
 | **Configuration** | (Carried from E2.3) Loader system | Active |
-| **WorkUniversal** | (Carried from E2.3) Add mode field | Active |
+| **WorkUniversal** | (Carried from E2.3) Add mode + queue_position fields | Active |
+
+---
+
+## Session 276 Additions
+
+### Decision 7: Four-Dimensional Work Item State (WORK-065)
+
+Work items have four orthogonal state dimensions:
+
+| Dimension | Field | Values | Purpose |
+|-----------|-------|--------|---------|
+| Lifecycle | `status` | active/blocked/complete/archived | ADR-041 authoritative |
+| Queue | `queue_position` | backlog/todo/in_progress/done | **NEW** - selection pipeline |
+| Cycle | `cycle_phase` | discovery/plan/implement/close | RENAME current_node |
+| Activity | `activity_state` | EXPLORE/DESIGN/.../DONE | E2.4 derived |
+
+**Key Finding:** `current_node` conflated queue and cycle dimensions. 94% stuck at backlog.
+
+**Implementation:** WORK-066 (queue_position field + cycle wiring)
 
 ---
 
@@ -127,14 +146,16 @@ One template per phase with:
 - [ ] Governed activities matrix implemented
 - [ ] Phase templates fractured with contracts
 - [ ] Universal flow with critique hard gates
-- [ ] Investigation cycle uses EXPLORE-FIRST
+- [x] Investigation cycle uses EXPLORE-FIRST (Session 276 - WORK-065 demonstrated)
 - [ ] DO phase enforces black-box constraints
+- [ ] Queue position field implemented (WORK-066)
 
 ---
 
 ## Memory Refs
 
 Session 265 L4 decisions: 82688-82744
+Session 276 work item state model: 82952-82954, 82963-82973
 
 ---
 
