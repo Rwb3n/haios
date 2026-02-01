@@ -1,5 +1,5 @@
 # generated: 2025-09-23
-# System Auto: last updated on: 2026-02-01T17:20:23
+# System Auto: last updated on: 2026-02-01T21:28:58
 # Code Implementation & Engineering Guide
 
 ## RFC 2119 Keywords
@@ -99,8 +99,8 @@ I am **Claude (Executor)**, the **Orchestrator** of the HAIOS project. I work wi
 
 ### Project Context
 - **Description:** HAIOS (Hybrid AI Operating System) is a **Trust Engine** for AI agents.
-- **Current Epoch:** Epoch 2 - Governance Suite (hooks, commands, templates, memory integration)
-- **Reference:** See `docs/epistemic_state.md` for detailed phase status.
+- **Current Epoch:** Epoch 2.4 - The Activity Layer (governed activities, phase templates, universal flow)
+- **Reference:** See `.claude/haios/epochs/E2_4/EPOCH.md` for current epoch status.
 
 ### Key Reference Locations
 
@@ -294,5 +294,5 @@ CC Tasks are ephemeral. For persistent tracking, use WorkEngine (WORK.md files).
 **Rationale:** Moving files breaks portal links, memory references, and embedded @ references. The close-work-cycle "ARCHIVE" phase means "mark complete", not "move to archive directory".
 
 ---
-*Last Updated: 2026-01-30 | Version: Epoch 2.4 (The Activity Layer)*
-*See `docs/epistemic_state.md` for detailed status*
+*Last Updated: 2026-02-01 | Version: Epoch 2.4 (The Activity Layer)*
+*See `.claude/haios/epochs/E2_4/EPOCH.md` for detailed status*

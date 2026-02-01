@@ -4,7 +4,7 @@ status: active
 date: 2025-12-06
 component: commands
 generated: 2025-12-23
-last_updated: '2026-01-25T01:50:11'
+last_updated: '2026-02-01T21:29:13'
 ---
 # Slash Commands
 
@@ -17,7 +17,7 @@ Custom slash commands for HAIOS governance. Available via `/command` syntax.
 
 | Command | Description | Implementation |
 |---------|-------------|----------------|
-| `/coldstart` | Load session context | Reads CLAUDE.md, epistemic_state.md, latest checkpoint |
+| `/coldstart` | Load session context | Runs coldstart-orchestrator, loads epoch context |
 | `/haios` | Show system status | Dashboard with hooks, memory, agents status |
 | `/status` | Compact status | Tests, memory count, git status |
 | `/validate <file>` | Validate template | `just validate` recipe |

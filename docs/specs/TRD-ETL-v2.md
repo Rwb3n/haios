@@ -1,8 +1,8 @@
 # generated: 2025-10-19
-# System Auto: last updated on: 2025-12-05 20:53:01
+# System Auto: last updated on: 2026-02-01T21:30:03
 # Technical Reference Document (TRD) - ETL-v2: Agent Memory ETL Pipeline
 
-> **Progressive Disclosure:** [Quick Reference](../README.md) -> [Strategic Overview](../epistemic_state.md) -> [Specs](.) -> **TRD-ETL-v2 (YOU ARE HERE)**
+> **Progressive Disclosure:** [Quick Reference](../README.md) -> [Current Epoch](../../.claude/haios/epochs/E2_4/EPOCH.md) -> [Specs](.) -> **TRD-ETL-v2 (YOU ARE HERE)**
 >
 > **Navigation:** [Schema v3](memory_db_schema_v3.sql) | [Synthesis TRD](TRD-SYNTHESIS-EXPLORATION.md) | [Operations](../OPERATIONS.md)
 
@@ -632,7 +632,7 @@ python etl_pipeline.py --batch-size 10 --source-dir ./test_data
 
 ### Documents That Link Here:
 - [Quick Reference](../README.md) - Documentation map
-- [Strategic Overview](../epistemic_state.md) - System state
+- [Current Epoch](../../.claude/haios/epochs/E2_4/EPOCH.md) - System state
 - [CLAUDE.md](../../CLAUDE.md) - Agent instructions
 
 ---

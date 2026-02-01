@@ -2,13 +2,14 @@
 template: readme
 status: active
 date: 2025-12-06
-title: "Specs Directory Index"
+title: Specs Directory Index
 component: documentation
+generated: '2026-02-01'
+last_updated: '2026-02-01T21:29:28'
 ---
-# generated: 2025-12-06
 # Specs Directory
 
-> **Navigation:** [Strategic Overview](../epistemic_state.md) | [Plans](../plans/)
+> **Navigation:** [Current Epoch](../../.claude/haios/epochs/E2_4/EPOCH.md) | [Plans](../plans/)
 
 ## Purpose
 Technical specifications and schemas that drive the system.
