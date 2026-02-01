@@ -36,13 +36,24 @@ load_memory_refs:
 - 83007
 - 83008
 - 83009
+- 83010
+- 83011
+- 83012
+- 83013
+- 83014
+- 83015
+- 83016
+- 83017
 pending: []
 drift_observed:
 - Scaffold blocking tests outdated (expected plan/inv blocked, but Session 253 refined
   to only block just work)
+- Preflight-checker on haiku too rigid - demands PLAN.md even for trivial inline-plan
+  work
 completed:
 - WORK-063
 - WORK-056
+- WORK-068
 generated: '2026-02-01'
-last_updated: '2026-02-01T22:36:40'
+last_updated: '2026-02-01T22:55:11'
 ---
