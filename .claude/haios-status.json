@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-01T22:28:52",
+    "generated": "2026-02-01T22:35:49",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 276,
-        "current_session": 277,
+        "prior_session": 277,
+        "current_session": 278,
         "prior_date": "2026-02-01",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82798,
-        "entities": 9406,
+        "concepts": 82818,
+        "entities": 9409,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3323,6 +3323,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-01-11-SESSION-278-work-063-complete-contextfork-added-to-validation-agent.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-01",
+            "last_updated": "2026-02-01T22:30:07",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "template": "implementation_plan",
             "status": "complete",
@@ -6506,7 +6515,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-prototype-consolidation.md",
             "last_updated": "2025-12-04T22:30:47",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-comprehensive-checkpoint.md",
@@ -7161,7 +7170,7 @@
         {
             "path": "docs/checkpoints/2025-12-30-02-SESSION-151-inv-052-architecture-documentation-complete.md",
             "last_updated": "2025-12-30T22:34:43",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/checkpoints/2025-12-31-01-SESSION-152-inv-052-architecture-analysis-complete.md",
@@ -8345,9 +8354,9 @@
         }
     ],
     "workspace": {
-        "total_files": 525,
+        "total_files": 526,
         "by_template": {
-            "checkpoint": 276,
+            "checkpoint": 277,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8359,7 +8368,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 112,
+            "unknown": 113,
             "draft": 2,
             "approved": 6,
             "ready": 1,
