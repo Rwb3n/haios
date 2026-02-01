@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-01T16:25:04",
+    "generated": "2026-02-01T16:53:07",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 271,
-        "current_session": 272,
+        "prior_session": 272,
+        "current_session": 273,
         "prior_date": "2026-02-01",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82710,
-        "entities": 9380,
+        "concepts": 82726,
+        "entities": 9386,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3274,6 +3274,15 @@
             "status": null,
             "date": "2026-02-01",
             "last_updated": "2026-02-01T16:10:40",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-02-01-06-SESSION-273-work-060-claude-code-platform-features-investigation-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-01",
+            "last_updated": "2026-02-01T16:26:52",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6841,7 +6850,7 @@
         {
             "path": "docs/checkpoints/2025-12-22-02-SESSION-97-e2-131-cascade-fix-and-e2-111-plan.md",
             "last_updated": "2025-12-22T16:39:34",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/checkpoints/2025-12-22-03-SESSION-98-m4-investigation-infrastructure-complete.md",
@@ -7296,7 +7305,7 @@
         {
             "path": "docs/plans/PLAN-E2-111-investigation-cycle-skill.md",
             "last_updated": "2025-12-22T16:53:04",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/plans/PLAN-E2-112-investigation-agent.md",
@@ -7501,7 +7510,7 @@
         {
             "path": "docs/plans/PLAN-E2-211-add-sqlite-busytimeout-to-databasemanager.md",
             "last_updated": "2025-12-27T16:45:14",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/plans/PLAN-E2-FIX-001-SYNTHESIS-EMBEDDING-GAP.md",
@@ -7596,7 +7605,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-E2-016-enhanced-cli-status-design-investigation.md",
             "last_updated": "2025-12-26T16:40:55",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-025-precompact-hook-context-preservation.md",
@@ -7726,7 +7735,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-027-ingester-synthesis-concurrent-access-crash.md",
             "last_updated": "2025-12-27T16:29:58",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-028-agent-error-reporting-and-observability-gap.md",
@@ -7906,7 +7915,7 @@
         {
             "path": "docs/work/archive/WORK-E2-016-enhanced-cli-status-synthesis-run.md",
             "last_updated": "2025-12-26T16:41:28",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-025-precompact-hook-context-preservation.md",
@@ -8221,7 +8230,7 @@
         {
             "path": "docs/work/archive/WORK-E2-211-add-sqlite-busytimeout-to-databasemanager.md",
             "last_updated": "2025-12-27T16:45:50",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/work/archive/WORK-INV-025-workflow-state-machine-architecture.md",
@@ -8231,7 +8240,7 @@
         {
             "path": "docs/work/archive/WORK-INV-027-ingester-synthesis-concurrent-access-crash.md",
             "last_updated": "2025-12-27T16:29:45",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/work/archive/WORK-INV-029-status-generation-architecture-gap.md",
@@ -8290,9 +8299,9 @@
         }
     ],
     "workspace": {
-        "total_files": 520,
+        "total_files": 521,
         "by_template": {
-            "checkpoint": 271,
+            "checkpoint": 272,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8304,7 +8313,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 107,
+            "unknown": 108,
             "draft": 2,
             "approved": 6,
             "ready": 1,
