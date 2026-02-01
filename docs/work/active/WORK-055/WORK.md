@@ -3,13 +3,13 @@ template: work_item
 id: WORK-055
 title: Multi-Level Governance - Decomposition Leakage Pattern
 type: investigation
-status: active
+status: complete
 owner: null
 created: 2026-01-31
 spawned_by: obs-268-1
 chapter: null
 arc: null
-closed: null
+closed: '2026-02-01'
 priority: high
 effort: medium
 traces_to: []
@@ -26,11 +26,42 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 83018
+- 83019
+- 83020
+- 83021
+- 83022
+- 83023
+- 83024
+- 83025
+- 83026
+- 83027
+- 83028
+- 83029
+- 83030
+- 83031
+- 83032
+- 83033
+- 83034
+- 83035
+- 83036
+- 83037
+- 83038
+- 83039
+- 83040
+- 83041
+- 83042
+- 83043
+- 83044
+- 83045
+- 83046
+- 83047
+- 83048
 extensions: {}
 version: '2.0'
 generated: 2026-01-31
-last_updated: '2026-01-31T18:07:55'
+last_updated: '2026-02-01T23:06:55'
 ---
 # WORK-055: Multi-Level Governance - Decomposition Leakage Pattern
 
@@ -70,16 +101,69 @@ Spawned from observation `obs-268-1` during WORK-040 closure review.
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] **Gap Analysis** - Document where multi-level governance is missing
-- [ ] **Traceability Design** - How epoch decisions trace to chapters
-- [ ] **Batch Critique Pattern** - Arc-level critique before chapter work
-- [ ] **Multi-Level DoD** - DoD cascade: Work → Chapter → Arc → Epoch
-- [ ] **Pre-Decomposition Gate** - Review decomposition completeness before work begins
-- [ ] **Findings Document** - Investigation conclusions with recommendations
+- [x] **Gap Analysis** - Document where multi-level governance is missing
+- [x] **Traceability Design** - How epoch decisions trace to chapters
+- [x] **Batch Critique Pattern** - Arc-level critique before chapter work
+- [x] **Multi-Level DoD** - DoD cascade: Work → Chapter → Arc → Epoch
+- [x] **Pre-Decomposition Gate** - Review decomposition completeness before work begins
+- [x] **Findings Document** - Investigation conclusions with recommendations
+
+---
+
+## Investigation Findings (Session 279)
+
+### Gap Analysis
+
+Three governance gaps identified at branch nodes (chapters, arcs, epochs):
+
+| Gap | Description | Evidence |
+|-----|-------------|----------|
+| **Decision-to-Chapter** | Epoch decisions have no `assigned_to` field linking to chapters | EPOCH.md decisions are prose only |
+| **Traceability** | REQ-TRACE-005 traces hierarchy but not decision coverage | Decisions are orphaned from traceability chain |
+| **DoD** | DoD exists only at work item level (ADR-033) | No Chapter/Arc/Epoch DoD |
+
+### Recommended Patterns
+
+**Pattern 1: Decision Traceability Schema**
+- Add to EPOCH.md: `decisions[].assigned_to: [{arc, chapters}]`
+- Add to chapter files: `implements_decisions: [D1, D3]`
+
+**Pattern 2: Multi-Level DoD Cascade**
+| Level | DoD Criteria |
+|-------|--------------|
+| Work Item | Tests pass, runtime consumer, WHY captured |
+| Chapter | All work complete + exit criteria + implements_decisions verified |
+| Arc | All chapters complete + no unassigned epoch decisions |
+| Epoch | All arcs complete + all decisions implemented |
+
+**Pattern 3: Pre-Decomposition Review Gate**
+- When decomposing arc → chapters, require critique verifying:
+  - All epoch decisions for arc have chapter assignment
+  - Sum of chapter scopes covers arc theme
+
+**Pattern 4: New Requirements**
+- REQ-TRACE-006: Decisions MUST have chapter assignment before work begins
+- REQ-DOD-001: Chapter closure verifies decision implementation
+- REQ-DOD-002: Arc closure verifies no orphan decisions
+
+### Spawned Work Items
+
+| ID | Type | Title |
+|----|------|-------|
+| WORK-069 | design | Decision Traceability Schema Design |
+| WORK-070 | design | Multi-Level DoD Cascade Design |
+| WORK-071 | design | Pre-Decomposition Review Gate Design |
 
 ---
 
 ## History
+
+### 2026-02-01 - Completed (Session 279)
+- EXPLORE: Gathered evidence from EPOCH.md, chapter files, functional_requirements.md, obs-268-1.md
+- HYPOTHESIZE: Formed 4 hypotheses about decomposition leakage causes
+- VALIDATE: All 4 hypotheses CONFIRMED (high/medium confidence)
+- CONCLUDE: Documented 4 patterns, spawned 3 design work items
+- Memory refs: 83018-83029
 
 ### 2026-01-31 - Created (Session 268)
 - Spawned from obs-268-1
