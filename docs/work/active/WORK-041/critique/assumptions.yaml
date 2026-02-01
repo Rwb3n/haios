@@ -1,0 +1,80 @@
+# generated: 2026-02-01
+# System Auto: last updated on: 2026-02-01T14:12:58
+# Critique Agent Output: WORK-041 Plan Assumptions
+# Framework: assumption_surfacing v1.0
+
+assumptions:
+  - id: A1
+    statement: "The rule schema is sufficient to express all 102 matrix cells from CH-001"
+    category: scope
+    confidence: medium
+    risk_if_wrong: "Schema redesign required during CH-004 implementation"
+    mitigation: "Plan includes examples for key edge cases; verify during DO"
+    related_requirement: null
+    related_deliverable: "D1"
+
+  - id: A2
+    statement: "Nested dict lookup provides adequate O(1) performance"
+    category: environment
+    confidence: high
+    risk_if_wrong: "Governance checks add noticeable latency"
+    mitigation: "Python dict is O(1); YAML caching addressed in plan"
+    related_requirement: null
+    related_deliverable: "D3"
+
+  - id: A3
+    statement: "Pattern priority order correctly handles all path permutations"
+    category: data
+    confidence: medium
+    risk_if_wrong: "Files incorrectly classified"
+    mitigation: "Fallback behavior explicit; consider test cases for ambiguous paths"
+    related_requirement: null
+    related_deliverable: "D5"
+
+  - id: A4
+    statement: "fnmatch-style glob matching available and sufficient"
+    category: dependency
+    confidence: high
+    risk_if_wrong: "Pattern matching fails"
+    mitigation: "fnmatch is Python standard library"
+    related_requirement: null
+    related_deliverable: "D6"
+
+  - id: A5
+    statement: "Rule examples accurately reflect CH-001 matrix symbols"
+    category: data
+    confidence: medium
+    risk_if_wrong: "CH-003 diverges from CH-001"
+    mitigation: "Cross-reference verification in CHECK phase"
+    related_requirement: null
+    related_deliverable: "D7"
+
+  - id: A6
+    statement: "GateResult compatible with PreToolUse hook patterns"
+    category: user_behavior
+    confidence: medium
+    risk_if_wrong: "CH-004 requires refactoring"
+    mitigation: "Plan references hook and shows expected formats"
+    related_requirement: null
+    related_deliverable: "D4"
+
+  - id: A7
+    statement: "CH-002 provides complete mapping for all cycles"
+    category: scope
+    confidence: high
+    risk_if_wrong: "New cycles fail silently (to EXPLORE)"
+    mitigation: "Fail-permissive by design per CH-002"
+    related_requirement: null
+    related_deliverable: "D4"
+
+  - id: A8
+    statement: "Design work can skip TDD per memory 82789-82792"
+    category: user_behavior
+    confidence: high
+    risk_if_wrong: "Deliverables not verified"
+    mitigation: "Ground Truth Verification section explicit"
+    related_requirement: "Memory 82789-82792"
+    related_deliverable: "All"
+
+verdict: PROCEED
+blocking_assumptions: []
