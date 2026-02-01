@@ -1,0 +1,241 @@
+# generated: 2026-02-01
+# System Auto: last updated on: 2026-02-01T16:02:37
+# Activity Matrix Configuration (E2.4 CH-004)
+#
+# O(1) lookup structure: rules[primitive][state] -> rule
+# Source spec: CH-003-GovernanceRules.md
+
+version: "1.0"
+default_action: allow  # Fail-open for unknown primitives (CH-003 decision 82800)
+
+rules:
+  # =============================================================================
+  # Category 1: File Operations
+  # =============================================================================
+
+  file-read:
+    _all_states: {action: allow}
+
+  file-write:
+    EXPLORE: {action: warn, message: "EXPLORE phase: prefer notes over artifacts"}
+    DESIGN: {action: allow}
+    PLAN: {action: allow}
+    DO: {action: allow}
+    CHECK: {action: warn, message: "CHECK phase: writes should be verdict only"}
+    DONE: {action: allow}
+
+  file-edit:
+    EXPLORE: {action: warn, message: "EXPLORE phase: prefer notes over artifacts"}
+    DESIGN: {action: allow}
+    PLAN: {action: allow}
+    DO: {action: allow}
+    CHECK: {action: warn, message: "CHECK phase: edits should be verdict only"}
+    DONE: {action: allow}
+
+  file-search:
+    _all_states: {action: allow}
+
+  content-search:
+    _all_states: {action: allow}
+
+  # =============================================================================
+  # Category 2: Execution
+  # =============================================================================
+
+  shell-execute:
+    EXPLORE: {action: warn, message: "EXPLORE phase: prefer read-only commands"}
+    DESIGN: {action: warn, message: "DESIGN phase: prefer read-only commands"}
+    PLAN: {action: warn, message: "PLAN phase: prefer read-only commands"}
+    DO: {action: allow}
+    CHECK: {action: allow}
+    DONE: {action: warn, message: "DONE phase: prefer read-only commands"}
+
+  shell-background:
+    EXPLORE: {action: block, message: "BLOCKED: Background execution not allowed in EXPLORE"}
+    DESIGN: {action: block, message: "BLOCKED: Background execution not allowed in DESIGN"}
+    PLAN: {action: block, message: "BLOCKED: Background execution not allowed in PLAN"}
+    DO: {action: allow}
+    CHECK: {action: allow}
+    DONE: {action: block, message: "BLOCKED: Background execution not allowed in DONE"}
+
+  notebook-edit:
+    EXPLORE: {action: block, message: "BLOCKED: Notebook edits not allowed in EXPLORE"}
+    DESIGN: {action: warn, message: "DESIGN phase: notebook edits unusual"}
+    PLAN: {action: warn, message: "PLAN phase: notebook edits unusual"}
+    DO: {action: allow}
+    CHECK: {action: allow}
+    DONE: {action: block, message: "BLOCKED: Notebook edits not allowed in DONE"}
+
+  # =============================================================================
+  # Category 3: Web/External (BLOCKED in DO - black-box)
+  # =============================================================================
+
+  web-fetch:
+    EXPLORE: {action: allow}
+    DESIGN: {action: allow}
+    PLAN: {action: allow}
+    DO: {action: block, message: "BLOCKED: DO phase is black-box. Web research belongs in EXPLORE."}
+    CHECK: {action: allow}
+    DONE: {action: allow}
+
+  web-search:
+    EXPLORE: {action: allow}
+    DESIGN: {action: allow}
+    PLAN: {action: allow}
+    DO: {action: block, message: "BLOCKED: DO phase is black-box. Web research belongs in EXPLORE."}
+    CHECK: {action: allow}
+    DONE: {action: allow}
+
+  # =============================================================================
+  # Category 4: Agent/Task
+  # =============================================================================
+
+  task-spawn:
+    _all_states: {action: allow}
+
+  skill-invoke:
+    # Skill restrictions handled separately via skill_restrictions section
+    _all_states: {action: allow}
+
+  user-query:
+    EXPLORE: {action: allow}
+    DESIGN: {action: allow}
+    PLAN: {action: allow}
+    DO: {action: block, message: "BLOCKED: DO phase is black-box. Spec should be complete - no user queries."}
+    CHECK: {action: allow}
+    DONE: {action: allow}
+
+  # =============================================================================
+  # Category 5: Memory (HAIOS)
+  # =============================================================================
+
+  memory-search:
+    EXPLORE: {action: allow}
+    DESIGN: {action: allow}
+    PLAN: {action: allow}
+    DO: {action: block, message: "BLOCKED: DO phase is black-box. Query memory during EXPLORE/DESIGN."}
+    CHECK: {action: allow}
+    DONE: {action: allow}
+
+  memory-store:
+    EXPLORE: {action: warn, message: "EXPLORE phase: prefer notes over memory storage"}
+    DESIGN: {action: warn, message: "DESIGN phase: prefer notes over memory storage"}
+    PLAN: {action: warn, message: "PLAN phase: prefer notes over memory storage"}
+    DO: {action: block, message: "BLOCKED: Memory storage not allowed in DO phase."}
+    CHECK: {action: warn, message: "CHECK phase: prefer notes over memory storage"}
+    DONE: {action: allow}
+
+  schema-query:
+    _all_states: {action: allow}
+
+  db-query:
+    _all_states: {action: redirect, redirect_to: "schema-verifier", message: "BLOCKED: Direct SQL not allowed. Use: Task(prompt='...', subagent_type='schema-verifier')"}
+
+  # =============================================================================
+  # Category 6: Planning/Governance
+  # =============================================================================
+
+  plan-enter:
+    EXPLORE: {action: allow}
+    DESIGN: {action: allow}
+    PLAN: {action: allow}
+    DO: {action: block, message: "BLOCKED: Cannot enter plan mode during DO phase."}
+    CHECK: {action: allow}
+    DONE: {action: allow}
+
+  plan-exit:
+    _all_states: {action: allow}
+
+  mcp-list:
+    _all_states: {action: allow}
+
+  mcp-read:
+    _all_states: {action: allow}
+
+# =============================================================================
+# Skill Restrictions (per CH-001 "Skill Restrictions in DO")
+# =============================================================================
+
+skill_restrictions:
+  DO:
+    allowed:
+      - validate
+      - status
+      - implement
+      - schema
+      - tree
+      - schema-ref
+    blocked:
+      - critique
+      - reason
+      - "new-*"
+      - close
+    block_message: "BLOCKED: Skill '{skill}' not allowed in DO phase. Spec is frozen."
+
+# =============================================================================
+# Phase-to-State Mapping (per CH-002)
+# =============================================================================
+
+phase_to_state:
+  # implementation-cycle
+  implementation-cycle/PLAN: PLAN
+  implementation-cycle/DO: DO
+  implementation-cycle/CHECK: CHECK
+  implementation-cycle/DONE: DONE
+
+  # investigation-cycle (EXPLORE-FIRST per E2.4 - WORK-061)
+  investigation-cycle/EXPLORE: EXPLORE       # Phase 1: Evidence gathering
+  investigation-cycle/HYPOTHESIZE: DESIGN    # Phase 2: Form hypotheses from evidence
+  investigation-cycle/VALIDATE: CHECK        # Phase 3: Test hypotheses
+  investigation-cycle/CONCLUDE: DONE         # Phase 4: Synthesize and spawn
+
+  # close-work-cycle
+  close-work-cycle/VALIDATE: CHECK
+  close-work-cycle/OBSERVE: DONE
+  close-work-cycle/ARCHIVE: DONE
+  close-work-cycle/MEMORY: DONE
+
+  # observation-triage-cycle
+  observation-triage-cycle/SCAN: EXPLORE
+  observation-triage-cycle/TRIAGE: DESIGN
+  observation-triage-cycle/PROMOTE: DONE
+
+  # work-creation-cycle
+  work-creation-cycle/VERIFY: CHECK
+  work-creation-cycle/POPULATE: DESIGN
+  work-creation-cycle/READY: CHECK
+  work-creation-cycle/CHAIN: DONE
+
+  # plan-authoring-cycle
+  plan-authoring-cycle/AMBIGUITY: DESIGN
+  plan-authoring-cycle/ANALYZE: EXPLORE
+  plan-authoring-cycle/AUTHOR: DESIGN
+  plan-authoring-cycle/VALIDATE: CHECK
+  plan-authoring-cycle/CHAIN: DONE
+
+  # checkpoint-cycle
+  checkpoint-cycle/SCAFFOLD: DESIGN
+  checkpoint-cycle/FILL: DO
+  checkpoint-cycle/VERIFY: CHECK
+  checkpoint-cycle/CAPTURE: DONE
+  checkpoint-cycle/COMMIT: DONE
+
+  # survey-cycle
+  survey-cycle/GATHER: EXPLORE
+  survey-cycle/ASSESS: DESIGN
+  survey-cycle/OPTIONS: DESIGN
+  survey-cycle/CHOOSE: PLAN
+  survey-cycle/ROUTE: DONE
+
+  # ground-cycle
+  ground-cycle/PROVENANCE: EXPLORE
+  ground-cycle/ARCHITECTURE: EXPLORE
+  ground-cycle/MEMORY: EXPLORE
+  ground-cycle/CONTEXT_MAP: EXPLORE
+
+  # plan-validation-cycle
+  plan-validation-cycle/CHECK: CHECK
+  plan-validation-cycle/SPEC_ALIGN: CHECK
+  plan-validation-cycle/CRITIQUE: CHECK
+  plan-validation-cycle/VALIDATE: CHECK
+  plan-validation-cycle/APPROVE: DONE

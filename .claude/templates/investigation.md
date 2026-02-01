@@ -16,6 +16,20 @@ last_updated: 2025-12-22T23:16:24
 ---
 # Investigation: {{TITLE}}
 
+<!-- DEPRECATION NOTICE (E2.4 - WORK-061)
+
+     This monolithic template is preserved for backward compatibility.
+
+     NEW investigations should use the fractured phase templates:
+       .claude/templates/investigation/EXPLORE.md
+       .claude/templates/investigation/HYPOTHESIZE.md
+       .claude/templates/investigation/VALIDATE.md
+       .claude/templates/investigation/CONCLUDE.md
+
+     The investigation-cycle skill reads these phase-specific templates.
+     This monolithic template will be removed in E2.5.
+-->
+
 <!-- FILE REFERENCE REQUIREMENTS (MUST - Session 171 Learning)
 
      1. MUST use full @ paths for prior work:

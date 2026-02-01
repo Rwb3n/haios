@@ -1,5 +1,5 @@
 # generated: 2025-12-25
-# System Auto: last updated on: 2026-01-10T16:56:24
+# System Auto: last updated on: 2026-02-01T16:05:52
 # Skills
 
 Skills are prompt injection components that provide domain-specific guidance and workflows for Claude Code.
@@ -16,7 +16,7 @@ Skills are prompt injection components that provide domain-specific guidance and
 | `extract-content` | Utility | Extract entities/concepts from documents |
 | `ground-cycle` | Cycle | PROVENANCE->ARCHITECTURE->MEMORY->CONTEXT MAP for loading architectural context |
 | `implementation-cycle` | Cycle | PLAN->DO->CHECK->DONE workflow for implementation |
-| `investigation-cycle` | Cycle | HYPOTHESIZE->EXPLORE->CONCLUDE workflow for research |
+| `investigation-cycle` | Cycle | EXPLORE->HYPOTHESIZE->VALIDATE->CONCLUDE workflow for research |
 | `memory-agent` | Utility | Intelligent context retrieval and learning |
 | `observation-capture-cycle` | Cycle | 3 questions for genuine reflection before work closure (hard gate on non-empty) |
 | `observation-triage-cycle` | Cycle | SCAN->TRIAGE->PROMOTE workflow for processing captured observations |

@@ -3,13 +3,13 @@ template: work_item
 id: WORK-061
 title: EXPLORE-FIRST Investigation Cycle Implementation
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-037
 chapter: null
 arc: flow
-closed: null
+closed: '2026-02-01'
 priority: medium
 effort: medium
 traces_to: []
@@ -37,10 +37,15 @@ memory_refs:
 - 82835
 - 82836
 - 82837
+- 82870
+- 82871
+- 82872
+- 82873
+- 82878
 extensions: {}
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-01T15:59:48'
+last_updated: '2026-02-01T16:06:54'
 ---
 # WORK-061: EXPLORE-FIRST Investigation Cycle Implementation
 
@@ -78,15 +83,15 @@ last_updated: '2026-02-01T15:59:48'
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Update activity_matrix.yaml with new phase-to-state mappings
-- [ ] Create fractured templates directory (.claude/templates/investigation/)
-- [ ] Create EXPLORE.md phase template (~30 lines)
-- [ ] Create HYPOTHESIZE.md phase template (~30 lines)
-- [ ] Create VALIDATE.md phase template (~30 lines)
-- [ ] Create CONCLUDE.md phase template (~30 lines)
-- [ ] Update investigation-cycle/SKILL.md with new flow
-- [ ] Add deprecation notice to monolithic investigation.md
-- [ ] Store implementation learnings to memory
+- [x] Update activity_matrix.yaml with new phase-to-state mappings
+- [x] Create fractured templates directory (.claude/templates/investigation/)
+- [x] Create EXPLORE.md phase template (~30 lines)
+- [x] Create HYPOTHESIZE.md phase template (~30 lines)
+- [x] Create VALIDATE.md phase template (~30 lines)
+- [x] Create CONCLUDE.md phase template (~30 lines)
+- [x] Update investigation-cycle/SKILL.md with new flow
+- [x] Add deprecation notice to monolithic investigation.md
+- [x] Store implementation learnings to memory
 
 ---
 
