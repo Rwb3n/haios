@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-01-30T17:44:53
+# System Auto: last updated on: 2026-02-01T14:47:28
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -289,6 +289,11 @@ session-end session:
 # Usage: just set-cycle implementation-cycle DO E2-288
 set-cycle cycle phase work_id:
     @python -c "import json; from datetime import datetime; p='.claude/haios-status-slim.json'; d=json.load(open(p)); d['session_state']={'active_cycle':'{{cycle}}','current_phase':'{{phase}}','work_id':'{{work_id}}','entered_at':datetime.now().isoformat()}; json.dump(d,open(p,'w'),indent=4); print(f'Set: {{cycle}}/{{phase}}/{{work_id}}')"
+
+# Get current cycle state (E2.4 CH-004 PreToolUseIntegration)
+# Returns: cycle/phase/work_id or empty string if no cycle active
+get-cycle:
+    @python -c "import json; p='.claude/haios-status-slim.json'; d=json.load(open(p)); s=d.get('session_state',{}); c=s.get('active_cycle') or ''; p=s.get('current_phase') or ''; w=s.get('work_id') or ''; print(f'{c}/{p}/{w}' if c else '')"
 
 # Clear session_state after cycle exit (E2-288, E2-293)
 clear-cycle:
