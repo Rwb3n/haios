@@ -1,5 +1,5 @@
 # generated: 2026-01-01
-# System Auto: last updated on: 2026-01-24T21:19:58
+# System Auto: last updated on: 2026-01-30T21:34:52
 # HAIOS Manifesto Corpus
 
 ## What This Is
@@ -95,7 +95,7 @@ The system exists to serve this specific human. Not abstract "users."
 | **L1** | COMPLETE | S154 - Success definition complete |
 | **L2** | COMPLETE | S154 - Goals, criteria, trade-offs |
 | **L3** | COMPLETE | S155 - 7 principles, boundaries |
-| **L4** | COMPLETE | S158 - Epoch 2.2 Chariot architecture |
+| **L4** | ACTIVE | S265 - E2.4 The Activity Layer |
 | **L5** | COMPLETE | S158 - Execution framework |
 | **L6** | COMPLETE | S158 - Session framework |
 | **L7** | COMPLETE | S158 - Prompt framework |

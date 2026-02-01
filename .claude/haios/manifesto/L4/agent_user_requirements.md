@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-18T19:54:57
+# System Auto: last updated on: 2026-01-30T21:34:07
 # L4: Agent/User Requirements
 
 ## Core Requirement
@@ -30,6 +30,14 @@
 - must allow Builder to store learnings to memory
 - must allow Builder to signal completion or blockage
 
+**State-Aware Capabilities (E2.4):**
+- in EXPLORE state: must allow unrestricted reading, note capture
+- in DESIGN state: must allow spec writing, critique invocation
+- in PLAN state: must allow plan writing, critique invocation
+- in DO state: must BLOCK AskUser, must BLOCK spec-write, must allow only artifact-*
+- in CHECK state: must allow verification, test execution
+- in DONE state: must allow knowledge commit, work closure
+
 ### Validator Agent
 - must allow Validator to load agent_user_requirements
 - must allow Validator to load produced artifacts
@@ -42,3 +50,10 @@
 - must allow agents to signal state changes to each other
 - must allow agents to escalate decisions they cannot make
 - must allow observations to be captured at any point
+
+## Flow Requirements (E2.4)
+
+- must enforce universal flow: EXPLORE → DESIGN → PLAN → DO → CHECK → DONE
+- must enforce critique as hard gate at DESIGN→PLAN and PLAN→DO transitions
+- must block DO entry until critique verdict = PROCEED
+- must allow investigation variant: EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE

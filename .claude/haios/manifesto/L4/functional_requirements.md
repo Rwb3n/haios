@@ -1,5 +1,5 @@
 # generated: 2026-01-24
-# System Auto: last updated on: 2026-01-27T23:16:25
+# System Auto: last updated on: 2026-01-30T21:34:41
 # L4: Functional Requirements
 
 Level: L4
@@ -32,6 +32,14 @@ Derived from: L3 principles + agent_user_requirements.md
 | REQ-VALID-001 | Validation | Work creation MUST validate ID availability against terminal statuses | L3.1, L3.5 | WorkEngine, scaffold.py |
 | REQ-VALID-002 | Validation | Scaffold templates MUST produce files with all required fields populated | L3.2 | scaffold.py |
 | REQ-VALID-003 | Validation | Plan validation MUST check for unresolved decisions before DO phase | L3.1, L3.15 | plan-validation-cycle Gate 4 |
+| REQ-ACTIVITY-001 | Activities | Governed activities MUST be state-aware (Primitive × State × Rules) | L3.4, L3.15 | PreToolUse hook |
+| REQ-ACTIVITY-002 | Activities | DO state MUST block AskUser, explore-*, spec-write | L3.4, L3.15 | PreToolUse hook |
+| REQ-FLOW-001 | Flow | Implementation MUST follow EXPLORE→DESIGN→PLAN→DO→CHECK→DONE | L3.1, L3.7 | CycleRunner |
+| REQ-FLOW-002 | Flow | Investigation MUST follow EXPLORE→HYPOTHESIZE→VALIDATE→CONCLUDE | L3.1, L3.7 | CycleRunner |
+| REQ-CRITIQUE-001 | Critique | Critique MUST be hard gate at DESIGN→PLAN and PLAN→DO | L3.2, L3.15 | GovernanceLayer |
+| REQ-CRITIQUE-002 | Critique | DO entry MUST require critique verdict = PROCEED | L3.2, L3.15 | GovernanceLayer |
+| REQ-TEMPLATE-001 | Templates | Phase templates MUST have input/output contracts | L3.2, L3.7 | Template validation |
+| REQ-TEMPLATE-002 | Templates | Templates MUST be fractured by phase (~30-50 lines each) | L3.6 | Template structure |
 
 *Registry grows as requirements are enumerated from L3 principles.*
 
@@ -72,6 +80,71 @@ Derived from: L3 principles + agent_user_requirements.md
 - Validation is enforcement, not documentation (L3.15: enforcement over enablement)
 - Terminal status collision MUST block, not warn (data loss is irreversible)
 - REQ-VALID-002 supersedes scaffold recipes — `/new-*` commands are the governed path
+
+---
+
+## Activity Requirements (E2.4 - Session 265)
+
+*Derived from L3.4 (Duties Are Separated) + L3.15 (Enforcement over Enablement)*
+
+| ID | Requirement | Derives From | Acceptance Test |
+|----|-------------|--------------|-----------------|
+| **REQ-ACTIVITY-001** | Governed activities MUST be state-aware: same primitive has different rules per state | L3.4, L3.15 | PreToolUse checks current state before allowing primitive |
+| **REQ-ACTIVITY-002** | DO state MUST block: AskUser, explore-*, spec-write | L3.4, L3.15 | Attempting blocked activity in DO returns error |
+
+**Invariants:**
+- State determines governance envelope, not agent role
+- Blocked activities return clear error with current state and blocked reason
+- State transitions logged for audit
+
+---
+
+## Flow Requirements (E2.4 - Session 265)
+
+*Derived from L3.1 (Certainty Ratchet) + L3.7 (Traceability)*
+
+| ID | Requirement | Derives From | Acceptance Test |
+|----|-------------|--------------|-----------------|
+| **REQ-FLOW-001** | Implementation work MUST follow: EXPLORE → DESIGN → PLAN → DO → CHECK → DONE | L3.1, L3.7 | CycleRunner enforces phase sequence |
+| **REQ-FLOW-002** | Investigation work MUST follow: EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE | L3.1, L3.7 | Investigation cycle enforces EXPLORE-FIRST |
+
+**Invariants:**
+- Phases cannot be skipped (though can be lightweight)
+- Phase transitions logged with timestamp
+- Output of phase N is input contract of phase N+1
+
+---
+
+## Critique Requirements (E2.4 - Session 265)
+
+*Derived from L3.2 (Evidence Over Assumption) + L3.15 (Enforcement over Enablement)*
+
+| ID | Requirement | Derives From | Acceptance Test |
+|----|-------------|--------------|-----------------|
+| **REQ-CRITIQUE-001** | Critique MUST be invoked as hard gate at DESIGN→PLAN and PLAN→DO transitions | L3.2, L3.15 | Transition blocked without critique invocation |
+| **REQ-CRITIQUE-002** | DO phase entry MUST require critique verdict = PROCEED | L3.2, L3.15 | BLOCK or REVISE verdict prevents DO entry |
+
+**Invariants:**
+- Critique loop: invoke → read → revise (if needed) → re-invoke until PROCEED
+- Critique findings stored to memory for future reference
+- "If there's a critique, revise until there is no critique"
+
+---
+
+## Template Requirements (E2.4 - Session 265)
+
+*Derived from L3.2 (Evidence Over Assumption) + L3.6 (Graceful Degradation)*
+
+| ID | Requirement | Derives From | Acceptance Test |
+|----|-------------|--------------|-----------------|
+| **REQ-TEMPLATE-001** | Phase templates MUST have explicit input/output contracts | L3.2, L3.7 | Template includes Input Contract and Output Contract sections |
+| **REQ-TEMPLATE-002** | Templates MUST be fractured by phase (~30-50 lines each) | L3.6 | No single template exceeds 100 lines |
+
+**Invariants:**
+- One template per phase (not monolithic)
+- Input contract is gate for phase entry
+- Output contract is gate for phase exit
+- Governance through activities layer, not template checkboxes
 
 ---
 

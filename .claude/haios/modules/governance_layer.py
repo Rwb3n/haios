@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-21T20:31:13
+# System Auto: last updated on: 2026-02-01T14:52:01
 """
 GovernanceLayer Module (E2-240)
 
@@ -300,3 +300,198 @@ class GovernanceLayer:
         from config import ConfigLoader
 
         return ConfigLoader.get().toggles.get(name, default)
+
+    # =========================================================================
+    # E2.4 CH-004: Governed Activities (State-Aware Governance)
+    # =========================================================================
+
+    def get_activity_state(self) -> str:
+        """
+        Get current ActivityMatrix state from cycle/phase.
+
+        Uses `just get-cycle` to get current cycle state, maps to ActivityMatrix state.
+
+        Returns:
+            State name: EXPLORE, DESIGN, PLAN, DO, CHECK, or DONE
+            Defaults to EXPLORE on failure (fail-permissive per CH-002)
+        """
+        import subprocess
+
+        try:
+            result = subprocess.run(
+                ["just", "get-cycle"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+                cwd=str(Path(__file__).parent.parent.parent.parent),  # Project root
+            )
+            cycle_info = result.stdout.strip()
+
+            if not cycle_info:
+                return "EXPLORE"  # No cycle = discovery mode
+
+            # Parse "cycle/phase/work_id"
+            parts = cycle_info.split("/")
+            if len(parts) < 2:
+                return "EXPLORE"
+
+            cycle, phase = parts[0], parts[1]
+
+            # Load phase-to-state mapping
+            matrix = self._load_activity_matrix()
+            mapping = matrix.get("phase_to_state", {})
+            key = f"{cycle}/{phase}"
+
+            return mapping.get(key, "EXPLORE")
+
+        except Exception:
+            return "EXPLORE"  # Fail-permissive
+
+    def map_tool_to_primitive(self, tool_name: str, tool_input: Dict[str, Any]) -> str:
+        """
+        Map Claude Code tool name to ActivityMatrix primitive.
+
+        Args:
+            tool_name: Tool name (e.g., "AskUserQuestion", "Read", "Bash")
+            tool_input: Tool input dict (for context-specific mapping)
+
+        Returns:
+            Primitive name (e.g., "user-query", "file-read")
+        """
+        # Direct mappings
+        TOOL_TO_PRIMITIVE = {
+            "AskUserQuestion": "user-query",
+            "Read": "file-read",
+            "Write": "file-write",
+            "Edit": "file-edit",
+            "Glob": "file-search",
+            "Grep": "content-search",
+            "Bash": "shell-execute",
+            "WebFetch": "web-fetch",
+            "WebSearch": "web-search",
+            "Task": "task-spawn",
+            "Skill": "skill-invoke",
+            "NotebookEdit": "notebook-edit",
+            "EnterPlanMode": "plan-enter",
+            "ExitPlanMode": "plan-exit",
+            "ListMcpResourcesTool": "mcp-list",
+            "ReadMcpResourceTool": "mcp-read",
+        }
+
+        # MCP tools
+        if tool_name.startswith("mcp__haios-memory__"):
+            if "search" in tool_name:
+                return "memory-search"
+            if "ingest" in tool_name or "store" in tool_name:
+                return "memory-store"
+            if "schema" in tool_name:
+                return "schema-query"
+            if "db_query" in tool_name:
+                return "db-query"
+
+        return TOOL_TO_PRIMITIVE.get(tool_name, "unknown")
+
+    def check_activity(
+        self, primitive: str, state: str, context: Dict[str, Any]
+    ) -> GateResult:
+        """
+        Check if activity is allowed in current state.
+
+        Args:
+            primitive: The primitive being invoked (e.g., "user-query")
+            state: Current ActivityMatrix state (e.g., "DO")
+            context: Additional context (file_path, skill_name, etc.)
+
+        Returns:
+            GateResult with allowed flag and reason message
+        """
+        matrix = self._load_activity_matrix()
+        rules = matrix.get("rules", {})
+
+        # Look up rule for (primitive, state)
+        primitive_rules = rules.get(primitive, {})
+
+        # Check _all_states shorthand first
+        if "_all_states" in primitive_rules:
+            rule = primitive_rules["_all_states"]
+        elif state in primitive_rules:
+            rule = primitive_rules[state]
+        else:
+            # Unknown primitive or state - use default (fail-open per CH-003)
+            default = matrix.get("default_action", "allow")
+            return GateResult(
+                allowed=True, reason=f"Unknown primitive '{primitive}', defaulting to {default}"
+            )
+
+        # Evaluate action
+        action = rule.get("action", "allow")
+        message = rule.get("message", "")
+
+        if action == "allow":
+            return GateResult(allowed=True, reason="Activity allowed")
+
+        if action == "warn":
+            return GateResult(allowed=True, reason=message)
+
+        if action == "block":
+            return GateResult(allowed=False, reason=message)
+
+        if action == "redirect":
+            redirect_to = rule.get("redirect_to", "alternative")
+            return GateResult(allowed=False, reason=message or f"Use {redirect_to} instead")
+
+        return GateResult(allowed=True, reason="Activity allowed")
+
+    def _check_skill_restriction(
+        self, skill_name: str, state: str
+    ) -> "GateResult | None":
+        """
+        Check if skill is allowed in current state.
+
+        Args:
+            skill_name: Name of skill being invoked
+            state: Current ActivityMatrix state
+
+        Returns:
+            None if allowed, GateResult if blocked
+        """
+        import fnmatch
+
+        matrix = self._load_activity_matrix()
+        restrictions = matrix.get("skill_restrictions", {}).get(state, {})
+
+        if not restrictions:
+            return None
+
+        allowed = restrictions.get("allowed", [])
+        blocked = restrictions.get("blocked", [])
+        block_message = restrictions.get("block_message", "Skill not allowed in this state")
+
+        # Check explicit allow list
+        for pattern in allowed:
+            if fnmatch.fnmatch(skill_name, pattern):
+                return None
+
+        # Check blocked list
+        for pattern in blocked:
+            if fnmatch.fnmatch(skill_name, pattern):
+                return GateResult(
+                    allowed=False, reason=block_message.format(skill=skill_name)
+                )
+
+        return None  # Default: allow if not blocked
+
+    def _load_activity_matrix(self) -> dict:
+        """Load and cache activity_matrix.yaml."""
+        # Use instance attribute for cache (allows test isolation)
+        if hasattr(self, "_activity_matrix_cache") and self._activity_matrix_cache is not None:
+            return self._activity_matrix_cache
+
+        config_path = Path(__file__).parent.parent / "config" / "activity_matrix.yaml"
+        if config_path.exists():
+            with open(config_path, encoding="utf-8") as f:
+                self._activity_matrix_cache = yaml.safe_load(f) or {}
+        else:
+            self._activity_matrix_cache = {"default_action": "allow", "rules": {}}
+
+        return self._activity_matrix_cache

@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-18T19:54:42
+# System Auto: last updated on: 2026-01-30T21:33:31
 # L4: Project Requirements
 
 ## What HAIOS IS
@@ -11,6 +11,20 @@ INPUT:  Corpus of documents (specs, designs, requirements)
 PROCESS: Team of agents collaborating by role
 OUTPUT: Functional product (aligned to L0-L3 manifesto)
 ```
+
+## How HAIOS Works (E2.4)
+
+The system operates through a five-layer hierarchy:
+
+```
+PRINCIPLES       (WHY)   - Beliefs, values (L0-L3)
+WAYS OF WORKING  (HOW)   - Patterns, flows, transformations
+CEREMONIES       (WHEN)  - Side-effect boundaries (commits, checkpoints)
+ACTIVITIES       (WHAT)  - Governed primitives per state
+ASSETS           (OUTPUT)- Immutable artifacts
+```
+
+See technical_requirements.md for implementation details.
 
 ## The Portability Test
 

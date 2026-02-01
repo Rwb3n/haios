@@ -1,0 +1,146 @@
+# generated: 2026-01-30
+# System Auto: last updated on: 2026-01-30T21:27:41
+# Epoch 2.4: The Activity Layer
+
+## L4 Object Definition
+
+**Epoch ID:** E2.4
+**Name:** The Activity Layer
+**Status:** Active
+**Started:** 2026-01-30 (Session 265)
+**Prior:** E2.3 (The Pipeline)
+
+---
+
+## Purpose
+
+Implement the five-layer hierarchy and governed activities paradigm.
+
+**The Mission:**
+```
+Principles → Ways of Working → Ceremonies → Activities → Assets
+```
+
+**The Paradigm Shift:**
+- From: Pipeline stages as modules
+- To: Governed activities as Primitive × State × Governance Rules
+
+---
+
+## What We Learned (E2.3)
+
+### What Works
+
+| Component | Evidence | Reuse |
+|-----------|----------|-------|
+| Pipeline stages (INGEST, PLAN) | CH-001-003, CH-006 complete | Foundation valid |
+| Universal work item structure | WORK-XXX format adopted | Keep, add `mode` field |
+| Configuration arc | Loaders, haios.yaml | Keep |
+| Critique agent pattern | Surfaces assumptions pre-DO | Elevate to hard gate |
+
+### What Doesn't Work
+
+| Problem | Evidence | Fix |
+|---------|----------|-----|
+| Monolithic templates | 372-line investigation.md, Template Tax | Fracture to phase templates |
+| Investigation HYPOTHESIZE-FIRST | WORK-036: premature hypothesis constrains depth | Invert to EXPLORE-FIRST |
+| DO phase leaky | Design decisions during implementation | Black-box with governed activities |
+| Critique optional | Agent skips when rushing | Make hard gate |
+
+---
+
+## Core Decisions (Session 265)
+
+### Decision 1: Five-Layer Hierarchy
+
+```
+PRINCIPLES       (WHY)
+WAYS OF WORKING  (HOW - functions/transformations)
+CEREMONIES       (WHEN - side-effect boundaries)
+ACTIVITIES       (WHAT - governed primitives)
+ASSETS           (OUTPUT - immutable artifacts)
+```
+
+### Decision 2: Work Classification (Two-Axis)
+
+| Axis | Values |
+|------|--------|
+| **Mode** | volumous, tight |
+| **Type** | investigate, design, implement, validate, triage |
+
+Type as function signature:
+- investigate: Question → Findings
+- design: Requirements → Specification
+- implement: Specification → Artifact
+- validate: Artifact × Spec → Verdict
+- triage: [Items] → [PrioritizedItems]
+
+### Decision 3: Governed Activities
+
+```
+Governed Activity = Primitive × State × Governance Rules
+```
+
+Same primitive, different governance per state.
+
+### Decision 4: Critique as Hard Gate
+
+- DESIGN → PLAN: Critique verdict must = PROCEED
+- PLAN → DO: Critique verdict must = PROCEED
+- Revise until no critique
+
+### Decision 5: Universal Flow
+
+```
+EXPLORE → DESIGN → PLAN → DO → CHECK → DONE
+```
+
+Investigation variant:
+```
+EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE
+```
+
+### Decision 6: Fractured Templates
+
+One template per phase with:
+- Input contract
+- Output contract
+- Governed activities
+- ~30-50 lines each
+
+---
+
+## Arcs
+
+| Arc | Theme | Status |
+|-----|-------|--------|
+| **Activities** | Define governed activities per state | Planned |
+| **Templates** | Fracture templates to phase contracts | Planned |
+| **Flow** | Implement universal flow with gates | Planned |
+| **Configuration** | (Carried from E2.3) Loader system | Active |
+| **WorkUniversal** | (Carried from E2.3) Add mode field | Active |
+
+---
+
+## Exit Criteria
+
+- [ ] Governed activities matrix implemented
+- [ ] Phase templates fractured with contracts
+- [ ] Universal flow with critique hard gates
+- [ ] Investigation cycle uses EXPLORE-FIRST
+- [ ] DO phase enforces black-box constraints
+
+---
+
+## Memory Refs
+
+Session 265 L4 decisions: 82688-82744
+
+---
+
+## References
+
+- @.claude/haios/epochs/E2_3/EPOCH.md (prior epoch)
+- @.claude/haios/manifesto/L4-implementation.md (to update)
+- @docs/work/active/WORK-036/ (Template Tax investigation)
+- @docs/work/active/WORK-037/ (EXPLORE-FIRST design)

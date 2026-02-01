@@ -1,38 +1,37 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-25T01:48:14
+# System Auto: last updated on: 2026-01-30T21:27:58
 # HAIOS System Configuration
 # Consolidates: governance-toggles.yaml, routing-thresholds.yaml
-# Version: 2.3 (Session 206 - The Pipeline)
+# Version: 2.4 (Session 265 - The Activity Layer)
 
 # Plugin manifest (for portable plugin spec)
 manifest:
   name: haios
-  version: "2.3"
-  description: "Hybrid AI Operating System - Doc-to-Product Pipeline"
+  version: "2.4"
+  description: "Hybrid AI Operating System - Governed Activities Framework"
 
 # Current epoch context (ADR-042: Arc > Chapter in hierarchy)
 epoch:
-  current: E2.3
-  subversion: "2.3"  # The Pipeline
-  epoch_file: ".claude/haios/epochs/E2_3/EPOCH.md"
-  architecture_dir: ".claude/haios/epochs/E2_3/architecture"
-  arcs_dir: ".claude/haios/epochs/E2_3/arcs"
-  observations_dir: ".claude/haios/epochs/E2_3/observations"
+  current: E2.4
+  subversion: "2.4"  # The Activity Layer
+  epoch_file: ".claude/haios/epochs/E2_4/EPOCH.md"
+  architecture_dir: ".claude/haios/epochs/E2_4/architecture"
+  arcs_dir: ".claude/haios/epochs/E2_4/arcs"
+  observations_dir: ".claude/haios/epochs/E2_4/observations"
   # Prior epoch (for reference)
-  prior_epoch: ".claude/haios/epochs/E2/EPOCH.md"
-  # Foundational architecture (MUST load) - carries forward from E2
+  prior_epoch: ".claude/haios/epochs/E2_3/EPOCH.md"
+  # Foundational architecture (MUST load) - carries forward
   foundational:
     - S20-pressure-dynamics.md
     - S21-cognitive-notation.md
     - S22-skill-patterns.md
-  # Active arcs
+  # Active arcs (E2.4 - carried + new)
   active_arcs:
-    - configuration
-    - provenance
-    - pipeline
-    - workuniversal
-    - migration
-    - observations
+    - activities      # NEW: Governed activities per state
+    - templates       # NEW: Fractured phase templates
+    - flow            # NEW: Universal flow with gates
+    - configuration   # CARRIED: Loader system
+    - workuniversal   # CARRIED: Add mode field
 
 # Governance toggles (from governance-toggles.yaml)
 toggles:

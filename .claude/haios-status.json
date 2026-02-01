@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-01T17:02:20",
+    "generated": "2026-02-01T17:23:11",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 272,
-        "current_session": 273,
+        "prior_session": 273,
+        "current_session": 274,
         "prior_date": "2026-02-01",
         "completed": [],
         "completed_count": 0,
@@ -3283,6 +3283,15 @@
             "status": null,
             "date": "2026-02-01",
             "last_updated": "2026-02-01T16:26:52",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-02-01-07-SESSION-274-work-059-and-work-058-cc-feature-investigations-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-01",
+            "last_updated": "2026-02-01T17:23:04",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6995,7 +7004,7 @@
         {
             "path": "docs/checkpoints/2025-12-26-04-SESSION-124-m7d-progress-and-governance-fixes.md",
             "last_updated": "2025-12-26T17:05:41",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/checkpoints/2025-12-27-01-SESSION-125-m7d-progress-and-skill-architecture-fixes.md",
@@ -7055,7 +7064,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-05-SESSION-136-inv-042-e2-219-complete-and-routing-gate-design.md",
             "last_updated": "2025-12-28T17:12:45",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/checkpoints/2025-12-28-06-SESSION-137-inv-048-complete-and-anti-pattern-architecture-revision.md",
@@ -7720,7 +7729,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-024-work-item-as-file-architecture.md",
             "last_updated": "2025-12-23T17:10:02",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-025-workflow-state-machine-architecture.md",
@@ -7875,7 +7884,7 @@
         {
             "path": "docs/ADR/ADR-040-haios-modular-black-box-architecture.md",
             "last_updated": "2025-12-31T17:20:07",
-            "days_stale": 31
+            "days_stale": 32
         },
         {
             "path": "docs/reports/2025-11-30-EVALUATION-synthesis-pipeline.md",
@@ -8000,7 +8009,7 @@
         {
             "path": "docs/work/archive/WORK-E2-119-updatehaiosstatus-on-every-prompt.md",
             "last_updated": "2025-12-26T17:02:26",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-128-checkpoint-git-integration.md",
@@ -8299,9 +8308,9 @@
         }
     ],
     "workspace": {
-        "total_files": 521,
+        "total_files": 522,
         "by_template": {
-            "checkpoint": 272,
+            "checkpoint": 273,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8313,7 +8322,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 108,
+            "unknown": 109,
             "draft": 2,
             "approved": 6,
             "ready": 1,

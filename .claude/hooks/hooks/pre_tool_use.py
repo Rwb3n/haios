@@ -1,5 +1,5 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-01-29T19:00:01
+# System Auto: last updated on: 2026-02-01T14:53:28
 """
 PreToolUse Hook Handler (E2-085).
 
@@ -68,6 +68,11 @@ def handle(hook_data: dict) -> Optional[dict]:
     tool_name = hook_data.get("tool_name", "")
     tool_input = hook_data.get("tool_input", {})
 
+    # E2.4 CH-004: State-aware governed activity check (checked FIRST)
+    result = _check_governed_activity(tool_name, tool_input)
+    if result:
+        return result
+
     # Check Bash for SQL and PowerShell
     if tool_name == "Bash":
         command = tool_input.get("command", "")
@@ -123,6 +128,61 @@ def handle(hook_data: dict) -> Optional[dict]:
             return result
 
     return None  # Allow all other tools
+
+
+def _check_governed_activity(tool_name: str, tool_input: dict) -> Optional[dict]:
+    """
+    Check governed activity via GovernanceLayer (E2.4 CH-004).
+
+    State-aware governance: same tool can have different rules per workflow state.
+
+    Returns:
+        None: Allow operation
+        dict: Block/warn response
+    """
+    try:
+        # Import GovernanceLayer (module-first pattern per E2-264)
+        modules_dir = Path(__file__).parent.parent.parent / "haios" / "modules"
+        if str(modules_dir) not in sys.path:
+            sys.path.insert(0, str(modules_dir))
+
+        from governance_layer import GovernanceLayer
+
+        layer = GovernanceLayer()
+
+        # 1. Get current state
+        state = layer.get_activity_state()
+
+        # 2. Map tool to primitive
+        primitive = layer.map_tool_to_primitive(tool_name, tool_input)
+
+        # 3. Build context
+        context = {
+            "file_path": tool_input.get("file_path", ""),
+            "tool_input": tool_input,
+        }
+
+        # 4. Special handling for skill-invoke
+        if primitive == "skill-invoke":
+            skill_name = tool_input.get("skill", "")
+            skill_result = layer._check_skill_restriction(skill_name, state)
+            if skill_result is not None and not skill_result.allowed:
+                return _deny(skill_result.reason)
+
+        # 5. Check activity
+        result = layer.check_activity(primitive, state, context)
+
+        if not result.allowed:
+            return _deny(result.reason)
+
+        if result.reason and result.reason != "Activity allowed":
+            return _allow_with_warning(result.reason)
+
+        return None  # Allow silently
+
+    except Exception:
+        # Fail-permissive on any error
+        return None
 
 
 def _check_sql_governance(command: str) -> Optional[dict]:

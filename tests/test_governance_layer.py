@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-04T20:09:43
+# System Auto: last updated on: 2026-02-01T14:52:32
 """
 Tests for GovernanceLayer module (E2-240).
 
@@ -344,3 +344,103 @@ class TestGetToggle:
         layer = GovernanceLayer()
         result = layer.get_toggle("nonexistent_toggle", default=False)
         assert result is False
+
+
+# =============================================================================
+# E2.4 CH-004: Governed Activities Tests
+# =============================================================================
+
+
+class TestGovernedActivities:
+    """Tests for governed activities (state-aware governance) - CH-004."""
+
+    def test_get_activity_state_returns_state_from_cycle(self, mocker):
+        """get_activity_state parses cycle/phase and maps to ActivityMatrix state."""
+        import subprocess
+        from governance_layer import GovernanceLayer
+
+        # Mock subprocess.run at module level where it's imported
+        mock_result = mocker.Mock()
+        mock_result.stdout = "implementation-cycle/DO/WORK-042"
+        mock_result.returncode = 0
+        mocker.patch.object(subprocess, "run", return_value=mock_result)
+
+        layer = GovernanceLayer()
+        state = layer.get_activity_state()
+
+        assert state == "DO"
+
+    def test_get_activity_state_returns_explore_when_no_cycle(self, mocker):
+        """get_activity_state returns EXPLORE when no cycle active (fail-permissive)."""
+        import subprocess
+        from governance_layer import GovernanceLayer
+
+        # Mock subprocess.run to return empty (no active cycle)
+        mock_result = mocker.Mock()
+        mock_result.stdout = ""
+        mock_result.returncode = 1
+        mocker.patch.object(subprocess, "run", return_value=mock_result)
+
+        layer = GovernanceLayer()
+        state = layer.get_activity_state()
+
+        assert state == "EXPLORE"
+
+    def test_map_tool_to_primitive_maps_askuser_to_user_query(self):
+        """map_tool_to_primitive converts tool name to primitive."""
+        from governance_layer import GovernanceLayer
+
+        layer = GovernanceLayer()
+
+        assert layer.map_tool_to_primitive("AskUserQuestion", {}) == "user-query"
+        assert layer.map_tool_to_primitive("Read", {}) == "file-read"
+        assert layer.map_tool_to_primitive("Write", {}) == "file-write"
+        assert layer.map_tool_to_primitive("WebFetch", {}) == "web-fetch"
+
+    def test_check_activity_blocks_user_query_in_do(self):
+        """check_activity returns blocked for user-query in DO state."""
+        from governance_layer import GovernanceLayer
+
+        layer = GovernanceLayer()
+        result = layer.check_activity("user-query", "DO", {})
+
+        assert result.allowed is False
+        assert "blocked" in result.reason.lower() or "black-box" in result.reason.lower()
+
+    def test_check_activity_allows_user_query_in_explore(self):
+        """check_activity returns allowed for user-query in EXPLORE state."""
+        from governance_layer import GovernanceLayer
+
+        layer = GovernanceLayer()
+        result = layer.check_activity("user-query", "EXPLORE", {})
+
+        assert result.allowed is True
+
+    def test_check_activity_allows_unknown_primitive(self):
+        """check_activity returns allowed for unknown primitive (fail-open per CH-003)."""
+        from governance_layer import GovernanceLayer
+
+        layer = GovernanceLayer()
+        result = layer.check_activity("unknown-primitive", "DO", {})
+
+        assert result.allowed is True
+
+    def test_skill_restriction_blocks_critique_in_do(self):
+        """_check_skill_restriction blocks design-phase skills in DO."""
+        from governance_layer import GovernanceLayer
+
+        layer = GovernanceLayer()
+        result = layer._check_skill_restriction("critique", "DO")
+
+        assert result is not None
+        assert result.allowed is False
+
+    def test_skill_restriction_allows_validate_in_do(self):
+        """_check_skill_restriction allows verification skills in DO."""
+        from governance_layer import GovernanceLayer
+
+        layer = GovernanceLayer()
+        result = layer._check_skill_restriction("validate", "DO")
+
+        # None means allowed (no restriction triggered)
+        assert result is None

@@ -1,8 +1,75 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-27T23:17:07
+# System Auto: last updated on: 2026-01-30T21:33:48
 # L4: Technical Requirements
 
 Derived from agent_user_requirements.md
+
+---
+
+## Five-Layer Hierarchy (E2.4 - Session 265)
+
+HAIOS operates through five layers:
+
+```
+PRINCIPLES       (WHY)   - L0-L3 manifesto, S20 pressure dynamics
+WAYS OF WORKING  (HOW)   - Functions/transformations (cycles, flows)
+CEREMONIES       (WHEN)  - Side-effect boundaries (memory commits, checkpoints)
+ACTIVITIES       (WHAT)  - Governed primitives per state
+ASSETS           (OUTPUT)- Immutable artifacts
+```
+
+**Functional design lens:**
+- Ways of Working are pure functions: `Input → Output`
+- Ceremonies are side-effect boundaries
+- Assets are immutable once produced
+
+---
+
+## Governed Activities (E2.4 - Session 265)
+
+**Core pattern:**
+```
+Governed Activity = Primitive × State × Governance Rules
+```
+
+The same primitive (Read, Write, etc.) has different governance per state.
+
+| State | Blocked | Allowed |
+|-------|---------|---------|
+| EXPLORE | (none) | explore-read, explore-search, capture-notes |
+| DESIGN | (none) | requirements-read, spec-write, critique-invoke |
+| PLAN | (none) | scope-read, plan-write, critique-invoke |
+| DO | AskUser, explore-*, spec-write | spec-read, artifact-write, build-execute |
+| CHECK | (none) | verify-read, test-execute, verdict-write |
+| DONE | (none) | synthesis-read, knowledge-commit, work-close |
+
+**DO phase black-box:**
+- NO AskUser - spec should be complete
+- NO explore-* activities - discovery is over
+- NO spec-write - design is frozen
+- ONLY artifact-* activities
+
+---
+
+## Universal Flow (E2.4 - Session 265)
+
+All implementation work follows:
+
+```
+EXPLORE → DESIGN → PLAN → DO → CHECK → DONE
+```
+
+**Investigation variant:**
+```
+EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE
+```
+
+**Critique as hard gate:**
+- DESIGN → PLAN: Critique verdict must = PROCEED
+- PLAN → DO: Critique verdict must = PROCEED
+- Revise until no blocking critiques
+
+---
 
 ## Context Loading (enables: separation of concerns)
 

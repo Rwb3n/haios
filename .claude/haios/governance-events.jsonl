@@ -95,3 +95,48 @@
 {"type": "SessionEnded", "session": 260, "agent": "Hephaestus", "timestamp": "2026-01-29T21:36:25.021145"}
 {"type": "SessionStarted", "session": 261, "agent": "Hephaestus", "timestamp": "2026-01-29T22:23:24.446097"}
 {"type": "SessionStarted", "session": 262, "agent": "Hephaestus", "timestamp": "2026-01-29T23:11:34.429582"}
+{"type": "SessionEnded", "session": 262, "agent": "Hephaestus", "timestamp": "2026-01-30T17:51:49.660180"}
+{"type": "SessionEnded", "session": 261, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-01-30T19:09:32.058124"}
+{"type": "SessionStarted", "session": 263, "agent": "Hephaestus", "timestamp": "2026-01-30T19:09:44.909363"}
+{"type": "SessionEnded", "session": 263, "agent": "Hephaestus", "timestamp": "2026-01-30T19:33:32.387627"}
+{"type": "SessionEnded", "session": 263, "agent": "Hephaestus", "timestamp": "2026-01-30T19:51:59.801533"}
+{"type": "SessionStarted", "session": 264, "agent": "Hephaestus", "timestamp": "2026-01-30T19:57:10.243245"}
+{"type": "SessionEnded", "session": 264, "agent": "Hephaestus", "timestamp": "2026-01-30T20:29:08.878287"}
+{"type": "SessionStarted", "session": 265, "agent": "Hephaestus", "timestamp": "2026-01-30T20:30:56.039704"}
+{"type": "SessionStarted", "session": 266, "agent": "Hephaestus", "timestamp": "2026-01-30T22:10:26.848322"}
+{"type": "SessionEnded", "session": 266, "agent": "Hephaestus", "timestamp": "2026-01-30T22:42:26.535205"}
+{"type": "SessionEnded", "session": 265, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-01-30T22:51:08.398199"}
+{"type": "SessionStarted", "session": 267, "agent": "Hephaestus", "timestamp": "2026-01-30T22:51:20.513047"}
+{"type": "SessionEnded", "session": 267, "agent": "Hephaestus", "timestamp": "2026-01-30T23:12:56.054374"}
+{"type": "SessionStarted", "session": 268, "agent": "Hephaestus", "timestamp": "2026-01-30T23:17:27.594336"}
+{"type": "SessionEnded", "session": 268, "agent": "Hephaestus", "timestamp": "2026-01-30T23:32:52.490207"}
+{"type": "SessionStarted", "session": 269, "agent": "Hephaestus", "timestamp": "2026-02-01T13:41:28.959890"}
+{"type": "SessionEnded", "session": 269, "agent": "Hephaestus", "timestamp": "2026-02-01T14:25:46.980653"}
+{"type": "SessionStarted", "session": 270, "agent": "Hephaestus", "timestamp": "2026-02-01T14:30:50.002610"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-01T14:53:39.199280"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-01T14:53:39.212498"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-02-01T14:53:39.244353"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-02-01T14:53:39.244353"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-01T14:53:39.256501"}
+{"type": "CyclePhaseEntered", "phase": "PLAN", "work_id": "E2-255", "agent": "Hephaestus", "timestamp": "2026-02-01T14:54:48.679817"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-01T14:54:52.506134"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-01T14:54:52.519774"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-02-01T14:54:52.543103"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-02-01T14:54:52.543103"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-01T14:54:52.550497"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-01T14:55:30.404101"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-01T14:55:30.416998"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-02-01T14:55:30.439077"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-02-01T14:55:30.440587"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-01T14:55:30.447777"}
+{"type": "SessionStarted", "session": 271, "agent": "Hephaestus", "timestamp": "2026-02-01T15:05:25.489659"}
+{"type": "SessionEnded", "session": 270, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-01T15:07:07.766998"}
+{"type": "SessionStarted", "session": 271, "agent": "Hephaestus", "timestamp": "2026-02-01T15:07:30.149255"}
+{"type": "SessionStarted", "session": 271, "agent": "Hephaestus", "timestamp": "2026-02-01T15:11:12.949577"}
+{"type": "SessionEnded", "session": 271, "agent": "Hephaestus", "timestamp": "2026-02-01T15:37:22.717078"}
+{"type": "SessionEnded", "session": 271, "agent": "Hephaestus", "timestamp": "2026-02-01T15:47:22.952455"}
+{"type": "SessionStarted", "session": 272, "agent": "Hephaestus", "timestamp": "2026-02-01T15:49:49.022694"}
+{"type": "SessionStarted", "session": 273, "agent": "Hephaestus", "timestamp": "2026-02-01T16:13:35.056591"}
+{"type": "SessionEnded", "session": 273, "agent": "Hephaestus", "timestamp": "2026-02-01T16:27:11.289225"}
+{"type": "SessionEnded", "session": 272, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-01T16:28:11.732556"}
+{"type": "SessionStarted", "session": 274, "agent": "Hephaestus", "timestamp": "2026-02-01T16:28:29.528856"}

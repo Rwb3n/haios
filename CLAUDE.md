@@ -1,5 +1,5 @@
 # generated: 2025-09-23
-# System Auto: last updated on: 2026-01-30T22:01:48
+# System Auto: last updated on: 2026-02-01T17:20:23
 # Code Implementation & Engineering Guide
 
 ## RFC 2119 Keywords
@@ -222,6 +222,33 @@ L4 Requirement → Epoch → Arc → Chapter → Work Item
 | `schema-verifier` | **REQUIRED** | Isolated schema queries |
 | `test-runner` | Optional | Isolated test execution |
 | `why-capturer` | Optional | Automated learning extraction |
+
+### CC Task System (DO Phase - WORK-059, Session 274)
+
+**Two-Layer Work Tracking Model:**
+
+| Layer | System | Scope | Persistence |
+|-------|--------|-------|-------------|
+| **Strategic** | HAIOS WorkEngine | Work items (WORK-XXX) | Disk (WORK.md) |
+| **Tactical** | CC Task System | Sub-tasks within DO phase | Ephemeral (session) |
+
+During DO phase implementation, agents **SHOULD** use CC Task tools for sub-task tracking:
+
+| Tool | Purpose |
+|------|---------|
+| `TaskCreate` | Break down implementation steps (subject, description, activeForm) |
+| `TaskUpdate` | Mark progress (status: in_progress → completed) |
+| `TaskList` | View current sub-tasks |
+| `TaskGet` | Get task details |
+
+**Benefits:**
+- `activeForm` provides spinner UX for operator visibility
+- `blockedBy` tracks sub-task dependencies
+- Auto-cleanup at session end (no stale items)
+
+**Level:** L2 (RECOMMENDED) - Agent discretion based on task complexity.
+
+CC Tasks are ephemeral. For persistent tracking, use WorkEngine (WORK.md files).
 
 ---
 
