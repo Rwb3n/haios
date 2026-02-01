@@ -3,13 +3,13 @@ template: work_item
 id: WORK-037
 title: Investigation Cycle Redesign - EXPLORE-FIRST Pattern
 type: investigation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-30
 spawned_by: WORK-036
 chapter: null
 arc: null
-closed: null
+closed: '2026-02-01'
 priority: low
 effort: medium
 traces_to: []
@@ -25,12 +25,40 @@ node_history:
   entered: 2026-01-30 19:26:12
   exited: null
 artifacts: []
-cycle_docs: {}
-memory_refs: []
+cycle_docs:
+  investigation: investigations/001-explore-first-design.md
+memory_refs:
+- 82646
+- 82647
+- 82648
+- 82649
+- 82650
+- 82651
+- 82652
+- 82653
+- 82654
+- 82655
+- 82656
+- 82721
+- 82722
+- 82723
+- 82829
+- 82830
+- 82831
+- 82832
+- 82833
+- 82834
+- 82835
+- 82836
+- 82837
+- 82852
+- 82853
+- 82854
+- 82855
 extensions: {}
 version: '2.0'
 generated: 2026-01-30
-last_updated: '2026-01-30T19:27:39'
+last_updated: '2026-02-01T15:20:48'
 ---
 # WORK-037: Investigation Cycle Redesign - EXPLORE-FIRST Pattern
 
@@ -41,17 +69,20 @@ last_updated: '2026-01-30T19:27:39'
 
 ## Context
 
-**Problem:** WORK-036 investigation found the investigation-cycle imposes a "Template Tax" (25 MUST gates + 27 checkboxes) that constrains depth. The Explore agent (built-in, unconstrained) produced deeper analysis in Session 262 than formal investigations typically achieve.
+**Background:** WORK-036 investigation found the investigation-cycle imposes a "Template Tax" (25 MUST gates + 27 checkboxes) that constrains depth. The Explore agent (built-in, unconstrained) produced deeper analysis in Session 262 than formal investigations typically achieve.
 
-**Root Cause:** The current HYPOTHESIZE → EXPLORE → CONCLUDE cycle assumes scientific method - form hypothesis first, then test. But discovery work benefits from open exploration BEFORE hypothesis formation.
+**L4 Decision (Session 265):** The EXPLORE-FIRST pattern was **approved** as part of E2.4 "The Activity Layer". Memory concepts 82721-82723 capture this decision:
+- "L4 Decision Session 265: Investigation Flow (EXPLORE-FIRST)"
+- "This inverts the previous HYPOTHESIZE → EXPLORE → CONCLUDE pattern."
+- New flow: `EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE`
 
-**Options identified (WORK-036):**
-- **Option C: EXPLORE-FIRST Pattern** - Invert cycle to EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE
-- **Option D: Hybrid** - Add "discovery-investigation" subtype that uses Explore agent, retain current for validation
+**Pivot (Session 271):** The original scope (evaluate Options C and D) is superseded. This investigation now focuses on **designing the implementation** of the approved EXPLORE-FIRST pattern.
 
-**Intent:** This work item is for further design exploration of Options C and/or D. Not necessarily for this epoch - may be triaged to future work.
-
-**Note from Operator:** "not sure if it fits this epoch so leave for later triage"
+**Design Questions:**
+1. How should the investigation-cycle skill be restructured?
+2. How do fractured phase templates (E2.4 Templates arc) interact with new flow?
+3. What governed activities apply to each new phase?
+4. What migration path exists for existing investigations?
 
 ---
 
@@ -73,12 +104,12 @@ last_updated: '2026-01-30T19:27:39'
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Design analysis: Compare EXPLORE-FIRST vs current HYPOTHESIZE-FIRST for different work types
-- [ ] Evaluate Option C: Full cycle inversion (pros, cons, migration path)
-- [ ] Evaluate Option D: Hybrid approach with "discovery" subtype (pros, cons, complexity)
-- [ ] Recommendation: Which option (if any) to pursue
-- [ ] If recommendation is "proceed": Draft design spec for chosen option
-- [ ] Store findings to memory
+- [x] Design spec: EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE phase definitions
+- [x] Integration: How new flow interacts with E2.4 fractured phase templates
+- [x] Governed activities: Activity matrix for each investigation phase
+- [x] Migration path: How to handle existing investigations (if any in-flight)
+- [x] Skill update: Draft changes to investigation-cycle/SKILL.md
+- [x] Store findings to memory (concepts 82829-82837)
 
 ---
 
@@ -89,6 +120,17 @@ last_updated: '2026-01-30T19:27:39'
 - Options C (EXPLORE-FIRST) and D (Hybrid) identified for further exploration
 - Marked low priority per operator direction ("leave for later triage")
 
+### 2026-02-01 - Pivoted (Session 271)
+- L4 Decision (Session 265) approved EXPLORE-FIRST, superseding original evaluation scope
+- Scope pivoted from "evaluate options" to "design implementation"
+- Added memory refs to Session 265 L4 decisions (82721-82723)
+
+### 2026-02-01 - Complete (Session 271)
+- Design spec complete: investigations/001-explore-first-design.md
+- All deliverables checked
+- Memory stored: concepts 82829-82837
+- Spawned: WORK-061 (implementation)
+
 ---
 
 ## References
@@ -96,4 +138,9 @@ last_updated: '2026-01-30T19:27:39'
 - @docs/work/active/WORK-036/WORK.md (spawning investigation)
 - @docs/work/active/WORK-036/investigations/001-investigation-template-vs-explore-agent-effectiveness.md
 - @.claude/skills/investigation-cycle/SKILL.md
+- @.claude/haios/epochs/E2_4/EPOCH.md (E2.4 decisions)
+- @.claude/haios/epochs/E2_4/arcs/templates/ARC.md (fractured templates arc)
 - Memory concepts 82646-82656 (WORK-036 findings)
+- Memory concepts 82721-82723 (L4 Decision: EXPLORE-FIRST)
+- Memory concepts 82829-82837 (WORK-037 design findings)
+- @docs/work/active/WORK-061/WORK.md (spawned implementation)
