@@ -1,36 +1,42 @@
 ---
 template: work_item
 id: WORK-069
-title: "Decision Traceability Schema Design"
+title: Decision Traceability Schema Design
 type: design
 status: active
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-055
-chapter: null
-arc: null
+chapter: flow/CH-009
+arc: flow
 closed: null
-priority: medium
+priority: high
 effort: medium
-traces_to: []  # REQUIRED: L4 requirement IDs (e.g., REQ-TRACE-001) - enforced by REQ-TRACE-002
-requirement_refs: []  # DEPRECATED: use traces_to instead
+traces_to:
+- REQ-TRACE-005
+requirement_refs: []
 source_files: []
 acceptance_criteria: []
 blocked_by: []
-blocks: []
+blocks:
+- WORK-070
+- WORK-071
 enables: []
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-01T23:06:07
-    exited: null
+- node: backlog
+  entered: 2026-02-01 23:06:07
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 83018
+- 83019
+- 83020
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-01
-last_updated: 2026-02-01T23:06:07
+last_updated: '2026-02-01T23:33:44'
 ---
 # WORK-069: Decision Traceability Schema Design
 
@@ -38,7 +44,20 @@ last_updated: 2026-02-01T23:06:07
 
 ## Context
 
-[Problem and root cause]
+**Spawned from:** WORK-055 (Multi-Level Governance Investigation)
+
+**Problem:** Epoch decisions have no structured traceability to chapters. Decisions are prose in EPOCH.md with no `assigned_to` field. This allows decisions to exist without explicit chapter ownership, causing decomposition leakage.
+
+**Layer Placement:** This is a **CEREMONIES** layer concern - the schema enables the ceremony that verifies decision coverage before decomposition.
+
+**Five-Layer Context:**
+```
+PRINCIPLES       - L0-L3
+WAYS OF WORKING  - Universal flow
+CEREMONIES       - Decision assignment ceremony ← THIS
+ACTIVITIES       - Governed primitives
+ASSETS           - EPOCH.md, chapter files (modified by this schema)
+```
 
 ---
 
@@ -60,18 +79,24 @@ last_updated: 2026-02-01T23:06:07
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] [Deliverable 1]
-- [ ] [Deliverable 2]
+- [ ] **EPOCH.md Decision Schema** - Add `assigned_to: [{arc, chapters}]` field to decisions
+- [ ] **Chapter implements_decisions Field** - Add `implements_decisions: [D1, D3]` to chapter files
+- [ ] **Validation Rule** - Decision without `assigned_to` triggers warning
+- [ ] **CH-009 Chapter File** - Document the decision traceability ceremony
 
 ---
 
 ## History
 
-### 2026-02-01 - Created (Session 247)
-- Initial creation
+### 2026-02-01 - Created (Session 279)
+- Spawned from WORK-055
+- Assigned to flow arc as CH-009 (Decision Traceability Ceremony)
+- Framed as CEREMONIES layer concern per Five-Layer Hierarchy
 
 ---
 
 ## References
 
-- [Related documents]
+- @docs/work/active/WORK-055/WORK.md (source investigation)
+- @.claude/haios/epochs/E2_4/arcs/flow/ARC.md (parent arc)
+- @.claude/haios/epochs/E2_4/EPOCH.md (Decision 8 - Multi-Level Governance)

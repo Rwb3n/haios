@@ -1,36 +1,41 @@
 ---
 template: work_item
 id: WORK-071
-title: "Pre-Decomposition Review Gate Design"
+title: Pre-Decomposition Review Gate Design
 type: design
 status: active
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-055
-chapter: null
-arc: null
+chapter: flow/CH-011
+arc: flow
 closed: null
 priority: medium
 effort: medium
-traces_to: []  # REQUIRED: L4 requirement IDs (e.g., REQ-TRACE-001) - enforced by REQ-TRACE-002
-requirement_refs: []  # DEPRECATED: use traces_to instead
+traces_to:
+- REQ-TRACE-005
+requirement_refs: []
 source_files: []
 acceptance_criteria: []
-blocked_by: []
+blocked_by:
+- WORK-069
 blocks: []
 enables: []
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-01T23:06:07
-    exited: null
+- node: backlog
+  entered: 2026-02-01 23:06:07
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 83024
+- 83025
+- 83026
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-01
-last_updated: 2026-02-01T23:06:07
+last_updated: '2026-02-01T23:34:28'
 ---
 # WORK-071: Pre-Decomposition Review Gate Design
 
@@ -38,7 +43,27 @@ last_updated: 2026-02-01T23:06:07
 
 ## Context
 
-[Problem and root cause]
+**Spawned from:** WORK-055 (Multi-Level Governance Investigation)
+
+**Problem:** When an arc is decomposed into chapters, there's no verification that the decomposition is complete. Chapters get scaffolded and worked independently without verifying the set of chapters covers all epoch decisions.
+
+**Layer Placement:** This is a **CEREMONIES** layer concern - the ceremony that verifies decomposition completeness before chapter work begins.
+
+**Five-Layer Context:**
+```
+PRINCIPLES       - L0-L3
+WAYS OF WORKING  - Universal flow, Chapter flow
+CEREMONIES       - decompose-arc-ceremony ← THIS
+ACTIVITIES       - Governed primitives
+ASSETS           - ARC.md chapter table, chapter files
+```
+
+**Ceremony Pattern:**
+```
+DECOMPOSE (create chapter table) → CRITIQUE (verify coverage) → PROCEED (begin chapter work)
+```
+
+This is the entry ceremony for chapter-level work, analogous to how critique-gate is the entry ceremony for DO phase.
 
 ---
 
@@ -60,18 +85,39 @@ last_updated: 2026-02-01T23:06:07
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] [Deliverable 1]
-- [ ] [Deliverable 2]
+- [ ] **decompose-arc-ceremony Skill** - Skill that verifies decomposition completeness
+- [ ] **Coverage Check** - Verify all epoch decisions for arc have chapter assignment
+- [ ] **Scope Check** - Verify sum of chapter scopes covers arc theme
+- [ ] **Arc-Level Critique** - Invoke critique on decomposition before chapter work
+- [ ] **CH-011 Chapter File** - Document the pre-decomposition ceremony
+
+**Ceremony Flow:**
+
+```
+1. DECOMPOSE: Create chapter table in ARC.md
+2. ASSIGN: For each epoch decision targeting this arc, assign to chapter(s)
+3. CRITIQUE: Run arc-level completeness check
+   - All epoch decisions for this arc have chapter assignment?
+   - Sum of chapter scopes covers arc theme?
+   - No gaps in coverage?
+4. PROCEED: Only when critique passes, begin chapter work
+```
 
 ---
 
 ## History
 
-### 2026-02-01 - Created (Session 247)
-- Initial creation
+### 2026-02-01 - Created (Session 279)
+- Spawned from WORK-055
+- Assigned to flow arc as CH-011 (Pre-Decomposition Ceremony)
+- Framed as CEREMONIES layer concern per Five-Layer Hierarchy
+- Blocked by WORK-069 (needs decision traceability schema first)
 
 ---
 
 ## References
 
-- [Related documents]
+- @docs/work/active/WORK-055/WORK.md (source investigation)
+- @docs/work/active/WORK-069/WORK.md (blocking dependency)
+- @.claude/haios/epochs/E2_4/arcs/flow/ARC.md (parent arc)
+- @.claude/haios/epochs/E2_4/arcs/flow/CH-006-chapter-flow.md (chapter flow context)
