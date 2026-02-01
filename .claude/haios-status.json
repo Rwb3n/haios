@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-01T22:35:49",
+    "generated": "2026-02-01T22:50:01",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82818,
-        "entities": 9409,
+        "concepts": 82827,
+        "entities": 9411,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3327,7 +3327,7 @@
             "template": "checkpoint",
             "status": null,
             "date": "2026-02-01",
-            "last_updated": "2026-02-01T22:30:07",
+            "last_updated": "2026-02-01T22:36:40",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6510,7 +6510,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
             "last_updated": "2025-12-04T22:47:20",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-prototype-consolidation.md",
@@ -7710,12 +7710,12 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-008-haios-status-json-optimization.md",
             "last_updated": "2025-12-22T22:37:14",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-009-backlog-archival-governance.md",
             "last_updated": "2025-12-22T22:37:32",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-010-memory-retrieval-architecture-mismatch.md",
@@ -7725,7 +7725,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-011-command-skill-architecture-gap.md",
             "last_updated": "2025-12-22T22:45:09",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-012-static-registration-anti-pattern-mitigation.md",
@@ -7755,7 +7755,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-018-adaptive-coldstart-query-formulation.md",
             "last_updated": "2025-12-22T22:39:13",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-020-llm-energy-channeling-patterns.md",
