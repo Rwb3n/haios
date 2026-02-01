@@ -3,13 +3,13 @@ template: work_item
 id: WORK-058
 title: Claude Code Session/Context Management - SESSION_ID, agent_type, context:fork
 type: investigation
-status: backlog
+status: complete
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-056
 chapter: null
 arc: configuration
-closed: null
+closed: '2026-02-01'
 priority: high
 effort: medium
 traces_to:
@@ -33,11 +33,20 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 82915
+- 82916
+- 82917
+- 82918
+- 82919
+- 82920
+- 82921
+- 82922
+- 82927
 extensions: {}
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-01T15:20:27'
+last_updated: '2026-02-01T17:01:24'
 ---
 # WORK-058: Claude Code Session/Context Management - SESSION_ID, agent_type, context:fork
 
@@ -71,10 +80,10 @@ Claude Code 2.1.x introduced session and context management features that could 
 
 ## Deliverables
 
-- [ ] **SESSION_ID integration doc** - Replace or augment `.claude/session`
-- [ ] **agent_type feasibility** - How to leverage for role-based loading
-- [ ] **context:fork evaluation** - Benefits for validation-agent, investigation-agent
-- [ ] **Adoption recommendation** - Which features to adopt, in what order
+- [x] **SESSION_ID integration doc** - AUGMENT not replace (CC uses UUID, HAIOS uses incrementing integers)
+- [x] **agent_type feasibility** - LIMITED value (only main vs subagent, not which subagent)
+- [x] **context:fork evaluation** - ADOPT for validation-agent (unbiased CHECK phase)
+- [x] **Adoption recommendation** - See Findings section
 
 ---
 
@@ -83,6 +92,40 @@ Claude Code 2.1.x introduced session and context management features that could 
 ### 2026-02-01 - Created (Session 271)
 - Spawned from WORK-056 parent investigation
 - Linked to configuration arc (context management)
+
+### 2026-02-01 - Investigation Complete (Session 274)
+- Evaluated all 4 features from CC 2.1.x
+- Findings:
+  - SESSION_ID: AUGMENT (store CC UUID alongside HAIOS session number)
+  - agent_type: LIMITED (only main vs subagent, not which subagent)
+  - context:fork: ADOPT for validation-agent (HIGH priority)
+  - --from-pr: SKIP (HAIOS uses work items, not PRs)
+- Spawned: WORK-063 (add context:fork to validation-agent)
+- Memory refs: 82915-82922
+
+---
+
+## Findings
+
+### Feature Evaluation Matrix
+
+| Feature | Verdict | Adoption | Priority |
+|---------|---------|----------|----------|
+| `CLAUDE_SESSION_ID` | AUGMENT | Store alongside HAIOS session | Low |
+| `agent_type` (SessionStart) | LIMITED | Analytics only | Low |
+| `context: fork` | **ADOPT** | Apply to validation-agent | **High** |
+| `--from-pr` | SKIP | Not useful for HAIOS | None |
+
+### Key Insight: context:fork for Unbiased Validation
+
+Current validation-agent shares full parent context, which can influence verdicts. `context: fork` provides:
+- Clean isolation with only explicit prompt
+- No implementation history leakage
+- Unbiased CHECK phase validation
+
+### Spawned Work
+
+**WORK-063:** Add context:fork to validation-agent frontmatter (trivial effort, high value)
 
 ---
 
