@@ -32,14 +32,20 @@ load_memory_refs:
 - 82950
 - 82951
 pending:
+- WORK-065
 - WORK-064
 - WORK-063
 drift_observed:
 - WORK-057 source_files had wrong path (.claude/hooks/hooks/ nested structure)
 - activity_matrix.yaml phase_to_state mapping comprehensive but state not surfaced
   to agent
+- Activities arc chapters (CH-001, CH-002, CH-003) still show Draft status but code
+  is implemented
+- TRD-WORK-ITEM-UNIVERSAL current_node values differ from GovernanceLayer VALID_TRANSITIONS
 completed:
 - WORK-057
+- E2.4 alignment review
+- WORK-065 created (Queue Position Model investigation)
 generated: '2026-02-01'
-last_updated: '2026-02-01T19:41:25'
+last_updated: '2026-02-01T20:07:18'
 ---
