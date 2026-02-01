@@ -3,16 +3,18 @@ template: investigation
 status: active
 date: 2026-02-01
 backlog_id: WORK-057
-title: "Claude Code Hook Enhancements"
+title: Claude Code Hook Enhancements
 author: Hephaestus
-session: 247
-lifecycle_phase: hypothesize
-spawned_by: null
-related: []
+session: 271
+lifecycle_phase: explore
+spawned_by: WORK-056
+related:
+- '@docs/work/active/WORK-056/WORK.md'
+- '@docs/work/active/WORK-042/WORK.md'
 memory_refs: []
-version: "2.0"
+version: '2.0'
 generated: 2025-12-22
-last_updated: 2025-12-22T23:16:24
+last_updated: '2026-02-01T16:12:17'
 ---
 # Investigation: Claude Code Hook Enhancements
 
@@ -81,13 +83,19 @@ last_updated: 2025-12-22T23:16:24
 
 <!-- HYPOTHESIZE PHASE: Describe background before exploring -->
 
-**Trigger:** [What event, observation, or question initiated this investigation?]
+**Trigger:** Session 271 parent investigation WORK-056 reviewing Claude Code 2.1.x features for HAIOS adoption.
 
-**Problem Statement:** [One sentence: What gap, issue, or unknown are we investigating?]
+**Problem Statement:** Claude Code 2.1.x introduced hook enhancements (`additionalContext`, skill hooks, `once:true`) that may enhance HAIOS governance without modifying the global PreToolUse hook architecture.
 
 **Prior Observations:**
-- [Observation 1 that led to this investigation]
-- [Observation 2]
+- WORK-042 completed CH-004 PreToolUseIntegration - state-aware governance via activity_matrix.yaml
+- Current hooks are global (all in `.claude/hooks/hooks/`) - no per-skill hooks
+- Memory shows strong commitment to Claude Code hooks as critical infrastructure (concepts 62842, 69362)
+
+**E2.4 Arc Relevance:**
+- **activities arc** - Hook enhancements could extend governed activities beyond PreToolUse
+- **flow arc** - once:true could enforce initialization in universal flow
+- **configuration arc** - Skill hooks could delegate governance to skill-level config
 
 ---
 
@@ -95,15 +103,18 @@ last_updated: 2025-12-22T23:16:24
 
 <!-- MUST query memory before starting investigation -->
 
-**Memory Query:** `memory_search_with_experience` with query: "[investigation topic keywords]"
+**Memory Query:** `memory_search_with_experience` with query: "PreToolUse hook additionalContext skill hooks once:true session initialization governance"
 
 | Concept ID | Content Summary | Relevance |
 |------------|-----------------|-----------|
-| [ID] | [What was learned] | [How it applies] |
+| 81773 | PostToolUse cannot intercept Skill() calls - limitation | High - skill hooks may address this |
+| 62889 | PreToolUse as gatekeeper with allow/deny/ask decisions | High - baseline for enhancement |
+| 82751 | PreToolUse needs state detection, primitive mapping, matrix lookup | High - current architecture |
+| 69743 | PreToolUse for contextual tool control via updatedInput | Medium - existing capability |
 
 **Prior Investigations:**
-- [ ] Searched for related INV-* documents
-- [ ] No prior work found / Found: [INV-xxx]
+- [x] Searched for related INV-* documents
+- [x] Found memory concepts from hook implementation work
 
 ---
 
@@ -111,28 +122,38 @@ last_updated: 2025-12-22T23:16:24
 
 <!-- One clear question this investigation will answer -->
 
-[What specific question will be answered when this investigation is complete?]
+**Primary Question:** Can Claude Code 2.1.x hook enhancements enhance E2.4's activities, flow, or configuration arcs?
+
+**Required Output:**
+1. For each feature (additionalContext, skill hooks, once:true):
+   - Document capability and limitations
+   - Identify which E2.4 arc(s) it could enhance
+   - Assess adoption priority (high/medium/low)
+2. Produce adoption recommendation with implementation sketches
 
 ---
 
 ## Scope
 
 ### In Scope
-- [Specific thing to investigate 1]
-- [Specific thing to investigate 2]
+- **additionalContext** return value from PreToolUse (v2.1.9)
+- **Hooks in skill frontmatter** (v2.1.0)
+- **once:true hook configuration** (v2.1.0)
+- E2.4 arc enhancement opportunities
 
 ### Out of Scope
-- [Explicitly excluded 1]
-- [Explicitly excluded 2]
+- PostToolUse enhancements (different investigation)
+- MCP-related changes (covered in WORK-060)
+- Backward compatibility with pre-2.1 Claude Code
 
 ### Scope Metrics
 
 | Metric | Value | Source |
 |--------|-------|--------|
-| Files to examine | [N] | Glob pattern or list |
-| Hypotheses to test | [N] | Listed below |
-| Expected evidence sources | [N] | Codebase / Memory / External |
-| Estimated complexity | [Low/Med/High] | Based on scope |
+| Files to examine | 3-5 | pre_tool_use.py, activity_matrix.yaml, skill files |
+| Hypotheses to test | 3 | Listed below |
+| Expected evidence sources | 3 | Codebase, Memory, External (changelog/docs) |
+| Estimated complexity | Medium | Feature evaluation + arc mapping |
 
 ---
 
@@ -143,9 +164,9 @@ last_updated: 2025-12-22T23:16:24
 
 | # | Hypothesis | Confidence | Test Method | Priority |
 |---|------------|------------|-------------|----------|
-| **H1** | [Primary hypothesis] | [High/Med/Low] | [How to verify - specific files, queries, or experiments] | 1st |
-| **H2** | [Secondary hypothesis] | [High/Med/Low] | [How to verify] | 2nd |
-| **H3** | [Alternative hypothesis] | [High/Med/Low] | [How to verify] | 3rd |
+| **H1** | `additionalContext` can inject activity state/hints into tool responses, enhancing **activities arc** | Medium | Review changelog + test hook output format | 1st |
+| **H2** | Skill-level hooks can delegate governance from global PreToolUse to per-skill config, enhancing **configuration arc** | Medium | Review skill frontmatter format, check if hooks can replace global checks | 2nd |
+| **H3** | `once:true` can enforce session initialization in **flow arc** universal flow | Low | Review hook lifecycle, check if it runs exactly once per session | 3rd |
 
 ---
 
@@ -155,19 +176,19 @@ last_updated: 2025-12-22T23:16:24
      MUST invoke investigation-agent for each major step -->
 
 ### Phase 1: Evidence Gathering
-1. [ ] Query memory for prior learnings on topic
-2. [ ] Search codebase for relevant patterns (Grep/Glob)
-3. [ ] Read identified files and document findings
+1. [ ] Query memory for prior learnings on hooks (DONE in HYPOTHESIZE)
+2. [ ] Fetch Claude Code hook documentation for additionalContext format
+3. [ ] Read current pre_tool_use.py to understand hook output structure
 
 ### Phase 2: Hypothesis Testing
-4. [ ] Test H1: [Specific actions]
-5. [ ] Test H2: [Specific actions]
-6. [ ] Test H3: [Specific actions]
+4. [ ] Test H1: Verify additionalContext return format and what it can inject
+5. [ ] Test H2: Review skill frontmatter hook syntax, check if it can gate cycles
+6. [ ] Test H3: Review once:true behavior, verify session-scoped execution
 
 ### Phase 3: Synthesis
-7. [ ] Compile evidence table
+7. [ ] Map each feature to E2.4 arcs (activities, flow, configuration)
 8. [ ] Determine verdict for each hypothesis
-9. [ ] Identify spawned work items
+9. [ ] Identify spawned work items (implementation or skip rationale)
 
 ---
 

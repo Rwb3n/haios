@@ -3,16 +3,16 @@ template: investigation
 status: active
 date: 2026-02-01
 backlog_id: WORK-059
-title: "Claude Code Task System Comparison"
+title: Claude Code Task System Comparison
 author: Hephaestus
 session: 247
-lifecycle_phase: hypothesize
+lifecycle_phase: explore
 spawned_by: null
 related: []
 memory_refs: []
-version: "2.0"
+version: '2.0'
 generated: 2025-12-22
-last_updated: 2025-12-22T23:16:24
+last_updated: '2026-02-01T16:12:37'
 ---
 # Investigation: Claude Code Task System Comparison
 

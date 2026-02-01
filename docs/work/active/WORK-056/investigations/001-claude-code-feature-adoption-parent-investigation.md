@@ -3,16 +3,16 @@ template: investigation
 status: active
 date: 2026-02-01
 backlog_id: WORK-056
-title: "Claude Code Feature Adoption - Parent Investigation"
+title: Claude Code Feature Adoption - Parent Investigation
 author: Hephaestus
-session: 247
-lifecycle_phase: hypothesize
+session: 271
+lifecycle_phase: explore
 spawned_by: null
 related: []
 memory_refs: []
-version: "2.0"
+version: '2.0'
 generated: 2025-12-22
-last_updated: 2025-12-22T23:16:24
+last_updated: '2026-02-01T16:12:14'
 ---
 # Investigation: Claude Code Feature Adoption - Parent Investigation
 
@@ -81,13 +81,14 @@ last_updated: 2025-12-22T23:16:24
 
 <!-- HYPOTHESIZE PHASE: Describe background before exploring -->
 
-**Trigger:** [What event, observation, or question initiated this investigation?]
+**Trigger:** Session 271 operator request to review Claude Code changelog and identify features useful for HAIOS.
 
-**Problem Statement:** [One sentence: What gap, issue, or unknown are we investigating?]
+**Problem Statement:** Claude Code 2.1.x introduced significant features; HAIOS should adopt those that enhance governance, context, and workflows without duplicating existing capabilities.
 
 **Prior Observations:**
-- [Observation 1 that led to this investigation]
-- [Observation 2]
+- WORK-042 just completed CH-004 PreToolUseIntegration - governance hooks are active
+- E2.4 arcs (activities, templates, flow, configuration, workuniversal) are in progress
+- Claude Code changelog shows hooks, session, tasks, and platform improvements
 
 ---
 
@@ -95,15 +96,19 @@ last_updated: 2025-12-22T23:16:24
 
 <!-- MUST query memory before starting investigation -->
 
-**Memory Query:** `memory_search_with_experience` with query: "[investigation topic keywords]"
+**Memory Query:** `memory_search_with_experience` with query: "Claude Code hooks integration platform capabilities"
 
 | Concept ID | Content Summary | Relevance |
 |------------|-----------------|-----------|
-| [ID] | [What was learned] | [How it applies] |
+| 73195 | Commitment to Claude Code Hooks for critical functionality | Strong - validates hooks as priority |
+| 65565 | Deterministic hooks for proactive failure prevention | Strong - design principle for governance |
+| 62842 | PreToolUse hook as deterministic safeguard | Strong - existing pattern to extend |
+| 69362 | Runtime control through user-defined hooks | Medium - architecture context |
+| 82458 | No authoritative documentation for hook data | Medium - documentation gap noted |
 
 **Prior Investigations:**
-- [ ] Searched for related INV-* documents
-- [ ] No prior work found / Found: [INV-xxx]
+- [x] Searched for related INV-* documents
+- [x] Found related concepts via memory search (see above)
 
 ---
 
@@ -111,28 +116,36 @@ last_updated: 2025-12-22T23:16:24
 
 <!-- One clear question this investigation will answer -->
 
-[What specific question will be answered when this investigation is complete?]
+**Primary Question:** Which Claude Code 2.1.x features should HAIOS adopt, and how do they map to E2.4's active arcs?
+
+**Required Output:** For each feature area, determine:
+1. Whether the feature enhances, replaces, or conflicts with HAIOS capabilities
+2. Which E2.4 arc(s) the feature maps to
+3. Priority (high/medium/low) and effort estimate
 
 ---
 
 ## Scope
 
 ### In Scope
-- [Specific thing to investigate 1]
-- [Specific thing to investigate 2]
+- Claude Code 2.1.x features from changelog (2.1.0 through 2.1.29)
+- E2.4 arc alignment analysis
+- Adoption priority matrix
 
 ### Out of Scope
-- [Explicitly excluded 1]
-- [Explicitly excluded 2]
+- Features already adopted (PreToolUse basic functionality)
+- Features requiring Claude Code SDK (not CLI)
+- Backward compatibility with pre-2.1 Claude Code
 
 ### Scope Metrics
 
 | Metric | Value | Source |
 |--------|-------|--------|
-| Files to examine | [N] | Glob pattern or list |
-| Hypotheses to test | [N] | Listed below |
-| Expected evidence sources | [N] | Codebase / Memory / External |
-| Estimated complexity | [Low/Med/High] | Based on scope |
+| Feature areas to examine | 4 | Hook, Session, Task, Platform |
+| Child investigations | 4 | WORK-057, WORK-058, WORK-059, WORK-060 |
+| E2.4 arcs to evaluate | 5 | activities, templates, flow, configuration, workuniversal |
+| Expected evidence sources | External (changelog) + Codebase | Hybrid |
+| Estimated complexity | Medium | Coordinating investigation |
 
 ---
 
@@ -143,9 +156,10 @@ last_updated: 2025-12-22T23:16:24
 
 | # | Hypothesis | Confidence | Test Method | Priority |
 |---|------------|------------|-------------|----------|
-| **H1** | [Primary hypothesis] | [High/Med/Low] | [How to verify - specific files, queries, or experiments] | 1st |
-| **H2** | [Secondary hypothesis] | [High/Med/Low] | [How to verify] | 2nd |
-| **H3** | [Alternative hypothesis] | [High/Med/Low] | [How to verify] | 3rd |
+| **H1** | Hook enhancements (additionalContext, skill hooks) will enhance the **activities** arc | High | Evaluate via WORK-057, compare to activity_matrix.yaml | 1st |
+| **H2** | Session features (SESSION_ID, agent_type) will enhance the **configuration** arc | Medium | Evaluate via WORK-058, compare to coldstart_orchestrator.py | 2nd |
+| **H3** | Task system complements rather than replaces WorkEngine (ephemeral vs persistent) | Medium | Evaluate via WORK-059, compare feature matrices | 3rd |
+| **H4** | Platform features are low-priority "nice to have" without arc impact | Low | Evaluate via WORK-060, check for arc relevance | 4th |
 
 ---
 

@@ -3,13 +3,13 @@ template: work_item
 id: WORK-060
 title: Claude Code Platform Features - plansDirectory, MCP improvements, auto-reload
 type: investigation
-status: backlog
+status: complete
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-056
 chapter: null
 arc: configuration
-closed: null
+closed: '2026-02-01'
 priority: medium
 effort: small
 traces_to:
@@ -34,11 +34,30 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 82879
+- 82880
+- 82881
+- 82882
+- 82883
+- 82884
+- 82885
+- 82886
+- 82887
+- 82888
+- 82889
+- 82890
+- 82891
+- 82899
+- 82900
+- 82901
+- 82902
+- 82901
+- 82903
 extensions: {}
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-01T15:20:32'
+last_updated: '2026-02-01T16:22:20'
 ---
 # WORK-060: Claude Code Platform Features - plansDirectory, MCP improvements, auto-reload
 
@@ -74,10 +93,10 @@ Claude Code 2.1.x introduced platform features that could improve HAIOS infrastr
 
 ## Deliverables
 
-- [ ] **plansDirectory evaluation** - Benefits vs current approach
-- [ ] **MCP list_changed doc** - How it works, potential uses
-- [ ] **Setup hook evaluation** - Fresh clone automation potential
-- [ ] **Adoption recommendation** - Which features to adopt, in what order
+- [x] **plansDirectory evaluation** - Skip: breaks HAIOS colocation pattern
+- [x] **MCP list_changed doc** - Skip: no use case for static memory tools
+- [x] **Setup hook evaluation** - Low: requires --init flag, cannot auto-trigger
+- [x] **Adoption recommendation** - None of these features require HAIOS implementation work
 
 ---
 
@@ -86,6 +105,12 @@ Claude Code 2.1.x introduced platform features that could improve HAIOS infrastr
 ### 2026-02-01 - Created (Session 271)
 - Spawned from WORK-056 parent investigation
 - Linked to configuration arc (platform infrastructure)
+
+### 2026-02-01 - Investigation Complete (Session 273)
+- Evaluated all 5 platform features
+- Findings: 2 already active, 2 not suitable, 1 minimal value
+- No implementation work spawned
+- Memory refs: 82879-82891
 
 ---
 
