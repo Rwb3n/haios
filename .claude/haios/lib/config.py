@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-21T22:21:39
+# System Auto: last updated on: 2026-02-02T17:46:47
 """
 Unified configuration loader for HAIOS modules.
 
@@ -88,3 +88,37 @@ class ConfigLoader:
     def node_bindings(self) -> Dict[str, Any]:
         """Node-cycle bindings (backward compat for node-cycle-bindings.yaml)."""
         return self._cycles.get("nodes", {})
+
+    # Path constants (WORK-080: Single source of truth)
+    @property
+    def paths(self) -> Dict[str, str]:
+        """Path constants from haios.yaml (single source of truth - WORK-080)."""
+        return self._haios.get("paths", {})
+
+    def get_path(self, key: str, **kwargs) -> Path:
+        """
+        Get path with placeholder substitution.
+
+        Args:
+            key: Path key from haios.yaml paths section (e.g., "work_item")
+            **kwargs: Placeholder values (e.g., id="WORK-080")
+
+        Returns:
+            Path object with placeholders resolved
+
+        Raises:
+            KeyError: If key not found in paths section
+            ValueError: If unresolved placeholders remain after substitution
+
+        Examples:
+            config.get_path("work_dir")  # Returns Path("docs/work")
+            config.get_path("work_item", id="WORK-080")  # Returns Path("docs/work/active/WORK-080/WORK.md")
+        """
+        template = self.paths.get(key)
+        if template is None:
+            raise KeyError(f"Path key '{key}' not found in haios.yaml paths section")
+        resolved = template.format(**kwargs) if kwargs else template
+        # Check for unresolved placeholders (A4 mitigation from critique)
+        if '{' in resolved:
+            raise ValueError(f"Unresolved placeholder in path: {resolved}")
+        return Path(resolved)

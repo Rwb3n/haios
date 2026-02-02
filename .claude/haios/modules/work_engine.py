@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-28T21:22:06
+# System Auto: last updated on: 2026-02-02T18:57:48
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -53,16 +53,20 @@ try:
 except ImportError:
     from governance_layer import GovernanceLayer
 
+# Import ConfigLoader for centralized paths (WORK-080)
+try:
+    from ..lib.config import ConfigLoader
+except ImportError:
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent.parent / "lib"))
+    from config import ConfigLoader
+
 # TYPE_CHECKING imports for delegation (avoid circular imports at runtime)
 if TYPE_CHECKING:
     from .cascade_engine import CascadeEngine, CascadeResult
     from .portal_manager import PortalManager
     from .spawn_tree import SpawnTree
     from .backfill_engine import BackfillEngine
-
-WORK_DIR = Path("docs/work")
-ACTIVE_DIR = WORK_DIR / "active"
-ARCHIVE_DIR = WORK_DIR / "archive"
 
 
 class InvalidTransitionError(Exception):
@@ -121,9 +125,6 @@ class QueueConfig:
 # Trigger statuses for cascade (shared constant)
 TRIGGER_STATUSES = {"complete", "completed", "done", "closed", "accepted"}
 
-# Queue config path (E2-290)
-QUEUE_CONFIG_PATH = Path(".claude/haios/config/work_queues.yaml")
-
 
 class WorkEngine:
     """
@@ -165,13 +166,15 @@ class WorkEngine:
 
     @property
     def active_dir(self) -> Path:
-        """Path to active work items directory."""
-        return self._base_path / ACTIVE_DIR
+        """Path to active work items directory (WORK-080: via ConfigLoader)."""
+        config = ConfigLoader.get()
+        return self._base_path / config.get_path("work_active")
 
     @property
     def archive_dir(self) -> Path:
-        """Path to archived work items directory."""
-        return self._base_path / ARCHIVE_DIR
+        """Path to archived work items directory (WORK-080: via ConfigLoader)."""
+        config = ConfigLoader.get()
+        return self._base_path / config.get_path("work_archive")
 
     # =========================================================================
     # Core Work Item Operations (E2-242)
@@ -351,8 +354,9 @@ class WorkEngine:
     # ========== Queue Methods (E2-290) ==========
 
     def _get_queue_config_path(self) -> Path:
-        """Get path to queue config file (for testing injection)."""
-        return QUEUE_CONFIG_PATH
+        """Get path to queue config file (WORK-080: via ConfigLoader)."""
+        config = ConfigLoader.get()
+        return config.get_path("work_queues")
 
     def load_queues(self) -> Dict[str, QueueConfig]:
         """

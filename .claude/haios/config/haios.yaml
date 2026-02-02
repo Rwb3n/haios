@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-30T21:27:58
+# System Auto: last updated on: 2026-02-02T17:46:26
 # HAIOS System Configuration
 # Consolidates: governance-toggles.yaml, routing-thresholds.yaml
 # Version: 2.4 (Session 265 - The Activity Layer)
@@ -45,6 +45,35 @@ thresholds:
     max_count: 10
     divert_to: observation-triage-cycle
     escape_priorities: [critical]
+
+# Path constants (single source of truth - WORK-080)
+paths:
+  # Work item paths
+  work_dir: "docs/work"
+  work_active: "docs/work/active"
+  work_archive: "docs/work/archive"
+  work_item: "docs/work/active/{id}/WORK.md"
+  work_plan: "docs/work/active/{id}/plans/PLAN.md"
+  work_queues: ".claude/haios/config/work_queues.yaml"
+
+  # Document paths
+  checkpoints: "docs/checkpoints"
+  reports: "docs/reports"
+  adr: "docs/ADR"
+  specs: "docs/specs"
+
+  # Plugin paths
+  templates: ".claude/templates"
+  skills: ".claude/skills"
+  commands: ".claude/commands"
+  agents: ".claude/agents"
+  hooks: ".claude/hooks"
+
+  # Config paths
+  haios_config: ".claude/haios/config"
+  manifesto: ".claude/haios/manifesto"
+  status: ".claude/haios-status.json"
+  status_slim: ".claude/haios-status-slim.json"
 
 # Context loading configuration (WORK-008)
 # Role-based loader dispatch per L4 principles

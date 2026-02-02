@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-01-24T19:47:10
+# System Auto: last updated on: 2026-02-02T19:00:19
 """
 ContextLoader Module (E2-254, WORK-008)
 
@@ -21,6 +21,14 @@ from typing import Any, Dict, List, Optional, Tuple, Type
 import json
 import logging
 import yaml
+
+# Import ConfigLoader for centralized paths (WORK-080)
+try:
+    from ..lib.config import ConfigLoader
+except ImportError:
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent.parent / "lib"))
+    from config import ConfigLoader
 
 logger = logging.getLogger(__name__)
 
@@ -68,9 +76,7 @@ class ContextLoader:
     - Gets ready work from WorkEngine
     """
 
-    MANIFESTO_PATH = Path(".claude/haios/manifesto")
-    STATUS_PATH = Path(".claude/haios-status.json")
-    CONFIG_PATH = Path(".claude/haios/config/haios.yaml")
+    # WORK-080: Path constants moved to haios.yaml, accessed via ConfigLoader
 
     # Loader registry - extensible via config (WORK-008)
     _loader_registry: Dict[str, type] = {}
@@ -124,8 +130,9 @@ class ContextLoader:
             logger.warning(f"Could not import WorkLoader: {e}")
 
     def _load_config(self) -> None:
-        """Load context config from haios.yaml."""
-        config_path = self._project_root / self.CONFIG_PATH
+        """Load context config from haios.yaml (WORK-080: via ConfigLoader)."""
+        config = ConfigLoader.get()
+        config_path = self._project_root / config.get_path("haios_config") / "haios.yaml"
         try:
             with open(config_path, "r", encoding="utf-8") as f:
                 self._config = yaml.safe_load(f) or {}
@@ -162,12 +169,13 @@ class ContextLoader:
 
     def compute_session_number(self) -> Tuple[int, Optional[int]]:
         """
-        Compute current and prior session from status JSON.
+        Compute current and prior session from status JSON (WORK-080: via ConfigLoader).
 
         Returns:
             (current_session, prior_session) where prior may be None
         """
-        status_path = self._project_root / self.STATUS_PATH
+        config = ConfigLoader.get()
+        status_path = self._project_root / config.get_path("status")
         try:
             with open(status_path, "r", encoding="utf-8") as f:
                 status = json.load(f)
@@ -235,8 +243,9 @@ class ContextLoader:
         return ctx
 
     def _read_manifesto_file(self, filename: str) -> str:
-        """Read a manifesto file, return empty string on error."""
-        path = self._project_root / self.MANIFESTO_PATH / filename
+        """Read a manifesto file, return empty string on error (WORK-080: via ConfigLoader)."""
+        config = ConfigLoader.get()
+        path = self._project_root / config.get_path("manifesto") / filename
         try:
             return path.read_text(encoding="utf-8")
         except FileNotFoundError:

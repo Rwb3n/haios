@@ -3,13 +3,13 @@ template: work_item
 id: WORK-080
 title: Single Source Path Constants Implementation
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-02
 spawned_by: INV-041
 chapter: CH-004
 arc: chariot
-closed: null
+closed: '2026-02-02'
 priority: medium
 effort: medium
 traces_to: []
@@ -36,10 +36,27 @@ memory_refs:
 - 83180
 - 83181
 - 83182
+- 83198
+- 83199
+- 83200
+- 83201
+- 83202
+- 83203
+- 83204
+- 83205
+- 83206
+- 83207
+- 65046
+- 83208
+- 83209
+- 83210
+- 82309
+- 83211
+- 83212
 extensions: {}
 version: '2.0'
 generated: 2026-02-02
-last_updated: '2026-02-02T17:23:45'
+last_updated: '2026-02-02T17:43:47'
 ---
 # WORK-080: Single Source Path Constants Implementation
 
@@ -62,9 +79,10 @@ last_updated: '2026-02-02T17:23:45'
 - [ ] Add `ConfigLoader.get_path(key, **kwargs)` method for interpolated paths
 - [ ] Migrate `work_engine.py`: Replace WORK_DIR, ACTIVE_DIR, ARCHIVE_DIR constants
 - [ ] Migrate `context_loader.py`: Replace MANIFESTO_PATH, STATUS_PATH, CONFIG_PATH constants
-- [ ] Migrate remaining 9 Python files with hardcoded paths
 - [ ] Add tests for ConfigLoader.paths and get_path()
 - [ ] Update CLAUDE.md with ConfigLoader.paths usage pattern
+
+> **Scope Note:** Remaining 8 Python files with hardcoded paths deferred to follow-up work item. This work establishes the pattern; incremental migration follows.
 
 ---
 

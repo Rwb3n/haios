@@ -1,5 +1,5 @@
 # generated: 2025-09-23
-# System Auto: last updated on: 2026-02-01T22:48:52
+# System Auto: last updated on: 2026-02-02T19:02:50
 # Code Implementation & Engineering Guide
 
 ## RFC 2119 Keywords
@@ -59,6 +59,34 @@ We have **11 modules** in `.claude/haios/modules/`. They MUST be used.
 > "Which module does the work? If none, why not?"
 
 If answer is "agent reads files manually" → design is WRONG.
+
+---
+
+## CRITICAL: Path Constants via ConfigLoader (WORK-080)
+
+**All path constants MUST be defined in haios.yaml and accessed via ConfigLoader.**
+
+```python
+from config import ConfigLoader
+
+config = ConfigLoader.get()
+
+# Simple path
+work_dir = config.get_path("work_dir")  # Path("docs/work")
+
+# Interpolated path
+work_file = config.get_path("work_item", id="WORK-080")  # Path("docs/work/active/WORK-080/WORK.md")
+```
+
+| Path Key | Value | Usage |
+|----------|-------|-------|
+| `work_dir` | `docs/work` | Work items root |
+| `work_active` | `docs/work/active` | Active work items |
+| `work_item` | `docs/work/active/{id}/WORK.md` | Specific work item |
+| `manifesto` | `.claude/haios/manifesto` | Manifesto files |
+| `haios_config` | `.claude/haios/config` | Config directory |
+
+**MUST NOT** define path constants at module level. Use `ConfigLoader.get_path()` instead.
 
 ---
 
