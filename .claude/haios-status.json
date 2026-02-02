@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-02T19:08:37",
+    "generated": "2026-02-02T19:35:53",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 289,
-        "current_session": 290,
+        "prior_session": 290,
+        "current_session": 291,
         "prior_date": "2026-02-02",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 83019,
-        "entities": 9499,
+        "concepts": 83042,
+        "entities": 9503,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3475,6 +3475,15 @@
             "status": null,
             "date": "2026-02-02",
             "last_updated": "2026-02-02T17:23:52",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-02-02-19-SESSION-291-work-080-single-source-path-constants-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-02",
+            "last_updated": "2026-02-02T19:10:23",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -7022,7 +7031,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-04-SESSION-94-m5-progress-e2-126-complete-distribution-discussion.md",
             "last_updated": "2025-12-21T19:11:15",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2025-12-21-05-SESSION-94-m5-complete-e2-125-e2-129-migration.md",
@@ -7087,7 +7096,7 @@
         {
             "path": "docs/checkpoints/2025-12-23-07-SESSION-106-e2-150-e2-151-work-item-infrastructure-migration.md",
             "last_updated": "2025-12-23T19:12:34",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/checkpoints/2025-12-23-08-SESSION-107-e2-152-complete-e2-154-planned.md",
@@ -7127,7 +7136,7 @@
         {
             "path": "docs/checkpoints/2025-12-24-05-SESSION-113-m7a-recipes-governance-workflow.md",
             "last_updated": "2025-12-24T19:15:58",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2025-12-24-06-SESSION-114-m7a-complete-and-yaml-fix.md",
@@ -7257,7 +7266,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-07-SESSION-138-e2-224-e2-221-observation-threshold-and-routing-gate.md",
             "last_updated": "2025-12-28T19:33:21",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-28-08-SESSION-139-e2-223-e2-222-routing-gate-integration-and-threshold-config.md",
@@ -7547,7 +7556,7 @@
         {
             "path": "docs/plans/PLAN-E2-114-spawn-tree-query.md",
             "last_updated": "2025-12-22T19:29:29",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/plans/PLAN-E2-115-investigation-closure.md",
@@ -7597,7 +7606,7 @@
         {
             "path": "docs/plans/PLAN-E2-143-audit-recipe-suite.md",
             "last_updated": "2025-12-24T19:13:58",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/plans/PLAN-E2-145-validate-script-section-enforcement.md",
@@ -7702,7 +7711,7 @@
         {
             "path": "docs/plans/PLAN-E2-186-promote-preflight-checker-to-required.md",
             "last_updated": "2025-12-25T19:29:13",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-189-dod-validation-cycle-skill.md",
@@ -8262,7 +8271,7 @@
         {
             "path": "docs/work/archive/WORK-E2-143-audit-recipe-suite.md",
             "last_updated": "2025-12-24T19:14:11",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/work/archive/WORK-E2-153-unified-metaphor-section-in-architecturemd.md",
@@ -8377,7 +8386,7 @@
         {
             "path": "docs/work/archive/WORK-E2-186-promote-preflight-checker-to-required.md",
             "last_updated": "2025-12-25T19:29:22",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/work/archive/WORK-E2-187-async-validator-agent.md",
@@ -8387,7 +8396,7 @@
         {
             "path": "docs/work/archive/WORK-E2-188-batch-work-item-metadata-tool.md",
             "last_updated": "2025-12-25T19:34:15",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/work/archive/WORK-E2-189-dod-validation-cycle-skill.md",
@@ -8526,9 +8535,9 @@
         }
     ],
     "workspace": {
-        "total_files": 542,
+        "total_files": 543,
         "by_template": {
-            "checkpoint": 293,
+            "checkpoint": 294,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8540,7 +8549,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 129,
+            "unknown": 130,
             "draft": 2,
             "approved": 6,
             "ready": 1,
