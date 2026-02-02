@@ -2,7 +2,7 @@
 template: work_item
 id: WORK-082
 title: Epistemic Review Ceremony After Investigation Closure
-type: implementation
+type: investigation
 status: active
 owner: Hephaestus
 created: 2026-02-02
@@ -31,7 +31,7 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: 2026-02-02
-last_updated: '2026-02-02T19:59:05'
+last_updated: '2026-02-02T20:02:25'
 ---
 # WORK-082: Epistemic Review Ceremony After Investigation Closure
 
@@ -82,11 +82,11 @@ This review surfaced 5 explicit unknowns that need resolution before implementat
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Create `epistemic-review-cycle` skill (.claude/skills/epistemic-review-cycle/)
-- [ ] Define 3-question ceremony: KNOWN / INFERRED / UNKNOWN
-- [ ] Wire into investigation-cycle CONCLUDE phase as exit gate
-- [ ] Output stored to spawned work item's `memory_refs` for context loading
-- [ ] Test: verify spawned work item has epistemic state captured
+- [ ] Determine ceremony exit point (within CONCLUDE vs after vs at implementation entry)
+- [ ] Determine exit behavior when unknowns are significant (block spawn, proceed with gaps, spawn follow-up investigation)
+- [ ] Define ceremony structure (questions, format, gate conditions)
+- [ ] Analyze interaction with existing ceremonies (observation-capture, critique-agent)
+- [ ] Spawned implementation work item(s) for ceremony creation
 
 ---
 
