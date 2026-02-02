@@ -19,7 +19,8 @@ source_files: []
 acceptance_criteria: []
 blocked_by:
 - WORK-069
-blocks: []
+blocks:
+- WORK-075
 enables: []
 current_node: backlog
 node_history:
@@ -35,7 +36,7 @@ memory_refs:
 extensions: {}
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-01T23:34:06'
+last_updated: '2026-02-02T00:56:30'
 ---
 # WORK-070: Multi-Level DoD Cascade Design
 

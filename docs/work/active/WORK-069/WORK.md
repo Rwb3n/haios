@@ -21,6 +21,7 @@ blocked_by: []
 blocks:
 - WORK-070
 - WORK-071
+- WORK-075
 enables: []
 current_node: backlog
 node_history:
@@ -36,7 +37,7 @@ memory_refs:
 extensions: {}
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-01T23:33:44'
+last_updated: '2026-02-02T00:56:24'
 ---
 # WORK-069: Decision Traceability Schema Design
 
