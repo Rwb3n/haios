@@ -9,7 +9,7 @@ lifecycle_phase: plan
 session: 284
 version: '1.5'
 generated: 2025-12-21
-last_updated: '2026-02-02T10:31:36'
+last_updated: '2026-02-02T11:25:00'
 ---
 # Implementation Plan: Multi-Level DoD Cascade Design
 
@@ -376,9 +376,11 @@ VALIDATE --> ARCHIVE --> TRANSITION
 
 ### 3. TRANSITION Phase
 
+**Note:** `/new-epoch` command (CH-008) is not yet implemented. This phase is manual until CH-008 completes.
+
 **Actions:**
-1. Create new epoch via `/new-epoch` command (CH-008)
-2. Update `haios.yaml` epoch.current to new epoch
+1. (Future) Create new epoch via `/new-epoch` command (CH-008)
+2. (Manual) Update `haios.yaml` epoch.current to new epoch
 ```
 
 ### Deliverable 5: CH-010 Chapter File
@@ -453,7 +455,7 @@ Session 284: [to be added]
 | VALIDATE->MARK pattern | Simpler than VALIDATE->ARCHIVE->MEMORY | Chapters/arcs/epochs don't need memory capture (work items already captured WHY) |
 | Leverage audit-decision-coverage | Use existing script for orphan detection | WORK-069 already built this; don't reinvent |
 | REQ-DOD prefix | New requirement domain | Distinguishes from REQ-TRACE (traceability) which is about links, not verification |
-| Status field in markdown | `**Status:** Complete` | Consistent with existing chapter/arc file pattern |
+| Status field in markdown | `**Status:** Complete` | Consistent with work item `status: complete` (ADR-033). Canonical terminal status is `Complete` (not `Closed` or `Done`). |
 
 ### Edge Cases
 
@@ -469,6 +471,10 @@ Session 284: [to be added]
 **Q: Should close-chapter-ceremony chain to close-arc-ceremony automatically?**
 
 No - manual invocation preferred. Closing a chapter doesn't mean the arc is done. Operator decides when all chapters are ready.
+
+**Q: Is D8 already assigned to CH-010?**
+
+Yes - verified. EPOCH.md Decision 8 (lines 148-150) has `assigned_to: [{arc: flow, chapters: [CH-009, CH-010, CH-011]}]`.
 
 ---
 
