@@ -1,5 +1,5 @@
 # generated: 2026-01-06
-# System Auto: last updated on: 2026-01-18T15:33:52
+# System Auto: last updated on: 2026-02-02T17:01:01
 # Arc: Chariot
 
 ## Arc Definition
@@ -51,7 +51,7 @@ The 9 Chariot modules that make HAIOS portable and LLM-agnostic:
 | CH-001 | ModuleWiring | **Complete** | E2-279: WorkEngine delegates to satellites |
 | CH-002 | BoundaryEnforcement | Planned | Enforce module boundaries (hooks?) |
 | CH-003 | SDKMigration | Vision | Claude Agent SDK enables hard enforcement (S25, Epoch 4) |
-| CH-004 | PathAuthority | Planned | Recipes own paths - agent doesn't hardcode (S190) - **INV-041 exists** |
+| CH-004 | PathAuthority | Planned | Recipes own paths - agent doesn't hardcode (S190) - **INV-041 complete, WORK-080 spawned** |
 | CH-005 | FileTypeLocking | Planned | PreToolUse enforces what file types go where (S190) |
 | CH-006 | CycleDelegation | **Active** | INV-068: Subagents execute cycles, main track routes (S199) |
 | CH-007 | APIDocumentation | Planned | Formalize module interfaces + data dictionary (S203, INV-069) |
