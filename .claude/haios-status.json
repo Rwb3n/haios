@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-02T13:25:17",
+    "generated": "2026-02-02T14:34:22",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 285,
-        "current_session": 286,
+        "prior_session": 999,
+        "current_session": 998,
         "prior_date": "2026-02-02",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82978,
-        "entities": 9483,
+        "concepts": 82984,
+        "entities": 9486,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3420,6 +3420,33 @@
             "status": null,
             "date": "2026-02-02",
             "last_updated": "2026-02-02T13:00:08",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-02-02-13-SESSION-287-work-077-close-arc-ceremony-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-02",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-02-02-14-SESSION-999-test-checkpoint.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-02",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-02-02-15-SESSION-998-test-fix.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-02",
+            "last_updated": null,
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6957,7 +6984,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-02-SESSION-93-e2-120-phase-2a-status-module-core.md",
             "last_updated": "2025-12-21T14:08:34",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2025-12-21-03-SESSION-94-e2-120-phase-3-complete-and-plans-e2-125-e2-126.md",
@@ -7022,7 +7049,7 @@
         {
             "path": "docs/checkpoints/2025-12-23-05-SESSION-104-e2-145-e2-142-e2-146-triple-implementation.md",
             "last_updated": "2025-12-23T14:29:59",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/checkpoints/2025-12-23-06-SESSION-105-inv-024-inv-026-m6-workcycle-definition.md",
@@ -7062,7 +7089,7 @@
         {
             "path": "docs/checkpoints/2025-12-24-03-SESSION-111-work-item-review-and-milestone-organization.md",
             "last_updated": "2025-12-24T14:27:06",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2025-12-24-04-SESSION-112-orphan-review-and-milestone-reorganization.md",
@@ -7137,12 +7164,12 @@
         {
             "path": "docs/checkpoints/2025-12-27-01-SESSION-125-m7d-progress-and-skill-architecture-fixes.md",
             "last_updated": "2025-12-27T13:26:26",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/checkpoints/2025-12-27-02-SESSION-126-m7d-complete-and-autonomous-session-loop-vision.md",
             "last_updated": "2025-12-27T14:24:06",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/checkpoints/2025-12-27-03-SESSION-127-inv-041-complete-m7b-progress-work-item-directory-architecture.md",
@@ -7177,7 +7204,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-02-SESSION-133-e2-217-observation-capture-gate-and-inv-046-mechanical-automation.md",
             "last_updated": "2025-12-28T13:33:07",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-28-03-SESSION-134-observation-gate-complete-and-triage-design.md",
@@ -7292,6 +7319,11 @@
         {
             "path": "docs/checkpoints/2026-01-03-01-SESSION-157-inv-052-documentation-consistency-fixes.md",
             "last_updated": "2026-01-03T00:08:04",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/checkpoints/2026-01-03-02-SESSION-158-inv-053-architecture-review-and-l5-l7-formalization.md",
+            "last_updated": "2026-01-03T14:24:41",
             "days_stale": 30
         },
         {
@@ -7487,7 +7519,7 @@
         {
             "path": "docs/plans/PLAN-E2-120-complete-powershell-to-python-migration.md",
             "last_updated": "2025-12-21T14:32:32",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/plans/PLAN-E2-125-full-status-module.md",
@@ -7517,7 +7549,7 @@
         {
             "path": "docs/plans/PLAN-E2-142-investigation-subagent-enforcement.md",
             "last_updated": "2025-12-23T13:47:56",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/plans/PLAN-E2-143-audit-recipe-suite.md",
@@ -7532,7 +7564,7 @@
         {
             "path": "docs/plans/PLAN-E2-146-validation-error-message-placeholder-sections.md",
             "last_updated": "2025-12-23T14:01:58",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/plans/PLAN-E2-150-work-item-infrastructure.md",
@@ -7592,7 +7624,7 @@
         {
             "path": "docs/plans/PLAN-E2-177-chain-new-plan-to-implementation-cycle.md",
             "last_updated": "2025-12-25T14:30:19",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-180-work-creation-cycle-skill.md",
@@ -7762,7 +7794,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-E2-025-precompact-hook-context-preservation.md",
             "last_updated": "2025-12-27T13:43:17",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-030-template-registry-audit.md",
@@ -7947,7 +7979,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-039-information-architecture-policy-audit.md",
             "last_updated": "2025-12-26T14:27:59",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-040a-plan-tree-missing-titles-bug.md",
@@ -8072,7 +8104,7 @@
         {
             "path": "docs/work/archive/WORK-E2-025-precompact-hook-context-preservation.md",
             "last_updated": "2025-12-27T14:09:45",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-029-new-backlog-item-command.md",
@@ -8107,7 +8139,7 @@
         {
             "path": "docs/work/archive/WORK-E2-089-fix-backlogids-array-parsing-bug.md",
             "last_updated": "2025-12-24T13:44:50",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/work/archive/WORK-E2-090-script-to-skill-migration.md",
@@ -8157,7 +8189,7 @@
         {
             "path": "docs/work/archive/WORK-E2-128-checkpoint-git-integration.md",
             "last_updated": "2025-12-24T13:43:29",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/work/archive/WORK-E2-132-remove-references-from-checkpoint-template.md",
@@ -8267,7 +8299,7 @@
         {
             "path": "docs/work/archive/WORK-E2-177-chain-new-plan-to-implementation-cycle.md",
             "last_updated": "2025-12-25T14:30:49",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/work/archive/WORK-E2-180-work-creation-cycle-skill.md",
@@ -8342,7 +8374,7 @@
         {
             "path": "docs/work/archive/WORK-E2-202-enhance-invariantsmd-with-operational-rules.md",
             "last_updated": "2025-12-26T13:57:20",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-E2-203-reconcile-anti-pattern-duplication.md",
@@ -8427,7 +8459,7 @@
         {
             "path": "docs/work/archive/WORK-INV-039-information-architecture-policy-audit.md",
             "last_updated": "2025-12-26T14:27:47",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-INV-040-plan-tree-missing-titles-bug.md",
@@ -8451,9 +8483,9 @@
         }
     ],
     "workspace": {
-        "total_files": 536,
+        "total_files": 539,
         "by_template": {
-            "checkpoint": 287,
+            "checkpoint": 290,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8465,7 +8497,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 123,
+            "unknown": 126,
             "draft": 2,
             "approved": 6,
             "ready": 1,
@@ -8480,7 +8512,7 @@
             "duplicate": 1,
             "deferred": 1
         },
-        "stale_count": 378
+        "stale_count": 379
     },
     "alignment": {
         "aligned": [

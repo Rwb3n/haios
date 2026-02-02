@@ -3,13 +3,13 @@ template: work_item
 id: WORK-079
 title: CHAIN Phase Stop Pattern Investigation
 type: investigation
-status: active
+status: complete
 owner: null
 created: 2026-02-02
 spawned_by: null
 chapter: null
 arc: null
-closed: null
+closed: '2026-02-02'
 priority: high
 effort: medium
 traces_to:
@@ -34,10 +34,17 @@ memory_refs:
 - 83159
 - 83160
 - 83161
+- 83169
+- 83170
+- 83171
+- 83172
+- 83173
+- 83174
+- 83175
 extensions: {}
 version: '2.0'
 generated: 2026-02-02
-last_updated: '2026-02-02T13:05:22'
+last_updated: '2026-02-02T14:32:25'
 ---
 # WORK-079: CHAIN Phase Stop Pattern Investigation
 
@@ -64,14 +71,30 @@ last_updated: '2026-02-02T13:05:22'
 
 ## Deliverables
 
-- [ ] **Root cause analysis** - Identify what triggers stops at workflow boundaries
-- [ ] **Subagent pattern for CHAIN** - Design chain-agent that handles routing
-- [ ] **TaskList continuity experiment** - Test if active tasks prevent stops
-- [ ] **Recommendations** - Concrete changes to skill definitions
+- [x] **Root cause analysis** - Checkpoint friction caused by missing `scaffold-checkpoint` alias (naming inconsistency)
+- [ ] ~~**Subagent pattern for CHAIN**~~ - Descoped: checkpoint issue was simpler
+- [ ] ~~**TaskList continuity experiment**~~ - Descoped: checkpoint issue was simpler
+- [x] **Recommendations** - Added `scaffold-checkpoint` alias to justfile
 
 ---
 
 ## History
+
+### 2026-02-02 - Checkpoint Friction Resolved (Session 288)
+
+**Focused Investigation:** Operator requested focus on checkpoint scaffold friction specifically.
+
+**Root Cause Found:** Naming inconsistency in justfile. Recipe `scaffold-observations` uses hyphenated form, but checkpoint used `checkpoint` (unhyphenated). Agents naturally try `scaffold-checkpoint` pattern which didn't exist.
+
+**Fix Applied:** Added `scaffold-checkpoint` alias to justfile (2 lines):
+```just
+scaffold-checkpoint session title:
+    just checkpoint {{session}} "{{title}}"
+```
+
+**Verdict:** This specific friction was NOT a CHAIN phase cognitive issue - it was a simple missing alias. The broader CHAIN phase stop pattern (stops at error recovery boundaries) may still warrant investigation, but this instance had a trivial fix.
+
+**Memory refs added:** 83169-83172
 
 ### 2026-02-02 - Additional Evidence (Session 286)
 - Two stops during WORK-076 CHAIN phase (checkpoint-cycle):

@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-02-02T08:59:26
+# System Auto: last updated on: 2026-02-02T14:12:53
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -38,6 +38,10 @@ work id title *args:
 
 checkpoint session title:
     just scaffold checkpoint {{session}} "{{title}}"
+
+# Alias: scaffold-checkpoint for consistency with scaffold-observations (WORK-079)
+scaffold-checkpoint session title:
+    just checkpoint {{session}} "{{title}}"
 
 # Move work item to a DAG node (E2-162, E2-250: Uses WorkEngine)
 node id node:
