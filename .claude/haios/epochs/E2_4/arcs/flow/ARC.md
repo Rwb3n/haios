@@ -1,5 +1,5 @@
 # generated: 2026-01-30
-# System Auto: last updated on: 2026-02-02T08:59:05
+# System Auto: last updated on: 2026-02-02T19:33:02
 # Arc: Flow
 
 ## Arc Definition
@@ -89,6 +89,7 @@ DESIGN isn't optional overhead. It's the counter to completion incentive.
 
 Session 265 universal flow decision: 82717-82720
 Session 265 critique gate decision: 82711-82716
+Session 292 cycle delegation architecture (INV-068): 83213-83224
 
 ---
 
