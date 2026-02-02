@@ -36,7 +36,7 @@ memory_refs:
 extensions: {}
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-02T00:56:30'
+last_updated: '2026-02-02T10:25:58'
 ---
 # WORK-070: Multi-Level DoD Cascade Design
 
@@ -86,6 +86,7 @@ Each level gets entry/exit ceremonies with DoD criteria.
      Deliverables are implementation outputs, not requirements.
 -->
 
+- [ ] **L4 Requirements** - Create REQ-DOD-001, REQ-DOD-002 in functional_requirements.md
 - [ ] **Chapter DoD Ceremony** - `close-chapter-ceremony` skill with criteria
 - [ ] **Arc DoD Ceremony** - `close-arc-ceremony` skill with criteria
 - [ ] **Epoch DoD Ceremony** - `close-epoch-ceremony` skill with criteria
