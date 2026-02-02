@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-02T19:35:55",
+    "generated": "2026-02-02T21:19:36",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 290,
-        "current_session": 291,
+        "prior_session": 291,
+        "current_session": 292,
         "prior_date": "2026-02-02",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 83042,
-        "entities": 9503,
+        "concepts": 83087,
+        "entities": 9508,
         "backlog_pending": 0
     },
     "infrastructure": {
