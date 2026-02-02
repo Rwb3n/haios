@@ -9,7 +9,7 @@ lifecycle_phase: plan
 session: 284
 version: '1.5'
 generated: 2025-12-21
-last_updated: '2026-02-02T11:25:00'
+last_updated: '2026-02-02T11:43:53'
 ---
 # Implementation Plan: Multi-Level DoD Cascade Design
 
@@ -490,49 +490,37 @@ Yes - verified. EPOCH.md Decision 8 (lines 148-150) has `assigned_to: [{arc: flo
 
 ### Step 1: Write Failing Tests
 - [ ] Create `tests/test_multilevel_dod.py`
-- [ ] Add 6 tests from Tests First section
-- [ ] Verify all tests fail (red)
+- [ ] Add tests for L4 requirements and CH-010 (reduced scope)
+- [ ] Verify tests fail (red)
 
 ### Step 2: Create L4 Requirements
 - [ ] Edit `.claude/haios/manifesto/L4/functional_requirements.md`
 - [ ] Add REQ-DOD-001 and REQ-DOD-002 to registry table (line ~42)
 - [ ] Add full DoD Requirements section (after Template Requirements)
-- [ ] Tests 1a, 1b pass (green)
+- [ ] Tests for requirements pass (green)
 
-### Step 3: Create close-chapter-ceremony Skill
-- [ ] Create `.claude/skills/close-chapter-ceremony/SKILL.md`
-- [ ] Implement VALIDATE->MARK->REPORT cycle per Detailed Design
-- [ ] Test 2a passes (green)
-
-### Step 4: Create close-arc-ceremony Skill
-- [ ] Create `.claude/skills/close-arc-ceremony/SKILL.md`
-- [ ] Implement VALIDATE->MARK->REPORT cycle per Detailed Design
-- [ ] Test 2b passes (green)
-
-### Step 5: Create close-epoch-ceremony Skill
-- [ ] Create `.claude/skills/close-epoch-ceremony/SKILL.md`
-- [ ] Implement VALIDATE->ARCHIVE->TRANSITION cycle per Detailed Design
-- [ ] Test 2c passes (green)
-
-### Step 6: Create CH-010 Chapter File
+### Step 3: Create CH-010 Chapter File
 - [ ] Create `.claude/haios/epochs/E2_4/arcs/flow/CH-010-MultiLevelDoD.md`
 - [ ] Add `implements_decisions: [D8]` field
 - [ ] Link to WORK-070 as implementing work
-- [ ] Test 3 passes (green)
+- [ ] Test for CH-010 passes (green)
 
-### Step 7: Update ARC.md with CH-010
+### Step 4: Update ARC.md with CH-010
 - [ ] Edit `.claude/haios/epochs/E2_4/arcs/flow/ARC.md`
 - [ ] Add CH-010 to Chapters table
 - [ ] Verify chapter references parent arc
 
-### Step 8: Integration Verification
-- [ ] All 6 tests pass
-- [ ] Run full test suite: `pytest tests/` (no regressions)
+### Step 5: Spawn Ceremony Work Items
+- [ ] Create WORK-076: close-chapter-ceremony skill (via /new-work)
+- [ ] Create WORK-077: close-arc-ceremony skill (via /new-work)
+- [ ] Create WORK-078: close-epoch-ceremony skill (via /new-work)
+- [ ] Set blocked_by relationships
+
+### Step 6: Integration Verification
+- [ ] All tests pass
 - [ ] Run `just audit-decision-coverage` (verify no new errors)
 
-### Step 9: README Sync (MUST)
-- [ ] **MUST:** Update `.claude/skills/README.md` with 3 new ceremony skills
-- [ ] **MUST:** Verify skill descriptions match actual skill functionality
+**Note (Session 284):** Scope reduced from 6 files to 3 files per preflight-checker guidance. Ceremony skills decomposed to WORK-076, WORK-077, WORK-078.
 
 ---
 

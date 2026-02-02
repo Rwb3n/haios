@@ -21,6 +21,7 @@ blocked_by:
 - WORK-069
 blocks:
 - WORK-075
+- WORK-076
 enables: []
 current_node: backlog
 node_history:
@@ -36,7 +37,7 @@ memory_refs:
 extensions: {}
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-02T10:25:58'
+last_updated: '2026-02-02T11:45:48'
 ---
 # WORK-070: Multi-Level DoD Cascade Design
 
@@ -87,11 +88,13 @@ Each level gets entry/exit ceremonies with DoD criteria.
 -->
 
 - [ ] **L4 Requirements** - Create REQ-DOD-001, REQ-DOD-002 in functional_requirements.md
-- [ ] **Chapter DoD Ceremony** - `close-chapter-ceremony` skill with criteria
-- [ ] **Arc DoD Ceremony** - `close-arc-ceremony` skill with criteria
-- [ ] **Epoch DoD Ceremony** - `close-epoch-ceremony` skill with criteria
-- [ ] **DoD Cascade Schema** - Work → Chapter → Arc → Epoch verification chain
 - [ ] **CH-010 Chapter File** - Document the multi-level DoD ceremonies
+- [ ] **ARC.md Update** - Add CH-010 to Chapters table
+
+**Decomposed to separate work items (Session 284):**
+- WORK-076: close-chapter-ceremony skill
+- WORK-077: close-arc-ceremony skill
+- WORK-078: close-epoch-ceremony skill
 
 **DoD Criteria per Level:**
 
