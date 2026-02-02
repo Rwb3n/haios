@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-02T12:51:41",
+    "generated": "2026-02-02T13:25:18",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -9,7 +9,7 @@
     },
     "session_delta": {
         "prior_session": 285,
-        "current_session": 285,
+        "current_session": 286,
         "prior_date": "2026-02-02",
         "completed": [],
         "completed_count": 0,
@@ -27,14 +27,14 @@
     "session_state": {
         "active_cycle": "close-work-cycle",
         "current_phase": "CHAIN",
-        "work_id": "WORK-076",
-        "entered_at": "2026-02-02T12:52:15.608229"
+        "work_id": "WORK-077",
+        "entered_at": "2026-02-02T13:25:43.802224"
     },
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82964,
-        "entities": 9478,
+        "concepts": 82978,
+        "entities": 9483,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -62,6 +62,7 @@
         "skills": [
             "audit",
             "checkpoint-cycle",
+            "close-arc-ceremony",
             "close-chapter-ceremony",
             "close-work-cycle",
             "design-review-validation",

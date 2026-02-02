@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-02T12:51:40",
+    "generated": "2026-02-02T13:25:17",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -9,7 +9,7 @@
     },
     "session_delta": {
         "prior_session": 285,
-        "current_session": 285,
+        "current_session": 286,
         "prior_date": "2026-02-02",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82964,
-        "entities": 9478,
+        "concepts": 82978,
+        "entities": 9483,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -64,6 +64,7 @@
         "skills": [
             "audit",
             "checkpoint-cycle",
+            "close-arc-ceremony",
             "close-chapter-ceremony",
             "close-work-cycle",
             "design-review-validation",
@@ -3410,6 +3411,15 @@
             "status": null,
             "date": "2026-02-02",
             "last_updated": "2026-02-02T12:33:21",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-02-02-08-SESSION-286-work-076-close-chapter-ceremony-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-02",
+            "last_updated": "2026-02-02T13:00:08",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6942,7 +6952,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-01-SESSION-92-e2-120-phase-1-plugin-architecture-migration.md",
             "last_updated": "2025-12-21T13:00:13",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2025-12-21-02-SESSION-93-e2-120-phase-2a-status-module-core.md",
@@ -7047,7 +7057,7 @@
         {
             "path": "docs/checkpoints/2025-12-24-02-SESSION-110-e2-170-backfill-complete-and-inv-028-inv-029-created.md",
             "last_updated": "2025-12-24T13:15:13",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2025-12-24-03-SESSION-111-work-item-review-and-milestone-organization.md",
@@ -7227,7 +7237,7 @@
         {
             "path": "docs/checkpoints/2025-12-29-04-SESSION-145-e2-233-m8-skillarch-complete.md",
             "last_updated": "2025-12-29T12:53:24",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/checkpoints/2025-12-29-05-SESSION-146-m7b-workinfra-e2075-superseded.md",
@@ -7517,7 +7527,7 @@
         {
             "path": "docs/plans/PLAN-E2-145-validate-script-section-enforcement.md",
             "last_updated": "2025-12-23T13:03:59",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/plans/PLAN-E2-146-validation-error-message-placeholder-sections.md",
@@ -7642,7 +7652,7 @@
         {
             "path": "docs/plans/PLAN-E2-206-slim-vitals-remove-static-infrastructure.md",
             "last_updated": "2025-12-27T13:23:11",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/plans/PLAN-E2-210-context-threshold-auto-checkpoint.md",
@@ -8352,7 +8362,7 @@
         {
             "path": "docs/work/archive/WORK-E2-206-slim-vitals-remove-static-infrastructure.md",
             "last_updated": "2025-12-27T13:23:29",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-208-coldstart-work-routing.md",
@@ -8441,9 +8451,9 @@
         }
     ],
     "workspace": {
-        "total_files": 535,
+        "total_files": 536,
         "by_template": {
-            "checkpoint": 286,
+            "checkpoint": 287,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8455,7 +8465,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 122,
+            "unknown": 123,
             "draft": 2,
             "approved": 6,
             "ready": 1,
