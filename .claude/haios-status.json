@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-02T12:01:08",
+    "generated": "2026-02-02T12:51:40",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 283,
-        "current_session": 284,
+        "prior_session": 285,
+        "current_session": 285,
         "prior_date": "2026-02-02",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82953,
-        "entities": 9469,
+        "concepts": 82964,
+        "entities": 9478,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -64,6 +64,7 @@
         "skills": [
             "audit",
             "checkpoint-cycle",
+            "close-chapter-ceremony",
             "close-work-cycle",
             "design-review-validation",
             "dod-validation-cycle",
@@ -3391,6 +3392,24 @@
             "status": null,
             "date": "2026-02-02",
             "last_updated": "2026-02-02T11:46:18",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-02-02-06-SESSION-285-work-070-multi-level-dod-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-02",
+            "last_updated": "2026-02-02T12:12:51",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-02-02-07-SESSION-285-work-079-investigation-created.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-02",
+            "last_updated": "2026-02-02T12:33:21",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6988,7 +7007,7 @@
         {
             "path": "docs/checkpoints/2025-12-23-03-SESSION-103-e2-140-investigation-status-sync-complete.md",
             "last_updated": "2025-12-23T12:44:43",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/checkpoints/2025-12-23-05-SESSION-104-e2-145-e2-142-e2-146-triple-implementation.md",
@@ -7143,7 +7162,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-01-SESSION-132-e2-212-consumer-verification-and-memory-ux-investigation.md",
             "last_updated": "2025-12-28T12:03:53",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-28-02-SESSION-133-e2-217-observation-capture-gate-and-inv-046-mechanical-automation.md",
@@ -7483,7 +7502,7 @@
         {
             "path": "docs/plans/PLAN-E2-141-backlog-id-uniqueness-gate.md",
             "last_updated": "2025-12-23T12:39:59",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/plans/PLAN-E2-142-investigation-subagent-enforcement.md",
@@ -7768,7 +7787,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-E2-160-work-file-prerequisite-gate-design.md",
             "last_updated": "2025-12-29T12:26:37",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-FIX-002-ingester-embedding-gap.md",
@@ -7913,7 +7932,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-038-l1-invariants-content-completeness-audit.md",
             "last_updated": "2025-12-26T12:40:24",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-039-information-architecture-policy-audit.md",
@@ -7933,7 +7952,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-042-synthesis-skill-architecture.md",
             "last_updated": "2025-12-29T12:26:00",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-043-work-item-directory-architecture.md",
@@ -8118,7 +8137,7 @@
         {
             "path": "docs/work/archive/WORK-E2-118-vitals-work-cycle-state-injection.md",
             "last_updated": "2025-12-27T12:28:28",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-119-updatehaiosstatus-on-every-prompt.md",
@@ -8153,7 +8172,7 @@
         {
             "path": "docs/work/archive/WORK-E2-137-event-pattern-analyzer.md",
             "last_updated": "2025-12-27T12:05:18",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-143-audit-recipe-suite.md",
@@ -8178,7 +8197,7 @@
         {
             "path": "docs/work/archive/WORK-E2-160-work-file-prerequisite-gate.md",
             "last_updated": "2025-12-27T12:31:39",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-162-just-recipes-for-node-transitions.md",
@@ -8218,7 +8237,7 @@
         {
             "path": "docs/work/archive/WORK-E2-171-cascade-event-consumer.md",
             "last_updated": "2025-12-27T12:04:18",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-172-fix-yaml-timestamp-injection.md",
@@ -8393,7 +8412,7 @@
         {
             "path": "docs/work/archive/WORK-INV-038-l1-invariants-content-completeness-audit.md",
             "last_updated": "2025-12-26T12:40:16",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-INV-039-information-architecture-policy-audit.md",
@@ -8422,9 +8441,9 @@
         }
     ],
     "workspace": {
-        "total_files": 533,
+        "total_files": 535,
         "by_template": {
-            "checkpoint": 284,
+            "checkpoint": 286,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8436,7 +8455,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 120,
+            "unknown": 122,
             "draft": 2,
             "approved": 6,
             "ready": 1,
