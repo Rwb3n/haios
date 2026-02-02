@@ -3,13 +3,13 @@ template: work_item
 id: WORK-073
 title: E2.4 System Audit Verification Pass
 type: investigation
-status: active
+status: complete
 owner: null
 created: 2026-02-01
 spawned_by: WORK-072
 chapter: null
 arc: null
-closed: null
+closed: '2026-02-02'
 priority: high
 effort: medium
 traces_to:
@@ -37,10 +37,21 @@ memory_refs:
 - 83056
 - 83057
 - 83058
+- 83073
+- 83074
+- 83075
+- 83076
+- 83077
+- 83078
+- 83085
+- 83086
+- 83087
+- 83088
+- 83089
 extensions: {}
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-01T23:59:08'
+last_updated: '2026-02-02T00:07:27'
 ---
 # WORK-073: E2.4 System Audit Verification Pass
 
@@ -84,10 +95,10 @@ last_updated: '2026-02-01T23:59:08'
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] **Update SYSTEM-AUDIT.md** with findings from verification pass
-- [ ] **Verify or refute** each major claim from first pass
-- [ ] **Document** any areas first pass missed
-- [ ] **Cross-check** test failures against implementation reality
+- [x] **Update SYSTEM-AUDIT.md** with findings from verification pass
+- [x] **Verify or refute** each major claim from first pass
+- [x] **Document** any areas first pass missed
+- [x] **Cross-check** test failures against implementation reality
 
 ---
 
@@ -97,6 +108,21 @@ last_updated: '2026-02-01T23:59:08'
 - Spawned from WORK-072 per operator request
 - Operator noted single-pass audits risk blind spots
 - Memory refs linked to WORK-072 findings for context
+
+### 2026-02-02 - Completed (Session 281)
+- Investigation via EXPLORE→HYPOTHESIZE→VALIDATE→CONCLUDE
+- **All first pass claims verified accurate:**
+  - 14 failing tests confirmed (exact match)
+  - 71% orphan work items confirmed
+  - 95% stuck at backlog confirmed
+- **New findings:**
+  - Three-vocabulary conflict: TRD, GovernanceLayer, L5-execution.md all define different current_node values
+  - 4 of 5 E2.4 observations pending triage
+  - Activities arc ARC.md status drift (shows Planned, actually Complete)
+  - E2.4 architecture/ empty is expected (inherits from E2.3)
+- **Test failure root cause:** 8 doc/policy drift, 6 missing VERIFY phase implementation
+- SYSTEM-AUDIT.md Section 10 added with verification findings
+- Memory refs: 83073-83078
 
 ---
 
