@@ -1,5 +1,5 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-01-27T22:33:39
+# System Auto: last updated on: 2026-02-01T22:11:23
 """
 Tests for Python hook dispatcher (E2-085).
 
@@ -56,8 +56,10 @@ class TestDispatcherRouting:
             "tool_input": {"command": "ls"}
         }
         result = dispatch_hook(hook_input)
-        # Non-SQL bash should return None (allow)
-        assert result is None
+        # WORK-064: Now returns context on allow (non-SQL bash should be allowed)
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "allow"
+        assert "additionalContext" in result["hookSpecificOutput"]
 
     def test_dispatcher_routes_post_tool_use(self):
         """Verify dispatcher routes PostToolUse to correct handler."""
@@ -243,8 +245,9 @@ class TestPreToolUseSqlBlocking:
             "tool_input": {"command": "sqlite3 db.sqlite 'PRAGMA table_info(concepts)'"}
         }
         result = dispatch_hook(hook_input)
-        # Should return None (allow)
-        assert result is None
+        # WORK-064: Now returns context on allow
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "allow"
 
     def test_pretooluse_allows_pytest(self):
         """Verify pytest commands are allowed."""
@@ -256,7 +259,9 @@ class TestPreToolUseSqlBlocking:
             "tool_input": {"command": "pytest tests/ -v"}
         }
         result = dispatch_hook(hook_input)
-        assert result is None
+        # WORK-064: Now returns context on allow
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "allow"
 
     def test_pretooluse_allows_non_bash(self):
         """Verify non-Bash tools are allowed."""
@@ -268,53 +273,65 @@ class TestPreToolUseSqlBlocking:
             "tool_input": {"file_path": "/some/file.py"}
         }
         result = dispatch_hook(hook_input)
-        assert result is None
+        # WORK-064: Now returns context on allow
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "allow"
 
 
 class TestPreToolUseScaffoldBlocking:
-    """Test: PreToolUse scaffold recipe blocking (E2-305)."""
+    """Test: PreToolUse scaffold recipe blocking (E2-305, refined Session 253/257).
+
+    Note: Only 'just work' and 'just scaffold work_item' are blocked.
+    Other scaffold types (plan, inv) are allowed as they chain to governed commands.
+    """
 
     def test_blocks_just_work_recipe(self):
-        """Verify 'just work' is blocked with redirect to /new-work."""
+        """Verify 'just work WORK-XXX' is blocked with redirect to /new-work."""
         from hooks.pre_tool_use import handle
-        result = handle({"tool_name": "Bash", "tool_input": {"command": "just work E2-999 'test'"}})
+        # Pattern requires WORK-XXX or quoted title after 'just work'
+        result = handle({"tool_name": "Bash", "tool_input": {"command": "just work WORK-999 'test'"}})
         assert result is not None
         assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
         assert "/new-work" in result["hookSpecificOutput"]["permissionDecisionReason"]
 
-    def test_blocks_just_plan_recipe(self):
-        """Verify 'just plan' is blocked with redirect to /new-plan."""
+    def test_blocks_just_scaffold_work_item_recipe(self):
+        """Verify 'just scaffold work_item' is blocked."""
+        from hooks.pre_tool_use import handle
+        result = handle({"tool_name": "Bash", "tool_input": {"command": "just scaffold work_item E2-999 'test'"}})
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
+
+    def test_allows_just_plan_recipe(self):
+        """Verify 'just plan' is allowed (Session 253 refinement)."""
         from hooks.pre_tool_use import handle
         result = handle({"tool_name": "Bash", "tool_input": {"command": "just plan E2-999 'test'"}})
+        # WORK-064: Now returns context on allow
         assert result is not None
-        assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
-        assert "/new-plan" in result["hookSpecificOutput"]["permissionDecisionReason"]
+        assert result["hookSpecificOutput"]["permissionDecision"] == "allow"
 
-    def test_blocks_just_inv_recipe(self):
-        """Verify 'just inv' is blocked."""
+    def test_allows_just_inv_recipe(self):
+        """Verify 'just inv' is allowed (Session 253 refinement)."""
         from hooks.pre_tool_use import handle
         result = handle({"tool_name": "Bash", "tool_input": {"command": "just inv INV-999 'test'"}})
+        # WORK-064: Now returns context on allow
         assert result is not None
-        assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
-
-    def test_blocks_just_scaffold_recipe(self):
-        """Verify 'just scaffold' is blocked."""
-        from hooks.pre_tool_use import handle
-        result = handle({"tool_name": "Bash", "tool_input": {"command": "just scaffold work E2-999 'test'"}})
-        assert result is not None
-        assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
+        assert result["hookSpecificOutput"]["permissionDecision"] == "allow"
 
     def test_allows_non_scaffold_just_commands(self):
         """Verify 'just ready' is not blocked."""
         from hooks.pre_tool_use import handle
         result = handle({"tool_name": "Bash", "tool_input": {"command": "just ready"}})
-        assert result is None
+        # WORK-064: Now returns context on allow
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "allow"
 
     def test_allows_just_scaffold_observations(self):
         """Verify 'just scaffold-observations' is not blocked (hyphenated, different recipe)."""
         from hooks.pre_tool_use import handle
         result = handle({"tool_name": "Bash", "tool_input": {"command": "just scaffold-observations E2-305"}})
-        assert result is None
+        # WORK-064: Now returns context on allow
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "allow"
 
 
 class TestPostToolUseTimestamps:
@@ -452,8 +469,9 @@ class TestBackwardCompatibility:
                 "tool_input": {"file_path": temp_path}
             }
             result = dispatch_hook(hook_input)
-            # Editing existing files should be allowed
-            assert result is None
+            # WORK-064: Now returns context on allow
+            assert result is not None
+            assert result["hookSpecificOutput"]["permissionDecision"] == "allow"
         finally:
             Path(temp_path).unlink(missing_ok=True)
 
@@ -576,6 +594,83 @@ status: active
         # yaml.dump may quote date strings, so check for the value, not exact format
         assert "2025-12-24" in result and "generated" in result
         assert "2025-12-24T12:00:00" in result and "last_updated" in result
+
+
+class TestPreToolUseAdditionalContext:
+    """Test WORK-064: PreToolUse additionalContext for state visibility."""
+
+    def test_additional_context_on_allow(self, mocker):
+        """WORK-064: additionalContext should be present even when tool is allowed."""
+        import subprocess
+        from hooks.pre_tool_use import handle
+
+        # Mock subprocess.run to simulate DO state
+        mock_result = mocker.Mock()
+        mock_result.stdout = "implementation-cycle/DO/WORK-064"
+        mock_result.returncode = 0
+        mocker.patch.object(subprocess, "run", return_value=mock_result)
+
+        hook_data = {"tool_name": "Read", "tool_input": {"file_path": "/some/file.py"}}
+        result = handle(hook_data)
+
+        # Read is allowed in DO - should have additionalContext
+        assert result is not None
+        assert "hookSpecificOutput" in result
+        assert "additionalContext" in result["hookSpecificOutput"]
+
+    def test_additional_context_includes_state_and_blocked(self, mocker):
+        """WORK-064: additionalContext should contain current state and blocked primitives."""
+        import subprocess
+        from hooks.pre_tool_use import handle
+
+        mock_result = mocker.Mock()
+        mock_result.stdout = "implementation-cycle/DO/WORK-064"
+        mock_result.returncode = 0
+        mocker.patch.object(subprocess, "run", return_value=mock_result)
+
+        hook_data = {"tool_name": "Read", "tool_input": {}}
+        result = handle(hook_data)
+
+        context = result["hookSpecificOutput"].get("additionalContext", "")
+        assert "[STATE: DO]" in context
+        assert "Blocked:" in context
+        # DO state blocks: user-query, web-fetch, web-search, memory-search, memory-store
+        assert "user-query" in context
+
+    def test_deny_behavior_preserved_with_context(self, mocker):
+        """WORK-064: Deny responses should still block with reason AND include context."""
+        import subprocess
+        from hooks.pre_tool_use import handle
+
+        mock_result = mocker.Mock()
+        mock_result.stdout = "implementation-cycle/DO/WORK-064"
+        mock_result.returncode = 0
+        mocker.patch.object(subprocess, "run", return_value=mock_result)
+
+        # AskUserQuestion is blocked in DO state
+        hook_data = {"tool_name": "AskUserQuestion", "tool_input": {}}
+        result = handle(hook_data)
+
+        assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
+        assert "permissionDecisionReason" in result["hookSpecificOutput"]
+        assert "additionalContext" in result["hookSpecificOutput"]
+
+    def test_graceful_degradation_on_governance_failure(self, mocker):
+        """WORK-064: When subprocess fails, default to EXPLORE state (fail-permissive)."""
+        import subprocess
+        from hooks.pre_tool_use import handle
+
+        # Make subprocess.run raise exception - GovernanceLayer.get_activity_state()
+        # catches this and returns "EXPLORE" as default (fail-permissive)
+        mocker.patch.object(subprocess, "run", side_effect=Exception("Simulated failure"))
+
+        hook_data = {"tool_name": "Read", "tool_input": {}}
+        result = handle(hook_data)
+
+        # Should default to EXPLORE state and still provide context
+        assert result is not None
+        assert "hookSpecificOutput" in result
+        assert "[STATE: EXPLORE]" in result["hookSpecificOutput"]["additionalContext"]
 
 
 class TestMemoryRefsAutoLink:

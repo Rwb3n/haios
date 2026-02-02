@@ -1,10 +1,12 @@
 ---
 name: test-runner
-description: Execute pytest in isolated context. Returns structured pass/fail summary. Use during CHECK phase.
+description: Execute pytest in isolated context. Returns structured pass/fail summary.
+  Use during CHECK phase.
 tools: Bash, Read
+model: haiku
+generated: '2026-02-01'
+last_updated: '2026-02-01T22:47:01'
 ---
-# generated: 2025-12-19
-# System Auto: last updated on: 2025-12-19 22:58:40
 # Test Runner
 
 ## Requirement Level

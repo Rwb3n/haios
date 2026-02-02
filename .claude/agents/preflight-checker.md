@@ -3,8 +3,9 @@ name: preflight-checker
 description: Validate plan readiness and enforce DO phase guardrails. Use before starting
   implementation.
 tools: Read, Glob
+model: haiku
 generated: '2025-12-25'
-last_updated: '2025-12-28T10:45:45'
+last_updated: '2026-02-01T22:46:57'
 ---
 # Preflight Checker
 

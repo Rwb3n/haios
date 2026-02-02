@@ -1,5 +1,5 @@
 # generated: 2026-01-24
-# System Auto: last updated on: 2026-01-30T21:34:41
+# System Auto: last updated on: 2026-02-02T11:54:28
 # L4: Functional Requirements
 
 Level: L4
@@ -40,6 +40,8 @@ Derived from: L3 principles + agent_user_requirements.md
 | REQ-CRITIQUE-002 | Critique | DO entry MUST require critique verdict = PROCEED | L3.2, L3.15 | GovernanceLayer |
 | REQ-TEMPLATE-001 | Templates | Phase templates MUST have input/output contracts | L3.2, L3.7 | Template validation |
 | REQ-TEMPLATE-002 | Templates | Templates MUST be fractured by phase (~30-50 lines each) | L3.6 | Template structure |
+| REQ-DOD-001 | DoD | Chapter closure MUST verify all work complete + implements_decisions | L3.7, L3.18 | close-chapter-ceremony |
+| REQ-DOD-002 | DoD | Arc closure MUST verify all chapters complete + no orphan decisions | L3.7, L3.18 | close-arc-ceremony |
 
 *Registry grows as requirements are enumerated from L3 principles.*
 
@@ -145,6 +147,22 @@ Derived from: L3 principles + agent_user_requirements.md
 - Input contract is gate for phase entry
 - Output contract is gate for phase exit
 - Governance through activities layer, not template checkboxes
+
+---
+
+## DoD Requirements (E2.4 - Session 285)
+
+*Derived from L3.7 (Traceability) + L3.18 (DoD requirement)*
+
+| ID | Requirement | Derives From | Acceptance Test |
+|----|-------------|--------------|-----------------|
+| **REQ-DOD-001** | Chapter closure MUST verify all work items complete + implements_decisions match claimed decisions | L3.7, L3.18 | close-chapter-ceremony blocks on incomplete work or unimplemented decisions |
+| **REQ-DOD-002** | Arc closure MUST verify all chapters complete + no epoch decisions unassigned to arc | L3.7, L3.18 | close-arc-ceremony blocks on incomplete chapters or orphan decisions |
+
+**Invariants:**
+- DoD cascade: Work -> Chapter -> Arc -> Epoch
+- Lower level must complete before higher level can close
+- Orphan decisions (assigned but not implemented) block closure
 
 ---
 

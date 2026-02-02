@@ -1,5 +1,5 @@
 # generated: 2025-09-23
-# System Auto: last updated on: 2026-02-01T21:28:58
+# System Auto: last updated on: 2026-02-01T22:48:52
 # Code Implementation & Engineering Guide
 
 ## RFC 2119 Keywords
@@ -159,6 +159,16 @@ Note: All hooks routed via `hook_dispatcher.py`. PowerShell archived to `hooks/a
 | PowerShell blocking | `.claude/haios/config/haios.yaml` (toggles.block_powershell) | Set `block_powershell: false` |
 | Path governance | Hardcoded | Use `/new-*` commands |
 
+### PreToolUse additionalContext (WORK-064)
+
+Every tool invocation receives `additionalContext` showing current governance state:
+
+```
+[STATE: DO] Blocked: user-query, web-fetch, web-search, memory-search, memory-store
+```
+
+This provides visibility into blocked primitives BEFORE tool selection, reducing wasted attempts.
+
 ### Routing Thresholds (E2-222)
 System health thresholds configured in `.claude/haios/config/haios.yaml` (thresholds section):
 - `observation_pending.max_count`: Trigger triage if pending observations > value (default: 10)
@@ -214,14 +224,21 @@ L4 Requirement → Epoch → Arc → Chapter → Work Item
 | `audit` | Utility | Find gaps, drift, stale items |
 
 ### Agents (`.claude/agents/`)
-| Agent | Requirement | Purpose |
-|-------|-------------|---------|
-| `preflight-checker` | **REQUIRED** | Plan readiness + >3 file gate (E2-186) |
-| `validation-agent` | Optional | Unbiased CHECK phase validation |
-| `investigation-agent` | Optional | EXPLORE phase evidence gathering |
-| `schema-verifier` | **REQUIRED** | Isolated schema queries |
-| `test-runner` | Optional | Isolated test execution |
-| `why-capturer` | Optional | Automated learning extraction |
+| Agent | Model | Requirement | Purpose |
+|-------|-------|-------------|---------|
+| `critique-agent` | opus | Optional | Pre-implementation assumption surfacing |
+| `investigation-agent` | opus | Optional | EXPLORE phase evidence gathering |
+| `validation-agent` | sonnet | Optional | Unbiased CHECK phase validation |
+| `anti-pattern-checker` | sonnet | Optional | L1 anti-pattern verification |
+| `preflight-checker` | haiku | **REQUIRED** | Plan readiness + >3 file gate (E2-186) |
+| `schema-verifier` | haiku | **REQUIRED** | Isolated schema queries |
+| `test-runner` | haiku | Optional | Isolated test execution |
+| `why-capturer` | haiku | Optional | Automated learning extraction |
+
+**Model Selection Principle (WORK-068):** Match model to cognitive requirements:
+- **opus**: Open-ended/critical reasoning (critique, investigation)
+- **sonnet**: Structured reasoning with judgment (validation, anti-pattern)
+- **haiku**: Mechanical/fast tasks (preflight, schema, tests)
 
 ### CC Task System (DO Phase - WORK-059, Session 274)
 

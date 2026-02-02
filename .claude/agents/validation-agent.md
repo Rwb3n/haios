@@ -3,8 +3,10 @@ name: validation-agent
 description: Unbiased CHECK phase validation. Runs tests, demos features, checks DoD
   criteria in isolated context.
 tools: Bash, Read, Glob
+model: sonnet
+context: fork
 generated: '2025-12-25'
-last_updated: '2025-12-25T18:08:05'
+last_updated: '2026-02-01T22:46:46'
 ---
 # Validation Agent
 

@@ -1,10 +1,12 @@
 ---
 name: schema-verifier
-description: Verify database schema and run read-only queries. Returns table/column info in isolated context. Use before ANY database operation.
+description: Verify database schema and run read-only queries. Returns table/column
+  info in isolated context. Use before ANY database operation.
 tools: Read, mcp__haios-memory__schema_info, mcp__haios-memory__db_query
+model: haiku
+generated: '2026-02-01'
+last_updated: '2026-02-01T22:46:59'
 ---
-# generated: 2025-12-09
-# System Auto: last updated on: 2025-12-10 18:37:45
 # Schema Verifier
 
 ## Requirement Level

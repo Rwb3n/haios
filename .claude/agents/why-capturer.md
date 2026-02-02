@@ -1,10 +1,12 @@
 ---
 name: why-capturer
-description: Extract and store learnings from completed work. Use during DONE phase to capture WHY per ADR-033.
+description: Extract and store learnings from completed work. Use during DONE phase
+  to capture WHY per ADR-033.
 tools: Read, mcp__haios-memory__ingester_ingest
+model: haiku
+generated: '2026-02-01'
+last_updated: '2026-02-01T22:47:04'
 ---
-# generated: 2025-12-19
-# System Auto: last updated on: 2025-12-19 23:17:43
 # WHY Capturer
 
 Extracts learnings from completed work and stores to memory.

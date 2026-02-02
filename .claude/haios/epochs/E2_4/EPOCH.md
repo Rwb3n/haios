@@ -1,5 +1,5 @@
 # generated: 2026-01-30
-# System Auto: last updated on: 2026-02-01T21:05:15
+# System Auto: last updated on: 2026-02-02T08:58:24
 # Epoch 2.4: The Activity Layer
 
 ## L4 Object Definition
@@ -141,6 +141,32 @@ Work items have four orthogonal state dimensions:
 
 ---
 
+## Session 279 Additions
+
+### Decision 8: Multi-Level Governance (WORK-055)
+
+assigned_to:
+  - arc: flow
+    chapters: [CH-009, CH-010, CH-011]
+
+Governance must exist at branch nodes (chapters, arcs, epochs), not just leaf nodes (work items).
+
+**Gap Identified:**
+1. Epoch decisions have no traceability to chapters (no `assigned_to` field)
+2. REQ-TRACE-005 traces hierarchy but not decision coverage
+3. DoD exists only at work item level (no Chapter/Arc/Epoch DoD)
+
+**Patterns:**
+1. **Decision Traceability Schema:** Add `assigned_to` field to decisions, `implements_decisions` to chapters
+2. **Multi-Level DoD Cascade:** Work → Chapter → Arc → Epoch DoD verification
+3. **Pre-Decomposition Review Gate:** Arc-level critique before chapter work begins
+
+**Implementation:** WORK-069, WORK-070, WORK-071
+
+**Memory Refs:** 83018-83029
+
+---
+
 ## Exit Criteria
 
 - [ ] Governed activities matrix implemented
@@ -152,10 +178,26 @@ Work items have four orthogonal state dimensions:
 
 ---
 
+## Session 280: Full System Audit (WORK-072)
+
+**Audit File:** `.claude/haios/epochs/E2_4/SYSTEM-AUDIT.md`
+
+Key findings:
+- 78% ceremonies implemented (26 total: 12 cycle skills, 2 bridges, 4 utilities, 8 agents)
+- 71% work items orphaned (96/135 lack chapter assignment)
+- 95% items stuck at backlog node (confirms WORK-065 finding)
+- ActivityMatrix: 76 rules across 21 primitives
+- Memory: 82,860 concepts, 96.8% embedding coverage
+- 14 failing tests (documentation drift)
+
+---
+
 ## Memory Refs
 
 Session 265 L4 decisions: 82688-82744
 Session 276 work item state model: 82952-82954, 82963-82973
+Session 279 multi-level governance: 83018-83029
+Session 280 system audit: 83050-83058
 
 ---
 

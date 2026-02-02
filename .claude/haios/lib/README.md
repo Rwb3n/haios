@@ -1,5 +1,5 @@
 # generated: 2026-01-21
-# System Auto: last updated on: 2026-01-24T20:49:42
+# System Auto: last updated on: 2026-02-02T08:59:57
 # HAIOS Library
 
 Portable plugin utilities for the HAIOS system.
@@ -97,6 +97,7 @@ context:
 | `extraction.py` | Content extraction (requires haios_etl) |
 | `error_capture.py` | Error tracking |
 | `audit.py` | System audit operations |
+| `audit_decision_coverage.py` | Decision-to-chapter traceability validation (WORK-069) |
 | `errors.py` | Error definitions |
 | `cli.py` | CLI utilities (requires haios_etl) |
 | `mcp_server.py` | MCP server utilities (requires haios_etl) |

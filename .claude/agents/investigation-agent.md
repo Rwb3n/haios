@@ -1,9 +1,12 @@
 ---
 name: investigation-agent
-description: Phase-aware research agent for HAIOS investigations. Use during investigation-cycle to conduct hypothesis testing, evidence gathering, and synthesis. Queries memory first, understands current phase (HYPOTHESIZE/EXPLORE/CONCLUDE).
+description: Phase-aware research agent for HAIOS investigations. Use during investigation-cycle
+  to conduct hypothesis testing, evidence gathering, and synthesis. Queries memory
+  first, understands current phase (HYPOTHESIZE/EXPLORE/CONCLUDE).
 tools: Read, Grep, Glob, WebSearch, WebFetch, mcp__haios-memory__memory_search_with_experience
+model: opus
 generated: 2025-12-22
-last_updated: 2025-12-23T13:46:33
+last_updated: '2026-02-01T22:46:44'
 ---
 # Investigation Agent
 

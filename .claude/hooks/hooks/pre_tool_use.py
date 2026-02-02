@@ -1,5 +1,5 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-02-01T14:53:28
+# System Auto: last updated on: 2026-02-01T22:10:37
 """
 PreToolUse Hook Handler (E2-085).
 
@@ -69,9 +69,13 @@ def handle(hook_data: dict) -> Optional[dict]:
     tool_input = hook_data.get("tool_input", {})
 
     # E2.4 CH-004: State-aware governed activity check (checked FIRST)
-    result = _check_governed_activity(tool_name, tool_input)
-    if result:
-        return result
+    # WORK-064: Now always returns context, but only block if denied
+    activity_result = _check_governed_activity(tool_name, tool_input)
+    if activity_result:
+        # If blocked by activity governance, return immediately
+        if activity_result.get("hookSpecificOutput", {}).get("permissionDecision") == "deny":
+            return activity_result
+        # Otherwise continue checking other governance rules
 
     # Check Bash for SQL and PowerShell
     if tool_name == "Bash":
@@ -92,7 +96,8 @@ def handle(hook_data: dict) -> Optional[dict]:
         if result:
             return result
 
-        return None  # Allow other bash commands
+        # WORK-064: Return activity context if no other governance blocked
+        return activity_result
 
     # Check Write/Edit for governance
     if tool_name in ("Write", "Edit"):
@@ -127,7 +132,8 @@ def handle(hook_data: dict) -> Optional[dict]:
         if result:
             return result
 
-    return None  # Allow all other tools
+    # WORK-064: Return activity context if no other governance blocked
+    return activity_result
 
 
 def _check_governed_activity(tool_name: str, tool_input: dict) -> Optional[dict]:
@@ -167,18 +173,19 @@ def _check_governed_activity(tool_name: str, tool_input: dict) -> Optional[dict]
             skill_name = tool_input.get("skill", "")
             skill_result = layer._check_skill_restriction(skill_name, state)
             if skill_result is not None and not skill_result.allowed:
-                return _deny(skill_result.reason)
+                return _deny_with_context(skill_result.reason, state, layer)
 
         # 5. Check activity
         result = layer.check_activity(primitive, state, context)
 
+        # WORK-064: Always return context for state visibility
         if not result.allowed:
-            return _deny(result.reason)
+            return _deny_with_context(result.reason, state, layer)
 
         if result.reason and result.reason != "Activity allowed":
-            return _allow_with_warning(result.reason)
+            return _allow_with_context(result.reason, state, layer)
 
-        return None  # Allow silently
+        return _allow_with_context(None, state, layer)  # Always provide context
 
     except Exception:
         # Fail-permissive on any error
@@ -451,6 +458,96 @@ def _allow_with_warning(reason: str) -> dict:
             "hookEventName": "PreToolUse",
             "permissionDecision": "allow",
             "permissionDecisionReason": reason
+        }
+    }
+
+
+# =============================================================================
+# WORK-064: additionalContext helpers for state visibility
+# =============================================================================
+
+
+def _build_additional_context(state: str, layer) -> str:
+    """
+    Build additionalContext string with state and blocked primitives.
+
+    WORK-064: Provides agent visibility into governance constraints BEFORE tool execution.
+
+    Args:
+        state: Current activity state (EXPLORE, DESIGN, PLAN, DO, CHECK, DONE)
+        layer: GovernanceLayer instance
+
+    Returns:
+        Context string like "[STATE: DO] Blocked: user-query, web-fetch, web-search"
+    """
+    try:
+        matrix = layer._load_activity_matrix()
+        rules = matrix.get("rules", {})
+
+        # Find blocked primitives for this state
+        blocked = []
+        for primitive, state_rules in rules.items():
+            if primitive.startswith("_"):
+                continue
+            rule = state_rules.get(state, state_rules.get("_all_states", {}))
+            if rule.get("action") == "block":
+                blocked.append(primitive)
+
+        blocked_str = ", ".join(sorted(blocked)) if blocked else "none"
+        return f"[STATE: {state}] Blocked: {blocked_str}"
+
+    except Exception:
+        return f"[STATE: {state}]"
+
+
+def _allow_with_context(reason: Optional[str], state: str, layer) -> dict:
+    """
+    Return allow response with additionalContext.
+
+    WORK-064: Always provides state visibility, even when tool is allowed.
+
+    Args:
+        reason: Optional warning reason (or None for silent allow)
+        state: Current activity state
+        layer: GovernanceLayer instance
+
+    Returns:
+        hookSpecificOutput with permissionDecision=allow and additionalContext
+    """
+    context = _build_additional_context(state, layer)
+    result = {
+        "hookSpecificOutput": {
+            "hookEventName": "PreToolUse",
+            "permissionDecision": "allow",
+            "additionalContext": context,
+        }
+    }
+    if reason:
+        result["hookSpecificOutput"]["permissionDecisionReason"] = reason
+    return result
+
+
+def _deny_with_context(reason: str, state: str, layer) -> dict:
+    """
+    Return deny response with additionalContext.
+
+    WORK-064: Provides state visibility alongside block reason.
+
+    Args:
+        reason: Block reason message
+        state: Current activity state
+        layer: GovernanceLayer instance
+
+    Returns:
+        hookSpecificOutput with permissionDecision=deny and additionalContext
+    """
+    context = _build_additional_context(state, layer)
+    return {
+        "hookSpecificOutput": {
+            "hookEventName": "PreToolUse",
+            "permissionDecision": "deny",
+            "permissionDecisionReason": reason,
+            "additionalContext": context,
         }
     }
 

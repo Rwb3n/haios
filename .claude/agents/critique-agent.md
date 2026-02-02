@@ -3,9 +3,10 @@ name: critique-agent
 description: Pre-implementation assumption surfacing. Framework loaded from haios.yaml
   config.
 tools: Read, Glob
+model: opus
 color: yellow
 generated: '2026-01-25'
-last_updated: '2026-01-25T01:25:46'
+last_updated: '2026-02-01T22:46:39'
 ---
 # Critique Agent
 

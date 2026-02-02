@@ -3,8 +3,9 @@ name: anti-pattern-checker
 description: Verify claims against 6 L1 anti-patterns before acceptance. Use for epoch,
   milestone, or major completion claims.
 tools: Read, Grep, Glob
+model: sonnet
 generated: '2025-12-29'
-last_updated: '2025-12-29T11:30:20'
+last_updated: '2026-02-01T22:46:49'
 ---
 # Anti-Pattern Checker Agent
 

@@ -1,5 +1,5 @@
 # generated: 2026-01-30
-# System Auto: last updated on: 2026-02-01T23:34:42
+# System Auto: last updated on: 2026-02-02T08:59:05
 # Arc: Flow
 
 ## Arc Definition
@@ -62,7 +62,7 @@ DESIGN/PLAN → critique-invoke → critique-read → REVISE?
 | CH-006 | [ChapterFlow](CH-006-chapter-flow.md) | Planned | Bulk spawn, chapter scaffold, implementation spawn |
 | CH-007 | [BatchOperations](CH-007-batch-operations.md) | Planned | Ceremony for bulk create without cycle trigger |
 | CH-008 | [EpochTransition](CH-008-epoch-transition.md) | Planned | Ceremony for epoch transitions (/new-epoch) |
-| CH-009 | DecisionTraceability | Planned | Ceremony for decision-to-chapter assignment (WORK-069) |
+| CH-009 | [DecisionTraceability](CH-009-DecisionTraceability.md) | Active | Ceremony for decision-to-chapter assignment (WORK-069) |
 | CH-010 | MultiLevelDoD | Planned | Ceremonies for chapter/arc/epoch DoD cascade (WORK-070) |
 | CH-011 | PreDecomposition | Planned | Ceremony for arc decomposition review (WORK-071) |
 
