@@ -1,5 +1,5 @@
 # generated: 2026-02-02
-# System Auto: last updated on: 2026-02-02T13:21:22
+# System Auto: last updated on: 2026-02-02T15:41:55
 # Tests for WORK-070: Multi-Level DoD Cascade Design
 # TDD: These tests written BEFORE implementation
 
@@ -136,4 +136,39 @@ class TestCloseArcCeremony:
         assert "description:" in content
 
 
-# Note: Tests for close-epoch-ceremony are in WORK-078
+class TestCloseEpochCeremony:
+    """Test close-epoch-ceremony skill exists with required structure (WORK-078)"""
+
+    @pytest.fixture
+    def skill_path(self):
+        return Path(".claude/skills/close-epoch-ceremony/SKILL.md")
+
+    def test_close_epoch_ceremony_exists(self, skill_path):
+        """close-epoch-ceremony skill should exist"""
+        assert skill_path.exists(), f"Skill file not found: {skill_path}"
+
+    def test_close_epoch_ceremony_has_cycle(self, skill_path):
+        """Skill should have VALIDATE->ARCHIVE->TRANSITION cycle"""
+        content = skill_path.read_text()
+        assert "## The Cycle" in content
+        assert "VALIDATE" in content
+        assert "ARCHIVE" in content
+        assert "TRANSITION" in content
+
+    def test_close_epoch_ceremony_has_archive_work_items(self, skill_path):
+        """Skill should document archiving work items at epoch boundary"""
+        content = skill_path.read_text()
+        assert "archive" in content.lower()
+        assert "work item" in content.lower() or "work items" in content.lower()
+
+    def test_close_epoch_ceremony_has_haios_yaml_update(self, skill_path):
+        """Skill should document haios.yaml update for epoch transition"""
+        content = skill_path.read_text()
+        assert "haios.yaml" in content
+
+    def test_close_epoch_ceremony_has_frontmatter(self, skill_path):
+        """Skill should have proper frontmatter with name and description"""
+        content = skill_path.read_text()
+        assert content.startswith("---")
+        assert "name: close-epoch-ceremony" in content
+        assert "description:" in content

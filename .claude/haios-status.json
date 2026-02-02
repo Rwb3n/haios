@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-02T14:34:22",
+    "generated": "2026-02-02T15:43:55",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 999,
-        "current_session": 998,
+        "prior_session": 998,
+        "current_session": 288,
         "prior_date": "2026-02-02",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 82984,
-        "entities": 9486,
+        "concepts": 82987,
+        "entities": 9488,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -66,6 +66,7 @@
             "checkpoint-cycle",
             "close-arc-ceremony",
             "close-chapter-ceremony",
+            "close-epoch-ceremony",
             "close-work-cycle",
             "design-review-validation",
             "dod-validation-cycle",
@@ -3447,6 +3448,15 @@
             "status": null,
             "date": "2026-02-02",
             "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-02-02-16-SESSION-288-work-079-checkpoint-scaffold-friction-fixed.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-02",
+            "last_updated": "2026-02-02T14:35:11",
             "backlog_id": null,
             "spawned_by": null
         },
@@ -6989,7 +6999,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-03-SESSION-94-e2-120-phase-3-complete-and-plans-e2-125-e2-126.md",
             "last_updated": "2025-12-21T14:46:46",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2025-12-21-04-SESSION-94-m5-progress-e2-126-complete-distribution-discussion.md",
@@ -7119,7 +7129,7 @@
         {
             "path": "docs/checkpoints/2025-12-25-03-SESSION-116-inv-033-e2-177-e2-176-gate-contract-formalization.md",
             "last_updated": "2025-12-25T14:45:17",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/checkpoints/2025-12-25-04-SESSION-117-m8-skillarch-4-skills-implemented.md",
@@ -7149,7 +7159,7 @@
         {
             "path": "docs/checkpoints/2025-12-26-02-SESSION-122-inv-037-038-039-l1-architecture-and-information-architecture-audit.md",
             "last_updated": "2025-12-26T14:36:59",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/checkpoints/2025-12-26-03-SESSION-123-m7d-quick-wins-and-work-item-cleanup.md",
@@ -7209,7 +7219,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-03-SESSION-134-observation-gate-complete-and-triage-design.md",
             "last_updated": "2025-12-28T15:16:53",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2025-12-28-04-SESSION-135-e2-218-observation-triage-and-e2-216-analysis.md",
@@ -7324,6 +7334,16 @@
         {
             "path": "docs/checkpoints/2026-01-03-02-SESSION-158-inv-053-architecture-review-and-l5-l7-formalization.md",
             "last_updated": "2026-01-03T14:24:41",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/checkpoints/2026-01-03-03-SESSION-159-e2-246-config-consolidation-complete.md",
+            "last_updated": "2026-01-03T14:50:44",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/checkpoints/2026-01-03-04-SESSION-160-e2-246-e2-247-e2-240-chariot-modules-complete.md",
+            "last_updated": "2026-01-03T15:34:42",
             "days_stale": 30
         },
         {
@@ -7529,7 +7549,7 @@
         {
             "path": "docs/plans/PLAN-E2-126-frontmatter-timestamp-migration.md",
             "last_updated": "2025-12-21T14:43:01",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/plans/PLAN-E2-130-error-capture-rebuild.md",
@@ -7619,7 +7639,7 @@
         {
             "path": "docs/plans/PLAN-E2-176-document-gate-contract-pattern.md",
             "last_updated": "2025-12-25T14:38:27",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-177-chain-new-plan-to-implementation-cycle.md",
@@ -7634,7 +7654,7 @@
         {
             "path": "docs/plans/PLAN-E2-181-close-work-cycle-skill.md",
             "last_updated": "2025-12-25T15:05:42",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/plans/PLAN-E2-182-plan-authoring-cycle-skill.md",
@@ -7984,12 +8004,12 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-040a-plan-tree-missing-titles-bug.md",
             "last_updated": "2025-12-26T15:20:08",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-041-autonomous-session-loop-gap-analysis.md",
             "last_updated": "2025-12-27T14:43:49",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-042-synthesis-skill-architecture.md",
@@ -8109,7 +8129,7 @@
         {
             "path": "docs/work/archive/WORK-E2-029-new-backlog-item-command.md",
             "last_updated": "2025-12-27T15:25:53",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-035-checkpoint-lifecycle-enhancement.md",
@@ -8119,12 +8139,12 @@
         {
             "path": "docs/work/archive/WORK-E2-069-roadmap-and-milestones-structure.md",
             "last_updated": "2025-12-27T15:24:54",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-071-milestone-progress-visualization.md",
             "last_updated": "2025-12-27T15:25:14",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-E2-081-heartbeat-scheduler-rhythm.md",
@@ -8134,7 +8154,7 @@
         {
             "path": "docs/work/archive/WORK-E2-088-epistemic-state-slim-down.md",
             "last_updated": "2025-12-26T15:34:59",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-E2-089-fix-backlogids-array-parsing-bug.md",
@@ -8199,7 +8219,7 @@
         {
             "path": "docs/work/archive/WORK-E2-134-session-number-from-events-log.md",
             "last_updated": "2025-12-26T15:34:57",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-E2-135-close-command-enforcement.md",
@@ -8254,7 +8274,7 @@
         {
             "path": "docs/work/archive/WORK-E2-166-close-git-commit-step.md",
             "last_updated": "2025-12-26T15:34:58",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-E2-167-git-just-recipes.md",
@@ -8294,7 +8314,7 @@
         {
             "path": "docs/work/archive/WORK-E2-176-document-gate-contract-pattern.md",
             "last_updated": "2025-12-25T14:39:01",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/work/archive/WORK-E2-177-chain-new-plan-to-implementation-cycle.md",
@@ -8309,7 +8329,7 @@
         {
             "path": "docs/work/archive/WORK-E2-181-close-work-cycle-skill.md",
             "last_updated": "2025-12-25T15:06:25",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/work/archive/WORK-E2-182-plan-authoring-cycle-skill.md",
@@ -8379,12 +8399,12 @@
         {
             "path": "docs/work/archive/WORK-E2-203-reconcile-anti-pattern-duplication.md",
             "last_updated": "2025-12-26T14:51:14",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-E2-204-add-l1l2l3-context-level-definitions.md",
             "last_updated": "2025-12-26T14:56:36",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-E2-205-just-recipe-for-latest-checkpoint-lookup.md",
@@ -8464,12 +8484,12 @@
         {
             "path": "docs/work/archive/WORK-INV-040-plan-tree-missing-titles-bug.md",
             "last_updated": "2025-12-26T15:20:19",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/work/archive/WORK-INV-041-autonomous-session-loop-gap-analysis.md",
             "last_updated": "2025-12-27T14:39:47",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/work/archive/WORK-INV-043-work-item-directory-architecture.md",
@@ -8483,9 +8503,9 @@
         }
     ],
     "workspace": {
-        "total_files": 539,
+        "total_files": 540,
         "by_template": {
-            "checkpoint": 290,
+            "checkpoint": 291,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8497,7 +8517,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 126,
+            "unknown": 127,
             "draft": 2,
             "approved": 6,
             "ready": 1,
@@ -8512,7 +8532,7 @@
             "duplicate": 1,
             "deferred": 1
         },
-        "stale_count": 379
+        "stale_count": 381
     },
     "alignment": {
         "aligned": [
