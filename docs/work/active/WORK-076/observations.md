@@ -3,7 +3,7 @@ template: observations
 work_id: WORK-076
 captured_session: '286'
 generated: '2026-02-02'
-last_updated: '2026-02-02T12:50:56'
+last_updated: '2026-02-02T13:04:50'
 ---
 # Observations: WORK-076
 
@@ -18,6 +18,11 @@ last_updated: '2026-02-02T12:50:56'
 **No programmatic chapter DoD validator.** The close-chapter-ceremony skill documents a manual workflow (read files, grep, run audit), but there's no Python function like `validate_chapter_dod(chapter_id)` that could be called from a hook or automated. This is intentional for now (ceremonies are agent-guided), but could become friction if we want to enforce chapter closure before arc closure programmatically.
 
 **The audit-decision-coverage script lacks chapter-specific filtering.** As surfaced by critique A1, the audit runs at epoch scope. The ceremony needs to parse full output and filter. A `--chapter` flag would make this cleaner.
+
+**CHAIN phase stops at checkpoint ceremony (WORK-079 evidence).** Two stops occurred during checkpoint-cycle:
+1. `just scaffold-checkpoint 286` failed - recipe doesn't exist (should be `just scaffold checkpoint`)
+2. Attempted Python fallback `scaffold_checkpoint()` - function doesn't exist in scaffold.py
+These are exactly the CHAIN phase boundary stops that WORK-079 is investigating. The agent stopped after hitting errors at ceremony/transition steps, not during core DO phase work. Relevant to hypothesis: error recovery paths at workflow boundaries trigger stops.
 
 ## What should we remember?
 

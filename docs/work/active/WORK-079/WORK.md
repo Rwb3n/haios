@@ -27,11 +27,17 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 83156
+- 83157
+- 83158
+- 83159
+- 83160
+- 83161
 extensions: {}
 version: '2.0'
 generated: 2026-02-02
-last_updated: '2026-02-02T12:28:24'
+last_updated: '2026-02-02T13:05:22'
 ---
 # WORK-079: CHAIN Phase Stop Pattern Investigation
 
@@ -66,6 +72,13 @@ last_updated: '2026-02-02T12:28:24'
 ---
 
 ## History
+
+### 2026-02-02 - Additional Evidence (Session 286)
+- Two stops during WORK-076 CHAIN phase (checkpoint-cycle):
+  1. `just scaffold-checkpoint 286` failed (recipe doesn't exist)
+  2. Python fallback `scaffold_checkpoint()` failed (function doesn't exist)
+- Pattern confirmed: stops at error recovery paths during ceremony/transition steps
+- Memory refs 83156-83161 added with evidence
 
 ### 2026-02-02 - Created (Session 285)
 - Observed pattern: stops at CHAIN phases during WORK-070 closure
