@@ -3,13 +3,13 @@ template: work_item
 id: WORK-070
 title: Multi-Level DoD Cascade Design
 type: design
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-055
 chapter: flow/CH-010
 arc: flow
-closed: null
+closed: '2026-02-02'
 priority: high
 effort: medium
 traces_to:
@@ -34,10 +34,14 @@ memory_refs:
 - 83021
 - 83022
 - 83023
+- 83137
+- 83138
+- 83139
+- 83142
 extensions: {}
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-02T11:45:48'
+last_updated: '2026-02-02T11:58:41'
 ---
 # WORK-070: Multi-Level DoD Cascade Design
 
@@ -87,9 +91,9 @@ Each level gets entry/exit ceremonies with DoD criteria.
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] **L4 Requirements** - Create REQ-DOD-001, REQ-DOD-002 in functional_requirements.md
-- [ ] **CH-010 Chapter File** - Document the multi-level DoD ceremonies
-- [ ] **ARC.md Update** - Add CH-010 to Chapters table
+- [x] **L4 Requirements** - Create REQ-DOD-001, REQ-DOD-002 in functional_requirements.md
+- [x] **CH-010 Chapter File** - Document the multi-level DoD ceremonies
+- [x] **ARC.md Update** - Add CH-010 to Chapters table (pre-existing, verified)
 
 **Decomposed to separate work items (Session 284):**
 - WORK-076: close-chapter-ceremony skill
@@ -108,6 +112,14 @@ Each level gets entry/exit ceremonies with DoD criteria.
 ---
 
 ## History
+
+### 2026-02-02 - Implemented (Session 285)
+- L4 requirements REQ-DOD-001, REQ-DOD-002 created
+- CH-010-MultiLevelDoD.md chapter file created
+- ARC.md already had CH-010 (verified)
+- 6 tests pass
+- Ceremony skills remain in decomposed work items (WORK-076/077/078)
+- Memory refs: 83137-83139
 
 ### 2026-02-01 - Created (Session 279)
 - Spawned from WORK-055
