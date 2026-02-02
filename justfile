@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-02-01T14:47:28
+# System Auto: last updated on: 2026-02-02T08:59:26
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -399,3 +399,7 @@ audit-gaps:
 # Audit: Find investigations older than 10 sessions
 audit-stale:
     @python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from audit import audit_stale; [print(i) for i in audit_stale()]"
+
+# Audit: Validate decision-to-chapter traceability (WORK-069)
+audit-decision-coverage:
+    @python .claude/haios/lib/audit_decision_coverage.py
