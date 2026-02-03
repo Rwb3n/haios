@@ -1,37 +1,38 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-02T17:46:26
+# System Auto: last updated on: 2026-02-03T00:32:26
 # HAIOS System Configuration
 # Consolidates: governance-toggles.yaml, routing-thresholds.yaml
-# Version: 2.4 (Session 265 - The Activity Layer)
+# Version: 2.5 (Session 295 - Independent Lifecycles)
 
 # Plugin manifest (for portable plugin spec)
 manifest:
   name: haios
-  version: "2.4"
-  description: "Hybrid AI Operating System - Governed Activities Framework"
+  version: "2.5"
+  description: "Hybrid AI Operating System - Independent Lifecycles"
 
 # Current epoch context (ADR-042: Arc > Chapter in hierarchy)
 epoch:
-  current: E2.4
-  subversion: "2.4"  # The Activity Layer
-  epoch_file: ".claude/haios/epochs/E2_4/EPOCH.md"
-  architecture_dir: ".claude/haios/epochs/E2_4/architecture"
-  arcs_dir: ".claude/haios/epochs/E2_4/arcs"
-  observations_dir: ".claude/haios/epochs/E2_4/observations"
+  current: E2.5
+  subversion: "2.5"  # Independent Lifecycles
+  epoch_file: ".claude/haios/epochs/E2_5/EPOCH.md"
+  architecture_dir: ".claude/haios/epochs/E2_5/architecture"
+  arcs_dir: ".claude/haios/epochs/E2_5/arcs"
+  observations_dir: ".claude/haios/epochs/E2_5/observations"
   # Prior epoch (for reference)
-  prior_epoch: ".claude/haios/epochs/E2_3/EPOCH.md"
+  prior_epoch: ".claude/haios/epochs/E2_4/EPOCH.md"
   # Foundational architecture (MUST load) - carries forward
   foundational:
     - S20-pressure-dynamics.md
     - S21-cognitive-notation.md
     - S22-skill-patterns.md
-  # Active arcs (E2.4 - carried + new)
+    - S27-breath-model.md  # NEW: E2.4 discovery, foundational for E2.5
+  # Active arcs (E2.5 - implementation of E2.4 designs)
   active_arcs:
-    - activities      # NEW: Governed activities per state
-    - templates       # NEW: Fractured phase templates
-    - flow            # NEW: Universal flow with gates
-    - configuration   # CARRIED: Loader system
-    - workuniversal   # CARRIED: Add mode field
+    - lifecycles      # NEW: CycleRunner pure function semantics
+    - queue           # NEW: Orthogonal queue tracking
+    - ceremonies      # NEW: Side-effect boundary implementations
+    - feedback        # NEW: Review ceremonies
+    - assets          # NEW: Typed, versioned asset production
 
 # Governance toggles (from governance-toggles.yaml)
 toggles:
