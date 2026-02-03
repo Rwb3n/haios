@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-30T21:33:48
+# System Auto: last updated on: 2026-02-02T23:14:41
 # L4: Technical Requirements
 
 Derived from agent_user_requirements.md
@@ -51,23 +51,37 @@ The same primitive (Read, Write, etc.) has different governance per state.
 
 ---
 
-## Universal Flow (E2.4 - Session 265)
+## Independent Lifecycles (E2.5 - Session 294)
 
-All implementation work follows:
+*Replaces "Universal Flow" - lifecycles are independent, not chained.*
+
+**Lifecycles as Pure Functions:**
+
+| Lifecycle | Signature | Phases | Output |
+|-----------|-----------|--------|--------|
+| Investigation | `Question → Findings` | EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE | Findings document |
+| Design | `Requirements → Specification` | EXPLORE → SPECIFY → CRITIQUE → COMPLETE | Specification document |
+| Implementation | `Specification → Artifact` | PLAN → DO → CHECK → DONE | Working artifact |
+| Validation | `Artifact × Spec → Verdict` | VERIFY → JUDGE → REPORT | Pass/fail verdict |
+
+**S27 Breath Model (Session 292):**
 
 ```
-EXPLORE → DESIGN → PLAN → DO → CHECK → DONE
+[inhale: gather]  →  [exhale: produce]  →  [pause: safe stop]
 ```
 
-**Investigation variant:**
-```
-EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE
-```
+Each lifecycle follows this rhythm. Pause points are valid completion states.
 
-**Critique as hard gate:**
-- DESIGN → PLAN: Critique verdict must = PROCEED
-- PLAN → DO: Critique verdict must = PROCEED
-- Revise until no blocking critiques
+**Chaining is Caller Choice:**
+- Investigation MAY spawn Design (or close)
+- Design MAY spawn Implementation (or close - batch design period)
+- Implementation MAY spawn Validation (or close)
+- No implicit side-effects forcing progression
+
+**Critique within Design lifecycle:**
+- SPECIFY → CRITIQUE: Hard gate
+- Revise until PROCEED verdict
+- Critique is internal to Design lifecycle, not cross-lifecycle gate
 
 ---
 

@@ -1,5 +1,5 @@
 # generated: 2026-01-01
-# System Auto: last updated on: 2026-01-25T09:28:41
+# System Auto: last updated on: 2026-02-03T00:00:49
 # L3: Functional Requirements - How HAIOS Behaves
 
 Level: L3
@@ -69,21 +69,25 @@ Every action connects to purpose. Nothing happens in isolation.
 
 ---
 
-## Context Architecture (Session 179)
+## Context Architecture (Session 179, updated S294)
 
 **Files are not documentation. Files are context windows for the next node.**
 
-Every gate output is a file designed to be consumed by the next node:
+Every lifecycle produces assets; assets become context for next lifecycle:
 
-| File | Context For |
-|------|-------------|
-| WORK.md | Any agent touching this work |
-| observations.md | close-work-cycle |
-| PLAN.md | implementation-cycle |
-| findings.md | plan-authoring-cycle |
-| checkpoint.md | next session's coldstart |
+| Asset Type | Produced By | Context For |
+|------------|-------------|-------------|
+| WORK.md | Queue ceremony (Intake) | Any agent touching this work |
+| findings.md | Investigation lifecycle | Design lifecycle (optional) |
+| spec.md / TRD | Design lifecycle | Implementation lifecycle (optional) |
+| artifact/ | Implementation lifecycle | Validation lifecycle (optional) |
+| verdict.md | Validation lifecycle | Close ceremony |
+| observations.md | Observation Capture | close-work-cycle |
+| checkpoint.md | Checkpoint ceremony | next session's coldstart |
 
-**The quality of every gate output file determines the capability of every downstream node.**
+**E2.5 Insight:** Lifecycles are pure functions producing typed assets. Piping is optional - assets can be stored without chaining to next lifecycle (batch mode).
+
+**The quality of every asset determines the capability of every downstream consumer.**
 
 When an agent writes a poor file, they sabotage the next agent's context window.
 When an agent skips reflection, the next node starts blind.
@@ -205,15 +209,17 @@ L4 (Rules/Specs) - Dynamic
 
 ---
 
-## Epoch 3+ Considerations
+## Future Considerations
 
-Architectural alignment items deferred from Epoch 2:
+Architectural alignment items for future epochs:
 
-1. **Work ID Naming Convention (S164):** Current scheme (E2-NNN, INV-NNN) lacks temporal ordering and inline type visibility. Consider `WORK-SSS-TYPE-NNN` pattern for Epoch 3+ to enable temporal sorting and type inference from ID. Data exists in `created:` and `category:` fields - this is a display/query improvement, not data migration.
+1. ~~**Work ID Naming Convention (S164):**~~ **DONE (WORK-030, S218)** - Now uses `WORK-XXX` format. Type determined by `type:` field, not ID prefix.
 
-2. **File TOC with Line Numbers (S164, Epoch 2.3 candidate):** Large files waste context when agent scans for sections. Add structured TOC with line numbers (`## Section ... L102`) so agent can `Read(offset=N)` directly. Options: Markdown TOC, YAML frontmatter index, or RFC-style numbered sections. Could auto-generate via PostToolUse hook or just recipe on file save.
+2. **File TOC with Line Numbers (S164):** Large files waste context when agent scans for sections. Add structured TOC with line numbers (`## Section ... L102`) so agent can `Read(offset=N)` directly. Options: Markdown TOC, YAML frontmatter index, or RFC-style numbered sections. Could auto-generate via PostToolUse hook or just recipe on file save.
 
 3. **Confidence Gating (S175):** Distinct from Ambiguity Gating (INV-058). Ambiguity gating surfaces explicit operator decisions with known options. Confidence gating addresses agent uncertainty about its own conclusions - no explicit options, agent must self-assess. Requires FORESIGHT calibration to make self-reported confidence meaningful. Investigate: How to measure agent confidence reliably? Does self-reported confidence correlate with correctness? Gate mechanism design for plan-authoring and plan-validation cycles.
+
+4. **S27 Breath Model Integration (S292, E2.5):** Work phases follow inhale/exhale rhythm. Pause points are ceremonies. Each lifecycle is a complete breath. Implementation in E2.5 will formalize this pattern.
 
 ---
 

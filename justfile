@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-02-02T14:12:53
+# System Auto: last updated on: 2026-02-02T21:57:56
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -36,12 +36,18 @@ adr id title:
 work id title *args:
     just scaffold work_item {{id}} "{{title}}" {{args}}
 
+# Helper: get current session from .claude/session file
+_get-session:
+    @python -c "print([l.strip() for l in open('.claude/session') if l.strip() and not l.startswith('#')][-1])"
+
+# Checkpoint with explicit session
 checkpoint session title:
     just scaffold checkpoint {{session}} "{{title}}"
 
-# Alias: scaffold-checkpoint for consistency with scaffold-observations (WORK-079)
-scaffold-checkpoint session title:
-    just checkpoint {{session}} "{{title}}"
+# Alias: scaffold-checkpoint - session defaults to current if omitted (S294)
+# Usage: just scaffold-checkpoint "title"  OR  just scaffold-checkpoint 294 "title"
+scaffold-checkpoint *args:
+    @python -c "import sys; sys.path.insert(0,'.claude/haios/lib'); from scaffold import scaffold_template; args='{{args}}'.split(); session=(args.pop(0) if args and args[0].isdigit() else [l.strip() for l in open('.claude/session') if l.strip() and not l.startswith('#')][-1]); title=' '.join(args) if args else None; print(f'Created: {scaffold_template(\"checkpoint\", backlog_id=session, title=title)}') if title else print('Usage: just scaffold-checkpoint [session] \"title\"')"
 
 # Move work item to a DAG node (E2-162, E2-250: Uses WorkEngine)
 node id node:

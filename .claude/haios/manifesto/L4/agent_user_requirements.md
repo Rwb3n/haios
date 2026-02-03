@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-30T21:34:07
+# System Auto: last updated on: 2026-02-02T23:57:02
 # L4: Agent/User Requirements
 
 ## Core Requirement
@@ -30,13 +30,14 @@
 - must allow Builder to store learnings to memory
 - must allow Builder to signal completion or blockage
 
-**State-Aware Capabilities (E2.4):**
-- in EXPLORE state: must allow unrestricted reading, note capture
-- in DESIGN state: must allow spec writing, critique invocation
-- in PLAN state: must allow plan writing, critique invocation
-- in DO state: must BLOCK AskUser, must BLOCK spec-write, must allow only artifact-*
-- in CHECK state: must allow verification, test execution
-- in DONE state: must allow knowledge commit, work closure
+**State-Aware Capabilities (E2.5 - phases within lifecycles):**
+- in EXPLORE phase (Investigation/Design): must allow unrestricted reading, note capture
+- in SPECIFY phase (Design): must allow spec writing
+- in CRITIQUE phase (Design): must allow critique invocation, revision
+- in PLAN phase (Implementation): must allow plan writing
+- in DO phase (Implementation): must BLOCK AskUser, must BLOCK spec-write, must allow only artifact-*
+- in CHECK phase (Implementation): must allow verification, test execution
+- in DONE phase (Implementation): must allow knowledge commit, work closure
 
 ### Validator Agent
 - must allow Validator to load agent_user_requirements
@@ -51,9 +52,28 @@
 - must allow agents to escalate decisions they cannot make
 - must allow observations to be captured at any point
 
-## Flow Requirements (E2.4)
+## Lifecycle Requirements (E2.5 - Session 294)
 
-- must enforce universal flow: EXPLORE → DESIGN → PLAN → DO → CHECK → DONE
-- must enforce critique as hard gate at DESIGN→PLAN and PLAN→DO transitions
-- must block DO entry until critique verdict = PROCEED
-- must allow investigation variant: EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE
+*Updated from E2.4 "Flow Requirements" - lifecycles are now independent, not chained.*
+
+**Independent Lifecycles:**
+- must allow Investigation lifecycle: EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE
+- must allow Design lifecycle: EXPLORE → SPECIFY → CRITIQUE → COMPLETE
+- must allow Implementation lifecycle: PLAN → DO → CHECK → DONE
+- must allow Validation lifecycle: VERIFY → JUDGE → REPORT
+- must allow Triage lifecycle: SCAN → ASSESS → RANK → COMMIT
+
+**Lifecycle Independence:**
+- must allow each lifecycle to complete without chaining to next
+- must allow pause points as valid completion states (S27 Breath Model)
+- must allow batch mode (multiple items in same lifecycle phase)
+- must treat chaining as caller choice, not callee side-effect
+
+**Critique within Design Lifecycle:**
+- must enforce critique as hard gate within Design lifecycle (SPECIFY → CRITIQUE)
+- must block Design COMPLETE until critique verdict = PROCEED
+
+**Queue Lifecycle (orthogonal):**
+- must track queue position separately from lifecycle phase
+- must allow: backlog → ready → active → done
+- must allow work item to be `queue: done` without spawning next lifecycle

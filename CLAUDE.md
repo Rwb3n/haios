@@ -1,343 +1,152 @@
 # generated: 2025-09-23
-# System Auto: last updated on: 2026-02-02T19:02:50
+# System Auto: last updated on: 2026-02-03T00:06:06
 # Code Implementation & Engineering Guide
 
-## RFC 2119 Keywords
+## Quick Links
 
-This document uses RFC 2119 keywords to indicate requirement levels:
-
-| Keyword | Meaning |
-|---------|---------|
-| **MUST** / **REQUIRED** | Absolute requirement - violation breaks the system |
-| **MUST NOT** / **SHALL NOT** | Absolute prohibition - violation breaks the system |
-| **SHOULD** / **RECOMMENDED** | Strong recommendation - valid reasons may exist to ignore |
-| **SHOULD NOT** | Strong discouragement - valid reasons may exist to do otherwise |
-| **MAY** / **OPTIONAL** | Truly optional - implement at discretion |
+| What | Where |
+|------|-------|
+| **Requirements** | `.claude/haios/manifesto/L4/functional_requirements.md` |
+| **Architecture** | `.claude/haios/manifesto/L4/technical_requirements.md` |
+| **Current Epoch** | `.claude/haios/epochs/E2_4/EPOCH.md` |
+| **Config** | `.claude/haios/config/haios.yaml` |
 
 ---
 
-## CRITICAL: Platform Awareness
+## CRITICAL Rules (MUST)
 
-### Current Environment
-- **OS:** Windows
-- **Shell:** Python (all hooks migrated from PowerShell as of E2-120)
-- **Terminal:** Claude Code CLI
+### 1. Module-First Principle
+Commands/Skills → `cli.py` / `just` → modules → lib. **Never** instruct agents to read files manually.
 
-### Tool Preference Hierarchy (Search/Query)
-When searching files or content, agents **SHOULD** prefer dedicated tools over shell commands:
-
-| Priority | Tool | Use Case |
-|----------|------|----------|
-| 1 | **Grep** | Content search - no escaping issues |
-| 2 | **Glob** | File pattern matching |
-| 3 | **Read** | Reading specific files |
-| 4 | **Python scripts** | Complex logic (`.claude/lib/`) |
-| 5 | **Inline shell** | Last resort |
-
----
-
-## CRITICAL: Module-First Principle (Session 218 - MUST)
-
-**Commands and skills MUST call modules, not instruct agents to read files manually.**
-
-```
-Commands/Skills (prose) → cli.py / just recipes → modules/*.py → lib/*.py
-```
-
-We have **11 modules** in `.claude/haios/modules/`. They MUST be used.
-
-| Module | Purpose |
-|--------|---------|
-| `ContextLoader` | L0-L4 loading, session bootstrap |
-| `WorkEngine` | WORK.md CRUD, lifecycle |
-| `GovernanceLayer` | Gates, transitions |
-| `MemoryBridge` | MCP wrapper |
-| `CycleRunner` | Phase execution |
-| + 6 more | See modules/README.md |
-
-**Design Gate:** Every chapter/arc/skill design MUST answer:
-> "Which module does the work? If none, why not?"
-
-If answer is "agent reads files manually" → design is WRONG.
-
----
-
-## CRITICAL: Path Constants via ConfigLoader (WORK-080)
-
-**All path constants MUST be defined in haios.yaml and accessed via ConfigLoader.**
-
+### 2. Path Constants via ConfigLoader
 ```python
 from config import ConfigLoader
-
 config = ConfigLoader.get()
-
-# Simple path
-work_dir = config.get_path("work_dir")  # Path("docs/work")
-
-# Interpolated path
-work_file = config.get_path("work_item", id="WORK-080")  # Path("docs/work/active/WORK-080/WORK.md")
+path = config.get_path("work_item", id="WORK-080")
 ```
+**Never** hardcode paths.
 
-| Path Key | Value | Usage |
-|----------|-------|-------|
-| `work_dir` | `docs/work` | Work items root |
-| `work_active` | `docs/work/active` | Active work items |
-| `work_item` | `docs/work/active/{id}/WORK.md` | Specific work item |
-| `manifesto` | `.claude/haios/manifesto` | Manifesto files |
-| `haios_config` | `.claude/haios/config` | Config directory |
+### 3. Work Item ID Policy
+Format: `WORK-XXX`. Type field determines routing, not ID prefix.
 
-**MUST NOT** define path constants at module level. Use `ConfigLoader.get_path()` instead.
+### 4. Memory Refs Rule
+When reading documents with `memory_refs` in frontmatter, **MUST** query those IDs.
+
+### 5. SQL Queries
+**BLOCKED.** Use `schema-verifier` subagent.
+
+### 6. Traceability Chain
+```
+L4 Requirement → Epoch → Arc → Chapter → Work Item
+```
+No chapter file → work item BLOCKED.
 
 ---
 
-## CRITICAL: Work Item ID Policy (WORK-030)
+## Lifecycles (E2.5 - Session 294)
 
-**All new work items MUST use WORK-XXX format.**
+Lifecycles are pure functions, independently completable:
 
-| Rule | Description |
-|------|-------------|
-| **Format** | `WORK-###` (e.g., WORK-031, WORK-032) |
-| **Auto-increment** | Use `get_next_work_id()` from `.claude/haios/lib/scaffold.py` |
-| **Type field** | Behavior determined by `type:` field, not ID prefix |
+| Lifecycle | Signature | Phases |
+|-----------|-----------|--------|
+| Investigation | `Question → Findings` | EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE |
+| Design | `Requirements → Specification` | EXPLORE → SPECIFY → CRITIQUE → COMPLETE |
+| Implementation | `Specification → Artifact` | PLAN → DO → CHECK → DONE |
+| Validation | `Artifact × Spec → Verdict` | VERIFY → JUDGE → REPORT |
+| Triage | `[Items] → [PrioritizedItems]` | SCAN → ASSESS → RANK → COMMIT |
 
-### Type Values
+**Chaining is caller choice.** Lifecycles can complete without spawning next.
 
-| Type | Cycle | Description |
-|------|-------|-------------|
-| `investigation` | investigation-cycle | Discovery/research work |
-| `implementation` | implementation-cycle | Code/feature work |
-| `cleanup` | implementation-cycle | Tech debt/refactoring |
-
-### Deprecated ID Formats
-
-| Format | Status | Migration |
-|--------|--------|-----------|
-| `E2-XXX` | Legacy (Epoch 2) | Existing items remain, new items use WORK-XXX |
-| `INV-XXX` | Deprecated | Use WORK-XXX with `type: investigation` |
-| `TD-XXX` | Deprecated | Use WORK-XXX with `type: cleanup` |
-
-**The `type` field determines routing, not the ID prefix.**
+See `L4/functional_requirements.md` for full details (REQ-LIFECYCLE-*).
 
 ---
 
-## Identity & Role
+## Queue (Orthogonal to Lifecycle)
 
-### Who I Am
-I am **Claude (Executor)**, the **Orchestrator** of the HAIOS project. I work with **Ruben (Operator)** to define strategy and **Antigravity (Implementer)** to execute technical tasks.
-
-### Project Context
-- **Description:** HAIOS (Hybrid AI Operating System) is a **Trust Engine** for AI agents.
-- **Current Epoch:** Epoch 2.4 - The Activity Layer (governed activities, phase templates, universal flow)
-- **Reference:** See `.claude/haios/epochs/E2_4/EPOCH.md` for current epoch status.
-
-### Key Reference Locations
-
-#### Database Schema
-- **Schema:** `docs/specs/memory_db_schema_v3.sql` - THE authoritative source
-- **Manager:** `.claude/lib/database.py` - All database operations
-
-Direct SQL queries are BLOCKED. Agents **MUST** use the schema-verifier subagent:
 ```
-Task(prompt='<your query intent>', subagent_type='schema-verifier')
+backlog → ready → active → done
 ```
 
-#### Project Structure
-- **Plugin Code:** `.claude/lib/` - ALL Python code (database, retrieval, synthesis, status, scaffold, validate)
-- **Tests:** `tests/` - All test files following pytest conventions
-- **Specifications:** `docs/specs/` - TRDs and schemas
-- **Checkpoints:** `docs/checkpoints/` - Session summaries
-- **DEPRECATED:** `haios_etl/` - See `haios_etl/DEPRECATED.md` for migration guide
+Queue position is separate from lifecycle phase. Work item can be `queue: done` without spawning.
+
+See `L4/functional_requirements.md` (REQ-QUEUE-*).
 
 ---
 
-## Memory Refs Rule (MUST - Session 178)
+## Ceremonies
 
-**When reading ANY document with `memory_refs` in frontmatter, MUST query those IDs:**
+Side-effect boundaries. See `L4/functional_requirements.md` (REQ-CEREMONY-*).
 
-```sql
-SELECT id, type, content FROM concepts WHERE id IN ({memory_refs})
-```
-
-This applies to:
-- Work items (WORK.md) - load prior context for the work
-- Checkpoints - load prior session's learnings
-- Plans - load design decisions
-- Investigations - load findings
-
-**Rationale:** memory_refs exist specifically for direct ID lookup. NOT semantic search. The IDs point to exact concepts stored during that work. Ignoring them loses context.
+| Category | Ceremonies |
+|----------|------------|
+| Queue | Intake, Prioritize, Commit, Release |
+| Session | Start, End, Checkpoint |
+| Closure | Close Work/Chapter/Arc/Epoch |
+| Feedback | Chapter/Arc/Epoch/Requirements Review |
+| Memory | Observation Capture, Triage, Memory Commit |
 
 ---
 
 ## Governance Quick Reference
 
-### Hooks (`.claude/hooks/`) - ALL PYTHON
-| Hook | Handler | Purpose |
-|------|---------|---------|
-| **PreToolUse** | `hooks/pre_tool_use.py` | Governance enforcement (SQL, PowerShell, paths) |
-| **PostToolUse** | `hooks/post_tool_use.py` | YAML timestamps, cascade triggers |
-| **UserPromptSubmit** | `hooks/user_prompt_submit.py` | Date/time, vitals injection |
-| **Stop** | `hooks/stop.py` | ReasoningBank extraction |
+### Hooks
+| Hook | Purpose |
+|------|---------|
+| PreToolUse | Governance enforcement, state injection |
+| PostToolUse | Timestamps, cascade triggers |
+| UserPromptSubmit | Date/time, vitals |
+| Stop | ReasoningBank extraction |
 
-Note: All hooks routed via `hook_dispatcher.py`. PowerShell archived to `hooks/archive/`.
-
-### PreToolUse Governance Checks
-| Check | Toggle | Bypass |
-|-------|--------|--------|
-| SQL blocking | Hardcoded | Use `schema-verifier` subagent |
-| PowerShell blocking | `.claude/haios/config/haios.yaml` (toggles.block_powershell) | Set `block_powershell: false` |
-| Path governance | Hardcoded | Use `/new-*` commands |
-
-### PreToolUse additionalContext (WORK-064)
-
-Every tool invocation receives `additionalContext` showing current governance state:
-
-```
-[STATE: DO] Blocked: user-query, web-fetch, web-search, memory-search, memory-store
-```
-
-This provides visibility into blocked primitives BEFORE tool selection, reducing wasted attempts.
-
-### Routing Thresholds (E2-222)
-System health thresholds configured in `.claude/haios/config/haios.yaml` (thresholds section):
-- `observation_pending.max_count`: Trigger triage if pending observations > value (default: 10)
-- `observation_pending.escape_priorities`: Skip threshold for these priorities (default: [critical])
-
-### Commands (`.claude/commands/`)
+### Commands
 | Command | Purpose |
 |---------|---------|
 | `/coldstart` | Initialize session |
-| `/new-checkpoint` | Create session checkpoint |
-| `/new-plan` | Create implementation plan → chains to implementation-cycle |
-| `/new-investigation` | Create investigation → chains to investigation-cycle |
-| `/new-work` | Create work item → chains to work-creation-cycle |
-| `/new-adr` | Create Architecture Decision Record |
-| `/close` | Close work item → chains to close-work-cycle |
-| `/validate` | Validate file against templates |
-| `/implement` | Start implementation cycle for existing plan |
+| `/new-checkpoint` | Create checkpoint |
+| `/new-work` | Create work item |
+| `/new-investigation` | Create investigation |
+| `/new-plan` | Create plan |
+| `/close` | Close work item |
+| `/implement` | Start implementation |
 
 ### Governance Triggers (MUST)
-| Trigger | Action |
-|---------|--------|
-| Discover bug/gap/issue | **MUST** use `/new-investigation` |
-| Any SQL query | **MUST** use `schema-verifier` subagent |
-| Close work item | **MUST** use `/close <id>` |
-| Create governed document | **MUST** use `/new-*` command |
-| Create work item | **MUST** have chapter file first (REQ-TRACE-004) |
-
-### Traceability Chain (MUST - REQ-TRACE-005)
-```
-L4 Requirement → Epoch → Arc → Chapter → Work Item
-```
-**No chapter file → work item BLOCKED.** Every work item MUST trace up this chain. No orphan work.
-
-### Memory Tools
-| Tool | Purpose |
-|------|---------|
-| `ingester_ingest` | **PRIMARY** - Ingest with auto-classification |
-| `memory_search_with_experience` | Query with strategy injection |
-
-### Skills (`.claude/skills/`) - M8-SkillArch Complete
-| Skill | Type | Purpose |
-|-------|------|---------|
-| `ground-cycle` | Cycle | PROVENANCE→ARCHITECTURE→MEMORY→CONTEXT MAP for context loading |
-| `implementation-cycle` | Cycle | PLAN→DO→CHECK→DONE with MUST gates |
-| `investigation-cycle` | Cycle | HYPOTHESIZE→EXPLORE→CONCLUDE |
-| `work-creation-cycle` | Cycle | VERIFY→POPULATE→READY with placeholder validation |
-| `close-work-cycle` | Cycle | VALIDATE→OBSERVE→ARCHIVE→MEMORY |
-| `observation-triage-cycle` | Cycle | SCAN→TRIAGE→PROMOTE for archived observations |
-| `plan-validation-cycle` | Bridge | Pre-DO plan quality gate |
-| `design-review-validation` | Bridge | During-DO design alignment |
-| `dod-validation-cycle` | Bridge | Post-DO DoD criteria check |
-| `memory-agent` | Utility | Strategy retrieval before complex tasks |
-| `audit` | Utility | Find gaps, drift, stale items |
-
-### Agents (`.claude/agents/`)
-| Agent | Model | Requirement | Purpose |
-|-------|-------|-------------|---------|
-| `critique-agent` | opus | Optional | Pre-implementation assumption surfacing |
-| `investigation-agent` | opus | Optional | EXPLORE phase evidence gathering |
-| `validation-agent` | sonnet | Optional | Unbiased CHECK phase validation |
-| `anti-pattern-checker` | sonnet | Optional | L1 anti-pattern verification |
-| `preflight-checker` | haiku | **REQUIRED** | Plan readiness + >3 file gate (E2-186) |
-| `schema-verifier` | haiku | **REQUIRED** | Isolated schema queries |
-| `test-runner` | haiku | Optional | Isolated test execution |
-| `why-capturer` | haiku | Optional | Automated learning extraction |
-
-**Model Selection Principle (WORK-068):** Match model to cognitive requirements:
-- **opus**: Open-ended/critical reasoning (critique, investigation)
-- **sonnet**: Structured reasoning with judgment (validation, anti-pattern)
-- **haiku**: Mechanical/fast tasks (preflight, schema, tests)
-
-### CC Task System (DO Phase - WORK-059, Session 274)
-
-**Two-Layer Work Tracking Model:**
-
-| Layer | System | Scope | Persistence |
-|-------|--------|-------|-------------|
-| **Strategic** | HAIOS WorkEngine | Work items (WORK-XXX) | Disk (WORK.md) |
-| **Tactical** | CC Task System | Sub-tasks within DO phase | Ephemeral (session) |
-
-During DO phase implementation, agents **SHOULD** use CC Task tools for sub-task tracking:
-
-| Tool | Purpose |
-|------|---------|
-| `TaskCreate` | Break down implementation steps (subject, description, activeForm) |
-| `TaskUpdate` | Mark progress (status: in_progress → completed) |
-| `TaskList` | View current sub-tasks |
-| `TaskGet` | Get task details |
-
-**Benefits:**
-- `activeForm` provides spinner UX for operator visibility
-- `blockedBy` tracks sub-task dependencies
-- Auto-cleanup at session end (no stale items)
-
-**Level:** L2 (RECOMMENDED) - Agent discretion based on task complexity.
-
-CC Tasks are ephemeral. For persistent tracking, use WorkEngine (WORK.md files).
+- Discover bug/gap → `/new-investigation`
+- SQL query → `schema-verifier` subagent
+- Close work → `/close <id>`
+- Create governed doc → `/new-*` command
 
 ---
 
-## Important Reminders
+## Agents
 
-### Governance Compliance
-1. **MUST** use slash commands for governed documents (checkpoints, plans, handoffs, reports)
-2. PreToolUse hook will prompt when attempting raw Write to governed paths
-3. **SHOULD** check memory before complex tasks - strategies from past sessions may help
-4. **SHOULD** store learnings after completing significant work
-
-### Database Safety
-1. **MUST** read schema first: `docs/specs/memory_db_schema_v3.sql`
-2. **MUST NOT** assume column names - verify with schema-verifier subagent
-3. **MUST** use `.claude/lib/database.py` methods - **MUST NOT** modify haios_memory.db directly
-
-### Session Hygiene
-1. **SHOULD** run `/coldstart` at session start
-2. **SHOULD** create checkpoint before compact
-3. **SHOULD** store key learnings to memory
-
-### Work Item Completion (ADR-033, E2-250)
-
-| Criterion | How to Verify |
-|-----------|---------------|
-| **Tests pass** | Run `pytest` - all green |
-| **Runtime consumer exists** | `Grep` for imports outside tests - must have callers |
-| **WHY captured** | Store reasoning via `ingester_ingest` |
-| **Docs current** | CLAUDE.md, READMEs updated if behavior changed |
-
-> **E2-250 Learning:** "Tests pass" ≠ "Code is used". Modules without runtime consumers are prototypes.
-
-### Work Item Location (ADR-041)
-
-**MUST NOT** move work items from `docs/work/active/` to `archive/` on completion.
-
-| Principle | Rule |
-|-----------|------|
-| **Status over location** | `status: complete` marks closure, not directory path |
-| **References stay valid** | Portals, memory_refs, @ links all point to paths |
-| **Epoch-level cleanup** | Archive move happens at epoch boundary, not work item close |
-
-**Rationale:** Moving files breaks portal links, memory references, and embedded @ references. The close-work-cycle "ARCHIVE" phase means "mark complete", not "move to archive directory".
+| Agent | Model | Purpose |
+|-------|-------|---------|
+| critique-agent | opus | Assumption surfacing |
+| investigation-agent | opus | EXPLORE phase |
+| validation-agent | sonnet | CHECK phase |
+| preflight-checker | haiku | **REQUIRED** - Plan readiness |
+| schema-verifier | haiku | **REQUIRED** - SQL queries |
+| test-runner | haiku | Test execution |
 
 ---
-*Last Updated: 2026-02-01 | Version: Epoch 2.4 (The Activity Layer)*
-*See `.claude/haios/epochs/E2_4/EPOCH.md` for detailed status*
+
+## Work Item Completion (ADR-033)
+
+| Criterion | Verify |
+|-----------|--------|
+| Tests pass | `pytest` - all green |
+| Runtime consumer exists | Grep for imports outside tests |
+| WHY captured | `ingester_ingest` |
+| Docs current | CLAUDE.md, READMEs updated |
+
+---
+
+## Session Hygiene
+
+1. `/coldstart` at session start
+2. Checkpoint before compact
+3. Store learnings to memory
+
+---
+
+*For full requirements, see `.claude/haios/manifesto/L4/`*
+*Last Updated: 2026-02-03 | Version: Epoch 2.5 Design (Session 294)*
