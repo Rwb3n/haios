@@ -2,10 +2,12 @@
 template: work_item
 id: E2-249
 title: Agent UX Test in DoD
-status: active
+status: archived
 owner: Hephaestus
 created: 2026-01-03
-closed: null
+closed: 2026-02-03
+archive_reason: Superseded by WORK-096 during E2.5 Legacy Assimilation Triage (WORK-095)
+superseded_by: WORK-096
 milestone: M7b-WorkInfra
 priority: low
 effort: low
@@ -30,7 +32,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-03
-last_updated: '2026-01-25T00:37:07'
+last_updated: '2026-02-03T20:40:39'
 ---
 # WORK-E2-249: Agent UX Test in DoD
 

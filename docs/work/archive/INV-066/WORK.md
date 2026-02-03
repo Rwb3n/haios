@@ -2,10 +2,12 @@
 template: work_item
 id: INV-066
 title: Plan Decomposition Traceability Pattern
-status: active
+status: archived
 owner: Hephaestus
 created: 2026-01-16
-closed: null
+closed: 2026-02-03
+archive_reason: Superseded by WORK-097 during E2.5 Legacy Assimilation Triage (WORK-095)
+superseded_by: WORK-097
 milestone: null
 priority: medium
 effort: medium
@@ -38,7 +40,7 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2026-01-16
-last_updated: '2026-01-25T00:38:26'
+last_updated: '2026-02-03T20:40:41'
 ---
 # WORK-INV-066: Plan Decomposition Traceability Pattern
 

@@ -1,18 +1,20 @@
 ---
 template: work_item
-id: TD-001
-title: TOON Serializer
-status: active
+id: INV-017
+title: Observability Gap Analysis
+status: archived
 owner: Hephaestus
 created: 2025-12-23
-closed: null
-milestone: M8-Memory
+closed: 2026-02-03
+archive_reason: Deliverables corrupted (copy-paste bug from early scaffolding). Title
+  concept valid but needs fresh work item with proper scope.
+milestone: M7e-Hygiene
 priority: medium
 effort: medium
 category: implementation
 spawned_by: Session 64 observation
 spawned_by_investigation: null
-arc: pipeline
+arc: observations
 blocked_by: []
 blocks: []
 enables: []
@@ -30,9 +32,9 @@ documents:
   checkpoints: []
 version: '1.0'
 generated: 2025-12-23
-last_updated: '2026-01-25T00:39:08'
+last_updated: '2026-02-03T20:36:52'
 ---
-# WORK-TD-001: TOON Serializer
+# WORK-INV-017: Observability Gap Analysis
 
 @docs/README.md
 @docs/epistemic_state.md
@@ -41,7 +43,7 @@ last_updated: '2026-01-25T00:39:08'
 
 ## Context
 
-**Problem:** Implement 57% token savings format for memory output
+**Problem:** Audit of HAIOS observability infrastructure. What telemetry exists? What gaps exist in anomaly detection? Is observability investment valuable at current scale?
 ---
 
 ## Current State
@@ -96,6 +98,16 @@ Work item in BACKLOG node. Awaiting prioritization.
 - [ ] Define critique framework (Assumption Surfacing as default)
 - [ ] Create `/critique <artifact>` command or skill invocation
 - [ ] Test on 3 existing designs, validate improvement
+- [ ] Test PreToolUse enforcement (intentionally try raw Write)
+- [ ] Sample 10 extracted strategies, rate quality
+- [ ] Scan all .md files for template compliance rate
+- [ ] Review alignment_issues from UpdateHaiosStatus.ps1
+- [ ] Timeline analysis: when was Triad introduced vs bulk extraction
+- [ ] Schema update: add `knowledge_class` column (episteme/techne/doxa)
+- [ ] Mapping heuristics: can extraction types inform Triad? (Critique often → doxa)
+- [ ] Doxa identification: what content qualifies as belief/opinion
+- [ ] Migration plan: backfill existing concepts with knowledge_class
+- [ ] Ingester update: auto-classify knowledge_class on ingest
 
 ---
 
