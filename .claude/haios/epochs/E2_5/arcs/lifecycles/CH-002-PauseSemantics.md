@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T01:26:51
+# System Auto: last updated on: 2026-02-03T19:44:18
 # Chapter: Pause Semantics
 
 ## Definition
@@ -9,7 +9,7 @@
 **Status:** Planned
 **Implementation Type:** REFACTOR
 **Depends:** CH-001
-**Work Items:** None
+**Work Items:** WORK-085
 
 ---
 

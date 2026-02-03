@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T00:31:37
+# System Auto: last updated on: 2026-02-03T20:01:42
 # Epoch 2.5: Independent Lifecycles
 
 ## L4 Object Definition
@@ -136,6 +136,7 @@ Pause points are valid completion states, not "stuck" states.
 | **ceremonies** | Implement ceremony boundaries and contracts | Planned | REQ-CEREMONY-001 to 003 |
 | **feedback** | Implement review ceremonies and upward flow | Planned | REQ-FEEDBACK-001 to 005 |
 | **assets** | Implement typed, versioned asset production | Planned | REQ-ASSET-001 to 005 |
+| **portability** | HAIOS as distributable, portable plugin | Planned | REQ-PORTABLE-001 to 003 (proposed) |
 
 ---
 

@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T01:35:54
+# System Auto: last updated on: 2026-02-03T19:44:22
 # Chapter: Caller Chaining
 
 ## Definition
@@ -9,7 +9,7 @@
 **Status:** Planned
 **Implementation Type:** REFACTOR
 **Depends:** CH-001, CH-002
-**Work Items:** None
+**Work Items:** WORK-087
 
 ---
 

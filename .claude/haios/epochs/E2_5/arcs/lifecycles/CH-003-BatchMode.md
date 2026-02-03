@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T01:27:15
+# System Auto: last updated on: 2026-02-03T19:44:20
 # Chapter: Batch Mode
 
 ## Definition
@@ -9,7 +9,7 @@
 **Status:** Planned
 **Implementation Type:** CREATE NEW
 **Depends:** CH-001
-**Work Items:** None
+**Work Items:** WORK-086
 
 ---
 

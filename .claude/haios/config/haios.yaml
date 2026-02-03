@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-03T00:32:26
+# System Auto: last updated on: 2026-02-03T20:01:50
 # HAIOS System Configuration
 # Consolidates: governance-toggles.yaml, routing-thresholds.yaml
 # Version: 2.5 (Session 295 - Independent Lifecycles)
@@ -33,6 +33,7 @@ epoch:
     - ceremonies      # NEW: Side-effect boundary implementations
     - feedback        # NEW: Review ceremonies
     - assets          # NEW: Typed, versioned asset production
+    - portability     # NEW: HAIOS as distributable plugin (Session 297)
 
 # Governance toggles (from governance-toggles.yaml)
 toggles:

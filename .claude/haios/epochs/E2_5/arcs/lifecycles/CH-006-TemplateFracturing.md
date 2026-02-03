@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T01:28:25
+# System Auto: last updated on: 2026-02-03T19:44:30
 # Chapter: Template Fracturing
 
 ## Definition
@@ -9,7 +9,7 @@
 **Status:** Planned
 **Implementation Type:** PARTIAL (investigation done, others need fracturing)
 **Depends:** CH-005
-**Work Items:** None
+**Work Items:** WORK-089, WORK-090, WORK-091, WORK-092
 
 ---
 

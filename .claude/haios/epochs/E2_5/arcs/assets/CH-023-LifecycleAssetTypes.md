@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T01:35:18
+# System Auto: last updated on: 2026-02-03T19:44:32
 # Chapter: Lifecycle Asset Types
 
 ## Definition
@@ -9,7 +9,7 @@
 **Status:** Planned
 **Implementation Type:** CREATE NEW
 **Depends:** Lifecycles:CH-001
-**Work Items:** None
+**Work Items:** WORK-093
 
 ---
 
