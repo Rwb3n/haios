@@ -30,6 +30,7 @@ load_memory_refs:
 - 83371
 - 83372
 pending:
+- 'WORK-095: E2.5 Legacy Assimilation Triage (HIGH PRIORITY - operator requested)'
 - 'WORK-084: Implement Lifecycle Signatures (CH-001) - foundation for lifecycles arc'
 - 'Portability arc: Create work items for CH-028 to CH-031'
 - 'Phase 2-5 decomposition: queue/ceremonies/feedback/assets arcs'
@@ -44,5 +45,5 @@ completed:
 - 'Hardcoded path audit: 17 occurrences across 7 files'
 - Updated portability ARC.md with investigation findings
 generated: '2026-02-03'
-last_updated: '2026-02-03T20:18:04'
+last_updated: '2026-02-03T20:23:34'
 ---
