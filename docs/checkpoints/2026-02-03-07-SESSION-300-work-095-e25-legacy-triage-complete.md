@@ -16,17 +16,23 @@ load_memory_refs:
 - 83379
 pending:
 - 'WORK-084: Implement Lifecycle Signatures (CH-001) - foundation for lifecycles arc'
+- 'WORK-066: Queue Position Field (CH-007) - unblocked, second priority'
 - Harvest E2_3/E2_4 observations to memory (deferred from WORK-095)
 drift_observed:
 - WORK-071, WORK-075 have stale blocked_by references to completed items (WORK-069,
   WORK-070)
 - just scaffold checkpoint vs just scaffold-checkpoint naming inconsistency
+- work_queues.yaml has stale named queues (workitem-evolution, governance) pointing
+  to archived items
 completed:
 - 'WORK-095: E2.5 Legacy Assimilation Triage - Batch 2 complete'
 - Deleted 16 empty scaffolds (WORK-017, 018, 019, 021, 022, 044-054)
 - Archived WORK-035 as superseded by WORK-095
 - Updated 8 items with E2.5 epoch and arc mapping
 - 'Final queue: 21 active items, all E2.5 compliant'
+- 'WORK-066: Unblocked by decoupling from WORK-067 (portability is separate concern)'
+- 'Queue arc exploration: design aligns with agent ideals, infrastructure exists but
+  stale'
 generated: '2026-02-03'
-last_updated: '2026-02-03T21:02:15'
+last_updated: '2026-02-03T21:26:19'
 ---

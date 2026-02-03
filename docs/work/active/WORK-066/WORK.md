@@ -7,13 +7,13 @@ status: active
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-016
-chapter: CH-006
+chapter: CH-007
 arc: queue
 closed: null
 priority: high
 effort: large
 traces_to:
-- REQ-WORK-001
+- REQ-QUEUE-001
 source_files:
 - docs/specs/TRD-WORK-ITEM-UNIVERSAL.md
 - .claude/haios/modules/governance_layer.py
@@ -27,8 +27,7 @@ acceptance_criteria:
 - close-work-cycle sets queue_position to done on closure
 - Single in_progress constraint enforced in survey-cycle
 - current_node aligned to GovernanceLayer vocabulary
-blocked_by:
-- WORK-067
+blocked_by: []
 blocks: []
 enables: []
 current_node: backlog
@@ -46,7 +45,7 @@ extensions:
   epoch: E2.5
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-03T20:52:49'
+last_updated: '2026-02-03T21:19:00'
 ---
 # WORK-066: Queue Position Field and Cycle Wiring Implementation
 
