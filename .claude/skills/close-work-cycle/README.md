@@ -1,12 +1,12 @@
 # generated: 2025-12-25
-# System Auto: last updated on: 2025-12-25T15:04:01
+# System Auto: last updated on: 2026-02-03T23:35:21
 # Close Work Cycle Skill
 
 Guides structured work item closure with Definition of Done (DoD) enforcement.
 
 ## Overview
 
-This is a **Cycle Skill** that defines the VALIDATE-ARCHIVE-CAPTURE workflow for closing work items per ADR-033.
+This is a **Cycle Skill** that defines the VALIDATE-ARCHIVE-MEMORY-CHAIN workflow for closing work items per ADR-033.
 
 ## Phases
 

@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-02-03T22:19:17
+# System Auto: last updated on: 2026-02-03T23:39:23
 """Tests for CycleRunner module (E2-255).
 
 Tests phase gate validation and cycle phase lookup functionality.
@@ -307,4 +307,5 @@ class TestPauseSemantics:
 
         # Verify existing cycles still have same phases
         assert CYCLE_PHASES["implementation-cycle"] == ["PLAN", "DO", "CHECK", "DONE", "CHAIN"]
-        assert CYCLE_PHASES["investigation-cycle"] == ["HYPOTHESIZE", "EXPLORE", "CONCLUDE", "CHAIN"]
+        # WORK-098: Updated to match L4 REQ-FLOW-002 (Session 304)
+        assert CYCLE_PHASES["investigation-cycle"] == ["EXPLORE", "HYPOTHESIZE", "VALIDATE", "CONCLUDE", "CHAIN"]

@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-02-03T22:20:42
+# System Auto: last updated on: 2026-02-03T23:37:34
 """
 CycleRunner Module (E2-255)
 
@@ -130,9 +130,10 @@ class PriorityList(LifecycleOutput):
 
 
 # Cycle phase definitions (from S17.5 and existing skills)
+# WORK-098: investigation-cycle aligned with L4 REQ-FLOW-002 (Session 304)
 CYCLE_PHASES: Dict[str, List[str]] = {
     "implementation-cycle": ["PLAN", "DO", "CHECK", "DONE", "CHAIN"],
-    "investigation-cycle": ["HYPOTHESIZE", "EXPLORE", "CONCLUDE", "CHAIN"],
+    "investigation-cycle": ["EXPLORE", "HYPOTHESIZE", "VALIDATE", "CONCLUDE", "CHAIN"],
     "close-work-cycle": ["VALIDATE", "OBSERVE", "ARCHIVE", "MEMORY"],
     "work-creation-cycle": ["VERIFY", "POPULATE", "READY"],
     "checkpoint-cycle": ["SCAFFOLD", "FILL", "VERIFY", "CAPTURE", "COMMIT"],
@@ -143,12 +144,13 @@ CYCLE_PHASES: Dict[str, List[str]] = {
 # WORK-085: Pause phases per lifecycle (REQ-LIFECYCLE-002, S27 Breath Model)
 # Pause = exhale complete, valid completion state per S27
 # These are the phases where work can safely stop without being "incomplete"
+# WORK-099: Added PROMOTE as alias for observation-triage-cycle (Session 304)
 PAUSE_PHASES: Dict[str, List[str]] = {
     "investigation": ["CONCLUDE"],      # After exhale: findings committed
     "design": ["COMPLETE"],             # After exhale: spec committed
     "implementation": ["DONE"],         # After exhale: artifact committed
     "validation": ["REPORT"],           # After exhale: verdict committed
-    "triage": ["COMMIT"],               # After exhale: priorities committed
+    "triage": ["COMMIT", "PROMOTE"],    # After exhale: priorities committed (PROMOTE is skill alias)
 }
 
 
