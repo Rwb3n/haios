@@ -3,13 +3,13 @@ template: work_item
 id: WORK-094
 title: HAIOS Portability Architecture Investigation
 type: investigation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-03
 spawned_by: Session-297-stakeholder-review
 chapter: null
 arc: portability
-closed: null
+closed: '2026-02-03'
 priority: high
 effort: medium
 traces_to:
@@ -42,12 +42,32 @@ memory_refs:
 - 83343
 - 83344
 - 83345
+- 83351
+- 83352
+- 83353
+- 83354
+- 83355
+- 83356
+- 83357
+- 83358
+- 83359
+- 83360
+- 83361
+- 83362
+- 83363
+- 83366
+- 83367
+- 83368
+- 83369
+- 83370
+- 83371
+- 83372
 extensions:
   epoch: E2.5
   investigation_type: architecture
 version: '2.0'
 generated: 2026-02-03
-last_updated: '2026-02-03T20:02:30'
+last_updated: '2026-02-03T20:15:04'
 ---
 # WORK-094: HAIOS Portability Architecture Investigation
 
@@ -106,12 +126,12 @@ Investigate and design the portability architecture for HAIOS as a distributable
 
 ## Deliverables
 
-- [ ] Complete hardcoded path audit (all files in haios/lib, haios/modules, hooks/)
-- [ ] Template seed/runtime architecture design document
-- [ ] Init ceremony specification (inputs, outputs, idempotency)
-- [ ] L4 requirement proposal (REQ-PORTABLE-001 to 003)
-- [ ] Portability arc chapter structure proposal
-- [ ] Migration plan for existing HAIOS installations
+- [x] Complete hardcoded path audit (7 files, 17 occurrences identified)
+- [x] Template seed/runtime architecture design document
+- [x] Init ceremony specification (inputs, outputs, idempotency)
+- [x] L4 requirement proposal (REQ-PORTABLE-001 to 003)
+- [x] Portability arc chapter structure proposal (CH-028 to CH-031)
+- [ ] Migration plan for existing HAIOS installations (deferred to implementation)
 
 ---
 
@@ -142,7 +162,79 @@ Investigate and design the portability architecture for HAIOS as a distributable
 
 ---
 
+---
+
+## Investigation Findings (Session 298)
+
+### Hypothesis Verdicts
+
+| ID | Hypothesis | Verdict | Confidence |
+|----|------------|---------|------------|
+| H1 | HAIOS fails portability test | **CONFIRMED** | 95% |
+| H2 | Hardcoded paths violate REQ-CONFIG-001 | **CONFIRMED** | 95% |
+| H3 | Seed/Runtime pattern is correct | **CONFIRMED** | 80% |
+| H4 | No init ceremony exists | **CONFIRMED** | 95% |
+
+### Hardcoded Path Audit Results
+
+| File | Occurrences | Key Paths |
+|------|-------------|-----------|
+| `scaffold.py` | 4 | `.claude/templates/`, status files |
+| `status.py` | 4 | agents/, skills/, commands/ |
+| `cascade.py` | 3 | status.json, events.jsonl |
+| `dependencies.py` | 2 | skills/, agents/ |
+| `audit_decision_coverage.py` | 2 | **BUG: E2_4 hardcoded** |
+| `work_loader.py` | 1 | haios.yaml path |
+| `audit.py` | 1 | status.json |
+| **Total** | **17** | |
+
+ConfigLoader usage: 8 occurrences across 3 files (work_engine.py, context_loader.py, config.py)
+
+### Architecture Decision: Seed + Runtime
+
+```
+.claude/haios/                  ← SEED (portable, canonical)
+├── templates/, skills/, agents/, hooks/, commands/
+
+.claude/                        ← RUNTIME (project-specific)
+├── templates/, skills/, agents/, hooks/, commands/
+```
+
+**Init Ceremony Flow:**
+1. Check: Does runtime exist?
+2. NO → Copy seed → runtime for each component
+3. YES → Diff seed vs runtime, report changes
+4. Create: haios-status.json, session file
+5. Validate: All dependencies present
+
+### Proposed L4 Requirements
+
+| ID | Requirement | Derives From |
+|----|-------------|--------------|
+| REQ-PORTABLE-001 | All component paths via ConfigLoader | L3.6, REQ-CONFIG-001 |
+| REQ-PORTABLE-002 | Init ceremony for fresh installs | L3.6 |
+| REQ-PORTABLE-003 | Seed in haios/, runtime in .claude/ | L3.6, Portability Test |
+
+### Proposed Chapters for Portability Arc
+
+| CH-ID | Title | Requirements | Dependencies |
+|-------|-------|--------------|--------------|
+| CH-028 | PathConfigMigration | REQ-PORTABLE-001 | None |
+| CH-029 | SeedStructure | REQ-PORTABLE-003 | CH-028 |
+| CH-030 | InitCeremony | REQ-PORTABLE-002 | CH-029 |
+| CH-031 | UpgradePath | REQ-PORTABLE-002 | CH-030 |
+
+---
+
 ## History
+
+### 2026-02-03 - Completed (Session 298)
+- Investigation complete with 4 hypotheses validated
+- Hardcoded path audit: 17 occurrences across 7 files
+- Architecture decision: Seed + Runtime pattern
+- L4 requirements proposed: REQ-PORTABLE-001 to 003
+- Chapters proposed: CH-028 to CH-031
+- Arc updated with findings
 
 ### 2026-02-03 - Created (Session 297)
 - Spawned from stakeholder review during E2.5 decomposition

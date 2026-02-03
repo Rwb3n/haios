@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T20:01:32
+# System Auto: last updated on: 2026-02-03T20:14:09
 # Arc: Portability
 
 ## Definition
@@ -25,7 +25,7 @@ Ensure HAIOS can be distributed as a standalone Claude Code plugin with proper i
 | REQ-PORTABLE-002 | Init ceremony creates runtime structure from seed |
 | REQ-PORTABLE-003 | Templates have seed (source) and runtime (customizable) locations |
 
-**NOTE:** These requirements are PROPOSED. Investigation WORK-094 will determine if they should be added to L4.
+**Status:** VALIDATED by WORK-094 (Session 298). Ready for L4 addition.
 
 ---
 
@@ -61,11 +61,39 @@ This arc was created to contain portability-related chapters that emerge from in
 
 ---
 
+## Investigation Findings (WORK-094, Session 298)
+
+### Validated Findings
+
+1. **Portability test FAILS** - Components (templates, skills, agents, hooks, commands) live outside `.claude/haios/`
+2. **17 hardcoded paths across 7 files** violate REQ-CONFIG-001:
+   - `scaffold.py` (4), `status.py` (4), `cascade.py` (3), `dependencies.py` (2), `audit_decision_coverage.py` (2), `work_loader.py` (1), `audit.py` (1)
+3. **ConfigLoader underutilized** - Only 8 usages across 3 files vs 17 hardcoded
+4. **No init ceremony exists** - No mechanism to bootstrap fresh installations
+5. **BUG confirmed**: `audit_decision_coverage.py:306-307` has hardcoded E2_4 epoch path
+
+### Architecture Decision: Seed + Runtime Pattern
+
+```
+.claude/haios/                  ← SEED (portable, canonical)
+├── templates/, skills/, agents/, hooks/, commands/
+
+.claude/                        ← RUNTIME (project-specific, customizable)
+├── templates/, skills/, agents/, hooks/, commands/
+```
+
+Init ceremony copies seed → runtime on fresh install. Upgrades diff seed vs runtime.
+
+---
+
 ## Chapters
 
 | CH-ID | Title | Requirements | Dependencies |
 |-------|-------|--------------|--------------|
-| TBD | TBD - pending WORK-094 investigation | TBD | TBD |
+| CH-028 | PathConfigMigration | REQ-PORTABLE-001, REQ-CONFIG-001 | None |
+| CH-029 | SeedStructure | REQ-PORTABLE-003 | CH-028 |
+| CH-030 | InitCeremony | REQ-PORTABLE-002 | CH-029 |
+| CH-031 | UpgradePath | REQ-PORTABLE-002 | CH-030 |
 
 ---
 
