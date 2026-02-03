@@ -3,13 +3,13 @@ template: work_item
 id: WORK-087
 title: Implement Caller Chaining (CH-004)
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-03
 spawned_by: E2.5-decomposition
 chapter: CH-004-CallerChaining
 arc: lifecycles
-closed: null
+closed: '2026-02-03'
 priority: high
 effort: medium
 traces_to:
@@ -34,13 +34,20 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 83400
+- 83401
+- 83402
+- 83403
+- 83404
+- 83409
+- 83410
 extensions:
   epoch: E2.5
   implementation_type: REFACTOR
 version: '2.0'
 generated: 2026-02-03
-last_updated: '2026-02-03T19:43:01'
+last_updated: '2026-02-03T23:05:50'
 ---
 # WORK-087: Implement Caller Chaining (CH-004)
 
@@ -78,6 +85,13 @@ CHAIN phase has routing logic embedded in skill, not returned to caller. The ski
 ---
 
 ## History
+
+### 2026-02-03 - Completed (Session 303)
+- Implemented REQ-LIFECYCLE-004 caller chaining
+- Refactored close-work-cycle CHAIN phase to present options via AskUserQuestion
+- "Complete without spawn" now first-class valid option
+- Added 3 tests in test_close_work_cycle.py (all pass)
+- Memory refs: 83400-83404
 
 ### 2026-02-03 - Created (Session 297)
 - Decomposed from E2.5 CH-004-CallerChaining

@@ -6,7 +6,7 @@ recipes:
 - close-work
 - update-status
 generated: 2025-12-25
-last_updated: '2026-01-28T22:45:47'
+last_updated: '2026-02-03T23:03:31'
 ---
 # Close Work Cycle
 
@@ -180,26 +180,42 @@ Skill(skill="checkpoint-cycle")
 
 **Rationale:** Work complexity within hardened gating system makes context limits per work item likely. Checkpointing after closure ensures context from completed work is preserved before starting new work. Next session picks up with full context of decisions made.
 
-#### 4b. Route to Next Work
+#### 4b. Route to Next Work (REQ-LIFECYCLE-004: Caller Choice)
 
 **Actions:**
 1. (Closure already completed in MEMORY phase)
 2. (Checkpoint completed in 4a)
 3. Query next work: `just ready`
-4. If items returned, read first work file to check `documents.plans`
+4. If items returned, read first work file to determine suggested routing
 5. Read work item `type` field from WORK.md
-6. **Apply routing decision table** (WORK-030: type field is authoritative):
-   - If `next_work_id` is None → `await_operator`
-   - If `type` == "investigation" → `invoke_investigation`
-   - If `has_plan` is True → `invoke_implementation`
-   - Else → `invoke_work_creation`
-7. Execute the action:
-   - `invoke_investigation` -> `Skill(skill="investigation-cycle")`
-   - `invoke_implementation` -> `Skill(skill="implementation-cycle")`
-   - `invoke_work_creation` -> `Skill(skill="work-creation-cycle")`
-   - `await_operator` -> Report "No unblocked work. Awaiting operator direction."
+6. **Determine suggested action** (WORK-030: type field is authoritative):
+   - If `next_work_id` is None → suggest `complete_without_spawn`
+   - If `type` == "investigation" → suggest `investigation-cycle`
+   - If `has_plan` is True → suggest `implementation-cycle`
+   - Else → suggest `work-creation-cycle`
 
-**MUST:** Do not pause for acknowledgment - checkpoint then execute routing immediately.
+7. **Present options to caller** (REQ-LIFECYCLE-004):
+
+   Use AskUserQuestion to present choices:
+   ```
+   AskUserQuestion(questions=[{
+     "question": "Work closed. What next?",
+     "header": "Next Action",
+     "options": [
+       {"label": "Complete without spawn", "description": "Store output, no next work item"},
+       {"label": "Chain to {suggested_cycle}", "description": "Continue with {next_work_id}"},
+       {"label": "Select different work", "description": "Choose from queue"}
+     ],
+     "multiSelect": false
+   }])
+   ```
+
+8. **Execute chosen action:**
+   - `Complete without spawn` → Report "Work complete. No spawn." (valid, no warning)
+   - `Chain to {cycle}` → `Skill(skill="{cycle}")`
+   - `Select different work` → `Skill(skill="survey-cycle")`
+
+**Note:** "Complete without spawn" is a first-class valid outcome per REQ-LIFECYCLE-004.
 
 **Exit Criteria:**
 - [ ] **MUST:** checkpoint-cycle invoked (E2-287)
@@ -251,6 +267,8 @@ just clear-cycle
 | Keep command lookup | Skill assumes work item found | Command handles "not found" case before skill |
 | Skill documents steps | Command + Skill redundancy | Command is authoritative; skill provides structure |
 | MEMORY phase after archive | After archive | Memory should reflect completed state |
+| **CHAIN presents options, not auto-executes** | AskUserQuestion for caller choice | WORK-087: REQ-LIFECYCLE-004 "chaining is caller choice" |
+| **"Complete without spawn" first-class** | Listed as option 1 | REQ-LIFECYCLE-004: Valid outcome, not exceptional case |
 
 ---
 

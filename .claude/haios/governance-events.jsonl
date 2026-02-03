@@ -210,3 +210,43 @@
 {"type": "SessionStarted", "session": 296, "agent": "Hephaestus", "timestamp": "2026-02-03T01:17:15.153221"}
 {"type": "SessionEnded", "session": 296, "agent": "Hephaestus", "timestamp": "2026-02-03T01:43:58.355743"}
 {"type": "SessionStarted", "session": 297, "agent": "Hephaestus", "timestamp": "2026-02-03T19:18:48.081340"}
+{"type": "SessionStarted", "session": 298, "agent": "Hephaestus", "timestamp": "2026-02-03T20:07:30.337848"}
+{"type": "SessionEnded", "session": 298, "agent": "Hephaestus", "timestamp": "2026-02-03T20:18:30.887383"}
+{"type": "SessionEnded", "session": 297, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-03T20:25:15.925263"}
+{"type": "SessionStarted", "session": 299, "agent": "Hephaestus", "timestamp": "2026-02-03T20:25:28.026461"}
+{"type": "SessionEnded", "session": 299, "agent": "Hephaestus", "timestamp": "2026-02-03T20:43:24.066549"}
+{"type": "SessionStarted", "session": 300, "agent": "Hephaestus", "timestamp": "2026-02-03T20:45:15.160005"}
+{"type": "SessionEnded", "session": 300, "agent": "Hephaestus", "timestamp": "2026-02-03T21:02:50.295039"}
+{"type": "SessionStarted", "session": 301, "agent": "Hephaestus", "timestamp": "2026-02-03T21:29:23.810088"}
+{"type": "CyclePhaseEntered", "phase": "PLAN", "work_id": "E2-255", "agent": "Hephaestus", "timestamp": "2026-02-03T21:45:22.578286"}
+{"type": "CyclePhaseEntered", "phase": "PLAN", "work_id": "E2-255", "agent": "Hephaestus", "timestamp": "2026-02-03T21:46:56.526153"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-084", "agent": "Hephaestus", "timestamp": "2026-02-03T21:46:56.593050"}
+{"type": "CyclePhaseEntered", "phase": "PLAN", "work_id": "E2-255", "agent": "Hephaestus", "timestamp": "2026-02-03T21:47:25.656644"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-084", "agent": "Hephaestus", "timestamp": "2026-02-03T21:47:25.709875"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-03T21:47:29.556433"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-03T21:47:29.574536"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-02-03T21:47:29.620376"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-02-03T21:47:29.621709"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-03T21:47:29.641612"}
+{"type": "CyclePhaseEntered", "phase": "PLAN", "work_id": "E2-255", "agent": "Hephaestus", "timestamp": "2026-02-03T21:48:16.529618"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-084", "agent": "Hephaestus", "timestamp": "2026-02-03T21:48:16.598463"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-03T21:48:16.615767"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-03T21:48:16.632475"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-02-03T21:48:16.659894"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-02-03T21:48:16.659894"}
+{"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-03T21:48:16.671110"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-084", "agent": "Hephaestus", "timestamp": "2026-02-03T21:49:10.381981"}
+{"type": "CyclePhaseEntered", "phase": "PLAN", "work_id": "E2-255", "agent": "Hephaestus", "timestamp": "2026-02-03T21:50:12.279280"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-084", "agent": "Hephaestus", "timestamp": "2026-02-03T21:50:12.351981"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-084", "agent": "Hephaestus", "timestamp": "2026-02-03T21:50:30.390073"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "INV-069", "agent": "Hephaestus", "timestamp": "2026-02-03T21:50:30.391077"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-001", "agent": "Hephaestus", "timestamp": "2026-02-03T21:50:30.391077"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-084", "agent": "Hephaestus", "timestamp": "2026-02-03T21:50:30.391077"}
+{"type": "SessionStarted", "session": 302, "agent": "Hephaestus", "timestamp": "2026-02-03T22:05:22.403592"}
+{"type": "CyclePhaseEntered", "phase": "PLAN", "work_id": "E2-255", "agent": "Hephaestus", "timestamp": "2026-02-03T22:21:42.545861"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-084", "agent": "Hephaestus", "timestamp": "2026-02-03T22:21:42.626198"}
+{"type": "SessionEnded", "session": 302, "agent": "Hephaestus", "timestamp": "2026-02-03T22:33:19.685448"}
+{"type": "SessionEnded", "session": 301, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-03T22:44:32.411399"}
+{"type": "SessionStarted", "session": 303, "agent": "Hephaestus", "timestamp": "2026-02-03T22:44:54.206206"}
+{"type": "CyclePhaseEntered", "phase": "PLAN", "work_id": "E2-255", "agent": "Hephaestus", "timestamp": "2026-02-03T23:04:22.245407"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-084", "agent": "Hephaestus", "timestamp": "2026-02-03T23:04:22.318137"}
