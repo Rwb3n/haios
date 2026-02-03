@@ -8,7 +8,7 @@ owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-055
 chapter: flow/CH-011
-arc: flow
+arc: feedback
 closed: null
 priority: medium
 effort: medium
@@ -32,10 +32,11 @@ memory_refs:
 - 83024
 - 83025
 - 83026
-extensions: {}
+extensions:
+  epoch: E2.5
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-01T23:34:28'
+last_updated: '2026-02-03T20:52:10'
 ---
 # WORK-071: Pre-Decomposition Review Gate Design
 

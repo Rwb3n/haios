@@ -3,7 +3,8 @@ template: work_item
 id: WORK-035
 title: E2 Legacy Queue Triage
 type: cleanup
-status: active
+status: archived
+archived_reason: superseded_by_WORK-095
 owner: Hephaestus
 created: 2026-01-29
 spawned_by: null
@@ -30,7 +31,7 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: 2026-01-29
-last_updated: '2026-01-29T22:41:14'
+last_updated: '2026-02-03T20:50:37'
 ---
 # WORK-035: E2 Legacy Queue Triage
 

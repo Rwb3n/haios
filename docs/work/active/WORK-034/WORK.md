@@ -8,7 +8,7 @@ owner: Hephaestus
 created: 2026-01-29
 spawned_by: null
 chapter: CH-005
-arc: workuniversal
+arc: ceremonies
 closed: null
 priority: medium
 effort: medium
@@ -27,10 +27,11 @@ node_history:
 artifacts: []
 cycle_docs: {}
 memory_refs: []
-extensions: {}
+extensions:
+  epoch: E2.5
 version: '2.0'
 generated: 2026-01-29
-last_updated: '2026-01-29T22:40:37'
+last_updated: '2026-02-03T20:51:39'
 ---
 # WORK-034: Upstream Status Propagation on Work Closure
 

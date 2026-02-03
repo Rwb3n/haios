@@ -8,7 +8,7 @@ owner: Hephaestus
 created: 2026-01-26
 spawned_by: obs-222-001
 chapter: CH-009
-arc: configuration
+arc: portability
 closed: null
 priority: medium
 effort: medium
@@ -27,10 +27,11 @@ node_history:
 artifacts: []
 cycle_docs: {}
 memory_refs: []
-extensions: {}
+extensions:
+  epoch: E2.5
 version: '2.0'
 generated: 2026-01-26
-last_updated: '2026-01-28T23:54:36'
+last_updated: '2026-02-03T20:51:14'
 ---
 # WORK-020: Discoverability Architecture
 

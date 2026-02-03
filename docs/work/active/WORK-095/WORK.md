@@ -3,13 +3,13 @@ template: work_item
 id: WORK-095
 title: E2.5 Legacy Assimilation Triage
 type: triage
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-03
 spawned_by: Session-298-operator-request
 chapter: null
 arc: null
-closed: null
+closed: '2026-02-03'
 priority: high
 effort: large
 traces_to:
@@ -40,12 +40,19 @@ cycle_docs: {}
 memory_refs:
 - 83366
 - 83367
+- 83373
+- 83374
+- 83375
+- 83376
+- 83377
+- 83378
+- 83379
 extensions:
   epoch: E2.5
   lifecycle_type: triage
 version: '2.0'
 generated: 2026-02-03
-last_updated: '2026-02-03T20:23:25'
+last_updated: '2026-02-03T21:01:04'
 ---
 # WORK-095: E2.5 Legacy Assimilation Triage
 

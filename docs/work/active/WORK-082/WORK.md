@@ -8,7 +8,7 @@ owner: Hephaestus
 created: 2026-02-02
 spawned_by: INV-068
 chapter: null
-arc: flow
+arc: feedback
 closed: null
 priority: medium
 effort: medium
@@ -28,10 +28,11 @@ node_history:
 artifacts: []
 cycle_docs: {}
 memory_refs: []
-extensions: {}
+extensions:
+  epoch: E2.5
 version: '2.0'
 generated: 2026-02-02
-last_updated: '2026-02-02T20:02:25'
+last_updated: '2026-02-03T20:52:16'
 ---
 # WORK-082: Epistemic Review Ceremony After Investigation Closure
 

@@ -8,7 +8,7 @@ owner: Hephaestus
 created: 2026-02-02
 spawned_by: INV-068
 chapter: null
-arc: flow
+arc: lifecycles
 closed: null
 priority: medium
 effort: medium
@@ -27,10 +27,11 @@ node_history:
 artifacts: []
 cycle_docs: {}
 memory_refs: []
-extensions: {}
+extensions:
+  epoch: E2.5
 version: '2.0'
 generated: 2026-02-02
-last_updated: '2026-02-02T19:31:21'
+last_updated: '2026-02-03T20:52:14'
 ---
 # WORK-081: Implement Cycle-as-Subagent Delegation Pattern
 

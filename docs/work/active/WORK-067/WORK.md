@@ -8,7 +8,7 @@ owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-065
 chapter: null
-arc: configuration
+arc: portability
 closed: null
 priority: high
 effort: medium
@@ -32,10 +32,11 @@ artifacts: []
 cycle_docs: {}
 memory_refs:
 - 82952
-extensions: {}
+extensions:
+  epoch: E2.5
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-01T21:20:15'
+last_updated: '2026-02-03T20:52:08'
 ---
 # WORK-067: HAIOS Portable Schema Architecture Investigation
 
