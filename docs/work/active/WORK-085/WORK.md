@@ -3,13 +3,13 @@ template: work_item
 id: WORK-085
 title: Implement Pause Semantics (CH-002)
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-03
 spawned_by: E2.5-decomposition
 chapter: CH-002-PauseSemantics
 arc: lifecycles
-closed: null
+closed: '2026-02-03'
 priority: high
 effort: small
 traces_to:

@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-28T21:20:35
+# System Auto: last updated on: 2026-02-03T22:19:51
 """
 Tests for WorkEngine module (E2-242).
 
@@ -997,3 +997,142 @@ def test_create_work_new_id_succeeds(tmp_path, governance):
 
     assert result.exists()
     assert "WORK.md" in str(result)
+
+
+# =============================================================================
+# WORK-085: Pause Point Recognition (REQ-LIFECYCLE-002, S27 Breath Model)
+# =============================================================================
+
+# Sample work item at CONCLUDE phase (investigation pause point)
+SAMPLE_INV_AT_CONCLUDE = """---
+template: work_item
+id: INV-TEST
+title: Test Investigation
+type: investigation
+status: active
+owner: Hephaestus
+created: 2026-02-03
+closed: null
+priority: high
+blocked_by: []
+blocks: []
+current_node: CONCLUDE
+node_history:
+- node: backlog
+  entered: '2026-02-03T10:00:00'
+  exited: '2026-02-03T11:00:00'
+- node: CONCLUDE
+  entered: '2026-02-03T11:00:00'
+  exited: null
+memory_refs: []
+---
+# INV-TEST: Test Investigation
+"""
+
+# Sample work item at EXPLORE phase (not a pause point)
+SAMPLE_INV_AT_EXPLORE = """---
+template: work_item
+id: INV-TEST
+title: Test Investigation
+type: investigation
+status: active
+owner: Hephaestus
+created: 2026-02-03
+closed: null
+priority: high
+blocked_by: []
+blocks: []
+current_node: EXPLORE
+node_history:
+- node: backlog
+  entered: '2026-02-03T10:00:00'
+  exited: '2026-02-03T11:00:00'
+- node: EXPLORE
+  entered: '2026-02-03T11:00:00'
+  exited: null
+memory_refs: []
+---
+# INV-TEST: Test Investigation
+"""
+
+# Sample feature at DONE phase (implementation pause point)
+SAMPLE_FEATURE_AT_DONE = """---
+template: work_item
+id: WORK-TEST
+title: Test Feature
+type: feature
+status: active
+owner: Hephaestus
+created: 2026-02-03
+closed: null
+priority: high
+blocked_by: []
+blocks: []
+current_node: DONE
+node_history:
+- node: backlog
+  entered: '2026-02-03T10:00:00'
+  exited: '2026-02-03T11:00:00'
+- node: DONE
+  entered: '2026-02-03T11:00:00'
+  exited: null
+memory_refs: []
+---
+# WORK-TEST: Test Feature
+"""
+
+
+def test_is_at_pause_point_true_at_conclude(tmp_path, governance):
+    """WORK-085: is_at_pause_point returns True when investigation is at CONCLUDE phase."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup: Create investigation at CONCLUDE phase
+    work_dir = tmp_path / "docs" / "work" / "active" / "INV-001"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(
+        SAMPLE_INV_AT_CONCLUDE.replace("INV-TEST", "INV-001"),
+        encoding="utf-8"
+    )
+
+    result = engine.is_at_pause_point("INV-001")
+    assert result is True
+
+
+def test_is_at_pause_point_false_at_explore(tmp_path, governance):
+    """WORK-085: is_at_pause_point returns False when investigation is at EXPLORE phase (inhale, not pause)."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup: Create investigation at EXPLORE phase
+    work_dir = tmp_path / "docs" / "work" / "active" / "INV-002"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(
+        SAMPLE_INV_AT_EXPLORE.replace("INV-TEST", "INV-002"),
+        encoding="utf-8"
+    )
+
+    result = engine.is_at_pause_point("INV-002")
+    assert result is False
+
+
+def test_is_at_pause_point_false_for_unknown_work(tmp_path, governance):
+    """WORK-085: is_at_pause_point returns False when work item doesn't exist."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    result = engine.is_at_pause_point("NONEXISTENT-001")
+    assert result is False
+
+
+def test_is_at_pause_point_feature_at_done(tmp_path, governance):
+    """WORK-085: is_at_pause_point returns True when feature is at DONE phase."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup: Create feature at DONE phase
+    work_dir = tmp_path / "docs" / "work" / "active" / "WORK-001"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(
+        SAMPLE_FEATURE_AT_DONE.replace("WORK-TEST", "WORK-001"),
+        encoding="utf-8"
+    )
+
+    result = engine.is_at_pause_point("WORK-001")
+    assert result is True

@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-01-04T20:52:33
+# System Auto: last updated on: 2026-02-03T22:19:17
 """Tests for CycleRunner module (E2-255).
 
 Tests phase gate validation and cycle phase lookup functionality.
@@ -166,3 +166,145 @@ class TestScaffoldCommand:
             title="Test"
         )
         assert result == "just validate"
+
+
+# =============================================================================
+# WORK-084: Lifecycle Signatures (REQ-LIFECYCLE-001)
+# =============================================================================
+
+
+class TestLifecycleOutputDataclasses:
+    """Tests for LifecycleOutput type hierarchy (WORK-084)."""
+
+    def test_lifecycle_output_base_dataclass(self):
+        """LifecycleOutput has required fields."""
+        from cycle_runner import LifecycleOutput
+        from datetime import datetime
+
+        output = LifecycleOutput(
+            lifecycle="investigation",
+            work_id="INV-001",
+            timestamp=datetime.now(),
+            status="success"
+        )
+        assert output.lifecycle == "investigation"
+        assert output.work_id == "INV-001"
+        assert output.status == "success"
+
+    def test_findings_output_type(self):
+        """Findings extends LifecycleOutput with investigation-specific fields."""
+        from cycle_runner import Findings
+        from datetime import datetime
+
+        findings = Findings(
+            lifecycle="investigation",
+            work_id="INV-001",
+            timestamp=datetime.now(),
+            status="success",
+            question="What causes the bug?",
+            conclusions=["Root cause is X"],
+            evidence=["Log file shows Y"],
+            open_questions=[]
+        )
+        assert findings.question == "What causes the bug?"
+        assert len(findings.conclusions) == 1
+
+    def test_specification_output_type(self):
+        """Specification extends LifecycleOutput with design-specific fields."""
+        from cycle_runner import Specification
+        from datetime import datetime
+
+        spec = Specification(
+            lifecycle="design",
+            work_id="WORK-084",
+            timestamp=datetime.now(),
+            status="success",
+            requirements=["REQ-LIFECYCLE-001"],
+            design_decisions=["Use dataclasses"],
+            interfaces={"run": "work_id, lifecycle -> LifecycleOutput"}
+        )
+        assert "REQ-LIFECYCLE-001" in spec.requirements
+        assert "run" in spec.interfaces
+
+
+class TestCycleRunnerRun:
+    """Tests for CycleRunner.run() method (WORK-084)."""
+
+    def test_run_returns_lifecycle_output(self):
+        """CycleRunner.run() returns LifecycleOutput subclass."""
+        from cycle_runner import CycleRunner, LifecycleOutput
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        output = runner.run(work_id="WORK-084", lifecycle="design")
+        assert isinstance(output, LifecycleOutput)
+        assert output.work_id == "WORK-084"
+        assert output.lifecycle == "design"
+
+    def test_run_does_not_auto_chain(self):
+        """CycleRunner.run() returns output, does NOT trigger next lifecycle."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+
+        # Mock any chaining mechanism
+        with patch.object(runner, '_emit_phase_entered') as mock_emit:
+            output = runner.run(work_id="WORK-084", lifecycle="design")
+            # Should emit for current lifecycle phases only, not next lifecycle
+            # Specifically, should NOT emit for "implementation" phases
+            for call in mock_emit.call_args_list:
+                assert "implementation" not in str(call)
+
+    def test_existing_get_cycle_phases_unchanged(self):
+        """Existing get_cycle_phases behavior unchanged after adding run()."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        phases = runner.get_cycle_phases("implementation-cycle")
+        assert phases == ["PLAN", "DO", "CHECK", "DONE", "CHAIN"]
+
+
+# =============================================================================
+# WORK-085: Pause Semantics (REQ-LIFECYCLE-002, S27 Breath Model)
+# =============================================================================
+
+
+class TestPauseSemantics:
+    """Tests for PAUSE_PHASES constant (WORK-085)."""
+
+    def test_pause_phases_constant_exists(self):
+        """PAUSE_PHASES constant defines pause phases for all 5 lifecycles."""
+        from cycle_runner import PAUSE_PHASES
+
+        assert "investigation" in PAUSE_PHASES
+        assert "design" in PAUSE_PHASES
+        assert "implementation" in PAUSE_PHASES
+        assert "validation" in PAUSE_PHASES
+        assert "triage" in PAUSE_PHASES
+
+    def test_pause_phases_maps_to_exhale_phases(self):
+        """Pause phases match S27 exhale phases (CONCLUDE, COMPLETE, DONE, REPORT, COMMIT)."""
+        from cycle_runner import PAUSE_PHASES
+
+        assert "CONCLUDE" in PAUSE_PHASES["investigation"]
+        assert "COMPLETE" in PAUSE_PHASES["design"]
+        assert "DONE" in PAUSE_PHASES["implementation"]
+        assert "REPORT" in PAUSE_PHASES["validation"]
+        assert "COMMIT" in PAUSE_PHASES["triage"]
+
+    def test_all_lifecycles_have_defined_pause_points(self):
+        """Every lifecycle in PAUSE_PHASES has at least one pause phase defined."""
+        from cycle_runner import PAUSE_PHASES
+
+        for lifecycle, phases in PAUSE_PHASES.items():
+            assert len(phases) > 0, f"Lifecycle {lifecycle} has no pause phases"
+
+    def test_existing_cycle_phases_unchanged(self):
+        """CYCLE_PHASES constant unchanged after adding PAUSE_PHASES."""
+        from cycle_runner import CYCLE_PHASES
+
+        # Verify existing cycles still have same phases
+        assert CYCLE_PHASES["implementation-cycle"] == ["PLAN", "DO", "CHECK", "DONE", "CHAIN"]
+        assert CYCLE_PHASES["investigation-cycle"] == ["HYPOTHESIZE", "EXPLORE", "CONCLUDE", "CHAIN"]

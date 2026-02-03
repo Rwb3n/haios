@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-01-21T20:31:23
+# System Auto: last updated on: 2026-02-03T22:20:42
 """
 CycleRunner Module (E2-255)
 
@@ -30,6 +30,7 @@ Usage:
         print("Phase entry allowed")
 """
 from dataclasses import dataclass, field
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
 
@@ -64,6 +65,70 @@ class CycleResult:
     next_cycle: Optional[str] = None
 
 
+# =============================================================================
+# WORK-084: Lifecycle Output Types (REQ-LIFECYCLE-001)
+# =============================================================================
+
+
+@dataclass
+class LifecycleOutput:
+    """Base class for all lifecycle outputs (REQ-LIFECYCLE-001).
+
+    Lifecycles are pure functions: Input → Output, independently completable.
+    This base class defines the common fields for all lifecycle outputs.
+    """
+
+    lifecycle: str
+    work_id: str
+    timestamp: datetime
+    status: Literal["success", "failure", "partial"]
+
+
+@dataclass
+class Findings(LifecycleOutput):
+    """Output from Investigation lifecycle: Question → Findings."""
+
+    question: str
+    conclusions: List[str]
+    evidence: List[str]
+    open_questions: List[str]
+
+
+@dataclass
+class Specification(LifecycleOutput):
+    """Output from Design lifecycle: Requirements → Specification."""
+
+    requirements: List[str]
+    design_decisions: List[str]
+    interfaces: Dict[str, Any]
+
+
+@dataclass
+class Artifact(LifecycleOutput):
+    """Output from Implementation lifecycle: Specification → Artifact."""
+
+    files_created: List[str]
+    files_modified: List[str]
+    tests_passed: bool
+
+
+@dataclass
+class Verdict(LifecycleOutput):
+    """Output from Validation lifecycle: Artifact × Spec → Verdict."""
+
+    passed: bool
+    failures: List[str]
+    warnings: List[str]
+
+
+@dataclass
+class PriorityList(LifecycleOutput):
+    """Output from Triage lifecycle: [Items] → [PrioritizedItems]."""
+
+    items: List[str]
+    ranking_criteria: str
+
+
 # Cycle phase definitions (from S17.5 and existing skills)
 CYCLE_PHASES: Dict[str, List[str]] = {
     "implementation-cycle": ["PLAN", "DO", "CHECK", "DONE", "CHAIN"],
@@ -73,6 +138,17 @@ CYCLE_PHASES: Dict[str, List[str]] = {
     "checkpoint-cycle": ["SCAFFOLD", "FILL", "VERIFY", "CAPTURE", "COMMIT"],
     "plan-authoring-cycle": ["ANALYZE", "AUTHOR", "VALIDATE", "CHAIN"],
     "observation-triage-cycle": ["SCAN", "TRIAGE", "PROMOTE"],
+}
+
+# WORK-085: Pause phases per lifecycle (REQ-LIFECYCLE-002, S27 Breath Model)
+# Pause = exhale complete, valid completion state per S27
+# These are the phases where work can safely stop without being "incomplete"
+PAUSE_PHASES: Dict[str, List[str]] = {
+    "investigation": ["CONCLUDE"],      # After exhale: findings committed
+    "design": ["COMPLETE"],             # After exhale: spec committed
+    "implementation": ["DONE"],         # After exhale: artifact committed
+    "validation": ["REPORT"],           # After exhale: verdict committed
+    "triage": ["COMMIT"],               # After exhale: priorities committed
 }
 
 
@@ -218,3 +294,121 @@ class CycleRunner:
         """
         from node_cycle import build_scaffold_command as _build_scaffold_command
         return _build_scaffold_command(template, work_id, title)
+
+    # =========================================================================
+    # WORK-084: Lifecycle Execution (REQ-LIFECYCLE-001)
+    # =========================================================================
+
+    def run(self, work_id: str, lifecycle: str) -> LifecycleOutput:
+        """
+        Execute lifecycle and return typed output. Does NOT auto-chain.
+
+        This implements REQ-LIFECYCLE-001: Lifecycles are pure functions.
+        Caller decides whether to chain to next lifecycle.
+
+        Args:
+            work_id: Work item ID (e.g., "WORK-084", "INV-001")
+            lifecycle: Lifecycle name ("investigation", "design", "implementation",
+                       "validation", "triage")
+
+        Returns:
+            Typed LifecycleOutput subclass based on lifecycle type:
+            - investigation → Findings
+            - design → Specification
+            - implementation → Artifact
+            - validation → Verdict
+            - triage → PriorityList
+            - unknown → LifecycleOutput (base)
+
+        Note:
+            MVP implementation returns typed output with default/empty values.
+            Full content population requires integration with skill execution
+            (see CH-005: PhaseTemplateContracts).
+        """
+        # Map lifecycle to output type
+        output_types: Dict[str, type] = {
+            "investigation": Findings,
+            "design": Specification,
+            "implementation": Artifact,
+            "validation": Verdict,
+            "triage": PriorityList,
+        }
+
+        # Get output type or default to base
+        output_class = output_types.get(lifecycle, LifecycleOutput)
+
+        # Emit phase entered for observability
+        self._emit_phase_entered(lifecycle, "RUN", work_id)
+
+        # Create timestamp for output
+        now = datetime.now()
+
+        # MVP: Return output with basic fields populated
+        # Full implementation: populate from skill execution results
+        if output_class == LifecycleOutput:
+            return LifecycleOutput(
+                lifecycle=lifecycle,
+                work_id=work_id,
+                timestamp=now,
+                status="success"
+            )
+
+        # For typed outputs, provide default values for required fields
+        if output_class == Findings:
+            return Findings(
+                lifecycle=lifecycle,
+                work_id=work_id,
+                timestamp=now,
+                status="success",
+                question="",
+                conclusions=[],
+                evidence=[],
+                open_questions=[]
+            )
+        elif output_class == Specification:
+            return Specification(
+                lifecycle=lifecycle,
+                work_id=work_id,
+                timestamp=now,
+                status="success",
+                requirements=[],
+                design_decisions=[],
+                interfaces={}
+            )
+        elif output_class == Artifact:
+            return Artifact(
+                lifecycle=lifecycle,
+                work_id=work_id,
+                timestamp=now,
+                status="success",
+                files_created=[],
+                files_modified=[],
+                tests_passed=False
+            )
+        elif output_class == Verdict:
+            return Verdict(
+                lifecycle=lifecycle,
+                work_id=work_id,
+                timestamp=now,
+                status="success",
+                passed=False,
+                failures=[],
+                warnings=[]
+            )
+        elif output_class == PriorityList:
+            return PriorityList(
+                lifecycle=lifecycle,
+                work_id=work_id,
+                timestamp=now,
+                status="success",
+                items=[],
+                ranking_criteria=""
+            )
+
+        # Fallback (should not reach here)
+        return LifecycleOutput(
+            lifecycle=lifecycle,
+            work_id=work_id,
+            timestamp=now,
+            status="success"
+        )

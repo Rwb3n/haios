@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-02T18:57:48
+# System Auto: last updated on: 2026-02-03T22:21:14
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -350,6 +350,49 @@ class WorkEngine:
                     if work and not work.blocked_by and work.status not in terminal_statuses:
                         ready.append(work)
         return ready
+
+    # ========== Pause Point Methods (WORK-085, REQ-LIFECYCLE-002) ==========
+
+    def is_at_pause_point(self, work_id: str) -> bool:
+        """
+        Check if work item is at valid pause point per S27 Breath Model.
+
+        Pause points are the exhale-complete phases where work can safely stop
+        without being considered incomplete. Per REQ-LIFECYCLE-002.
+
+        Args:
+            work_id: Work item ID (e.g., "INV-001", "WORK-085")
+
+        Returns:
+            True if work is at pause phase, False otherwise
+        """
+        work = self.get_work(work_id)
+        if work is None:
+            return False
+
+        # Import PAUSE_PHASES from cycle_runner
+        try:
+            from .cycle_runner import PAUSE_PHASES
+        except ImportError:
+            from cycle_runner import PAUSE_PHASES
+
+        # Map work type to lifecycle
+        type_to_lifecycle = {
+            "investigation": "investigation",
+            "design": "design",
+            "feature": "implementation",
+            "implementation": "implementation",
+            "bug": "implementation",
+            "chore": "implementation",
+            "spike": "investigation",
+            "validation": "validation",
+            "triage": "triage",
+        }
+        lifecycle = type_to_lifecycle.get(work.type, "implementation")
+
+        # Check if current_node is a pause phase for this lifecycle
+        pause_phases = PAUSE_PHASES.get(lifecycle, [])
+        return work.current_node in pause_phases
 
     # ========== Queue Methods (E2-290) ==========
 
