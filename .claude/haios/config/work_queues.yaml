@@ -1,8 +1,8 @@
 # generated: 2026-01-15
-# System Auto: last updated on: 2026-01-19T13:28:21
+# System Auto: last updated on: 2026-02-04T21:28:07
 # Work Queue Configuration (E2-290, INV-064 design)
 # Provides typed queues with cycle-locking for structured work execution
-version: "1.0"
+version: "1.1"
 
 # Queue type definitions
 queue_types:
@@ -17,45 +17,77 @@ queue_types:
 
 # Active queues
 queues:
-  # WORKITEM-EVOLUTION queue - Session 208 (Pre-E2.3 Migration Focus)
-  workitem-evolution:
-    type: fifo  # Ordered execution - spec first, then implementation
+  # LIFECYCLES queue - E2.5 Priority (Session 307: Foundation first)
+  # Per EPOCH.md: lifecycles arc is foundation, all other arcs depend on it
+  lifecycles:
+    type: fifo  # Ordered execution per dependency analysis
     items:
-      - WORK-001  # Universal Work Item Structure (TRD-WORK-ITEM-UNIVERSAL spec)
-      - E2-179    # Scaffold Recipe Optional Frontmatter Args (spawn_by etc)
-    allowed_cycles: [implementation-cycle, work-creation-cycle]
-    rationale: "Session 208: Solidify work item schema before E2.3 migration. WORK-001 defines spec, E2-179 improves tooling."
+      - WORK-081  # Cycle-as-Subagent Delegation Pattern (foundational)
+      - WORK-088  # Phase Template Contracts (defines contracts before fracturing)
+      - WORK-089  # Fracture Design Lifecycle Templates
+      - WORK-090  # Fracture Implementation Lifecycle Templates
+      - WORK-091  # Fracture Validation Lifecycle Templates
+      - WORK-092  # Fracture Triage Lifecycle Templates
+      - WORK-086  # Batch Mode (builds on lifecycle infrastructure)
+    allowed_cycles: [implementation-cycle, investigation-cycle, work-creation-cycle]
+    rationale: "Session 307: Lifecycles arc is E2.5 foundation. All other arcs blocked until this completes."
 
-  # PIPELINE queue - Epoch 2.3 (Session 206: Doc-to-Product Pipeline)
-  pipeline:
-    type: fifo  # Ordered execution - each step enables the next
-    items: []   # Populated after workitem-evolution complete
-    allowed_cycles: [implementation-cycle, investigation-cycle]
-    rationale: "Session 206: Building the doc-to-product pipeline. FIFO because steps are sequential."
+  # QUEUE arc - E2.5 (depends on lifecycles)
+  queue-arc:
+    type: fifo
+    items: []  # WORK-066 complete. Wiring work TBD after lifecycles.
+    allowed_cycles: [implementation-cycle]
+    rationale: "Queue position wiring depends on lifecycle patterns."
 
-  # GOVERNANCE queue - Session 193 priority (governance hardening focus)
-  governance:
+  # CEREMONIES arc - E2.5 (depends on queue)
+  ceremonies:
     type: priority
     items:
-      - E2-291   # Wire Queue into Survey-Cycle and Routing-Gate (critical gap S192)
-      - INV-054  # Validation Cycle Fitness for Purpose (semantic L4 alignment)
-      - INV-041  # Single Source Path Constants Architecture (drift prevention)
-      - E2-164   # Coldstart L1 Context Review (agent efficiency)
-    allowed_cycles: [implementation-cycle, investigation-cycle]
-    rationale: "Session 193: Governance hardening per S192 learnings"
+      - WORK-034  # Upstream Status Propagation
+      - WORK-096  # Agent UX Test in DoD Validation
+    allowed_cycles: [implementation-cycle]
+    rationale: "Ceremony implementations depend on queue and lifecycle patterns."
 
-  # Default queue - everything else, priority ordering
+  # FEEDBACK arc - E2.5 (depends on ceremonies)
+  feedback:
+    type: priority
+    items:
+      - WORK-071  # Pre-Decomposition Review Gate Design
+      - WORK-075  # System Audit as L4 Traceability Verification
+      - WORK-082  # Epistemic Review Ceremony
+    allowed_cycles: [implementation-cycle, investigation-cycle]
+    rationale: "Feedback loops depend on ceremony infrastructure."
+
+  # ASSETS arc - E2.5 (can parallel with ceremonies)
+  assets:
+    type: priority
+    items:
+      - WORK-093  # Lifecycle Asset Types
+      - WORK-097  # Plan Decomposition Traceability
+    allowed_cycles: [implementation-cycle]
+    rationale: "Asset typing can parallel ceremony work."
+
+  # PORTABILITY arc - E2.5 (lower priority)
+  portability:
+    type: priority
+    items:
+      - WORK-067  # Portable Schema Architecture Investigation
+      - WORK-020  # Discoverability Architecture
+    allowed_cycles: [implementation-cycle, investigation-cycle]
+    rationale: "Portability work can proceed when bandwidth allows."
+
+  # Default queue - catch-all for unassigned work
   default:
     type: priority
-    items: auto  # Populated from get_ready() excluding governance queue
+    items: auto  # Populated from get_ready() excluding named queues
     allowed_cycles: [implementation-cycle, investigation-cycle, work-creation-cycle]
 
 # Policies
 policies:
   assignment:
-    default_queue: default
-    auto_batch_threshold: 3  # Suggest batch for 3+ related items
+    default_queue: lifecycles  # E2.5 focus: lifecycles first
+    auto_batch_threshold: 3
   cross_arc:
-    allowed: true  # Queues can span arcs
+    allowed: false  # Session 307: Stay in lifecycles until complete
   cycle_enforcement:
-    strict: true  # Block cycles not in allowed_cycles
+    strict: true
