@@ -41,11 +41,19 @@ memory_refs:
 - 82952
 - 82953
 - 82954
+operator_decisions:
+- question: Should current_node be renamed to cycle_phase?
+  options:
+  - rename to cycle_phase
+  - keep current_node
+  resolved: true
+  chosen: rename to cycle_phase
+  rationale: Better semantic clarity, aligns with four-dimensional model terminology
 extensions:
   epoch: E2.5
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-03T21:19:00'
+last_updated: '2026-02-03T23:54:26'
 ---
 # WORK-066: Queue Position Field and Cycle Wiring Implementation
 
