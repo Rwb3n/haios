@@ -9,7 +9,7 @@ lifecycle_phase: plan
 session: 305
 version: '1.5'
 generated: 2026-02-03
-last_updated: '2026-02-04T00:01:17'
+last_updated: '2026-02-04T00:06:48'
 ---
 # Implementation Plan: Queue Position Field Implementation
 
@@ -61,8 +61,8 @@ Add `queue_position` field to work items and rename `current_node` to `cycle_pha
 
 | Metric | Value | Source |
 |--------|-------|--------|
-| Files to modify | 4 | work_engine.py, TRD-WORK-ITEM-UNIVERSAL.md, work_item.md template, scaffold.py |
-| Lines of code affected | ~80 | WorkEngine (~40), TRD (~20), template (~10), scaffold (~10) |
+| Files to modify | 3 | work_engine.py, TRD-WORK-ITEM-UNIVERSAL.md, work_item.md template |
+| Lines of code affected | ~70 | WorkEngine (~40), TRD (~20), template (~10) |
 | New files to create | 1 | test_queue_position.py |
 | Tests to write | 6 | See Tests First section |
 | Dependencies | 2 | GovernanceLayer (reads), cycle_runner (reads) |
@@ -338,7 +338,45 @@ def _parse_work_file(self, path: Path) -> Optional[WorkState]:
     )
 ```
 
-### Change 3: New Methods (after add_memory_refs, ~line 617)
+### Change 3: Update _write_work_file (REVISED per critique A1)
+
+**File:** `.claude/haios/modules/work_engine.py`
+**Location:** Lines 709-732 in `_write_work_file()`
+
+**Current Code:**
+```python
+# work_engine.py:709-732
+def _write_work_file(self, work: WorkState) -> None:
+    # ...
+    fm = yaml.safe_load(parts[1]) or {}
+    fm["current_node"] = work.current_node
+    fm["node_history"] = work.node_history
+    fm["memory_refs"] = work.memory_refs
+    fm["status"] = work.status
+
+    new_fm = yaml.dump(...)
+```
+
+**Changed Code:**
+```python
+def _write_work_file(self, work: WorkState) -> None:
+    # ...
+    fm = yaml.safe_load(parts[1]) or {}
+    fm["current_node"] = work.current_node
+    fm["node_history"] = work.node_history
+    fm["memory_refs"] = work.memory_refs
+    fm["status"] = work.status
+    # WORK-066: Persist queue_position and cycle_phase (unified write path)
+    fm["queue_position"] = work.queue_position
+    fm["cycle_phase"] = work.cycle_phase
+    fm["last_updated"] = datetime.now().isoformat()
+
+    new_fm = yaml.dump(...)
+```
+
+**Rationale (A1 mitigation):** Unifies write path - all WorkState persistence goes through `_write_work_file()`. Prevents data loss from dual write paths.
+
+### Change 4: New Methods (after add_memory_refs, ~line 617)
 
 **File:** `.claude/haios/modules/work_engine.py`
 **Location:** After line 617 (add_memory_refs method)
@@ -350,6 +388,8 @@ def _parse_work_file(self, path: Path) -> Optional[WorkState]:
 def set_queue_position(self, id: str, position: str) -> Optional[WorkState]:
     """
     Set queue_position for work item (WORK-066).
+
+    Uses unified write path via _write_work_file() per critique A1.
 
     Args:
         id: Work item ID
@@ -365,23 +405,17 @@ def set_queue_position(self, id: str, position: str) -> Optional[WorkState]:
     if position not in VALID_POSITIONS:
         raise ValueError(f"Invalid queue_position: {position}. Must be one of {VALID_POSITIONS}")
 
-    path = self._find_work_file(id)
-    if path is None:
+    work = self.get_work(id)
+    if work is None:
         return None
 
-    content = path.read_text(encoding="utf-8")
-    parts = content.split("---", 2)
-    if len(parts) < 3:
-        return None
+    # Update in-memory state
+    work.queue_position = position
 
-    fm = yaml.safe_load(parts[1]) or {}
-    fm["queue_position"] = position
-    fm["last_updated"] = datetime.now().isoformat()
+    # Persist via unified write path (A1 mitigation)
+    self._write_work_file(work)
 
-    new_fm = yaml.dump(fm, default_flow_style=False, sort_keys=False, allow_unicode=True)
-    path.write_text(f"---\n{new_fm}---{parts[2]}", encoding="utf-8")
-
-    return self._parse_work_file(path)
+    return work
 
 def get_in_progress(self) -> List[WorkState]:
     """
@@ -433,6 +467,7 @@ close-work-cycle (future wiring)
 | queue_position values | backlog, in_progress, done | Simplified from L5 (removed "todo" - survey-cycle handles selection) |
 | Default queue_position | "backlog" | All existing items are unselected by definition |
 | Enforcement location | get_in_progress() method | survey-cycle calls this; WorkEngine doesn't enforce (separation) |
+| **Unified write path (A1)** | `set_queue_position` uses `_write_work_file` | Critique A1: Prevents data loss from dual write paths |
 
 ### Input/Output Examples
 
@@ -511,31 +546,36 @@ No - backward compatibility defaults handle this. Items without the field get `q
 - [ ] Parse `cycle_phase` with fallback to `current_node`
 - [ ] Tests 1, 2, 5 pass (green)
 
-### Step 4: Add New WorkEngine Methods
-- [ ] Add `set_queue_position(id, position)` method
+### Step 4: Update _write_work_file (A1 mitigation)
+- [ ] Add `fm["queue_position"] = work.queue_position`
+- [ ] Add `fm["cycle_phase"] = work.cycle_phase`
+- [ ] Add `fm["last_updated"] = datetime.now().isoformat()`
+
+### Step 5: Add New WorkEngine Methods
+- [ ] Add `set_queue_position(id, position)` method (uses unified write path)
 - [ ] Add `get_in_progress()` method
 - [ ] Tests 3, 4, 6 pass (green)
 
-### Step 5: Update TRD-WORK-ITEM-UNIVERSAL.md
+### Step 6: Update TRD-WORK-ITEM-UNIVERSAL.md
 - [ ] Add `queue_position` field to schema
 - [ ] Add `cycle_phase` field (note current_node as deprecated)
 - [ ] Update Lifecycle Nodes section
 
-### Step 6: Update work_item.md Template
+### Step 7: Update work_item.md Template
 - [ ] Add `queue_position: backlog` to frontmatter
 - [ ] Add `cycle_phase: backlog` to frontmatter
 - [ ] Add `cycle_phase_history` section
 
-### Step 7: Integration Verification
+### Step 8: Integration Verification
 - [ ] All 6 tests pass
 - [ ] Run full test suite: `pytest .claude/haios/modules/tests/ -v`
 - [ ] No regressions
 
-### Step 8: README Sync (MUST)
+### Step 9: README Sync (MUST)
 - [ ] **MUST:** Update `.claude/haios/modules/README.md` with new methods
 - [ ] **MUST:** Verify README content matches actual file state
 
-### Step 9: Consumer Verification (MUST for renames)
+### Step 10: Consumer Verification (MUST for renames)
 - [ ] **MUST:** Grep for references to `current_node` in modules
 - [ ] **MUST:** Document consumers (no changes needed - backward compat)
 - [ ] **MUST:** Verify cycle_phase fallback works for all existing items
