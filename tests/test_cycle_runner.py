@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-02-03T23:39:23
+# System Auto: last updated on: 2026-02-04T22:28:13
 """Tests for CycleRunner module (E2-255).
 
 Tests phase gate validation and cycle phase lookup functionality.
@@ -309,3 +309,86 @@ class TestPauseSemantics:
         assert CYCLE_PHASES["implementation-cycle"] == ["PLAN", "DO", "CHECK", "DONE", "CHAIN"]
         # WORK-098: Updated to match L4 REQ-FLOW-002 (Session 304)
         assert CYCLE_PHASES["investigation-cycle"] == ["EXPLORE", "HYPOTHESIZE", "VALIDATE", "CONCLUDE", "CHAIN"]
+
+
+# =============================================================================
+# WORK-088: Phase Template Contracts (REQ-TEMPLATE-001)
+# =============================================================================
+
+
+class TestLoadPhaseTemplate:
+    """Tests for _load_phase_template method (WORK-088)."""
+
+    def test_explore_template_has_input_contract(self):
+        """EXPLORE template frontmatter includes input_contract field."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        template = runner._load_phase_template("EXPLORE")
+        assert "input_contract" in template
+        assert len(template["input_contract"]) > 0
+
+    def test_explore_template_has_output_contract(self):
+        """EXPLORE template frontmatter includes output_contract field."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        template = runner._load_phase_template("EXPLORE")
+        assert "output_contract" in template
+        assert len(template["output_contract"]) > 0
+
+
+class TestValidatePhaseInput:
+    """Tests for validate_phase_input method (WORK-088)."""
+
+    def test_validate_phase_input_success(self):
+        """validate_phase_input returns allowed when contract satisfied."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer, GateResult
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        result = runner.validate_phase_input("EXPLORE", "WORK-088")
+        assert result.allowed is True
+        assert isinstance(result, GateResult)
+
+    def test_validate_phase_input_missing_field_blocks(self):
+        """validate_phase_input returns blocked when required field missing."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+
+        # Mock _check_work_has_field to return False for specific field
+        with patch.object(runner, '_check_work_has_field', return_value=False):
+            result = runner.validate_phase_input("EXPLORE", "WORK-EMPTY")
+            assert result.allowed is False
+            assert "Missing required input:" in result.reason
+
+
+class TestValidatePhaseOutput:
+    """Tests for validate_phase_output method (WORK-088)."""
+
+    def test_validate_phase_output_returns_gate_result(self):
+        """validate_phase_output returns GateResult."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer, GateResult
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        result = runner.validate_phase_output("EXPLORE", "WORK-088")
+        assert isinstance(result, GateResult)
+
+
+class TestBackwardCompatibility:
+    """Tests for backward compatibility (WORK-088)."""
+
+    def test_check_phase_entry_unchanged_for_cycles_without_templates(self):
+        """Existing check_phase_entry behavior unchanged for cycles without templates."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        # implementation-cycle doesn't have templates yet
+        result = runner.check_phase_entry("implementation-cycle", "PLAN", "WORK-088")
+        assert result.allowed is True  # MVP behavior preserved

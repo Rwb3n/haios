@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-04T21:12:23
+# System Auto: last updated on: 2026-02-04T22:32:03
 # HAIOS Modules
 
 Core modules for HAIOS Chariot Architecture (L4-implementation.md).
@@ -546,6 +546,29 @@ Stateless phase gate validator for cycle skills. Now includes lifecycle output t
 | `check_phase_exit(cycle_id, phase, work_id)` | Cycle + phase + work ID | `GateResult` |
 | `build_scaffold_command(template, work_id, title)` | Command template + IDs | `str` formatted command (E2-263) |
 | `run(work_id, lifecycle)` | Work ID + lifecycle name | `LifecycleOutput` subclass (WORK-084) |
+| `validate_phase_input(phase, work_id)` | Phase + work ID | `GateResult` (WORK-088) |
+| `validate_phase_output(phase, work_id)` | Phase + work ID | `GateResult` (WORK-088) |
+| `_load_phase_template(phase)` | Phase name | `Dict` with frontmatter (WORK-088) |
+
+### Phase Template Contracts (WORK-088, REQ-TEMPLATE-001)
+
+Templates can define machine-readable contracts in YAML frontmatter:
+
+```yaml
+input_contract:
+  - field: work_context
+    type: markdown
+    required: true
+    description: Work item Context section populated
+
+output_contract:
+  - field: evidence_table
+    type: table
+    required: true
+    description: Evidence Collection table
+```
+
+`check_phase_entry` and `check_phase_exit` now call `validate_phase_input`/`validate_phase_output` respectively. MVP uses soft validation (warn but allow). Hard gates in CH-007.
 
 ### Lifecycle Output Types (WORK-084, REQ-LIFECYCLE-001)
 

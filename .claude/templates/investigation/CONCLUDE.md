@@ -2,9 +2,35 @@
 template: investigation_phase
 phase: CONCLUDE
 maps_to_state: DONE
-version: '1.0'
-generated: 2026-02-01
-last_updated: '2026-02-01T15:25:58'
+version: '1.1'
+input_contract:
+- field: validate_complete
+  type: boolean
+  required: true
+  description: VALIDATE phase complete
+- field: all_verdicts
+  type: table
+  required: true
+  description: All hypotheses have verdicts
+output_contract:
+- field: findings_synthesized
+  type: markdown
+  required: true
+  description: Answer to investigation objective
+- field: spawned_work
+  type: table
+  required: false
+  description: Spawned work items created
+- field: memory_stored
+  type: list
+  required: true
+  description: Learnings stored via ingester_ingest
+- field: memory_refs
+  type: list
+  required: true
+  description: memory_refs populated in work item frontmatter
+generated: '2026-02-04'
+last_updated: '2026-02-04T22:29:16'
 ---
 # CONCLUDE Phase
 

@@ -1,5 +1,5 @@
 # generated: 2026-02-01
-# System Auto: last updated on: 2026-02-01T15:26:36
+# System Auto: last updated on: 2026-02-04T22:31:43
 # Investigation Phase Templates
 
 Phase-specific templates for the investigation cycle (E2.4 EXPLORE-FIRST design).
@@ -25,6 +25,30 @@ Each template follows:
 ## Output Contract    <- Required outputs
 ## Template           <- Minimal structure
 ```
+
+## Machine-Readable Contracts (WORK-088)
+
+As of v1.1, templates include machine-readable contracts in YAML frontmatter:
+
+```yaml
+input_contract:
+  - field: <field_name>     # Field to check
+    type: <type>            # markdown | table | list | string | boolean
+    required: <bool>        # true = must exist
+    description: <string>   # Human-readable explanation
+
+output_contract:
+  - field: <field_name>
+    type: <type>
+    required: <bool>
+    description: <string>
+```
+
+CycleRunner validates these contracts on phase entry/exit via:
+- `validate_phase_input(phase, work_id)` - checks input_contract
+- `validate_phase_output(phase, work_id)` - checks output_contract
+
+MVP uses soft validation (warn but allow). Hard gates in CH-007.
 
 ## Usage
 

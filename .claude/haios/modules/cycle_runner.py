@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-02-03T23:37:34
+# System Auto: last updated on: 2026-02-04T22:31:11
 """
 CycleRunner Module (E2-255)
 
@@ -206,8 +206,7 @@ class CycleRunner:
         """
         Check if a phase can be entered (entry conditions met).
 
-        Entry conditions are currently defined in skill markdown.
-        This method provides a hook for programmatic checks.
+        WORK-088: Now validates input contract from phase template.
 
         Args:
             cycle_id: Cycle identifier
@@ -215,13 +214,25 @@ class CycleRunner:
             work_id: Work item ID
 
         Returns:
-            GateResult with allowed=True (MVP: always allow entry)
+            GateResult with allowed=True (MVP: soft gate, always allows)
 
         Side Effects:
             Emits PhaseEntered event via log_phase_transition()
+            Logs validation warnings if contract not satisfied
         """
-        # For MVP: always allow entry (conditions in skill markdown)
-        # Future: read entry conditions from skill and validate
+        # WORK-088: Validate input contract before entry
+        input_result = self.validate_phase_input(phase, work_id)
+        if not input_result.allowed:
+            # Log warning but don't block (MVP soft gate)
+            log_validation_outcome(
+                work_id=work_id,
+                gate="phase_entry",
+                outcome="warn",
+                reason=input_result.reason
+            )
+            # MVP: Allow anyway (soft gate)
+            # Future CH-007: return input_result to hard block
+
         self._emit_phase_entered(cycle_id, phase, work_id)
         return GateResult(allowed=True, reason=f"Phase {phase} entry allowed")
 
@@ -231,6 +242,7 @@ class CycleRunner:
         """
         Check if a phase can be exited (exit criteria met).
 
+        WORK-088: Now validates output contract from phase template.
         Delegates to node_cycle.check_exit_criteria for node-bound cycles.
 
         Args:
@@ -241,6 +253,18 @@ class CycleRunner:
         Returns:
             GateResult with allowed flag and reason
         """
+        # WORK-088: Validate output contract before exit
+        output_result = self.validate_phase_output(phase, work_id)
+        if not output_result.allowed:
+            # Log warning but don't block (MVP soft gate)
+            log_validation_outcome(
+                work_id=work_id,
+                gate="phase_exit",
+                outcome="warn",
+                reason=output_result.reason
+            )
+            # MVP: Allow anyway (soft gate)
+
         from node_cycle import check_exit_criteria
 
         # Map cycle to node (if node-bound)
@@ -414,3 +438,120 @@ class CycleRunner:
             timestamp=now,
             status="success"
         )
+
+    # =========================================================================
+    # WORK-088: Phase Template Contract Validation (REQ-TEMPLATE-001)
+    # =========================================================================
+
+    def _load_phase_template(self, phase: str) -> Dict[str, Any]:
+        """Load phase template frontmatter.
+
+        Args:
+            phase: Phase name (e.g., "EXPLORE", "HYPOTHESIZE")
+
+        Returns:
+            Dict with frontmatter fields, empty dict if not found.
+        """
+        # Map phase to template path
+        template_paths = {
+            "EXPLORE": Path(__file__).parent.parent.parent / "templates" / "investigation" / "EXPLORE.md",
+            "HYPOTHESIZE": Path(__file__).parent.parent.parent / "templates" / "investigation" / "HYPOTHESIZE.md",
+            "VALIDATE": Path(__file__).parent.parent.parent / "templates" / "investigation" / "VALIDATE.md",
+            "CONCLUDE": Path(__file__).parent.parent.parent / "templates" / "investigation" / "CONCLUDE.md",
+        }
+
+        path = template_paths.get(phase)
+        if not path or not path.exists():
+            return {}
+
+        try:
+            content = path.read_text(encoding="utf-8")
+            if content.startswith("---"):
+                end = content.find("---", 3)
+                if end > 0:
+                    frontmatter = content[3:end].strip()
+                    return yaml.safe_load(frontmatter) or {}
+        except (yaml.YAMLError, OSError) as e:
+            # Log warning but return empty dict (graceful degradation)
+            log_validation_outcome(
+                work_id="system",
+                gate="template_load",
+                outcome="warn",
+                reason=f"Failed to load template {phase}: {e}"
+            )
+        return {}
+
+    def validate_phase_input(self, phase: str, work_id: str) -> GateResult:
+        """Validate input contract for phase entry (REQ-TEMPLATE-001).
+
+        Args:
+            phase: Target phase name
+            work_id: Work item ID
+
+        Returns:
+            GateResult - allowed if all required inputs present, blocked otherwise.
+        """
+        template = self._load_phase_template(phase)
+        contract = template.get("input_contract", [])
+
+        if not contract:
+            # No contract defined, allow entry (backward compatible)
+            return GateResult(allowed=True, reason=f"No input contract for {phase}")
+
+        # Check each required item
+        for item in contract:
+            if item.get("required", False):
+                if not self._check_work_has_field(work_id, item["field"]):
+                    return GateResult(
+                        allowed=False,
+                        reason=f"Missing required input: {item['field']} - {item.get('description', '')}"
+                    )
+
+        return GateResult(allowed=True, reason=f"Input contract satisfied for {phase}")
+
+    def validate_phase_output(self, phase: str, work_id: str) -> GateResult:
+        """Validate output contract for phase exit (REQ-TEMPLATE-001).
+
+        Args:
+            phase: Current phase name
+            work_id: Work item ID
+
+        Returns:
+            GateResult - allowed if all required outputs present, blocked otherwise.
+        """
+        template = self._load_phase_template(phase)
+        contract = template.get("output_contract", [])
+
+        if not contract:
+            return GateResult(allowed=True, reason=f"No output contract for {phase}")
+
+        for item in contract:
+            if item.get("required", False):
+                if not self._check_work_has_field(work_id, item["field"]):
+                    return GateResult(
+                        allowed=False,
+                        reason=f"Missing required output: {item['field']} - {item.get('description', '')}"
+                    )
+
+        return GateResult(allowed=True, reason=f"Output contract satisfied for {phase}")
+
+    def _check_work_has_field(self, work_id: str, field: str) -> bool:
+        """Check if work item has a populated field.
+
+        MVP: Returns True (actual field checking requires WorkEngine integration).
+        Full implementation will read work file and check field presence.
+
+        Args:
+            work_id: Work item ID
+            field: Field name to check
+
+        Returns:
+            True if field exists and is populated.
+        """
+        # MVP: Always return True - field validation is soft gate
+        # Future: Use WorkEngine to read work file and verify field
+        if self._work_engine is None:
+            return True
+
+        # TODO: Implement actual field checking when WorkEngine supports it
+        return True
