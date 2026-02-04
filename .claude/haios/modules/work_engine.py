@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-03T22:21:14
+# System Auto: last updated on: 2026-02-04T21:10:45
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -92,13 +92,16 @@ class WorkState:
     """Typed work item state from parsed WORK.md.
 
     WORK-001: Extended with universal work item fields for pipeline portability.
+    WORK-066: Added queue_position and cycle_phase per four-dimensional model.
     """
 
     id: str
     title: str
     status: str
-    current_node: str
+    current_node: str  # DEPRECATED: use cycle_phase (kept for backward compat)
     type: str = "feature"  # WORK-001: feature|investigation|bug|chore|spike
+    queue_position: str = "backlog"  # WORK-066: backlog|in_progress|done
+    cycle_phase: str = "backlog"  # WORK-066: renamed from current_node
     blocked_by: List[str] = field(default_factory=list)
     node_history: List[Dict[str, Any]] = field(default_factory=list)
     memory_refs: List[int] = field(default_factory=list)
@@ -616,6 +619,66 @@ class WorkEngine:
         if self._memory:
             self._memory.auto_link(id, concept_ids)
 
+    # =========================================================================
+    # Queue Position Methods (WORK-066: Four-Dimensional Model)
+    # =========================================================================
+
+    def set_queue_position(self, id: str, position: str) -> Optional[WorkState]:
+        """
+        Set queue_position for work item (WORK-066).
+
+        Uses unified write path via _write_work_file() per critique A1.
+
+        Args:
+            id: Work item ID
+            position: New position (backlog, in_progress, done)
+
+        Returns:
+            Updated WorkState, or None if not found
+
+        Raises:
+            ValueError: If position is not valid
+        """
+        VALID_POSITIONS = {"backlog", "in_progress", "done"}
+        if position not in VALID_POSITIONS:
+            raise ValueError(
+                f"Invalid queue_position: {position}. Must be one of {VALID_POSITIONS}"
+            )
+
+        work = self.get_work(id)
+        if work is None:
+            return None
+
+        # Update in-memory state
+        work.queue_position = position
+
+        # Persist via unified write path (A1 mitigation)
+        self._write_work_file(work)
+
+        return work
+
+    def get_in_progress(self) -> List[WorkState]:
+        """
+        Get all work items with queue_position: in_progress (WORK-066).
+
+        Used by survey-cycle to enforce single in_progress constraint.
+
+        Returns:
+            List of WorkState with queue_position == "in_progress"
+        """
+        result = []
+        if not self.active_dir.exists():
+            return result
+
+        for subdir in self.active_dir.iterdir():
+            if subdir.is_dir():
+                work_md = subdir / "WORK.md"
+                if work_md.exists():
+                    work = self._parse_work_file(work_md)
+                    if work and work.queue_position == "in_progress":
+                        result.append(work)
+        return result
+
     def add_document_link(self, id: str, doc_type: str, doc_path: str) -> None:
         """
         Link a document to the work item.
@@ -679,6 +742,10 @@ class WorkEngine:
         WORK-001: Extended to parse universal work item fields with backward compat.
         - type falls back to category field for legacy items
         - New fields default to empty list/dict if missing
+
+        WORK-066: Parse queue_position and cycle_phase with backward compat.
+        - queue_position defaults to "backlog" if missing
+        - cycle_phase falls back to current_node for legacy items
         """
         content = path.read_text(encoding="utf-8")
         parts = content.split("---", 2)
@@ -686,13 +753,18 @@ class WorkEngine:
             return None
 
         fm = yaml.safe_load(parts[1]) or {}
+        # WORK-066: Parse current_node first for cycle_phase fallback
+        current_node_val = fm.get("current_node", "backlog")
         return WorkState(
             id=fm.get("id", ""),
             title=fm.get("title", ""),
             status=fm.get("status", ""),
-            current_node=fm.get("current_node", "backlog"),
+            current_node=current_node_val,  # DEPRECATED: kept for backward compat
             # WORK-001: type with fallback to category for backward compat
             type=fm.get("type", fm.get("category", "feature")),
+            # WORK-066: New queue_position and cycle_phase fields
+            queue_position=fm.get("queue_position", "backlog"),
+            cycle_phase=fm.get("cycle_phase", current_node_val),  # Falls back to current_node
             blocked_by=fm.get("blocked_by", []) or [],
             node_history=fm.get("node_history", []),
             memory_refs=fm.get("memory_refs", []) or [],
@@ -711,6 +783,7 @@ class WorkEngine:
         Write WorkState back to WORK.md.
 
         L4 Invariant: WorkEngine is the ONLY writer to WORK.md files.
+        WORK-066: Unified write path for queue_position and cycle_phase (A1 mitigation).
         """
         if work.path is None:
             return
@@ -725,6 +798,10 @@ class WorkEngine:
         fm["node_history"] = work.node_history
         fm["memory_refs"] = work.memory_refs
         fm["status"] = work.status
+        # WORK-066: Persist queue_position and cycle_phase (unified write path per A1)
+        fm["queue_position"] = work.queue_position
+        fm["cycle_phase"] = work.cycle_phase
+        fm["last_updated"] = datetime.now().isoformat()
 
         new_fm = yaml.dump(
             fm, default_flow_style=False, sort_keys=False, allow_unicode=True

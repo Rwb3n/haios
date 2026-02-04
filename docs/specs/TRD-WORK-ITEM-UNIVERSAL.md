@@ -1,5 +1,5 @@
 # generated: 2026-01-18
-# System Auto: last updated on: 2026-01-21T18:25:49
+# System Auto: last updated on: 2026-02-04T21:11:31
 # TRD: Universal Work Item Structure
 
 Status: APPROVED
@@ -107,7 +107,9 @@ blocks: []                      # Work items waiting on this
 enables: []                     # Work items this unlocks (softer than blocks)
 
 # === LIFECYCLE ===
-current_node: backlog           # backlog|planning|in_progress|review|complete
+queue_position: backlog         # WORK-066: backlog|in_progress|done (work selection state)
+cycle_phase: backlog            # WORK-066: backlog|plan|implement|check|done (lifecycle phase)
+current_node: backlog           # DEPRECATED: use cycle_phase (kept for backward compat)
 node_history:
   - node: backlog
     entered: 2026-01-18T16:00:00
@@ -227,20 +229,50 @@ WORK-001, WORK-002, WORK-003, ...
 
 ## Lifecycle Nodes
 
+### Queue Position (WORK-066)
+
+Work selection pipeline state - orthogonal to lifecycle phase:
+
 ```
-backlog → planning → in_progress → review → complete
-                          ↑           │
-                          └───────────┘
-                          (rework if review fails)
+backlog → in_progress → done
 ```
 
-| Node | Meaning |
-|------|---------|
+| Position | Meaning |
+|----------|---------|
+| `backlog` | Available for selection |
+| `in_progress` | Currently being worked (single active constraint) |
+| `done` | Work complete, closed |
+
+### Cycle Phase (WORK-066)
+
+Lifecycle phase within a work item (replaces current_node):
+
+```
+backlog → plan → implement → check → done
+                    ↑          │
+                    └──────────┘
+                    (rework if check fails)
+```
+
+| Phase | Meaning |
+|-------|---------|
 | `backlog` | Identified, not started |
-| `planning` | Being decomposed/planned |
-| `in_progress` | Actively being built |
-| `review` | Awaiting validation |
-| `complete` | Done, acceptance criteria met |
+| `plan` | Being decomposed/planned |
+| `implement` | Actively being built |
+| `check` | Awaiting validation |
+| `done` | Done, acceptance criteria met |
+
+### Legacy current_node (DEPRECATED)
+
+The `current_node` field is deprecated but kept for backward compatibility. New code should use `cycle_phase`. Legacy values map as follows:
+
+| current_node | cycle_phase |
+|--------------|-------------|
+| `backlog` | `backlog` |
+| `planning` | `plan` |
+| `in_progress` | `implement` |
+| `review` | `check` |
+| `complete` | `done` |
 
 ---
 

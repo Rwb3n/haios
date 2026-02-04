@@ -3,13 +3,13 @@ template: work_item
 id: WORK-066
 title: Queue Position Field and Cycle Wiring Implementation
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-016
 chapter: CH-007
 arc: queue
-closed: null
+closed: '2026-02-04'
 priority: high
 effort: large
 traces_to:
@@ -41,6 +41,18 @@ memory_refs:
 - 82952
 - 82953
 - 82954
+- 83938
+- 83939
+- 83940
+- 83941
+- 83942
+- 83943
+- 83944
+- 83945
+- 83946
+- 83947
+- 83948
+- 83949
 operator_decisions:
 - question: Should current_node be renamed to cycle_phase?
   options:
@@ -53,7 +65,9 @@ extensions:
   epoch: E2.5
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-03T23:54:26'
+last_updated: '2026-02-04T21:17:34.827099'
+queue_position: backlog
+cycle_phase: backlog
 ---
 # WORK-066: Queue Position Field and Cycle Wiring Implementation
 

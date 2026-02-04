@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-01-29T21:32:13
+# System Auto: last updated on: 2026-02-04T21:12:23
 # HAIOS Modules
 
 Core modules for HAIOS Chariot Architecture (L4-implementation.md).
@@ -226,6 +226,8 @@ Stateless work item management module. Core CRUD operations, with delegated func
 | `close(id)` | Work item ID | Path to WORK.md |
 | `archive(id)` | Work item ID | Path to archived WORK.md |
 | `add_memory_refs(id, concept_ids)` | Work ID + concept list | None |
+| `set_queue_position(id, position)` | Work ID + position | `WorkState` or None (WORK-066) |
+| `get_in_progress()` | None | `List[WorkState]` with queue_position=in_progress (WORK-066) |
 
 ### Functions (Delegated to E2-279 modules)
 
@@ -248,11 +250,20 @@ class WorkState:
     id: str
     title: str
     status: str
-    current_node: str
+    current_node: str          # DEPRECATED: use cycle_phase
+    type: str = "feature"
+    queue_position: str = "backlog"  # WORK-066: backlog|in_progress|done
+    cycle_phase: str = "backlog"     # WORK-066: backlog|plan|implement|check|done
     blocked_by: List[str]
     node_history: List[Dict]
     memory_refs: List[int]
+    requirement_refs: List[str]
+    source_files: List[str]
+    acceptance_criteria: List[str]
+    artifacts: List[str]
+    extensions: Dict[str, Any]
     path: Optional[Path]
+    priority: str = "medium"
 ```
 
 ### Exception Classes
@@ -522,9 +533,9 @@ The `just coldstart` recipe calls `cli.py context-load` which:
 
 This eliminates Read tool calls for L0-L4 manifesto files during coldstart.
 
-## CycleRunner (E2-255)
+## CycleRunner (E2-255, WORK-084)
 
-Stateless phase gate validator for cycle skills.
+Stateless phase gate validator for cycle skills. Now includes lifecycle output types (WORK-084).
 
 ### Functions
 
@@ -534,6 +545,42 @@ Stateless phase gate validator for cycle skills.
 | `check_phase_entry(cycle_id, phase, work_id)` | Cycle + phase + work ID | `GateResult` |
 | `check_phase_exit(cycle_id, phase, work_id)` | Cycle + phase + work ID | `GateResult` |
 | `build_scaffold_command(template, work_id, title)` | Command template + IDs | `str` formatted command (E2-263) |
+| `run(work_id, lifecycle)` | Work ID + lifecycle name | `LifecycleOutput` subclass (WORK-084) |
+
+### Lifecycle Output Types (WORK-084, REQ-LIFECYCLE-001)
+
+Lifecycles are pure functions with explicit Input → Output signatures. The `run()` method returns typed outputs:
+
+| Lifecycle | Output Type | Input → Output |
+|-----------|-------------|----------------|
+| `investigation` | `Findings` | Question → Findings |
+| `design` | `Specification` | Requirements → Specification |
+| `implementation` | `Artifact` | Specification → Artifact |
+| `validation` | `Verdict` | Artifact × Spec → Verdict |
+| `triage` | `PriorityList` | [Items] → [PrioritizedItems] |
+
+```python
+@dataclass
+class LifecycleOutput:
+    """Base class for all lifecycle outputs."""
+    lifecycle: str
+    work_id: str
+    timestamp: datetime
+    status: Literal["success", "failure", "partial"]
+
+@dataclass
+class Findings(LifecycleOutput):
+    question: str
+    conclusions: List[str]
+    evidence: List[str]
+    open_questions: List[str]
+
+@dataclass
+class Specification(LifecycleOutput):
+    requirements: List[str]
+    design_decisions: List[str]
+    interfaces: Dict[str, Any]
+```
 
 ### Supported Cycles
 
@@ -557,7 +604,7 @@ Stateless phase gate validator for cycle skills.
 ### Usage
 
 ```python
-from cycle_runner import CycleRunner, CycleResult
+from cycle_runner import CycleRunner, CycleResult, LifecycleOutput, Specification
 from governance_layer import GovernanceLayer
 
 runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
@@ -583,6 +630,11 @@ command = runner.build_scaffold_command(
     title="Scaffold Commands"
 )
 # Returns: "/new-plan E2-263 Scaffold Commands"
+
+# Execute lifecycle and get typed output (WORK-084)
+output = runner.run(work_id="WORK-084", lifecycle="design")
+# Returns: Specification(...) with work_id, timestamp, status, requirements, etc.
+# Caller decides whether to chain to next lifecycle (pure function behavior)
 ```
 
 ### CLI Integration (E2-255)

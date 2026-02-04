@@ -19,7 +19,9 @@ acceptance_criteria: []
 blocked_by: []
 blocks: []
 enables: []
-current_node: backlog
+queue_position: backlog  # WORK-066: backlog|in_progress|done
+cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
+current_node: backlog    # DEPRECATED: use cycle_phase
 node_history:
   - node: backlog
     entered: {{TIMESTAMP}}

@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-03T22:19:51
+# System Auto: last updated on: 2026-02-04T21:09:04
 """
 Tests for WorkEngine module (E2-242).
 
@@ -1136,3 +1136,160 @@ def test_is_at_pause_point_feature_at_done(tmp_path, governance):
 
     result = engine.is_at_pause_point("WORK-001")
     assert result is True
+
+
+# =============================================================================
+# WORK-066: Queue Position Field and Cycle Phase (Four-Dimensional Model)
+# =============================================================================
+
+# Sample work item with queue_position field
+SAMPLE_WORK_WITH_QUEUE_POSITION = """---
+template: work_item
+id: WORK-QP
+title: Work Item with Queue Position
+type: feature
+status: active
+owner: Hephaestus
+created: 2026-02-04
+closed: null
+priority: high
+queue_position: in_progress
+cycle_phase: plan
+current_node: plan
+blocked_by: []
+blocks: []
+node_history:
+- node: backlog
+  entered: '2026-02-04T10:00:00'
+  exited: '2026-02-04T11:00:00'
+- node: plan
+  entered: '2026-02-04T11:00:00'
+  exited: null
+memory_refs: []
+---
+# WORK-QP: Work Item with Queue Position
+"""
+
+# Sample work item without queue_position (legacy format)
+SAMPLE_WORK_LEGACY_NO_QUEUE = """---
+template: work_item
+id: WORK-LEGACY
+title: Legacy Work Item
+type: feature
+status: active
+owner: Hephaestus
+created: 2026-02-04
+closed: null
+priority: high
+current_node: implement
+blocked_by: []
+blocks: []
+node_history:
+- node: backlog
+  entered: '2026-02-04T10:00:00'
+  exited: null
+memory_refs: []
+---
+# WORK-LEGACY: Legacy Work Item
+"""
+
+
+def test_parse_queue_position(tmp_path, governance):
+    """WORK-066 Test 1: WorkEngine._parse_work_file reads queue_position field."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup: Create work item with queue_position: in_progress
+    work_dir = tmp_path / "docs" / "work" / "active" / "WORK-QP"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(SAMPLE_WORK_WITH_QUEUE_POSITION, encoding="utf-8")
+
+    work = engine.get_work("WORK-QP")
+
+    assert work is not None
+    assert work.queue_position == "in_progress"
+
+
+def test_queue_position_defaults_to_backlog(tmp_path, governance):
+    """WORK-066 Test 2: Work items without queue_position field default to 'backlog'."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup: Create work item WITHOUT queue_position field (legacy format)
+    work_dir = tmp_path / "docs" / "work" / "active" / "WORK-LEGACY"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(SAMPLE_WORK_LEGACY_NO_QUEUE, encoding="utf-8")
+
+    work = engine.get_work("WORK-LEGACY")
+
+    assert work is not None
+    assert work.queue_position == "backlog"
+
+
+def test_set_queue_position(tmp_path, governance):
+    """WORK-066 Test 3: WorkEngine.set_queue_position updates field in file."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup: Create work item
+    engine.create_work("WORK-SET", "Test Set Queue Position")
+
+    # Action: Set queue_position to in_progress
+    result = engine.set_queue_position("WORK-SET", "in_progress")
+
+    # Assert: Result reflects update
+    assert result is not None
+    assert result.queue_position == "in_progress"
+
+    # Assert: Re-read shows queue_position: in_progress
+    work = engine.get_work("WORK-SET")
+    assert work.queue_position == "in_progress"
+
+
+def test_get_in_progress_items(tmp_path, governance):
+    """WORK-066 Test 4: WorkEngine.get_in_progress returns items with queue_position: in_progress."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup: Create 3 items
+    engine.create_work("WORK-A", "Item A")
+    engine.create_work("WORK-B", "Item B")
+    engine.create_work("WORK-C", "Item C")
+
+    # Set one to in_progress
+    engine.set_queue_position("WORK-B", "in_progress")
+
+    # Action
+    in_progress = engine.get_in_progress()
+
+    # Assert
+    assert len(in_progress) == 1
+    assert in_progress[0].id == "WORK-B"
+    assert in_progress[0].queue_position == "in_progress"
+
+
+def test_cycle_phase_falls_back_to_current_node(tmp_path, governance):
+    """WORK-066 Test 5: cycle_phase falls back to current_node for legacy items."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup: Create work item with current_node but NO cycle_phase
+    work_dir = tmp_path / "docs" / "work" / "active" / "WORK-FALLBACK"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(SAMPLE_WORK_LEGACY_NO_QUEUE, encoding="utf-8")
+
+    work = engine.get_work("WORK-FALLBACK")
+
+    assert work is not None
+    # cycle_phase should fall back to current_node value
+    assert work.cycle_phase == "implement"
+
+
+def test_invalid_queue_position_raises(tmp_path, governance):
+    """WORK-066 Test 6: set_queue_position rejects invalid values."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Setup: Create work item
+    engine.create_work("WORK-INVALID", "Test Invalid Queue Position")
+
+    # Action + Assert: Invalid value should raise ValueError
+    with pytest.raises(ValueError) as exc:
+        engine.set_queue_position("WORK-INVALID", "invalid_value")
+
+    assert "invalid_value" in str(exc.value)
+    assert "backlog" in str(exc.value) or "in_progress" in str(exc.value) or "done" in str(exc.value)
