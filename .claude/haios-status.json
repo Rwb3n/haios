@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-04T22:35:54",
+    "generated": "2026-02-04T23:07:19",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 308,
-        "current_session": 309,
+        "prior_session": 309,
+        "current_session": 310,
         "prior_date": "2026-02-04",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 83770,
-        "entities": 9553,
+        "concepts": 83777,
+        "entities": 9562,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3684,6 +3684,24 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-04-07-SESSION-309-work-088-implementation-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-04",
+            "last_updated": "2026-02-04T22:36:46",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-02-04-08-SESSION-310-work-089-plan-validated.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-04",
+            "last_updated": "2026-02-04T22:57:05",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "template": "implementation_plan",
             "status": "complete",
@@ -6862,7 +6880,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
             "last_updated": "2025-12-04T22:47:20",
-            "days_stale": 61
+            "days_stale": 62
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-prototype-consolidation.md",
@@ -6877,7 +6895,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-extraction-improvement-complete.md",
             "last_updated": "2025-12-04T22:58:40",
-            "days_stale": 61
+            "days_stale": 62
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-final.md",
@@ -7237,7 +7255,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-06-SESSION-95-e2-130-error-capture-rebuild-and-taxonomy-discussion.md",
             "last_updated": "2025-12-21T23:04:37",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/checkpoints/2025-12-22-01-SESSION-96-synthesis-review-and-backlog-archival.md",
@@ -7577,7 +7595,7 @@
         {
             "path": "docs/checkpoints/2026-01-03-06-SESSION-162-e2-250-chariot-module-integration-and-dod-framework.md",
             "last_updated": "2026-01-03T23:06:35",
-            "days_stale": 31
+            "days_stale": 32
         },
         {
             "path": "docs/checkpoints/2026-01-03-07-SESSION-162-epoch-22-migration-planning-e2-251-through-e2-255.md",
@@ -7632,7 +7650,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-10-SESSION-172-inv-057-complete-e2-269-plan-authored.md",
             "last_updated": "2026-01-04T22:46:19",
-            "days_stale": 30
+            "days_stale": 31
         },
         {
             "path": "docs/checkpoints/2026-01-05-01-SESSION-173-e2-269-e2-238-inv-052-implementation-and-plan-authoring.md",
@@ -7647,6 +7665,11 @@
         {
             "path": "docs/checkpoints/2026-01-05-03-SESSION-175-inv-058-ambiguity-gating-complete-e2-272-through-e2-275-spawned.md",
             "last_updated": "2026-01-05T21:53:53",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/checkpoints/2026-01-05-04-SESSION-176-e2-272-e2-273-ambiguity-gating-gates-1-2-complete.md",
+            "last_updated": "2026-01-05T22:53:08",
             "days_stale": 30
         },
         {
@@ -7857,7 +7880,7 @@
         {
             "path": "docs/plans/PLAN-E2-130-error-capture-rebuild.md",
             "last_updated": "2025-12-21T23:02:26",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/plans/PLAN-E2-140-investigation-status-sync-hook.md",
@@ -8162,12 +8185,12 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-008-haios-status-json-optimization.md",
             "last_updated": "2025-12-22T22:37:14",
-            "days_stale": 43
+            "days_stale": 44
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-009-backlog-archival-governance.md",
             "last_updated": "2025-12-22T22:37:32",
-            "days_stale": 43
+            "days_stale": 44
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-010-memory-retrieval-architecture-mismatch.md",
@@ -8177,7 +8200,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-011-command-skill-architecture-gap.md",
             "last_updated": "2025-12-22T22:45:09",
-            "days_stale": 43
+            "days_stale": 44
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-012-static-registration-anti-pattern-mitigation.md",
@@ -8207,7 +8230,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-018-adaptive-coldstart-query-formulation.md",
             "last_updated": "2025-12-22T22:39:13",
-            "days_stale": 43
+            "days_stale": 44
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-020-llm-energy-channeling-patterns.md",
@@ -8806,9 +8829,9 @@
         }
     ],
     "workspace": {
-        "total_files": 564,
+        "total_files": 566,
         "by_template": {
-            "checkpoint": 315,
+            "checkpoint": 317,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8820,7 +8843,7 @@
         "by_status": {
             "complete": 253,
             "active": 118,
-            "unknown": 151,
+            "unknown": 153,
             "draft": 2,
             "approved": 6,
             "ready": 1,
@@ -8835,7 +8858,7 @@
             "duplicate": 1,
             "deferred": 1
         },
-        "stale_count": 397
+        "stale_count": 398
     },
     "alignment": {
         "aligned": [
