@@ -9,7 +9,7 @@ lifecycle_phase: plan
 session: 247
 version: '1.5'
 generated: 2025-12-21
-last_updated: '2026-02-04T22:18:34'
+last_updated: '2026-02-04T22:26:17'
 ---
 # Implementation Plan: Implement Phase Template Contracts
 
@@ -193,15 +193,17 @@ def test_validate_phase_input_success():
     assert result.allowed is True
 ```
 
-### Test 4: Validate Input Contract - Missing Field
+### Test 4: Validate Input Contract - Missing Field (A7 - Mock Strategy)
 ```python
 def test_validate_phase_input_missing_field_blocks():
     """validate_phase_input returns blocked when required field missing."""
     runner = CycleRunner(governance=GovernanceLayer())
-    # Mock work item missing required field
-    result = runner.validate_phase_input("EXPLORE", "WORK-EMPTY")
-    assert result.allowed is False
-    assert "Missing:" in result.reason
+
+    # Mock _check_work_has_field to return False for specific field
+    with patch.object(runner, '_check_work_has_field', return_value=False):
+        result = runner.validate_phase_input("EXPLORE", "WORK-EMPTY")
+        assert result.allowed is False
+        assert "Missing required input:" in result.reason
 ```
 
 ### Test 5: Validate Output Contract
@@ -401,6 +403,115 @@ def _check_work_has_field(self, work_id: str, field: str) -> bool:
     return True
 ```
 
+### Part 4: Integration into check_phase_entry/exit (A4 - Critique Finding)
+
+**File:** `.claude/haios/modules/cycle_runner.py`
+**Location:** Lines 203-226 (check_phase_entry) and 228-261 (check_phase_exit)
+
+**Current check_phase_entry:**
+```python
+# cycle_runner.py:203-226
+def check_phase_entry(
+    self, cycle_id: str, phase: str, work_id: str
+) -> GateResult:
+    """Check if a phase can be entered..."""
+    # For MVP: always allow entry (conditions in skill markdown)
+    self._emit_phase_entered(cycle_id, phase, work_id)
+    return GateResult(allowed=True, reason=f"Phase {phase} entry allowed")
+```
+
+**Modified check_phase_entry:**
+```python
+def check_phase_entry(
+    self, cycle_id: str, phase: str, work_id: str
+) -> GateResult:
+    """Check if a phase can be entered (entry conditions met).
+
+    WORK-088: Now validates input contract from phase template.
+    """
+    # WORK-088: Validate input contract before entry
+    input_result = self.validate_phase_input(phase, work_id)
+    if not input_result.allowed:
+        # Log warning but don't block (MVP soft gate)
+        log_validation_outcome(
+            work_id=work_id,
+            gate="phase_entry",
+            outcome="warn",
+            reason=input_result.reason
+        )
+        # MVP: Allow anyway (soft gate)
+        # Future CH-007: return input_result to hard block
+
+    self._emit_phase_entered(cycle_id, phase, work_id)
+    return GateResult(allowed=True, reason=f"Phase {phase} entry allowed")
+```
+
+**Modified check_phase_exit:**
+```python
+def check_phase_exit(
+    self, cycle_id: str, phase: str, work_id: str
+) -> GateResult:
+    """Check if a phase can be exited (exit criteria met).
+
+    WORK-088: Now validates output contract from phase template.
+    """
+    # WORK-088: Validate output contract before exit
+    output_result = self.validate_phase_output(phase, work_id)
+    if not output_result.allowed:
+        log_validation_outcome(
+            work_id=work_id,
+            gate="phase_exit",
+            outcome="warn",
+            reason=output_result.reason
+        )
+        # MVP: Allow anyway (soft gate)
+
+    # Existing node-based exit validation
+    from node_cycle import check_exit_criteria
+    node = self._get_node_for_cycle(cycle_id)
+    if not node:
+        return GateResult(allowed=True, reason=f"Phase {phase} exit allowed")
+
+    failures = check_exit_criteria(node, work_id)
+    if failures:
+        return GateResult(allowed=False, reason=f"Exit blocked: {'; '.join(failures)}")
+
+    return GateResult(allowed=True, reason=f"Phase {phase} exit criteria met")
+```
+
+### Part 5: Error Handling for YAML Parsing (A5 - Critique Finding)
+
+**Modified _load_phase_template with try/except:**
+```python
+def _load_phase_template(self, phase: str) -> Dict[str, Any]:
+    """Load phase template frontmatter."""
+    template_paths = {
+        "EXPLORE": Path(__file__).parent.parent.parent / "templates" / "investigation" / "EXPLORE.md",
+        # ... other paths
+    }
+
+    path = template_paths.get(phase)
+    if not path or not path.exists():
+        return {}
+
+    try:
+        content = path.read_text(encoding="utf-8")
+        if content.startswith("---"):
+            end = content.find("---", 3)
+            if end > 0:
+                frontmatter = content[3:end].strip()
+                return yaml.safe_load(frontmatter) or {}
+    except (yaml.YAMLError, OSError) as e:
+        # Log warning but return empty dict (graceful degradation)
+        log_validation_outcome(
+            work_id="system",
+            gate="template_load",
+            outcome="warn",
+            reason=f"Failed to load template {phase}: {e}"
+        )
+    return {}
+```
+
 ### Call Chain Context
 
 ```
@@ -413,11 +524,14 @@ Skill invokes CycleRunner
     |       |       +-> _load_phase_template(phase)   # <-- NEW
     |       |       +-> _check_work_has_field()       # <-- NEW
     |       |
+    |       +-> log_validation_outcome() if warn      # <-- NEW
     |       +-> _emit_phase_entered()
     |
     +-> check_phase_exit(cycle_id, phase, work_id)
             |
             +-> validate_phase_output(phase, work_id)  # <-- NEW
+            +-> log_validation_outcome() if warn       # <-- NEW
+            +-> check_exit_criteria()  # existing
 ```
 
 ### Key Design Decisions
@@ -429,6 +543,9 @@ Skill invokes CycleRunner
 | Template path mapping | Hardcoded dict | Investigation templates only for CH-005 scope |
 | Backward compatibility | Empty contract = allow | Existing cycles without templates continue working |
 | Validation integration | Soft gate (log, don't block) | E2.5 phased rollout - hard gate in CH-007 |
+| Integration point (A4) | Modify check_phase_entry/exit | Critique surfaced gap - new methods must be wired in |
+| Error handling (A5) | try/except for yaml.safe_load | Graceful degradation on malformed YAML |
+| Test mock strategy (A7) | patch _check_work_has_field | Allows testing blocking path when MVP returns True |
 
 ### Input/Output Examples
 
@@ -510,20 +627,26 @@ A: MVP uses soft validation (warn but allow). Hard blocking requires WorkEngine 
 - [ ] Check each required output_contract item
 - [ ] Test 5 passes (green)
 
-### Step 6: Verify Backward Compatibility
-- [ ] Ensure existing check_phase_entry behavior unchanged
+### Step 6: Integrate into check_phase_entry/exit (A4 - Critique)
+- [ ] Modify `check_phase_entry` to call `validate_phase_input`
+- [ ] Modify `check_phase_exit` to call `validate_phase_output`
+- [ ] Add `log_validation_outcome` calls for soft gate warnings
+- [ ] Add try/except around yaml.safe_load (A5)
+
+### Step 7: Verify Backward Compatibility
+- [ ] Ensure existing check_phase_entry behavior unchanged (returns allowed=True)
 - [ ] Test 6 passes (green)
 - [ ] All 16 existing tests still pass
 
-### Step 7: Integration Verification
+### Step 8: Integration Verification
 - [ ] Run full test suite: `pytest tests/test_cycle_runner.py -v`
 - [ ] All 22 tests pass (16 existing + 6 new)
 
-### Step 8: README Sync (MUST)
+### Step 9: README Sync (MUST)
 - [ ] **MUST:** Update `.claude/templates/investigation/README.md` with contract schema
 - [ ] **MUST:** Update `.claude/haios/modules/README.md` with new methods
 
-### Step 9: Consumer Verification
+### Step 10: Consumer Verification
 - [ ] Verify skills that use CycleRunner don't break
 - [ ] Grep for `check_phase_entry` usage - ensure compatible
 
