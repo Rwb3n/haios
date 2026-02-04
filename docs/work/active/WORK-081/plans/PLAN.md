@@ -9,7 +9,7 @@ lifecycle_phase: plan
 session: 308
 version: '1.5'
 generated: 2025-12-21
-last_updated: '2026-02-04T21:43:56'
+last_updated: '2026-02-04T21:49:50'
 ---
 # Implementation Plan: Cycle-as-Subagent Delegation Pattern Implementation
 
@@ -168,6 +168,26 @@ def test_agent_defines_output_format():
     assert "Cycle Result:" in content or "Implementation Result:" in content
 ```
 
+### Test 4: Task Tool Runtime Discoverability (A1 Critique Response)
+```python
+def test_task_tool_can_invoke_agent():
+    """Verify Task tool can discover and invoke agent at runtime.
+
+    NOTE: This is a manual verification step, not automated pytest.
+    Run after agent files created:
+
+    Task(
+        subagent_type='implementation-cycle-agent',
+        prompt='Echo test: respond with "Agent reachable" and nothing else.'
+    )
+
+    Expected: Subagent responds with "Agent reachable"
+    If fails: Agent file exists but Task tool cannot discover it
+    """
+    # Manual verification - document result in Ground Truth Verification
+    pass
+```
+
 ---
 
 ## Detailed Design
@@ -193,17 +213,52 @@ last_updated: 2026-02-04T00:00:00
 **File 1:** `.claude/agents/implementation-cycle-agent.md`
 - Executes PLAN → DO → CHECK → DONE → CHAIN phases
 - Loads implementation-cycle skill content as reference
-- Returns: Implementation Result (PASS/FAIL), tests run, deliverables verified
+- **MUST include embedded governance gates** (see Governance Enforcement below)
+- Returns: Implementation Result (PASS/FAIL), tests run, deliverables verified, **gates honored**
 
 **File 2:** `.claude/agents/investigation-cycle-agent.md`
 - Executes EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE → CHAIN phases
 - Loads investigation-cycle skill content as reference
-- Returns: Investigation Result, hypotheses verdicts, spawned work items
+- **MUST include embedded governance gates**
+- Returns: Investigation Result, hypotheses verdicts, spawned work items, **gates honored**
 
 **File 3:** `.claude/agents/close-work-cycle-agent.md`
 - Executes VALIDATE → ARCHIVE → MEMORY → CHAIN phases
 - Loads close-work-cycle skill content as reference
-- Returns: Closure Result, DoD validation, memory refs
+- **MUST include embedded governance gates**
+- Returns: Closure Result, DoD validation, memory refs, **gates honored**
+
+### Governance Enforcement (A5 Critique Response)
+
+**Problem:** Agent markdown files are instructional guidance, not enforcement. Subagent may skip governance gates.
+
+**Solution: Defense-in-Depth**
+
+1. **Embed MUST gates in agent instructions:**
+   ```markdown
+   ## Governance Gates (MUST)
+
+   Before proceeding past each phase, you MUST:
+   - PLAN phase exit: Invoke preflight-checker, report result in output
+   - DO phase exit: Invoke design-review-validation, report result in output
+   - CHECK phase: Verify ALL WORK.md deliverables, list each in output
+
+   Your output MUST include:
+   ## Gates Honored
+   - preflight-checker: PASS/FAIL
+   - design-review-validation: PASS/FAIL
+   - deliverables-verified: X/Y complete
+   ```
+
+2. **Parent verifies output contains gate results:**
+   - Parse "## Gates Honored" section from subagent output
+   - If section missing or any gate FAIL: treat as BLOCKED, do not proceed
+   - This is post-hoc verification, not enforcement, but surfaces bypass
+
+3. **Trade-off accepted:**
+   - Subagent could lie about gate results (fabricate PASS)
+   - Mitigation: Sample auditing in validation-agent reviews
+   - Full enforcement requires SDK-level tooling (Epoch 4)
 
 ### Call Chain Context
 
@@ -231,6 +286,11 @@ Cycle Result: PASS | FAIL | BLOCKED
 - Phases completed: {list}
 - Duration: {estimate}
 
+## Gates Honored (A5 Governance Enforcement)
+- preflight-checker: PASS | FAIL | SKIPPED
+- design-review-validation: PASS | FAIL | SKIPPED
+- deliverables-verified: X/Y complete
+
 ## Outcome
 {Brief description of what was accomplished}
 
@@ -244,6 +304,12 @@ Cycle Result: PASS | FAIL | BLOCKED
 - {List specific blockers}
 ```
 
+**Parent Parsing Requirements (A4 Critique Response):**
+- Parse output fault-tolerantly - handle missing sections gracefully
+- If "## Gates Honored" missing: treat as governance bypass warning, log but allow
+- If "Cycle Result:" missing: treat entire output as BLOCKED
+- If sections malformed: extract what's available, warn on missing
+
 ### Key Design Decisions
 
 | Decision | Choice | Rationale |
@@ -254,6 +320,8 @@ Cycle Result: PASS | FAIL | BLOCKED
 | Skill reference, not embedding | Agent reads skill file | Skill is source of truth; agent adapts to skill changes |
 | Structured output format | Standardized across agents | Parent can parse consistently regardless of cycle type |
 | Optional delegation | Skills offer delegation, don't require it | Operator can choose inline execution for debugging |
+| **Governance via instruction + verification** | Embed MUST gates in agent + parent verifies output | A5 critique: "voluntary compliance" + post-hoc check provides defense-in-depth |
+| **Fault-tolerant output parsing** | Parent handles missing sections gracefully | A4 critique: Subagent may deviate from format; parent must be resilient |
 
 ### Input/Output Examples
 
@@ -383,9 +451,11 @@ Answer: Agent reads skill file directly via Read tool. Skill file is source of t
 |------|--------|------------|
 | Subagent can't access skill content | Medium | Agent uses Read tool to load skill file; verified in existing agents |
 | Output format drift between agents | Low | Standardized template in design; copy-paste consistency |
-| Governance bypass in subagent | Medium | Subagent follows skill structure which includes governance gates |
+| **Governance bypass in subagent (A5)** | Medium | **Defense-in-depth: Embed MUST gates in agent + parent verifies "Gates Honored" section in output** |
 | Context limit in subagent | Low | Subagent has fresh context; cycles are bounded work |
 | SDK migration path unclear | Low | Pattern designed to port directly per S25; validate when SDK available |
+| **Task tool can't discover agent (A1)** | High | **Add manual Task invocation test (Test 4) to verify runtime discoverability** |
+| **Output parsing fails silently (A4)** | Medium | **Parent parses fault-tolerantly; missing sections logged as warnings, not failures** |
 
 ---
 
