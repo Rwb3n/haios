@@ -30,7 +30,7 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
+queue_position: parked
 cycle_phase: backlog
 current_node: backlog
 node_history:
@@ -49,7 +49,7 @@ extensions:
   - ceremonies
 version: '2.0'
 generated: 2026-02-05
-last_updated: '2026-02-05T19:00:27'
+last_updated: '2026-02-05T21:35:28'
 ---
 # WORK-101: Proportional Governance Design
 
