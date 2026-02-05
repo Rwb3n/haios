@@ -3,7 +3,7 @@ template: work_item
 id: WORK-102
 title: Session and Process Review Ceremonies
 type: design
-status: active
+status: blocked
 owner: Hephaestus
 created: 2026-02-05
 spawned_by: Session-314-review
@@ -39,10 +39,13 @@ artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions:
-  epoch: E2.5
+  epoch: E2.6
+  parked_for: E2.6
+  parked_reason: New design work - includes operator-initiated system evolution ceremony
+    which is out of E2.5 implementation scope
 version: '2.0'
 generated: 2026-02-05
-last_updated: '2026-02-05T18:53:06'
+last_updated: '2026-02-05T19:01:01'
 ---
 # WORK-102: Session and Process Review Ceremonies
 
@@ -92,6 +95,10 @@ Currently observation-capture answers "what did I notice about this work item?" 
 - Operator asked "what went well / could've gone better" and "keep / should / stop"
 - These natural review patterns recognized as missing ceremonies
 - Operator confirmed: "these should be ceremonies"
+- Further discussion revealed the ceremony chain is incomplete: Session Review and Process Review produce proposed changes, but there's no ceremony governing HOW upstream L3/L4 modifications get approved and applied
+- The feedback arc assumes bottom-up flow (work -> chapter -> arc -> epoch -> requirements) but this session demonstrated top-down flow (operator reflection -> requirements change -> trickle down)
+- Missing: "operator-initiated system evolution" ceremony with governance for deciding whether a finding becomes a memory note, observation, work item, or immediate L3/L4 modification
+- Parked for E2.6: this is new design work, not E2.5 implementation scope
 
 ---
 

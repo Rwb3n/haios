@@ -3,7 +3,7 @@ template: work_item
 id: WORK-101
 title: Proportional Governance Design
 type: design
-status: active
+status: blocked
 owner: Hephaestus
 created: 2026-02-05
 spawned_by: Session-314-review
@@ -41,13 +41,15 @@ artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions:
-  epoch: E2.5
+  epoch: E2.6
+  parked_for: E2.6
+  parked_reason: New design work, not E2.5 implementation scope
   cross_cuts:
   - lifecycles
   - ceremonies
 version: '2.0'
 generated: 2026-02-05
-last_updated: '2026-02-05T18:52:40'
+last_updated: '2026-02-05T19:00:27'
 ---
 # WORK-101: Proportional Governance Design
 
