@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-04T21:10:45
+# System Auto: last updated on: 2026-02-05T22:03:58
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -127,6 +127,19 @@ class QueueConfig:
 
 # Trigger statuses for cascade (shared constant)
 TRIGGER_STATUSES = {"complete", "completed", "done", "closed", "accepted"}
+
+# WORK-086: Map work type to lifecycle (extracted from is_at_pause_point for reuse)
+TYPE_TO_LIFECYCLE = {
+    "investigation": "investigation",
+    "design": "design",
+    "feature": "implementation",
+    "implementation": "implementation",
+    "bug": "implementation",
+    "chore": "implementation",
+    "spike": "investigation",
+    "validation": "validation",
+    "triage": "triage",
+}
 
 
 class WorkEngine:
@@ -379,19 +392,8 @@ class WorkEngine:
         except ImportError:
             from cycle_runner import PAUSE_PHASES
 
-        # Map work type to lifecycle
-        type_to_lifecycle = {
-            "investigation": "investigation",
-            "design": "design",
-            "feature": "implementation",
-            "implementation": "implementation",
-            "bug": "implementation",
-            "chore": "implementation",
-            "spike": "investigation",
-            "validation": "validation",
-            "triage": "triage",
-        }
-        lifecycle = type_to_lifecycle.get(work.type, "implementation")
+        # WORK-086: Use module-level constant (extracted for reuse by get_in_lifecycle)
+        lifecycle = TYPE_TO_LIFECYCLE.get(work.type, "implementation")
 
         # Check if current_node is a pause phase for this lifecycle
         pause_phases = PAUSE_PHASES.get(lifecycle, [])
@@ -678,6 +680,65 @@ class WorkEngine:
                     if work and work.queue_position == "in_progress":
                         result.append(work)
         return result
+
+    # ========== Lifecycle Query Methods (WORK-086: Batch Mode) ==========
+
+    def get_in_lifecycle(self, lifecycle: str, phase: Optional[str] = None) -> List[WorkState]:
+        """
+        Get all active work items in a given lifecycle, optionally filtered by phase.
+
+        Maps work.type to lifecycle via TYPE_TO_LIFECYCLE constant.
+        Excludes terminal statuses (complete, archived, dismissed, invalid, deferred).
+
+        Args:
+            lifecycle: Lifecycle name ("investigation", "design", "implementation",
+                       "validation", "triage")
+            phase: Optional phase filter. Uses cycle_phase field with
+                   current_node fallback (WORK-066).
+
+        Returns:
+            List of WorkState items matching the lifecycle (and phase if specified)
+        """
+        result = []
+        if not self.active_dir.exists():
+            return result
+
+        terminal_statuses = {"complete", "archived", "dismissed", "invalid", "deferred"}
+
+        for subdir in self.active_dir.iterdir():
+            if subdir.is_dir():
+                work_md = subdir / "WORK.md"
+                if work_md.exists():
+                    work = self._parse_work_file(work_md)
+                    if work is None or work.status in terminal_statuses:
+                        continue
+                    # Map type to lifecycle via constant
+                    work_lifecycle = TYPE_TO_LIFECYCLE.get(work.type, "implementation")
+                    if work_lifecycle != lifecycle:
+                        continue
+                    # Optional phase filter (cycle_phase with current_node fallback)
+                    if phase is not None:
+                        effective_phase = work.cycle_phase if work.cycle_phase != work.current_node else work.current_node
+                        if effective_phase != phase:
+                            continue
+                    result.append(work)
+        return result
+
+    def count_active_in_lifecycle(self, lifecycle: str) -> int:
+        """
+        Count active work items in a given lifecycle.
+
+        Convenience wrapper around get_in_lifecycle.
+
+        Args:
+            lifecycle: Lifecycle name
+
+        Returns:
+            Number of active items in the lifecycle
+        """
+        return len(self.get_in_lifecycle(lifecycle))
+
+    # ========== End Lifecycle Query Methods ==========
 
     def add_document_link(self, id: str, doc_type: str, doc_path: str) -> None:
         """

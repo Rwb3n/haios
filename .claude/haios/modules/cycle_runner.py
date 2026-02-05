@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-02-04T22:31:11
+# System Auto: last updated on: 2026-02-05T22:05:28
 """
 CycleRunner Module (E2-255)
 
@@ -438,6 +438,62 @@ class CycleRunner:
             timestamp=now,
             status="success"
         )
+
+    # =========================================================================
+    # WORK-086: Batch Execution (REQ-LIFECYCLE-003)
+    # =========================================================================
+
+    # Known lifecycles for validation
+    VALID_LIFECYCLES = {"investigation", "design", "implementation", "validation", "triage"}
+
+    def run_batch(
+        self,
+        work_ids: List[str],
+        lifecycle: str,
+        until_phase: Optional[str] = None,
+    ) -> Dict[str, LifecycleOutput]:
+        """
+        Execute lifecycle for multiple work items sequentially.
+
+        Per-item error handling: if one item fails, it gets status="failure"
+        and processing continues with remaining items.
+
+        Args:
+            work_ids: List of work item IDs to process
+            lifecycle: Lifecycle name (must be one of 5 known lifecycles)
+            until_phase: Accepted but no-ops in MVP (matches existing run() pattern)
+
+        Returns:
+            Dict mapping work_id to LifecycleOutput for each item
+
+        Raises:
+            ValueError: If lifecycle is not a known lifecycle name
+        """
+        if lifecycle not in self.VALID_LIFECYCLES:
+            raise ValueError(
+                f"Unknown lifecycle '{lifecycle}'. "
+                f"Must be one of: {sorted(self.VALID_LIFECYCLES)}"
+            )
+
+        if not work_ids:
+            return {}
+
+        results: Dict[str, LifecycleOutput] = {}
+
+        for work_id in work_ids:
+            try:
+                output = self.run(work_id, lifecycle)
+                results[work_id] = output
+            except Exception:
+                # Per-item error handling: set failure status, continue
+                results[work_id] = LifecycleOutput(
+                    lifecycle=lifecycle,
+                    work_id=work_id,
+                    timestamp=datetime.now(),
+                    status="failure",
+                )
+
+        return results
 
     # =========================================================================
     # WORK-088: Phase Template Contract Validation (REQ-TEMPLATE-001)

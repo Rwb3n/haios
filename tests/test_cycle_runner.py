@@ -1,5 +1,5 @@
 # generated: 2026-01-04
-# System Auto: last updated on: 2026-02-04T22:28:13
+# System Auto: last updated on: 2026-02-05T22:04:53
 """Tests for CycleRunner module (E2-255).
 
 Tests phase gate validation and cycle phase lookup functionality.
@@ -392,3 +392,149 @@ class TestBackwardCompatibility:
         # implementation-cycle doesn't have templates yet
         result = runner.check_phase_entry("implementation-cycle", "PLAN", "WORK-088")
         assert result.allowed is True  # MVP behavior preserved
+
+
+# =============================================================================
+# WORK-086: Batch Mode - CycleRunner Tests (T10-T18)
+# =============================================================================
+
+
+class TestRunBatch:
+    """Tests for CycleRunner.run_batch() method (WORK-086)."""
+
+    def test_run_batch_returns_dict_of_outputs(self):
+        """T10: run_batch with 3 items returns Dict with 3 keys."""
+        from cycle_runner import CycleRunner, LifecycleOutput
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        result = runner.run_batch(
+            work_ids=["WORK-A", "WORK-B", "WORK-C"],
+            lifecycle="design"
+        )
+
+        assert isinstance(result, dict)
+        assert len(result) == 3
+        assert all(isinstance(v, LifecycleOutput) for v in result.values())
+
+    def test_run_batch_all_same_lifecycle(self):
+        """T11: All output values have lifecycle == 'design'."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        result = runner.run_batch(
+            work_ids=["WORK-A", "WORK-B"],
+            lifecycle="design"
+        )
+
+        for output in result.values():
+            assert output.lifecycle == "design"
+
+    def test_run_batch_preserves_work_id(self):
+        """T12: Output work_ids match input work_ids."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        work_ids = ["WORK-X", "WORK-Y", "WORK-Z"]
+        result = runner.run_batch(work_ids=work_ids, lifecycle="implementation")
+
+        assert set(result.keys()) == set(work_ids)
+        for wid in work_ids:
+            assert result[wid].work_id == wid
+
+    def test_run_batch_empty_list(self):
+        """T13: Empty work_ids returns empty dict."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        result = runner.run_batch(work_ids=[], lifecycle="design")
+
+        assert result == {}
+
+    def test_run_batch_invalid_lifecycle_raises(self):
+        """T14: Invalid lifecycle name raises ValueError."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+
+        with pytest.raises(ValueError, match="nonexistent"):
+            runner.run_batch(work_ids=["WORK-A"], lifecycle="nonexistent")
+
+    def test_run_batch_sequential_execution(self):
+        """T15: run() is called in order A, B, C (sequential execution)."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        call_order = []
+        original_run = runner.run
+
+        def tracking_run(work_id, lifecycle, **kwargs):
+            call_order.append(work_id)
+            return original_run(work_id, lifecycle)
+
+        runner.run = tracking_run
+
+        runner.run_batch(
+            work_ids=["WORK-A", "WORK-B", "WORK-C"],
+            lifecycle="design"
+        )
+
+        assert call_order == ["WORK-A", "WORK-B", "WORK-C"]
+
+    def test_run_batch_single_failure_continues(self):
+        """T16: Failure in one item doesn't stop others. Failed item has status='failure'."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        original_run = runner.run
+
+        def failing_run(work_id, lifecycle, **kwargs):
+            if work_id == "WORK-B":
+                raise RuntimeError("Simulated failure")
+            return original_run(work_id, lifecycle)
+
+        runner.run = failing_run
+
+        result = runner.run_batch(
+            work_ids=["WORK-A", "WORK-B", "WORK-C"],
+            lifecycle="design"
+        )
+
+        assert len(result) == 3
+        assert result["WORK-A"].status == "success"
+        assert result["WORK-B"].status == "failure"
+        assert result["WORK-C"].status == "success"
+
+    def test_run_batch_typed_output(self):
+        """T17: investigation lifecycle returns Findings type."""
+        from cycle_runner import CycleRunner, Findings
+        from governance_layer import GovernanceLayer
+
+        runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+        result = runner.run_batch(
+            work_ids=["INV-001"],
+            lifecycle="investigation"
+        )
+
+        assert isinstance(result["INV-001"], Findings)
+
+    def test_run_batch_emits_events(self):
+        """T18: Phase transitions are logged for each item."""
+        from cycle_runner import CycleRunner
+        from governance_layer import GovernanceLayer
+
+        with patch("cycle_runner.log_phase_transition") as mock_log:
+            runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
+            runner.run_batch(
+                work_ids=["WORK-A", "WORK-B"],
+                lifecycle="design"
+            )
+
+            # Each item should emit at least one phase event
+            assert mock_log.call_count >= 2

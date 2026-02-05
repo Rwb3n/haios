@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-04T21:09:04
+# System Auto: last updated on: 2026-02-05T22:06:12
 """
 Tests for WorkEngine module (E2-242).
 
@@ -1293,3 +1293,300 @@ def test_invalid_queue_position_raises(tmp_path, governance):
 
     assert "invalid_value" in str(exc.value)
     assert "backlog" in str(exc.value) or "in_progress" in str(exc.value) or "done" in str(exc.value)
+
+
+# =============================================================================
+# WORK-086: Batch Mode - WorkEngine Tests (T1-T9, T19)
+# =============================================================================
+
+# Sample data for lifecycle filtering tests
+SAMPLE_DESIGN_AT_SPECIFY = """---
+template: work_item
+id: WORK-D1
+title: Design Item 1
+type: design
+status: active
+owner: Hephaestus
+created: 2026-02-05
+closed: null
+priority: medium
+blocked_by: []
+blocks: []
+current_node: SPECIFY
+cycle_phase: SPECIFY
+node_history:
+- node: backlog
+  entered: '2026-02-05T10:00:00'
+  exited: '2026-02-05T11:00:00'
+- node: SPECIFY
+  entered: '2026-02-05T11:00:00'
+  exited: null
+memory_refs: []
+---
+# WORK-D1: Design Item 1
+"""
+
+SAMPLE_DESIGN_AT_EXPLORE = """---
+template: work_item
+id: WORK-D2
+title: Design Item 2
+type: design
+status: active
+owner: Hephaestus
+created: 2026-02-05
+closed: null
+priority: medium
+blocked_by: []
+blocks: []
+current_node: EXPLORE
+cycle_phase: EXPLORE
+node_history:
+- node: backlog
+  entered: '2026-02-05T10:00:00'
+  exited: '2026-02-05T11:00:00'
+- node: EXPLORE
+  entered: '2026-02-05T11:00:00'
+  exited: null
+memory_refs: []
+---
+# WORK-D2: Design Item 2
+"""
+
+SAMPLE_DESIGN_COMPLETE = """---
+template: work_item
+id: WORK-DC
+title: Design Complete Item
+type: design
+status: complete
+owner: Hephaestus
+created: 2026-02-05
+closed: 2026-02-05
+priority: medium
+blocked_by: []
+blocks: []
+current_node: COMPLETE
+cycle_phase: COMPLETE
+node_history:
+- node: backlog
+  entered: '2026-02-05T10:00:00'
+  exited: '2026-02-05T11:00:00'
+- node: COMPLETE
+  entered: '2026-02-05T11:00:00'
+  exited: null
+memory_refs: []
+---
+# WORK-DC: Design Complete Item
+"""
+
+SAMPLE_FEATURE_ITEM = """---
+template: work_item
+id: WORK-F1
+title: Feature Item 1
+type: feature
+status: active
+owner: Hephaestus
+created: 2026-02-05
+closed: null
+priority: medium
+blocked_by: []
+blocks: []
+current_node: DO
+cycle_phase: DO
+node_history:
+- node: backlog
+  entered: '2026-02-05T10:00:00'
+  exited: '2026-02-05T11:00:00'
+- node: DO
+  entered: '2026-02-05T11:00:00'
+  exited: null
+memory_refs: []
+---
+# WORK-F1: Feature Item 1
+"""
+
+SAMPLE_SPIKE_ITEM = """---
+template: work_item
+id: WORK-S1
+title: Spike Item 1
+type: spike
+status: active
+owner: Hephaestus
+created: 2026-02-05
+closed: null
+priority: medium
+blocked_by: []
+blocks: []
+current_node: EXPLORE
+cycle_phase: EXPLORE
+node_history:
+- node: backlog
+  entered: '2026-02-05T10:00:00'
+  exited: '2026-02-05T11:00:00'
+- node: EXPLORE
+  entered: '2026-02-05T11:00:00'
+  exited: null
+memory_refs: []
+---
+# WORK-S1: Spike Item 1
+"""
+
+
+def _create_work_item(tmp_path, work_id, content):
+    """Helper to create a work item from sample content."""
+    work_dir = tmp_path / "docs" / "work" / "active" / work_id
+    work_dir.mkdir(parents=True, exist_ok=True)
+    work_file = work_dir / "WORK.md"
+    work_file.write_text(content, encoding="utf-8")
+    return work_file
+
+
+def test_get_in_lifecycle_returns_matching_items(tmp_path, governance):
+    """T1: get_in_lifecycle('design') returns 2 design items, not the feature."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    _create_work_item(tmp_path, "WORK-D1", SAMPLE_DESIGN_AT_SPECIFY)
+    _create_work_item(tmp_path, "WORK-D2", SAMPLE_DESIGN_AT_EXPLORE)
+    _create_work_item(tmp_path, "WORK-F1", SAMPLE_FEATURE_ITEM)
+
+    result = engine.get_in_lifecycle("design")
+
+    assert len(result) == 2
+    ids = {w.id for w in result}
+    assert ids == {"WORK-D1", "WORK-D2"}
+
+
+def test_get_in_lifecycle_with_phase_filter(tmp_path, governance):
+    """T2: get_in_lifecycle('design', phase='SPECIFY') returns only the item at SPECIFY."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    _create_work_item(tmp_path, "WORK-D1", SAMPLE_DESIGN_AT_SPECIFY)
+    _create_work_item(tmp_path, "WORK-D2", SAMPLE_DESIGN_AT_EXPLORE)
+
+    result = engine.get_in_lifecycle("design", phase="SPECIFY")
+
+    assert len(result) == 1
+    assert result[0].id == "WORK-D1"
+
+
+def test_get_in_lifecycle_empty_dir(tmp_path, governance):
+    """T3: get_in_lifecycle returns [] when active_dir is empty."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    result = engine.get_in_lifecycle("design")
+
+    assert result == []
+
+
+def test_get_in_lifecycle_excludes_terminal_statuses(tmp_path, governance):
+    """T4: get_in_lifecycle excludes items with terminal statuses (complete, archived, etc.)."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    _create_work_item(tmp_path, "WORK-D1", SAMPLE_DESIGN_AT_SPECIFY)
+    _create_work_item(tmp_path, "WORK-DC", SAMPLE_DESIGN_COMPLETE)
+
+    result = engine.get_in_lifecycle("design")
+
+    assert len(result) == 1
+    assert result[0].id == "WORK-D1"
+
+
+def test_get_in_lifecycle_maps_feature_to_implementation(tmp_path, governance):
+    """T5: type=feature is found via get_in_lifecycle('implementation')."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    _create_work_item(tmp_path, "WORK-F1", SAMPLE_FEATURE_ITEM)
+
+    result = engine.get_in_lifecycle("implementation")
+
+    assert len(result) == 1
+    assert result[0].id == "WORK-F1"
+    assert result[0].type == "feature"
+
+
+def test_get_in_lifecycle_maps_spike_to_investigation(tmp_path, governance):
+    """T6: type=spike is found via get_in_lifecycle('investigation')."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    _create_work_item(tmp_path, "WORK-S1", SAMPLE_SPIKE_ITEM)
+
+    result = engine.get_in_lifecycle("investigation")
+
+    assert len(result) == 1
+    assert result[0].id == "WORK-S1"
+    assert result[0].type == "spike"
+
+
+def test_count_active_in_lifecycle(tmp_path, governance):
+    """T7: count_active_in_lifecycle('design') returns 3 for 3 design items."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    _create_work_item(tmp_path, "WORK-D1", SAMPLE_DESIGN_AT_SPECIFY)
+    _create_work_item(tmp_path, "WORK-D2", SAMPLE_DESIGN_AT_EXPLORE)
+    _create_work_item(tmp_path, "WORK-D3",
+                      SAMPLE_DESIGN_AT_SPECIFY.replace("WORK-D1", "WORK-D3"))
+
+    result = engine.count_active_in_lifecycle("design")
+
+    assert result == 3
+
+
+def test_count_active_in_lifecycle_zero(tmp_path, governance):
+    """T8: count_active_in_lifecycle returns 0 when no items match."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    result = engine.count_active_in_lifecycle("design")
+
+    assert result == 0
+
+
+def test_pause_point_regression_after_refactor(tmp_path, governance):
+    """T9: is_at_pause_point still works after TYPE_TO_LIFECYCLE extraction."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Investigation at CONCLUDE (should be pause point)
+    _create_work_item(tmp_path, "INV-009",
+                      SAMPLE_INV_AT_CONCLUDE.replace("INV-TEST", "INV-009"))
+
+    # Feature at DO (not a pause point)
+    _create_work_item(tmp_path, "WORK-F9", SAMPLE_FEATURE_ITEM.replace("WORK-F1", "WORK-F9"))
+
+    assert engine.is_at_pause_point("INV-009") is True
+    assert engine.is_at_pause_point("WORK-F9") is False
+
+
+# =============================================================================
+# WORK-086: Integration Test (T19)
+# =============================================================================
+
+
+def test_batch_design_three_items_integration(tmp_path, governance):
+    """T19: Create 3 design items, run_batch, verify get_in_lifecycle returns 3."""
+    # Load CycleRunner
+    _cr_path = Path(__file__).parent.parent / ".claude" / "haios" / "modules" / "cycle_runner.py"
+    cycle_runner_mod = _load_module("cycle_runner_t19", _cr_path)
+    CycleRunner = cycle_runner_mod.CycleRunner
+
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    runner = CycleRunner(governance=governance, work_engine=engine)
+
+    # Create 3 design items
+    _create_work_item(tmp_path, "WORK-INT-D1", SAMPLE_DESIGN_AT_SPECIFY)
+    _create_work_item(tmp_path, "WORK-INT-D2",
+                      SAMPLE_DESIGN_AT_EXPLORE.replace("WORK-D2", "WORK-INT-D2"))
+    _create_work_item(tmp_path, "WORK-INT-D3",
+                      SAMPLE_DESIGN_AT_SPECIFY.replace("WORK-D1", "WORK-INT-D3"))
+
+    # Run batch
+    batch_result = runner.run_batch(
+        work_ids=["WORK-INT-D1", "WORK-INT-D2", "WORK-INT-D3"],
+        lifecycle="design"
+    )
+
+    # Verify batch output
+    assert len(batch_result) == 3
+    assert all(v.status == "success" for v in batch_result.values())
+    assert all(v.lifecycle == "design" for v in batch_result.values())
+
+    # Verify get_in_lifecycle still finds all 3
+    in_design = engine.get_in_lifecycle("design")
+    assert len(in_design) == 3

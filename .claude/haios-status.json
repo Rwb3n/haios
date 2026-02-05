@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-05T21:36:54",
+    "generated": "2026-02-05T22:15:14",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 83828,
-        "entities": 9604,
+        "concepts": 83837,
+        "entities": 9606,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -6909,7 +6909,7 @@
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-22-gap-b3-complete.md",
             "last_updated": "2025-12-03T21:54:50",
-            "days_stale": 63
+            "days_stale": 64
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-23-docs-ingestion-embedding-gap.md",
@@ -6929,7 +6929,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-25-embedding-fix-research-synthesis.md",
             "last_updated": "2025-12-04T22:02:49",
-            "days_stale": 62
+            "days_stale": 63
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
@@ -7334,7 +7334,7 @@
         {
             "path": "docs/checkpoints/2025-12-22-05-SESSION-100-m4-complete-inv-020-channeling-patterns.md",
             "last_updated": "2025-12-22T21:41:04",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/checkpoints/2025-12-23-01-SESSION-101-inv-022-work-cycle-dag-architecture-complete.md",
@@ -7499,7 +7499,7 @@
         {
             "path": "docs/checkpoints/2025-12-27-07-SESSION-131-e2-210-complete-e2-212-infrastructure-ready.md",
             "last_updated": "2025-12-27T22:04:17",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2025-12-28-01-SESSION-132-e2-212-consumer-verification-and-memory-ux-investigation.md",
@@ -7544,7 +7544,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-09-SESSION-140-e2-220-e2-225-e2-024-ground-truth-verification-and-dependency-validator.md",
             "last_updated": "2025-12-28T21:42:56",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/checkpoints/2025-12-28-10-SESSION-141-e2-037-e2-086-closure-e2-108-gate-observability-plan.md",
@@ -7589,7 +7589,7 @@
         {
             "path": "docs/checkpoints/2025-12-30-01-SESSION-150-inv-052-architecture-redesign-meta-design-session-2.md",
             "last_updated": "2025-12-30T21:37:09",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/checkpoints/2025-12-30-02-SESSION-151-inv-052-architecture-documentation-complete.md",
@@ -7619,7 +7619,7 @@
         {
             "path": "docs/checkpoints/2026-01-02-02-SESSION-156-inv-052-gap-resolution-and-consistency-alignment.md",
             "last_updated": "2026-01-02T22:02:15",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/checkpoints/2026-01-03-01-SESSION-157-inv-052-documentation-consistency-fixes.md",
@@ -7719,7 +7719,7 @@
         {
             "path": "docs/checkpoints/2026-01-05-03-SESSION-175-inv-058-ambiguity-gating-complete-e2-272-through-e2-275-spawned.md",
             "last_updated": "2026-01-05T21:53:53",
-            "days_stale": 30
+            "days_stale": 31
         },
         {
             "path": "docs/checkpoints/2026-01-05-04-SESSION-176-e2-272-e2-273-ambiguity-gating-gates-1-2-complete.md",
