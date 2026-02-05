@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-01-28T21:23:30
+# System Auto: last updated on: 2026-02-05T19:13:19
 """
 DEPRECATED: Use GovernanceLayer.scaffold_template() instead.
 
@@ -254,6 +254,9 @@ def generate_output_path(
 def load_template(template: str) -> str:
     """Load template content from file.
 
+    Checks primary path first, then falls back to _legacy/ for templates
+    moved during CH-006 TemplateFracturing (WORK-099).
+
     Args:
         template: Template name (without .md extension)
 
@@ -266,7 +269,12 @@ def load_template(template: str) -> str:
     template_path = PROJECT_ROOT / ".claude" / "templates" / f"{template}.md"
 
     if not template_path.exists():
-        raise FileNotFoundError(f"Template not found: {template_path}")
+        # Fallback to _legacy/ for templates moved during fracturing (CH-006)
+        legacy_path = PROJECT_ROOT / ".claude" / "templates" / "_legacy" / f"{template}.md"
+        if legacy_path.exists():
+            template_path = legacy_path
+        else:
+            raise FileNotFoundError(f"Template not found: {template_path}")
 
     return template_path.read_text(encoding="utf-8-sig")
 

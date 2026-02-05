@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-01-27T20:58:36
+# System Auto: last updated on: 2026-02-05T19:16:13
 """Tests for .claude/haios/lib/validate.py - Template validation module.
 
 TDD tests for E2-120 Phase 2c.
@@ -119,23 +119,31 @@ class TestWorkItemTemplate:
 class TestImplementationPlanTemplate:
     """Tests for implementation_plan.md template structure (E2-273)."""
 
+    @staticmethod
+    def _get_template_path():
+        """Resolve implementation_plan template, checking _legacy/ fallback (WORK-099)."""
+        path = Path(__file__).parent.parent / ".claude" / "templates" / "implementation_plan.md"
+        if not path.exists():
+            path = Path(__file__).parent.parent / ".claude" / "templates" / "_legacy" / "implementation_plan.md"
+        return path
+
     def test_implementation_plan_template_has_open_decisions_section(self):
         """Implementation plan template should have Open Decisions section."""
-        template_path = Path(__file__).parent.parent / ".claude" / "templates" / "implementation_plan.md"
+        template_path = self._get_template_path()
         content = template_path.read_text()
 
         assert "## Open Decisions" in content
 
     def test_open_decisions_section_has_table(self):
         """Open Decisions section should have Decision/Options/Chosen/Rationale table."""
-        template_path = Path(__file__).parent.parent / ".claude" / "templates" / "implementation_plan.md"
+        template_path = self._get_template_path()
         content = template_path.read_text()
 
         assert "| Decision | Options | Chosen | Rationale |" in content
 
     def test_open_decisions_section_has_block_comment(self):
         """Open Decisions section should document BLOCK behavior."""
-        template_path = Path(__file__).parent.parent / ".claude" / "templates" / "implementation_plan.md"
+        template_path = self._get_template_path()
         content = template_path.read_text()
 
         assert "plan-validation-cycle will BLOCK" in content

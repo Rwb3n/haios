@@ -3,7 +3,7 @@ name: plan-validation-cycle
 description: HAIOS Plan Validation Bridge for validating plan readiness. Use before
   entering DO phase. Guides CHECK->VALIDATE->APPROVE workflow.
 generated: 2025-12-25
-last_updated: '2026-01-25T01:49:39'
+last_updated: '2026-02-05T19:16:55'
 ---
 # Plan Validation Cycle (Bridge Skill)
 
@@ -254,4 +254,4 @@ Skill(skill="checkpoint-cycle")
 - **plan-authoring-cycle skill:** Populates plan sections
 - **implementation-cycle skill:** Uses validated plans
 - **close-work-cycle skill:** Parallel validation pattern
-- **Implementation plan template:** `.claude/templates/implementation_plan.md`
+- **Implementation plan template:** `.claude/templates/_legacy/implementation_plan.md`

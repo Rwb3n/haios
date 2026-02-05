@@ -1,5 +1,5 @@
 # generated: 2025-12-28
-# System Auto: last updated on: 2025-12-28T21:57:12
+# System Auto: last updated on: 2026-02-05T19:16:23
 """
 Tests for RFC 2119 governance sections in templates (E2-086).
 
@@ -26,7 +26,10 @@ def test_checkpoint_template_has_rfc2119_section():
 
 def test_implementation_plan_template_has_rfc2119_section():
     """Implementation plan template should have Pre-Implementation Checklist."""
-    content = (TEMPLATES_DIR / "implementation_plan.md").read_text()
+    template_path = TEMPLATES_DIR / "implementation_plan.md"
+    if not template_path.exists():
+        template_path = TEMPLATES_DIR / "_legacy" / "implementation_plan.md"
+    content = template_path.read_text()
     # Check for the RFC 2119 section
     assert "Pre-Implementation Checklist" in content or "RFC 2119" in content, \
         "implementation_plan.md missing 'Pre-Implementation Checklist' or 'RFC 2119' section"

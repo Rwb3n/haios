@@ -5,7 +5,7 @@ description: HAIOS Plan Authoring Cycle for structured plan population. Use when
 recipes:
 - plan
 generated: 2025-12-25
-last_updated: '2026-01-19T17:31:15'
+last_updated: '2026-02-05T19:16:50'
 ---
 # Plan Authoring Cycle
 
@@ -330,5 +330,5 @@ This provides independent validation before implementation-cycle can begin.
 - **work-creation-cycle skill:** Parallel workflow for work items
 - **close-work-cycle skill:** Parallel workflow for closure
 - **implementation-cycle skill:** Uses this skill during PLAN phase
-- **Implementation plan template:** `.claude/templates/implementation_plan.md`
+- **Implementation plan template:** `.claude/templates/_legacy/implementation_plan.md`
 - **/new-plan command:** Creates plan files
