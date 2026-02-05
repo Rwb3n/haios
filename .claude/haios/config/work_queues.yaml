@@ -1,5 +1,5 @@
 # generated: 2026-01-15
-# System Auto: last updated on: 2026-02-04T21:28:07
+# System Auto: last updated on: 2026-02-05T08:40:50
 # Work Queue Configuration (E2-290, INV-064 design)
 # Provides typed queues with cycle-locking for structured work execution
 version: "1.1"
@@ -22,6 +22,7 @@ queues:
   lifecycles:
     type: fifo  # Ordered execution per dependency analysis
     items:
+      - WORK-098  # Lifecycle Tooling Consumer Updates (BLOCKER - discovered S313, blocks 091/092)
       - WORK-081  # Cycle-as-Subagent Delegation Pattern (foundational)
       - WORK-088  # Phase Template Contracts (defines contracts before fracturing)
       - WORK-089  # Fracture Design Lifecycle Templates

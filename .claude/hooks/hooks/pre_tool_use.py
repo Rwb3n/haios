@@ -1,5 +1,5 @@
 # generated: 2025-12-20
-# System Auto: last updated on: 2026-02-03T19:41:54
+# System Auto: last updated on: 2026-02-05T00:30:49
 """
 PreToolUse Hook Handler (E2-085).
 
@@ -338,7 +338,8 @@ def _check_plan_validation(file_path: str, content: str) -> Optional[dict]:
         return None
 
     # Check for backlog_id in YAML frontmatter
-    if not re.search(r'backlog_id:\s*E2-\d{3}', content):
+    # Accepts: E2-NNN, WORK-NNN, INV-NNN, TD-NNN formats
+    if not re.search(r'backlog_id:\s*(E2-\d{3}|WORK-\d{3}|INV-\d{3}|TD-\d{3})', content):
         return _deny(
             "BLOCKED: Plans require backlog_id field in YAML frontmatter. "
             "Use '/new-plan <backlog_id> <title>' command."
