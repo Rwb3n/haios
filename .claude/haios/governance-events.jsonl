@@ -288,3 +288,9 @@
 {"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-02-04T23:03:28.452818"}
 {"type": "ValidationOutcome", "gate": "dod", "work_id": "unknown", "result": "pass", "reason": "DoD complete", "timestamp": "2026-02-04T23:03:28.452818"}
 {"type": "ValidationOutcome", "gate": "dod", "work_id": "E2-240", "result": "block", "reason": "DoD incomplete: tests not passing", "timestamp": "2026-02-04T23:03:28.464924"}
+{"type": "SessionStarted", "session": 312, "agent": "Hephaestus", "timestamp": "2026-02-04T23:51:22.199897"}
+{"type": "SessionEnded", "session": 311, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-05T00:08:45.937072"}
+{"type": "SessionStarted", "session": 313, "agent": "Hephaestus", "timestamp": "2026-02-05T00:08:58.663738"}
+{"type": "SessionEnded", "session": 313, "agent": "Hephaestus", "timestamp": "2026-02-05T08:41:44.984738"}
+{"type": "SessionEnded", "session": 312, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-05T18:29:40.310026"}
+{"type": "SessionStarted", "session": 314, "agent": "Hephaestus", "timestamp": "2026-02-05T18:30:14.302440"}

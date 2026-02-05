@@ -3,13 +3,13 @@ template: work_item
 id: WORK-098
 title: Lifecycle Tooling Consumer Updates
 type: investigation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-05
 spawned_by: WORK-091
 chapter: null
 arc: lifecycles
-closed: null
+closed: '2026-02-05'
 priority: high
 effort: medium
 traces_to:
@@ -35,14 +35,25 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 83975
+- 83976
+- 83977
+- 83978
+- 83984
+- 83985
+- 83986
+- 83987
+- 83988
 extensions:
   epoch: E2.5
   discovered_during: WORK-091
   issue_type: tooling_gap
 version: '2.0'
 generated: 2026-02-05
-last_updated: '2026-02-05T08:40:36'
+last_updated: '2026-02-05T18:38:45.640269'
+queue_position: backlog
+cycle_phase: backlog
 ---
 # WORK-098: Lifecycle Tooling Consumer Updates
 
@@ -72,11 +83,65 @@ Investigate the full scope of tooling updates needed to support fractured lifecy
 
 ## Deliverables
 
-- [ ] Document all affected just recipes
-- [ ] Document all affected hooks
-- [ ] Document scaffold.py changes needed
-- [ ] Recommend: new chapter CH-007 or expand CH-006
-- [ ] Spawn work items for each fix
+- [x] Document all affected just recipes
+- [x] Document all affected hooks
+- [x] Document scaffold.py changes needed
+- [x] Recommend: new chapter CH-007 or expand CH-006
+- [x] Spawn work items for each fix
+
+---
+
+## Findings (Session 314)
+
+### Tier 1: Broken at Runtime (5 test failures, 1 recipe broken)
+
+| File | Line(s) | Issue |
+|------|---------|-------|
+| `.claude/haios/lib/scaffold.py` | 266 | `load_template("implementation_plan")` → FileNotFoundError (template moved to `_legacy/`) |
+| `tests/test_lib_validate.py` | 124, 131, 138 | 3 tests read deleted `implementation_plan.md` directly |
+| `tests/test_template_rfc2119.py` | 29 | Reads deleted `implementation_plan.md` |
+| `tests/test_lib_scaffold.py` | 147 | `test_known_templates_exist` lists `implementation_plan` |
+
+**Impact:** `just plan` recipe broken. 5 tests fail.
+
+### Tier 2: Wrong Data (runs but incorrect)
+
+| File | Line(s) | Issue |
+|------|---------|-------|
+| `.claude/haios/lib/audit_decision_coverage.py` | 306-307 | Hardcoded `E2_4` epoch path; audits wrong epoch |
+
+**Impact:** `just audit-decision-coverage` reports stale E2.4 decisions instead of E2.5.
+
+### Tier 3: Stale Documentation
+
+| File | Line(s) | Issue |
+|------|---------|-------|
+| `.claude/skills/plan-authoring-cycle/SKILL.md` | 333 | References deleted `.claude/templates/implementation_plan.md` |
+| `.claude/skills/plan-validation-cycle/SKILL.md` | 257 | References deleted `.claude/templates/implementation_plan.md` |
+| `justfile` | 390 | `commit-close` uses old `WORK-{{id}}` archive path pattern |
+
+### Missing (Never Existed)
+
+| Item | Description |
+|------|-------------|
+| `just prioritize` recipe | No way to reorder queue programmatically |
+| `ConfigLoader.get_phase_template()` | No API for fractured template discovery (CH-006 success criteria) |
+
+### Hooks (Already Fixed)
+
+| Item | Status |
+|------|--------|
+| PreToolUse backlog_id regex | Fixed in Session 313 (memory 83972) |
+| Path governance for work dirs | Working correctly |
+
+### Recommendation
+
+Expand CH-006 scope (not new chapter). The consumer updates are part of the same fracturing effort - CH-006 success criteria already includes "Skill loaders updated to use fractured templates."
+
+### Spawned Work Items
+
+- **WORK-099**: Fix scaffold.py template loading + broken tests + stale skill docs (Tier 1 + Tier 3)
+- **WORK-100**: Fix audit_decision_coverage.py hardcoded epoch path (Tier 2, independent)
 
 ---
 
