@@ -3,13 +3,13 @@ template: work_item
 id: WORK-091
 title: Fracture Validation Lifecycle Templates (CH-006)
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-03
 spawned_by: E2.5-decomposition
 chapter: CH-006-TemplateFracturing
 arc: lifecycles
-closed: null
+closed: '2026-02-05'
 priority: medium
 effort: small
 traces_to:
@@ -33,14 +33,18 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 84015
+- 84016
 extensions:
   epoch: E2.5
   implementation_type: CREATE_NEW
   fracture_target: validation
 version: '2.0'
 generated: 2026-02-03
-last_updated: '2026-02-03T19:43:41'
+last_updated: '2026-02-05T20:33:34.334908'
+queue_position: backlog
+cycle_phase: backlog
 ---
 # WORK-091: Fracture Validation Lifecycle Templates (CH-006)
 

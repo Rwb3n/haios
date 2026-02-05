@@ -3,13 +3,13 @@ template: work_item
 id: WORK-092
 title: Fracture Triage Lifecycle Templates (CH-006)
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-03
 spawned_by: E2.5-decomposition
 chapter: CH-006-TemplateFracturing
 arc: lifecycles
-closed: null
+closed: '2026-02-05'
 priority: medium
 effort: small
 traces_to:
@@ -40,7 +40,9 @@ extensions:
   fracture_target: triage
 version: '2.0'
 generated: 2026-02-03
-last_updated: '2026-02-03T19:43:47'
+last_updated: '2026-02-05T20:33:40.216380'
+queue_position: backlog
+cycle_phase: backlog
 ---
 # WORK-092: Fracture Triage Lifecycle Templates (CH-006)
 
