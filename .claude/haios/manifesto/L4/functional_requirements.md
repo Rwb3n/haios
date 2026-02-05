@@ -1,5 +1,5 @@
 # generated: 2026-01-24
-# System Auto: last updated on: 2026-02-02T23:55:11
+# System Auto: last updated on: 2026-02-05T19:05:36
 # L4: Functional Requirements
 
 Level: L4
@@ -49,8 +49,9 @@ Derived from: L3 principles + agent_user_requirements.md
 | REQ-LIFECYCLE-004 | Lifecycle | Chaining is caller choice, not callee side-effect | L3.4, L3.5 | CycleRunner |
 | REQ-QUEUE-001 | Queue | Queue position is orthogonal to lifecycle phase | L3.4 | WorkEngine |
 | REQ-QUEUE-002 | Queue | "Complete without spawn" is valid terminal state | L3.4, L3.5 | close-work-cycle |
-| REQ-QUEUE-003 | Queue | Queue has own lifecycle (backlog→ready→active→done) | L3.4 | WorkEngine |
+| REQ-QUEUE-003 | Queue | Queue has own lifecycle (parked→backlog→ready→active→done) | L3.4 | WorkEngine |
 | REQ-QUEUE-004 | Queue | Queue ceremonies govern queue state transitions | L3.4, L3.7 | Queue ceremonies |
+| REQ-QUEUE-005 | Queue | Parked items are excluded from current epoch scope | L3.4, L3.6 | WorkEngine.get_queue() |
 | REQ-CEREMONY-001 | Ceremony | Ceremonies govern side-effects (commits, state changes) | L3.7 | Ceremony skills |
 | REQ-CEREMONY-002 | Ceremony | Each ceremony has explicit input/output contract | L3.2, L3.7 | Ceremony skills |
 | REQ-CEREMONY-003 | Ceremony | Ceremonies distinct from lifecycles (WHEN vs WHAT) | L3.4 | Architecture |
@@ -248,40 +249,53 @@ Each lifecycle follows inhale→exhale→pause rhythm. Pause = valid completion 
 |----|-------------|--------------|-----------------|
 | **REQ-QUEUE-001** | Queue position is orthogonal to lifecycle phase. Separate tracking dimensions. | L3.4 | Work item in `queue: done` can have any lifecycle phase |
 | **REQ-QUEUE-002** | "Complete without spawn" is valid terminal state. No forced chaining. | L3.4, L3.5 | close-work-cycle accepts completion without spawn_next |
-| **REQ-QUEUE-003** | Queue has its own lifecycle (backlog → ready → active → done) | L3.4 | Queue transitions independent of work lifecycle |
+| **REQ-QUEUE-003** | Queue has its own lifecycle (parked → backlog → ready → active → done) | L3.4 | Queue transitions independent of work lifecycle |
 | **REQ-QUEUE-004** | Queue ceremonies govern queue state transitions | L3.4, L3.7 | Each transition has ceremony |
+| **REQ-QUEUE-005** | Parked items are excluded from current epoch scope. Parked ≠ blocked. | L3.4, L3.6 | `WorkEngine.get_queue()` excludes parked items; `just ready` never shows parked |
 
 **Queue Lifecycle:**
 
 ```
-backlog ──→ ready ──→ active ──→ done
-   │          │          │
-   └── Intake └── Commit └── Release (ceremonies)
+parked ──→ backlog ──→ ready ──→ active ──→ done
+   │          │          │          │
+   └── Unpark └── Intake └── Commit └── Release (ceremonies)
 ```
 
-| Phase | Meaning | Entry Ceremony |
-|-------|---------|----------------|
-| backlog | Captured, not prioritized | Intake |
-| ready | Prioritized, dependencies clear | Prioritize |
-| active | Being worked | Commit |
-| done | Work complete | Release |
+| Phase | Meaning | Entry Ceremony | Exit Ceremony |
+|-------|---------|----------------|---------------|
+| parked | Out of scope for current epoch | - | Unpark |
+| backlog | Captured, not prioritized | Intake | Prioritize |
+| ready | Prioritized, dependencies clear | Prioritize | Commit |
+| active | Being worked | Commit | Release |
+| done | Work complete | Release | - |
+
+**Parked vs Blocked (Session 314 finding):**
+
+| | Parked | Blocked |
+|---|---|---|
+| Meaning | Out of scope (future epoch) | Has unresolved dependency |
+| Field | `queue_position: parked` | `status: blocked` + `blocked_by: [...]` |
+| Visibility | Excluded from all queues | Visible but not selectable |
+| Resolution | Operator decision to unpark | Dependency completion |
+| Example | WORK-101 (E2.6 design work during E2.5) | WORK-091 (blocked by WORK-098) |
 
 **Two Parallel State Machines:**
 
 ```
-Queue:     backlog ──→ ready ──→ active ──→ done
-                         │
-Work:                    └──→ [lifecycle phases] ──→ complete
+Queue:     parked ──→ backlog ──→ ready ──→ active ──→ done
+                                    │
+Work:                               └──→ [lifecycle phases] ──→ complete
 ```
 
 Work lifecycle runs *while* queue position is `active`. They are orthogonal.
+Parked items never enter work lifecycle until unparked.
 
 **Four Orthogonal Dimensions (WORK-065 finding):**
 
 | Dimension | Field | Values | Purpose |
 |-----------|-------|--------|---------|
 | Lifecycle | `status` | active/blocked/complete/archived | ADR-041 authoritative |
-| Queue | `queue_position` | backlog/ready/active/done | Selection pipeline |
+| Queue | `queue_position` | parked/backlog/ready/active/done | Selection pipeline |
 | Cycle | `cycle_phase` | per-lifecycle phases | Current phase within lifecycle |
 | Activity | `activity_state` | EXPLORE/DESIGN/etc. | Governed activity state |
 
@@ -289,6 +303,8 @@ Work lifecycle runs *while* queue position is `active`. They are orthogonal.
 - Queue tracks "where in selection pipeline" - not "what lifecycle phase"
 - Lifecycle tracks "what transformation is happening" - not "will it chain"
 - A work item can be `queue: done` + `status: complete` without spawning anything
+- Parked items are invisible to survey-cycle and `just ready` (REQ-QUEUE-005)
+- Parked ≠ blocked: parked is scope decision, blocked is dependency (Session 314)
 - 94% stuck at backlog (WORK-065) was symptom of conflation - these requirements fix root cause
 
 ---

@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T01:00:52
+# System Auto: last updated on: 2026-02-05T19:05:53
 # Arc: Queue
 
 ## Definition
@@ -23,8 +23,9 @@ Implement queue as separate state machine from lifecycle per REQ-QUEUE-001 to 00
 |-------------|-------------|
 | REQ-QUEUE-001 | Queue position orthogonal to lifecycle phase |
 | REQ-QUEUE-002 | "Complete without spawn" is valid terminal state |
-| REQ-QUEUE-003 | Queue has own lifecycle (backlog→ready→active→done) |
+| REQ-QUEUE-003 | Queue has own lifecycle (parked→backlog→ready→active→done) |
 | REQ-QUEUE-004 | Queue ceremonies govern transitions |
+| REQ-QUEUE-005 | Parked items excluded from current epoch scope (Session 314) |
 
 ---
 
@@ -41,7 +42,9 @@ Implement queue as separate state machine from lifecycle per REQ-QUEUE-001 to 00
 
 ## Exit Criteria
 
-- [ ] queue_position field tracked independently
-- [ ] Queue ceremonies (Intake, Prioritize, Commit, Release) implemented
+- [ ] queue_position field tracked independently with 5 states (parked/backlog/ready/active/done)
+- [ ] Queue ceremonies (Unpark, Intake, Prioritize, Commit, Release) implemented
 - [ ] Work item can be queue:done + status:complete without spawn
 - [ ] WorkEngine.get_queue() respects queue_position
+- [ ] Parked items excluded from survey-cycle and `just ready`
+- [ ] Parked vs blocked distinction enforced (parked = scope, blocked = dependency)
