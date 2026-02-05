@@ -1,5 +1,5 @@
 # generated: 2025-12-16
-# System Auto: last updated on: 2026-02-02T21:57:56
+# System Auto: last updated on: 2026-02-05T19:17:13
 # HAIOS Justfile - Claude's Execution Toolkit
 # E2-080: Wraps PowerShell scripts into clean `just <recipe>` invocations
 # Pattern: "Slash commands are prompts, just recipes are execution"
@@ -384,10 +384,10 @@ commit-session session title:
     git add docs/checkpoints/ docs/work/ .claude/haios-status*.json justfile
     git commit -m "Session {{session}}: {{title}}"
 
-# Commit work item closure (work file + plan + investigation)
-# Usage: just commit-close E2-168
+# Commit work item closure (work directory structure)
+# Usage: just commit-close WORK-099
 commit-close id:
-    git add "docs/work/archive/WORK-{{id}}-*" "docs/plans/PLAN-{{id}}*" "docs/investigations/INVESTIGATION-{{id}}*" .claude/haios-status*.json
+    git add "docs/work/archive/{{id}}/" .claude/haios-status*.json
     git commit -m "Close {{id}}"
 
 # Stage all HAIOS governance files

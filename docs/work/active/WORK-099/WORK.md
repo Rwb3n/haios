@@ -3,13 +3,13 @@ template: work_item
 id: WORK-099
 title: Fix Scaffold Template Loading and Broken Tests
 type: bugfix
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-05
 spawned_by: WORK-098
 chapter: CH-006-TemplateFracturing
 arc: lifecycles
-closed: null
+closed: '2026-02-05'
 priority: high
 effort: small
 traces_to:
@@ -41,14 +41,20 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 83998
+- 83999
+- 84000
+- 84001
+- 84002
+- 84008
 extensions:
   epoch: E2.5
   discovered_during: WORK-098
   issue_type: tooling_gap
 version: '2.0'
 generated: 2026-02-05
-last_updated: '2026-02-05T18:35:06'
+last_updated: '2026-02-05T19:25:45.948773'
 ---
 # WORK-099: Fix Scaffold Template Loading and Broken Tests
 
