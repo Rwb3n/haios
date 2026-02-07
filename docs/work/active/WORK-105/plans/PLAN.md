@@ -1,17 +1,17 @@
 ---
 template: implementation_plan
 status: draft
-date: {{DATE}}
-backlog_id: {{BACKLOG_ID}}
-title: "{{TITLE}}"
+date: 2026-02-05
+backlog_id: WORK-105
+title: "Queue Position Field (CH-007)"
 author: Hephaestus
 lifecycle_phase: plan
-session: {{SESSION}}
+session: 247
 version: "1.5"
 generated: 2025-12-21
 last_updated: 2025-12-22T12:41:28
 ---
-# Implementation Plan: {{TITLE}}
+# Implementation Plan: Queue Position Field (CH-007)
 
 ---
 
@@ -388,7 +388,7 @@ Grep(pattern="old_path|OldName", path=".", glob="**/*.{md,py,json}")
 
 ### WORK.md Deliverables Check (MUST - Session 192)
 
-**MUST** read `docs/work/active/{{BACKLOG_ID}}/WORK.md` and verify ALL deliverables:
+**MUST** read `docs/work/active/WORK-105/WORK.md` and verify ALL deliverables:
 
 | Deliverable | Complete | Evidence |
 |-------------|----------|----------|

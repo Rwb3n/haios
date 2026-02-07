@@ -1,15 +1,15 @@
 {
-    "generated": "2026-02-05T22:15:19",
+    "generated": "2026-02-07T15:38:49",
     "milestone": {
-        "id": "M8-Memory",
-        "name": "Memory",
-        "progress": 94,
-        "prior_progress": 93,
+        "id": "M7b-WorkInfra",
+        "name": "WorkInfra",
+        "progress": 78,
+        "prior_progress": 77,
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 315,
-        "current_session": 316,
+        "prior_session": 316,
+        "current_session": 317,
         "prior_date": "2026-02-05",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 83837,
-        "entities": 9606,
+        "concepts": 83846,
+        "entities": 9617,
         "backlog_pending": 0
     },
     "infrastructure": {
