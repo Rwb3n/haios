@@ -1,5 +1,5 @@
 # generated: 2026-01-24
-# System Auto: last updated on: 2026-02-05T19:05:36
+# System Auto: last updated on: 2026-02-07T15:35:59
 # L4: Functional Requirements
 
 Level: L4
@@ -49,7 +49,7 @@ Derived from: L3 principles + agent_user_requirements.md
 | REQ-LIFECYCLE-004 | Lifecycle | Chaining is caller choice, not callee side-effect | L3.4, L3.5 | CycleRunner |
 | REQ-QUEUE-001 | Queue | Queue position is orthogonal to lifecycle phase | L3.4 | WorkEngine |
 | REQ-QUEUE-002 | Queue | "Complete without spawn" is valid terminal state | L3.4, L3.5 | close-work-cycle |
-| REQ-QUEUE-003 | Queue | Queue has own lifecycle (parked→backlog→ready→active→done) | L3.4 | WorkEngine |
+| REQ-QUEUE-003 | Queue | Queue has own lifecycle (parked→backlog→ready→working→done) | L3.4 | WorkEngine |
 | REQ-QUEUE-004 | Queue | Queue ceremonies govern queue state transitions | L3.4, L3.7 | Queue ceremonies |
 | REQ-QUEUE-005 | Queue | Parked items are excluded from current epoch scope | L3.4, L3.6 | WorkEngine.get_queue() |
 | REQ-CEREMONY-001 | Ceremony | Ceremonies govern side-effects (commits, state changes) | L3.7 | Ceremony skills |
@@ -249,14 +249,14 @@ Each lifecycle follows inhale→exhale→pause rhythm. Pause = valid completion 
 |----|-------------|--------------|-----------------|
 | **REQ-QUEUE-001** | Queue position is orthogonal to lifecycle phase. Separate tracking dimensions. | L3.4 | Work item in `queue: done` can have any lifecycle phase |
 | **REQ-QUEUE-002** | "Complete without spawn" is valid terminal state. No forced chaining. | L3.4, L3.5 | close-work-cycle accepts completion without spawn_next |
-| **REQ-QUEUE-003** | Queue has its own lifecycle (parked → backlog → ready → active → done) | L3.4 | Queue transitions independent of work lifecycle |
+| **REQ-QUEUE-003** | Queue has its own lifecycle (parked → backlog → ready → working → done) | L3.4 | Queue transitions independent of work lifecycle |
 | **REQ-QUEUE-004** | Queue ceremonies govern queue state transitions | L3.4, L3.7 | Each transition has ceremony |
 | **REQ-QUEUE-005** | Parked items are excluded from current epoch scope. Parked ≠ blocked. | L3.4, L3.6 | `WorkEngine.get_queue()` excludes parked items; `just ready` never shows parked |
 
 **Queue Lifecycle:**
 
 ```
-parked ──→ backlog ──→ ready ──→ active ──→ done
+parked ──→ backlog ──→ ready ──→ working ──→ done
    │          │          │          │
    └── Unpark └── Intake └── Commit └── Release (ceremonies)
 ```
@@ -266,7 +266,7 @@ parked ──→ backlog ──→ ready ──→ active ──→ done
 | parked | Out of scope for current epoch | - | Unpark |
 | backlog | Captured, not prioritized | Intake | Prioritize |
 | ready | Prioritized, dependencies clear | Prioritize | Commit |
-| active | Being worked | Commit | Release |
+| working | Being worked | Commit | Release |
 | done | Work complete | Release | - |
 
 **Parked vs Blocked (Session 314 finding):**
@@ -282,12 +282,12 @@ parked ──→ backlog ──→ ready ──→ active ──→ done
 **Two Parallel State Machines:**
 
 ```
-Queue:     parked ──→ backlog ──→ ready ──→ active ──→ done
+Queue:     parked ──→ backlog ──→ ready ──→ working ──→ done
                                     │
 Work:                               └──→ [lifecycle phases] ──→ complete
 ```
 
-Work lifecycle runs *while* queue position is `active`. They are orthogonal.
+Work lifecycle runs *while* queue position is `working`. They are orthogonal.
 Parked items never enter work lifecycle until unparked.
 
 **Four Orthogonal Dimensions (WORK-065 finding):**
@@ -295,7 +295,7 @@ Parked items never enter work lifecycle until unparked.
 | Dimension | Field | Values | Purpose |
 |-----------|-------|--------|---------|
 | Lifecycle | `status` | active/blocked/complete/archived | ADR-041 authoritative |
-| Queue | `queue_position` | parked/backlog/ready/active/done | Selection pipeline |
+| Queue | `queue_position` | parked/backlog/ready/working/done | Selection pipeline |
 | Cycle | `cycle_phase` | per-lifecycle phases | Current phase within lifecycle |
 | Activity | `activity_state` | EXPLORE/DESIGN/etc. | Governed activity state |
 
@@ -611,6 +611,7 @@ Agent sees what's blocked BEFORE attempting, reducing wasted attempts.
 | 294 | REQ-WORK-001 (original: "track lifecycle via node_history") | REQ-WORK-001 (revised) + REQ-QUEUE-001 | Four dimensions replace single node_history |
 | 294 | REQ-VALID-003 (original: "before DO phase") | REQ-VALID-003 (revised) | "DO phase" → "Implementation lifecycle" |
 | 294 | REQ-ACTIVITY-002 (original: "DO state") | REQ-ACTIVITY-002 (revised) | Clarify DO is phase within Implementation lifecycle |
+| 320 | REQ-QUEUE-003 (original: "active" in queue lifecycle) | REQ-QUEUE-003 (revised: "working") | Rename queue_position `active` → `working` to avoid collision with `status: active` (CH-007 critique A5, WORK-106) |
 
 **Original Wordings (preserved for history):**
 

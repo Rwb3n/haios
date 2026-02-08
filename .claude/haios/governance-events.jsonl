@@ -353,3 +353,14 @@
 {"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-A", "agent": "Hephaestus", "timestamp": "2026-02-05T22:06:36.364823"}
 {"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-C", "agent": "Hephaestus", "timestamp": "2026-02-05T22:06:36.364823"}
 {"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "INV-001", "agent": "Hephaestus", "timestamp": "2026-02-05T22:06:36.374294"}
+{"type": "SessionStarted", "session": 318, "agent": "Hephaestus", "timestamp": "2026-02-05T22:29:13.052284"}
+{"type": "SessionEnded", "session": 317, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-05T22:56:21.325099"}
+{"type": "SessionStarted", "session": 318, "agent": "Hephaestus", "timestamp": "2026-02-05T22:56:42.944549"}
+{"type": "SessionStarted", "session": 319, "agent": "Hephaestus", "timestamp": "2026-02-05T23:04:24.720944"}
+{"type": "SessionEnded", "session": 318, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-07T14:56:46.269519"}
+{"type": "SessionStarted", "session": 319, "agent": "Hephaestus", "timestamp": "2026-02-07T14:57:22.893837"}
+{"type": "SessionStarted", "session": 320, "agent": "Hephaestus", "timestamp": "2026-02-07T15:20:55.578890"}
+{"type": "SessionEnded", "session": 320, "agent": "Hephaestus", "timestamp": "2026-02-07T15:40:02.112061"}
+{"type": "SessionEnded", "session": 319, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-08T21:24:20.226184"}
+{"type": "SessionStarted", "session": 321, "agent": "Hephaestus", "timestamp": "2026-02-08T21:24:56.930294"}
+{"type": "SessionEnded", "session": 321, "agent": "Hephaestus", "timestamp": "2026-02-08T21:47:50.780379"}

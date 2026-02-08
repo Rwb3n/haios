@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T01:00:49
+# System Auto: last updated on: 2026-02-05T22:35:15
 # Arc: Lifecycles
 
 ## Definition
@@ -7,7 +7,8 @@
 **Arc ID:** lifecycles
 **Epoch:** E2.5
 **Theme:** Implement CycleRunner with pure function semantics
-**Status:** Planned
+**Status:** Complete
+**Completed:** 2026-02-05 (Session 318)
 
 ---
 
@@ -43,7 +44,7 @@ Transform CycleRunner from implicit-chaining to pure-function semantics per REQ-
 
 ## Exit Criteria
 
-- [ ] CycleRunner.run() returns output, does not auto-chain
-- [ ] "Complete without spawn" accepted by close-work-cycle
-- [ ] Pause points (per S27) recognized as valid completion
-- [ ] Batch mode tested (3+ items in same phase)
+- [x] CycleRunner.run() returns output, does not auto-chain
+- [x] "Complete without spawn" accepted by close-work-cycle
+- [x] Pause points (per S27) recognized as valid completion
+- [x] Batch mode tested (3+ items in same phase)

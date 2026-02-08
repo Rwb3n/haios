@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T01:30:21
+# System Auto: last updated on: 2026-02-07T15:31:29
 # Chapter: Queue Lifecycle
 
 ## Definition
@@ -71,17 +71,18 @@ Queue types and ordering exist, but no position lifecycle (backlog→ready→wor
 
 ## Requirements
 
-### R1: Queue Lifecycle Definition (REQ-QUEUE-003)
+### R1: Queue Lifecycle Definition (REQ-QUEUE-003, REQ-QUEUE-005)
 
-Queue has four phases (using "working" per CH-007 terminology fix):
+Queue has five phases (using "working" per CH-007 terminology fix):
 
 ```
-backlog ──→ ready ──→ working ──→ done
+parked ──→ backlog ──→ ready ──→ working ──→ done
 ```
 
 | Phase | Meaning | Entry Condition |
 |-------|---------|-----------------|
-| backlog | Captured, not prioritized | Created via Intake |
+| parked | Out of scope for current epoch | Created/moved by operator |
+| backlog | Captured, not prioritized | Created via Intake or Unpark |
 | ready | Prioritized, dependencies clear | Prioritize ceremony |
 | working | Currently being worked | Commit ceremony |
 | done | Work complete | Release ceremony |
@@ -91,13 +92,17 @@ backlog ──→ ready ──→ working ──→ done
 Valid transitions only:
 
 ```
+parked → backlog   (Unpark - operator decision)
 backlog → ready    (Prioritize)
+backlog → parked   (Park - scope deferral)
 ready → working    (Commit)
-working → done     (Release)
 ready → backlog    (Deprioritize - valid rollback)
+working → done     (Release)
 ```
 
 Invalid transitions:
+- parked → ready (must go through backlog first)
+- parked → working (must go through backlog → ready)
 - backlog → working (skip ready)
 - done → working (reopen)
 - working → backlog (abandon without release)
@@ -125,10 +130,11 @@ def get_active() -> List[WorkState]:
 
 ```python
 QUEUE_TRANSITIONS = {
-    "backlog": ["ready"],
-    "ready": ["working", "backlog"],
-    "working": ["done"],
-    "done": []  # Terminal
+    "parked": ["backlog"],           # Unpark
+    "backlog": ["ready", "parked"],  # Prioritize or Park
+    "ready": ["working", "backlog"], # Commit or Deprioritize
+    "working": ["done"],             # Release
+    "done": []                       # Terminal
 }
 
 def is_valid_queue_transition(from_pos: str, to_pos: str) -> bool:
@@ -141,14 +147,17 @@ def is_valid_queue_transition(from_pos: str, to_pos: str) -> bool:
 def get_by_queue_position(position: str) -> List[WorkState]:
     """Get all work items at given queue position."""
 
+def get_parked(self) -> List[WorkState]:
+    return self.get_by_queue_position("parked")
+
 def get_backlog(self) -> List[WorkState]:
     return self.get_by_queue_position("backlog")
 
 def get_ready(self) -> List[WorkState]:
     return self.get_by_queue_position("ready")
 
-def get_active(self) -> List[WorkState]:
-    return self.get_by_queue_position("active")
+def get_working(self) -> List[WorkState]:
+    return self.get_by_queue_position("working")
 ```
 
 ### Governance Integration
@@ -168,11 +177,12 @@ def validate_queue_transition(work_id: str, to_position: str) -> GateResult:
 
 ## Success Criteria
 
-- [ ] Queue lifecycle defined with 4 phases
-- [ ] Transition rules enforced by governance
-- [ ] WorkEngine.get_backlog/ready/active methods work
-- [ ] Invalid transitions blocked
+- [ ] Queue lifecycle defined with 5 phases (parked/backlog/ready/working/done)
+- [ ] Transition rules enforced by governance (including parked transitions)
+- [ ] WorkEngine.get_parked/get_backlog/get_ready/get_working methods work
+- [ ] Invalid transitions blocked (parked→ready, parked→working, done→working)
 - [ ] Valid rollback (ready → backlog) works
+- [ ] Valid park/unpark (backlog ↔ parked) works
 - [ ] Unit tests for all valid transitions
 - [ ] Unit tests for blocked invalid transitions
 

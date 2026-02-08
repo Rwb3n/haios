@@ -1,12 +1,13 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T19:44:30
+# System Auto: last updated on: 2026-02-05T22:33:47
 # Chapter: Template Fracturing
 
 ## Definition
 
 **Chapter ID:** CH-006
 **Arc:** lifecycles
-**Status:** Planned
+**Status:** Complete
+**Completed:** 2026-02-05 (Session 316)
 **Implementation Type:** PARTIAL (investigation done, others need fracturing)
 **Depends:** CH-005
 **Work Items:** WORK-089, WORK-090, WORK-091, WORK-092

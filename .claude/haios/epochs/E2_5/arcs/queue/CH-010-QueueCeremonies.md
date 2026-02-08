@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T01:30:45
+# System Auto: last updated on: 2026-02-07T15:32:00
 # Chapter: Queue Ceremonies
 
 ## Definition
@@ -56,18 +56,21 @@ Queue transition ceremonies don't exist as formal skills. work-creation, survey,
 
 ## Requirements
 
-### R1: Four Queue Ceremonies (REQ-QUEUE-004)
+### R1: Five Queue Ceremonies (REQ-QUEUE-004, REQ-QUEUE-005)
 
 Each queue transition has a ceremony:
 
 | Ceremony | Transition | Signature | Implementation |
 |----------|------------|-----------|----------------|
+| Unpark | parked → backlog | `ParkedItem → BacklogItem` | NEW skill (operator decision) |
 | Intake | → backlog | `Idea → BacklogItem` | Extend work-creation-cycle |
 | Prioritize | backlog → ready | `[BacklogItems] → [ReadyItems]` | NEW skill |
 | Commit | ready → working | `ReadyItem → WorkingItem` | Extend survey-cycle |
 | Release | working → done | `WorkingItem → DoneItem` | **IS close-work-cycle** (CH-008) |
 
 **NOTE:** Per CH-008 decision, Release ceremony IS close-work-cycle. No separate Release skill needed.
+
+**NOTE:** Park (backlog → parked) is the reverse of Unpark but uses the same ceremony skill with direction parameter. It's an operator scope decision, not a queue progression.
 
 ### R2: Ceremony Contracts
 
@@ -105,10 +108,11 @@ All ceremonies log to governance-events.jsonl:
 
 ```
 skills/
+  queue-unpark.md       # Move item parked → backlog (or backlog → parked)
   queue-intake.md       # Create work item at backlog
   queue-prioritize.md   # Move items backlog → ready
-  queue-commit.md       # Move item ready → active
-  queue-release.md      # Move item active → done
+  queue-commit.md       # Move item ready → working
+  queue-release.md      # Move item working → done
 ```
 
 ### queue-intake Skill
@@ -159,13 +163,14 @@ triggers: ["prioritize", "triage backlog"]
 
 ## Success Criteria
 
-- [ ] 4 queue ceremony skills created
+- [ ] 5 queue ceremony skills created (Unpark, Intake, Prioritize, Commit, Release)
 - [ ] Each ceremony has input/output contract
 - [ ] Ceremonies log to governance-events.jsonl
+- [ ] Unpark moves parked → backlog (and Park moves backlog → parked)
 - [ ] Intake creates work at backlog
 - [ ] Prioritize moves backlog → ready
-- [ ] Commit moves ready → active
-- [ ] Release moves active → done
+- [ ] Commit moves ready → working
+- [ ] Release moves working → done
 - [ ] Unit tests for each ceremony
 - [ ] Integration test: full queue lifecycle via ceremonies
 

@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-05T19:05:53
+# System Auto: last updated on: 2026-02-07T15:36:07
 # Arc: Queue
 
 ## Definition
@@ -42,7 +42,7 @@ Implement queue as separate state machine from lifecycle per REQ-QUEUE-001 to 00
 
 ## Exit Criteria
 
-- [ ] queue_position field tracked independently with 5 states (parked/backlog/ready/active/done)
+- [ ] queue_position field tracked independently with 5 states (parked/backlog/ready/working/done)
 - [ ] Queue ceremonies (Unpark, Intake, Prioritize, Commit, Release) implemented
 - [ ] Work item can be queue:done + status:complete without spawn
 - [ ] WorkEngine.get_queue() respects queue_position
