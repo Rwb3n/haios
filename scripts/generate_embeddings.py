@@ -1,10 +1,10 @@
 # generated: 2025-11-26
-# System Auto: last updated on: 2025-11-26 20:31:28
+# System Auto: last updated on: 2026-02-08T23:31:53
 """
 Batch embedding generation for HAIOS Cognitive Memory System.
 
 Generates embeddings for all artifacts that don't have them yet.
-Uses Gemini text-embedding-004 model via the ExtractionManager.
+Uses Gemini gemini-embedding-001 model via the ExtractionManager.
 
 Usage:
     python scripts/generate_embeddings.py [--limit N] [--dry-run]
@@ -32,7 +32,7 @@ from haios_etl.processing import read_file_safely
 load_dotenv()
 
 # Configuration
-EMBEDDING_MODEL = "text-embedding-004"
+EMBEDDING_MODEL = "gemini-embedding-001"
 EMBEDDING_DIMENSIONS = 768
 RATE_LIMIT_DELAY = 0.1  # seconds between requests (10 req/sec)
 BATCH_LOG_INTERVAL = 10  # Log progress every N artifacts
@@ -61,7 +61,7 @@ def get_artifacts_without_embeddings(db: DatabaseManager, limit: int = None):
 def truncate_for_embedding(text: str, max_chars: int = 25000) -> str:
     """
     Truncate text to fit within embedding model limits.
-    text-embedding-004 has a token limit; ~25k chars is safe.
+    gemini-embedding-001 has a token limit; ~25k chars is safe.
     """
     if len(text) <= max_chars:
         return text

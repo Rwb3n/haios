@@ -1,5 +1,5 @@
 # generated: 2025-12-01
-# System Auto: last updated on: 2026-01-30T20:09:32
+# System Auto: last updated on: 2026-02-08T23:30:51
 """
 Ingester Agent - The "Mouth" of HAIOS
 
@@ -179,7 +179,7 @@ class Ingester:
                                 self.db_manager.insert_concept_embedding(
                                     concept_id=concept_id,
                                     vector=embedding,
-                                    model="text-embedding-004",
+                                    model="gemini-embedding-001",
                                     dimensions=len(embedding)
                                 )
                         except Exception as embed_err:

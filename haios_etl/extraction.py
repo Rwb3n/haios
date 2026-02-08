@@ -1,5 +1,5 @@
 # generated: 2025-11-24
-# System Auto: last updated on: 2025-12-04 22:57:22
+# System Auto: last updated on: 2026-02-08T23:46:57
 from dataclasses import dataclass, field
 from typing import List, Optional
 from enum import Enum
@@ -365,12 +365,13 @@ class ExtractionManager:
             genai.configure(api_key=self.api_key)
 
             # Use a dedicated embedding model
-            embedding_model = "models/text-embedding-004"
+            embedding_model = "models/gemini-embedding-001"
 
             result = genai.embed_content(
                 model=embedding_model,
                 content=text,
-                task_type="retrieval_query"
+                task_type="retrieval_query",
+                output_dimensionality=768
             )
 
             return result['embedding']

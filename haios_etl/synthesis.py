@@ -1,5 +1,5 @@
 # generated: 2025-11-29
-# System Auto: last updated on: 2025-12-20 10:47:22
+# System Auto: last updated on: 2026-02-08T23:30:54
 """
 Memory Synthesis Pipeline - Phase 9 Enhancement
 
@@ -496,7 +496,7 @@ Output ONLY valid JSON (no markdown):
                         """, (
                             new_concept_id,
                             struct.pack(f'{len(embedding)}f', *embedding),
-                            "text-embedding-004",
+                            "gemini-embedding-001",
                             len(embedding)
                         ))
                         conn.commit()

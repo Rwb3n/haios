@@ -1,5 +1,5 @@
 # generated: 2025-12-05
-# System Auto: last updated on: 2025-12-14 20:22:38
+# System Auto: last updated on: 2026-02-08T23:31:02
 #!/usr/bin/env python3
 """
 Memory Retrieval Hook Helper for HAIOS
@@ -7,7 +7,7 @@ Standalone script called by UserPromptSubmit.ps1 to inject memory context.
 
 Session 32 Implementation:
 - Receives user prompt as argument
-- Generates embedding via Google's text-embedding-004
+- Generates embedding via Google's gemini-embedding-001
 - Searches HAIOS memory database (concepts + artifacts)
 - Returns TOON-formatted results for token efficiency
 

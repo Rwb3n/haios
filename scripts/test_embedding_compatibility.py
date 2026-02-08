@@ -1,3 +1,5 @@
+# generated: 2026-02-08
+# System Auto: last updated on: 2026-02-08T23:47:31
 
 import os
 import sys
@@ -16,9 +18,10 @@ genai.configure(api_key=api_key)
 
 def get_embedding(text, task_type):
     return genai.embed_content(
-        model="models/text-embedding-004",
+        model="models/gemini-embedding-001",
         content=text,
-        task_type=task_type
+        task_type=task_type,
+        output_dimensionality=768
     )['embedding']
 
 def cosine_similarity(a, b):

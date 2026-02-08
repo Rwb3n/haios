@@ -1,5 +1,5 @@
 # generated: 2025-12-02
-# System Auto: last updated on: 2025-12-02 22:45:13
+# System Auto: last updated on: 2026-02-08T23:30:52
 """
 Collaboration Protocol - Agent-to-Agent Handoffs
 
@@ -245,7 +245,7 @@ class Collaborator:
                             self.db_manager.insert_embedding(
                                 artifact_id=artifact_id,
                                 vector=embedding,
-                                model="text-embedding-004",
+                                model="gemini-embedding-001",
                                 dimensions=len(embedding)
                             )
                             logger.info(f"Generated embedding for artifact {artifact_id}")

@@ -1,5 +1,5 @@
 # generated: 2025-12-05
-# System Auto: last updated on: 2025-12-05 18:34:03
+# System Auto: last updated on: 2026-02-08T23:30:57
 """
 Complete missing concept embeddings.
 
@@ -24,7 +24,7 @@ from haios_etl.extraction import ExtractionManager
 
 load_dotenv()
 
-EMBEDDING_MODEL = "text-embedding-004"
+EMBEDDING_MODEL = "gemini-embedding-001"
 MIN_CONTENT_LENGTH = 10  # Skip obvious junk but keep short meaningful concepts
 RATE_LIMIT_DELAY = 0.5  # Slower rate to avoid quota issues
 BATCH_LOG_INTERVAL = 50

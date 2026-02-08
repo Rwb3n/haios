@@ -1,5 +1,5 @@
 # generated: 2025-12-11
-# System Auto: last updated on: 2025-12-11 00:23:46
+# System Auto: last updated on: 2026-02-08T23:30:59
 """
 Backfill embeddings for SynthesizedInsight concepts.
 
@@ -139,7 +139,7 @@ def backfill_embeddings(
                     """, (
                         concept_id,
                         struct.pack(f'{len(embedding)}f', *embedding),
-                        "text-embedding-004",
+                        "gemini-embedding-001",
                         len(embedding)
                     ))
                     conn.commit()

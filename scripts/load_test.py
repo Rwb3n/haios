@@ -1,3 +1,5 @@
+# generated: 2026-02-08
+# System Auto: last updated on: 2026-02-08T23:31:55
 import time
 import random
 import concurrent.futures
@@ -17,7 +19,7 @@ class MockExtractionManager(ExtractionManager):
         pass
     
     def embed_content(self, text):
-        # Return random 768-dim vector (simulating text-embedding-004)
+        # Return random 768-dim vector (simulating gemini-embedding-001)
         return [random.random() for _ in range(768)]
 
 def run_query(db_path, query_id):

@@ -1,5 +1,5 @@
 # generated: 2025-11-25
-# System Auto: last updated on: 2026-01-14T21:13:39
+# System Auto: last updated on: 2026-02-08T23:31:28
 # HAIOS ETL Package
 
 > **Navigation:** [Quick Reference](../docs/README.md) | [Strategic Overview](../docs/epistemic_state.md) | [Operations](../docs/OPERATIONS.md) | [MCP Integration](../docs/MCP_INTEGRATION.md)
@@ -41,7 +41,7 @@ The `haios_etl` package implements the Extract, Transform, Load pipeline for the
     -   Uses `langextract` library for schema-constrained generation.
     -   Implements retry logic for API stability.
     -   Handles model configuration (currently `gemini-2.5-flash-lite`).
-    -   **`embed_content()`**: Generates embeddings via Gemini text-embedding-004.
+    -   **`embed_content()`**: Generates embeddings via Gemini gemini-embedding-001.
 
 #### `processing.py` (The "Brain")
 -   **Role:** Orchestrates the batch processing of files.
@@ -198,7 +198,7 @@ Apply with: `python scripts/apply_migration.py`
 
 #### Embedding Generation
 -   **Script:** `scripts/generate_embeddings.py`
--   **Model:** Gemini text-embedding-004
+-   **Model:** Gemini gemini-embedding-001
 -   **Coverage:** Complete (all concepts have embeddings)
 
 ---
