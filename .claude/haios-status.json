@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-08T22:39:27",
+    "generated": "2026-02-08T23:11:38",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 321,
-        "current_session": 322,
+        "prior_session": 322,
+        "current_session": 323,
         "prior_date": "2026-02-08",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 83896,
-        "entities": 9633,
+        "concepts": 83911,
+        "entities": 9635,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3480,6 +3480,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-08-03-SESSION-323-work-103-dynamic-blocker-resolution.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-08",
+            "last_updated": "2026-02-08T22:54:30",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "template": "implementation_plan",
             "status": "complete",
@@ -5923,7 +5932,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
             "last_updated": "2025-12-04T22:47:20",
-            "days_stale": 65
+            "days_stale": 66
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-prototype-consolidation.md",
@@ -5938,7 +5947,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-extraction-improvement-complete.md",
             "last_updated": "2025-12-04T22:58:40",
-            "days_stale": 65
+            "days_stale": 66
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-final.md",
@@ -6298,7 +6307,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-06-SESSION-95-e2-130-error-capture-rebuild-and-taxonomy-discussion.md",
             "last_updated": "2025-12-21T23:04:37",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/checkpoints/2025-12-22-01-SESSION-96-synthesis-review-and-backlog-archival.md",
@@ -6638,7 +6647,7 @@
         {
             "path": "docs/checkpoints/2026-01-03-06-SESSION-162-e2-250-chariot-module-integration-and-dod-framework.md",
             "last_updated": "2026-01-03T23:06:35",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2026-01-03-07-SESSION-162-epoch-22-migration-planning-e2-251-through-e2-255.md",
@@ -6693,7 +6702,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-10-SESSION-172-inv-057-complete-e2-269-plan-authored.md",
             "last_updated": "2026-01-04T22:46:19",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/checkpoints/2026-01-05-01-SESSION-173-e2-269-e2-238-inv-052-implementation-and-plan-authoring.md",
@@ -6713,7 +6722,7 @@
         {
             "path": "docs/checkpoints/2026-01-05-04-SESSION-176-e2-272-e2-273-ambiguity-gating-gates-1-2-complete.md",
             "last_updated": "2026-01-05T22:53:08",
-            "days_stale": 33
+            "days_stale": 34
         },
         {
             "path": "docs/checkpoints/2026-01-05-05-SESSION-177-e2-274-e2-275-complete-ambiguity-gating-done-critical-memory-loss-finding.md",
@@ -6973,7 +6982,7 @@
         {
             "path": "docs/plans/PLAN-E2-130-error-capture-rebuild.md",
             "last_updated": "2025-12-21T23:02:26",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/plans/PLAN-E2-140-investigation-status-sync-hook.md",
@@ -7293,7 +7302,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-011-command-skill-architecture-gap.md",
             "last_updated": "2025-12-22T22:45:09",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-012-static-registration-anti-pattern-mitigation.md",
@@ -7542,9 +7551,9 @@
         }
     ],
     "workspace": {
-        "total_files": 499,
+        "total_files": 500,
         "by_template": {
-            "checkpoint": 327,
+            "checkpoint": 328,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7555,7 +7564,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 162,
+            "unknown": 163,
             "draft": 2,
             "approved": 6,
             "ready": 1,

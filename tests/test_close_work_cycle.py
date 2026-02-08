@@ -1,17 +1,22 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T23:02:35
+# System Auto: last updated on: 2026-02-08T23:07:34
 # WORK-087: Tests for close-work-cycle CHAIN phase caller chaining
-"""Tests for close-work-cycle SKILL.md CHAIN phase behavior.
+# WORK-107: Runtime tests for complete-without-spawn (CH-008)
+"""Tests for close-work-cycle behavior.
 
-These tests verify the skill markdown content, not runtime behavior.
-Skills are instruction documents interpreted by Claude Code.
+Part 1 (WORK-087): Skill markdown content tests for CHAIN phase.
+Part 2 (WORK-107): Runtime tests for WorkEngine.close() queue_position behavior.
 
 REQ-LIFECYCLE-004: Chaining is caller choice, not callee side-effect.
+REQ-QUEUE-002: "Complete without spawn" is valid terminal state.
 """
 import re
+import sys
 from pathlib import Path
 
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "modules"))
 
 
 def extract_section(content: str, section_header: str) -> str:
@@ -170,3 +175,104 @@ class TestChainPhaseCallerChoice:
             "CHAIN phase should NOT have 'execute immediately' or 'do not pause' directives. "
             "These contradict REQ-LIFECYCLE-004 (caller choice)."
         )
+
+
+# =============================================================================
+# Part 2: Runtime Tests - WorkEngine.close() queue_position behavior (WORK-107)
+# =============================================================================
+
+# Sample work item for close() tests
+SAMPLE_WORK_FOR_CLOSE = """---
+template: work_item
+id: {id}
+title: Test Work Item for Close
+type: feature
+status: active
+owner: Hephaestus
+created: 2026-02-08
+closed: null
+priority: high
+queue_position: {queue_position}
+cycle_phase: implement
+current_node: implement
+blocked_by: []
+blocks: []
+node_history:
+- node: backlog
+  entered: '2026-02-08T10:00:00'
+  exited: '2026-02-08T11:00:00'
+memory_refs: []
+---
+# {id}: Test Work Item for Close
+"""
+
+
+def _create_work_item(tmp_path, work_id="WORK-TEST", queue_position="working"):
+    """Helper to create a work item for close() tests."""
+    work_dir = tmp_path / "docs" / "work" / "active" / work_id
+    work_dir.mkdir(parents=True)
+    content = SAMPLE_WORK_FOR_CLOSE.format(id=work_id, queue_position=queue_position)
+    (work_dir / "WORK.md").write_text(content, encoding="utf-8")
+    return work_dir
+
+
+def _make_engine(tmp_path):
+    """Create WorkEngine with governance for testing."""
+    from governance_layer import GovernanceLayer
+    from work_engine import WorkEngine
+    return WorkEngine(governance=GovernanceLayer(), base_path=tmp_path)
+
+
+class TestCloseQueuePosition:
+    """WORK-107: WorkEngine.close() sets queue_position=done (CH-008, REQ-QUEUE-002)."""
+
+    def test_close_sets_queue_position_done(self, tmp_path):
+        """WorkEngine.close() sets queue_position to 'done'."""
+        _create_work_item(tmp_path, "WORK-T1", queue_position="working")
+        engine = _make_engine(tmp_path)
+
+        engine.close("WORK-T1")
+
+        work = engine.get_work("WORK-T1")
+        assert work is not None
+        assert work.queue_position == "done"
+
+    def test_close_sets_status_complete(self, tmp_path):
+        """WorkEngine.close() sets status to 'complete'."""
+        _create_work_item(tmp_path, "WORK-T2", queue_position="working")
+        engine = _make_engine(tmp_path)
+
+        engine.close("WORK-T2")
+
+        work = engine.get_work("WORK-T2")
+        assert work is not None
+        assert work.status == "complete"
+
+    def test_close_without_spawn_no_warnings(self, tmp_path):
+        """Closing work item without spawn_next succeeds.
+
+        REQ-QUEUE-002: 'Complete without spawn' is valid terminal state.
+        No spawn_next parameter needed — absence is valid.
+        """
+        _create_work_item(tmp_path, "WORK-T3", queue_position="backlog")
+        engine = _make_engine(tmp_path)
+
+        path = engine.close("WORK-T3")
+
+        assert path.exists()
+        work = engine.get_work("WORK-T3")
+        assert work is not None
+        assert work.status == "complete"
+        assert work.queue_position == "done"
+
+    def test_close_persists_queue_position_in_frontmatter(self, tmp_path):
+        """Verify queue_position=done is persisted to WORK.md frontmatter on disk."""
+        _create_work_item(tmp_path, "WORK-T4", queue_position="working")
+        engine = _make_engine(tmp_path)
+
+        engine.close("WORK-T4")
+
+        # Re-read from disk to verify persistence
+        work_md = tmp_path / "docs" / "work" / "active" / "WORK-T4" / "WORK.md"
+        content = work_md.read_text(encoding="utf-8")
+        assert "queue_position: done" in content

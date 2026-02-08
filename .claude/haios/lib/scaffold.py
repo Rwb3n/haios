@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-02-05T19:13:19
+# System Auto: last updated on: 2026-02-08T23:18:10
 """
 DEPRECATED: Use GovernanceLayer.scaffold_template() instead.
 
@@ -328,31 +328,27 @@ def get_next_sequence_number(directory: str, date: str) -> str:
 
 
 def get_current_session() -> int | str:
-    """Read current session number from events log, falling back to status file.
+    """Read current session number.
 
-    Priority: haios-events.jsonl (last session_start) > haios-status.json
+    Priority: .claude/session (authoritative) > haios-status.json (fallback)
 
     Returns:
         Current session number as int, or "??" if unavailable.
     """
-    # E2-134: Try events log first (most accurate - reflects just session-start)
-    events_path = PROJECT_ROOT / ".claude" / "haios-events.jsonl"
-    if events_path.exists():
+    # Primary: .claude/session file (written by `just session-start`)
+    session_path = PROJECT_ROOT / ".claude" / "session"
+    if session_path.exists():
         try:
-            with open(events_path, encoding="utf-8") as f:
-                lines = f.readlines()
-            # Read backwards to find last session_start
+            lines = session_path.read_text(encoding="utf-8").strip().splitlines()
+            # Skip comment lines (start with #), take last non-comment line
             for line in reversed(lines):
-                try:
-                    event = json.loads(line.strip())
-                    if event.get("type") == "session" and event.get("action") == "start":
-                        return event.get("session", "??")
-                except json.JSONDecodeError:
-                    continue
-        except Exception:
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    return int(line)
+        except (ValueError, Exception):
             pass  # Fall through to status file
 
-    # Fall back to haios-status.json
+    # Fallback: haios-status.json
     status_path = PROJECT_ROOT / ".claude" / "haios-status.json"
     if not status_path.exists():
         return "??"

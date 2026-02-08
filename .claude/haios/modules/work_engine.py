@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-08T22:35:28
+# System Auto: last updated on: 2026-02-08T23:08:12
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -542,10 +542,11 @@ class WorkEngine:
 
     def close(self, id: str) -> Path:
         """
-        Close work item: set status=complete, closed date.
+        Close work item: set status=complete, queue_position=done, closed date.
 
         Per ADR-041 "status over location": work items stay in docs/work/active/
         until epoch cleanup. The status field determines state, not directory path.
+        CH-008: Sets queue_position=done atomically. No spawn_next required.
 
         Args:
             id: Work item ID
@@ -560,8 +561,9 @@ class WorkEngine:
         if work is None:
             raise WorkNotFoundError(f"Work item {id} not found")
 
-        # Update status and closed date
+        # Update status and queue_position atomically (CH-008: complete without spawn)
         work.status = "complete"
+        work.queue_position = "done"
         self._write_work_file(work)
 
         # Set closed date in frontmatter
