@@ -3,13 +3,13 @@ template: work_item
 id: WORK-108
 title: Fix Embedding Model Migration (text-embedding-004 to gemini-embedding-001)
 type: bug
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-08
 spawned_by: null
 chapter: null
 arc: null
-closed: null
+closed: '2026-02-08'
 priority: high
 effort: small
 traces_to:
@@ -28,7 +28,7 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
+queue_position: done
 cycle_phase: backlog
 current_node: backlog
 node_history:
@@ -37,11 +37,17 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 84103
+- 84104
+- 84105
+- 84112
+- 84113
+- 84114
 extensions: {}
 version: '2.0'
 generated: 2026-02-08
-last_updated: '2026-02-08T23:25:09'
+last_updated: '2026-02-08T23:52:16.770506'
 ---
 # WORK-108: Fix Embedding Model Migration (text-embedding-004 to gemini-embedding-001)
 
@@ -74,16 +80,24 @@ Google retired the `text-embedding-004` model from the Gemini API (v1beta endpoi
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Replace `text-embedding-004` with `gemini-embedding-001` in haios_etl/extraction.py
-- [ ] Replace `text-embedding-004` with `gemini-embedding-001` in haios_etl/agents/ingester.py
-- [ ] Replace `text-embedding-004` with `gemini-embedding-001` in haios_etl/agents/collaboration.py
-- [ ] Replace `text-embedding-004` in scripts (backfill_synthesis_embeddings.py, complete_concept_embeddings.py)
-- [ ] Verify memory_search_with_experience returns results (not 404)
-- [ ] Consider: make embedding model name configurable via env var or haios.yaml
+- [x] Replace `text-embedding-004` with `gemini-embedding-001` in haios_etl/extraction.py
+- [x] Replace `text-embedding-004` with `gemini-embedding-001` in haios_etl/agents/ingester.py
+- [x] Replace `text-embedding-004` with `gemini-embedding-001` in haios_etl/agents/collaboration.py
+- [x] Replace `text-embedding-004` in scripts (backfill_synthesis_embeddings.py, complete_concept_embeddings.py)
+- [x] Verify memory_search_with_experience returns results (not 404)
+- [x] Consider: make embedding model name configurable via env var or haios.yaml (deferred — output_dimensionality coupling makes simple env var risky)
 
 ---
 
 ## History
+
+### 2026-02-08 - Completed (Session 325)
+- Replaced model name in 11 files (5 functional + 3 scripts + 1 test + 1 hook comment + 1 README)
+- Critical discovery: gemini-embedding-001 defaults to 3072 dimensions vs text-embedding-004's 768
+- Added output_dimensionality=768 to genai.embed_content() call for backward compatibility with 81k existing embeddings
+- Verified: memory_search_with_experience returns results, no 404
+- All 3 synthesis embedding tests pass, no regressions (1048 pass / 18 pre-existing failures)
+- Memory refs: 84103, 84104, 84105
 
 ### 2026-02-08 - Created (Session 324)
 - Discovered during WORK-107 when memory_search_with_experience returned 404

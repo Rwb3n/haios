@@ -1,5 +1,5 @@
 # generated: 2025-11-29
-# System Auto: last updated on: 2025-12-20 10:46:41
+# System Auto: last updated on: 2026-02-08T23:30:44
 """
 Tests for the Memory Synthesis Pipeline (Phase 9 Enhancement).
 
@@ -1162,7 +1162,7 @@ class TestSynthesisEmbedding:
         conn.close()
 
         assert row is not None, "Embedding should be created for synthesized concept"
-        assert row[1] == "text-embedding-004", "Should use correct model name"
+        assert row[1] == "gemini-embedding-001", "Should use correct model name"
 
         # Verify embed_content was called with the concept content
         mock_extractor.embed_content.assert_called_once()
