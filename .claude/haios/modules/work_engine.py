@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-08T22:07:45
+# System Auto: last updated on: 2026-02-08T22:35:28
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -375,7 +375,7 @@ class WorkEngine:
                     # INV-070: Filter out complete items
                     # WORK-002: Also filter archived, dismissed, invalid, deferred
                     # WORK-105: Exclude parked items (REQ-QUEUE-005)
-                    if work and not work.blocked_by and work.status not in terminal_statuses and work.queue_position != "parked":
+                    if work and not self._is_actually_blocked(work) and work.status not in terminal_statuses and work.queue_position != "parked":
                         ready.append(work)
         return ready
 
@@ -826,6 +826,34 @@ class WorkEngine:
                 f"Forbidden state combination: status=archived + "
                 f"queue_position={queue_position}. Archived items must be queue done"
             )
+
+    def _is_actually_blocked(self, work: WorkState) -> bool:
+        """Check if work item is actually blocked (blockers still active).
+
+        WORK-103: Resolves blocked_by IDs against actual work item status.
+        Items whose blockers are ALL terminal are treated as unblocked.
+
+        Args:
+            work: WorkState to check
+
+        Returns:
+            True if at least one blocker is still active, False otherwise
+        """
+        if not work.blocked_by:
+            return False
+
+        terminal_statuses = {"complete", "archived", "dismissed", "invalid", "deferred"}
+
+        for blocker_id in work.blocked_by:
+            blocker = self.get_work(blocker_id)
+            # If blocker not found (deleted/moved), treat as resolved
+            if blocker is None:
+                continue
+            # If blocker is still active, item is actually blocked
+            if blocker.status not in terminal_statuses:
+                return True
+
+        return False
 
     # =========================================================================
     # Helper Methods

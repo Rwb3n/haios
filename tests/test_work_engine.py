@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-08T22:06:47
+# System Auto: last updated on: 2026-02-08T22:36:17
 """
 Tests for WorkEngine module (E2-242).
 
@@ -291,12 +291,16 @@ def test_get_ready_returns_unblocked_only(tmp_path, engine, setup_work_item):
     # Create 1 unblocked and 1 blocked item
     setup_work_item("E2-UNBLOCKED", SAMPLE_WORK_MD)
     setup_work_item("E2-BLOCKED", SAMPLE_BLOCKED_WORK_MD)
+    # WORK-103: Create active blockers so dynamic resolution sees them as active
+    setup_work_item("E2-240", SAMPLE_WORK_MD)
+    setup_work_item("E2-241", SAMPLE_WORK_MD)
 
     result = engine.get_ready()
 
-    assert len(result) == 1
-    assert result[0].id == "E2-UNBLOCKED"
-    assert result[0].blocked_by == []
+    # E2-BLOCKED should NOT appear (blockers E2-240, E2-241 are active)
+    result_ids = [w.id for w in result]
+    assert "E2-UNBLOCKED" in result_ids
+    assert "E2-BLOCKED" not in result_ids
 
 
 # =============================================================================
@@ -1717,3 +1721,159 @@ def test_forbidden_state_caught_on_write(tmp_path, governance):
     work.status = "complete"
     with pytest.raises(ValueError, match="[Ff]orbidden"):
         engine._write_work_file(work)
+
+
+# =============================================================================
+# WORK-103: Dynamic Blocker Resolution Tests
+# =============================================================================
+
+SAMPLE_BLOCKER_COMPLETE = """---
+template: work_item
+id: BLOCKER-A
+title: Completed Blocker
+status: complete
+current_node: complete
+queue_position: done
+cycle_phase: complete
+blocked_by: []
+blocks: []
+node_history:
+- node: backlog
+  entered: '2026-01-01T10:00:00'
+  exited: '2026-01-02T10:00:00'
+- node: complete
+  entered: '2026-01-02T10:00:00'
+  exited: null
+---
+# BLOCKER-A: Completed Blocker
+"""
+
+SAMPLE_BLOCKER_ACTIVE = """---
+template: work_item
+id: BLOCKER-C
+title: Active Blocker
+status: active
+current_node: plan
+queue_position: working
+cycle_phase: plan
+blocked_by: []
+blocks: []
+node_history:
+- node: backlog
+  entered: '2026-01-01T10:00:00'
+  exited: null
+---
+# BLOCKER-C: Active Blocker
+"""
+
+SAMPLE_BLOCKED_ITEM = """---
+template: work_item
+id: BLOCKED-B
+title: Blocked Item
+status: active
+current_node: backlog
+queue_position: backlog
+cycle_phase: backlog
+blocked_by:
+- BLOCKER-A
+blocks: []
+node_history:
+- node: backlog
+  entered: '2026-01-01T10:00:00'
+  exited: null
+---
+# BLOCKED-B: Blocked Item
+"""
+
+
+def test_get_ready_resolves_completed_blocker(tmp_path, governance):
+    """WORK-103 T1: Item blocked_by completed work should appear in get_ready()."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Create blocker A (status: complete)
+    blocker_dir = tmp_path / "docs" / "work" / "active" / "BLOCKER-A"
+    blocker_dir.mkdir(parents=True)
+    (blocker_dir / "WORK.md").write_text(SAMPLE_BLOCKER_COMPLETE, encoding="utf-8")
+
+    # Create item B (blocked_by: [BLOCKER-A])
+    blocked_dir = tmp_path / "docs" / "work" / "active" / "BLOCKED-B"
+    blocked_dir.mkdir(parents=True)
+    (blocked_dir / "WORK.md").write_text(SAMPLE_BLOCKED_ITEM, encoding="utf-8")
+
+    result = engine.get_ready()
+    result_ids = [w.id for w in result]
+    assert "BLOCKED-B" in result_ids, f"Item with completed blocker should be in get_ready(), got: {result_ids}"
+
+
+def test_get_ready_excludes_actively_blocked(tmp_path, governance):
+    """WORK-103 T2: Item blocked_by active work should NOT appear in get_ready()."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Create blocker C (status: active)
+    blocker_dir = tmp_path / "docs" / "work" / "active" / "BLOCKER-C"
+    blocker_dir.mkdir(parents=True)
+    (blocker_dir / "WORK.md").write_text(SAMPLE_BLOCKER_ACTIVE, encoding="utf-8")
+
+    # Create item B blocked by active BLOCKER-C
+    blocked_content = SAMPLE_BLOCKED_ITEM.replace("BLOCKER-A", "BLOCKER-C")
+    blocked_dir = tmp_path / "docs" / "work" / "active" / "BLOCKED-B"
+    blocked_dir.mkdir(parents=True)
+    (blocked_dir / "WORK.md").write_text(blocked_content, encoding="utf-8")
+
+    result = engine.get_ready()
+    result_ids = [w.id for w in result]
+    assert "BLOCKED-B" not in result_ids, f"Item with active blocker should NOT be in get_ready(), got: {result_ids}"
+
+
+def test_get_ready_partial_blocker_resolution(tmp_path, governance):
+    """WORK-103 T3: Item with mix of complete and active blockers stays blocked."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Create BLOCKER-A (complete) and BLOCKER-C (active)
+    blocker_a_dir = tmp_path / "docs" / "work" / "active" / "BLOCKER-A"
+    blocker_a_dir.mkdir(parents=True)
+    (blocker_a_dir / "WORK.md").write_text(SAMPLE_BLOCKER_COMPLETE, encoding="utf-8")
+
+    blocker_c_dir = tmp_path / "docs" / "work" / "active" / "BLOCKER-C"
+    blocker_c_dir.mkdir(parents=True)
+    (blocker_c_dir / "WORK.md").write_text(SAMPLE_BLOCKER_ACTIVE, encoding="utf-8")
+
+    # Create item B blocked by both
+    blocked_content = SAMPLE_BLOCKED_ITEM.replace(
+        "blocked_by:\n- BLOCKER-A",
+        "blocked_by:\n- BLOCKER-A\n- BLOCKER-C"
+    )
+    blocked_dir = tmp_path / "docs" / "work" / "active" / "BLOCKED-B"
+    blocked_dir.mkdir(parents=True)
+    (blocked_dir / "WORK.md").write_text(blocked_content, encoding="utf-8")
+
+    result = engine.get_ready()
+    result_ids = [w.id for w in result]
+    assert "BLOCKED-B" not in result_ids, f"Item with partial active blockers should NOT be in get_ready(), got: {result_ids}"
+
+
+def test_get_ready_missing_blocker_treated_as_resolved(tmp_path, governance):
+    """WORK-103 T4: Item blocked_by nonexistent work should appear in get_ready()."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Create item B blocked by nonexistent item
+    blocked_content = SAMPLE_BLOCKED_ITEM.replace("BLOCKER-A", "NONEXISTENT-001")
+    blocked_dir = tmp_path / "docs" / "work" / "active" / "BLOCKED-B"
+    blocked_dir.mkdir(parents=True)
+    (blocked_dir / "WORK.md").write_text(blocked_content, encoding="utf-8")
+
+    result = engine.get_ready()
+    result_ids = [w.id for w in result]
+    assert "BLOCKED-B" in result_ids, f"Item with missing blocker should be in get_ready(), got: {result_ids}"
+
+
+def test_get_ready_empty_blocked_by_unchanged(tmp_path, governance):
+    """WORK-103 T5: Items with empty blocked_by still appear (backward compat)."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Create a normal unblocked item
+    engine.create_work("WORK-NORMAL", "Normal Unblocked Item")
+
+    result = engine.get_ready()
+    result_ids = [w.id for w in result]
+    assert "WORK-NORMAL" in result_ids, f"Item with empty blocked_by should be in get_ready(), got: {result_ids}"

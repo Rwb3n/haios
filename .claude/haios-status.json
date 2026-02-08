@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-08T22:11:21",
+    "generated": "2026-02-08T22:39:27",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,9 +8,9 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 320,
-        "current_session": 321,
-        "prior_date": "2026-02-07",
+        "prior_session": 321,
+        "current_session": 322,
+        "prior_date": "2026-02-08",
         "completed": [],
         "completed_count": 0,
         "added": [],
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 83858,
-        "entities": 9622,
+        "concepts": 83896,
+        "entities": 9633,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3471,6 +3471,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-08-02-SESSION-322-work-105-queue-position-field-implemented.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-08",
+            "last_updated": "2026-02-08T22:21:41",
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "template": "implementation_plan",
             "status": "complete",
@@ -5919,7 +5928,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-prototype-consolidation.md",
             "last_updated": "2025-12-04T22:30:47",
-            "days_stale": 65
+            "days_stale": 66
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-comprehensive-checkpoint.md",
@@ -6574,7 +6583,7 @@
         {
             "path": "docs/checkpoints/2025-12-30-02-SESSION-151-inv-052-architecture-documentation-complete.md",
             "last_updated": "2025-12-30T22:34:43",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2025-12-31-01-SESSION-152-inv-052-architecture-analysis-complete.md",
@@ -6589,7 +6598,7 @@
         {
             "path": "docs/checkpoints/2026-01-01-02-SESSION-154-manifesto-corpus-l0-l4-complete.md",
             "last_updated": "2026-01-01T22:23:49",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/checkpoints/2026-01-02-01-SESSION-155-coldstart-manifesto-integration.md",
@@ -6679,7 +6688,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-09-SESSION-171-e2-264-complete-inv-057-needs-revision.md",
             "last_updated": "2026-01-04T22:18:45",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/checkpoints/2026-01-04-10-SESSION-172-inv-057-complete-e2-269-plan-authored.md",
@@ -7269,12 +7278,12 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-008-haios-status-json-optimization.md",
             "last_updated": "2025-12-22T22:37:14",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-009-backlog-archival-governance.md",
             "last_updated": "2025-12-22T22:37:32",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-010-memory-retrieval-architecture-mismatch.md",
@@ -7314,7 +7323,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-018-adaptive-coldstart-query-formulation.md",
             "last_updated": "2025-12-22T22:39:13",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-020-llm-energy-channeling-patterns.md",
@@ -7533,9 +7542,9 @@
         }
     ],
     "workspace": {
-        "total_files": 498,
+        "total_files": 499,
         "by_template": {
-            "checkpoint": 326,
+            "checkpoint": 327,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7546,7 +7555,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 161,
+            "unknown": 162,
             "draft": 2,
             "approved": 6,
             "ready": 1,
