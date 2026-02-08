@@ -3,13 +3,13 @@ template: work_item
 id: WORK-105
 title: Queue Position Field (CH-007)
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-05
 spawned_by: null
 chapter: CH-007
 arc: queue
-closed: null
+closed: '2026-02-08'
 priority: medium
 effort: medium
 traces_to:
@@ -30,11 +30,24 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 84044
+- 84045
+- 84046
+- 84047
+- 84048
+- 84049
+- 84050
+- 84051
+- 84052
+- 84053
+- 84054
+- 84055
+- 84056
 extensions: {}
 version: '2.0'
 generated: 2026-02-05
-last_updated: '2026-02-07T15:36:25'
+last_updated: '2026-02-08T22:11:48.285898'
 ---
 # WORK-105: Queue Position Field (CH-007)
 

@@ -364,3 +364,7 @@
 {"type": "SessionEnded", "session": 319, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-08T21:24:20.226184"}
 {"type": "SessionStarted", "session": 321, "agent": "Hephaestus", "timestamp": "2026-02-08T21:24:56.930294"}
 {"type": "SessionEnded", "session": 321, "agent": "Hephaestus", "timestamp": "2026-02-08T21:47:50.780379"}
+{"type": "SessionStarted", "session": 322, "agent": "Hephaestus", "timestamp": "2026-02-08T21:59:54.604281"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-INT-D1", "agent": "Hephaestus", "timestamp": "2026-02-08T22:07:12.009178"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-INT-D2", "agent": "Hephaestus", "timestamp": "2026-02-08T22:07:12.010179"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-INT-D3", "agent": "Hephaestus", "timestamp": "2026-02-08T22:07:12.010179"}

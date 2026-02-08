@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-04T22:32:03
+# System Auto: last updated on: 2026-02-08T22:08:11
 # HAIOS Modules
 
 Core modules for HAIOS Chariot Architecture (L4-implementation.md).
@@ -226,8 +226,9 @@ Stateless work item management module. Core CRUD operations, with delegated func
 | `close(id)` | Work item ID | Path to WORK.md |
 | `archive(id)` | Work item ID | Path to archived WORK.md |
 | `add_memory_refs(id, concept_ids)` | Work ID + concept list | None |
-| `set_queue_position(id, position)` | Work ID + position | `WorkState` or None (WORK-066) |
-| `get_in_progress()` | None | `List[WorkState]` with queue_position=in_progress (WORK-066) |
+| `set_queue_position(id, position)` | Work ID + position (parked/backlog/ready/working/done) | `WorkState` or None (WORK-105) |
+| `get_working()` | None | `List[WorkState]` with queue_position=working (WORK-105) |
+| `get_in_progress()` | None | **Deprecated** alias for `get_working()` |
 
 ### Functions (Delegated to E2-279 modules)
 
@@ -252,7 +253,7 @@ class WorkState:
     status: str
     current_node: str          # DEPRECATED: use cycle_phase
     type: str = "feature"
-    queue_position: str = "backlog"  # WORK-066: backlog|in_progress|done
+    queue_position: str = "backlog"  # WORK-105: parked|backlog|ready|working|done
     cycle_phase: str = "backlog"     # WORK-066: backlog|plan|implement|check|done
     blocked_by: List[str]
     node_history: List[Dict]

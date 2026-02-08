@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-05T22:06:12
+# System Auto: last updated on: 2026-02-08T22:06:47
 """
 Tests for WorkEngine module (E2-242).
 
@@ -1143,6 +1143,7 @@ def test_is_at_pause_point_feature_at_done(tmp_path, governance):
 # =============================================================================
 
 # Sample work item with queue_position field
+# WORK-105: Updated in_progress -> working (terminology fix)
 SAMPLE_WORK_WITH_QUEUE_POSITION = """---
 template: work_item
 id: WORK-QP
@@ -1153,7 +1154,7 @@ owner: Hephaestus
 created: 2026-02-04
 closed: null
 priority: high
-queue_position: in_progress
+queue_position: working
 cycle_phase: plan
 current_node: plan
 blocked_by: []
@@ -1198,7 +1199,7 @@ def test_parse_queue_position(tmp_path, governance):
     """WORK-066 Test 1: WorkEngine._parse_work_file reads queue_position field."""
     engine = WorkEngine(governance=governance, base_path=tmp_path)
 
-    # Setup: Create work item with queue_position: in_progress
+    # Setup: Create work item with queue_position: working (WORK-105: renamed from in_progress)
     work_dir = tmp_path / "docs" / "work" / "active" / "WORK-QP"
     work_dir.mkdir(parents=True)
     (work_dir / "WORK.md").write_text(SAMPLE_WORK_WITH_QUEUE_POSITION, encoding="utf-8")
@@ -1206,7 +1207,7 @@ def test_parse_queue_position(tmp_path, governance):
     work = engine.get_work("WORK-QP")
 
     assert work is not None
-    assert work.queue_position == "in_progress"
+    assert work.queue_position == "working"
 
 
 def test_queue_position_defaults_to_backlog(tmp_path, governance):
@@ -1231,20 +1232,22 @@ def test_set_queue_position(tmp_path, governance):
     # Setup: Create work item
     engine.create_work("WORK-SET", "Test Set Queue Position")
 
-    # Action: Set queue_position to in_progress
-    result = engine.set_queue_position("WORK-SET", "in_progress")
+    # Action: Set queue_position to working (WORK-105: renamed from in_progress)
+    result = engine.set_queue_position("WORK-SET", "working")
 
     # Assert: Result reflects update
     assert result is not None
-    assert result.queue_position == "in_progress"
+    assert result.queue_position == "working"
 
-    # Assert: Re-read shows queue_position: in_progress
+    # Assert: Re-read shows queue_position: working
     work = engine.get_work("WORK-SET")
-    assert work.queue_position == "in_progress"
+    assert work.queue_position == "working"
 
 
 def test_get_in_progress_items(tmp_path, governance):
-    """WORK-066 Test 4: WorkEngine.get_in_progress returns items with queue_position: in_progress."""
+    """WORK-066 Test 4: WorkEngine.get_in_progress returns items with queue_position: working.
+    WORK-105: Updated to use working terminology. get_in_progress() is deprecated alias for get_working().
+    """
     engine = WorkEngine(governance=governance, base_path=tmp_path)
 
     # Setup: Create 3 items
@@ -1252,16 +1255,16 @@ def test_get_in_progress_items(tmp_path, governance):
     engine.create_work("WORK-B", "Item B")
     engine.create_work("WORK-C", "Item C")
 
-    # Set one to in_progress
-    engine.set_queue_position("WORK-B", "in_progress")
+    # Set one to working (WORK-105: renamed from in_progress)
+    engine.set_queue_position("WORK-B", "working")
 
-    # Action
+    # Action: get_in_progress is deprecated alias for get_working
     in_progress = engine.get_in_progress()
 
     # Assert
     assert len(in_progress) == 1
     assert in_progress[0].id == "WORK-B"
-    assert in_progress[0].queue_position == "in_progress"
+    assert in_progress[0].queue_position == "working"
 
 
 def test_cycle_phase_falls_back_to_current_node(tmp_path, governance):
@@ -1291,8 +1294,8 @@ def test_invalid_queue_position_raises(tmp_path, governance):
     with pytest.raises(ValueError) as exc:
         engine.set_queue_position("WORK-INVALID", "invalid_value")
 
+    # WORK-105: Error message now references 5 valid positions
     assert "invalid_value" in str(exc.value)
-    assert "backlog" in str(exc.value) or "in_progress" in str(exc.value) or "done" in str(exc.value)
 
 
 # =============================================================================
@@ -1590,3 +1593,127 @@ def test_batch_design_three_items_integration(tmp_path, governance):
     # Verify get_in_lifecycle still finds all 3
     in_design = engine.get_in_lifecycle("design")
     assert len(in_design) == 3
+
+
+# =============================================================================
+# WORK-105: Queue Position Field - Expand to 5 Values (CH-007)
+# =============================================================================
+
+
+def test_set_queue_position_five_values(tmp_path, governance):
+    """WORK-105 T1: set_queue_position accepts all 5 canonical values."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-5V", "Five Value Test")
+    for pos in ["parked", "backlog", "ready", "working", "done"]:
+        result = engine.set_queue_position("WORK-5V", pos)
+        assert result is not None
+        assert result.queue_position == pos
+
+
+def test_in_progress_rejected(tmp_path, governance):
+    """WORK-105 T2: 'in_progress' is no longer valid after rename to 'working'."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-RENAMED", "Rename Test")
+    with pytest.raises(ValueError):
+        engine.set_queue_position("WORK-RENAMED", "in_progress")
+
+
+def test_get_working(tmp_path, governance):
+    """WORK-105 T3: get_working() returns items with queue_position: working."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-W1", "Item 1")
+    engine.create_work("WORK-W2", "Item 2")
+    engine.set_queue_position("WORK-W1", "working")
+    working = engine.get_working()
+    assert len(working) == 1
+    assert working[0].id == "WORK-W1"
+
+
+def test_parked_excluded_from_get_ready(tmp_path, governance):
+    """WORK-105 T4: Parked items don't appear in get_ready()."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-PARKED", "Parked Item")
+    engine.create_work("WORK-ACTIVE", "Active Item")
+    engine.set_queue_position("WORK-PARKED", "parked")
+    ready = engine.get_ready()
+    ids = [w.id for w in ready]
+    assert "WORK-PARKED" not in ids
+    assert "WORK-ACTIVE" in ids
+
+
+def test_parked_excluded_from_get_queue(tmp_path, governance):
+    """WORK-105 T5: Parked items excluded from get_queue()."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-P1", "Parked")
+    engine.create_work("WORK-B1", "Backlog")
+    engine.set_queue_position("WORK-P1", "parked")
+    queue = engine.get_queue()
+    ids = [w.id for w in queue]
+    assert "WORK-P1" not in ids
+
+
+def test_queue_position_independent_of_cycle_phase(tmp_path, governance):
+    """WORK-105 T6: Changing queue_position doesn't change cycle_phase."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-IND", "Independence Test")
+    # Set cycle_phase manually
+    work = engine.get_work("WORK-IND")
+    work.cycle_phase = "DO"
+    engine._write_work_file(work)
+    # Change queue_position
+    engine.set_queue_position("WORK-IND", "working")
+    # Verify cycle_phase unchanged
+    reread = engine.get_work("WORK-IND")
+    assert reread.queue_position == "working"
+    assert reread.cycle_phase == "DO"
+
+
+def test_forbidden_complete_working(tmp_path, governance):
+    """WORK-105 T7: Cannot set queue_position=working when status=complete."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-FORB", "Forbidden Test")
+    work = engine.get_work("WORK-FORB")
+    work.status = "complete"
+    engine._write_work_file(work)
+    with pytest.raises(ValueError, match="[Ff]orbidden"):
+        engine.set_queue_position("WORK-FORB", "working")
+
+
+def test_forbidden_archived_not_done(tmp_path, governance):
+    """WORK-105 T8: Cannot set queue_position != done when status=archived."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-ARCH", "Archived Test")
+    # First set to done (valid for archived), then set status to archived
+    engine.set_queue_position("WORK-ARCH", "done")
+    work = engine.get_work("WORK-ARCH")
+    work.status = "archived"
+    engine._write_work_file(work)
+    # Now try to change back to backlog - should be forbidden
+    with pytest.raises(ValueError, match="[Ff]orbidden"):
+        engine.set_queue_position("WORK-ARCH", "backlog")
+
+
+def test_cycle_phase_independent_of_queue_position(tmp_path, governance):
+    """WORK-105 T9: Changing cycle_phase doesn't change queue_position."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-REV", "Reverse Independence Test")
+    engine.set_queue_position("WORK-REV", "working")
+    # Change cycle_phase directly
+    work = engine.get_work("WORK-REV")
+    work.cycle_phase = "CHECK"
+    engine._write_work_file(work)
+    # Verify queue_position unchanged
+    reread = engine.get_work("WORK-REV")
+    assert reread.cycle_phase == "CHECK"
+    assert reread.queue_position == "working"
+
+
+def test_forbidden_state_caught_on_write(tmp_path, governance):
+    """WORK-105 T10: _write_work_file catches forbidden state (complete+working)."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-CATCH", "Catch-All Test")
+    engine.set_queue_position("WORK-CATCH", "working")
+    work = engine.get_work("WORK-CATCH")
+    work.status = "complete"
+    with pytest.raises(ValueError, match="[Ff]orbidden"):
+        engine._write_work_file(work)

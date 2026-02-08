@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-05T22:03:58
+# System Auto: last updated on: 2026-02-08T22:07:45
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -100,7 +100,7 @@ class WorkState:
     status: str
     current_node: str  # DEPRECATED: use cycle_phase (kept for backward compat)
     type: str = "feature"  # WORK-001: feature|investigation|bug|chore|spike
-    queue_position: str = "backlog"  # WORK-066: backlog|in_progress|done
+    queue_position: str = "backlog"  # WORK-105: parked|backlog|ready|working|done
     cycle_phase: str = "backlog"  # WORK-066: renamed from current_node
     blocked_by: List[str] = field(default_factory=list)
     node_history: List[Dict[str, Any]] = field(default_factory=list)
@@ -127,6 +127,17 @@ class QueueConfig:
 
 # Trigger statuses for cascade (shared constant)
 TRIGGER_STATUSES = {"complete", "completed", "done", "closed", "accepted"}
+
+# WORK-105: Canonical queue positions (5 values per REQ-QUEUE-003)
+VALID_QUEUE_POSITIONS = {"parked", "backlog", "ready", "working", "done"}
+
+# WORK-105: Forbidden state combinations per CH-007 R3
+FORBIDDEN_STATE_COMBINATIONS = [
+    # (status, queue_position, reason)
+    ("complete", "working", "Complete work cannot be actively worked"),
+    ("blocked", "working", "Blocked work cannot be actively worked"),
+    # archived must be done - checked separately in _validate_state_combination
+]
 
 # WORK-086: Map work type to lifecycle (extracted from is_at_pause_point for reuse)
 TYPE_TO_LIFECYCLE = {
@@ -346,7 +357,7 @@ class WorkEngine:
         Get all unblocked, active work items from active directory.
 
         Returns:
-            List of WorkState with empty blocked_by and status in ('active', 'in_progress')
+            List of WorkState with empty blocked_by, non-terminal status, and not parked
         """
         ready = []
         if not self.active_dir.exists():
@@ -363,7 +374,8 @@ class WorkEngine:
                     work = self._parse_work_file(work_md)
                     # INV-070: Filter out complete items
                     # WORK-002: Also filter archived, dismissed, invalid, deferred
-                    if work and not work.blocked_by and work.status not in terminal_statuses:
+                    # WORK-105: Exclude parked items (REQ-QUEUE-005)
+                    if work and not work.blocked_by and work.status not in terminal_statuses and work.queue_position != "parked":
                         ready.append(work)
         return ready
 
@@ -467,6 +479,9 @@ class WorkEngine:
                     # Session 211 Bug 1 fix: Filter terminal statuses for explicit lists
                     if work and work.status not in terminal_statuses:
                         items.append(work)
+
+        # WORK-105: Exclude parked items from queue (REQ-QUEUE-005)
+        items = [item for item in items if item.queue_position != "parked"]
 
         # Sort by queue type
         if q.type == "priority":
@@ -627,29 +642,32 @@ class WorkEngine:
 
     def set_queue_position(self, id: str, position: str) -> Optional[WorkState]:
         """
-        Set queue_position for work item (WORK-066).
+        Set queue_position for work item (WORK-105: 5 canonical values).
 
         Uses unified write path via _write_work_file() per critique A1.
+        Validates forbidden state combinations per CH-007 R3.
 
         Args:
             id: Work item ID
-            position: New position (backlog, in_progress, done)
+            position: New position (parked, backlog, ready, working, done)
 
         Returns:
             Updated WorkState, or None if not found
 
         Raises:
-            ValueError: If position is not valid
+            ValueError: If position is not valid or state combination is forbidden
         """
-        VALID_POSITIONS = {"backlog", "in_progress", "done"}
-        if position not in VALID_POSITIONS:
+        if position not in VALID_QUEUE_POSITIONS:
             raise ValueError(
-                f"Invalid queue_position: {position}. Must be one of {VALID_POSITIONS}"
+                f"Invalid queue_position: {position}. Must be one of {VALID_QUEUE_POSITIONS}"
             )
 
         work = self.get_work(id)
         if work is None:
             return None
+
+        # WORK-105: Validate forbidden state combinations
+        self._validate_state_combination(work.status, position)
 
         # Update in-memory state
         work.queue_position = position
@@ -659,14 +677,15 @@ class WorkEngine:
 
         return work
 
-    def get_in_progress(self) -> List[WorkState]:
+    def get_working(self) -> List[WorkState]:
         """
-        Get all work items with queue_position: in_progress (WORK-066).
+        Get all work items with queue_position: working (WORK-105).
 
-        Used by survey-cycle to enforce single in_progress constraint.
+        Replaces get_in_progress() per in_progress->working terminology fix.
+        Used by survey-cycle to enforce single working constraint.
 
         Returns:
-            List of WorkState with queue_position == "in_progress"
+            List of WorkState with queue_position == "working"
         """
         result = []
         if not self.active_dir.exists():
@@ -677,9 +696,14 @@ class WorkEngine:
                 work_md = subdir / "WORK.md"
                 if work_md.exists():
                     work = self._parse_work_file(work_md)
-                    if work and work.queue_position == "in_progress":
+                    if work and work.queue_position == "working":
                         result.append(work)
         return result
+
+    # WORK-105: Backward compat alias (deprecated)
+    def get_in_progress(self) -> List[WorkState]:
+        """Deprecated: Use get_working() instead."""
+        return self.get_working()
 
     # ========== Lifecycle Query Methods (WORK-086: Batch Mode) ==========
 
@@ -780,6 +804,30 @@ class WorkEngine:
         path.write_text(f"---\n{new_fm}---{parts[2]}", encoding="utf-8")
 
     # =========================================================================
+    # Validation Methods (WORK-105: Forbidden State Combinations)
+    # =========================================================================
+
+    def _validate_state_combination(self, status: str, queue_position: str) -> None:
+        """
+        Validate status + queue_position combination (WORK-105, CH-007 R3).
+
+        Raises:
+            ValueError: If combination is forbidden
+        """
+        for forbidden_status, forbidden_qp, reason in FORBIDDEN_STATE_COMBINATIONS:
+            if status == forbidden_status and queue_position == forbidden_qp:
+                raise ValueError(
+                    f"Forbidden state combination: status={status} + "
+                    f"queue_position={queue_position}. {reason}"
+                )
+        # archived must have queue_position: done
+        if status == "archived" and queue_position != "done":
+            raise ValueError(
+                f"Forbidden state combination: status=archived + "
+                f"queue_position={queue_position}. Archived items must be queue done"
+            )
+
+    # =========================================================================
     # Helper Methods
     # =========================================================================
 
@@ -848,6 +896,9 @@ class WorkEngine:
         """
         if work.path is None:
             return
+
+        # WORK-105: Catch-all forbidden state validation (A6 mitigation)
+        self._validate_state_combination(work.status, work.queue_position)
 
         content = work.path.read_text(encoding="utf-8")
         parts = content.split("---", 2)
