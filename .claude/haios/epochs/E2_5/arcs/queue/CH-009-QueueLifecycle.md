@@ -6,7 +6,8 @@
 
 **Chapter ID:** CH-009
 **Arc:** queue
-**Status:** Planned
+**Status:** Complete
+**Completed:** 2026-02-09 (Session 327, WORK-109)
 **Implementation Type:** REFACTOR (queue types exist, transitions don't)
 **Depends:** CH-007
 **Work Items:** None

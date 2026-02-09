@@ -6,7 +6,8 @@
 
 **Chapter ID:** CH-008
 **Arc:** queue
-**Status:** Planned
+**Status:** Complete
+**Completed:** 2026-02-08 (Session 323, WORK-107)
 **Implementation Type:** REFACTOR
 **Depends:** CH-007, Lifecycles:CH-004
 **Work Items:** None

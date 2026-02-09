@@ -132,7 +132,7 @@ Pause points are valid completion states, not "stuck" states.
 | Arc | Theme | Status | Requirements |
 |-----|-------|--------|--------------|
 | **lifecycles** | Implement CycleRunner with pure function semantics | Planned | REQ-LIFECYCLE-001 to 004 |
-| **queue** | Implement queue ceremonies and orthogonal tracking | Planned | REQ-QUEUE-001 to 004 |
+| **queue** | Implement queue ceremonies and orthogonal tracking | **Complete** (S331) | REQ-QUEUE-001 to 004 |
 | **ceremonies** | Implement ceremony boundaries and contracts | Planned | REQ-CEREMONY-001 to 003 |
 | **feedback** | Implement review ceremonies and upward flow | Planned | REQ-FEEDBACK-001 to 005 |
 | **assets** | Implement typed, versioned asset production | Planned | REQ-ASSET-001 to 005 |
@@ -143,12 +143,12 @@ Pause points are valid completion states, not "stuck" states.
 ## Exit Criteria
 
 - [ ] CycleRunner treats lifecycles as pure functions (no implicit chaining)
-- [ ] Queue position is tracked independently from lifecycle phase
+- [x] Queue position is tracked independently from lifecycle phase
 - [ ] All 20 ceremonies have skill implementations with contracts
 - [ ] Assets have typed schemas and provenance frontmatter
 - [ ] Feedback review ceremonies update parent scope
 - [ ] Pause points (per S27) recognized as valid completion
-- [ ] "Complete without spawn" is accepted by close-work-cycle
+- [x] "Complete without spawn" is accepted by close-work-cycle
 
 ---
 

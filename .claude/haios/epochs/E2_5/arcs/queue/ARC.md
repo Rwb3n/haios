@@ -7,7 +7,8 @@
 **Arc ID:** queue
 **Epoch:** E2.5
 **Theme:** Implement orthogonal queue tracking
-**Status:** Planned
+**Status:** Complete
+**Completed:** 2026-02-09 (Session 331)
 
 ---
 
@@ -42,9 +43,9 @@ Implement queue as separate state machine from lifecycle per REQ-QUEUE-001 to 00
 
 ## Exit Criteria
 
-- [ ] queue_position field tracked independently with 5 states (parked/backlog/ready/working/done)
-- [ ] Queue ceremonies (Unpark, Intake, Prioritize, Commit, Release) implemented
-- [ ] Work item can be queue:done + status:complete without spawn
-- [ ] WorkEngine.get_queue() respects queue_position
-- [ ] Parked items excluded from survey-cycle and `just ready`
-- [ ] Parked vs blocked distinction enforced (parked = scope, blocked = dependency)
+- [x] queue_position field tracked independently with 5 states (parked/backlog/ready/working/done)
+- [x] Queue ceremonies (Unpark, Intake, Prioritize, Commit, Release) implemented
+- [x] Work item can be queue:done + status:complete without spawn
+- [x] WorkEngine.get_queue() respects queue_position
+- [x] Parked items excluded from survey-cycle and `just ready`
+- [x] Parked vs blocked distinction enforced (parked = scope, blocked = dependency)
