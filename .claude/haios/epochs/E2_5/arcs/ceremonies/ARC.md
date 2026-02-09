@@ -13,7 +13,7 @@
 
 ## Purpose
 
-Implement all 20 ceremonies as side-effect boundaries per REQ-CEREMONY-001 to 003.
+Implement all 19 ceremonies as side-effect boundaries per REQ-CEREMONY-001 to 003.
 
 ---
 

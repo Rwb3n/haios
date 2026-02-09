@@ -46,7 +46,7 @@ Chaining is caller choice, not callee side-effect.
 |-----------|----------|-------|
 | Governed activities paradigm | REQ-ACTIVITY-001, REQ-ACTIVITY-002 | Implement |
 | Four-dimensional work state | WORK-065 finding, REQ-WORK-001 | Implement |
-| Ceremony definitions | 20 ceremonies across 6 categories | Implement |
+| Ceremony definitions | 19 ceremonies across 6 categories | Implement |
 | Asset typing | Unix pipe philosophy | Implement |
 | Feedback loops | Work → Chapter → Arc → Epoch → L4 | Implement |
 
@@ -131,7 +131,7 @@ Pause points are valid completion states, not "stuck" states.
 
 | Arc | Theme | Status | Requirements |
 |-----|-------|--------|--------------|
-| **lifecycles** | Implement CycleRunner with pure function semantics | Planned | REQ-LIFECYCLE-001 to 004 |
+| **lifecycles** | Implement CycleRunner with pure function semantics | **Complete** (S318) | REQ-LIFECYCLE-001 to 004 |
 | **queue** | Implement queue ceremonies and orthogonal tracking | **Complete** (S331) | REQ-QUEUE-001 to 004 |
 | **ceremonies** | Implement ceremony boundaries and contracts | Planned | REQ-CEREMONY-001 to 003 |
 | **feedback** | Implement review ceremonies and upward flow | Planned | REQ-FEEDBACK-001 to 005 |
@@ -144,7 +144,7 @@ Pause points are valid completion states, not "stuck" states.
 
 - [ ] CycleRunner treats lifecycles as pure functions (no implicit chaining)
 - [x] Queue position is tracked independently from lifecycle phase
-- [ ] All 20 ceremonies have skill implementations with contracts
+- [ ] All 19 ceremonies have skill implementations with contracts
 - [ ] Assets have typed schemas and provenance frontmatter
 - [ ] Feedback review ceremonies update parent scope
 - [ ] Pause points (per S27) recognized as valid completion

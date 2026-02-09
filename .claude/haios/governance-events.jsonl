@@ -648,3 +648,13 @@
 {"type": "SessionStarted", "session": 330, "agent": "Hephaestus", "timestamp": "2026-02-09T21:00:26.942738"}
 {"type": "SessionEnded", "session": 330, "agent": "Hephaestus", "timestamp": "2026-02-09T21:07:32.523748"}
 {"type": "SessionStarted", "session": 331, "agent": "Hephaestus", "timestamp": "2026-02-09T21:32:42.244425"}
+{"type": "SessionStarted", "session": 332, "agent": "Hephaestus", "timestamp": "2026-02-09T22:00:08.097088"}
+{"type": "QueueCeremony", "ceremony": "Intake", "items": ["WORK-111"], "from": "new", "to": "backlog", "timestamp": "2026-02-09T22:21:06.564988", "rationale": "CH-011 CeremonyContracts decomposition (S332)", "agent": "Hephaestus"}
+{"type": "QueueCeremony", "ceremony": "Intake", "items": ["WORK-112"], "from": "new", "to": "backlog", "timestamp": "2026-02-09T22:21:06.565988", "rationale": "CH-011 CeremonyContracts decomposition (S332)", "agent": "Hephaestus"}
+{"type": "QueueCeremony", "ceremony": "Intake", "items": ["WORK-113"], "from": "new", "to": "backlog", "timestamp": "2026-02-09T22:21:06.565988", "rationale": "CH-011 CeremonyContracts decomposition (S332)", "agent": "Hephaestus"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-111", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-09T22:33:10.447629"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-111"], "from": "backlog", "to": "ready", "timestamp": "2026-02-09T22:33:10.453704", "rationale": "CH-011 foundation \u2014 blocks WORK-112 and WORK-113. Design type, small effort. Starting ceremonies arc.", "agent": "Hephaestus"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-111", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-09T22:33:22.013625"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-111"], "from": "ready", "to": "working", "timestamp": "2026-02-09T22:33:22.020157", "rationale": "Starting ceremonies arc, CH-011 foundation work", "agent": "Hephaestus"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-111", "result": "pass", "reason": "Valid transition: working -> done", "timestamp": "2026-02-09T22:46:08.501313"}
+{"type": "QueueCeremony", "ceremony": "Release", "items": ["WORK-111"], "from": "working", "to": "done", "timestamp": "2026-02-09T22:46:08.505359", "rationale": "WORK-111 complete: ceremony contract schema, registry, template, 15 tests green", "agent": "Hephaestus"}

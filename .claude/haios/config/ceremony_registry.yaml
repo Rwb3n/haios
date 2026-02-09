@@ -1,0 +1,204 @@
+# generated: 2026-02-09
+# WORK-111: Ceremony Contract Schema Design
+# Source: L4/functional_requirements.md ceremony definitions table (lines 326-346)
+# Ceremony Registry - Single source of truth for all 19 ceremonies
+
+version: "1.0"
+ceremony_count: 19
+
+ceremonies:
+  # Queue ceremonies (4)
+  - name: intake
+    category: queue
+    skill: queue-intake
+    signature: "Idea -> BacklogItem"
+    side_effects:
+      - "Create work item"
+    has_contract: false
+    has_skill: true
+    notes: null
+
+  - name: prioritize
+    category: queue
+    skill: queue-prioritize
+    signature: "[BacklogItems] -> [ReadyItems]"
+    side_effects:
+      - "Update queue_position"
+    has_contract: false
+    has_skill: true
+    notes: "Batch capable"
+
+  - name: commit
+    category: queue
+    skill: queue-commit
+    signature: "ReadyItem -> ActiveItem"
+    side_effects:
+      - "Start work, log event"
+    has_contract: false
+    has_skill: true
+    notes: null
+
+  - name: release
+    category: queue
+    skill: close-work-cycle
+    signature: "ActiveItem -> DoneItem"
+    side_effects:
+      - "Complete work, log event"
+    has_contract: false
+    has_skill: true
+    notes: "Release IS close-work-cycle (CH-008 decision). Same implementation as close-work ceremony."
+
+  # Session ceremonies (3)
+  - name: session-start
+    category: session
+    skill: null
+    signature: "Config -> SessionState"
+    side_effects:
+      - "Log event, load context"
+    has_contract: false
+    has_skill: false
+    notes: "coldstart command exists but not formal ceremony skill"
+
+  - name: session-end
+    category: session
+    skill: null
+    signature: "SessionState -> Log"
+    side_effects:
+      - "Log event, orphan check"
+    has_contract: false
+    has_skill: false
+    notes: null
+
+  - name: checkpoint
+    category: session
+    skill: checkpoint-cycle
+    signature: "SessionState -> CheckpointDoc"
+    side_effects:
+      - "Write doc, git commit"
+    has_contract: false
+    has_skill: true
+    notes: null
+
+  # Closure ceremonies (4) — Release is listed under Queue (dual-category)
+  - name: close-work
+    category: closure
+    skill: close-work-cycle
+    signature: "WorkItem -> ClosedWorkItem"
+    side_effects:
+      - "Status change, memory commit"
+    has_contract: false
+    has_skill: true
+    notes: "Same implementation as Release (queue ceremony). Two L4 entries, one skill."
+
+  - name: close-chapter
+    category: closure
+    skill: close-chapter-ceremony
+    signature: "Chapter -> ClosedChapter"
+    side_effects:
+      - "DoD verify, status change"
+    has_contract: false
+    has_skill: true
+    notes: null
+
+  - name: close-arc
+    category: closure
+    skill: close-arc-ceremony
+    signature: "Arc -> ClosedArc"
+    side_effects:
+      - "Decision verify, status change"
+    has_contract: false
+    has_skill: true
+    notes: null
+
+  - name: close-epoch
+    category: closure
+    skill: close-epoch-ceremony
+    signature: "Epoch -> ClosedEpoch"
+    side_effects:
+      - "Archive, config transition"
+    has_contract: false
+    has_skill: true
+    notes: null
+
+  # Memory ceremonies (3)
+  - name: observation-capture
+    category: memory
+    skill: observation-capture-cycle
+    signature: "Experience -> Observations"
+    side_effects:
+      - "Write observations"
+    has_contract: false
+    has_skill: true
+    notes: null
+
+  - name: observation-triage
+    category: memory
+    skill: observation-triage-cycle
+    signature: "[Observations] -> [Actions]"
+    side_effects:
+      - "Promote or close"
+    has_contract: false
+    has_skill: true
+    notes: null
+
+  - name: memory-commit
+    category: memory
+    skill: null
+    signature: "Learnings -> ConceptIDs"
+    side_effects:
+      - "Store to memory"
+    has_contract: false
+    has_skill: false
+    notes: "Currently embedded in close-work-cycle MEMORY phase"
+
+  # Spawn ceremony (1)
+  - name: spawn-work
+    category: spawn
+    skill: null
+    signature: "WorkItem -> NewWorkItem"
+    side_effects:
+      - "Create linked work item"
+    has_contract: false
+    has_skill: false
+    notes: null
+
+  # Feedback ceremonies (4)
+  - name: chapter-review
+    category: feedback
+    skill: null
+    signature: "CompletedWork + Chapter -> Chapter?"
+    side_effects:
+      - "Maybe update chapter scope"
+    has_contract: false
+    has_skill: false
+    notes: null
+
+  - name: arc-review
+    category: feedback
+    skill: null
+    signature: "CompletedChapter + Arc -> Arc?"
+    side_effects:
+      - "Maybe update arc direction"
+    has_contract: false
+    has_skill: false
+    notes: null
+
+  - name: epoch-review
+    category: feedback
+    skill: null
+    signature: "CompletedArc + Epoch -> Epoch?"
+    side_effects:
+      - "Maybe update epoch goals"
+    has_contract: false
+    has_skill: false
+    notes: null
+
+  - name: requirements-review
+    category: feedback
+    skill: null
+    signature: "CompletedEpoch + L4 -> L4?"
+    side_effects:
+      - "Maybe update requirements"
+    has_contract: false
+    has_skill: false
+    notes: null
