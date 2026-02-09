@@ -641,3 +641,9 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-INT", "result": "pass", "reason": "Valid transition: parked -> backlog", "timestamp": "2026-02-09T20:32:58.222131"}
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-INT", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-02-09T20:32:58.234791"}
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-INIT", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-02-09T20:32:58.270610"}
+{"type": "SessionEnded", "session": 329, "agent": "Hephaestus", "timestamp": "2026-02-09T20:39:37.672455"}
+{"type": "SessionEnded", "session": 328, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-09T20:47:31.098796"}
+{"type": "SessionStarted", "session": 330, "agent": "Hephaestus", "timestamp": "2026-02-09T20:47:59.567771"}
+{"type": "SessionStarted", "session": 330, "agent": "Hephaestus", "timestamp": "2026-02-09T20:52:31.269763"}
+{"type": "SessionStarted", "session": 330, "agent": "Hephaestus", "timestamp": "2026-02-09T21:00:26.942738"}
+{"type": "SessionEnded", "session": 330, "agent": "Hephaestus", "timestamp": "2026-02-09T21:07:32.523748"}

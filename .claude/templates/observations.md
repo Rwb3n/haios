@@ -3,7 +3,7 @@ template: observations
 work_id: '{{BACKLOG_ID}}'
 captured_session: '{{SESSION}}'
 generated: '{{DATE}}'
-last_updated: '2026-01-18T22:09:58'
+last_updated: '{{TIMESTAMP}}'
 ---
 # Observations: {{BACKLOG_ID}}
 

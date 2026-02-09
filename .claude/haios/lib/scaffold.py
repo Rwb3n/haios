@@ -457,6 +457,10 @@ def scaffold_template(
     if "SPAWNED_BY" not in variables:
         variables["SPAWNED_BY"] = "null"
 
+    # S330: Default TYPE for work_item templates (fixes {{TYPE}} not substituted bug)
+    if "TYPE" not in variables and template == "work_item":
+        variables["TYPE"] = "implementation"
+
     # Substitute variables
     content = substitute_variables(content, variables)
 

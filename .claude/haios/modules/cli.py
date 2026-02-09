@@ -627,8 +627,14 @@ def main():
             variables["SPAWNED_BY"] = args[idx + 1]
             args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
 
+        # S330: Extract --type flag for work_item TYPE variable
+        if "--type" in args:
+            idx = args.index("--type")
+            variables["TYPE"] = args[idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
+
         if len(args) < 5:
-            print("Usage: cli.py scaffold <template> <backlog_id> <title> [--output <path>] [--spawned-by <id>]")
+            print("Usage: cli.py scaffold <template> <backlog_id> <title> [--output <path>] [--spawned-by <id>] [--type <type>]")
             return 1
         template = args[2]
         backlog_id = args[3]

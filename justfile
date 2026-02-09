@@ -288,7 +288,7 @@ cycle-events:
 # CH-002: Session Simplify - session number in simple file
 # E2-306: Now calls log_session_start() for orphan detection support
 session-start session:
-    @python -c "import json,os,sys; sys.path.insert(0,'.claude/haios/lib'); from governance_events import log_session_start; sf='.claude/session'; jf='.claude/haios-status.json'; s={{session}}; lines=open(sf).readlines() if os.path.exists(sf) else []; hdr=[l for l in lines if l.startswith('#')]; open(sf,'w').write(''.join(hdr)+str(s)+chr(10)); j=json.load(open(jf)) if os.path.exists(jf) else {}; pr=j.get('session_delta',{}).get('current_session',s-1); j['session_delta']={'current_session':s,'prior_session':pr}; json.dump(j,open(jf,'w'),indent=2); log_session_start(s,'Hephaestus'); print(f'Session {s} start logged')"
+    @python -c "import json,os,sys; sys.path.insert(0,'.claude/haios/lib'); from governance_events import log_session_start; sf='.claude/session'; jf='.claude/haios-status.json'; s={{session}}; lines=open(sf).readlines() if os.path.exists(sf) else []; hdr=[l for l in lines if l.startswith('#')]; open(sf,'w').write(''.join(hdr)+str(s)+chr(10)); j=json.load(open(jf)) if os.path.exists(jf) else {}; j['session_delta']={'current_session':s,'prior_session':s-1}; json.dump(j,open(jf,'w'),indent=2); log_session_start(s,'Hephaestus'); print(f'Session {s} start logged')"
 
 # Log session end event
 # E2-306: Now calls log_session_end() for orphan detection support
@@ -381,7 +381,7 @@ checkpoint-latest:
 # Commit session checkpoint and related changes
 # Usage: just commit-session 113 "M7a-Recipes progress"
 commit-session session title:
-    git add docs/checkpoints/ docs/work/ .claude/haios/ .claude/haios-status*.json .claude/templates/ tests/ justfile
+    git add docs/checkpoints/ docs/work/ .claude/haios/ .claude/haios-status*.json .claude/templates/ .claude/skills/ .claude/commands/ .claude/agents/ .claude/hooks/ tests/ justfile
     git commit -m "Session {{session}}: {{title}}"
 
 # Commit work item closure (work directory structure)
