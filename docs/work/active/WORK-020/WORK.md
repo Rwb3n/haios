@@ -7,7 +7,7 @@ status: active
 owner: Hephaestus
 created: 2026-01-26
 spawned_by: obs-222-001
-chapter: CH-009
+chapter: CH-028
 arc: portability
 closed: null
 priority: medium
