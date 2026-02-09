@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-09T19:21:58",
+    "generated": "2026-02-09T20:37:59",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,9 +8,9 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 325,
-        "current_session": 326,
-        "prior_date": "2026-02-08",
+        "prior_session": 327,
+        "current_session": 328,
+        "prior_date": "2026-02-09",
         "completed": [],
         "completed_count": 0,
         "added": [],
@@ -25,16 +25,16 @@
         "lifecycle_phase": null
     },
     "session_state": {
-        "active_cycle": "implementation-cycle",
-        "current_phase": "PLAN",
+        "active_cycle": "close-work-cycle",
+        "current_phase": "CHAIN",
         "work_id": "WORK-110",
-        "entered_at": "2026-02-09T20:05:08.037462"
+        "entered_at": "2026-02-09T20:38:27.829437"
     },
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 83960,
-        "entities": 9648,
+        "concepts": 83999,
+        "entities": 9662,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -77,6 +77,10 @@
             "observation-triage-cycle",
             "plan-authoring-cycle",
             "plan-validation-cycle",
+            "queue-commit",
+            "queue-intake",
+            "queue-prioritize",
+            "queue-unpark",
             "routing-gate",
             "schema-ref",
             "survey-cycle",

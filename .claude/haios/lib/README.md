@@ -90,6 +90,7 @@ context:
 | `backfill.py` | Backlog content backfill |
 | `node_cycle.py` | Node lifecycle transitions |
 | `governance_events.py` | Governance event logging |
+| `queue_ceremonies.py` | Queue ceremony execution and event logging (CH-010, WORK-110). Runtime consumers: queue-unpark, queue-intake, queue-prioritize, queue-commit skills |
 | `routing.py` | Work routing decisions |
 | `dependencies.py` | Dependency resolution |
 | `retrieval.py` | Memory retrieval (requires haios_etl) |
