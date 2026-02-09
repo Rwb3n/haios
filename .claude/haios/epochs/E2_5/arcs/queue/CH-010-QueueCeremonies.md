@@ -112,7 +112,7 @@ skills/
   queue-intake.md       # Create work item at backlog
   queue-prioritize.md   # Move items backlog → ready
   queue-commit.md       # Move item ready → working
-  queue-release.md      # Move item working → done
+  # queue-release: IS close-work-cycle (CH-008 decision). No separate skill.
 ```
 
 ### queue-intake Skill
@@ -163,7 +163,7 @@ triggers: ["prioritize", "triage backlog"]
 
 ## Success Criteria
 
-- [ ] 5 queue ceremony skills created (Unpark, Intake, Prioritize, Commit, Release)
+- [ ] 4 new queue ceremony skills created (Unpark, Intake, Prioritize, Commit) + Release via close-work-cycle (CH-008)
 - [ ] Each ceremony has input/output contract
 - [ ] Ceremonies log to governance-events.jsonl
 - [ ] Unpark moves parked → backlog (and Park moves backlog → parked)
