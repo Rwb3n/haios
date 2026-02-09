@@ -17,17 +17,27 @@ load_memory_refs:
   - 84260  # Release vs Unpark L4 drift
   - 84262  # Release IS close-work-cycle (CH-008 decision)
   - 84263  # Ceremony contract schema design (WORK-111 techne)
+  - 84265  # Gate skip governance bypass (observation-capture at closure)
+  - 84271  # Design-review-validation skip + design plan template request
+  - 84276  # Checkpoint prior_session off-by-one bug
+  - 84280  # L4 Unpark missing from ceremony table
+  - 84284  # S332 success pattern (critique + TDD + operator retros)
 
 pending:
   - WORK-112 (Retrofit 19 ceremony skills with contracts — unblocked by WORK-111)
   - WORK-113 (Ceremony contract validation and governance — blocked by WORK-112)
   - Coldstart identity loader shows E2.4 instead of E2.5 (bug, not yet work item)
   - Release vs Unpark L4 drift (reconcile during WORK-112 retrofit)
+  - Checkpoint scaffold prior_session off-by-one (bug, memory 84276)
+  - Gate skip logging feature (governance-events.jsonl, memory 84265)
+  - Design plan template for type:design work items (feature request, memory 84271)
 
 drift_observed:
   - "Coldstart orchestrator IDENTITY phase reports E2.4 epoch despite config specifying E2.5"
   - "EPOCH.md arc statuses were stale (lifecycles showed Planned, was Complete since S318) — fixed this session"
   - "Ceremony count was 20 in multiple docs but L4 table has 19 — fixed this session"
+  - "MUST gates skipped without logging: observation-capture-cycle at closure, design-review-validation before CHECK"
+  - "L4 ceremony table missing Unpark, Release not annotated as close-work-cycle"
 
 completed:
   - "WORK-111: Ceremony Contract Schema Design (CH-011, ceremonies arc)"
