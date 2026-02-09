@@ -3,13 +3,13 @@ template: work_item
 id: WORK-109
 title: Queue Lifecycle State Machine (CH-009)
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-09
 spawned_by: null
 chapter: CH-009
 arc: queue
-closed: null
+closed: 2026-02-09
 priority: high
 effort: medium
 traces_to:
@@ -46,10 +46,30 @@ cycle_docs: {}
 memory_refs:
 - 84054
 - 84055
+- 84129
+- 84130
+- 84131
+- 84132
+- 84133
+- 84134
+- 84135
+- 84136
+- 84137
+- 84138
+- 84139
+- 84140
+- 84141
+- 84142
+- 84143
+- 84144
+- 84145
+- 84146
+- 84147
+- 84148
 extensions: {}
 version: '2.0'
 generated: 2026-02-09
-last_updated: '2026-02-09T00:29:17'
+last_updated: '2026-02-09T19:21:52.017395'
 ---
 # WORK-109: Queue Lifecycle State Machine (CH-009)
 
@@ -95,14 +115,14 @@ CH-009 requires implementing the queue lifecycle as a formal state machine with 
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] `QUEUE_TRANSITIONS` dict defining valid state transitions (6 valid paths)
-- [ ] `is_valid_queue_transition(from_pos, to_pos)` function
-- [ ] `validate_queue_transition()` in governance layer returning GateResult
-- [ ] `get_parked()` query method in WorkEngine
-- [ ] `get_by_queue_position(position)` generic query method in WorkEngine
-- [ ] Unit tests for all 6 valid transitions (parked->backlog, backlog->ready, backlog->parked, ready->working, ready->backlog, working->done)
-- [ ] Unit tests for invalid transitions (parked->ready, parked->working, backlog->working, done->working, working->backlog)
-- [ ] Integration with existing `set_queue_position()` write path
+- [x] `QUEUE_TRANSITIONS` dict defining valid state transitions (6 valid paths)
+- [x] `is_valid_queue_transition(from_pos, to_pos)` function
+- [x] `validate_queue_transition()` in governance layer returning GateResult
+- [x] `get_parked()` query method in WorkEngine
+- [x] `get_by_queue_position(position)` generic query method in WorkEngine
+- [x] Unit tests for all 6 valid transitions (parked->backlog, backlog->ready, backlog->parked, ready->working, ready->backlog, working->done)
+- [x] Unit tests for invalid transitions (parked->ready, parked->working, backlog->working, done->working, working->backlog)
+- [x] Integration with existing `set_queue_position()` write path
 
 ---
 

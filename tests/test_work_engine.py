@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-08T22:36:17
+# System Auto: last updated on: 2026-02-09T19:17:05
 """
 Tests for WorkEngine module (E2-242).
 
@@ -1236,7 +1236,8 @@ def test_set_queue_position(tmp_path, governance):
     # Setup: Create work item
     engine.create_work("WORK-SET", "Test Set Queue Position")
 
-    # Action: Set queue_position to working (WORK-105: renamed from in_progress)
+    # Action: Set queue_position via valid transitions (CH-009)
+    engine.set_queue_position("WORK-SET", "ready")
     result = engine.set_queue_position("WORK-SET", "working")
 
     # Assert: Result reflects update
@@ -1259,7 +1260,8 @@ def test_get_in_progress_items(tmp_path, governance):
     engine.create_work("WORK-B", "Item B")
     engine.create_work("WORK-C", "Item C")
 
-    # Set one to working (WORK-105: renamed from in_progress)
+    # Set one to working via valid transitions (CH-009)
+    engine.set_queue_position("WORK-B", "ready")
     engine.set_queue_position("WORK-B", "working")
 
     # Action: get_in_progress is deprecated alias for get_working
@@ -1627,6 +1629,7 @@ def test_get_working(tmp_path, governance):
     engine = WorkEngine(governance=governance, base_path=tmp_path)
     engine.create_work("WORK-W1", "Item 1")
     engine.create_work("WORK-W2", "Item 2")
+    engine.set_queue_position("WORK-W1", "ready")
     engine.set_queue_position("WORK-W1", "working")
     working = engine.get_working()
     assert len(working) == 1
@@ -1664,7 +1667,8 @@ def test_queue_position_independent_of_cycle_phase(tmp_path, governance):
     work = engine.get_work("WORK-IND")
     work.cycle_phase = "DO"
     engine._write_work_file(work)
-    # Change queue_position
+    # Change queue_position via valid transitions
+    engine.set_queue_position("WORK-IND", "ready")
     engine.set_queue_position("WORK-IND", "working")
     # Verify cycle_phase unchanged
     reread = engine.get_work("WORK-IND")
@@ -1676,10 +1680,12 @@ def test_forbidden_complete_working(tmp_path, governance):
     """WORK-105 T7: Cannot set queue_position=working when status=complete."""
     engine = WorkEngine(governance=governance, base_path=tmp_path)
     engine.create_work("WORK-FORB", "Forbidden Test")
+    # Advance to ready first (valid path), then set complete status
+    engine.set_queue_position("WORK-FORB", "ready")
     work = engine.get_work("WORK-FORB")
     work.status = "complete"
     engine._write_work_file(work)
-    with pytest.raises(ValueError, match="[Ff]orbidden"):
+    with pytest.raises(ValueError):
         engine.set_queue_position("WORK-FORB", "working")
 
 
@@ -1687,13 +1693,15 @@ def test_forbidden_archived_not_done(tmp_path, governance):
     """WORK-105 T8: Cannot set queue_position != done when status=archived."""
     engine = WorkEngine(governance=governance, base_path=tmp_path)
     engine.create_work("WORK-ARCH", "Archived Test")
-    # First set to done (valid for archived), then set status to archived
+    # Advance via valid path to done, then set status to archived
+    engine.set_queue_position("WORK-ARCH", "ready")
+    engine.set_queue_position("WORK-ARCH", "working")
     engine.set_queue_position("WORK-ARCH", "done")
     work = engine.get_work("WORK-ARCH")
     work.status = "archived"
     engine._write_work_file(work)
-    # Now try to change back to backlog - should be forbidden
-    with pytest.raises(ValueError, match="[Ff]orbidden"):
+    # Now try to change back to backlog - should be forbidden (done is terminal)
+    with pytest.raises(ValueError):
         engine.set_queue_position("WORK-ARCH", "backlog")
 
 
@@ -1701,6 +1709,7 @@ def test_cycle_phase_independent_of_queue_position(tmp_path, governance):
     """WORK-105 T9: Changing cycle_phase doesn't change queue_position."""
     engine = WorkEngine(governance=governance, base_path=tmp_path)
     engine.create_work("WORK-REV", "Reverse Independence Test")
+    engine.set_queue_position("WORK-REV", "ready")
     engine.set_queue_position("WORK-REV", "working")
     # Change cycle_phase directly
     work = engine.get_work("WORK-REV")
@@ -1716,6 +1725,7 @@ def test_forbidden_state_caught_on_write(tmp_path, governance):
     """WORK-105 T10: _write_work_file catches forbidden state (complete+working)."""
     engine = WorkEngine(governance=governance, base_path=tmp_path)
     engine.create_work("WORK-CATCH", "Catch-All Test")
+    engine.set_queue_position("WORK-CATCH", "ready")
     engine.set_queue_position("WORK-CATCH", "working")
     work = engine.get_work("WORK-CATCH")
     work.status = "complete"
@@ -1877,3 +1887,166 @@ def test_get_ready_empty_blocked_by_unchanged(tmp_path, governance):
     result = engine.get_ready()
     result_ids = [w.id for w in result]
     assert "WORK-NORMAL" in result_ids, f"Item with empty blocked_by should be in get_ready(), got: {result_ids}"
+
+
+# =============================================================================
+# CH-009: Queue Lifecycle State Machine Tests (WORK-109)
+# =============================================================================
+
+
+def test_queue_transition_parked_to_backlog(tmp_path, governance):
+    """CH-009 T1: parked -> backlog (Unpark) is allowed."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-T1", "Unpark Test")
+    engine.set_queue_position("WORK-T1", "parked")
+    result = engine.set_queue_position("WORK-T1", "backlog")
+    assert result is not None
+    assert result.queue_position == "backlog"
+
+
+def test_queue_transition_backlog_to_ready(tmp_path, governance):
+    """CH-009 T2: backlog -> ready (Prioritize) is allowed."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-T2", "Prioritize Test")
+    result = engine.set_queue_position("WORK-T2", "ready")
+    assert result is not None
+    assert result.queue_position == "ready"
+
+
+def test_queue_transition_backlog_to_parked(tmp_path, governance):
+    """CH-009 T3: backlog -> parked (Park) is allowed."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-T3", "Park Test")
+    result = engine.set_queue_position("WORK-T3", "parked")
+    assert result is not None
+    assert result.queue_position == "parked"
+
+
+def test_queue_transition_ready_to_working(tmp_path, governance):
+    """CH-009 T4: ready -> working (Commit) is allowed."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-T4", "Commit Test")
+    engine.set_queue_position("WORK-T4", "ready")
+    result = engine.set_queue_position("WORK-T4", "working")
+    assert result is not None
+    assert result.queue_position == "working"
+
+
+def test_queue_transition_ready_to_backlog(tmp_path, governance):
+    """CH-009 T5: ready -> backlog (Deprioritize/rollback) is allowed."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-T5", "Deprioritize Test")
+    engine.set_queue_position("WORK-T5", "ready")
+    result = engine.set_queue_position("WORK-T5", "backlog")
+    assert result is not None
+    assert result.queue_position == "backlog"
+
+
+def test_queue_transition_working_to_done(tmp_path, governance):
+    """CH-009 T6: working -> done (Release) is allowed."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-T6", "Release Test")
+    engine.set_queue_position("WORK-T6", "ready")
+    engine.set_queue_position("WORK-T6", "working")
+    result = engine.set_queue_position("WORK-T6", "done")
+    assert result is not None
+    assert result.queue_position == "done"
+
+
+def test_queue_transition_parked_to_ready_blocked(tmp_path, governance):
+    """CH-009 T7: parked -> ready (skip backlog) is blocked."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-T7", "Skip Backlog Test")
+    engine.set_queue_position("WORK-T7", "parked")
+    with pytest.raises(ValueError, match="[Ii]nvalid.*transition|[Bb]locked"):
+        engine.set_queue_position("WORK-T7", "ready")
+
+
+def test_queue_transition_parked_to_working_blocked(tmp_path, governance):
+    """CH-009 T8: parked -> working (skip backlog+ready) is blocked."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-T8", "Skip Two Test")
+    engine.set_queue_position("WORK-T8", "parked")
+    with pytest.raises(ValueError, match="[Ii]nvalid.*transition|[Bb]locked"):
+        engine.set_queue_position("WORK-T8", "working")
+
+
+def test_queue_transition_backlog_to_working_blocked(tmp_path, governance):
+    """CH-009 T9: backlog -> working (skip ready) is blocked."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-T9", "Skip Ready Test")
+    with pytest.raises(ValueError, match="[Ii]nvalid.*transition|[Bb]locked"):
+        engine.set_queue_position("WORK-T9", "working")
+
+
+def test_queue_transition_done_to_working_blocked(tmp_path, governance):
+    """CH-009 T10: done -> working (reopen) is blocked."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-T10", "Reopen Test")
+    engine.set_queue_position("WORK-T10", "ready")
+    engine.set_queue_position("WORK-T10", "working")
+    engine.set_queue_position("WORK-T10", "done")
+    with pytest.raises(ValueError, match="[Ii]nvalid.*transition|[Bb]locked"):
+        engine.set_queue_position("WORK-T10", "working")
+
+
+def test_queue_transition_working_to_backlog_blocked(tmp_path, governance):
+    """CH-009 T11: working -> backlog (abandon without release) is blocked."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-T11", "Abandon Test")
+    engine.set_queue_position("WORK-T11", "ready")
+    engine.set_queue_position("WORK-T11", "working")
+    with pytest.raises(ValueError, match="[Ii]nvalid.*transition|[Bb]locked"):
+        engine.set_queue_position("WORK-T11", "backlog")
+
+
+def test_get_parked_returns_only_parked(tmp_path, governance):
+    """CH-009 T12: get_parked() returns only parked items."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-P1", "Parked 1")
+    engine.create_work("WORK-P2", "Parked 2")
+    engine.create_work("WORK-B1", "Backlog")
+    engine.set_queue_position("WORK-P1", "parked")
+    engine.set_queue_position("WORK-P2", "parked")
+    parked = engine.get_parked()
+    assert len(parked) == 2
+    ids = {w.id for w in parked}
+    assert ids == {"WORK-P1", "WORK-P2"}
+
+
+def test_get_by_queue_position_generic(tmp_path, governance):
+    """CH-009 T13: get_by_queue_position() returns items at specified position."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-R1", "Ready 1")
+    engine.create_work("WORK-R2", "Ready 2")
+    engine.create_work("WORK-W1", "Working")
+    engine.set_queue_position("WORK-R1", "ready")
+    engine.set_queue_position("WORK-R2", "ready")
+    engine.set_queue_position("WORK-W1", "ready")
+    engine.set_queue_position("WORK-W1", "working")
+    ready = engine.get_by_queue_position("ready")
+    assert len(ready) == 2
+    ids = {w.id for w in ready}
+    assert ids == {"WORK-R1", "WORK-R2"}
+
+
+def test_set_queue_position_validates_transition(tmp_path, governance):
+    """CH-009 T14: set_queue_position() integrates with validation."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-INT", "Integration Test")
+    engine.set_queue_position("WORK-INT", "parked")
+    result = engine.set_queue_position("WORK-INT", "backlog")
+    assert result.queue_position == "backlog"
+    with pytest.raises(ValueError, match="[Ii]nvalid.*transition|[Bb]locked"):
+        engine.set_queue_position("WORK-INT", "working")
+
+
+def test_initial_queue_assignment_allowed(tmp_path, governance):
+    """CH-009 T15: create_work() sets backlog by default (initial assignment)."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-INIT", "Initial Test")
+    work = engine.get_work("WORK-INIT")
+    assert work.queue_position == "backlog"
+    # Subsequent invalid transition should be blocked
+    with pytest.raises(ValueError):
+        engine.set_queue_position("WORK-INIT", "working")

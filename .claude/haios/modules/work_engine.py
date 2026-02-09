@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-08T23:08:12
+# System Auto: last updated on: 2026-02-09T19:16:06
 """
 WorkEngine Module (E2-242, E2-279 refactored)
 
@@ -130,6 +130,21 @@ TRIGGER_STATUSES = {"complete", "completed", "done", "closed", "accepted"}
 
 # WORK-105: Canonical queue positions (5 values per REQ-QUEUE-003)
 VALID_QUEUE_POSITIONS = {"parked", "backlog", "ready", "working", "done"}
+
+# CH-009: Queue lifecycle state machine (REQ-QUEUE-003, REQ-QUEUE-005)
+QUEUE_TRANSITIONS = {
+    "parked": ["backlog"],           # Unpark
+    "backlog": ["ready", "parked"],  # Prioritize or Park
+    "ready": ["working", "backlog"], # Commit or Deprioritize
+    "working": ["done"],             # Release
+    "done": [],                      # Terminal
+}
+
+
+def is_valid_queue_transition(from_pos: str, to_pos: str) -> bool:
+    """Check if queue position transition is valid (CH-009)."""
+    return to_pos in QUEUE_TRANSITIONS.get(from_pos, [])
+
 
 # WORK-105: Forbidden state combinations per CH-007 R3
 FORBIDDEN_STATE_COMBINATIONS = [
@@ -668,6 +683,13 @@ class WorkEngine:
         if work is None:
             return None
 
+        # CH-009: Validate queue transition before write (fail fast)
+        gate_result = self._governance.validate_queue_transition(
+            id, position, work_engine=self
+        )
+        if not gate_result.allowed:
+            raise ValueError(f"Queue transition blocked: {gate_result.reason}")
+
         # WORK-105: Validate forbidden state combinations
         self._validate_state_combination(work.status, position)
 
@@ -706,6 +728,33 @@ class WorkEngine:
     def get_in_progress(self) -> List[WorkState]:
         """Deprecated: Use get_working() instead."""
         return self.get_working()
+
+    def get_parked(self) -> List[WorkState]:
+        """Get all work items with queue_position: parked (CH-009)."""
+        return self.get_by_queue_position("parked")
+
+    def get_by_queue_position(self, position: str) -> List[WorkState]:
+        """
+        Get all work items at given queue position (CH-009).
+
+        Args:
+            position: Queue position to filter by
+
+        Returns:
+            List of WorkState with matching queue_position
+        """
+        result = []
+        if not self.active_dir.exists():
+            return result
+
+        for subdir in self.active_dir.iterdir():
+            if subdir.is_dir():
+                work_md = subdir / "WORK.md"
+                if work_md.exists():
+                    work = self._parse_work_file(work_md)
+                    if work and work.queue_position == position:
+                        result.append(work)
+        return result
 
     # ========== Lifecycle Query Methods (WORK-086: Batch Mode) ==========
 

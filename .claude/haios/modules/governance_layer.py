@@ -1,5 +1,5 @@
 # generated: 2026-01-03
-# System Auto: last updated on: 2026-02-01T14:52:01
+# System Auto: last updated on: 2026-02-09T19:15:53
 """
 GovernanceLayer Module (E2-240)
 
@@ -173,6 +173,55 @@ class GovernanceLayer:
         allowed = VALID_TRANSITIONS.get(from_node, [])
         return to_node in allowed
 
+    def validate_queue_transition(
+        self, work_id: str, to_position: str, work_engine: Any = None
+    ) -> "GateResult":
+        """
+        Validate queue position transition is allowed (CH-009).
+
+        Args:
+            work_id: Work item ID
+            to_position: Target queue position
+            work_engine: WorkEngine instance (to read current position)
+
+        Returns:
+            GateResult with allowed flag and reason
+        """
+        from work_engine import is_valid_queue_transition
+
+        work = work_engine.get_work(work_id) if work_engine else None
+        if work is None:
+            result = GateResult(
+                allowed=False, reason=f"Work item {work_id} not found"
+            )
+        else:
+            from_pos = work.queue_position
+
+            if from_pos == to_position:
+                # No-op: already at target position
+                result = GateResult(
+                    allowed=True, reason=f"No-op: already at {to_position}"
+                )
+            elif is_valid_queue_transition(from_pos, to_position):
+                result = GateResult(
+                    allowed=True,
+                    reason=f"Valid transition: {from_pos} -> {to_position}",
+                )
+            else:
+                result = GateResult(
+                    allowed=False,
+                    reason=f"Invalid queue transition: {from_pos} -> {to_position}",
+                )
+
+        log_validation_outcome(
+            gate="queue_transition",
+            work_id=work_id,
+            result="pass" if result.allowed else "block",
+            reason=result.reason,
+        )
+
+        return result
+
     def load_handlers(self, config_path: str) -> Dict[str, Any]:
         """
         Load handler registry from config file.
@@ -250,6 +299,7 @@ class GovernanceLayer:
     def scaffold_template(
         self,
         template: str,
+        *,
         output_path: str = None,
         backlog_id: str = None,
         title: str = None,

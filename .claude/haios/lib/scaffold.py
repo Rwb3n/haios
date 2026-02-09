@@ -1,5 +1,5 @@
 # generated: 2025-12-21
-# System Auto: last updated on: 2026-02-08T23:18:10
+# System Auto: last updated on: 2026-02-09T19:09:05
 """
 DEPRECATED: Use GovernanceLayer.scaffold_template() instead.
 
@@ -385,6 +385,7 @@ def get_prev_session() -> int | str:
 
 def scaffold_template(
     template: str,
+    *,
     output_path: Optional[str] = None,
     backlog_id: Optional[str] = None,
     title: Optional[str] = None,
