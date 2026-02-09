@@ -408,3 +408,5 @@
 {"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-INT-D1", "agent": "Hephaestus", "timestamp": "2026-02-08T23:33:22.505502"}
 {"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-INT-D2", "agent": "Hephaestus", "timestamp": "2026-02-08T23:33:22.505502"}
 {"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-INT-D3", "agent": "Hephaestus", "timestamp": "2026-02-08T23:33:22.506511"}
+{"type": "SessionEnded", "session": 325, "agent": "Hephaestus", "timestamp": "2026-02-08T23:55:37.925343"}
+{"type": "SessionStarted", "session": 326, "agent": "Hephaestus", "timestamp": "2026-02-09T00:09:26.246976"}
