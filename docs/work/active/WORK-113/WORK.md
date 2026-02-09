@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-113
-title: "Ceremony Contract Validation and Governance"
+title: Ceremony Contract Validation and Governance
 type: implementation
 status: active
 owner: Hephaestus
@@ -12,35 +12,43 @@ arc: ceremonies
 closed: null
 priority: high
 effort: medium
-traces_to: [REQ-CEREMONY-002, REQ-CEREMONY-001]
+traces_to:
+- REQ-CEREMONY-002
+- REQ-CEREMONY-001
 requirement_refs: []
 source_files: []
 acceptance_criteria:
-  - "validate_ceremony_input() function implemented in lib/"
-  - "validate_ceremony_output() function implemented in lib/"
-  - "Governance gate blocks ceremony start if input contract fails (configurable warn/block)"
-  - "Unit tests for contract validation (input valid, input invalid, output valid, output invalid)"
-  - "OutputField.guaranteed validated against {always, on_success, on_failure} (WORK-112 critique A5)"
-  - "ContractField.type validated against canonical vocabulary {string, boolean, list, path, integer} (WORK-112 critique A6)"
-  - "Registry ceremony_count self-verifying: assert declared == actual (WORK-112 critique A10)"
-blocked_by: [WORK-111, WORK-112]
+- validate_ceremony_input() function implemented in lib/
+- validate_ceremony_output() function implemented in lib/
+- Governance gate blocks ceremony start if input contract fails (configurable warn/block)
+- Unit tests for contract validation (input valid, input invalid, output valid, output
+  invalid)
+- OutputField.guaranteed validated against {always, on_success, on_failure} (WORK-112
+  critique A5)
+- ContractField.type validated against canonical vocabulary {string, boolean, list,
+  path, integer} (WORK-112 critique A6)
+- 'Registry ceremony_count self-verifying: assert declared == actual (WORK-112 critique
+  A10)'
+blocked_by:
+- WORK-111
+- WORK-112
 blocks: []
 enables: []
-queue_position: backlog
+queue_position: working
 cycle_phase: backlog
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-09T22:19:48
-    exited: null
+- node: backlog
+  entered: 2026-02-09 22:19:48
+  exited: null
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions:
   epoch: E2.5
-version: "2.0"
+version: '2.0'
 generated: 2026-02-09
-last_updated: 2026-02-09T22:19:48
+last_updated: '2026-02-09T23:50:44.188590'
 ---
 # WORK-113: Ceremony Contract Validation and Governance
 
