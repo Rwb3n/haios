@@ -3,13 +3,13 @@ template: work_item
 id: WORK-112
 title: Retrofit Ceremony Skills with Contracts
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-09
 spawned_by: null
 chapter: ceremonies/CH-011
 arc: ceremonies
-closed: null
+closed: '2026-02-09'
 priority: high
 effort: medium
 traces_to:
@@ -29,7 +29,7 @@ blocks:
 - WORK-113
 enables:
 - WORK-113
-queue_position: working
+queue_position: done
 cycle_phase: backlog
 current_node: backlog
 node_history:
@@ -42,11 +42,13 @@ memory_refs:
 - 84249
 - 84287
 - 84288
+- 84293
+- 84294
 extensions:
   epoch: E2.5
 version: '2.0'
 generated: 2026-02-09
-last_updated: '2026-02-09T23:43:44.115095'
+last_updated: '2026-02-09T23:49:11.915268'
 ---
 # WORK-112: Retrofit Ceremony Skills with Contracts
 
