@@ -78,10 +78,10 @@ def handle(hook_data: dict) -> Optional[str]:
     if path.suffix.lower() in (".json", ".jsonc"):
         return "\n".join(messages) if messages else None
 
-    # Part 1: Timestamp injection
-    timestamp_msg = _add_timestamp(path)
-    if timestamp_msg:
-        messages.append(timestamp_msg)
+    # Part 1: Timestamp injection (DISABLED Session 327 - causes Edit race conditions)
+    # timestamp_msg = _add_timestamp(path)
+    # if timestamp_msg:
+    #     messages.append(timestamp_msg)
 
     # Part 2: Template validation (for governed paths)
     validation_msg = _validate_template(path)
