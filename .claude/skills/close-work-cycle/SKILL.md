@@ -2,6 +2,41 @@
 name: close-work-cycle
 description: HAIOS Close Work Cycle for structured work item closure. Use when closing
   work items. Guides VALIDATE->ARCHIVE->MEMORY workflow with DoD enforcement.
+category:
+  - closure
+  - queue
+input_contract:
+  - field: work_id
+    type: string
+    required: true
+    description: "Work item ID to close (e.g., WORK-110)"
+    pattern: "WORK-\\d{3}"
+output_contract:
+  - field: success
+    type: boolean
+    guaranteed: always
+    description: "Whether closure completed successfully"
+  - field: work_id
+    type: string
+    guaranteed: always
+    description: "The work item ID"
+  - field: archived_path
+    type: path
+    guaranteed: on_success
+    description: "Path to the closed work item file"
+  - field: memory_concept_id
+    type: integer
+    guaranteed: on_success
+    description: "Memory concept ID from closure summary"
+  - field: error
+    type: string
+    guaranteed: on_failure
+    description: "Error description"
+side_effects:
+  - "Status change (active -> complete)"
+  - "Memory commit (closure summary via ingester_ingest)"
+  - "Log ceremony event"
+  - "Git commit via checkpoint-cycle"
 recipes:
 - close-work
 - update-status

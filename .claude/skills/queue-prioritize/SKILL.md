@@ -3,6 +3,36 @@ name: queue-prioritize
 description: Move work items from backlog to ready queue position with rationale.
   Use when selecting items for upcoming work. Batch capable. Rationale required for
   audit trail.
+category: queue
+input_contract:
+  - field: items
+    type: list
+    required: true
+    description: "List of work item IDs to prioritize (e.g., ['WORK-067', 'WORK-093'])"
+  - field: rationale
+    type: string
+    required: true
+    description: "Why these items, in this order"
+output_contract:
+  - field: prioritized
+    type: list
+    guaranteed: always
+    description: "List of work IDs successfully moved to ready"
+  - field: failed
+    type: list
+    guaranteed: always
+    description: "List of work IDs that failed (with reasons)"
+  - field: rationale
+    type: string
+    guaranteed: always
+    description: "Captured rationale for all transitions"
+  - field: event_count
+    type: integer
+    guaranteed: always
+    description: "Number of QueueCeremony events logged"
+side_effects:
+  - "Update queue_position from backlog to ready"
+  - "Log QueueCeremony event per item"
 generated: 2026-02-09
 last_updated: '2026-02-09'
 ---

@@ -1,6 +1,29 @@
 ---
 name: checkpoint-cycle
 description: Create checkpoint manifest. Scaffold, populate fields, commit.
+category: session
+input_contract:
+  - field: session_number
+    type: integer
+    required: false
+    description: "Session number (auto-detected from context if not provided)"
+output_contract:
+  - field: success
+    type: boolean
+    guaranteed: always
+    description: "Whether checkpoint was created and committed"
+  - field: checkpoint_path
+    type: path
+    guaranteed: on_success
+    description: "Path to the created checkpoint manifest"
+  - field: memory_concept_ids
+    type: list
+    guaranteed: on_success
+    description: "Concept IDs from stored learnings"
+side_effects:
+  - "Write checkpoint manifest doc"
+  - "Git commit via commit-session"
+  - "Store learnings to memory via ingester_ingest"
 recipes:
 - checkpoint
 - commit-session

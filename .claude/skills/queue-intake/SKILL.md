@@ -3,6 +3,36 @@ name: queue-intake
 description: Create new work item at backlog queue position with ceremony logging.
   Use when capturing a new idea or requirement as a tracked work item. Wraps work-creation-cycle
   with queue ceremony event.
+category: queue
+input_contract:
+  - field: description
+    type: string
+    required: true
+    description: "What is the idea/work?"
+  - field: traces_to
+    type: string
+    required: false
+    description: "Which requirement does this trace to?"
+  - field: rationale
+    type: string
+    required: false
+    description: "Why is this being created now?"
+output_contract:
+  - field: work_id
+    type: string
+    guaranteed: on_success
+    description: "Created WORK-XXX ID"
+  - field: queue_position
+    type: string
+    guaranteed: on_success
+    description: "Always backlog"
+  - field: event_logged
+    type: boolean
+    guaranteed: on_success
+    description: "Whether ceremony event was captured"
+side_effects:
+  - "Create work item"
+  - "Log Intake ceremony event via log_queue_ceremony()"
 generated: 2026-02-09
 last_updated: '2026-02-09'
 ---

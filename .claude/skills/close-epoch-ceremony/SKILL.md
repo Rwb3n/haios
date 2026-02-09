@@ -2,6 +2,36 @@
 name: close-epoch-ceremony
 description: HAIOS Close Epoch Ceremony for verifying epoch DoD. Use when all arcs
   are complete. Guides VALIDATE->ARCHIVE->TRANSITION workflow.
+category: closure
+input_contract:
+  - field: epoch_id
+    type: string
+    required: true
+    description: "Epoch ID to close (e.g., E2.4)"
+output_contract:
+  - field: success
+    type: boolean
+    guaranteed: always
+    description: "Whether epoch closure completed successfully"
+  - field: epoch_id
+    type: string
+    guaranteed: always
+    description: "The epoch ID"
+  - field: status
+    type: string
+    guaranteed: on_success
+    description: "Complete"
+  - field: arcs_verified
+    type: integer
+    guaranteed: on_success
+    description: "Count of arcs verified complete"
+  - field: error
+    type: string
+    guaranteed: on_failure
+    description: "Error description"
+side_effects:
+  - "Archive (move completed work items, mark epoch complete)"
+  - "Config transition (update haios.yaml epoch)"
 recipes:
 - audit-decision-coverage
 generated: 2026-02-02

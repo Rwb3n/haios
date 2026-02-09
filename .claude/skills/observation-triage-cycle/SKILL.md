@@ -3,6 +3,33 @@ name: observation-triage-cycle
 description: HAIOS Observation Triage Cycle for processing captured observations.
   Use when scanning archived work items to triage and act on observations. Guides
   SCAN->TRIAGE->PROMOTE workflow with dimension validation.
+category: memory
+input_contract:
+  - field: scan_scope
+    type: string
+    required: false
+    description: "Scope to scan for pending observations (default: all archived work)"
+output_contract:
+  - field: success
+    type: boolean
+    guaranteed: always
+    description: "Whether triage completed successfully"
+  - field: scanned_count
+    type: integer
+    guaranteed: always
+    description: "Number of observations scanned"
+  - field: actions
+    type: list
+    guaranteed: on_success
+    description: "List of actions taken (spawn:INV, spawn:WORK, memory, dismiss, etc.)"
+  - field: spawned_ids
+    type: list
+    guaranteed: on_success
+    description: "IDs of spawned work items or investigations"
+side_effects:
+  - "Promote observations to work items or investigations"
+  - "Store insights to memory via ingester_ingest"
+  - "Update triage_status in observation files"
 generated: 2025-12-28
 last_updated: '2026-01-07T20:28:24'
 ---

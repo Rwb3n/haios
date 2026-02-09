@@ -1,5 +1,6 @@
 # generated: 2026-02-09
 # WORK-111: Ceremony Contract Schema Design
+# WORK-112: Retrofit Ceremony Skills with Contracts
 # Source: L4/functional_requirements.md ceremony definitions table (lines 326-346)
 # Ceremony Registry - Single source of truth for all 19 ceremonies
 
@@ -14,7 +15,7 @@ ceremonies:
     signature: "Idea -> BacklogItem"
     side_effects:
       - "Create work item"
-    has_contract: false
+    has_contract: true
     has_skill: true
     notes: null
 
@@ -24,7 +25,7 @@ ceremonies:
     signature: "[BacklogItems] -> [ReadyItems]"
     side_effects:
       - "Update queue_position"
-    has_contract: false
+    has_contract: true
     has_skill: true
     notes: "Batch capable"
 
@@ -34,7 +35,7 @@ ceremonies:
     signature: "ReadyItem -> ActiveItem"
     side_effects:
       - "Start work, log event"
-    has_contract: false
+    has_contract: true
     has_skill: true
     notes: null
 
@@ -44,30 +45,30 @@ ceremonies:
     signature: "ActiveItem -> DoneItem"
     side_effects:
       - "Complete work, log event"
-    has_contract: false
+    has_contract: true
     has_skill: true
     notes: "Release IS close-work-cycle (CH-008 decision). Same implementation as close-work ceremony."
 
   # Session ceremonies (3)
   - name: session-start
     category: session
-    skill: null
+    skill: session-start-ceremony
     signature: "Config -> SessionState"
     side_effects:
       - "Log event, load context"
-    has_contract: false
-    has_skill: false
-    notes: "coldstart command exists but not formal ceremony skill"
+    has_contract: true
+    has_skill: true
+    notes: "Stub skill created by WORK-112"
 
   - name: session-end
     category: session
-    skill: null
+    skill: session-end-ceremony
     signature: "SessionState -> Log"
     side_effects:
       - "Log event, orphan check"
-    has_contract: false
-    has_skill: false
-    notes: null
+    has_contract: true
+    has_skill: true
+    notes: "Stub skill created by WORK-112"
 
   - name: checkpoint
     category: session
@@ -75,7 +76,7 @@ ceremonies:
     signature: "SessionState -> CheckpointDoc"
     side_effects:
       - "Write doc, git commit"
-    has_contract: false
+    has_contract: true
     has_skill: true
     notes: null
 
@@ -86,7 +87,7 @@ ceremonies:
     signature: "WorkItem -> ClosedWorkItem"
     side_effects:
       - "Status change, memory commit"
-    has_contract: false
+    has_contract: true
     has_skill: true
     notes: "Same implementation as Release (queue ceremony). Two L4 entries, one skill."
 
@@ -96,7 +97,7 @@ ceremonies:
     signature: "Chapter -> ClosedChapter"
     side_effects:
       - "DoD verify, status change"
-    has_contract: false
+    has_contract: true
     has_skill: true
     notes: null
 
@@ -106,7 +107,7 @@ ceremonies:
     signature: "Arc -> ClosedArc"
     side_effects:
       - "Decision verify, status change"
-    has_contract: false
+    has_contract: true
     has_skill: true
     notes: null
 
@@ -116,7 +117,7 @@ ceremonies:
     signature: "Epoch -> ClosedEpoch"
     side_effects:
       - "Archive, config transition"
-    has_contract: false
+    has_contract: true
     has_skill: true
     notes: null
 
@@ -127,7 +128,7 @@ ceremonies:
     signature: "Experience -> Observations"
     side_effects:
       - "Write observations"
-    has_contract: false
+    has_contract: true
     has_skill: true
     notes: null
 
@@ -137,68 +138,68 @@ ceremonies:
     signature: "[Observations] -> [Actions]"
     side_effects:
       - "Promote or close"
-    has_contract: false
+    has_contract: true
     has_skill: true
     notes: null
 
   - name: memory-commit
     category: memory
-    skill: null
+    skill: memory-commit-ceremony
     signature: "Learnings -> ConceptIDs"
     side_effects:
       - "Store to memory"
-    has_contract: false
-    has_skill: false
-    notes: "Currently embedded in close-work-cycle MEMORY phase"
+    has_contract: true
+    has_skill: true
+    notes: "Stub skill created by WORK-112. Previously embedded in close-work-cycle MEMORY phase."
 
   # Spawn ceremony (1)
   - name: spawn-work
     category: spawn
-    skill: null
+    skill: spawn-work-ceremony
     signature: "WorkItem -> NewWorkItem"
     side_effects:
       - "Create linked work item"
-    has_contract: false
-    has_skill: false
-    notes: null
+    has_contract: true
+    has_skill: true
+    notes: "Stub skill created by WORK-112"
 
   # Feedback ceremonies (4)
   - name: chapter-review
     category: feedback
-    skill: null
+    skill: chapter-review
     signature: "CompletedWork + Chapter -> Chapter?"
     side_effects:
       - "Maybe update chapter scope"
-    has_contract: false
-    has_skill: false
-    notes: null
+    has_contract: true
+    has_skill: true
+    notes: "Stub skill created by WORK-112"
 
   - name: arc-review
     category: feedback
-    skill: null
+    skill: arc-review
     signature: "CompletedChapter + Arc -> Arc?"
     side_effects:
       - "Maybe update arc direction"
-    has_contract: false
-    has_skill: false
-    notes: null
+    has_contract: true
+    has_skill: true
+    notes: "Stub skill created by WORK-112"
 
   - name: epoch-review
     category: feedback
-    skill: null
+    skill: epoch-review
     signature: "CompletedArc + Epoch -> Epoch?"
     side_effects:
       - "Maybe update epoch goals"
-    has_contract: false
-    has_skill: false
-    notes: null
+    has_contract: true
+    has_skill: true
+    notes: "Stub skill created by WORK-112"
 
   - name: requirements-review
     category: feedback
-    skill: null
+    skill: requirements-review
     signature: "CompletedEpoch + L4 -> L4?"
     side_effects:
       - "Maybe update requirements"
-    has_contract: false
-    has_skill: false
-    notes: null
+    has_contract: true
+    has_skill: true
+    notes: "Stub skill created by WORK-112"

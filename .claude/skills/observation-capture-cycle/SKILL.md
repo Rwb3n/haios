@@ -2,6 +2,33 @@
 name: observation-capture-cycle
 description: 4 questions for genuine reflection before work closure. Hard gate on
   non-empty.
+category: memory
+input_contract:
+  - field: work_id
+    type: string
+    required: true
+    description: "Work item ID being closed (for observation file naming)"
+    pattern: "WORK-\\d{3}"
+output_contract:
+  - field: success
+    type: boolean
+    guaranteed: always
+    description: "Whether observations were captured"
+  - field: observations_path
+    type: path
+    guaranteed: on_success
+    description: "Path to the observations file"
+  - field: observation_count
+    type: integer
+    guaranteed: on_success
+    description: "Number of non-empty observation answers"
+  - field: memory_concept_ids
+    type: list
+    guaranteed: on_success
+    description: "Concept IDs from ingested observations"
+side_effects:
+  - "Write observations file via scaffold-observations"
+  - "Store observations to memory via ingester_ingest"
 recipes:
 - scaffold-observations
 generated: 2026-01-10

@@ -3,6 +3,41 @@ name: close-chapter-ceremony
 description: HAIOS Close Chapter Ceremony for verifying chapter DoD. Use when all
   work items in a chapter are complete. Guides VALIDATE->MARK->REPORT workflow with
   decision verification.
+category: closure
+input_contract:
+  - field: chapter_id
+    type: string
+    required: true
+    description: "Chapter ID to close (e.g., CH-011)"
+    pattern: "CH-\\d{3}"
+  - field: arc
+    type: string
+    required: true
+    description: "Arc name containing the chapter (e.g., ceremonies)"
+output_contract:
+  - field: success
+    type: boolean
+    guaranteed: always
+    description: "Whether chapter closure completed successfully"
+  - field: chapter_id
+    type: string
+    guaranteed: always
+    description: "The chapter ID"
+  - field: status
+    type: string
+    guaranteed: on_success
+    description: "Complete"
+  - field: work_items_verified
+    type: integer
+    guaranteed: on_success
+    description: "Count of work items verified complete"
+  - field: error
+    type: string
+    guaranteed: on_failure
+    description: "Error description"
+side_effects:
+  - "DoD verify (all work items complete, exit criteria checked)"
+  - "Status change (Active -> Complete in chapter file)"
 recipes:
 - audit-decision-coverage
 generated: 2026-02-02

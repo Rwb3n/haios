@@ -20,6 +20,9 @@ acceptance_criteria:
   - "validate_ceremony_output() function implemented in lib/"
   - "Governance gate blocks ceremony start if input contract fails (configurable warn/block)"
   - "Unit tests for contract validation (input valid, input invalid, output valid, output invalid)"
+  - "OutputField.guaranteed validated against {always, on_success, on_failure} (WORK-112 critique A5)"
+  - "ContractField.type validated against canonical vocabulary {string, boolean, list, path, integer} (WORK-112 critique A6)"
+  - "Registry ceremony_count self-verifying: assert declared == actual (WORK-112 critique A10)"
 blocked_by: [WORK-111, WORK-112]
 blocks: []
 enables: []

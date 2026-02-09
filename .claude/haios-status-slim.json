@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-09T22:46:27",
+    "generated": "2026-02-09T23:40:31",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 330,
-        "current_session": 331,
+        "prior_session": 331,
+        "current_session": 332,
         "prior_date": "2026-02-09",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 84076,
-        "entities": 9693,
+        "concepts": 84098,
+        "entities": 9696,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -62,7 +62,9 @@
             "/workspace"
         ],
         "skills": [
+            "arc-review",
             "audit",
+            "chapter-review",
             "checkpoint-cycle",
             "close-arc-ceremony",
             "close-chapter-ceremony",
@@ -70,11 +72,13 @@
             "close-work-cycle",
             "design-review-validation",
             "dod-validation-cycle",
+            "epoch-review",
             "extract-content",
             "ground-cycle",
             "implementation-cycle",
             "investigation-cycle",
             "memory-agent",
+            "memory-commit-ceremony",
             "observation-capture-cycle",
             "observation-triage-cycle",
             "plan-authoring-cycle",
@@ -83,8 +87,12 @@
             "queue-intake",
             "queue-prioritize",
             "queue-unpark",
+            "requirements-review",
             "routing-gate",
             "schema-ref",
+            "session-end-ceremony",
+            "session-start-ceremony",
+            "spawn-work-ceremony",
             "survey-cycle",
             "work-creation-cycle"
         ],

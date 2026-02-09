@@ -3,6 +3,36 @@ name: close-arc-ceremony
 description: HAIOS Close Arc Ceremony for verifying arc DoD. Use when all chapters
   in an arc are complete. Guides VALIDATE->MARK->REPORT workflow with orphan decision
   check.
+category: closure
+input_contract:
+  - field: arc_id
+    type: string
+    required: true
+    description: "Arc ID to close (e.g., ceremonies)"
+output_contract:
+  - field: success
+    type: boolean
+    guaranteed: always
+    description: "Whether arc closure completed successfully"
+  - field: arc_id
+    type: string
+    guaranteed: always
+    description: "The arc ID"
+  - field: status
+    type: string
+    guaranteed: on_success
+    description: "Complete"
+  - field: chapters_verified
+    type: integer
+    guaranteed: on_success
+    description: "Count of chapters verified complete"
+  - field: error
+    type: string
+    guaranteed: on_failure
+    description: "Error description"
+side_effects:
+  - "Decision verify (orphan check via audit-decision-coverage)"
+  - "Status change (Active -> Complete in ARC.md)"
 recipes:
 - audit-decision-coverage
 generated: 2026-02-02

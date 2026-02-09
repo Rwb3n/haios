@@ -3,6 +3,49 @@ name: queue-unpark
 description: Move work item between parked and backlog (scope decision). Use when
   bringing a parked item into scope (Unpark) or deferring a backlog item out of scope
   (Park). Operator decision requiring rationale.
+category: queue
+input_contract:
+  - field: work_id
+    type: string
+    required: true
+    description: "Work item ID (e.g., WORK-067)"
+    pattern: "WORK-\\d{3}"
+  - field: direction
+    type: string
+    required: true
+    description: "unpark (parked->backlog) or park (backlog->parked)"
+  - field: rationale
+    type: string
+    required: true
+    description: "Reason for scope decision"
+output_contract:
+  - field: success
+    type: boolean
+    guaranteed: always
+    description: "Whether transition succeeded"
+  - field: work_id
+    type: string
+    guaranteed: always
+    description: "The work item ID"
+  - field: from_position
+    type: string
+    guaranteed: on_success
+    description: "Source queue position"
+  - field: to_position
+    type: string
+    guaranteed: on_success
+    description: "Target queue position"
+  - field: rationale
+    type: string
+    guaranteed: on_success
+    description: "Captured rationale"
+  - field: error
+    type: string
+    guaranteed: on_failure
+    description: "Error description"
+side_effects:
+  - "Update queue_position (park or unpark)"
+  - "Log QueueCeremony event to governance-events.jsonl"
 generated: 2026-02-09
 last_updated: '2026-02-09'
 ---

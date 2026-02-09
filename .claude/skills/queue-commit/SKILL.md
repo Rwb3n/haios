@@ -3,6 +3,37 @@ name: queue-commit
 description: Move work item from ready to working queue position, signaling active
   work session. Use when starting implementation of a ready item. Typically invoked
   by survey-cycle after work selection.
+category: queue
+input_contract:
+  - field: work_id
+    type: string
+    required: true
+    description: "Work item ID to commit (e.g., WORK-110)"
+    pattern: "WORK-\\d{3}"
+  - field: rationale
+    type: string
+    required: false
+    description: "Why starting now (optional — commit is mechanical)"
+output_contract:
+  - field: success
+    type: boolean
+    guaranteed: always
+    description: "Whether transition succeeded"
+  - field: work_id
+    type: string
+    guaranteed: always
+    description: "The work item ID"
+  - field: queue_position
+    type: string
+    guaranteed: on_success
+    description: "working"
+  - field: error
+    type: string
+    guaranteed: on_failure
+    description: "Error description"
+side_effects:
+  - "Start work, log event"
+  - "Log QueueCeremony event to governance-events.jsonl"
 generated: 2026-02-09
 last_updated: '2026-02-09'
 ---
