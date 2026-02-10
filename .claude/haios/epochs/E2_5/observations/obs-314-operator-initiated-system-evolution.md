@@ -8,7 +8,7 @@ potential_action: investigation
 parked_for: E2.6
 discovered_during: Session-314-review
 generated: '2026-02-05'
-last_updated: '2026-02-05T19:01:16'
+last_updated: '2026-02-10T22:10:00'
 ---
 # Observation: Missing Ceremony for Operator-Initiated System Evolution
 
@@ -30,11 +30,28 @@ Without a governed path for operator-initiated system evolution:
 - No audit trail for why system rules changed
 - Next agent has no context about what governance path was followed
 
+## Additional Finding (Session 339)
+
+Session 339 observation review surfaced a fourth gap in the ceremony chain:
+
+4. **Batch Scope Triage** - no ceremony for reviewing accumulated themes across observations and deciding epoch scope (E2.5 vs park E2.6)
+
+This is distinct from `observation-triage` (individual item SCAN/TRIAGE/PROMOTE) and `epoch-review` (is the epoch on track?). It operates at a different granularity: operator reviews patterns across many observations and memory entries, then makes batch scoping decisions about what fits current epoch vs next.
+
+The full missing chain is now:
+1. Session Review -> learnings
+2. Process Review -> proposed behavioral changes (K/S/D)
+3. Batch Scope Triage -> epoch scoping decisions
+4. System Evolution -> governed application of upstream changes
+
+All four are operator-initiated, top-down ceremonies with no existing skill or registry entry.
+
 ## Recommendation
 
 E2.6 investigation scope:
 - Define "System Evolution" ceremony with input/output contract
 - Define threshold criteria for routing Process Review findings
+- Define batch scope triage ceremony (distinct from observation-triage)
 - Consider: should L3/L4 modifications require ADR?
 - Related: WORK-101 (proportional governance), WORK-102 (review ceremonies)
 

@@ -7,7 +7,7 @@
 **Arc ID:** ceremonies
 **Epoch:** E2.5
 **Theme:** Implement ceremony boundaries and contracts
-**Status:** Planned
+**Status:** In Progress
 
 ---
 

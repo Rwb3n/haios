@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T20:01:42
+# System Auto: last updated on: 2026-02-10T22:43:00
 # Epoch 2.5: Independent Lifecycles
 
 ## L4 Object Definition
@@ -133,34 +133,81 @@ Pause points are valid completion states, not "stuck" states.
 |-----|-------|--------|--------------|
 | **lifecycles** | Implement CycleRunner with pure function semantics | **Complete** (S318) | REQ-LIFECYCLE-001 to 004 |
 | **queue** | Implement queue ceremonies and orthogonal tracking | **Complete** (S331) | REQ-QUEUE-001 to 004 |
-| **ceremonies** | Implement ceremony boundaries and contracts | Planned | REQ-CEREMONY-001 to 003 |
-| **feedback** | Implement review ceremonies and upward flow | Planned | REQ-FEEDBACK-001 to 005 |
-| **assets** | Implement typed, versioned asset production | Planned | REQ-ASSET-001 to 005 |
-| **portability** | HAIOS as distributable, portable plugin | Planned | REQ-PORTABLE-001 to 003 (proposed) |
+| **ceremonies** | Implement ceremony boundaries and contracts | **In Progress** (CH-011 Complete, CH-012 ~Done) | REQ-CEREMONY-001 to 003 |
+| ~~**feedback**~~ | ~~Implement review ceremonies and upward flow~~ | **Deferred to E2.6** (S339 scope review) | REQ-FEEDBACK-001 to 005 |
+| ~~**assets**~~ | ~~Implement typed, versioned asset production~~ | **Deferred to E2.6** (S339 scope review) | REQ-ASSET-001 to 005 |
+| ~~**portability**~~ | ~~HAIOS as distributable, portable plugin~~ | **Deferred to E2.6** (S339 scope review) | REQ-PORTABLE-001 to 003 |
 
 ---
 
 ## Exit Criteria
 
-- [ ] CycleRunner treats lifecycles as pure functions (no implicit chaining)
-- [x] Queue position is tracked independently from lifecycle phase
-- [ ] All 19 ceremonies have skill implementations with contracts
-- [ ] Assets have typed schemas and provenance frontmatter
-- [ ] Feedback review ceremonies update parent scope
-- [ ] Pause points (per S27) recognized as valid completion
-- [x] "Complete without spawn" is accepted by close-work-cycle
+- [x] CycleRunner treats lifecycles as pure functions (no implicit chaining) — lifecycles arc Complete (S318)
+- [x] Queue position is tracked independently from lifecycle phase — queue arc Complete (S331)
+- [ ] All 19 ceremonies have working implementations with contracts — ceremonies arc in progress
+- ~~[ ] Assets have typed schemas and provenance frontmatter~~ — **Deferred to E2.6** (S339)
+- ~~[ ] Feedback review ceremonies update parent scope~~ — **Deferred to E2.6** (S339)
+- [x] Pause points (per S27) recognized as valid completion — lifecycles arc Complete (S318)
+- [x] "Complete without spawn" is accepted by close-work-cycle — queue arc Complete (S331)
+
+---
+
+## Scope Revision (Session 339)
+
+S339 retrospective review with operator identified epoch scope inflation: 6 arcs scoped at creation, only 3 achievable. Operator decision: complete ceremonies arc, defer feedback/assets/portability to E2.6.
+
+### Remaining Work
+
+**Ceremonies arc (complete all 7 chapters):**
+
+| Chapter | Status | Remaining |
+|---------|--------|-----------|
+| CH-011 CeremonyContracts | **Complete** (S335) | None |
+| CH-012 SideEffectBoundaries | **~Done** (3 work items complete) | Close chapter |
+| CH-013 CeremonyLifecycleDistinction | Planned | CeremonyRunner, rename -cycle to -ceremony, type: field |
+| CH-014 SessionCeremonies | Planned | Implement session-start/end stubs, SessionState type |
+| CH-015 ClosureCeremonies | Planned | Verify WORK-112 coverage, close |
+| CH-016 MemoryCeremonies | Planned | Implement memory-commit stub |
+| CH-017 SpawnCeremony | Planned | Spawn lineage (spawned_from/children) |
+
+**Tiny fixes (S339 retro):**
+
+| Fix | Type |
+|-----|------|
+| Checkpoint prior_session stale value | Bug fix in scaffold.py |
+| Scaffold output lint test | New test |
+| stage-governance recipe stale | justfile update |
+| Coldstart shows wrong epoch | Bug fix in identity_loader |
+| L4 table drift (Unpark missing) | Doc fix |
+| `just chapter-status {arc}` command | New recipe |
+
+**Tactical:**
+
+| Item | Type |
+|------|------|
+| WORK-117: Shared conftest.py | Test infra unification |
+
+### Deferred to E2.6 (Agent UX)
+
+| Arc/Item | Reason |
+|----------|--------|
+| feedback arc (CH-018 to CH-022) | All stubs, fits E2.6 epoch-governance arc |
+| assets arc (CH-023 to CH-027) | Not started, fits E2.6 agent-ux arc |
+| portability arc (CH-028 to CH-031) | Not started, E2.6 structural-migration absorbs |
+| WORK-101 Proportional Governance | New design work |
+| WORK-102 Session/Process Review Ceremonies | New design work, obs-314 |
 
 ---
 
 ## Implementation Priority
 
-Based on dependency analysis:
+Based on dependency analysis (revised S339):
 
-1. **lifecycles arc** (foundation - CycleRunner changes)
-2. **queue arc** (depends on lifecycle separation)
-3. **ceremonies arc** (depends on queue for ceremony triggers)
-4. **assets arc** (can parallel with ceremonies)
-5. **feedback arc** (depends on ceremonies)
+1. **lifecycles arc** — **Complete** (S318)
+2. **queue arc** — **Complete** (S331)
+3. **ceremonies arc** — **In Progress** (CH-011 done, CH-012 ~done, CH-013-017 remaining)
+4. ~~assets arc~~ — Deferred to E2.6
+5. ~~feedback arc~~ — Deferred to E2.6
 
 ---
 
@@ -173,11 +220,20 @@ Session 294 architecture design: 83277-83323
 - 83299: Unix pipe philosophy applied (Critique)
 - 83313: Paths via ConfigLoader (Directive)
 
+Session 339 retrospective review: 84215-84802 (selected)
+- 84284: S332 success pattern (critique + TDD + operator retros)
+- 84332: Ceremony overhead ~40% of tokens for small work items
+- 84227: Chapter files do double-duty (design + status)
+- 84331: Implementation-cycle should auto-detect missing plan
+- 84783-84802: S338 WORK-116 learnings (test infra, prior_session)
+
 ---
 
 ## References
 
 - @.claude/haios/epochs/E2_4/EPOCH.md (prior epoch)
+- @.claude/haios/epochs/E2_6/EPOCH.md (next epoch)
 - @.claude/haios/epochs/E2_4/architecture/S27-breath-model.md (breath model)
 - @.claude/haios/manifesto/L4/functional_requirements.md (E2.5 requirements)
 - @docs/checkpoints/2026-02-03-01-SESSION-294-e25-architecture-design-complete.md
+- @.claude/haios/epochs/E2_5/observations/obs-314-operator-initiated-system-evolution.md (S339 updated)
