@@ -2156,3 +2156,4 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-INIT", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-02-10T21:42:44.537611"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-10T21:44:48.063700"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-10T21:44:48.109199"}
+{"type": "SessionEnded", "session": 338, "agent": "Hephaestus", "timestamp": "2026-02-10T21:47:14.621832"}
