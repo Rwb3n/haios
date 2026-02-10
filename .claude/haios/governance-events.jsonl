@@ -673,3 +673,4 @@
 {"type": "SessionEnded", "session": 334, "agent": "Hephaestus", "timestamp": "2026-02-10T00:12:20.534029"}
 {"type": "SessionEnded", "session": 333, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-10T00:19:16.705108"}
 {"type": "SessionStarted", "session": 335, "agent": "Hephaestus", "timestamp": "2026-02-10T00:19:51.200413"}
+{"type": "SessionEnded", "session": 335, "agent": "Hephaestus", "timestamp": "2026-02-10T00:44:29.978856"}
