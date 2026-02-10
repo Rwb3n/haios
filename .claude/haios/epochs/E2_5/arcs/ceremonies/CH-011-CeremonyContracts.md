@@ -6,7 +6,8 @@
 
 **Chapter ID:** CH-011
 **Arc:** ceremonies
-**Status:** Planned
+**Status:** Complete
+**Completed:** 2026-02-10 (Session 335)
 **Implementation Type:** CREATE NEW
 **Depends:** None
 **Work Items:** WORK-111, WORK-112, WORK-113
@@ -165,13 +166,13 @@ def validate_ceremony_output(ceremony: str, outputs: Dict) -> ValidationResult:
 
 ## Success Criteria
 
-- [ ] Contract schema defined (YAML structure)
-- [ ] All 19 ceremonies have input_contract in frontmatter
-- [ ] All 19 ceremonies have output_contract in frontmatter
-- [ ] All 19 ceremonies have side_effects documented
-- [ ] Validation functions implemented
-- [ ] Governance blocks ceremony start if input contract fails
-- [ ] Unit tests for contract validation
+- [x] Contract schema defined (YAML structure) — WORK-111
+- [x] All 19 ceremonies have input_contract in frontmatter — WORK-112
+- [x] All 19 ceremonies have output_contract in frontmatter — WORK-112
+- [x] All 19 ceremonies have side_effects documented — WORK-112
+- [x] Validation functions implemented — WORK-113
+- [x] Governance blocks ceremony start if input contract fails — WORK-113 (configurable warn/block)
+- [x] Unit tests for contract validation — WORK-113 (17 tests)
 
 ---
 

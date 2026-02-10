@@ -671,3 +671,5 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-113", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-09T23:50:44.185576"}
 {"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-113"], "from": "ready", "to": "working", "timestamp": "2026-02-09T23:50:44.190272", "rationale": "Starting implementation of ceremony contract validation", "agent": "Hephaestus"}
 {"type": "SessionEnded", "session": 334, "agent": "Hephaestus", "timestamp": "2026-02-10T00:12:20.534029"}
+{"type": "SessionEnded", "session": 333, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-10T00:19:16.705108"}
+{"type": "SessionStarted", "session": 335, "agent": "Hephaestus", "timestamp": "2026-02-10T00:19:51.200413"}
