@@ -1,6 +1,6 @@
 ---
 template: implementation_plan
-status: approved
+status: complete
 date: 2026-02-10
 backlog_id: WORK-116
 title: "Adopt ceremony_context() in Ceremony Skills"

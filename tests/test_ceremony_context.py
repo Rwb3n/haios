@@ -161,7 +161,7 @@ class TestWarnMode:
 
         _clear_ceremony_context()
         monkeypatch.setattr(
-            "governance_layer._get_ceremony_enforcement", lambda: "warn"
+            _get_gov_mod(), "_get_ceremony_enforcement", lambda: "warn"
         )
 
         with caplog.at_level(logging.WARNING):
@@ -285,6 +285,19 @@ _we_path = _root / ".claude" / "haios" / "modules" / "work_engine.py"
 work_engine_mod = _ensure_module("work_engine", _we_path)
 
 
+def _get_gov_mod():
+    """Get the canonical governance_layer module at runtime.
+
+    CRITICAL (Session 338): test_work_engine.py's _load_module unconditionally
+    creates a new governance_layer module and overwrites sys.modules during
+    collection. If this file was collected first, any module-scope reference
+    becomes stale. Resolving at runtime via sys.modules ensures we always get
+    the same module instance that work_engine's check_ceremony_required was
+    bound to (since work_engine imports from governance_layer in sys.modules).
+    """
+    return sys.modules["governance_layer"]
+
+
 def _read_events(events_file: Path) -> list:
     """Read JSONL events file."""
     events = []
@@ -299,19 +312,39 @@ def _read_events(events_file: Path) -> list:
 @pytest.fixture
 def w116_engine(tmp_path):
     """Create WorkEngine for WORK-116 tests."""
-    from governance_layer import GovernanceLayer
-    return work_engine_mod.WorkEngine(governance=GovernanceLayer(), base_path=tmp_path)
+    return work_engine_mod.WorkEngine(
+        governance=_get_gov_mod().GovernanceLayer(), base_path=tmp_path
+    )
 
 
 @pytest.fixture(autouse=True)
 def w116_patch_events(tmp_path, monkeypatch):
-    """Redirect events files for test isolation."""
+    """Redirect events files for test isolation.
+
+    Session 338: Multiple test files use _load_module("governance_layer", ...)
+    which unconditionally creates new module instances, each with its own
+    ContextVar. work_engine_mod.check_ceremony_required was bound to whichever
+    governance_layer existed when work_engine was loaded. We must ensure ALL
+    ceremony_context/check_ceremony_required calls use the SAME ContextVar.
+
+    Strategy: rebind work_engine_mod.check_ceremony_required to the current
+    sys.modules["governance_layer"] so it shares ContextVar with ceremony_context
+    (which resolves from sys.modules at call time via lazy import in cli.py and
+    queue_ceremonies.py).
+    """
+    gov = _get_gov_mod()
     events_file = tmp_path / "test-events.jsonl"
     monkeypatch.setattr(queue_ceremonies, "EVENTS_FILE", events_file)
-    # Also patch governance_layer event logging to use tmp file
+    # Patch event logging on the canonical module
     monkeypatch.setattr(
-        "governance_layer._log_ceremony_event",
+        gov, "_log_ceremony_event",
         lambda e: events_file.open("a").write(json.dumps(e) + "\n"),
+    )
+    # Rebind work_engine's check_ceremony_required to use current governance_layer
+    # This ensures ContextVar is shared even if work_engine was loaded with a
+    # different governance_layer module instance
+    monkeypatch.setattr(
+        work_engine_mod, "check_ceremony_required", gov.check_ceremony_required
     )
     return events_file
 
@@ -319,10 +352,9 @@ def w116_patch_events(tmp_path, monkeypatch):
 @pytest.fixture(autouse=True)
 def w116_clean_context():
     """Ensure clean ceremony context for each test."""
-    from governance_layer import _clear_ceremony_context
-    _clear_ceremony_context()
+    _get_gov_mod()._clear_ceremony_context()
     yield
-    _clear_ceremony_context()
+    _get_gov_mod()._clear_ceremony_context()
 
 
 # =========================================================================
@@ -332,7 +364,7 @@ class TestQueueTransitionCeremonyAdoption:
     def test_execute_queue_transition_no_warning(self, w116_engine, caplog, monkeypatch):
         """execute_queue_transition wraps state change in ceremony_context — no warning."""
         monkeypatch.setattr(
-            "governance_layer._get_ceremony_enforcement", lambda: "warn"
+            _get_gov_mod(), "_get_ceremony_enforcement", lambda: "warn"
         )
 
         # create_work in setup will warn (expected — not wrapped by this work item)
@@ -370,7 +402,7 @@ class TestQueueTransitionCeremonyEvents:
     def test_execute_queue_transition_ceremony_events(self, w116_engine, w116_patch_events, monkeypatch):
         """execute_queue_transition produces CeremonyStart and CeremonyEnd events."""
         monkeypatch.setattr(
-            "governance_layer._get_ceremony_enforcement", lambda: "warn"
+            _get_gov_mod(), "_get_ceremony_enforcement", lambda: "warn"
         )
         w116_engine.create_work("WORK-QT2", "Queue Test 2")
 
@@ -397,7 +429,7 @@ class TestCmdCloseCeremonyAdoption:
     def test_cmd_close_no_warning(self, w116_engine, tmp_path, caplog, monkeypatch):
         """cmd_close wraps engine.close() in ceremony_context — no warning."""
         monkeypatch.setattr(
-            "governance_layer._get_ceremony_enforcement", lambda: "warn"
+            _get_gov_mod(), "_get_ceremony_enforcement", lambda: "warn"
         )
         # Create a work item to close
         w116_engine.create_work("WORK-CL1", "Close Test 1")
@@ -433,7 +465,7 @@ class TestDirectCallStillWarns:
     def test_direct_set_queue_position_warns(self, w116_engine, caplog, monkeypatch):
         """Direct WorkEngine.set_queue_position outside ceremony_context still warns."""
         monkeypatch.setattr(
-            "governance_layer._get_ceremony_enforcement", lambda: "warn"
+            _get_gov_mod(), "_get_ceremony_enforcement", lambda: "warn"
         )
         w116_engine.create_work("WORK-DW1", "Direct Warn Test")
 

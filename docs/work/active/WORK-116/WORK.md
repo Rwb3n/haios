@@ -3,13 +3,13 @@ template: work_item
 id: WORK-116
 title: Adopt ceremony_context() in Ceremony Skills (CH-012)
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-10
 spawned_by: WORK-115
 chapter: CH-012
 arc: ceremonies
-closed: null
+closed: '2026-02-10'
 priority: medium
 effort: medium
 traces_to:
@@ -25,7 +25,7 @@ acceptance_criteria: []
 blocked_by: []
 blocks: []
 enables: []
-queue_position: working
+queue_position: done
 cycle_phase: backlog
 current_node: backlog
 node_history:
@@ -34,11 +34,15 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 84790
+- 84791
+- 84792
+- 84793
 extensions: {}
 version: '2.0'
 generated: 2026-02-10
-last_updated: '2026-02-10T20:55:41.193639'
+last_updated: '2026-02-10T21:45:08.596243'
 ---
 # WORK-116: Adopt ceremony_context() in Ceremony Skills (CH-012)
 
