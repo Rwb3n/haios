@@ -38,6 +38,7 @@ epoch:
 # Governance toggles (from governance-toggles.yaml)
 toggles:
   block_powershell: true  # PowerShell through bash mangles $_ variables
+  ceremony_contract_enforcement: warn  # warn|block (WORK-113)
   # block_sql: true       # Future: migrate from hardcoded
 
 # Routing thresholds (from routing-thresholds.yaml)

@@ -1,6 +1,6 @@
 # generated: 2026-02-09
 """
-Ceremony contract schema and registry (CH-011, WORK-111).
+Ceremony contract schema, registry, and validation (CH-011, WORK-111, WORK-113).
 
 Defines the data model for ceremony contracts:
 - ContractField: Input contract field (field, type, required, description, pattern?)
@@ -9,17 +9,34 @@ Defines the data model for ceremony contracts:
 - CeremonyRegistry: Collection of all 19 ceremonies loaded from YAML
 - RegistryEntry: Single ceremony entry in the registry
 
+Validation (WORK-113):
+- ValidationResult: Result of validating inputs/outputs against a contract
+- validate_ceremony_input: Check inputs satisfy ceremony's input contract
+- validate_ceremony_output: Check outputs satisfy ceremony's output contract
+- enforce_ceremony_contract: Governance gate with configurable warn/block
+
 Usage:
-    from ceremony_contracts import CeremonyContract, load_ceremony_registry
+    from ceremony_contracts import (
+        CeremonyContract, load_ceremony_registry,
+        validate_ceremony_input, validate_ceremony_output,
+        enforce_ceremony_contract, ValidationResult,
+    )
 
     # Parse contract from skill frontmatter
     contract = CeremonyContract.from_frontmatter(yaml_dict)
+
+    # Validate inputs
+    result = validate_ceremony_input(contract, {"work_id": "WORK-113"})
+
+    # Governance gate (reads haios.yaml toggle)
+    result = enforce_ceremony_contract(contract, {"work_id": "WORK-113"})
 
     # Load ceremony registry
     registry = load_ceremony_registry()
     assert len(registry.ceremonies) == 19
 """
 
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
@@ -31,6 +48,12 @@ import yaml
 VALID_CATEGORIES = frozenset(
     ["queue", "session", "closure", "feedback", "memory", "spawn"]
 )
+
+# Valid contract field types (WORK-112 critique A6)
+VALID_TYPES = frozenset(["string", "boolean", "list", "path", "integer"])
+
+# Valid output guaranteed values (WORK-112 critique A5)
+VALID_GUARANTEED = frozenset(["always", "on_success", "on_failure"])
 
 
 def _validate_category(category: Union[str, List[str]]) -> None:
@@ -58,7 +81,7 @@ class ContractField:
 
     Attributes:
         field: Field name (e.g., 'work_id')
-        type: Data type (string, boolean, list, path, integer)
+        type: Data type - must be one of: string, boolean, list, path, integer
         required: Whether this field is required
         description: Human-readable description
         pattern: Optional regex pattern for validation (e.g., r'WORK-\\d{3}')
@@ -70,6 +93,12 @@ class ContractField:
     description: str
     pattern: Optional[str] = None
 
+    def __post_init__(self):
+        if self.type not in VALID_TYPES:
+            raise ValueError(
+                f"Invalid type '{self.type}'. Must be one of: {sorted(VALID_TYPES)}"
+            )
+
 
 @dataclass
 class OutputField:
@@ -77,15 +106,27 @@ class OutputField:
 
     Attributes:
         field: Field name (e.g., 'success')
-        type: Data type (string, boolean, list, path, integer)
-        guaranteed: When this field is present (always, on_success, on_failure)
+        type: Data type - must be one of: string, boolean, list, path, integer
+        guaranteed: When this field is present - must be one of: always, on_success, on_failure
         description: Human-readable description
+
+    Note (A8): Conditional output validation (on_success/on_failure) is coupled to
+    the literal field name "success" in validate_ceremony_output(). All current
+    ceremonies use this convention. If a ceremony uses a different field name for
+    its success indicator, conditional validation will silently skip enforcement.
     """
 
     field: str
     type: str
     guaranteed: str
     description: str
+
+    def __post_init__(self):
+        if self.guaranteed not in VALID_GUARANTEED:
+            raise ValueError(
+                f"Invalid guaranteed '{self.guaranteed}'. "
+                f"Must be one of: {sorted(VALID_GUARANTEED)}"
+            )
 
 
 @dataclass
@@ -188,6 +229,191 @@ class CeremonyRegistry:
     version: str
     ceremony_count: int
     ceremonies: List[RegistryEntry]
+
+
+# --- Validation (WORK-113) ---
+
+
+@dataclass
+class ValidationResult:
+    """Result of validating inputs/outputs against a contract.
+
+    Attributes:
+        valid: True if all checks passed
+        errors: List of error/warning descriptions (empty if valid)
+    """
+
+    valid: bool
+    errors: List[str] = field(default_factory=list)
+
+
+def validate_ceremony_input(
+    contract: CeremonyContract, inputs: Dict[str, Any]
+) -> ValidationResult:
+    """Validate inputs against ceremony's input contract.
+
+    Checks:
+    - Required fields are present
+    - Fields with pattern constraints match the regex
+
+    Note: Does NOT perform Python type checking (CH-011 non-goal).
+    The 'type' field validates vocabulary only, not runtime types.
+
+    Args:
+        contract: Parsed ceremony contract
+        inputs: Dict of actual input values
+
+    Returns:
+        ValidationResult with valid=True if all required fields present
+        and patterns match, else valid=False with error descriptions.
+    """
+    errors = []
+    for field_def in contract.input_contract:
+        value = inputs.get(field_def.field)
+        if field_def.required and value is None:
+            errors.append(f"Required field '{field_def.field}' is missing")
+            continue
+        if value is not None and field_def.pattern:
+            if not re.fullmatch(field_def.pattern, str(value)):
+                errors.append(
+                    f"Field '{field_def.field}' value '{value}' "
+                    f"does not match pattern '{field_def.pattern}'"
+                )
+    return ValidationResult(valid=len(errors) == 0, errors=errors)
+
+
+def validate_ceremony_output(
+    contract: CeremonyContract, outputs: Dict[str, Any]
+) -> ValidationResult:
+    """Validate outputs against ceremony's output contract.
+
+    Checks:
+    - guaranteed="always" fields must be present
+    - guaranteed="on_success" fields required when outputs["success"] is True
+    - guaranteed="on_failure" fields required when outputs["success"] is False
+    - Warns if contract has on_success/on_failure but no success:always field (A3)
+
+    Note (A8): Conditional validation is coupled to the literal field name "success".
+    All current ceremonies use this convention.
+
+    Args:
+        contract: Parsed ceremony contract
+        outputs: Dict of actual output values
+
+    Returns:
+        ValidationResult with valid=True if all guaranteed fields present
+        per their condition (always/on_success/on_failure).
+    """
+    errors = []
+    success_value = outputs.get("success")
+
+    for field_def in contract.output_contract:
+        value = outputs.get(field_def.field)
+        if field_def.guaranteed == "always" and value is None:
+            errors.append(
+                f"Guaranteed field '{field_def.field}' is missing "
+                f"(guaranteed=always)"
+            )
+        elif (
+            field_def.guaranteed == "on_success"
+            and success_value is True
+            and value is None
+        ):
+            errors.append(
+                f"Field '{field_def.field}' is missing "
+                f"(guaranteed=on_success, success=True)"
+            )
+        elif (
+            field_def.guaranteed == "on_failure"
+            and success_value is False
+            and value is None
+        ):
+            errors.append(
+                f"Field '{field_def.field}' is missing "
+                f"(guaranteed=on_failure, success=False)"
+            )
+
+    # A3: Warn if contract has on_success/on_failure but no success:always field
+    has_conditional = any(
+        f.guaranteed in ("on_success", "on_failure")
+        for f in contract.output_contract
+    )
+    has_success_always = any(
+        f.field == "success" and f.guaranteed == "always"
+        for f in contract.output_contract
+    )
+    if has_conditional and not has_success_always:
+        errors.append(
+            f"Warning: contract '{contract.name}' has on_success/on_failure fields "
+            f"but no 'success' field with guaranteed=always. "
+            f"Conditional validation will be skipped."
+        )
+
+    return ValidationResult(valid=len(errors) == 0, errors=errors)
+
+
+def enforce_ceremony_contract(
+    contract: CeremonyContract,
+    inputs: Dict[str, Any],
+    config_path: Optional[Path] = None,
+) -> ValidationResult:
+    """Governance gate: validate inputs and enforce per haios.yaml toggle.
+
+    Reads toggles.ceremony_contract_enforcement from haios.yaml:
+    - 'warn': log validation errors but allow ceremony to proceed
+    - 'block': raise ValueError if validation fails
+
+    Args:
+        contract: Parsed ceremony contract
+        inputs: Dict of actual input values
+        config_path: Optional path to haios.yaml (auto-discovers if None)
+
+    Returns:
+        ValidationResult (always returned in warn mode)
+
+    Raises:
+        ValueError: If enforcement='block' and validation fails
+    """
+    result = validate_ceremony_input(contract, inputs)
+    if result.valid:
+        return result
+
+    # Read enforcement mode from haios.yaml
+    enforcement = _read_enforcement_toggle(config_path)
+
+    if enforcement == "block":
+        raise ValueError(
+            f"Ceremony '{contract.name}' input contract failed "
+            f"(enforcement=block): " + "; ".join(result.errors)
+        )
+    # enforcement == "warn": return result, caller logs but continues
+    return result
+
+
+def _read_enforcement_toggle(config_path: Optional[Path] = None) -> str:
+    """Read ceremony_contract_enforcement from haios.yaml. Default: 'warn'.
+
+    Args:
+        config_path: Optional explicit path. If None, auto-discovers.
+
+    Returns:
+        'warn' or 'block' (defaults to 'warn' on any error).
+    """
+    if config_path is None:
+        config_path = Path(__file__).parent.parent / "config" / "haios.yaml"
+        if not config_path.exists():
+            config_path = Path(".claude/haios/config/haios.yaml")
+    try:
+        with open(config_path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+        return data.get("toggles", {}).get(
+            "ceremony_contract_enforcement", "warn"
+        )
+    except (FileNotFoundError, yaml.YAMLError):
+        return "warn"
+
+
+# --- Registry Loading ---
 
 
 def _find_registry_path() -> Path:

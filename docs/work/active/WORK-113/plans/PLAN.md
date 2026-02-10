@@ -1,6 +1,6 @@
 ---
 template: implementation_plan
-status: approved
+status: complete
 date: 2026-02-09
 backlog_id: WORK-113
 title: "Ceremony Contract Validation and Governance"
@@ -295,6 +295,79 @@ def test_existing_contract_parsing_unchanged():
     assert len(contract.output_contract) == 1
 ```
 
+### Test 13: Enforce Gate - Warn Mode (A5)
+```python
+def test_enforce_warn_mode_returns_result(tmp_path):
+    """In warn mode, enforce returns ValidationResult but does not raise."""
+    config = tmp_path / "haios.yaml"
+    config.write_text("toggles:\n  ceremony_contract_enforcement: warn\n")
+    contract = CeremonyContract(
+        name="test", category="queue",
+        input_contract=[ContractField(field="x", type="string", required=True, description="X")],
+        output_contract=[], side_effects=[]
+    )
+    result = enforce_ceremony_contract(contract, {}, config_path=config)
+    assert result.valid is False
+    assert len(result.errors) > 0  # errors returned, not raised
+```
+
+### Test 14: Enforce Gate - Block Mode (A5)
+```python
+def test_enforce_block_mode_raises(tmp_path):
+    """In block mode, enforce raises ValueError on invalid input."""
+    config = tmp_path / "haios.yaml"
+    config.write_text("toggles:\n  ceremony_contract_enforcement: block\n")
+    contract = CeremonyContract(
+        name="test", category="queue",
+        input_contract=[ContractField(field="x", type="string", required=True, description="X")],
+        output_contract=[], side_effects=[]
+    )
+    with pytest.raises(ValueError, match="enforcement=block"):
+        enforce_ceremony_contract(contract, {}, config_path=config)
+```
+
+### Test 15: Enforce Gate - Valid Input Passes
+```python
+def test_enforce_valid_input_passes(tmp_path):
+    """Valid input passes regardless of enforcement mode."""
+    config = tmp_path / "haios.yaml"
+    config.write_text("toggles:\n  ceremony_contract_enforcement: block\n")
+    contract = CeremonyContract(
+        name="test", category="queue",
+        input_contract=[ContractField(field="x", type="string", required=True, description="X")],
+        output_contract=[], side_effects=[]
+    )
+    result = enforce_ceremony_contract(contract, {"x": "val"}, config_path=config)
+    assert result.valid is True
+```
+
+### Test 16: Output Validation Warns on Missing Success Field (A3)
+```python
+def test_output_validation_warns_missing_success_field():
+    """Warn when contract has on_success/on_failure but no success:always."""
+    contract = CeremonyContract.from_frontmatter({
+        "name": "test", "category": "queue",
+        "input_contract": [],
+        "output_contract": [
+            {"field": "data", "type": "string", "guaranteed": "on_success", "description": "Payload"}
+        ],
+        "side_effects": []
+    })
+    result = validate_ceremony_output(contract, {"data": "ok"})
+    assert result.valid is False
+    assert any("no 'success' field" in e for e in result.errors)
+```
+
+### Test 17: Registry ceremony_count Field Explicitly Present (A9)
+```python
+def test_registry_ceremony_count_field_explicit():
+    """ceremony_count must be explicitly declared in YAML, not defaulted."""
+    registry_path = Path(".claude/haios/config/ceremony_registry.yaml")
+    with open(registry_path) as f:
+        data = yaml.safe_load(f)
+    assert "ceremony_count" in data, "ceremony_count field must be explicitly declared"
+```
+
 ---
 
 ## Detailed Design
@@ -340,7 +413,6 @@ def validate_ceremony_input(
             errors.append(f"Required field '{field_def.field}' is missing")
             continue
         if value is not None and field_def.pattern:
-            import re
             if not re.fullmatch(field_def.pattern, str(value)):
                 errors.append(
                     f"Field '{field_def.field}' value '{value}' "
@@ -373,7 +445,79 @@ def validate_ceremony_output(
             errors.append(f"Field '{field_def.field}' is missing (guaranteed=on_success, success=True)")
         elif field_def.guaranteed == "on_failure" and success_value is False and value is None:
             errors.append(f"Field '{field_def.field}' is missing (guaranteed=on_failure, success=False)")
+    # A3: Warn if contract has on_success/on_failure but no success:always field
+    has_conditional = any(
+        f.guaranteed in ("on_success", "on_failure") for f in contract.output_contract
+    )
+    has_success_always = any(
+        f.field == "success" and f.guaranteed == "always" for f in contract.output_contract
+    )
+    if has_conditional and not has_success_always:
+        errors.append(
+            f"Warning: contract '{contract.name}' has on_success/on_failure fields "
+            f"but no 'success' field with guaranteed=always. "
+            f"Conditional validation will be skipped."
+        )
     return ValidationResult(valid=len(errors) == 0, errors=errors)
+
+
+def enforce_ceremony_contract(
+    contract: CeremonyContract,
+    inputs: Dict[str, Any],
+    config_path: Optional[Path] = None,
+) -> ValidationResult:
+    """Governance gate: validate inputs and enforce per haios.yaml toggle.
+
+    Reads toggles.ceremony_contract_enforcement from haios.yaml:
+    - 'warn': log validation errors but allow ceremony to proceed
+    - 'block': raise ValueError if validation fails
+
+    Args:
+        contract: Parsed ceremony contract
+        inputs: Dict of actual input values
+        config_path: Optional path to haios.yaml (auto-discovers if None)
+
+    Returns:
+        ValidationResult (always returned, even in block mode after raising)
+
+    Raises:
+        ValueError: If enforcement='block' and validation fails
+    """
+    result = validate_ceremony_input(contract, inputs)
+    if result.valid:
+        return result
+
+    # Read enforcement mode from haios.yaml
+    enforcement = _read_enforcement_toggle(config_path)
+
+    if enforcement == "block":
+        raise ValueError(
+            f"Ceremony '{contract.name}' input contract failed (enforcement=block): "
+            + "; ".join(result.errors)
+        )
+    # enforcement == "warn": return result, caller logs but continues
+    return result
+
+
+def _read_enforcement_toggle(config_path: Optional[Path] = None) -> str:
+    """Read ceremony_contract_enforcement from haios.yaml. Default: 'warn'."""
+    if config_path is None:
+        config_path = Path(__file__).parent.parent / "config" / "haios.yaml"
+        if not config_path.exists():
+            config_path = Path(".claude/haios/config/haios.yaml")
+    try:
+        with open(config_path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+        return data.get("toggles", {}).get("ceremony_contract_enforcement", "warn")
+    except (FileNotFoundError, yaml.YAMLError):
+        return "warn"
+```
+
+**File:** `.claude/haios/lib/ceremony_contracts.py`
+**Location:** Module top - add `import re` (A7: move from function body to top)
+
+```python
+import re  # Added for pattern validation (A7)
 ```
 
 **File:** `.claude/haios/lib/ceremony_contracts.py`
@@ -415,14 +559,15 @@ toggles:
 ```
 Ceremony Skill invoked (e.g., queue-commit)
     |
-    +-> [Governance Gate] validate_ceremony_input(contract, inputs)
-    |       Returns: ValidationResult
-    |       If enforcement=block and !valid -> STOP
-    |       If enforcement=warn and !valid -> log warning, continue
+    +-> enforce_ceremony_contract(contract, inputs)
+    |       Calls: validate_ceremony_input(contract, inputs)
+    |       Reads: haios.yaml toggles.ceremony_contract_enforcement
+    |       If enforcement=block and !valid -> raises ValueError (STOP)
+    |       If enforcement=warn and !valid -> returns ValidationResult (continue)
     |
     +-> Ceremony executes (existing behavior)
     |
-    +-> [Governance Gate] validate_ceremony_output(contract, outputs)
+    +-> validate_ceremony_output(contract, outputs)
             Returns: ValidationResult
             Logged for audit (no blocking on output)
 ```
@@ -547,10 +692,11 @@ No unresolved operator decisions. All acceptance criteria from WORK-113 are addr
 ## Implementation Steps
 
 ### Step 1: Write Failing Tests
-- [ ] Create `tests/test_ceremony_validation.py` with all 12 tests
+- [ ] Create `tests/test_ceremony_validation.py` with all 17 tests
 - [ ] Verify all new tests fail (red) - validation functions don't exist yet
 
-### Step 2: Vocabulary Validation (A5, A6)
+### Step 2: Vocabulary Validation (critique A5, A6)
+- [ ] Add `import re` to module top (critique A7)
 - [ ] Add `VALID_TYPES` and `VALID_GUARANTEED` constants to `ceremony_contracts.py`
 - [ ] Add `__post_init__` to `ContractField` (type vocabulary check)
 - [ ] Add `__post_init__` to `OutputField` (guaranteed vocabulary check)
@@ -562,37 +708,41 @@ No unresolved operator decisions. All acceptance criteria from WORK-113 are addr
 - [ ] Add `validate_ceremony_input()` function
 - [ ] Tests 1, 2, 3, 4, 10 pass (green)
 
-### Step 4: validate_ceremony_output
-- [ ] Add `validate_ceremony_output()` function
-- [ ] Tests 5, 6, 11 pass (green)
+### Step 4: validate_ceremony_output + A3 Warning
+- [ ] Add `validate_ceremony_output()` function with missing-success-field warning (A3)
+- [ ] Tests 5, 6, 11, 16 pass (green)
 
-### Step 5: Registry Self-Verification (A10)
-- [ ] Test 9 should already pass (registry has ceremony_count=19, list has 19 entries)
-- [ ] Verify test 9 is green
+### Step 5: enforce_ceremony_contract (A5 Governance Gate)
+- [ ] Add `enforce_ceremony_contract()` function
+- [ ] Add `_read_enforcement_toggle()` helper
+- [ ] Tests 13, 14, 15 pass (green)
 
 ### Step 6: Governance Toggle
 - [ ] Add `ceremony_contract_enforcement: warn` to `haios.yaml` toggles section
+
+### Step 7: Registry Self-Verification (A10)
+- [ ] Tests 9, 17 pass (green)
 - [ ] Test 12 (backward compat) passes (green)
 
-### Step 7: Integration Verification
-- [ ] All 12 new tests pass
+### Step 8: Integration Verification
+- [ ] All 17 new tests pass
 - [ ] All 122 existing tests pass (no regressions)
 - [ ] Full test suite: `pytest tests/test_ceremony_contracts.py tests/test_ceremony_validation.py tests/test_ceremony_retrofit.py -v`
 
-### Step 8: README Sync (MUST)
+### Step 9: README Sync (MUST)
 - [ ] **MUST:** Update `.claude/haios/lib/` README if one exists
 - [ ] **MUST:** Verify test file location documented
 
-### Step 9: Consumer Verification
+### Step 10: Consumer Verification
 - [ ] **SKIPPED:** No migration or rename. New functions added, no existing functions changed.
 
 ---
 
 ## Verification
 
-- [ ] Tests pass (12 new + 122 existing)
+- [ ] Tests pass (17 new + 122 existing)
 - [ ] **MUST:** All WORK.md deliverables verified
-- [ ] Runtime consumer: validation functions importable from `ceremony_contracts`
+- [ ] Runtime consumer: `enforce_ceremony_contract()` callable from any ceremony runner
 
 ---
 
@@ -624,24 +774,24 @@ No unresolved operator decisions. All acceptance criteria from WORK-113 are addr
 |-------------|----------|----------|
 | `validate_ceremony_input()` in lib/ | [ ] | Read ceremony_contracts.py, function exists |
 | `validate_ceremony_output()` in lib/ | [ ] | Read ceremony_contracts.py, function exists |
-| Governance enforcement (warn/block in haios.yaml) | [ ] | Read haios.yaml toggles section |
-| Unit tests for contract validation | [ ] | pytest test_ceremony_validation.py passes |
+| Governance enforcement (warn/block in haios.yaml) | [ ] | `enforce_ceremony_contract()` exists, reads toggle, blocks or warns |
+| Unit tests for contract validation | [ ] | pytest test_ceremony_validation.py: 17 tests pass |
 | OutputField.guaranteed vocabulary (A5) | [ ] | `__post_init__` on OutputField validates against {always, on_success, on_failure} |
 | ContractField.type vocabulary (A6) | [ ] | `__post_init__` on ContractField validates against {string, boolean, list, path, integer} |
-| Registry ceremony_count self-verifying (A10) | [ ] | Test 9 asserts declared == actual |
+| Registry ceremony_count self-verifying (A10) | [ ] | Tests 9+17 assert declared == actual and field explicitly present |
 
 ### File Verification
 
 | File | Expected State | Verified | Notes |
 |------|---------------|----------|-------|
-| `.claude/haios/lib/ceremony_contracts.py` | ValidationResult, validate_ceremony_input, validate_ceremony_output, VALID_TYPES, VALID_GUARANTEED, __post_init__ validators | [ ] | |
-| `tests/test_ceremony_validation.py` | 12 tests covering all acceptance criteria | [ ] | |
+| `.claude/haios/lib/ceremony_contracts.py` | ValidationResult, validate_ceremony_input, validate_ceremony_output, enforce_ceremony_contract, VALID_TYPES, VALID_GUARANTEED, __post_init__ validators | [ ] | |
+| `tests/test_ceremony_validation.py` | 17 tests covering all acceptance criteria + critique items | [ ] | |
 | `.claude/haios/config/haios.yaml` | `ceremony_contract_enforcement: warn` in toggles | [ ] | |
 
 **Verification Commands:**
 ```bash
 pytest tests/test_ceremony_validation.py tests/test_ceremony_contracts.py tests/test_ceremony_retrofit.py -v
-# Expected: 134+ tests passed (12 new + 122 existing)
+# Expected: 139+ tests passed (17 new + 122 existing)
 ```
 
 **Binary Verification (Yes/No):**
