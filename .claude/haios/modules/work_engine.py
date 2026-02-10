@@ -49,9 +49,9 @@ import yaml
 # Import sibling modules
 # Use conditional import to support both package and standalone usage
 try:
-    from .governance_layer import GovernanceLayer
+    from .governance_layer import GovernanceLayer, check_ceremony_required
 except ImportError:
-    from governance_layer import GovernanceLayer
+    from governance_layer import GovernanceLayer, check_ceremony_required
 
 # Import ConfigLoader for centralized paths (WORK-080)
 try:
@@ -287,6 +287,7 @@ class WorkEngine:
         Raises:
             WorkIDUnavailableError: If ID exists with terminal status (E2-304)
         """
+        check_ceremony_required("create_work")  # CH-012
         # REQ-VALID-001: Validate ID availability against terminal statuses
         self._validate_id_available(id)
 
@@ -344,6 +345,7 @@ class WorkEngine:
             WorkNotFoundError: If work item doesn't exist
             InvalidTransitionError: If transition is invalid
         """
+        check_ceremony_required("transition")  # CH-012
         work = self.get_work(id)
         if work is None:
             raise WorkNotFoundError(f"Work item {id} not found")
@@ -572,6 +574,7 @@ class WorkEngine:
         Raises:
             WorkNotFoundError: If work item doesn't exist
         """
+        check_ceremony_required("close")  # CH-012
         work = self.get_work(id)
         if work is None:
             raise WorkNotFoundError(f"Work item {id} not found")
@@ -613,6 +616,7 @@ class WorkEngine:
         Raises:
             WorkNotFoundError: If work item doesn't exist
         """
+        check_ceremony_required("archive")  # CH-012
         source_dir = self.active_dir / id
         if not source_dir.exists():
             raise WorkNotFoundError(f"Work item {id} not found in active/")
@@ -674,6 +678,7 @@ class WorkEngine:
         Raises:
             ValueError: If position is not valid or state combination is forbidden
         """
+        check_ceremony_required("set_queue_position")  # CH-012
         if position not in VALID_QUEUE_POSITIONS:
             raise ValueError(
                 f"Invalid queue_position: {position}. Must be one of {VALID_QUEUE_POSITIONS}"

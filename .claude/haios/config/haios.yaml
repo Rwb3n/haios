@@ -39,6 +39,7 @@ epoch:
 toggles:
   block_powershell: true  # PowerShell through bash mangles $_ variables
   ceremony_contract_enforcement: warn  # warn|block (WORK-113)
+  ceremony_context_enforcement: warn  # warn|block (CH-012: state change boundary)
   # block_sql: true       # Future: migrate from hardcoded
 
 # Routing thresholds (from routing-thresholds.yaml)

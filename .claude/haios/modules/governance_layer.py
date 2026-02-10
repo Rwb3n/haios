@@ -545,3 +545,163 @@ class GovernanceLayer:
             self._activity_matrix_cache = {"default_action": "allow", "rules": {}}
 
         return self._activity_matrix_cache
+
+
+# =========================================================================
+# CH-012: Ceremony Context Manager (Side-Effect Boundaries)
+# =========================================================================
+
+import logging as _logging
+from contextlib import contextmanager
+from contextvars import ContextVar
+from dataclasses import dataclass, field as dataclass_field
+from datetime import datetime
+from typing import Optional
+
+# Context variable for ceremony context (A1: contextvars over threading.local for async safety)
+_ceremony_context_var: ContextVar[Optional["CeremonyContext"]] = ContextVar(
+    "ceremony_context", default=None
+)
+
+
+class CeremonyRequiredError(Exception):
+    """Raised when state change attempted outside ceremony context in block mode."""
+    pass
+
+
+class CeremonyNestingError(Exception):
+    """Raised when ceremony_context opened within existing context."""
+    pass
+
+
+@dataclass
+class CeremonyContext:
+    """Active ceremony context with side-effect tracking.
+
+    Attributes:
+        ceremony_name: Name of the active ceremony
+        side_effects: List of recorded side effects
+    """
+    ceremony_name: str
+    side_effects: list = dataclass_field(default_factory=list)
+
+    def log_side_effect(self, effect: str, details: dict = None) -> None:
+        """Record a side effect within this ceremony."""
+        self.side_effects.append({
+            "effect": effect,
+            "details": details or {},
+            "timestamp": datetime.now().isoformat(),
+        })
+
+    def execute_step(self, step_name: str, **kwargs) -> None:
+        """Execute a ceremony step (composition, not nesting)."""
+        self.log_side_effect(f"step:{step_name}", kwargs)
+
+
+@contextmanager
+def ceremony_context(ceremony_name: str):
+    """Context manager for ceremony boundaries.
+
+    All state changes within this context are logged.
+    Nesting is forbidden (composition via execute_step instead).
+
+    Args:
+        ceremony_name: Name of the ceremony (e.g., "close-work")
+
+    Yields:
+        CeremonyContext with log_side_effect and execute_step methods
+
+    Raises:
+        CeremonyNestingError: If called within existing ceremony context
+    """
+    if in_ceremony_context():
+        raise CeremonyNestingError(
+            f"Cannot nest ceremony '{ceremony_name}' inside "
+            f"'{_get_current_ceremony()}'. Use execute_step() for composition."
+        )
+
+    ctx = CeremonyContext(ceremony_name=ceremony_name)
+    _set_ceremony_context(ctx)
+
+    _log_ceremony_event({
+        "type": "CeremonyStart",
+        "ceremony": ceremony_name,
+        "timestamp": datetime.now().isoformat(),
+    })
+
+    try:
+        yield ctx
+    finally:
+        _log_ceremony_event({
+            "type": "CeremonyEnd",
+            "ceremony": ceremony_name,
+            "side_effects": len(ctx.side_effects),
+            "timestamp": datetime.now().isoformat(),
+        })
+        _clear_ceremony_context()
+
+
+def in_ceremony_context() -> bool:
+    """Check if currently within a ceremony context."""
+    return _ceremony_context_var.get() is not None
+
+
+def _get_current_ceremony() -> str:
+    """Get name of current ceremony (or empty string)."""
+    ctx = _ceremony_context_var.get()
+    return ctx.ceremony_name if ctx else ""
+
+
+def _set_ceremony_context(ctx: CeremonyContext) -> None:
+    """Set ContextVar ceremony context."""
+    _ceremony_context_var.set(ctx)
+
+
+def _clear_ceremony_context() -> None:
+    """Clear ContextVar ceremony context."""
+    _ceremony_context_var.set(None)
+
+
+def check_ceremony_required(operation: str) -> None:
+    """Check if operation requires ceremony context.
+
+    Public function (A2: crosses module boundary to work_engine.py).
+    Enforcement mode from haios.yaml toggles.ceremony_context_enforcement:
+    - 'warn': Log warning, allow operation
+    - 'block': Raise CeremonyRequiredError
+
+    Args:
+        operation: Name of the operation being attempted (e.g., "close")
+    """
+    if in_ceremony_context():
+        return  # Inside ceremony, allowed
+
+    mode = _get_ceremony_enforcement()
+    message = f"State change '{operation}' outside ceremony context"
+
+    if mode == "block":
+        raise CeremonyRequiredError(message)
+    else:
+        # Warn mode: log but allow
+        _logging.warning(f"GovernanceLayer: {message}")
+
+
+def _get_ceremony_enforcement() -> str:
+    """Read ceremony_context_enforcement toggle via ConfigLoader. Default: 'warn'.
+
+    Uses ConfigLoader (A5: no raw file I/O, respects REQ-CONFIG-001).
+    """
+    try:
+        from config import ConfigLoader
+        return ConfigLoader.get().toggles.get("ceremony_context_enforcement", "warn")
+    except Exception:
+        return "warn"
+
+
+def _log_ceremony_event(event: dict) -> None:
+    """Log ceremony event to governance-events.jsonl."""
+    try:
+        from governance_events import _append_event
+        _append_event(event)
+    except ImportError:
+        pass  # Fail-permissive if events module unavailable
