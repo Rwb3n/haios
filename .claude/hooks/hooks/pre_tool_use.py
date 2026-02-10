@@ -175,6 +175,14 @@ def _check_governed_activity(tool_name: str, tool_input: dict) -> Optional[dict]
             if skill_result is not None and not skill_result.allowed:
                 return _deny_with_context(skill_result.reason, state, layer)
 
+            # 4b. Ceremony contract validation (WORK-114)
+            ceremony_result = _check_ceremony_contract(skill_name, tool_input)
+            if ceremony_result:
+                # Merge state context into ceremony result
+                ctx = _build_additional_context(state, layer)
+                ceremony_result["hookSpecificOutput"]["additionalContext"] = ctx
+                return ceremony_result
+
         # 5. Check activity
         result = layer.check_activity(primitive, state, context)
 
@@ -703,3 +711,133 @@ def _check_exit_gate(file_path: str, old_string: str, new_string: str) -> Option
         pass  # On error, allow operation
 
     return None
+
+
+# =============================================================================
+# WORK-114: Ceremony contract enforcement at runtime
+# =============================================================================
+
+
+def _find_skill_path(skill_name: str) -> Optional[Path]:
+    """Find SKILL.md for a ceremony skill by name.
+
+    Uses Path(__file__) anchored navigation (matches codebase convention,
+    critique A2 — cwd-independent).
+    """
+    # .claude/hooks/hooks/pre_tool_use.py -> .claude/skills/{name}/SKILL.md
+    skills_dir = Path(__file__).parent.parent.parent / "skills"
+    skill_file = skills_dir / skill_name / "SKILL.md"
+    if skill_file.exists():
+        return skill_file
+    return None
+
+
+def _parse_skill_contract(skill_path: Path):
+    """Parse CeremonyContract from skill file YAML frontmatter.
+
+    Args:
+        skill_path: Path to SKILL.md file with YAML frontmatter.
+
+    Returns:
+        CeremonyContract if parseable, None otherwise.
+    """
+    try:
+        content = skill_path.read_text(encoding="utf-8")
+        # Extract YAML frontmatter between --- markers
+        if not content.startswith("---"):
+            return None
+        end = content.index("---", 3)
+        frontmatter = yaml.safe_load(content[3:end])
+        if not frontmatter or "input_contract" not in frontmatter:
+            return None
+
+        lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
+        if str(lib_dir) not in sys.path:
+            sys.path.insert(0, str(lib_dir))
+
+        from ceremony_contracts import CeremonyContract
+
+        return CeremonyContract.from_frontmatter(frontmatter)
+    except Exception:
+        return None
+
+
+def _extract_ceremony_inputs(tool_input: dict) -> dict:
+    """Extract ceremony inputs from Skill tool_input.
+
+    At PreToolUse time, Skill tool_input is {"skill": "name", "args": "..."}.
+    Args is a free-text string. We cannot reliably extract structured inputs.
+    Return empty dict — contract validation will flag missing required fields.
+    """
+    return {}
+
+
+def _check_ceremony_contract(skill_name: str, tool_input: dict) -> Optional[dict]:
+    """
+    Validate ceremony input contract when ceremony skill is invoked.
+
+    Loads ceremony registry to check if skill is a ceremony. If so, loads
+    the skill's YAML frontmatter, parses the contract, and calls
+    enforce_ceremony_contract(). Returns warn/deny based on haios.yaml toggle.
+
+    Args:
+        skill_name: Name of skill being invoked (e.g., "queue-commit")
+        tool_input: Full tool_input dict from hook_data
+
+    Returns:
+        None: Not a ceremony skill, or contract validation passed
+        dict: Allow-with-warning (warn mode) or deny (block mode)
+    """
+    try:
+        lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
+        if str(lib_dir) not in sys.path:
+            sys.path.insert(0, str(lib_dir))
+
+        from ceremony_contracts import (
+            load_ceremony_registry,
+            enforce_ceremony_contract,
+        )
+
+        # 1. Check if skill is a ceremony via registry
+        registry = load_ceremony_registry()
+        ceremony_entry = None
+        for entry in registry.ceremonies:
+            if entry.skill == skill_name:
+                ceremony_entry = entry
+                break
+
+        if ceremony_entry is None:
+            return None  # Not a ceremony, skip
+
+        # 2. Load skill YAML frontmatter to get contract
+        skill_path = _find_skill_path(skill_name)
+        if skill_path is None:
+            return None  # Skill file not found, skip gracefully
+
+        contract = _parse_skill_contract(skill_path)
+        if contract is None:
+            return None  # No parseable contract, skip
+
+        # 3. Extract inputs (empty dict — see _extract_ceremony_inputs docstring)
+        inputs = _extract_ceremony_inputs(tool_input)
+
+        # 4. Enforce contract
+        result = enforce_ceremony_contract(contract, inputs)
+
+        if result.valid:
+            return None  # Contract satisfied
+
+        # 5. Return warn (enforce_ceremony_contract raises ValueError in block mode,
+        #    so reaching here means warn mode)
+        error_msg = (
+            f"Ceremony '{skill_name}' contract validation: "
+            + "; ".join(result.errors)
+        )
+        return _allow_with_warning(error_msg)
+
+    except ValueError as e:
+        # Block mode: enforce_ceremony_contract raised ValueError
+        return _deny(str(e))
+
+    except Exception:
+        return None  # Fail-permissive on any error
