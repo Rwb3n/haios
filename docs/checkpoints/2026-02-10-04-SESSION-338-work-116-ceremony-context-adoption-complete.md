@@ -20,11 +20,21 @@ load_memory_refs:
   - 84791
   - 84792
   - 84793
+  - 84794
+  - 84795
+  - 84796
+  - 84797
+  - 84798
+  - 84799
+  - 84800
+  - 84801
+  - 84802
 
 # What's pending for next session
 pending:
-  - CH-012 remaining work items (if any) or next ceremonies arc chapter
-  - "Test suite conftest.py unification — _load_module vs _ensure_module divergence is latent fragility (see observations WORK-116)"
+  - "Triage all observation captures from recent sessions (batch observation-triage-cycle)"
+  - "WORK-117 in backlog: conftest.py unification (spawned from WORK-116)"
+  - Next ceremonies arc chapter or queue item selection
 
 # Drift from principles observed this session (if any)
 drift_observed:
@@ -34,4 +44,6 @@ drift_observed:
 completed:
   - "WORK-116: ceremony_context adoption in queue_ceremonies.py and cli.py (CH-012)"
   - "Fixed test isolation bug: _get_gov_mod() runtime resolution + check_ceremony_required rebinding"
+  - "WORK-117 created: conftest.py unification (E2.5 backlog)"
+  - "E2.6 observations captured: test infrastructure debt, checkpoint prior_session auto-detect"
 ---
