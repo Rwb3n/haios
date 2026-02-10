@@ -37,9 +37,13 @@ def get_engine() -> WorkEngine:
 
 def cmd_transition(work_id: str, to_node: str) -> int:
     """Transition work item to new node."""
+    from governance_layer import ceremony_context  # WORK-116: flat import (runs as __main__)
+
     engine = get_engine()
     try:
-        work = engine.transition(work_id, to_node)
+        with ceremony_context("transition-work") as ctx:
+            work = engine.transition(work_id, to_node)
+            ctx.log_side_effect("node_changed", {"work_id": work_id, "to": to_node})
         print(f"Moved {work_id} to node: {to_node}")
         return 0
     except WorkNotFoundError:
@@ -52,9 +56,13 @@ def cmd_transition(work_id: str, to_node: str) -> int:
 
 def cmd_close(work_id: str) -> int:
     """Close work item (set complete, closed date). Per ADR-041: stays in active/."""
+    from governance_layer import ceremony_context  # WORK-116: flat import (runs as __main__)
+
     engine = get_engine()
     try:
-        path = engine.close(work_id)
+        with ceremony_context("close-work") as ctx:
+            path = engine.close(work_id)
+            ctx.log_side_effect("status_changed", {"work_id": work_id, "to": "complete"})
         print(f"Closed: {work_id} -> {path}")
         return 0
     except WorkNotFoundError:
@@ -64,9 +72,13 @@ def cmd_close(work_id: str) -> int:
 
 def cmd_archive(work_id: str) -> int:
     """Archive work item (just move, no status change)."""
+    from governance_layer import ceremony_context  # WORK-116: flat import (runs as __main__)
+
     engine = get_engine()
     try:
-        path = engine.archive(work_id)
+        with ceremony_context("archive-work") as ctx:
+            path = engine.archive(work_id)
+            ctx.log_side_effect("archived", {"work_id": work_id})
         print(f"Archived: {work_id} -> {path}")
         return 0
     except WorkNotFoundError:

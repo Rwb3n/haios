@@ -25,9 +25,32 @@ Usage:
                                       rationale="Critical bug fix")
 """
 import json
+from contextlib import contextmanager
 from datetime import datetime
 from pathlib import Path
 from typing import Any, List, Optional
+
+
+@contextmanager
+def _ceremony_context_safe(name: str):
+    """Import and use ceremony_context with fail-permissive fallback.
+
+    Handles: ImportError (no governance module), already-inside-context
+    (reuse outer context to avoid CeremonyNestingError).
+
+    WORK-116: Wraps state-changing operations in ceremony boundaries
+    so check_ceremony_required() guards are satisfied.
+    """
+    try:
+        from governance_layer import ceremony_context, in_ceremony_context
+
+        if in_ceremony_context():
+            yield None  # Already inside ceremony — no-op (avoid nesting)
+        else:
+            with ceremony_context(name) as ctx:
+                yield ctx
+    except ImportError:
+        yield None  # Fail-permissive: no governance module available
 
 # Events file location (append-only JSONL, same as governance_events.py)
 EVENTS_FILE = Path(__file__).parent.parent / "governance-events.jsonl"
@@ -103,15 +126,20 @@ def execute_queue_transition(
     from_position = work.queue_position
 
     try:
-        updated_work = work_engine.set_queue_position(work_id, to_position)
-        log_queue_ceremony(
-            ceremony=ceremony,
-            items=[work_id],
-            from_position=from_position,
-            to_position=to_position,
-            rationale=rationale,
-            agent=agent,
-        )
+        with _ceremony_context_safe(f"queue-{ceremony.lower()}") as ctx:
+            updated_work = work_engine.set_queue_position(work_id, to_position)
+            if ctx:
+                ctx.log_side_effect("queue_transition", {
+                    "work_id": work_id, "from": from_position, "to": to_position,
+                })
+            log_queue_ceremony(
+                ceremony=ceremony,
+                items=[work_id],
+                from_position=from_position,
+                to_position=to_position,
+                rationale=rationale,
+                agent=agent,
+            )
         return {"success": True, "work": updated_work}
     except ValueError as e:
         return {"success": False, "error": str(e)}

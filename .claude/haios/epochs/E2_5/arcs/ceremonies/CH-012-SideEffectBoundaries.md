@@ -41,7 +41,7 @@ def close(self, work_id: str) -> WorkState:
 
 ## Problem
 
-State-changing methods (WorkEngine.close(), update_work(), etc.) don't check for ceremony context. Any code can mutate state without governance.
+State-changing methods (WorkEngine.close(), set_queue_position(), transition(), etc.) don't check for ceremony context. Any code can mutate state without governance.
 
 ---
 
@@ -59,11 +59,11 @@ State changes MUST occur within ceremony context:
 
 ```python
 # BLOCKED - direct state change
-work_engine.update_work(work_id, status="complete")
+work_engine.close(work_id)
 
 # ALLOWED - within ceremony
 with ceremony_context("close-work"):
-    work_engine.update_work(work_id, status="complete")
+    work_engine.close(work_id)
 ```
 
 ### R2: Ceremony Context Manager
@@ -107,8 +107,8 @@ from governance import ceremony_context
 
 # Usage
 with ceremony_context("close-work") as ctx:
-    work_engine.update_work(work_id, status="complete")
-    ctx.log_side_effect("status_changed", {"from": "active", "to": "complete"})
+    work_engine.close(work_id)
+    ctx.log_side_effect("status_changed", {"work_id": work_id, "to": "complete"})
 ```
 
 ### State Change Functions
@@ -116,24 +116,19 @@ with ceremony_context("close-work") as ctx:
 All state-changing functions check ceremony context:
 
 ```python
-def update_work(work_id: str, **fields):
-    if not in_ceremony_context():
-        if config.ceremony_enforcement == "block":
-            raise CeremonyRequiredError("update_work requires ceremony context")
-        else:
-            log_warning("State change outside ceremony", work_id=work_id)
-
-    # ... actual update
+def close(self, id: str) -> Path:
+    check_ceremony_required("close")  # CH-012: enforce ceremony boundary
+    # ... actual close logic
 ```
 
 ### Protected Operations
 
 Operations requiring ceremony context:
-- WorkEngine.update_work()
+- WorkEngine.close()
 - WorkEngine.create_work()
 - WorkEngine.archive()
-- log_governance_event()
-- Memory commit operations
+- WorkEngine.transition()
+- WorkEngine.set_queue_position()
 
 ---
 

@@ -1,9 +1,12 @@
 # generated: 2026-02-10
 """
-Tests for CH-012 Ceremony Context Manager (WORK-115).
+Tests for CH-012 Ceremony Context Manager.
 
-Tests ceremony_context(), in_ceremony_context(), check_ceremony_required(),
+WORK-115: ceremony_context(), in_ceremony_context(), check_ceremony_required(),
 CeremonyContext, and WorkEngine integration.
+
+WORK-116: Ceremony adoption tests — verify execute_queue_transition and
+cli.py cmd_close/cmd_archive/cmd_transition wrap state changes in ceremony_context.
 """
 import logging
 import sys
@@ -250,3 +253,197 @@ class TestDefaultEnforcement:
         # not have ceremony_context_enforcement set - should default to warn
         mode = _get_ceremony_enforcement()
         assert mode == "warn"
+
+
+# =========================================================================
+# WORK-116: Ceremony Adoption Tests
+# =========================================================================
+
+import json
+import importlib
+import importlib.util
+
+_root = Path(__file__).parent.parent
+
+
+def _ensure_module(name: str, path: Path):
+    """Load module if not already in sys.modules. Reuses existing to avoid ContextVar duplication."""
+    if name in sys.modules:
+        return sys.modules[name]
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+# Ensure modules are loaded (reuse existing to share ContextVars with work_engine)
+_qc_path = _root / ".claude" / "haios" / "lib" / "queue_ceremonies.py"
+queue_ceremonies = _ensure_module("queue_ceremonies", _qc_path)
+
+_we_path = _root / ".claude" / "haios" / "modules" / "work_engine.py"
+work_engine_mod = _ensure_module("work_engine", _we_path)
+
+
+def _read_events(events_file: Path) -> list:
+    """Read JSONL events file."""
+    events = []
+    if events_file.exists():
+        with open(events_file, encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    events.append(json.loads(line))
+    return events
+
+
+@pytest.fixture
+def w116_engine(tmp_path):
+    """Create WorkEngine for WORK-116 tests."""
+    from governance_layer import GovernanceLayer
+    return work_engine_mod.WorkEngine(governance=GovernanceLayer(), base_path=tmp_path)
+
+
+@pytest.fixture(autouse=True)
+def w116_patch_events(tmp_path, monkeypatch):
+    """Redirect events files for test isolation."""
+    events_file = tmp_path / "test-events.jsonl"
+    monkeypatch.setattr(queue_ceremonies, "EVENTS_FILE", events_file)
+    # Also patch governance_layer event logging to use tmp file
+    monkeypatch.setattr(
+        "governance_layer._log_ceremony_event",
+        lambda e: events_file.open("a").write(json.dumps(e) + "\n"),
+    )
+    return events_file
+
+
+@pytest.fixture(autouse=True)
+def w116_clean_context():
+    """Ensure clean ceremony context for each test."""
+    from governance_layer import _clear_ceremony_context
+    _clear_ceremony_context()
+    yield
+    _clear_ceremony_context()
+
+
+# =========================================================================
+# Test 11: execute_queue_transition wraps in ceremony_context (no warning)
+# =========================================================================
+class TestQueueTransitionCeremonyAdoption:
+    def test_execute_queue_transition_no_warning(self, w116_engine, caplog, monkeypatch):
+        """execute_queue_transition wraps state change in ceremony_context — no warning."""
+        monkeypatch.setattr(
+            "governance_layer._get_ceremony_enforcement", lambda: "warn"
+        )
+
+        # create_work in setup will warn (expected — not wrapped by this work item)
+        w116_engine.create_work("WORK-QT1", "Queue Test 1")
+        caplog.clear()  # Clear setup warnings
+
+        with caplog.at_level(logging.WARNING):
+            result = queue_ceremonies.execute_queue_transition(
+                work_engine=w116_engine,
+                work_id="WORK-QT1",
+                to_position="ready",
+                ceremony="Prioritize",
+                rationale="Test",
+                agent="test",
+            )
+
+        assert result["success"] is True
+        # After WORK-116 implementation, this assertion should pass:
+        # No "outside ceremony context" warning for set_queue_position
+        governance_warnings = [
+            r for r in caplog.records
+            if r.levelno >= logging.WARNING
+            and "outside ceremony context" in r.message
+            and "set_queue_position" in r.message
+        ]
+        assert len(governance_warnings) == 0, (
+            f"Expected no set_queue_position ceremony warnings, got: {[r.message for r in governance_warnings]}"
+        )
+
+
+# =========================================================================
+# Test 12: execute_queue_transition logs CeremonyStart/CeremonyEnd events
+# =========================================================================
+class TestQueueTransitionCeremonyEvents:
+    def test_execute_queue_transition_ceremony_events(self, w116_engine, w116_patch_events, monkeypatch):
+        """execute_queue_transition produces CeremonyStart and CeremonyEnd events."""
+        monkeypatch.setattr(
+            "governance_layer._get_ceremony_enforcement", lambda: "warn"
+        )
+        w116_engine.create_work("WORK-QT2", "Queue Test 2")
+
+        queue_ceremonies.execute_queue_transition(
+            work_engine=w116_engine,
+            work_id="WORK-QT2",
+            to_position="ready",
+            ceremony="Prioritize",
+        )
+
+        events = _read_events(w116_patch_events)
+        ceremony_starts = [e for e in events if e.get("type") == "CeremonyStart"]
+        ceremony_ends = [e for e in events if e.get("type") == "CeremonyEnd"]
+
+        assert len(ceremony_starts) >= 1, f"Expected CeremonyStart event, got: {events}"
+        assert len(ceremony_ends) >= 1, f"Expected CeremonyEnd event, got: {events}"
+        assert ceremony_starts[-1]["ceremony"] == "queue-prioritize"
+
+
+# =========================================================================
+# Test 13: cmd_close wraps in ceremony_context (no warning)
+# =========================================================================
+class TestCmdCloseCeremonyAdoption:
+    def test_cmd_close_no_warning(self, w116_engine, tmp_path, caplog, monkeypatch):
+        """cmd_close wraps engine.close() in ceremony_context — no warning."""
+        monkeypatch.setattr(
+            "governance_layer._get_ceremony_enforcement", lambda: "warn"
+        )
+        # Create a work item to close
+        w116_engine.create_work("WORK-CL1", "Close Test 1")
+        caplog.clear()  # Clear setup warnings
+
+        # Load cli module (reuse if already loaded to share module references)
+        _cli_path = _root / ".claude" / "haios" / "modules" / "cli.py"
+        cli_mod = _ensure_module("cli", _cli_path)
+
+        # Monkeypatch cli.py's get_engine to return our test engine
+        monkeypatch.setattr(cli_mod, "get_engine", lambda: w116_engine)
+
+        with caplog.at_level(logging.WARNING):
+            result = cli_mod.cmd_close("WORK-CL1")
+
+        assert result == 0
+        # After WORK-116 implementation, close should not warn
+        governance_warnings = [
+            r for r in caplog.records
+            if r.levelno >= logging.WARNING
+            and "outside ceremony context" in r.message
+            and "'close'" in r.message
+        ]
+        assert len(governance_warnings) == 0, (
+            f"Expected no close ceremony warnings, got: {[r.message for r in governance_warnings]}"
+        )
+
+
+# =========================================================================
+# Test 14: Direct WorkEngine call outside ceremony still warns
+# =========================================================================
+class TestDirectCallStillWarns:
+    def test_direct_set_queue_position_warns(self, w116_engine, caplog, monkeypatch):
+        """Direct WorkEngine.set_queue_position outside ceremony_context still warns."""
+        monkeypatch.setattr(
+            "governance_layer._get_ceremony_enforcement", lambda: "warn"
+        )
+        w116_engine.create_work("WORK-DW1", "Direct Warn Test")
+
+        with caplog.at_level(logging.WARNING):
+            w116_engine.set_queue_position("WORK-DW1", "ready")
+
+        governance_warnings = [
+            r for r in caplog.records
+            if r.levelno >= logging.WARNING and "outside ceremony context" in r.message
+        ]
+        assert len(governance_warnings) > 0, (
+            "Expected 'outside ceremony context' warning for direct call"
+        )
