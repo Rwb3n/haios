@@ -93,14 +93,24 @@ class SessionLoader:
         return PROJECT_ROOT / self.config.get("checkpoint_dir", "docs/checkpoints/")
 
     def _find_latest_checkpoint(self) -> Optional[Path]:
-        """Find most recent checkpoint by filename sort."""
+        """Find most recent checkpoint by session number (WORK-130: not filename sort).
+
+        Extracts SESSION-NNN from filenames and picks the highest session number.
+        Falls back to lexicographic sort if no SESSION-NNN pattern found.
+        """
         if not self.checkpoint_dir.exists():
             logger.warning(f"Checkpoint dir not found: {self.checkpoint_dir}")
             return None
-        checkpoints = sorted(self.checkpoint_dir.glob("*.md"), reverse=True)
-        # Filter out README.md
-        checkpoints = [cp for cp in checkpoints if cp.name != "README.md"]
-        return checkpoints[0] if checkpoints else None
+        checkpoints = [cp for cp in self.checkpoint_dir.glob("*.md") if cp.name != "README.md"]
+        if not checkpoints:
+            return None
+
+        def _session_number(path: Path) -> int:
+            """Extract session number from filename like '...-SESSION-348-...'."""
+            match = re.search(r"SESSION-(\d+)", path.name, re.IGNORECASE)
+            return int(match.group(1)) if match else 0
+
+        return max(checkpoints, key=_session_number)
 
     def _parse_frontmatter(self, content: str) -> Dict[str, Any]:
         """Extract YAML frontmatter from markdown."""

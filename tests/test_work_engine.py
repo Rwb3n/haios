@@ -2115,3 +2115,66 @@ def test_close_appends_done_to_queue_history(tmp_path, governance):
     assert work.queue_history[-1]["position"] == "done"
     assert work.queue_history[-2]["position"] == "working"
     assert work.queue_history[-2]["exited"] is not None
+
+
+# =============================================================================
+# WORK-132: close() must close node_history last exited timestamp
+# =============================================================================
+
+
+def test_close_sets_node_history_exited(tmp_path, governance):
+    """WORK-132 T1: close() sets node_history[-1].exited timestamp."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-NH1", "Node History Close Test")
+    engine.set_queue_position("WORK-NH1", "ready")
+    engine.set_queue_position("WORK-NH1", "working")
+    engine.close("WORK-NH1")
+    work = engine.get_work("WORK-NH1")
+    # Last node_history entry should have exited set (not null)
+    assert work.node_history[-1]["exited"] is not None, \
+        "close() should set exited timestamp on last node_history entry"
+
+
+def test_close_sets_node_history_exited_from_backlog(tmp_path, governance):
+    """WORK-132 T2: close() sets node_history exited even when item was never transitioned."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-NH2", "No Transition Close Test")
+    engine.close("WORK-NH2")
+    work = engine.get_work("WORK-NH2")
+    # Even items that never left backlog should have exited closed
+    assert work.node_history[-1]["exited"] is not None, \
+        "close() should set exited on backlog node_history entry"
+
+
+# =============================================================================
+# WORK-131: close() must set cycle_phase to done
+# =============================================================================
+
+
+def test_close_sets_cycle_phase_done(tmp_path, governance):
+    """WORK-131 T1: close() sets cycle_phase to 'done'."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-CP1", "Cycle Phase Close Test")
+    # Verify initial cycle_phase is backlog
+    work = engine.get_work("WORK-CP1")
+    assert work.cycle_phase == "backlog"
+    # Close without ever changing cycle_phase
+    engine.close("WORK-CP1")
+    work = engine.get_work("WORK-CP1")
+    assert work.cycle_phase == "done", \
+        "close() should set cycle_phase to 'done', not leave it as 'backlog'"
+
+
+def test_close_sets_cycle_phase_done_from_plan(tmp_path, governance):
+    """WORK-131 T2: close() sets cycle_phase to 'done' even if it was at 'plan'."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-CP2", "Cycle Phase From Plan Test")
+    # Manually set cycle_phase to plan
+    work = engine.get_work("WORK-CP2")
+    work.cycle_phase = "plan"
+    engine._write_work_file(work)
+    # Close
+    engine.close("WORK-CP2")
+    work = engine.get_work("WORK-CP2")
+    assert work.cycle_phase == "done", \
+        "close() should set cycle_phase to 'done' regardless of prior phase"

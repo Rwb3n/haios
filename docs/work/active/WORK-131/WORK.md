@@ -1,38 +1,43 @@
 ---
 template: work_item
 id: WORK-131
-title: "cycle_phase stays backlog when items skip plan-authoring"
+title: cycle_phase stays backlog when items skip plan-authoring
 type: bug
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-11
 spawned_by: WORK-126
 chapter: null
 arc: queue
-closed: null
+closed: '2026-02-11'
 priority: medium
 effort: medium
-traces_to: [REQ-QUEUE-001]
-requirement_refs: []  # DEPRECATED: use traces_to instead
+traces_to:
+- REQ-QUEUE-001
+requirement_refs: []
 source_files: []
 acceptance_criteria: []
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-11T22:33:27
-    exited: null
+- node: backlog
+  entered: 2026-02-11 22:33:27
+  exited: '2026-02-11T22:45:43.018579'
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-11
-last_updated: 2026-02-11T22:33:27
+last_updated: '2026-02-11T22:45:43.021592'
+queue_history:
+- position: done
+  entered: '2026-02-11T22:45:43.018579'
+  exited: null
 ---
 # WORK-131: cycle_phase stays backlog when items skip plan-authoring
 

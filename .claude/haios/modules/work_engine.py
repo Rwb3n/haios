@@ -586,12 +586,17 @@ class WorkEngine:
         # Update status and queue_position atomically (CH-008: complete without spawn)
         work.status = "complete"
         work.queue_position = "done"
+        work.cycle_phase = "done"  # WORK-131: Set cycle_phase on close
 
         # WORK-126: Append done to queue_history
         now_str = datetime.now().isoformat()
         if work.queue_history:
             work.queue_history[-1]["exited"] = now_str
         work.queue_history.append({"position": "done", "entered": now_str, "exited": None})
+
+        # WORK-132: Close node_history last entry (mirror queue_history pattern)
+        if work.node_history:
+            work.node_history[-1]["exited"] = now_str
 
         self._write_work_file(work)
 

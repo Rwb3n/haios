@@ -116,3 +116,54 @@ load_memory_refs: []
         assert isinstance(result, str)
         assert "SESSION" in result.upper()
         assert "229" in result
+
+
+# =============================================================================
+# WORK-130: Checkpoint discovery sorts by session number, not filename
+# =============================================================================
+
+
+class TestCheckpointDiscoveryOrder:
+    """WORK-130: _find_latest_checkpoint must pick highest session number."""
+
+    def test_find_latest_checkpoint_mixed_sequence_numbers(self, tmp_path):
+        """WORK-130 T1: Checkpoint without sequence number should not outrank higher-session checkpoint."""
+        from session_loader import SessionLoader
+
+        cp_dir = tmp_path / "docs" / "checkpoints"
+        cp_dir.mkdir(parents=True)
+
+        # S345 has no sequence number (sorts lexically AFTER 07-SESSION-348)
+        (cp_dir / "2026-02-11-SESSION-345-closure.md").write_text(
+            "---\nsession: 345\n---"
+        )
+        # S348 has sequence number 07
+        (cp_dir / "2026-02-11-07-SESSION-348-bug-fixes.md").write_text(
+            "---\nsession: 348\npending: [CH-016]\n---"
+        )
+        # S340 has sequence number 01
+        (cp_dir / "2026-02-11-01-SESSION-340-tiny-fixes.md").write_text(
+            "---\nsession: 340\n---"
+        )
+
+        loader = SessionLoader(checkpoint_dir=cp_dir)
+        extracted = loader.extract()
+
+        assert extracted["prior_session"] == 348, \
+            f"Should find session 348 (highest), got {extracted['prior_session']}"
+
+    def test_find_latest_checkpoint_consistent_sequence(self, tmp_path):
+        """WORK-130 T2: When all checkpoints have sequence numbers, highest wins."""
+        from session_loader import SessionLoader
+
+        cp_dir = tmp_path / "docs" / "checkpoints"
+        cp_dir.mkdir(parents=True)
+
+        (cp_dir / "2026-02-11-01-SESSION-340-x.md").write_text("---\nsession: 340\n---")
+        (cp_dir / "2026-02-11-02-SESSION-341-x.md").write_text("---\nsession: 341\n---")
+        (cp_dir / "2026-02-11-03-SESSION-343-x.md").write_text("---\nsession: 343\n---")
+
+        loader = SessionLoader(checkpoint_dir=cp_dir)
+        extracted = loader.extract()
+
+        assert extracted["prior_session"] == 343

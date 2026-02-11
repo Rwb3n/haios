@@ -195,12 +195,14 @@ def scan_incomplete_work(project_root: Path) -> list[dict]:
     Per INV-052 Section 2A: Scan for `exited: null` entries in node_history.
 
     Args:
-        project_root: Project root path
+        project_root: Project root path (accepts str or Path)
 
     Returns:
         List of dicts with id, incomplete_node, path
     """
     import re
+
+    project_root = Path(project_root)  # WORK-129: Coerce string to Path
 
     work_dirs = [
         project_root / "docs" / "work" / "active",

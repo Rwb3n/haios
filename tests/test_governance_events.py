@@ -220,3 +220,42 @@ node_history:
         result = scan_incomplete_work(tmp_path)
         assert len(result) == 1, "Active items should be included"
         assert result[0]["id"] == "E2-TEST"
+
+
+# =============================================================================
+# WORK-129: scan_incomplete_work accepts string input
+# =============================================================================
+
+
+class TestScanIncompleteWorkStringInput:
+    """WORK-129: scan_incomplete_work should accept string project_root."""
+
+    def test_scan_incomplete_work_accepts_string(self, tmp_path):
+        """WORK-129 T1: Passing a string instead of Path should not raise TypeError."""
+        from governance_events import scan_incomplete_work
+
+        work_dir = tmp_path / "docs" / "work" / "active" / "E2-STR"
+        work_dir.mkdir(parents=True)
+        (work_dir / "WORK.md").write_text("""---
+id: E2-STR
+status: active
+current_node: backlog
+node_history:
+- node: backlog
+  entered: 2026-01-01
+  exited: null
+---
+""")
+        # Pass string instead of Path - should not raise TypeError
+        result = scan_incomplete_work(str(tmp_path))
+        assert len(result) == 1
+        assert result[0]["id"] == "E2-STR"
+
+    def test_scan_incomplete_work_dot_string(self, tmp_path):
+        """WORK-129 T2: Passing '.' as string should work (session-end-ceremony use case)."""
+        from governance_events import scan_incomplete_work
+
+        # '.' with no work dirs should return empty, not TypeError
+        result = scan_incomplete_work(".")
+        # Should not raise; result depends on actual project state
+        assert isinstance(result, list)
