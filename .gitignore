@@ -42,6 +42,9 @@ etl_errors.log
 *.xml
 log.txt
 feedback.txt
+plan-sample.md
+test_output.txt
+test_results.txt
 
 # Agent working directories
 agents/*/Scripts/
