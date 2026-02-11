@@ -13,45 +13,10 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock
 
-# Add parent paths for module imports
-import sys
-import importlib.util
-
-_root = Path(__file__).parent.parent
-
-# Add parent paths for module imports (portal_manager, etc.)
-sys.path.insert(0, str(_root / ".claude" / "haios" / "modules"))
-sys.path.insert(0, str(_root / ".claude" / "haios" / "lib"))
-
-
-def _load_module(name: str, path: Path):
-    """Load a module from a specific path."""
-    spec = importlib.util.spec_from_file_location(name, path)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[name] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-# Load governance_layer first (dependency of work_engine)
-_gov_path = _root / ".claude" / "haios" / "modules" / "governance_layer.py"
-if "governance_layer" not in sys.modules:
-    governance_layer = _load_module("governance_layer", _gov_path)
-else:
-    governance_layer = sys.modules["governance_layer"]
-GovernanceLayer = governance_layer.GovernanceLayer
-
-# Load work_engine
-_work_path = _root / ".claude" / "haios" / "modules" / "work_engine.py"
-if "work_engine" not in sys.modules:
-    work_engine = _load_module("work_engine", _work_path)
-else:
-    work_engine = sys.modules["work_engine"]
-WorkEngine = work_engine.WorkEngine
-
-# Load queue_ceremonies (the module under test)
-_qc_path = _root / ".claude" / "haios" / "lib" / "queue_ceremonies.py"
-queue_ceremonies = _load_module("queue_ceremonies", _qc_path)
+# WORK-117: Module loading handled by conftest.py (_load_module_once)
+from governance_layer import GovernanceLayer
+from work_engine import WorkEngine
+import queue_ceremonies
 
 
 # =============================================================================

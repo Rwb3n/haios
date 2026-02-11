@@ -21,41 +21,19 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock, MagicMock
 
-# Add parent paths for module imports
-import sys
-_root = Path(__file__).parent.parent
-sys.path.insert(0, str(_root / ".claude" / "haios" / "modules"))
-sys.path.insert(0, str(_root / ".claude" / "lib"))
+# WORK-117: Module loading handled by conftest.py (_load_module_once)
+from governance_layer import GovernanceLayer
+from work_engine import (
+    WorkEngine,
+    WorkState,
+    InvalidTransitionError,
+    WorkNotFoundError,
+)
 
-# Import modules directly (avoiding relative import issues)
-# These are standalone modules, not part of a package when run from tests
-import importlib.util
-
-def _load_module(name: str, path: Path):
-    """Load a module from a specific path."""
-    spec = importlib.util.spec_from_file_location(name, path)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[name] = module
-    spec.loader.exec_module(module)
-    return module
-
-# Load governance_layer first (dependency)
-_gov_path = _root / ".claude" / "haios" / "modules" / "governance_layer.py"
-governance_layer = _load_module("governance_layer", _gov_path)
-GovernanceLayer = governance_layer.GovernanceLayer
-
-# Load work_engine with governance_layer already in sys.modules
-_work_path = _root / ".claude" / "haios" / "modules" / "work_engine.py"
-work_engine = _load_module("work_engine", _work_path)
-WorkEngine = work_engine.WorkEngine
-WorkState = work_engine.WorkState
-InvalidTransitionError = work_engine.InvalidTransitionError
-WorkNotFoundError = work_engine.WorkNotFoundError
 # E2-304: Import new exception for ID validation tests
-# Note: Will fail until work_engine.py is updated
 try:
-    WorkIDUnavailableError = work_engine.WorkIDUnavailableError
-except AttributeError:
+    from work_engine import WorkIDUnavailableError
+except ImportError:
     # Define stub for TDD - tests will fail until implementation
     class WorkIDUnavailableError(Exception):
         pass
@@ -1570,10 +1548,8 @@ def test_pause_point_regression_after_refactor(tmp_path, governance):
 
 def test_batch_design_three_items_integration(tmp_path, governance):
     """T19: Create 3 design items, run_batch, verify get_in_lifecycle returns 3."""
-    # Load CycleRunner
-    _cr_path = Path(__file__).parent.parent / ".claude" / "haios" / "modules" / "cycle_runner.py"
-    cycle_runner_mod = _load_module("cycle_runner_t19", _cr_path)
-    CycleRunner = cycle_runner_mod.CycleRunner
+    # WORK-117: cycle_runner loaded by conftest.py
+    from cycle_runner import CycleRunner
 
     engine = WorkEngine(governance=governance, base_path=tmp_path)
     runner = CycleRunner(governance=governance, work_engine=engine)
