@@ -1,5 +1,6 @@
 ---
 name: survey-cycle
+type: lifecycle
 description: HAIOS Survey Cycle for structured session-level work selection. Use after
   coldstart context loading. Guides GATHER->ASSESS->OPTIONS->CHOOSE->ROUTE workflow
   with volumous exploration before tight commitment.

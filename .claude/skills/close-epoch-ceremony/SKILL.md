@@ -1,5 +1,6 @@
 ---
 name: close-epoch-ceremony
+type: ceremony
 description: HAIOS Close Epoch Ceremony for verifying epoch DoD. Use when all arcs
   are complete. Guides VALIDATE->ARCHIVE->TRANSITION workflow.
 category: closure

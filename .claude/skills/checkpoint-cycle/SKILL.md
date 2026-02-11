@@ -1,5 +1,6 @@
 ---
 name: checkpoint-cycle
+type: ceremony
 description: Create checkpoint manifest. Scaffold, populate fields, commit.
 category: session
 input_contract:

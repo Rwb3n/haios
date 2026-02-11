@@ -1,5 +1,6 @@
 ---
 name: requirements-review
+type: ceremony
 description: "Review L4 requirements after epoch completion to assess if updates needed."
 category: feedback
 stub: true

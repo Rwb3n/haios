@@ -1,5 +1,6 @@
 ---
 name: extract-content
+type: utility
 description: Extract entities and concepts from documents using HAIOS memory system.
   Use when ingesting new documents, analyzing content structure, or populating the
   knowledge base.

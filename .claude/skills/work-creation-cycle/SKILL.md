@@ -1,5 +1,6 @@
 ---
 name: work-creation-cycle
+type: ceremony
 description: HAIOS Work Creation Cycle for structured work item population. Use when
   creating new work items. Guides VERIFY->POPULATE->READY workflow.
 recipes:

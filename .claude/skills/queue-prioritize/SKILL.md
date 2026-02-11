@@ -1,5 +1,6 @@
 ---
 name: queue-prioritize
+type: ceremony
 description: Move work items from backlog to ready queue position with rationale.
   Use when selecting items for upcoming work. Batch capable. Rationale required for
   audit trail.

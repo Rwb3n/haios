@@ -1,5 +1,6 @@
 ---
 name: plan-authoring-cycle
+type: lifecycle
 description: HAIOS Plan Authoring Cycle for structured plan population. Use when filling
   in implementation plan sections. Guides AMBIGUITY->ANALYZE->AUTHOR->VALIDATE workflow.
 recipes:

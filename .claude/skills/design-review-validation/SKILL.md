@@ -1,5 +1,6 @@
 ---
 name: design-review-validation
+type: lifecycle
 description: HAIOS Design Review Validation for verifying implementation alignment.
   Use during DO phase. Guides COMPARE->VERIFY->APPROVE workflow.
 generated: 2025-12-25

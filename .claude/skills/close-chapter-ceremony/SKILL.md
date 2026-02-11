@@ -1,5 +1,6 @@
 ---
 name: close-chapter-ceremony
+type: ceremony
 description: HAIOS Close Chapter Ceremony for verifying chapter DoD. Use when all
   work items in a chapter are complete. Guides VALIDATE->MARK->REPORT workflow with
   decision verification.

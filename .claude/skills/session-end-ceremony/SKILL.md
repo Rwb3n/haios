@@ -1,5 +1,6 @@
 ---
 name: session-end-ceremony
+type: ceremony
 description: "Finalize session with orphan check and event logging."
 category: session
 stub: true

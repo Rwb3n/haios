@@ -1,5 +1,6 @@
 ---
 name: close-work-cycle
+type: ceremony
 description: HAIOS Close Work Cycle for structured work item closure. Use when closing
   work items. Guides VALIDATE->ARCHIVE->MEMORY workflow with DoD enforcement.
 category:

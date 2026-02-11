@@ -1,5 +1,6 @@
 ---
 name: schema-ref
+type: utility
 description: Database schema reference for haios_memory.db. MUST be used before any SQL query to verify table and column names. Use when verifying schema, checking table structure, or before database operations.
 ---
 # generated: 2025-12-09

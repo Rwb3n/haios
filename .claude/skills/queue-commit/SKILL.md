@@ -1,5 +1,6 @@
 ---
 name: queue-commit
+type: ceremony
 description: Move work item from ready to working queue position, signaling active
   work session. Use when starting implementation of a ready item. Typically invoked
   by survey-cycle after work selection.

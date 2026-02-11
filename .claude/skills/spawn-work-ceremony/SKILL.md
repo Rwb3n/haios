@@ -1,5 +1,6 @@
 ---
 name: spawn-work-ceremony
+type: ceremony
 description: "Create a linked work item from an existing work item."
 category: spawn
 stub: true

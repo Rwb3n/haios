@@ -129,16 +129,13 @@ class PriorityList(LifecycleOutput):
     ranking_criteria: str
 
 
-# Cycle phase definitions (from S17.5 and existing skills)
+# Lifecycle phase definitions (from S17.5 and existing skills)
 # WORK-098: investigation-cycle aligned with L4 REQ-FLOW-002 (Session 304)
+# WORK-118: Ceremony phases extracted to ceremony_runner.py (CH-013, REQ-CEREMONY-003)
 CYCLE_PHASES: Dict[str, List[str]] = {
     "implementation-cycle": ["PLAN", "DO", "CHECK", "DONE", "CHAIN"],
     "investigation-cycle": ["EXPLORE", "HYPOTHESIZE", "VALIDATE", "CONCLUDE", "CHAIN"],
-    "close-work-cycle": ["VALIDATE", "OBSERVE", "ARCHIVE", "MEMORY"],
-    "work-creation-cycle": ["VERIFY", "POPULATE", "READY"],
-    "checkpoint-cycle": ["SCAFFOLD", "FILL", "VERIFY", "CAPTURE", "COMMIT"],
     "plan-authoring-cycle": ["ANALYZE", "AUTHOR", "VALIDATE", "CHAIN"],
-    "observation-triage-cycle": ["SCAN", "TRIAGE", "PROMOTE"],
 }
 
 # WORK-085: Pause phases per lifecycle (REQ-LIFECYCLE-002, S27 Breath Model)
@@ -192,13 +189,24 @@ class CycleRunner:
         """
         Return ordered phases for a cycle.
 
+        Falls back to CEREMONY_PHASES for backward compatibility (WORK-118).
+        Callers using ceremony IDs (e.g., "close-work-cycle") still get phases.
+
         Args:
             cycle_id: Cycle identifier (e.g., "implementation-cycle")
 
         Returns:
             List of phase names, or empty list if cycle not found.
         """
-        return CYCLE_PHASES.get(cycle_id, [])
+        phases = CYCLE_PHASES.get(cycle_id)
+        if phases is not None:
+            return phases
+        # WORK-118: Backward compat — fall back to CEREMONY_PHASES
+        try:
+            from ceremony_runner import CEREMONY_PHASES
+            return CEREMONY_PHASES.get(cycle_id, [])
+        except ImportError:
+            return []
 
     def check_phase_entry(
         self, cycle_id: str, phase: str, work_id: str

@@ -1,5 +1,6 @@
 ---
 name: arc-review
+type: ceremony
 description: "Review arc direction after chapter completion to assess if adjustments needed."
 category: feedback
 stub: true

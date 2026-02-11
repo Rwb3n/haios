@@ -1,5 +1,6 @@
 ---
 name: memory-commit-ceremony
+type: ceremony
 description: "Store learnings to memory with provenance tracking."
 category: memory
 stub: true

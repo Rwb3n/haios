@@ -1,5 +1,6 @@
 ---
 name: chapter-review
+type: ceremony
 description: "Review chapter scope after work completion to assess if adjustments needed."
 category: feedback
 stub: true

@@ -1,5 +1,6 @@
 ---
 name: investigation-cycle
+type: lifecycle
 description: HAIOS Investigation Cycle for structured research and discovery. Use
   when starting or resuming an investigation. Guides EXPLORE->HYPOTHESIZE->VALIDATE->CONCLUDE
   workflow with phase-specific tooling.

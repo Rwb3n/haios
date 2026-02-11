@@ -1,5 +1,6 @@
 ---
 name: implementation-cycle
+type: lifecycle
 description: HAIOS Implementation Cycle for structured work item implementation. Use
   when starting implementation of a plan. Guides PLAN->DO->CHECK->DONE workflow with
   phase-specific tooling.

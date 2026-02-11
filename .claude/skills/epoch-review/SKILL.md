@@ -1,5 +1,6 @@
 ---
 name: epoch-review
+type: ceremony
 description: "Review epoch goals after arc completion to assess if adjustments needed."
 category: feedback
 stub: true

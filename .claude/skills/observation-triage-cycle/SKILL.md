@@ -1,5 +1,6 @@
 ---
 name: observation-triage-cycle
+type: ceremony
 description: HAIOS Observation Triage Cycle for processing captured observations.
   Use when scanning archived work items to triage and act on observations. Guides
   SCAN->TRIAGE->PROMOTE workflow with dimension validation.

@@ -1,5 +1,6 @@
 ---
 name: observation-capture-cycle
+type: ceremony
 description: 4 questions for genuine reflection before work closure. Hard gate on
   non-empty.
 category: memory

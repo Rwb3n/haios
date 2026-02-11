@@ -1,5 +1,6 @@
 ---
 name: memory-agent
+type: utility
 description: HAIOS Memory Agent for intelligent context retrieval and learning. Use BEFORE answering complex questions to retrieve relevant strategies and context. Use AFTER completing tasks to extract and store learnings. Closes the ReasoningBank loop by injecting strategies into reasoning.
 ---
 # generated: 2025-12-05

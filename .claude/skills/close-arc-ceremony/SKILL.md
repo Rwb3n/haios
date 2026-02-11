@@ -1,5 +1,6 @@
 ---
 name: close-arc-ceremony
+type: ceremony
 description: HAIOS Close Arc Ceremony for verifying arc DoD. Use when all chapters
   in an arc are complete. Guides VALIDATE->MARK->REPORT workflow with orphan decision
   check.

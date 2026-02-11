@@ -1,5 +1,6 @@
 ---
 name: routing-gate
+type: utility
 description: Bridge skill for work-type routing in CHAIN phase. Use to determine next
   cycle skill based on work item signals.
 recipes:

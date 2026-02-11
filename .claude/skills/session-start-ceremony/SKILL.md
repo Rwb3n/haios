@@ -1,5 +1,6 @@
 ---
 name: session-start-ceremony
+type: ceremony
 description: "Initialize a new session with context loading and event logging."
 category: session
 stub: true

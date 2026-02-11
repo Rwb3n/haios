@@ -18,7 +18,8 @@ This directory contains the black-box modules that form the HAIOS runtime:
 | `spawn_tree.py` | Extracted (E2-279) | ~170 | Spawn tree traversal and formatting |
 | `backfill_engine.py` | Extracted (E2-279) | ~220 | Backlog content backfill |
 | `context_loader.py` | Implemented (E2-254) | ~300 | L0-L4 context loading, session tracking |
-| `cycle_runner.py` | Implemented (E2-255) | ~350 | Phase gate validation, cycle phase lookup |
+| `cycle_runner.py` | Implemented (E2-255) | ~350 | Lifecycle phase gate validation, lifecycle phase lookup |
+| `ceremony_runner.py` | Implemented (WORK-118) | ~130 | Ceremony phase validation, ceremony invocation wrapper |
 | `requirement_extractor.py` | Implemented (WORK-015) | ~390 | Extract requirements from TRDs, manifesto, prose |
 | `corpus_loader.py` | Implemented (WORK-031) | ~180 | YAML-configurable file discovery for RequirementExtractor |
 | `planner_agent.py` | Implemented (WORK-032) | ~300 | PLAN stage: RequirementSet → WorkPlan with groupings and dependencies |
@@ -534,9 +535,64 @@ The `just coldstart` recipe calls `cli.py context-load` which:
 
 This eliminates Read tool calls for L0-L4 manifesto files during coldstart.
 
+## CeremonyRunner (WORK-118, CH-013)
+
+Thin wrapper for ceremony phase validation and invocation. Delegates state-change enforcement to `ceremony_context()` from GovernanceLayer (CH-012).
+
+### Functions
+
+| Function | Input | Output |
+|----------|-------|--------|
+| `get_ceremony_phases(ceremony_id)` | Ceremony identifier | `List[str]` of phase names |
+| `invoke(ceremony, work_id, **inputs)` | Ceremony name + work ID | `CeremonyResult` |
+
+### CeremonyResult Dataclass
+
+```python
+@dataclass
+class CeremonyResult:
+    ceremony_id: str
+    work_id: str
+    side_effects: List[str]
+    timestamp: datetime
+    status: Literal["success", "failure"]
+```
+
+### Supported Ceremonies
+
+| Ceremony ID | Phases |
+|-------------|--------|
+| `close-work-cycle` | VALIDATE, OBSERVE, ARCHIVE, MEMORY |
+| `work-creation-cycle` | VERIFY, POPULATE, READY |
+| `checkpoint-cycle` | SCAFFOLD, FILL, VERIFY, CAPTURE, COMMIT |
+| `observation-triage-cycle` | SCAN, TRIAGE, PROMOTE |
+
+### Invariants
+
+- MUST delegate to `ceremony_context()` for boundary enforcement
+- MUST NOT produce artifacts (ceremonies produce state changes only)
+- MUST log events for observability
+
+### Usage
+
+```python
+from ceremony_runner import CeremonyRunner, CeremonyResult
+from governance_layer import GovernanceLayer
+
+runner = CeremonyRunner(governance=GovernanceLayer())
+
+# Get phases for a ceremony
+phases = runner.get_ceremony_phases("close-work-cycle")
+# ['VALIDATE', 'OBSERVE', 'ARCHIVE', 'MEMORY']
+
+# Invoke ceremony within ceremony_context boundary
+result = runner.invoke("close-work", work_id="WORK-118")
+print(f"Side effects: {result.side_effects}")
+```
+
 ## CycleRunner (E2-255, WORK-084)
 
-Stateless phase gate validator for cycle skills. Now includes lifecycle output types (WORK-084).
+Stateless phase gate validator for lifecycle skills. Now includes lifecycle output types (WORK-084). Ceremony phases extracted to CeremonyRunner (WORK-118).
 
 ### Functions
 
@@ -606,17 +662,15 @@ class Specification(LifecycleOutput):
     interfaces: Dict[str, Any]
 ```
 
-### Supported Cycles
+### Supported Lifecycles (WORK-118: ceremony phases moved to CeremonyRunner)
 
-| Cycle ID | Phases |
-|----------|--------|
+| Lifecycle ID | Phases |
+|--------------|--------|
 | `implementation-cycle` | PLAN, DO, CHECK, DONE, CHAIN |
-| `investigation-cycle` | HYPOTHESIZE, EXPLORE, CONCLUDE, CHAIN |
-| `close-work-cycle` | VALIDATE, OBSERVE, ARCHIVE, MEMORY |
-| `work-creation-cycle` | VERIFY, POPULATE, READY |
-| `checkpoint-cycle` | SCAFFOLD, FILL, VERIFY, CAPTURE, COMMIT |
+| `investigation-cycle` | EXPLORE, HYPOTHESIZE, VALIDATE, CONCLUDE, CHAIN |
 | `plan-authoring-cycle` | ANALYZE, AUTHOR, VALIDATE, CHAIN |
-| `observation-triage-cycle` | SCAN, TRIAGE, PROMOTE |
+
+Note: `get_cycle_phases()` falls back to `CEREMONY_PHASES` for backward compatibility.
 
 ### Invariants
 
@@ -741,7 +795,8 @@ python .claude/haios/modules/cli.py plan --from-corpus <corpus_config>
 | `spawn_tree.py` | SpawnTree module - tree traversal (E2-279) |
 | `backfill_engine.py` | BackfillEngine module - backlog backfill (E2-279) |
 | `context_loader.py` | ContextLoader module (E2-254) |
-| `cycle_runner.py` | CycleRunner module (E2-255) |
+| `cycle_runner.py` | CycleRunner module - lifecycle phases (E2-255, WORK-118) |
+| `ceremony_runner.py` | CeremonyRunner module - ceremony phases (WORK-118, CH-013) |
 | `requirement_extractor.py` | RequirementExtractor module (WORK-015) |
 | `corpus_loader.py` | CorpusLoader module (WORK-031) |
 | `planner_agent.py` | PlannerAgent module (WORK-032) |

@@ -1,5 +1,6 @@
 ---
 name: plan-validation-cycle
+type: lifecycle
 description: HAIOS Plan Validation Bridge for validating plan readiness. Use before
   entering DO phase. Guides CHECK->VALIDATE->APPROVE workflow.
 generated: 2025-12-25

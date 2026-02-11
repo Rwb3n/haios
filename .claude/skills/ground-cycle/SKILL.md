@@ -1,5 +1,6 @@
 ---
 name: ground-cycle
+type: lifecycle
 description: HAIOS Ground Cycle for loading architectural context before cognitive
   work. Use before plan-authoring, investigation, or implementation cycles.
 generated: 2026-01-06

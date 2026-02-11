@@ -1,5 +1,6 @@
 ---
 name: dod-validation-cycle
+type: lifecycle
 description: HAIOS DoD Validation Cycle for validating Definition of Done before closure.
   Use before DONE phase. Guides CHECK->VALIDATE->APPROVE workflow.
 generated: '2025-12-25'

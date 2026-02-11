@@ -1,5 +1,6 @@
 ---
 name: queue-intake
+type: ceremony
 description: Create new work item at backlog queue position with ceremony logging.
   Use when capturing a new idea or requirement as a tracked work item. Wraps work-creation-cycle
   with queue ceremony event.

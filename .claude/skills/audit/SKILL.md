@@ -1,5 +1,6 @@
 ---
 name: audit
+type: utility
 description: Run all HAIOS audit checks to find drift, gaps, and stale items. Use
   before starting a new session or after completing a milestone.
 generated: 2025-12-24

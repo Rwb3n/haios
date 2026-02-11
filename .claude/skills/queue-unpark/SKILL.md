@@ -1,5 +1,6 @@
 ---
 name: queue-unpark
+type: ceremony
 description: Move work item between parked and backlog (scope decision). Use when
   bringing a parked item into scope (Unpark) or deferring a backlog item out of scope
   (Park). Operator decision requiring rationale.
