@@ -390,9 +390,14 @@ commit-close id:
     git add "docs/work/archive/{{id}}/" .claude/haios-status*.json
     git commit -m "Close {{id}}"
 
-# Stage all HAIOS governance files
+# Stage HAIOS governance files (work artifacts + system definitions + config)
 stage-governance:
-    git add docs/work/ docs/plans/ docs/investigations/ docs/checkpoints/ .claude/haios-status*.json justfile
+    git add docs/work/ docs/plans/ docs/investigations/ docs/checkpoints/ .claude/haios-status*.json .claude/haios/config/ .claude/haios/manifesto/ .claude/haios/epochs/ .claude/haios/governance-events.jsonl justfile
+
+# Show chapter status for an arc (S340: D6 tiny fix)
+# Usage: just chapter-status ceremonies
+chapter-status arc:
+    @python -c "import re, yaml; from pathlib import Path; cfg=yaml.safe_load(open('.claude/haios/config/haios.yaml')); d=Path(cfg['epoch']['arcs_dir'])/'{{arc}}'; files=sorted(d.glob('CH-*.md')); print(f'Arc: {{arc}} ({len(files)} chapters)'); [print(f'  {m.group(1)}: {s.group(1):12s} {Path(f).stem.split(\"-\",2)[-1]}') for f in files if (t:=f.read_text(encoding=\"utf-8\")) and (m:=re.search(r'\\*\\*Chapter ID:\\*\\* (CH-\\d+)',t)) and (s:=re.search(r'\\*\\*Status:\\*\\* (\\w[\\w ]*)',t))]"
 
 # =============================================================================
 # AUDIT RECIPES (E2-143)

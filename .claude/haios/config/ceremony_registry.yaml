@@ -2,13 +2,23 @@
 # WORK-111: Ceremony Contract Schema Design
 # WORK-112: Retrofit Ceremony Skills with Contracts
 # Source: L4/functional_requirements.md ceremony definitions table (lines 326-346)
-# Ceremony Registry - Single source of truth for all 19 ceremonies
+# Ceremony Registry - Single source of truth for all 20 ceremonies
 
-version: "1.0"
-ceremony_count: 19
+version: "1.1"
+ceremony_count: 20
 
 ceremonies:
-  # Queue ceremonies (4)
+  # Queue ceremonies (5)
+  - name: unpark
+    category: queue
+    skill: queue-unpark
+    signature: "ParkedItem -> BacklogItem"
+    side_effects:
+      - "Update queue_position, log event"
+    has_contract: true
+    has_skill: true
+    notes: "Bidirectional: also handles Park (BacklogItem -> ParkedItem). Added S340."
+
   - name: intake
     category: queue
     skill: queue-intake

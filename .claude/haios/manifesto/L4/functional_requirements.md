@@ -325,6 +325,7 @@ Parked items never enter work lifecycle until unparked.
 
 | Category | Ceremony | Signature | Side Effects |
 |----------|----------|-----------|--------------|
+| **Queue** | Unpark | `ParkedItem → BacklogItem` | Update queue_position, log event |
 | **Queue** | Intake | `Idea → BacklogItem` | Create work item |
 | **Queue** | Prioritize | `[BacklogItems] → [ReadyItems]` | Update queue_position |
 | **Queue** | Commit | `ReadyItem → ActiveItem` | Start work, log event |

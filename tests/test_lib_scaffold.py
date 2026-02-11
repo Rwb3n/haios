@@ -15,11 +15,13 @@ Core functions:
 
 import sys
 import json
+import re
 from pathlib import Path
 from datetime import datetime
 from unittest.mock import patch, MagicMock
 
 import pytest
+import yaml
 
 # Add .claude/haios/lib to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
@@ -28,32 +30,45 @@ sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib
 class TestGenerateOutputPath:
     """Tests for generate_output_path() function."""
 
-    def test_investigation_path(self):
-        """Should generate correct path for investigation template."""
-        from scaffold import generate_output_path
+    def test_investigation_path(self, tmp_path):
+        """Should generate correct path for investigation template (E2-212: inside work dir)."""
+        import scaffold
+        original_root = scaffold.PROJECT_ROOT
+        scaffold.PROJECT_ROOT = tmp_path
 
-        path = generate_output_path(
-            template="investigation",
-            backlog_id="INV-017",
-            title="Observability Gap"
-        )
+        # Create work directory so E2-212 routing kicks in
+        (tmp_path / "docs" / "work" / "active" / "INV-017").mkdir(parents=True)
 
-        # E2-212: Investigations now go inside work directories
-        assert path == "docs/work/active/INV-017/investigations/001-observability-gap.md"
+        try:
+            from scaffold import generate_output_path
+            path = generate_output_path(
+                template="investigation",
+                backlog_id="INV-017",
+                title="Observability Gap"
+            )
+            assert path == "docs/work/active/INV-017/investigations/001-observability-gap.md"
+        finally:
+            scaffold.PROJECT_ROOT = original_root
 
-    def test_implementation_plan_path(self):
-        """Should generate correct path for implementation_plan template."""
-        from scaffold import generate_output_path
+    def test_implementation_plan_path(self, tmp_path):
+        """Should generate correct path for implementation_plan template (E2-212: inside work dir)."""
+        import scaffold
+        original_root = scaffold.PROJECT_ROOT
+        scaffold.PROJECT_ROOT = tmp_path
 
-        # E2-212: Plans go inside work directories when work dir exists
-        # Use E2-212 which has a directory (after migration)
-        path = generate_output_path(
-            template="implementation_plan",
-            backlog_id="E2-212",
-            title="Work Directory Migration"
-        )
+        # Create work directory so E2-212 routing kicks in
+        (tmp_path / "docs" / "work" / "active" / "E2-212").mkdir(parents=True)
 
-        assert path == "docs/work/active/E2-212/plans/PLAN.md"
+        try:
+            from scaffold import generate_output_path
+            path = generate_output_path(
+                template="implementation_plan",
+                backlog_id="E2-212",
+                title="Work Directory Migration"
+            )
+            assert path == "docs/work/active/E2-212/plans/PLAN.md"
+        finally:
+            scaffold.PROJECT_ROOT = original_root
 
     def test_checkpoint_path_has_date_and_session(self):
         """Checkpoint path should include date and session placeholder."""
@@ -752,3 +767,128 @@ milestone: {{MILESTONE}}
             assert "milestone: M8-Memory" in content
         finally:
             scaffold.PROJECT_ROOT = original_root
+
+
+# =============================================================================
+# S340 B3: Scaffold Output Lint Tests
+# =============================================================================
+
+class TestScaffoldOutputLint:
+    """Validate scaffold output produces valid YAML frontmatter and clean markdown.
+
+    S340 tiny fix B3: ensures no broken frontmatter is produced by scaffolding.
+    """
+
+    TEMPLATE_CONFIGS = [
+        ("checkpoint", "99", "Lint Test Session", {"SESSION": "99"}),
+        ("report", None, "Lint Test Report", {}),
+        ("architecture_decision_record", "099", "Lint Test ADR", {}),
+    ]
+
+    # Fields that are operator-fill (not auto-populated by scaffold)
+    OPERATOR_FILL_FIELDS = {"SPAWNED_BY", "MILESTONE", "PRIORITY", "CHAPTER", "ARC", "AUTHOR", "ID"}
+
+    @pytest.fixture
+    def scaffold_env(self, tmp_path):
+        """Set up a scaffold environment with templates copied from real project."""
+        import scaffold
+
+        original_root = scaffold.PROJECT_ROOT
+        scaffold.PROJECT_ROOT = tmp_path
+
+        # Copy real templates to tmp
+        real_templates = Path(__file__).parent.parent / ".claude" / "templates"
+        tmp_templates = tmp_path / ".claude" / "templates"
+        tmp_templates.mkdir(parents=True)
+
+        for tmpl_file in real_templates.glob("*.md"):
+            (tmp_templates / tmpl_file.name).write_text(
+                tmpl_file.read_text(encoding="utf-8"), encoding="utf-8"
+            )
+
+        # Also copy _legacy/ if it exists
+        legacy_dir = real_templates / "_legacy"
+        if legacy_dir.exists():
+            tmp_legacy = tmp_templates / "_legacy"
+            tmp_legacy.mkdir(exist_ok=True)
+            for tmpl_file in legacy_dir.glob("*.md"):
+                (tmp_legacy / tmpl_file.name).write_text(
+                    tmpl_file.read_text(encoding="utf-8"), encoding="utf-8"
+                )
+
+        # Create required output directories
+        (tmp_path / "docs" / "checkpoints").mkdir(parents=True)
+        (tmp_path / "docs" / "reports").mkdir(parents=True)
+        (tmp_path / "docs" / "ADR").mkdir(parents=True)
+        (tmp_path / "docs" / "work" / "active").mkdir(parents=True)
+
+        # Create session file
+        session_file = tmp_path / ".claude" / "session"
+        session_file.write_text("# session\n99\n")
+
+        # Create mock status file
+        status = {"session_delta": {"prior_session": 98, "current_session": 99}}
+        (tmp_path / ".claude" / "haios-status.json").write_text(json.dumps(status))
+
+        yield tmp_path
+
+        scaffold.PROJECT_ROOT = original_root
+
+    @pytest.mark.parametrize("template,backlog_id,title,variables", TEMPLATE_CONFIGS)
+    def test_scaffold_produces_valid_yaml_frontmatter(
+        self, scaffold_env, template, backlog_id, title, variables
+    ):
+        """Scaffold output must have parseable YAML frontmatter."""
+        from scaffold import scaffold_template
+
+        result = scaffold_template(
+            template=template,
+            backlog_id=backlog_id,
+            title=title,
+            variables=variables,
+        )
+
+        assert result is not None
+        content = Path(result).read_text(encoding="utf-8")
+
+        # Extract frontmatter between --- markers
+        fm_match = re.match(r"^---\s*\n(.*?)\n---", content, re.DOTALL)
+        assert fm_match, f"No YAML frontmatter found in {template} output"
+
+        # Replace unresolved {{VAR}} with placeholder strings so YAML can parse
+        sanitized = re.sub(r"\{\{(\w+)\}\}", r"__PLACEHOLDER_\1__", fm_match.group(1))
+
+        # Parse YAML - must not raise
+        frontmatter = yaml.safe_load(sanitized)
+        assert isinstance(frontmatter, dict), f"Frontmatter is not a dict in {template}"
+
+    @pytest.mark.parametrize("template,backlog_id,title,variables", TEMPLATE_CONFIGS)
+    def test_scaffold_no_unresolved_required_placeholders(
+        self, scaffold_env, template, backlog_id, title, variables
+    ):
+        """Scaffold output must not have unresolved {{VAR}} in frontmatter for required fields."""
+        from scaffold import scaffold_template
+
+        result = scaffold_template(
+            template=template,
+            backlog_id=backlog_id,
+            title=title,
+            variables=variables,
+        )
+
+        content = Path(result).read_text(encoding="utf-8")
+
+        # Extract frontmatter
+        fm_match = re.match(r"^---\s*\n(.*?)\n---", content, re.DOTALL)
+        assert fm_match
+
+        frontmatter_text = fm_match.group(1)
+        # Find any remaining {{...}} placeholders
+        unresolved = re.findall(r"\{\{(\w+)\}\}", frontmatter_text)
+
+        # Filter out operator-fill fields that are allowed to remain as placeholders
+        required_unresolved = [f for f in unresolved if f not in self.OPERATOR_FILL_FIELDS]
+
+        assert not required_unresolved, (
+            f"Unresolved required placeholders in {template} frontmatter: {required_unresolved}"
+        )

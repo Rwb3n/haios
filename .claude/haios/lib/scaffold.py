@@ -363,20 +363,27 @@ def get_current_session() -> int | str:
 
 
 def get_prev_session() -> int | str:
-    """Read previous session number from haios-status.json.
+    """Derive previous session number from current session.
+
+    Uses get_current_session() - 1 to avoid stale haios-status.json values.
+    Fallback: reads haios-status.json session_delta.prior_session.
 
     Returns:
         Previous session number as int, or "??" if unavailable.
     """
-    status_path = PROJECT_ROOT / ".claude" / "haios-status.json"
+    # Primary: derive from current session (always fresh via .claude/session)
+    current = get_current_session()
+    if isinstance(current, int) and current > 1:
+        return current - 1
 
+    # Fallback: haios-status.json (may be stale)
+    status_path = PROJECT_ROOT / ".claude" / "haios-status.json"
     if not status_path.exists():
         return "??"
 
     try:
         with open(status_path, encoding="utf-8-sig") as f:
             status = json.load(f)
-        # Read from session_delta.prior_session (E2-133 fix)
         prev_session = status.get("session_delta", {}).get("prior_session")
         return prev_session if prev_session is not None else "??"
     except Exception:
