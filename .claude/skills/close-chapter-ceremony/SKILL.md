@@ -72,7 +72,7 @@ just set-cycle close-chapter-ceremony VALIDATE {chapter_id}
 **Goal:** Verify chapter meets Definition of Done criteria.
 
 **DoD Criteria (REQ-DOD-001):**
-- [ ] All work items with `chapter: {arc}/{chapter_id}` have `status: complete`
+- [ ] All work items with `chapter: {chapter_id}` have `status: complete`
 - [ ] Chapter exit criteria (in chapter file) all checked
 - [ ] `implements_decisions` all verified via `just audit-decision-coverage`
 
@@ -81,7 +81,7 @@ just set-cycle close-chapter-ceremony VALIDATE {chapter_id}
 2. Extract `implements_decisions` field from chapter file
 3. Query work items assigned to chapter:
    ```
-   Grep(pattern="chapter: {arc}/{chapter_id}", path="docs/work/active")
+   Grep(pattern="chapter: {chapter_id}", path="docs/work/active")
    ```
 4. For each work item found, verify `status: complete` in frontmatter
 5. Run audit-decision-coverage and parse output for chapter-specific errors:

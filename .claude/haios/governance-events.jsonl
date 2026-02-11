@@ -2432,3 +2432,7 @@
 {"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 0, "timestamp": "2026-02-11T20:48:16.986813"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-11T21:05:16.136635"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-11T21:05:16.169357"}
+{"type": "SessionEnded", "session": 345, "agent": "Hephaestus", "timestamp": "2026-02-11T21:12:32.933370"}
+{"type": "SessionStarted", "session": 346, "agent": "Hephaestus", "timestamp": "2026-02-11T21:15:07.606046"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-11T21:19:11.917319"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-11T21:19:11.956056"}
