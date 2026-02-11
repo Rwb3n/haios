@@ -3,7 +3,6 @@ name: session-start-ceremony
 type: ceremony
 description: "Initialize a new session with context loading and event logging."
 category: session
-stub: true
 input_contract:
   - field: config_path
     type: path
@@ -25,7 +24,7 @@ output_contract:
 side_effects:
   - "Log event, load context"
 generated: 2026-02-09
-last_updated: "2026-02-09"
+last_updated: "2026-02-11"
 ---
 # Session Start Ceremony
 
@@ -50,11 +49,80 @@ Initialize a new HAIOS session by loading configuration, context files, and logg
 
 ## Ceremony Steps
 
-1. Load haios.yaml configuration
-2. Load epoch context and active arcs
-3. Query memory refs from prior checkpoint
-4. Log SessionStarted ceremony event
-5. Report session number to operator
+All steps execute within a `ceremony_context("session-start")` boundary per REQ-CEREMONY-001.
+
+### Step 1: Read Session Number
+
+- Read `.claude/session` file
+- Parse current session number (last non-comment line as integer)
+- Increment by 1 for new session
+- If file doesn't exist (first session), start at 1
+
+### Step 2: Update Session File and Status
+
+- Write new session number to `.claude/session` (preserve header comments)
+- Update `.claude/haios-status.json` with `session_delta`:
+  ```json
+  {"current_session": N, "prior_session": N-1}
+  ```
+
+### Step 3: Log SessionStarted Event
+
+- Execute: `just session-start {N}`
+- This invokes `governance_events.log_session_start(session, "Hephaestus")`
+- Event appended to `.claude/haios/governance-events.jsonl`:
+  ```json
+  {"type": "SessionStarted", "session": N, "agent": "Hephaestus", "timestamp": "..."}
+  ```
+
+### Step 4: Load Configuration
+
+- Read `.claude/haios/config/haios.yaml`
+- Extract: `epoch.current`, `epoch.epoch_file`, `epoch.active_arcs`, `epoch.arcs_dir`
+- Extract: `paths.*` for work item resolution
+
+### Step 5: Load Epoch Context
+
+- Read the epoch file at `epoch.epoch_file`
+- For each arc in `epoch.active_arcs`, read `{arcs_dir}/{arc}/ARC.md`
+- Note arc statuses (Complete, In Progress, Deferred)
+
+### Step 6: Query Memory Refs from Prior Checkpoint
+
+- Find latest checkpoint: `just checkpoint-latest`
+- If checkpoint has `load_memory_refs`, query those concept IDs via `db_query`
+- Load concept content for session context
+- If no checkpoint exists (first session), skip gracefully
+
+### Step 7: Report Session State
+
+Report to operator:
+```
+Session {N} started.
+- Epoch: {epoch.current}
+- Active arcs: {list of active_arcs with statuses}
+- Memory loaded: {count} concepts from prior checkpoint
+- Drift warnings: {any from prior checkpoint, or "none"}
+- Pending: {items from prior checkpoint pending field}
+```
+
+---
+
+## Integration with Coldstart
+
+The `/coldstart` command orchestrates the full context loading flow via ColdstartOrchestrator.
+Within coldstart, this ceremony is invoked via `just session-start N`.
+
+```
+Flow:
+  /coldstart
+    -> ColdstartOrchestrator.run()  (loads identity, session, work context)
+    -> just session-start N          (this ceremony: state change + event log)
+    -> survey-cycle                  (work selection)
+```
+
+This ceremony formalizes the session entry boundary. The coldstart skill handles
+orchestration; this ceremony handles the state change (session file update + event).
 
 ---
 

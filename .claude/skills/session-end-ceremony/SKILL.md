@@ -3,7 +3,6 @@ name: session-end-ceremony
 type: ceremony
 description: "Finalize session with orphan check and event logging."
 category: session
-stub: true
 input_contract:
   - field: session_number
     type: integer
@@ -25,7 +24,7 @@ output_contract:
 side_effects:
   - "Log event, orphan check"
 generated: 2026-02-09
-last_updated: "2026-02-09"
+last_updated: "2026-02-11"
 ---
 # Session End Ceremony
 
@@ -50,10 +49,59 @@ Finalize a HAIOS session by checking for orphan work items and logging the sessi
 
 ## Ceremony Steps
 
-1. Check for orphan work items (active but not in any chapter)
-2. Check for uncommitted changes
-3. Log SessionEnded ceremony event
-4. Report session summary to operator
+All steps execute within a `ceremony_context("session-end")` boundary per REQ-CEREMONY-001.
+
+### Step 1: Check for Orphan Work Items
+
+- Run `scan_incomplete_work(project_root)` from `governance_layer.py`
+- This scans `docs/work/active/` for work items with `queue_position: working` that were not closed
+- Also check for items with `status: active` but no chapter assignment (truly orphaned)
+- Report any orphan items found to operator:
+  ```
+  Orphan work detected:
+  - WORK-XXX: {title} (queue: working, not closed)
+  - WORK-YYY: {title} (no chapter assignment)
+  ```
+- This is a **warning**, not a blocker — operator may intentionally leave work in progress
+
+### Step 2: Check for Uncommitted Changes
+
+- Run `git status --porcelain` to detect uncommitted changes
+- If changes exist, warn operator:
+  ```
+  Uncommitted changes detected:
+  - {list of changed files}
+  Consider creating a checkpoint before ending session.
+  ```
+- This is a **warning**, not a blocker
+
+### Step 3: Log SessionEnded Event
+
+- Execute: `just session-end {N}`
+- This invokes `governance_events.log_session_end(session, "Hephaestus")`
+- Event appended to `.claude/haios/governance-events.jsonl`:
+  ```json
+  {"type": "SessionEnded", "session": N, "agent": "Hephaestus", "timestamp": "..."}
+  ```
+
+### Step 4: Report Session Summary
+
+Format:
+```
+Session {N} ended.
+- Completed this session: [list work items completed, or "none"]
+- Orphan items: {count} ({list IDs if any, or "none"})
+- Uncommitted changes: {yes/no}
+- Pending for next session: [items from checkpoint pending field, if checkpoint created]
+```
+
+---
+
+## Pre-Conditions
+
+- **SHOULD** invoke `checkpoint-cycle` before session-end to capture state
+- **SHOULD** invoke `observation-capture-cycle` for any completed work items
+- Session number auto-detected from `.claude/session` file if not provided
 
 ---
 

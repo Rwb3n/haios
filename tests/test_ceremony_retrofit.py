@@ -23,7 +23,7 @@ from ceremony_contracts import CeremonyContract, load_ceremony_registry
 
 SKILLS_DIR = Path(".claude/skills")
 
-# 11 existing skills that should be retrofitted with contract frontmatter
+# 13 existing skills that should be retrofitted with contract frontmatter
 EXISTING_CEREMONY_SKILLS = [
     "queue-intake",
     "queue-prioritize",
@@ -36,12 +36,12 @@ EXISTING_CEREMONY_SKILLS = [
     "observation-capture-cycle",
     "observation-triage-cycle",
     "checkpoint-cycle",
+    "session-start-ceremony",   # De-stubbed by WORK-120 (CH-014)
+    "session-end-ceremony",     # De-stubbed by WORK-120 (CH-014)
 ]
 
-# 8 new stub skills created by WORK-112
+# 6 remaining stub skills (WORK-112)
 STUB_CEREMONY_SKILLS = [
-    "session-start-ceremony",
-    "session-end-ceremony",
     "memory-commit-ceremony",
     "spawn-work-ceremony",
     "chapter-review",

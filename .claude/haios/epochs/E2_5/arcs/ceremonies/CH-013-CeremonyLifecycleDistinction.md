@@ -1,15 +1,16 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T01:32:13
+# System Auto: last updated on: 2026-02-11T19:40:00
 # Chapter: Ceremony Lifecycle Distinction
 
 ## Definition
 
 **Chapter ID:** CH-013
 **Arc:** ceremonies
-**Status:** Planned
+**Status:** Complete
+**Completed:** 2026-02-11 (Session 342-343)
 **Implementation Type:** CREATE NEW (CeremonyRunner doesn't exist)
 **Depends:** CH-011, Lifecycles:CH-001
-**Work Items:** None
+**Work Items:** WORK-118
 
 ---
 
@@ -140,14 +141,14 @@ type: lifecycle  # or ceremony
 
 ## Success Criteria
 
-- [ ] CeremonyRunner class separate from CycleRunner
-- [ ] Naming convention applied (ceremony vs lifecycle)
-- [ ] Existing "-cycle" ceremonies renamed to "-ceremony"
-- [ ] Each skill declares type: lifecycle or ceremony
-- [ ] No artifact production in ceremonies
-- [ ] No state changes in lifecycles (only via ceremony calls)
-- [ ] Unit tests verify separation
-- [ ] Documentation updated with distinction
+- [x] CeremonyRunner class separate from CycleRunner
+- [x] Naming convention applied (ceremony vs lifecycle) — `type:` field on all 33 skills
+- [ ] ~~Existing "-cycle" ceremonies renamed to "-ceremony"~~ DEFERRED to WORK-119 (391 refs, 107 files — operator decision S342)
+- [x] Each skill declares type: lifecycle or ceremony
+- [x] No artifact production in ceremonies
+- [x] No state changes in lifecycles (only via ceremony calls)
+- [x] Unit tests verify separation (12 tests)
+- [x] Documentation updated with distinction
 
 ---
 

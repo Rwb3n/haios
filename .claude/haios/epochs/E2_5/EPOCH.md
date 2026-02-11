@@ -133,7 +133,7 @@ Pause points are valid completion states, not "stuck" states.
 |-----|-------|--------|--------------|
 | **lifecycles** | Implement CycleRunner with pure function semantics | **Complete** (S318) | REQ-LIFECYCLE-001 to 004 |
 | **queue** | Implement queue ceremonies and orthogonal tracking | **Complete** (S331) | REQ-QUEUE-001 to 004 |
-| **ceremonies** | Implement ceremony boundaries and contracts | **In Progress** (CH-011 Complete, CH-012 ~Done) | REQ-CEREMONY-001 to 003 |
+| **ceremonies** | Implement ceremony boundaries and contracts | **In Progress** (CH-011-014 Complete; CH-015-017 remaining) | REQ-CEREMONY-001 to 003 |
 | ~~**feedback**~~ | ~~Implement review ceremonies and upward flow~~ | **Deferred to E2.6** (S339 scope review) | REQ-FEEDBACK-001 to 005 |
 | ~~**assets**~~ | ~~Implement typed, versioned asset production~~ | **Deferred to E2.6** (S339 scope review) | REQ-ASSET-001 to 005 |
 | ~~**portability**~~ | ~~HAIOS as distributable, portable plugin~~ | **Deferred to E2.6** (S339 scope review) | REQ-PORTABLE-001 to 003 |
@@ -164,8 +164,8 @@ S339 retrospective review with operator identified epoch scope inflation: 6 arcs
 |---------|--------|-----------|
 | CH-011 CeremonyContracts | **Complete** (S335) | None |
 | CH-012 SideEffectBoundaries | **Complete** (S335-338, closed S341) | None |
-| CH-013 CeremonyLifecycleDistinction | Planned | CeremonyRunner, rename -cycle to -ceremony, type: field |
-| CH-014 SessionCeremonies | Planned | Implement session-start/end stubs, SessionState type |
+| CH-013 CeremonyLifecycleDistinction | **Complete** (S342-343) | CeremonyRunner + type field done; rename deferred to WORK-119 |
+| CH-014 SessionCeremonies | **Complete** (S343) | Session-start/end de-stubbed with ceremony logic |
 | CH-015 ClosureCeremonies | Planned | Verify WORK-112 coverage, close |
 | CH-016 MemoryCeremonies | Planned | Implement memory-commit stub |
 | CH-017 SpawnCeremony | Planned | Spawn lineage (spawned_from/children) |
@@ -205,7 +205,7 @@ Based on dependency analysis (revised S339):
 
 1. **lifecycles arc** — **Complete** (S318)
 2. **queue arc** — **Complete** (S331)
-3. **ceremonies arc** — **In Progress** (CH-011 done, CH-012 ~done, CH-013-017 remaining)
+3. **ceremonies arc** — **In Progress** (CH-011-014 done; CH-015-017 remaining)
 4. ~~assets arc~~ — Deferred to E2.6
 5. ~~feedback arc~~ — Deferred to E2.6
 

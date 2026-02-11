@@ -42,6 +42,18 @@ After `/new-checkpoint` scaffolds the file, this skill guides population.
 
 ---
 
+## Contract Validation (CH-011)
+
+This ceremony has input/output contracts defined in frontmatter per REQ-CEREMONY-002.
+Before proceeding, verify:
+- `session_number` is available (from context or `.claude/session` file)
+- Summary of work done is available for `completed` field
+
+Contract enforcement mode is controlled by `ceremony_contract_enforcement`
+toggle in haios.yaml (currently: warn).
+
+---
+
 ## What to Do
 
 ### 1. Populate the Manifest
