@@ -45,7 +45,7 @@ extensions:
     which is out of E2.5 implementation scope
 version: '2.0'
 generated: 2026-02-05
-last_updated: '2026-02-05T21:35:31'
+last_updated: '2026-02-11T21:24:00.525725'
 ---
 # WORK-102: Session and Process Review Ceremonies
 

@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-11T21:19:13",
+    "generated": "2026-02-11T21:25:39",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 84723,
-        "entities": 9764,
+        "concepts": 84733,
+        "entities": 9765,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -7567,7 +7567,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-020-llm-energy-channeling-patterns.md",
             "last_updated": "2025-12-22T21:21:33",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-022-work-cycle-dag-unified-architecture.md",

@@ -346,6 +346,18 @@ queue-check name cycle:
 is-cycle-allowed queue_name cycle_name:
     python -c "import sys; sys.path.insert(0, '.claude/haios/modules'); from work_engine import WorkEngine; from governance_layer import GovernanceLayer; e=WorkEngine(governance=GovernanceLayer()); allowed=e.is_cycle_allowed('{{queue_name}}', '{{cycle_name}}'); print('ALLOWED' if allowed else 'BLOCKED')"
 
+# Queue ceremony: Prioritize (backlog -> ready) (WORK-124)
+queue-prioritize id rationale:
+    python -c "import sys; sys.path.insert(0, '.claude/haios/modules'); sys.path.insert(0, '.claude/haios/lib'); from work_engine import WorkEngine; from governance_layer import GovernanceLayer; from queue_ceremonies import execute_queue_transition; e=WorkEngine(governance=GovernanceLayer()); r=execute_queue_transition(e, '{{id}}', 'ready', 'Prioritize', rationale='{{rationale}}'); print(f'Prioritized: {{id}} -> ready' if r['success'] else f'Failed: {r[\"error\"]}')"
+
+# Queue ceremony: Commit (ready -> working) (WORK-124)
+queue-commit id:
+    python -c "import sys; sys.path.insert(0, '.claude/haios/modules'); sys.path.insert(0, '.claude/haios/lib'); from work_engine import WorkEngine; from governance_layer import GovernanceLayer; from queue_ceremonies import execute_queue_transition; e=WorkEngine(governance=GovernanceLayer()); r=execute_queue_transition(e, '{{id}}', 'working', 'Commit'); print(f'Committed: {{id}} -> working' if r['success'] else f'Failed: {r[\"error\"]}')"
+
+# Queue ceremony: Unpark (parked -> backlog) (WORK-124)
+queue-unpark id rationale:
+    python -c "import sys; sys.path.insert(0, '.claude/haios/modules'); sys.path.insert(0, '.claude/haios/lib'); from work_engine import WorkEngine; from governance_layer import GovernanceLayer; from queue_ceremonies import execute_queue_transition; e=WorkEngine(governance=GovernanceLayer()); r=execute_queue_transition(e, '{{id}}', 'backlog', 'Unpark', rationale='{{rationale}}'); print(f'Unparked: {{id}} -> backlog' if r['success'] else f'Failed: {r[\"error\"]}')"
+
 # Show spawn tree for an ID (E2-251: Uses WorkEngine)
 spawns id:
     python .claude/haios/modules/cli.py spawn-tree {{id}}

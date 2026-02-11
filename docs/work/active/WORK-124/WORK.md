@@ -1,38 +1,44 @@
 ---
 template: work_item
 id: WORK-124
-title: "Add justfile recipes for queue ceremonies"
+title: Add justfile recipes for queue ceremonies
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-11
 spawned_by: WORK-122
 chapter: null
 arc: ceremonies
-closed: null
+closed: '2026-02-11'
 priority: medium
 effort: small
-traces_to: [REQ-QUEUE-004]
-requirement_refs: []  # DEPRECATED: use traces_to instead
+traces_to:
+- REQ-QUEUE-004
+requirement_refs: []
 source_files: []
 acceptance_criteria: []
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: done
 node_history:
-  - node: backlog
-    entered: 2026-02-11T21:10:44
-    exited: null
+- node: backlog
+  entered: 2026-02-11 21:10:44
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 84919
+- 84920
+- 84921
+- 84922
+- 84923
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-11
-last_updated: 2026-02-11T21:10:44
+last_updated: '2026-02-11T21:25:54.177909'
 ---
 # WORK-124: Add justfile recipes for queue ceremonies
 
@@ -62,14 +68,20 @@ Queue ceremony module (queue_ceremonies.py) has execute_queue_transition() but n
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Add `just queue-prioritize {work_id} {rationale}` recipe (backlog -> ready)
-- [ ] Add `just queue-commit {work_id}` recipe (ready -> working)
-- [ ] Add `just queue-unpark {work_id} {rationale}` recipe (parked -> backlog)
-- [ ] Verify recipes invoke queue_ceremonies.execute_queue_transition() correctly
+- [x] Add `just queue-prioritize {work_id} {rationale}` recipe (backlog -> ready)
+- [x] Add `just queue-commit {work_id}` recipe (ready -> working)
+- [x] Add `just queue-unpark {work_id} {rationale}` recipe (parked -> backlog)
+- [x] Verify recipes invoke queue_ceremonies.execute_queue_transition() correctly
 
 ---
 
 ## History
+
+### 2026-02-11 - Completed (Session 346)
+- Added 3 recipes to justfile: queue-prioritize, queue-commit, queue-unpark
+- All invoke execute_queue_transition() with ceremony logging and error handling
+- Tested: prioritize WORK-124, commit WORK-124, unpark WORK-102 (restored after test)
+- Governance events verified in governance-events.jsonl
 
 ### 2026-02-11 - Created (Session 345)
 - Spawned from WORK-122 observations: queue ceremony bypass discovered during queue-commit attempt
