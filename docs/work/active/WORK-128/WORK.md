@@ -1,38 +1,42 @@
 ---
 template: work_item
 id: WORK-128
-title: "execute_queue_transition accepts no-op same-state transitions"
+title: execute_queue_transition accepts no-op same-state transitions
 type: bug
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-11
 spawned_by: WORK-125
 chapter: null
 arc: queue
-closed: null
+closed: '2026-02-11'
 priority: low
 effort: small
-traces_to: [REQ-QUEUE-004]
-requirement_refs: []  # DEPRECATED: use traces_to instead
-source_files: []
+traces_to:
+- REQ-QUEUE-004
+requirement_refs: []
+source_files:
+- .claude/haios/lib/queue_ceremonies.py
+- tests/test_queue_ceremonies.py
 acceptance_criteria: []
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: backlog
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-11T21:43:51
-    exited: null
+- node: backlog
+  entered: 2026-02-11 21:43:51
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 84940
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-11
-last_updated: 2026-02-11T21:43:51
+last_updated: '2026-02-11T21:59:30.534473'
 ---
 # WORK-128: execute_queue_transition accepts no-op same-state transitions
 
@@ -70,13 +74,21 @@ last_updated: 2026-02-11T21:43:51
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Add same-state guard to `execute_queue_transition()` (warn or block — operator decision)
-- [ ] Add test for same-state transition behavior
-- [ ] Verify no-op events are not logged (or are logged with `"no_op": true` marker)
+- [x] Add same-state guard to `execute_queue_transition()` (operator chose: block with error return)
+- [x] Add test for same-state transition behavior (2 tests: parked->parked, backlog->backlog)
+- [x] Verify no-op events are not logged (blocked before event logging — no events written)
 
 ---
 
 ## History
+
+### 2026-02-11 - Fixed (Session 348)
+- Operator decision: block (return {success: false, error: "already at X"}) rather than warn
+- Added same-state guard in execute_queue_transition() before the try block
+- Guard checks from_position == to_position, returns early with informative error
+- No events logged for blocked transitions (guard fires before log_queue_ceremony call)
+- 2 new tests added: test_same_state_transition_blocked, test_same_state_backlog_blocked
+- 12/12 queue ceremonies tests pass
 
 ### 2026-02-11 - Created (Session 347)
 - Discovered during WORK-125 round-trip testing with WORK-102

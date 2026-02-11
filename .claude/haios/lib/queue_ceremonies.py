@@ -2,7 +2,7 @@
 """
 Queue ceremony execution and event logging (CH-010, WORK-110).
 
-Events stored in .claude/governance-events.jsonl (append-only).
+Events stored in .claude/haios/governance-events.jsonl (append-only).
 
 Event Types:
 - QueueCeremony: Logged when queue ceremony executes
@@ -124,6 +124,13 @@ def execute_queue_transition(
         return {"success": False, "error": f"Work item {work_id} not found"}
 
     from_position = work.queue_position
+
+    # WORK-128: Block same-state transitions (operator decision: block, not warn)
+    if from_position == to_position:
+        return {
+            "success": False,
+            "error": f"{work_id} is already at '{to_position}' — no transition needed",
+        }
 
     try:
         with _ceremony_context_safe(f"queue-{ceremony.lower()}") as ctx:

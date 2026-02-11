@@ -79,6 +79,9 @@ paths:
   status: ".claude/haios-status.json"
   status_slim: ".claude/haios-status-slim.json"
 
+  # Event log paths (WORK-127: single canonical location)
+  governance_events: ".claude/haios/governance-events.jsonl"
+
 # Context loading configuration (WORK-008)
 # Role-based loader dispatch per L4 principles
 context:

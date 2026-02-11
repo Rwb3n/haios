@@ -5,7 +5,7 @@ Governance event logging and threshold monitoring.
 
 E2-108: Gate Observability for Implementation Cycle
 
-Events are stored in .claude/governance-events.jsonl (append-only).
+Events are stored in .claude/haios/governance-events.jsonl (append-only).
 Thresholds trigger actions when patterns are detected.
 
 Event Types:

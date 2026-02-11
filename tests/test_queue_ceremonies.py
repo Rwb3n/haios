@@ -337,3 +337,39 @@ def test_rationale_captured(tmp_path, engine):
     event = _read_events(queue_ceremonies.EVENTS_FILE)[-1]
     assert "rationale" in event
     assert "E2.6" in event["rationale"]
+
+
+# =============================================================================
+# Test 11: Same-State Transition Blocked (WORK-128)
+# =============================================================================
+
+
+def test_same_state_transition_blocked(tmp_path, engine):
+    """Same-state transition (e.g., parked -> parked) returns error, no event logged."""
+    engine.create_work("WORK-NOOP", "No-op Test")
+    engine.set_queue_position("WORK-NOOP", "parked")
+
+    result = queue_ceremonies.execute_queue_transition(
+        engine, "WORK-NOOP", "parked", "Park", rationale="Already parked"
+    )
+
+    assert result["success"] is False
+    assert "already" in result["error"].lower()
+    assert engine.get_work("WORK-NOOP").queue_position == "parked"
+    # No event should be logged for no-op transitions
+    events_file = queue_ceremonies.EVENTS_FILE
+    if events_file.exists():
+        events = _read_events(events_file)
+        assert len(events) == 0
+
+
+def test_same_state_backlog_blocked(tmp_path, engine):
+    """Backlog -> backlog transition blocked."""
+    engine.create_work("WORK-NOOP2", "No-op Backlog")
+
+    result = queue_ceremonies.execute_queue_transition(
+        engine, "WORK-NOOP2", "backlog", "Prioritize", rationale="Already backlog"
+    )
+
+    assert result["success"] is False
+    assert "already" in result["error"].lower()
