@@ -1,38 +1,42 @@
 ---
 template: work_item
 id: WORK-125
-title: "Add just queue-park recipe (reverse of queue-unpark)"
+title: Add just queue-park recipe (reverse of queue-unpark)
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-11
 spawned_by: WORK-124
 chapter: null
 arc: ceremonies
-closed: null
+closed: '2026-02-11'
 priority: low
 effort: small
-traces_to: [REQ-QUEUE-004]
-requirement_refs: []  # DEPRECATED: use traces_to instead
+traces_to:
+- REQ-QUEUE-004
+requirement_refs: []
 source_files: []
 acceptance_criteria: []
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: backlog
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-11T21:31:14
-    exited: null
+- node: backlog
+  entered: 2026-02-11 21:31:14
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 84929
+- 84930
+- 84931
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-11
-last_updated: 2026-02-11T21:31:14
+last_updated: '2026-02-11T21:40:16.709933'
 ---
 # WORK-125: Add just queue-park recipe (reverse of queue-unpark)
 
@@ -62,12 +66,17 @@ WORK-124 added queue-prioritize, queue-commit, and queue-unpark justfile recipes
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Add `just queue-park {work_id} {rationale}` recipe (backlog -> parked)
-- [ ] Test with a real parked/backlog item round-trip
+- [x] Add `just queue-park {work_id} {rationale}` recipe (backlog -> parked)
+- [x] Test with a real parked/backlog item round-trip
 
 ---
 
 ## History
+
+### 2026-02-11 - Implemented (Session 347)
+- Added `queue-park` recipe to justfile (line 361), mirroring queue-unpark pattern
+- Round-trip tested with WORK-102 (park -> unpark)
+- QueueCeremony events verified in `.claude/haios/governance-events.jsonl`
 
 ### 2026-02-11 - Created (Session 346)
 - Spawned from WORK-124 observations: missing queue-park recipe discovered during testing

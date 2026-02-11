@@ -2458,3 +2458,14 @@
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-11T21:25:37.369864"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-11T21:25:37.411207"}
 {"type": "SessionEnded", "session": 346, "agent": "Hephaestus", "timestamp": "2026-02-11T21:27:29.276757"}
+{"type": "SessionStarted", "session": 347, "agent": "Hephaestus", "timestamp": "2026-02-11T21:33:45.671062"}
+{"type": "CeremonyStart", "ceremony": "queue-park", "timestamp": "2026-02-11T21:36:57.810457"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-102", "result": "pass", "reason": "No-op: already at parked", "timestamp": "2026-02-11T21:36:57.818054"}
+{"type": "QueueCeremony", "ceremony": "Park", "items": ["WORK-102"], "from": "parked", "to": "parked", "timestamp": "2026-02-11T21:36:57.823166", "rationale": "Testing queue-park recipe for WORK-125"}
+{"type": "CeremonyEnd", "ceremony": "queue-park", "side_effects": 1, "timestamp": "2026-02-11T21:36:57.824670"}
+{"type": "CeremonyStart", "ceremony": "queue-unpark", "timestamp": "2026-02-11T21:37:03.716851"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-102", "result": "pass", "reason": "Valid transition: parked -> backlog", "timestamp": "2026-02-11T21:37:03.722360"}
+{"type": "QueueCeremony", "ceremony": "Unpark", "items": ["WORK-102"], "from": "parked", "to": "backlog", "timestamp": "2026-02-11T21:37:03.727884", "rationale": "Restoring after WORK-125 round-trip test"}
+{"type": "CeremonyEnd", "ceremony": "queue-unpark", "side_effects": 1, "timestamp": "2026-02-11T21:37:03.727884"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-11T21:39:55.298350"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-11T21:39:55.334677"}

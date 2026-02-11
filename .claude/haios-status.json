@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-11T21:25:39",
+    "generated": "2026-02-11T21:39:56",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -8,7 +8,7 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 344,
+        "prior_session": 346,
         "current_session": 345,
         "prior_date": "2026-02-11",
         "completed": [],
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 84733,
-        "entities": 9765,
+        "concepts": 84742,
+        "entities": 9771,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3690,6 +3690,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-11-05-SESSION-346-work-123-work-124-closures.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-11",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/checkpoints/2026-02-11-SESSION-345-closure-ceremony-dod-validation.md",
             "template": "checkpoint",
             "status": null,
@@ -6512,7 +6521,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-05-SESSION-94-m5-complete-e2-125-e2-129-migration.md",
             "last_updated": "2025-12-21T21:32:14",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/checkpoints/2025-12-21-06-SESSION-95-e2-130-error-capture-rebuild-and-taxonomy-discussion.md",
@@ -6652,7 +6661,7 @@
         {
             "path": "docs/checkpoints/2025-12-25-07-SESSION-120-inv-036-audit-and-e2-165-checkpoint-skill.md",
             "last_updated": "2025-12-25T21:34:08",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/checkpoints/2025-12-26-01-SESSION-121-inv-037-context-level-architecture-and-invariants-implementation.md",
@@ -6787,7 +6796,7 @@
         {
             "path": "docs/checkpoints/2025-12-29-06-SESSION-148-inv-052-session-state-system-audit-complete.md",
             "last_updated": "2025-12-29T21:32:25",
-            "days_stale": 43
+            "days_stale": 44
         },
         {
             "path": "docs/checkpoints/2025-12-29-07-SESSION-149-inv-052-architecture-redesign-meta-design.md",
@@ -6797,7 +6806,7 @@
         {
             "path": "docs/checkpoints/2025-12-30-01-SESSION-150-inv-052-architecture-redesign-meta-design-session-2.md",
             "last_updated": "2025-12-30T21:37:09",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2025-12-30-02-SESSION-151-inv-052-architecture-documentation-complete.md",
@@ -7277,7 +7286,7 @@
         {
             "path": "docs/plans/PLAN-E2-165-checkpoint-skill-with-git-commit.md",
             "last_updated": "2025-12-25T21:26:46",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/plans/PLAN-E2-170-backfill-work-items-from-archived-backlog.md",
@@ -7292,7 +7301,7 @@
         {
             "path": "docs/plans/PLAN-E2-173-work-file-milestone-discovery.md",
             "last_updated": "2025-12-24T21:28:42",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/plans/PLAN-E2-176-document-gate-contract-pattern.md",
@@ -7781,9 +7790,9 @@
         }
     ],
     "workspace": {
-        "total_files": 522,
+        "total_files": 523,
         "by_template": {
-            "checkpoint": 350,
+            "checkpoint": 351,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7794,7 +7803,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 185,
+            "unknown": 186,
             "draft": 2,
             "approved": 6,
             "ready": 1,

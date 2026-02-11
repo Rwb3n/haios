@@ -41,13 +41,14 @@ _get-session:
     @python -c "print([l.strip() for l in open('.claude/session') if l.strip() and not l.startswith('#')][-1])"
 
 # Checkpoint with explicit session
-checkpoint session title:
-    just scaffold checkpoint {{session}} "{{title}}"
+# Scaffold checkpoint manifest (canonical recipe, S347)
+# Usage: just checkpoint "title"  OR  just checkpoint 347 "title"
+checkpoint *args:
+    @python -c "import sys; sys.path.insert(0,'.claude/haios/lib'); from scaffold import scaffold_template; args='{{args}}'.split(); session=(args.pop(0) if args and args[0].isdigit() else [l.strip() for l in open('.claude/session') if l.strip() and not l.startswith('#')][-1]); title=' '.join(args) if args else None; print(f'Created: {scaffold_template(\"checkpoint\", backlog_id=session, title=title)}') if title else print('Usage: just checkpoint [session] \"title\"')"
 
-# Alias: scaffold-checkpoint - session defaults to current if omitted (S294)
-# Usage: just scaffold-checkpoint "title"  OR  just scaffold-checkpoint 294 "title"
+# Alias (legacy)
 scaffold-checkpoint *args:
-    @python -c "import sys; sys.path.insert(0,'.claude/haios/lib'); from scaffold import scaffold_template; args='{{args}}'.split(); session=(args.pop(0) if args and args[0].isdigit() else [l.strip() for l in open('.claude/session') if l.strip() and not l.startswith('#')][-1]); title=' '.join(args) if args else None; print(f'Created: {scaffold_template(\"checkpoint\", backlog_id=session, title=title)}') if title else print('Usage: just scaffold-checkpoint [session] \"title\"')"
+    just checkpoint {{args}}
 
 # Move work item to a DAG node (E2-162, E2-250: Uses WorkEngine)
 node id node:
@@ -357,6 +358,10 @@ queue-commit id:
 # Queue ceremony: Unpark (parked -> backlog) (WORK-124)
 queue-unpark id rationale:
     python -c "import sys; sys.path.insert(0, '.claude/haios/modules'); sys.path.insert(0, '.claude/haios/lib'); from work_engine import WorkEngine; from governance_layer import GovernanceLayer; from queue_ceremonies import execute_queue_transition; e=WorkEngine(governance=GovernanceLayer()); r=execute_queue_transition(e, '{{id}}', 'backlog', 'Unpark', rationale='{{rationale}}'); print(f'Unparked: {{id}} -> backlog' if r['success'] else f'Failed: {r[\"error\"]}')"
+
+# Queue ceremony: Park (backlog -> parked) (WORK-125)
+queue-park id rationale:
+    python -c "import sys; sys.path.insert(0, '.claude/haios/modules'); sys.path.insert(0, '.claude/haios/lib'); from work_engine import WorkEngine; from governance_layer import GovernanceLayer; from queue_ceremonies import execute_queue_transition; e=WorkEngine(governance=GovernanceLayer()); r=execute_queue_transition(e, '{{id}}', 'parked', 'Park', rationale='{{rationale}}'); print(f'Parked: {{id}} -> parked' if r['success'] else f'Failed: {r[\"error\"]}')"
 
 # Show spawn tree for an ID (E2-251: Uses WorkEngine)
 spawns id:

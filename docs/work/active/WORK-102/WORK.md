@@ -28,7 +28,7 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: parked
+queue_position: backlog
 cycle_phase: backlog
 current_node: backlog
 node_history:
@@ -45,7 +45,7 @@ extensions:
     which is out of E2.5 implementation scope
 version: '2.0'
 generated: 2026-02-05
-last_updated: '2026-02-11T21:24:00.525725'
+last_updated: '2026-02-11T21:37:03.725897'
 ---
 # WORK-102: Session and Process Review Ceremonies
 
