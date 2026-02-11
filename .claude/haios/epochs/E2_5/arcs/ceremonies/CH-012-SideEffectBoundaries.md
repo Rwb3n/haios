@@ -1,15 +1,16 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T01:31:48
+# System Auto: last updated on: 2026-02-11T18:40:00
 # Chapter: Side Effect Boundaries
 
 ## Definition
 
 **Chapter ID:** CH-012
 **Arc:** ceremonies
-**Status:** Planned
+**Status:** Complete
+**Completed:** 2026-02-10 (Sessions 335-338)
 **Implementation Type:** CREATE NEW
 **Depends:** CH-011
-**Work Items:** None
+**Work Items:** WORK-114, WORK-115, WORK-116
 
 ---
 
@@ -134,14 +135,14 @@ Operations requiring ceremony context:
 
 ## Success Criteria
 
-- [ ] ceremony_context() manager implemented
-- [ ] WorkEngine methods check ceremony context
-- [ ] Config toggle for warn/block mode
-- [ ] Out-of-ceremony changes logged (warn mode)
-- [ ] Out-of-ceremony changes blocked (block mode)
-- [ ] All ceremony skills use ceremony_context()
-- [ ] Unit tests for boundary enforcement
-- [ ] Integration test: state change without ceremony → appropriate response
+- [x] ceremony_context() manager implemented (WORK-115: governance_layer.py:602)
+- [x] WorkEngine methods check ceremony context (WORK-115: check_ceremony_required() at :665)
+- [x] Config toggle for warn/block mode (WORK-115: haios.yaml ceremony_context_enforcement)
+- [x] Out-of-ceremony changes logged (warn mode) (WORK-114, WORK-115)
+- [x] Out-of-ceremony changes blocked (block mode) (WORK-115)
+- [x] All ceremony skills use ceremony_context() (WORK-116: 4+ skills wired)
+- [x] Unit tests for boundary enforcement (WORK-114: 145 tests, WORK-115, WORK-116)
+- [x] Integration test: state change without ceremony → appropriate response (WORK-114, WORK-115)
 
 ---
 

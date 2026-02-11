@@ -46,7 +46,7 @@ Chaining is caller choice, not callee side-effect.
 |-----------|----------|-------|
 | Governed activities paradigm | REQ-ACTIVITY-001, REQ-ACTIVITY-002 | Implement |
 | Four-dimensional work state | WORK-065 finding, REQ-WORK-001 | Implement |
-| Ceremony definitions | 19 ceremonies across 6 categories | Implement |
+| Ceremony definitions | 20 ceremonies across 6 categories | Implement |
 | Asset typing | Unix pipe philosophy | Implement |
 | Feedback loops | Work → Chapter → Arc → Epoch → L4 | Implement |
 
@@ -144,7 +144,7 @@ Pause points are valid completion states, not "stuck" states.
 
 - [x] CycleRunner treats lifecycles as pure functions (no implicit chaining) — lifecycles arc Complete (S318)
 - [x] Queue position is tracked independently from lifecycle phase — queue arc Complete (S331)
-- [ ] All 19 ceremonies have working implementations with contracts — ceremonies arc in progress
+- [ ] All 20 ceremonies have working implementations with contracts — ceremonies arc in progress
 - ~~[ ] Assets have typed schemas and provenance frontmatter~~ — **Deferred to E2.6** (S339)
 - ~~[ ] Feedback review ceremonies update parent scope~~ — **Deferred to E2.6** (S339)
 - [x] Pause points (per S27) recognized as valid completion — lifecycles arc Complete (S318)
@@ -163,7 +163,7 @@ S339 retrospective review with operator identified epoch scope inflation: 6 arcs
 | Chapter | Status | Remaining |
 |---------|--------|-----------|
 | CH-011 CeremonyContracts | **Complete** (S335) | None |
-| CH-012 SideEffectBoundaries | **~Done** (3 work items complete) | Close chapter |
+| CH-012 SideEffectBoundaries | **Complete** (S335-338, closed S341) | None |
 | CH-013 CeremonyLifecycleDistinction | Planned | CeremonyRunner, rename -cycle to -ceremony, type: field |
 | CH-014 SessionCeremonies | Planned | Implement session-start/end stubs, SessionState type |
 | CH-015 ClosureCeremonies | Planned | Verify WORK-112 coverage, close |

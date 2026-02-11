@@ -14,7 +14,7 @@ The Ceremonies arc contains 7 chapters defining the governance boundary for side
 
 | ID | Chapter | Statement | Confidence | Risk if Wrong |
 |----|---------|-----------|------------|---------------|
-| A1 | CH-011 | All 19 ceremonies exist and are enumerable | medium | Contract applied to phantom ceremonies |
+| A1 | CH-011 | All 20 ceremonies exist and are enumerable | medium | Contract applied to phantom ceremonies |
 | A2 | CH-011 | YAML frontmatter parsing available in skill context | high | Skills cannot parse contracts |
 | A3 | CH-011 | Input validation happens synchronously | medium | Async allows invalid starts |
 | A4 | CH-011 | Pattern field uses regex syntax | low | Ambiguous interpretation |

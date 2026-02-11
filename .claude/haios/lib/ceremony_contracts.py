@@ -6,7 +6,7 @@ Defines the data model for ceremony contracts:
 - ContractField: Input contract field (field, type, required, description, pattern?)
 - OutputField: Output contract field (field, type, guaranteed, description)
 - CeremonyContract: Full ceremony contract (name, category, inputs, outputs, side_effects)
-- CeremonyRegistry: Collection of all 19 ceremonies loaded from YAML
+- CeremonyRegistry: Collection of all 20 ceremonies loaded from YAML
 - RegistryEntry: Single ceremony entry in the registry
 
 Validation (WORK-113):

@@ -174,9 +174,9 @@ class TestCeremonyRegistry:
     """Test 2: Load ceremony registry."""
 
     def test_load_ceremony_registry(self):
-        """Verify registry YAML loads and contains all 19 ceremonies."""
+        """Verify registry YAML loads and contains all 20 ceremonies."""
         registry = load_ceremony_registry()
-        assert len(registry.ceremonies) == 19
+        assert len(registry.ceremonies) == 20
 
     def test_registry_has_all_categories(self):
         """Registry must cover all 6 ceremony categories."""

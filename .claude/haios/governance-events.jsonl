@@ -2159,3 +2159,6 @@
 {"type": "SessionEnded", "session": 338, "agent": "Hephaestus", "timestamp": "2026-02-10T21:47:14.621832"}
 {"type": "SessionStarted", "session": 339, "agent": "Hephaestus", "timestamp": "2026-02-10T21:57:34.514455"}
 {"type": "SessionStarted", "session": 340, "agent": "Hephaestus", "timestamp": "2026-02-11T18:15:39.822602"}
+{"type": "SessionEnded", "session": 340, "agent": "Hephaestus", "timestamp": "2026-02-11T18:34:11.703936"}
+{"type": "SessionEnded", "session": 339, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-11T18:34:45.679384"}
+{"type": "SessionStarted", "session": 341, "agent": "Hephaestus", "timestamp": "2026-02-11T18:35:16.443558"}

@@ -167,9 +167,9 @@ def validate_ceremony_output(ceremony: str, outputs: Dict) -> ValidationResult:
 ## Success Criteria
 
 - [x] Contract schema defined (YAML structure) — WORK-111
-- [x] All 19 ceremonies have input_contract in frontmatter — WORK-112
-- [x] All 19 ceremonies have output_contract in frontmatter — WORK-112
-- [x] All 19 ceremonies have side_effects documented — WORK-112
+- [x] All 20 ceremonies have input_contract in frontmatter — WORK-112
+- [x] All 20 ceremonies have output_contract in frontmatter — WORK-112
+- [x] All 20 ceremonies have side_effects documented — WORK-112
 - [x] Validation functions implemented — WORK-113
 - [x] Governance blocks ceremony start if input contract fails — WORK-113 (configurable warn/block)
 - [x] Unit tests for contract validation — WORK-113 (17 tests)

@@ -1,5 +1,5 @@
 # generated: 2026-02-03
-# System Auto: last updated on: 2026-02-03T01:00:54
+# System Auto: last updated on: 2026-02-11T18:42:00
 # Arc: Ceremonies
 
 ## Definition
@@ -13,7 +13,7 @@
 
 ## Purpose
 
-Implement all 19 ceremonies as side-effect boundaries per REQ-CEREMONY-001 to 003.
+Implement all 20 ceremonies as side-effect boundaries per REQ-CEREMONY-001 to 003.
 
 ---
 
@@ -31,33 +31,33 @@ Implement all 19 ceremonies as side-effect boundaries per REQ-CEREMONY-001 to 00
 
 | Category | Ceremonies | Count |
 |----------|------------|-------|
-| Queue | Intake, Prioritize, Commit, Release | 4 |
+| Queue | Intake, Prioritize, Commit, Release, Unpark | 5 |
 | Session | Start, End, Checkpoint | 3 |
 | Closure | Work, Chapter, Arc, Epoch | 4 |
 | Feedback | Chapter/Arc/Epoch/Requirements Review | 4 |
 | Memory | Observation Capture, Triage, Memory Commit | 3 |
 | Spawn | Spawn Work | 1 |
-| **Total** | | **19** |
+| **Total** | | **20** |
 
 ---
 
 ## Chapters
 
-| CH-ID | Title | Requirements | Dependencies |
-|-------|-------|--------------|--------------|
-| CH-011 | CeremonyContracts | REQ-CEREMONY-002 | None |
-| CH-012 | SideEffectBoundaries | REQ-CEREMONY-001 | CH-011 |
-| CH-013 | CeremonyLifecycleDistinction | REQ-CEREMONY-003 | CH-011, Lifecycles:CH-001 |
-| CH-014 | SessionCeremonies | REQ-CEREMONY-001 | CH-011 |
-| CH-015 | ClosureCeremonies | REQ-CEREMONY-001 | CH-011 |
-| CH-016 | MemoryCeremonies | REQ-CEREMONY-001 | CH-011 |
-| CH-017 | SpawnCeremony | REQ-CEREMONY-001 | CH-011 |
+| CH-ID | Title | Requirements | Dependencies | Status |
+|-------|-------|--------------|--------------|--------|
+| CH-011 | CeremonyContracts | REQ-CEREMONY-002 | None | **Complete** (S335) |
+| CH-012 | SideEffectBoundaries | REQ-CEREMONY-001 | CH-011 | **Complete** (S335-338) |
+| CH-013 | CeremonyLifecycleDistinction | REQ-CEREMONY-003 | CH-011, Lifecycles:CH-001 | Planned |
+| CH-014 | SessionCeremonies | REQ-CEREMONY-001 | CH-011 | Planned |
+| CH-015 | ClosureCeremonies | REQ-CEREMONY-001 | CH-011 | Planned |
+| CH-016 | MemoryCeremonies | REQ-CEREMONY-001 | CH-011 | Planned |
+| CH-017 | SpawnCeremony | REQ-CEREMONY-001 | CH-011 | Planned |
 
 ---
 
 ## Exit Criteria
 
-- [ ] All 19 ceremonies have skill implementations
+- [ ] All 20 ceremonies have skill implementations
 - [ ] Each ceremony has documented input/output contract
 - [ ] Ceremonies log events for audit
 - [ ] No state changes occur outside ceremony boundaries

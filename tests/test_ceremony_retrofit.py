@@ -3,7 +3,7 @@
 WORK-112: Retrofit Ceremony Skills with Contracts
 Chapter: CH-011 (CeremonyContracts)
 
-Verifies that all 19 ceremony skills have YAML frontmatter contracts
+Verifies that all 20 ceremony skills have YAML frontmatter contracts
 and that the ceremony registry reflects full contract coverage.
 """
 
@@ -137,20 +137,20 @@ class TestStubSkillsCreated:
 
 
 class TestRegistryContractCoverage:
-    """Test 3: Registry shows 19/19 has_contract: true."""
+    """Test 3: Registry shows 20/20 has_contract: true."""
 
     def test_all_ceremonies_have_contracts(self):
-        """All 19 ceremonies in registry must have has_contract: true."""
+        """All 20 ceremonies in registry must have has_contract: true."""
         registry = load_ceremony_registry()
         missing = [c.name for c in registry.ceremonies if not c.has_contract]
         assert len(missing) == 0, (
             f"Ceremonies missing contracts: {missing}"
         )
 
-    def test_registry_count_still_19(self):
-        """Registry must still contain exactly 19 ceremonies."""
+    def test_registry_count_still_20(self):
+        """Registry must still contain exactly 20 ceremonies."""
         registry = load_ceremony_registry()
-        assert len(registry.ceremonies) == 19
+        assert len(registry.ceremonies) == 20
 
     def test_new_stubs_have_skill_entries(self):
         """The 8 new stub ceremonies must have has_skill: true and skill set."""
