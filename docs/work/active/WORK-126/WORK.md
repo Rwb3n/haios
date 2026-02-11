@@ -1,38 +1,46 @@
 ---
 template: work_item
 id: WORK-126
-title: "Queue transition node_history not captured by justfile recipes"
+title: Queue transition node_history not captured by justfile recipes
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-11
 spawned_by: WORK-124
 chapter: null
 arc: queue
-closed: null
+closed: '2026-02-11'
 priority: low
 effort: medium
-traces_to: [REQ-QUEUE-001]
-requirement_refs: []  # DEPRECATED: use traces_to instead
+traces_to:
+- REQ-QUEUE-001
+requirement_refs: []
 source_files: []
 acceptance_criteria: []
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: backlog
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-11T21:31:14
-    exited: null
+- node: backlog
+  entered: 2026-02-11 21:31:14
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 84947
+- 84948
+- 84949
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-11
-last_updated: 2026-02-11T21:31:14
+last_updated: '2026-02-11T22:27:06.022570'
+queue_history:
+- position: done
+  entered: '2026-02-11T22:26:50.495256'
+  exited: null
 ---
 # WORK-126: Queue transition node_history not captured by justfile recipes
 
@@ -62,9 +70,9 @@ When queue transitions happen via justfile recipes (queue-prioritize, queue-comm
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Investigate: should node_history track queue transitions or use separate queue_history?
-- [ ] Implement chosen approach in WorkEngine.set_queue_position()
-- [ ] Verify queue ceremony recipes produce history entries
+- [x] Investigate: should node_history track queue transitions or use separate queue_history?
+- [x] Implement chosen approach in WorkEngine.set_queue_position()
+- [x] Verify queue ceremony recipes produce history entries
 
 ---
 

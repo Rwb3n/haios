@@ -2050,3 +2050,68 @@ def test_initial_queue_assignment_allowed(tmp_path, governance):
     # Subsequent invalid transition should be blocked
     with pytest.raises(ValueError):
         engine.set_queue_position("WORK-INIT", "working")
+
+
+# =============================================================================
+# WORK-126: Queue History Tracking Tests
+# =============================================================================
+
+
+def test_set_queue_position_appends_queue_history(tmp_path, governance):
+    """WORK-126 T1: set_queue_position() appends to queue_history."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-QH1", "Test Queue History")
+    engine.set_queue_position("WORK-QH1", "ready")
+    work = engine.get_work("WORK-QH1")
+    assert len(work.queue_history) == 2
+    assert work.queue_history[0]["position"] == "backlog"
+    assert work.queue_history[0]["exited"] is not None
+    assert work.queue_history[1]["position"] == "ready"
+    assert work.queue_history[1]["exited"] is None
+
+
+def test_queue_history_full_lifecycle(tmp_path, governance):
+    """WORK-126 T2: queue_history tracks full backlog->ready->working lifecycle."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-QH2", "Full Lifecycle")
+    engine.set_queue_position("WORK-QH2", "ready")
+    engine.set_queue_position("WORK-QH2", "working")
+    work = engine.get_work("WORK-QH2")
+    assert len(work.queue_history) == 3
+    assert [h["position"] for h in work.queue_history] == ["backlog", "ready", "working"]
+    assert all(h["exited"] is not None for h in work.queue_history[:-1])
+    assert work.queue_history[-1]["exited"] is None
+
+
+def test_queue_history_backward_compat(tmp_path, governance):
+    """WORK-126 T3: Legacy WORK.md without queue_history defaults to []."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    work_dir = tmp_path / "docs" / "work" / "active" / "WORK-LEGACY"
+    work_dir.mkdir(parents=True)
+    (work_dir / "WORK.md").write_text(SAMPLE_WORK_LEGACY_NO_QUEUE, encoding="utf-8")
+    work = engine.get_work("WORK-LEGACY")
+    assert work.queue_history == []
+
+
+def test_create_work_seeds_queue_history(tmp_path, governance):
+    """WORK-126 T4: create_work() seeds queue_history with backlog entry."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-QH4", "Seed Test")
+    work = engine.get_work("WORK-QH4")
+    assert len(work.queue_history) == 1
+    assert work.queue_history[0]["position"] == "backlog"
+    assert work.queue_history[0]["entered"] is not None
+    assert work.queue_history[0]["exited"] is None
+
+
+def test_close_appends_done_to_queue_history(tmp_path, governance):
+    """WORK-126 T5: close() appends done entry to queue_history."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-QH5", "Close Test")
+    engine.set_queue_position("WORK-QH5", "ready")
+    engine.set_queue_position("WORK-QH5", "working")
+    engine.close("WORK-QH5")
+    work = engine.get_work("WORK-QH5")
+    assert work.queue_history[-1]["position"] == "done"
+    assert work.queue_history[-2]["position"] == "working"
+    assert work.queue_history[-2]["exited"] is not None

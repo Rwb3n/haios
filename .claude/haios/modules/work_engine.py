@@ -104,6 +104,7 @@ class WorkState:
     cycle_phase: str = "backlog"  # WORK-066: renamed from current_node
     blocked_by: List[str] = field(default_factory=list)
     node_history: List[Dict[str, Any]] = field(default_factory=list)
+    queue_history: List[Dict[str, Any]] = field(default_factory=list)  # WORK-126: Queue position audit trail
     memory_refs: List[int] = field(default_factory=list)
     requirement_refs: List[str] = field(default_factory=list)  # WORK-001: Links to source requirements
     source_files: List[str] = field(default_factory=list)  # WORK-001: Provenance
@@ -320,6 +321,9 @@ class WorkEngine:
             "current_node": "backlog",
             "node_history": [
                 {"node": "backlog", "entered": now.isoformat(), "exited": None}
+            ],
+            "queue_history": [  # WORK-126: Seed queue audit trail
+                {"position": "backlog", "entered": now.isoformat(), "exited": None}
             ],
             "memory_refs": [],
             "documents": {"plans": [], "investigations": [], "checkpoints": []},
@@ -582,6 +586,13 @@ class WorkEngine:
         # Update status and queue_position atomically (CH-008: complete without spawn)
         work.status = "complete"
         work.queue_position = "done"
+
+        # WORK-126: Append done to queue_history
+        now_str = datetime.now().isoformat()
+        if work.queue_history:
+            work.queue_history[-1]["exited"] = now_str
+        work.queue_history.append({"position": "done", "entered": now_str, "exited": None})
+
         self._write_work_file(work)
 
         # Set closed date in frontmatter
@@ -700,6 +711,12 @@ class WorkEngine:
 
         # Update in-memory state
         work.queue_position = position
+
+        # WORK-126: Append queue_history entry
+        now = datetime.now().isoformat()
+        if work.queue_history:
+            work.queue_history[-1]["exited"] = now
+        work.queue_history.append({"position": position, "entered": now, "exited": None})
 
         # Persist via unified write path (A1 mitigation)
         self._write_work_file(work)
@@ -960,6 +977,7 @@ class WorkEngine:
             cycle_phase=fm.get("cycle_phase", current_node_val),  # Falls back to current_node
             blocked_by=fm.get("blocked_by", []) or [],
             node_history=fm.get("node_history", []),
+            queue_history=fm.get("queue_history", []),  # WORK-126: backward compat
             memory_refs=fm.get("memory_refs", []) or [],
             # WORK-001: Universal work item fields
             requirement_refs=fm.get("requirement_refs", []) or [],
@@ -992,6 +1010,7 @@ class WorkEngine:
         fm = yaml.safe_load(parts[1]) or {}
         fm["current_node"] = work.current_node
         fm["node_history"] = work.node_history
+        fm["queue_history"] = work.queue_history  # WORK-126
         fm["memory_refs"] = work.memory_refs
         fm["status"] = work.status
         # WORK-066: Persist queue_position and cycle_phase (unified write path per A1)
