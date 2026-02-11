@@ -52,6 +52,6 @@ verdict_rules:
 
 # Gate integration (how this framework is used)
 integration:
-  phase: plan-validation-cycle.CRITIQUE
+  phase: implementation-cycle.PLAN.Gate1
   trigger: pre-DO
-  required: true  # Cannot skip critique in validation
+  required: true  # Cannot skip critique before validation

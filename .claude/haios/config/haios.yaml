@@ -104,7 +104,7 @@ agents:
     framework: assumption_surfacing  # Default framework
     frameworks_dir: ".claude/haios/config/critique_frameworks/"
     integration:
-      gate: plan-validation-cycle.CRITIQUE
+      gate: implementation-cycle.PLAN.Gate1
       trigger: pre-DO
     context_loading:
       - manifesto/L4/agent_user_requirements.md

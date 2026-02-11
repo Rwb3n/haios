@@ -233,9 +233,8 @@ phase_to_state:
   ground-cycle/MEMORY: EXPLORE
   ground-cycle/CONTEXT_MAP: EXPLORE
 
-  # plan-validation-cycle
+  # plan-validation-cycle (CRITIQUE removed WORK-121 S344, moved to implementation-cycle Gate 1)
   plan-validation-cycle/CHECK: CHECK
   plan-validation-cycle/SPEC_ALIGN: CHECK
-  plan-validation-cycle/CRITIQUE: CHECK
   plan-validation-cycle/VALIDATE: CHECK
   plan-validation-cycle/APPROVE: DONE

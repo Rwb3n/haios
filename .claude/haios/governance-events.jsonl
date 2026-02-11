@@ -2422,3 +2422,7 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-INT", "result": "pass", "reason": "Valid transition: parked -> backlog", "timestamp": "2026-02-11T19:53:20.330472"}
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-INT", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-02-11T19:53:20.345164"}
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-INIT", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-02-11T19:53:20.392243"}
+{"type": "SessionEnded", "session": 343, "agent": "Hephaestus", "timestamp": "2026-02-11T19:59:58.412893"}
+{"type": "SessionStarted", "session": 344, "agent": "Hephaestus", "timestamp": "2026-02-11T20:06:16.643569"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-11T20:36:15.000124"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-11T20:36:15.031304"}

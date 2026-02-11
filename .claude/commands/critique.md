@@ -56,5 +56,5 @@ For other artifacts, output is displayed inline.
 ## Related
 
 - **critique-agent:** `.claude/agents/critique-agent.md`
-- **plan-validation-cycle:** Integrates critique as CRITIQUE phase
+- **implementation-cycle:** Integrates critique as PLAN phase Gate 1 (WORK-121)
 - **assumption_surfacing.yaml:** Default framework in `.claude/haios/config/critique_frameworks/`

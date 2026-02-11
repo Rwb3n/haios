@@ -82,22 +82,39 @@ foresight_prep:
 - [ ] Tests defined in "Tests First" section
 - [ ] Current/Desired state documented
 - [ ] (Optional) foresight_prep captured with prediction
+- [ ] **MUST:** Invoke critique-agent and pass critique-revise loop (see Exit Gate)
 - [ ] **MUST:** Invoke `Skill(skill="plan-validation-cycle")` before proceeding to DO
 - [ ] **MUST:** Invoke `Task(subagent_type='preflight-checker')` to validate readiness
 
 **Exit Gate (MUST):**
-Before transitioning to DO phase, **MUST** invoke plan-validation-cycle:
+Before transitioning to DO phase, execute these three gates in order:
+
+**Gate 1 - MUST: Critique (Assumption Surfacing)**
+Invoke critique-agent to surface implicit assumptions on the raw plan:
+```
+Task(subagent_type='critique-agent', prompt='Critique plan: docs/work/active/{backlog_id}/plans/PLAN.md')
+```
+
+Apply critique-revise loop based on verdict:
+- **PROCEED:** All assumptions mitigated. Continue to Gate 2.
+- **REVISE:** Flagged assumptions exist. Revise plan to address them, then re-invoke critique. Repeat until PROCEED or max 3 iterations (then escalate to operator via AskUserQuestion).
+- **BLOCK:** Unmitigated low-confidence assumptions. Return to plan-authoring-cycle. DO phase blocked.
+
+> Critique runs BEFORE validation so assumptions are surfaced on the raw plan, not one already "blessed" by structural checks. This prevents the S343 anti-pattern where validation momentum caused critique to be skipped.
+
+**Gate 2 - MUST: Plan Validation**
 ```
 Skill(skill="plan-validation-cycle")
 ```
+Validates structural completeness and quality. plan-validation-cycle runs CHECK → SPEC_ALIGN → VALIDATE → APPROVE (no duplicate critique).
 
-**THEN MUST** invoke preflight-checker agent to validate plan readiness:
+**Gate 3 - MUST: Preflight Check**
 ```
 Task(subagent_type='preflight-checker', prompt='Check plan for {backlog_id}')
 ```
-This validates plan completeness and file scope. DO phase is blocked until preflight passes.
+Validates plan completeness and file scope. DO phase is blocked until all three gates pass.
 
-**Tools:** Read, Glob, Task(preflight-checker), Skill(plan-validation-cycle)
+**Tools:** Read, Glob, Task(critique-agent), Task(preflight-checker), Skill(plan-validation-cycle)
 
 ---
 

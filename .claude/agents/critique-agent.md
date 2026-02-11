@@ -112,4 +112,4 @@ blocking_assumptions: []
 
 ## Integration Point
 
-This agent is invoked by `plan-validation-cycle` in the CRITIQUE phase (between CHECK and VALIDATE). It provides a cognitive bias check before implementation begins.
+This agent is invoked by `implementation-cycle` in the PLAN phase Gate 1 (before plan-validation-cycle). It provides a cognitive bias check before implementation begins. Moved from plan-validation-cycle CRITIQUE phase in WORK-121 (S344).

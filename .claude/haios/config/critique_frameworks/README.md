@@ -55,5 +55,5 @@ Future frameworks could include:
 ## Related
 
 - **critique-agent**: `.claude/agents/critique-agent.md`
-- **plan-validation-cycle**: Invokes critique in CRITIQUE phase
+- **implementation-cycle**: Invokes critique in PLAN phase Gate 1 (WORK-121)
 - **E2-072**: Implementation work item

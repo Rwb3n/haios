@@ -1,40 +1,55 @@
 ---
 template: work_item
 id: WORK-121
-title: "Enforce Critique Gate Before DO Phase"
+title: Enforce Critique Gate Before DO Phase
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-11
 spawned_by: null
 chapter: null
 arc: null
-closed: null
+closed: '2026-02-11'
 priority: medium
 effort: medium
 traces_to:
-- REQ-GOVERNANCE-001
-requirement_refs: []  # DEPRECATED: use traces_to instead
+- REQ-CRITIQUE-001
+requirement_refs: []
 source_files:
 - .claude/skills/implementation-cycle/SKILL.md
+- .claude/skills/plan-validation-cycle/SKILL.md
 acceptance_criteria: []
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: backlog
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-11T20:02:07
-    exited: null
+- node: backlog
+  entered: 2026-02-11 20:02:07
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 84884
+- 65046
+- 84885
+- 84886
+- 84887
+- 82309
+- 84888
+- 84889
+- 84890
+- 84891
+- 84892
+- 84893
+- 84894
+- 84895
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-11
-last_updated: 2026-02-11T20:02:07
+last_updated: '2026-02-11T20:36:44.342523'
 ---
 # WORK-121: Enforce Critique Gate Before DO Phase
 
@@ -67,7 +82,9 @@ The implementation-cycle skill's PLAN phase exit gate currently goes: plan compl
 - [ ] implementation-cycle SKILL.md PLAN phase exit gate updated: critique-agent invoked after plan complete, before plan-validation-cycle
 - [ ] Critique-revise loop documented: critique → revise if flagged → re-critique → until clean → validate
 - [ ] PLAN phase exit criteria checklist updated to include critique step as MUST
+- [ ] plan-validation-cycle SKILL.md CRITIQUE phase removed (moved to implementation-cycle); cycle becomes CHECK → SPEC_ALIGN → VALIDATE → APPROVE
 - [ ] Test verifying implementation-cycle skill references critique-agent in PLAN phase
+- [ ] Test verifying plan-validation-cycle no longer has CRITIQUE phase
 
 ---
 
