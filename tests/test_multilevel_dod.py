@@ -14,7 +14,7 @@ class TestL4Requirements:
     def requirements_content(self):
         path = Path(".claude/haios/manifesto/L4/functional_requirements.md")
         assert path.exists(), f"Requirements file not found: {path}"
-        return path.read_text()
+        return path.read_text(encoding="utf-8")
 
     def test_req_dod_001_exists(self, requirements_content):
         """REQ-DOD-001 should exist in functional_requirements.md"""

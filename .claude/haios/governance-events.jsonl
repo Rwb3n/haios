@@ -2426,3 +2426,9 @@
 {"type": "SessionStarted", "session": 344, "agent": "Hephaestus", "timestamp": "2026-02-11T20:06:16.643569"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-11T20:36:15.000124"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-11T20:36:15.031304"}
+{"type": "SessionEnded", "session": 344, "agent": "Hephaestus", "timestamp": "2026-02-11T20:42:58.542915"}
+{"type": "SessionStarted", "session": 345, "agent": "Hephaestus", "timestamp": "2026-02-11T20:45:16.354578"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-11T20:48:16.983807"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 0, "timestamp": "2026-02-11T20:48:16.986813"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-11T21:05:16.136635"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-11T21:05:16.169357"}
