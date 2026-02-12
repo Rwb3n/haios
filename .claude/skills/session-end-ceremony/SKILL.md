@@ -53,16 +53,9 @@ All steps execute within a `ceremony_context("session-end")` boundary per REQ-CE
 
 ### Step 1: Check for Orphan Work Items
 
-- Run `scan_incomplete_work(project_root)` from `governance_layer.py`
-- This scans `docs/work/active/` for work items with `queue_position: working` that were not closed
-- Also check for items with `status: active` but no chapter assignment (truly orphaned)
-- Report any orphan items found to operator:
-  ```
-  Orphan work detected:
-  - WORK-XXX: {title} (queue: working, not closed)
-  - WORK-YYY: {title} (no chapter assignment)
-  ```
-- This is a **warning**, not a blocker — operator may intentionally leave work in progress
+- **Note:** Orphan detection is handled by `ColdstartOrchestrator` at next session start (RECOVERY phase). It detects incomplete work items and orphan sessions automatically.
+- At session-end, skip programmatic orphan scan — the agent should note any work left in-progress in the session summary for operator awareness.
+- This is informational, not a blocker — operator may intentionally leave work in progress.
 
 ### Step 2: Check for Uncommitted Changes
 
