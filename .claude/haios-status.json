@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-12T22:42:06",
+    "generated": "2026-02-12T23:37:01",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 84868,
-        "entities": 9813,
+        "concepts": 84882,
+        "entities": 9815,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -6207,7 +6207,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
             "last_updated": "2025-12-04T22:47:20",
-            "days_stale": 69
+            "days_stale": 70
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-prototype-consolidation.md",
@@ -6222,7 +6222,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-extraction-improvement-complete.md",
             "last_updated": "2025-12-04T22:58:40",
-            "days_stale": 69
+            "days_stale": 70
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-final.md",
@@ -6582,7 +6582,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-06-SESSION-95-e2-130-error-capture-rebuild-and-taxonomy-discussion.md",
             "last_updated": "2025-12-21T23:04:37",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/checkpoints/2025-12-22-01-SESSION-96-synthesis-review-and-backlog-archival.md",
@@ -6857,7 +6857,7 @@
         {
             "path": "docs/checkpoints/2025-12-29-07-SESSION-149-inv-052-architecture-redesign-meta-design.md",
             "last_updated": "2025-12-29T23:31:00",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/checkpoints/2025-12-30-01-SESSION-150-inv-052-architecture-redesign-meta-design-session-2.md",
@@ -6922,12 +6922,12 @@
         {
             "path": "docs/checkpoints/2026-01-03-06-SESSION-162-e2-250-chariot-module-integration-and-dod-framework.md",
             "last_updated": "2026-01-03T23:06:35",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2026-01-03-07-SESSION-162-epoch-22-migration-planning-e2-251-through-e2-255.md",
             "last_updated": "2026-01-03T23:31:47",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2026-01-04-01-SESSION-163-e2-251-workengine-cascade-spawn-backfill-complete.md",
@@ -6977,7 +6977,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-10-SESSION-172-inv-057-complete-e2-269-plan-authored.md",
             "last_updated": "2026-01-04T22:46:19",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/checkpoints/2026-01-05-01-SESSION-173-e2-269-e2-238-inv-052-implementation-and-plan-authoring.md",
@@ -6997,12 +6997,12 @@
         {
             "path": "docs/checkpoints/2026-01-05-04-SESSION-176-e2-272-e2-273-ambiguity-gating-gates-1-2-complete.md",
             "last_updated": "2026-01-05T22:53:08",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/checkpoints/2026-01-05-05-SESSION-177-e2-274-e2-275-complete-ambiguity-gating-done-critical-memory-loss-finding.md",
             "last_updated": "2026-01-05T23:29:59",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/checkpoints/2026-01-06-01-SESSION-177-epoch-chapter-arc-hierarchy-and-ground-cycle-discovery.md",
@@ -7277,7 +7277,7 @@
         {
             "path": "docs/plans/PLAN-E2-130-error-capture-rebuild.md",
             "last_updated": "2025-12-21T23:02:26",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/plans/PLAN-E2-140-investigation-status-sync-hook.md",
@@ -7597,7 +7597,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-011-command-skill-architecture-gap.md",
             "last_updated": "2025-12-22T22:45:09",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-012-static-registration-anti-pattern-mitigation.md",
@@ -7697,7 +7697,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-034-backlog-archival-and-status-rewiring.md",
             "last_updated": "2025-12-22T23:16:24",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-035-skill-architecture-refactoring.md",
