@@ -2,7 +2,7 @@
 template: work_item
 id: INV-065
 title: Session State Cascade Architecture
-status: dismissed
+status: complete
 owner: Hephaestus
 created: 2026-01-15
 closed: '2026-01-16'

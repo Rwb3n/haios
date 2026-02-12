@@ -2,10 +2,10 @@
 template: work_item
 id: E2-087
 title: "Plan Forward-Maintenance Automation"
-status: archived
+status: complete
 owner: Hephaestus
 created: 2025-12-23
-closed: null
+closed: 2026-02-12
 milestone: M7e-Hygiene
 priority: medium
 effort: medium

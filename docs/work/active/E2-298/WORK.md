@@ -2,7 +2,7 @@
 template: work_item
 id: E2-298
 title: Consumer Migration to WorkEngine
-status: dismissed
+status: complete
 owner: Hephaestus
 created: 2026-01-17
 closed: '2026-01-17'

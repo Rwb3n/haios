@@ -2,10 +2,10 @@
 template: work_item
 id: E2-161
 title: "Auto-link Documents to Work File"
-status: archived
+status: complete
 owner: Hephaestus
 created: 2025-12-24
-closed: null
+closed: 2026-02-12
 milestone: M7b-WorkInfra
 priority: medium
 effort: medium

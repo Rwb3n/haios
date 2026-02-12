@@ -2,10 +2,10 @@
 template: work_item
 id: INV-016
 title: "HAIOS Operational Infrastructure Audit"
-status: archived
+status: complete
 owner: Hephaestus
 created: 2025-12-23
-closed: null
+closed: 2026-02-12
 milestone: M7e-Hygiene
 priority: medium
 effort: medium

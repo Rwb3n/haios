@@ -2,10 +2,10 @@
 template: work_item
 id: INV-021
 title: Work Item Taxonomy and Schema Semantics
-status: dismissed
+status: complete
 owner: Hephaestus
 created: 2025-12-23
-closed: null
+closed: 2026-02-12
 milestone: M7b-WorkInfra
 priority: medium
 effort: medium

@@ -2,10 +2,10 @@
 template: work_item
 id: INV-051
 title: Skill Chain Pausing Behavioral Pattern
-status: archived
+status: complete
 owner: Hephaestus
 created: 2025-12-29
-closed: null
+closed: 2026-02-12
 milestone: M9-Agent
 priority: low
 effort: small

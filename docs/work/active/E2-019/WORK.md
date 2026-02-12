@@ -2,10 +2,10 @@
 template: work_item
 id: E2-019
 title: "Concept Type Normalization"
-status: archived
+status: complete
 owner: Hephaestus
 created: 2025-12-23
-closed: null
+closed: 2026-02-12
 milestone: M8-Memory
 priority: medium
 effort: medium

@@ -2,7 +2,7 @@
 template: work_item
 id: E2-296
 title: Observation Triage Batch - Chariot Arc
-status: dismissed
+status: complete
 owner: Hephaestus
 created: 2026-01-17
 closed: '2026-01-17'

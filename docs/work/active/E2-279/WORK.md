@@ -2,7 +2,7 @@
 template: work_item
 id: E2-279
 title: WorkEngine Decomposition
-status: dismissed
+status: complete
 owner: Hephaestus
 created: 2026-01-08
 closed: '2026-01-09'

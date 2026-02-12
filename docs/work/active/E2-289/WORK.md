@@ -2,10 +2,10 @@
 template: work_item
 id: E2-289
 title: Execute Hierarchy Rename Chapter to Arc
-status: archived
+status: complete
 owner: Hephaestus
 created: 2026-01-15
-closed: null
+closed: 2026-02-12
 milestone: null
 priority: medium
 effort: medium

@@ -2,10 +2,10 @@
 template: work_item
 id: INV-045
 title: Memory Retrieval UX and Trigger Design
-status: archived
+status: complete
 owner: Hephaestus
 created: 2025-12-28
-closed: null
+closed: 2026-02-12
 milestone: M8-Memory
 priority: medium
 effort: medium

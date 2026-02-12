@@ -3,13 +3,13 @@ template: work_item
 id: INV-069
 title: PostToolUse Timestamp Hook Value Assessment
 type: investigation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-01-27
 spawned_by: WORK-027
 chapter: CH-012
 arc: configuration
-closed: null
+closed: 2026-02-12
 priority: medium
 effort: medium
 traces_to:

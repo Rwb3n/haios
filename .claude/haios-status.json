@@ -1,21 +1,21 @@
 {
-    "generated": "2026-02-12T22:12:00",
+    "generated": "2026-02-12T22:33:38",
     "milestone": {
-        "id": "M7b-WorkInfra",
-        "name": "WorkInfra",
-        "progress": 78,
-        "prior_progress": 77,
+        "id": "M8-Memory",
+        "name": "Memory",
+        "progress": 100,
+        "prior_progress": 100,
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 356,
-        "current_session": 357,
+        "prior_session": 357,
+        "current_session": 358,
         "prior_date": "2026-02-12",
         "completed": [],
         "completed_count": 0,
         "added": [],
         "added_count": 0,
-        "milestone_delta": "+1%"
+        "milestone_delta": null
     },
     "work_cycle": {
         "id": "E2-279",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 84850,
-        "entities": 9812,
+        "concepts": 84852,
+        "entities": 9813,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -200,11 +200,13 @@
                 "E2-164",
                 "E2-213",
                 "E2-214",
+                "E2-234",
                 "E2-235",
-                "E2-236"
+                "E2-236",
+                "INV-021"
             ],
-            "progress": 78,
-            "prior_progress": 77,
+            "progress": 100,
+            "prior_progress": 100,
             "delta_source": null
         },
         "M7c-Governance": {
@@ -3753,6 +3755,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-12-05-SESSION-358-work-100-audit-decision-coverage-fix.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-12",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "template": "implementation_plan",
             "status": "complete",
@@ -6201,7 +6212,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-prototype-consolidation.md",
             "last_updated": "2025-12-04T22:30:47",
-            "days_stale": 69
+            "days_stale": 70
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-comprehensive-checkpoint.md",
@@ -6871,7 +6882,7 @@
         {
             "path": "docs/checkpoints/2026-01-01-02-SESSION-154-manifesto-corpus-l0-l4-complete.md",
             "last_updated": "2026-01-01T22:23:49",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/checkpoints/2026-01-02-01-SESSION-155-coldstart-manifesto-integration.md",
@@ -6961,7 +6972,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-09-SESSION-171-e2-264-complete-inv-057-needs-revision.md",
             "last_updated": "2026-01-04T22:18:45",
-            "days_stale": 38
+            "days_stale": 39
         },
         {
             "path": "docs/checkpoints/2026-01-04-10-SESSION-172-inv-057-complete-e2-269-plan-authored.md",
@@ -7835,9 +7846,9 @@
         }
     ],
     "workspace": {
-        "total_files": 528,
+        "total_files": 529,
         "by_template": {
-            "checkpoint": 356,
+            "checkpoint": 357,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7848,7 +7859,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 191,
+            "unknown": 192,
             "draft": 2,
             "approved": 6,
             "ready": 1,

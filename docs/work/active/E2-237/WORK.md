@@ -2,10 +2,10 @@
 template: work_item
 id: E2-237
 title: Cycle Definitions Config File
-status: archived
+status: complete
 owner: Hephaestus
 created: 2025-12-30
-closed: null
+closed: 2026-02-12
 milestone: null
 priority: medium
 effort: medium

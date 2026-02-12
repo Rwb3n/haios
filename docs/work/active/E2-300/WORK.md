@@ -2,10 +2,10 @@
 template: work_item
 id: E2-300
 title: ContextLoader S17.3 Spec Alignment
-status: dismissed
+status: complete
 owner: Hephaestus
 created: 2026-01-17
-closed: null
+closed: 2026-02-12
 milestone: null
 priority: medium
 effort: medium
