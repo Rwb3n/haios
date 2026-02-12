@@ -3,7 +3,6 @@ name: memory-commit-ceremony
 type: ceremony
 description: "Store learnings to memory with provenance tracking."
 category: memory
-stub: true
 input_contract:
   - field: content
     type: string
@@ -32,8 +31,10 @@ output_contract:
     description: "Final classification (episteme/techne/doxa)"
 side_effects:
   - "Store to memory via ingester_ingest"
+  - "Log MemoryCommitted event to governance-events.jsonl"
+  - "Update work item memory_refs field"
 generated: 2026-02-09
-last_updated: "2026-02-09"
+last_updated: "2026-02-12"
 ---
 # Memory Commit Ceremony
 
@@ -61,10 +62,47 @@ Store learnings and insights to the HAIOS memory system with provenance tracking
 
 ## Ceremony Steps
 
-1. Validate content is non-empty
-2. Call ingester_ingest with content and source_path
-3. Log MemoryCommit ceremony event
-4. Report concept IDs to operator
+### Step 1: Validate Input
+- Verify `content` is non-empty string (BLOCK if empty — return `{success: false, error: "Content is empty"}`)
+- Verify `source_path` is non-empty string (BLOCK if empty — return `{success: false, error: "Source path is empty"}`)
+- Default `content_type_hint` to "doxa" if not provided
+
+### Step 2: Store to Memory
+- Call `ingester_ingest` MCP tool:
+  - `content`: The learning content
+  - `source_path`: Provenance path (e.g., "closure:WORK-133")
+  - `content_type_hint`: Classification hint (episteme, techne, doxa, or unknown)
+- Capture returned concept IDs
+- If ingester_ingest fails: WARN — log error, return `{success: false, error: "<message>"}`
+
+### Step 3: Log Governance Event
+- Log `MemoryCommitted` event to governance-events.jsonl:
+  ```json
+  {
+    "type": "MemoryCommitted",
+    "ceremony": "memory-commit",
+    "source_path": "closure:WORK-133",
+    "concept_count": 2,
+    "timestamp": "2026-02-12T18:00:00"
+  }
+  ```
+- Use `_log_ceremony_event()` from governance_layer or append directly to events file
+
+### Step 4: Report Results
+- Report concept IDs to operator
+- Update work item `memory_refs` field with returned IDs
+- If no concept IDs returned: WARN — log warning, return `{success: true, concept_ids: []}`
+
+---
+
+## Error Handling
+
+| Error | Handling |
+|-------|----------|
+| Empty content | BLOCK — return `{success: false, error: "Content is empty"}` |
+| Empty source_path | BLOCK — return `{success: false, error: "Source path is empty"}` |
+| ingester_ingest failure | WARN — log error, return `{success: false, error: "<message>"}` |
+| No concept IDs returned | WARN — log warning, return `{success: true, concept_ids: []}` |
 
 ---
 

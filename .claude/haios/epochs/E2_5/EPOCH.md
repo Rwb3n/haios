@@ -167,7 +167,7 @@ S339 retrospective review with operator identified epoch scope inflation: 6 arcs
 | CH-013 CeremonyLifecycleDistinction | **Complete** (S342-343) | CeremonyRunner + type field done; rename deferred to WORK-119 |
 | CH-014 SessionCeremonies | **Complete** (S343) | Session-start/end de-stubbed with ceremony logic |
 | CH-015 ClosureCeremonies | Planned | Verify WORK-112 coverage, close |
-| CH-016 MemoryCeremonies | Planned | Implement memory-commit stub |
+| CH-016 MemoryCeremonies | **Complete** (S353, WORK-133) | De-stubbed memory-commit-ceremony, 8 tests |
 | CH-017 SpawnCeremony | Planned | Spawn lineage (spawned_from/children) |
 
 **Tiny fixes (S339 retro):**

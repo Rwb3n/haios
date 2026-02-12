@@ -50,7 +50,7 @@ Implement all 20 ceremonies as side-effect boundaries per REQ-CEREMONY-001 to 00
 | CH-013 | CeremonyLifecycleDistinction | REQ-CEREMONY-003 | CH-011, Lifecycles:CH-001 | **Complete** (S342-343) |
 | CH-014 | SessionCeremonies | REQ-CEREMONY-001 | CH-011 | **Complete** (S343) |
 | CH-015 | ClosureCeremonies | REQ-CEREMONY-001 | CH-011 | **Complete** (S345) |
-| CH-016 | MemoryCeremonies | REQ-CEREMONY-001 | CH-011 | Planned |
+| CH-016 | MemoryCeremonies | REQ-CEREMONY-001 | CH-011 | **Complete** (S353) |
 | CH-017 | SpawnCeremony | REQ-CEREMONY-001 | CH-011 | Planned |
 
 ---
