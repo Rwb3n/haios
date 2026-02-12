@@ -19,7 +19,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 from ceremony_contracts import CeremonyContract, load_ceremony_registry
-from helpers import load_skill_frontmatter
+from helpers import load_frontmatter
 
 
 def _has_category(entry, cat):
@@ -37,7 +37,7 @@ class TestMemoryCeremonyContracts:
 
     def test_observation_capture_has_ceremony_contract(self):
         """observation-capture-cycle has type: ceremony and valid contracts."""
-        skill = load_skill_frontmatter(".claude/skills/observation-capture-cycle/SKILL.md")
+        skill = load_frontmatter(".claude/skills/observation-capture-cycle/SKILL.md")
         assert skill["type"] == "ceremony"
         assert skill["category"] == "memory"
         contract = CeremonyContract.from_frontmatter(skill)
@@ -47,7 +47,7 @@ class TestMemoryCeremonyContracts:
 
     def test_observation_triage_has_ceremony_contract(self):
         """observation-triage-cycle has type: ceremony and valid contracts."""
-        skill = load_skill_frontmatter(".claude/skills/observation-triage-cycle/SKILL.md")
+        skill = load_frontmatter(".claude/skills/observation-triage-cycle/SKILL.md")
         assert skill["type"] == "ceremony"
         assert skill["category"] == "memory"
         contract = CeremonyContract.from_frontmatter(skill)
@@ -55,7 +55,7 @@ class TestMemoryCeremonyContracts:
 
     def test_memory_commit_has_ceremony_contract(self):
         """memory-commit-ceremony has type: ceremony and valid contracts."""
-        skill = load_skill_frontmatter(".claude/skills/memory-commit-ceremony/SKILL.md")
+        skill = load_frontmatter(".claude/skills/memory-commit-ceremony/SKILL.md")
         assert skill["type"] == "ceremony"
         assert skill["category"] == "memory"
         contract = CeremonyContract.from_frontmatter(skill)
@@ -71,7 +71,7 @@ class TestMemoryCommitNotStub:
 
     def test_memory_commit_not_stub(self):
         """memory-commit-ceremony must not have stub: true."""
-        skill = load_skill_frontmatter(".claude/skills/memory-commit-ceremony/SKILL.md")
+        skill = load_frontmatter(".claude/skills/memory-commit-ceremony/SKILL.md")
         assert skill.get("stub") is not True, "memory-commit-ceremony must not be a stub"
 
 

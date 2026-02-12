@@ -3692,3 +3692,5 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-12T20:38:45.313699"}
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-12T20:38:45.332222"}
 {"type": "SessionEnded", "session": 355, "agent": "Hephaestus", "timestamp": "2026-02-12T20:55:16.390681"}
+{"type": "SessionStarted", "session": 356, "agent": "Hephaestus", "timestamp": "2026-02-12T21:00:02.076192"}
+{"type": "SessionEnded", "session": 356, "agent": "Hephaestus", "timestamp": "2026-02-12T21:22:19.823828"}

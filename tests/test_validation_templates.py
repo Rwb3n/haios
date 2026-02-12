@@ -5,8 +5,9 @@
 
 from pathlib import Path
 
-import yaml
 import pytest
+
+from helpers import load_frontmatter
 
 
 # =============================================================================
@@ -42,25 +43,20 @@ class TestValidationTemplateContracts:
     @pytest.mark.parametrize("phase", VALIDATION_PHASES)
     def test_validation_template_has_contracts(self, phase):
         """Each template must have input_contract and output_contract."""
-        content = (VALIDATION_DIR / f"{phase}.md").read_text()
-        parts = content.split("---")
-        assert len(parts) >= 3, f"{phase}.md missing frontmatter delimiters"
-        frontmatter = yaml.safe_load(parts[1])
+        frontmatter = load_frontmatter(VALIDATION_DIR / f"{phase}.md")
         assert "input_contract" in frontmatter, f"{phase}.md missing input_contract"
         assert "output_contract" in frontmatter, f"{phase}.md missing output_contract"
 
     @pytest.mark.parametrize("phase", VALIDATION_PHASES)
     def test_validation_template_phase_field(self, phase):
         """Each template must have correct phase field."""
-        content = (VALIDATION_DIR / f"{phase}.md").read_text()
-        frontmatter = yaml.safe_load(content.split("---")[1])
+        frontmatter = load_frontmatter(VALIDATION_DIR / f"{phase}.md")
         assert frontmatter["phase"] == phase, f"Expected phase={phase}, got {frontmatter['phase']}"
 
     @pytest.mark.parametrize("phase", VALIDATION_PHASES)
     def test_validation_template_type_field(self, phase):
         """Each template must have template: validation_phase."""
-        content = (VALIDATION_DIR / f"{phase}.md").read_text()
-        frontmatter = yaml.safe_load(content.split("---")[1])
+        frontmatter = load_frontmatter(VALIDATION_DIR / f"{phase}.md")
         assert frontmatter["template"] == "validation_phase"
 
 
@@ -107,25 +103,20 @@ class TestTriageTemplateContracts:
     @pytest.mark.parametrize("phase", TRIAGE_PHASES)
     def test_triage_template_has_contracts(self, phase):
         """Each template must have input_contract and output_contract."""
-        content = (TRIAGE_DIR / f"{phase}.md").read_text()
-        parts = content.split("---")
-        assert len(parts) >= 3, f"{phase}.md missing frontmatter delimiters"
-        frontmatter = yaml.safe_load(parts[1])
+        frontmatter = load_frontmatter(TRIAGE_DIR / f"{phase}.md")
         assert "input_contract" in frontmatter, f"{phase}.md missing input_contract"
         assert "output_contract" in frontmatter, f"{phase}.md missing output_contract"
 
     @pytest.mark.parametrize("phase", TRIAGE_PHASES)
     def test_triage_template_phase_field(self, phase):
         """Each template must have correct phase field."""
-        content = (TRIAGE_DIR / f"{phase}.md").read_text()
-        frontmatter = yaml.safe_load(content.split("---")[1])
+        frontmatter = load_frontmatter(TRIAGE_DIR / f"{phase}.md")
         assert frontmatter["phase"] == phase
 
     @pytest.mark.parametrize("phase", TRIAGE_PHASES)
     def test_triage_template_type_field(self, phase):
         """Each template must have template: triage_phase."""
-        content = (TRIAGE_DIR / f"{phase}.md").read_text()
-        frontmatter = yaml.safe_load(content.split("---")[1])
+        frontmatter = load_frontmatter(TRIAGE_DIR / f"{phase}.md")
         assert frontmatter["template"] == "triage_phase"
 
 

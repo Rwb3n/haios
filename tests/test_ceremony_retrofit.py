@@ -16,7 +16,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 from ceremony_contracts import CeremonyContract, load_ceremony_registry
-from helpers import load_skill_frontmatter
+from helpers import load_frontmatter
 
 # --- Constants ---
 
@@ -66,7 +66,7 @@ class TestExistingSkillsRetrofitted:
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
         assert skill_path.exists(), f"Skill file not found: {skill_path}"
 
-        data = load_skill_frontmatter(skill_path)
+        data = load_frontmatter(skill_path)
 
         for field in CONTRACT_FIELDS:
             assert field in data, (
@@ -77,7 +77,7 @@ class TestExistingSkillsRetrofitted:
     def test_skill_category_valid(self, skill_name):
         """Category must be a valid ceremony category string or list."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = load_skill_frontmatter(skill_path)
+        data = load_frontmatter(skill_path)
 
         valid_categories = {"queue", "session", "closure", "feedback", "memory", "spawn"}
         category = data["category"]
@@ -105,7 +105,7 @@ class TestStubSkillsCreated:
     def test_stub_has_contract_frontmatter(self, skill_name):
         """Each stub ceremony skill must have all contract fields."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = load_skill_frontmatter(skill_path)
+        data = load_frontmatter(skill_path)
 
         for field in CONTRACT_FIELDS:
             assert field in data, (
@@ -116,7 +116,7 @@ class TestStubSkillsCreated:
     def test_stub_category_valid(self, skill_name):
         """Stub category must be a valid ceremony category."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = load_skill_frontmatter(skill_path)
+        data = load_frontmatter(skill_path)
 
         valid_categories = {"queue", "session", "closure", "feedback", "memory", "spawn"}
         category = data["category"]
@@ -164,7 +164,7 @@ class TestContractsParseable:
     def test_frontmatter_parses_to_contract(self, skill_name):
         """Each skill's frontmatter must successfully parse into a CeremonyContract."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = load_skill_frontmatter(skill_path)
+        data = load_frontmatter(skill_path)
 
         # Should not raise
         contract = CeremonyContract.from_frontmatter(data)
@@ -179,7 +179,7 @@ class TestContractsParseable:
     def test_contract_has_at_least_one_side_effect(self, skill_name):
         """Every ceremony must declare at least one side effect."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = load_skill_frontmatter(skill_path)
+        data = load_frontmatter(skill_path)
 
         assert len(data.get("side_effects", [])) > 0, (
             f"Skill '{skill_name}' must declare at least one side effect"
@@ -201,7 +201,7 @@ class TestRegistrySkillCrossReference:
                 f"Registry '{entry.name}' references skill '{entry.skill}' "
                 f"but {skill_path} does not exist"
             )
-            data = load_skill_frontmatter(skill_path)
+            data = load_frontmatter(skill_path)
             assert data["name"] == entry.skill, (
                 f"Registry '{entry.name}' references skill '{entry.skill}' "
                 f"but SKILL.md has name '{data['name']}'"
@@ -215,7 +215,7 @@ class TestStubSkillsMarked:
     def test_stub_has_stub_marker(self, skill_name):
         """Each stub ceremony skill must have stub: true in frontmatter."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = load_skill_frontmatter(skill_path)
+        data = load_frontmatter(skill_path)
         assert data.get("stub") is True, (
             f"Stub '{skill_name}' must have 'stub: true' in frontmatter"
         )
@@ -224,7 +224,7 @@ class TestStubSkillsMarked:
     def test_existing_skills_not_marked_stub(self, skill_name):
         """Existing functional skills must NOT have stub: true."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = load_skill_frontmatter(skill_path)
+        data = load_frontmatter(skill_path)
         assert data.get("stub") is not True, (
             f"Existing skill '{skill_name}' should not be marked as stub"
         )
