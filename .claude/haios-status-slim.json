@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-12T19:32:13",
+    "generated": "2026-02-12T20:14:58",
     "milestone": {
         "id": "M7b-WorkInfra",
         "name": "WorkInfra",
@@ -35,7 +35,7 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 84813,
+        "concepts": 84825,
         "entities": 9802,
         "backlog_pending": 0
     },

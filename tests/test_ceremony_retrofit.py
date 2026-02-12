@@ -7,17 +7,16 @@ Verifies that all 20 ceremony skills have YAML frontmatter contracts
 and that the ceremony registry reflects full contract coverage.
 """
 
-import re
 import sys
 from pathlib import Path
 
 import pytest
-import yaml
 
 # Add lib to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 from ceremony_contracts import CeremonyContract, load_ceremony_registry
+from helpers import load_skill_frontmatter
 
 # --- Constants ---
 
@@ -38,11 +37,11 @@ EXISTING_CEREMONY_SKILLS = [
     "checkpoint-cycle",
     "session-start-ceremony",   # De-stubbed by WORK-120 (CH-014)
     "session-end-ceremony",     # De-stubbed by WORK-120 (CH-014)
+    "memory-commit-ceremony",   # De-stubbed by WORK-133 (CH-016)
 ]
 
-# 6 remaining stub skills (WORK-112)
+# 5 remaining stub skills (WORK-112)
 STUB_CEREMONY_SKILLS = [
-    "memory-commit-ceremony",
     "spawn-work-ceremony",
     "chapter-review",
     "arc-review",
@@ -56,14 +55,6 @@ ALL_CEREMONY_SKILLS = EXISTING_CEREMONY_SKILLS + STUB_CEREMONY_SKILLS
 CONTRACT_FIELDS = ["category", "input_contract", "output_contract", "side_effects"]
 
 
-def _parse_frontmatter(skill_path: Path) -> dict:
-    """Parse YAML frontmatter from a SKILL.md file."""
-    content = skill_path.read_text(encoding="utf-8")
-    # Match YAML between --- markers
-    match = re.match(r"^---\n(.*?)\n---", content, re.DOTALL)
-    assert match, f"No YAML frontmatter found in {skill_path}"
-    return yaml.safe_load(match.group(1))
-
 
 class TestExistingSkillsRetrofitted:
     """Test 1: All 11 existing ceremony skills have contract fields in frontmatter."""
@@ -75,7 +66,7 @@ class TestExistingSkillsRetrofitted:
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
         assert skill_path.exists(), f"Skill file not found: {skill_path}"
 
-        data = _parse_frontmatter(skill_path)
+        data = load_skill_frontmatter(skill_path)
 
         for field in CONTRACT_FIELDS:
             assert field in data, (
@@ -86,7 +77,7 @@ class TestExistingSkillsRetrofitted:
     def test_skill_category_valid(self, skill_name):
         """Category must be a valid ceremony category string or list."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = _parse_frontmatter(skill_path)
+        data = load_skill_frontmatter(skill_path)
 
         valid_categories = {"queue", "session", "closure", "feedback", "memory", "spawn"}
         category = data["category"]
@@ -114,7 +105,7 @@ class TestStubSkillsCreated:
     def test_stub_has_contract_frontmatter(self, skill_name):
         """Each stub ceremony skill must have all contract fields."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = _parse_frontmatter(skill_path)
+        data = load_skill_frontmatter(skill_path)
 
         for field in CONTRACT_FIELDS:
             assert field in data, (
@@ -125,7 +116,7 @@ class TestStubSkillsCreated:
     def test_stub_category_valid(self, skill_name):
         """Stub category must be a valid ceremony category."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = _parse_frontmatter(skill_path)
+        data = load_skill_frontmatter(skill_path)
 
         valid_categories = {"queue", "session", "closure", "feedback", "memory", "spawn"}
         category = data["category"]
@@ -173,7 +164,7 @@ class TestContractsParseable:
     def test_frontmatter_parses_to_contract(self, skill_name):
         """Each skill's frontmatter must successfully parse into a CeremonyContract."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = _parse_frontmatter(skill_path)
+        data = load_skill_frontmatter(skill_path)
 
         # Should not raise
         contract = CeremonyContract.from_frontmatter(data)
@@ -188,7 +179,7 @@ class TestContractsParseable:
     def test_contract_has_at_least_one_side_effect(self, skill_name):
         """Every ceremony must declare at least one side effect."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = _parse_frontmatter(skill_path)
+        data = load_skill_frontmatter(skill_path)
 
         assert len(data.get("side_effects", [])) > 0, (
             f"Skill '{skill_name}' must declare at least one side effect"
@@ -210,7 +201,7 @@ class TestRegistrySkillCrossReference:
                 f"Registry '{entry.name}' references skill '{entry.skill}' "
                 f"but {skill_path} does not exist"
             )
-            data = _parse_frontmatter(skill_path)
+            data = load_skill_frontmatter(skill_path)
             assert data["name"] == entry.skill, (
                 f"Registry '{entry.name}' references skill '{entry.skill}' "
                 f"but SKILL.md has name '{data['name']}'"
@@ -224,7 +215,7 @@ class TestStubSkillsMarked:
     def test_stub_has_stub_marker(self, skill_name):
         """Each stub ceremony skill must have stub: true in frontmatter."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = _parse_frontmatter(skill_path)
+        data = load_skill_frontmatter(skill_path)
         assert data.get("stub") is True, (
             f"Stub '{skill_name}' must have 'stub: true' in frontmatter"
         )
@@ -233,7 +224,7 @@ class TestStubSkillsMarked:
     def test_existing_skills_not_marked_stub(self, skill_name):
         """Existing functional skills must NOT have stub: true."""
         skill_path = SKILLS_DIR / skill_name / "SKILL.md"
-        data = _parse_frontmatter(skill_path)
+        data = load_skill_frontmatter(skill_path)
         assert data.get("stub") is not True, (
             f"Existing skill '{skill_name}' should not be marked as stub"
         )

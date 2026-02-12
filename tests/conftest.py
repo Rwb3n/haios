@@ -27,6 +27,8 @@ _root = Path(__file__).parent.parent
 # (not packages) that test files import via `from X import Y`
 sys.path.insert(0, str(_root / ".claude" / "haios" / "modules"))
 sys.path.insert(0, str(_root / ".claude" / "haios" / "lib"))
+# Add tests/ so shared helpers (helpers.py) are importable
+sys.path.insert(0, str(Path(__file__).parent))
 
 
 def _load_module_once(name: str, path: Path):

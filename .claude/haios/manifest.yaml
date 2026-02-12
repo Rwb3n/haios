@@ -23,7 +23,7 @@ targets:
 
 # Component declarations
 components:
-  # Commands (18 total)
+  # Commands (19 total)
   commands:
     - id: "close"
       source: "commands/close/"
@@ -64,14 +64,29 @@ components:
     - id: "workspace"
       source: "commands/workspace/"
 
-  # Skills (18 total)
+  # Skills (33 total)
   skills:
+    - id: "arc-review"
+      source: "skills/arc-review/"
+      category: "ceremony"
     - id: "audit"
       source: "skills/audit/"
       category: "utility"
+    - id: "chapter-review"
+      source: "skills/chapter-review/"
+      category: "ceremony"
     - id: "checkpoint-cycle"
       source: "skills/checkpoint-cycle/"
       category: "cycle"
+    - id: "close-arc-ceremony"
+      source: "skills/close-arc-ceremony/"
+      category: "ceremony"
+    - id: "close-chapter-ceremony"
+      source: "skills/close-chapter-ceremony/"
+      category: "ceremony"
+    - id: "close-epoch-ceremony"
+      source: "skills/close-epoch-ceremony/"
+      category: "ceremony"
     - id: "close-work-cycle"
       source: "skills/close-work-cycle/"
       category: "cycle"
@@ -81,6 +96,9 @@ components:
     - id: "dod-validation-cycle"
       source: "skills/dod-validation-cycle/"
       category: "bridge"
+    - id: "epoch-review"
+      source: "skills/epoch-review/"
+      category: "ceremony"
     - id: "extract-content"
       source: "skills/extract-content/"
       category: "utility"
@@ -96,6 +114,9 @@ components:
     - id: "memory-agent"
       source: "skills/memory-agent/"
       category: "utility"
+    - id: "memory-commit-ceremony"
+      source: "skills/memory-commit-ceremony/"
+      category: "ceremony"
     - id: "observation-capture-cycle"
       source: "skills/observation-capture-cycle/"
       category: "cycle"
@@ -108,12 +129,36 @@ components:
     - id: "plan-validation-cycle"
       source: "skills/plan-validation-cycle/"
       category: "bridge"
+    - id: "queue-commit"
+      source: "skills/queue-commit/"
+      category: "ceremony"
+    - id: "queue-intake"
+      source: "skills/queue-intake/"
+      category: "ceremony"
+    - id: "queue-prioritize"
+      source: "skills/queue-prioritize/"
+      category: "ceremony"
+    - id: "queue-unpark"
+      source: "skills/queue-unpark/"
+      category: "ceremony"
+    - id: "requirements-review"
+      source: "skills/requirements-review/"
+      category: "ceremony"
     - id: "routing-gate"
       source: "skills/routing-gate/"
       category: "bridge"
     - id: "schema-ref"
       source: "skills/schema-ref/"
       category: "utility"
+    - id: "session-end-ceremony"
+      source: "skills/session-end-ceremony/"
+      category: "ceremony"
+    - id: "session-start-ceremony"
+      source: "skills/session-start-ceremony/"
+      category: "ceremony"
+    - id: "spawn-work-ceremony"
+      source: "skills/spawn-work-ceremony/"
+      category: "ceremony"
     - id: "survey-cycle"
       source: "skills/survey-cycle/"
       category: "cycle"
@@ -121,16 +166,25 @@ components:
       source: "skills/work-creation-cycle/"
       category: "cycle"
 
-  # Agents (8 total)
+  # Agents (11 total)
   agents:
     - id: "anti-pattern-checker"
       source: "agents/anti-pattern-checker/"
       required: false
+    - id: "close-work-cycle-agent"
+      source: "agents/close-work-cycle-agent/"
+      required: false
     - id: "critique-agent"
       source: "agents/critique-agent/"
       required: false
+    - id: "implementation-cycle-agent"
+      source: "agents/implementation-cycle-agent/"
+      required: false
     - id: "investigation-agent"
       source: "agents/investigation-agent/"
+      required: false
+    - id: "investigation-cycle-agent"
+      source: "agents/investigation-cycle-agent/"
       required: false
     - id: "preflight-checker"
       source: "agents/preflight-checker/"

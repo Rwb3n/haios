@@ -14,25 +14,12 @@ import sys
 from pathlib import Path
 
 import pytest
-import yaml
 
 # Add .claude/haios/lib to path for ceremony_contracts imports
 sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib"))
 
 from ceremony_contracts import CeremonyContract, load_ceremony_registry
-
-
-def load_skill_frontmatter(skill_path: str) -> dict:
-    """Parse YAML frontmatter from a skill markdown file.
-
-    Reads the content between the first two '---' delimiters
-    and returns the parsed YAML dict.
-    """
-    content = Path(skill_path).read_text(encoding="utf-8")
-    parts = content.split("---", 2)
-    if len(parts) < 3:
-        raise ValueError(f"No YAML frontmatter found in {skill_path}")
-    return yaml.safe_load(parts[1])
+from helpers import load_skill_frontmatter
 
 
 def _has_category(entry, cat):
