@@ -278,16 +278,21 @@ def get_session_delta() -> dict[str, Any]:
     if not checkpoints_dir.exists():
         return delta
 
-    # Get checkpoint files sorted by name (includes date and session)
+    # Get checkpoint files sorted by SESSION-NNN number (not lexicographic)
+    def _session_num(path: Path) -> int:
+        match = re.search(r"SESSION-(\d+)", path.name, re.IGNORECASE)
+        return int(match.group(1)) if match else 0
+
     checkpoint_files = [
         f
-        for f in sorted(checkpoints_dir.glob("*.md"), reverse=True)
+        for f in checkpoints_dir.glob("*.md")
         if f.name.lower() != "readme.md" and "SESSION-" in f.name.upper()
     ]
 
     if len(checkpoint_files) < 2:
         return delta
 
+    checkpoint_files.sort(key=_session_num, reverse=True)
     current_file = checkpoint_files[0]
     prior_file = checkpoint_files[1]
 
