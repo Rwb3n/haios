@@ -174,7 +174,7 @@ S339 retrospective review with operator identified epoch scope inflation: 6 arcs
 
 | Fix | Type |
 |-----|------|
-| Checkpoint prior_session stale value | Bug fix in scaffold.py |
+| Checkpoint prior_session stale value | **Fixed S354**: Test checkpoints (SESSION-999, 998) in production dir removed |
 | Scaffold output lint test | New test |
 | stage-governance recipe stale | justfile update |
 | Coldstart shows wrong epoch | Bug fix in identity_loader |

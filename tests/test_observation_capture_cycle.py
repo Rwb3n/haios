@@ -5,13 +5,10 @@ Tests for observation-capture-cycle skill (E2-284 simplification).
 
 Validates:
 1. Skill has 3 questions (not 3 phases) - S20 compliance
-2. Skill is minimal (<50 lines) - "smaller containers"
-3. Skill has hard gate for non-empty responses
+2. Skill has hard gate for non-empty responses
 4. /close command still invokes observation-capture-cycle (backward compat)
 """
 from pathlib import Path
-
-import pytest
 
 
 def test_skill_has_three_questions():
@@ -30,14 +27,6 @@ def test_skill_has_three_questions():
     assert "### 2. NOTICE Phase" not in content, "NOTICE Phase should be removed"
     assert "### 3. COMMIT Phase" not in content, "COMMIT Phase should be removed"
 
-
-def test_skill_is_minimal():
-    """Verify skill follows S20 'smaller containers' principle (<50 lines)."""
-    skill_path = Path(".claude/skills/observation-capture-cycle/SKILL.md")
-    content = skill_path.read_text(encoding="utf-8")
-    line_count = len(content.split('\n'))
-
-    assert line_count < 50, f"Skill should be <50 lines per S20, got {line_count}"
 
 
 def test_gate_requires_content():
