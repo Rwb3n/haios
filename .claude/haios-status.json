@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-12T22:33:38",
+    "generated": "2026-02-12T22:42:06",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,7 +35,7 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 84852,
+        "concepts": 84868,
         "entities": 9813,
         "backlog_pending": 0
     },
@@ -6867,7 +6867,7 @@
         {
             "path": "docs/checkpoints/2025-12-30-02-SESSION-151-inv-052-architecture-documentation-complete.md",
             "last_updated": "2025-12-30T22:34:43",
-            "days_stale": 43
+            "days_stale": 44
         },
         {
             "path": "docs/checkpoints/2025-12-31-01-SESSION-152-inv-052-architecture-analysis-complete.md",
@@ -7582,12 +7582,12 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-008-haios-status-json-optimization.md",
             "last_updated": "2025-12-22T22:37:14",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-009-backlog-archival-governance.md",
             "last_updated": "2025-12-22T22:37:32",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-010-memory-retrieval-architecture-mismatch.md",
@@ -7627,7 +7627,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-018-adaptive-coldstart-query-formulation.md",
             "last_updated": "2025-12-22T22:39:13",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-020-llm-energy-channeling-patterns.md",
