@@ -7,7 +7,8 @@
 **Arc ID:** ceremonies
 **Epoch:** E2.5
 **Theme:** Implement ceremony boundaries and contracts
-**Status:** In Progress
+**Status:** Complete
+**Completed:** 2026-02-12 (Session 358)
 
 ---
 
@@ -57,7 +58,7 @@ Implement all 20 ceremonies as side-effect boundaries per REQ-CEREMONY-001 to 00
 
 ## Exit Criteria
 
-- [ ] All 20 ceremonies have skill implementations
-- [ ] Each ceremony has documented input/output contract
-- [ ] Ceremonies log events for audit
-- [ ] No state changes occur outside ceremony boundaries
+- [x] All 20 ceremonies have skill implementations
+- [x] Each ceremony has documented input/output contract
+- [x] Ceremonies log events for audit
+- [x] No state changes occur outside ceremony boundaries

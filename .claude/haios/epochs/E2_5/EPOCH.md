@@ -6,8 +6,9 @@
 
 **Epoch ID:** E2.5
 **Name:** Independent Lifecycles
-**Status:** Active
+**Status:** Complete
 **Started:** 2026-02-03 (Session 295)
+**Completed:** 2026-02-12 (Session 358)
 **Prior:** E2.4 (The Activity Layer)
 
 ---
@@ -133,7 +134,7 @@ Pause points are valid completion states, not "stuck" states.
 |-----|-------|--------|--------------|
 | **lifecycles** | Implement CycleRunner with pure function semantics | **Complete** (S318) | REQ-LIFECYCLE-001 to 004 |
 | **queue** | Implement queue ceremonies and orthogonal tracking | **Complete** (S331) | REQ-QUEUE-001 to 004 |
-| **ceremonies** | Implement ceremony boundaries and contracts | **In Progress** (CH-011-014 Complete; CH-015-017 remaining) | REQ-CEREMONY-001 to 003 |
+| **ceremonies** | Implement ceremony boundaries and contracts | **Complete** (S358) | REQ-CEREMONY-001 to 003 |
 | ~~**feedback**~~ | ~~Implement review ceremonies and upward flow~~ | **Deferred to E2.6** (S339 scope review) | REQ-FEEDBACK-001 to 005 |
 | ~~**assets**~~ | ~~Implement typed, versioned asset production~~ | **Deferred to E2.6** (S339 scope review) | REQ-ASSET-001 to 005 |
 | ~~**portability**~~ | ~~HAIOS as distributable, portable plugin~~ | **Deferred to E2.6** (S339 scope review) | REQ-PORTABLE-001 to 003 |
@@ -144,7 +145,7 @@ Pause points are valid completion states, not "stuck" states.
 
 - [x] CycleRunner treats lifecycles as pure functions (no implicit chaining) — lifecycles arc Complete (S318)
 - [x] Queue position is tracked independently from lifecycle phase — queue arc Complete (S331)
-- [ ] All 20 ceremonies have working implementations with contracts — ceremonies arc in progress
+- [x] All 20 ceremonies have working implementations with contracts — ceremonies arc Complete (S358)
 - ~~[ ] Assets have typed schemas and provenance frontmatter~~ — **Deferred to E2.6** (S339)
 - ~~[ ] Feedback review ceremonies update parent scope~~ — **Deferred to E2.6** (S339)
 - [x] Pause points (per S27) recognized as valid completion — lifecycles arc Complete (S318)
@@ -205,7 +206,7 @@ Based on dependency analysis (revised S339):
 
 1. **lifecycles arc** — **Complete** (S318)
 2. **queue arc** — **Complete** (S331)
-3. **ceremonies arc** — **In Progress** (CH-011-014 done; CH-015-017 remaining)
+3. **ceremonies arc** — **Complete** (S358)
 4. ~~assets arc~~ — Deferred to E2.6
 5. ~~feedback arc~~ — Deferred to E2.6
 

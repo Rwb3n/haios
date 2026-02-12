@@ -7,33 +7,27 @@
 # Plugin manifest (for portable plugin spec)
 manifest:
   name: haios
-  version: "2.5"
-  description: "Hybrid AI Operating System - Independent Lifecycles"
+  version: "2.6"
+  description: "Hybrid AI Operating System - Agent UX"
 
 # Current epoch context (ADR-042: Arc > Chapter in hierarchy)
 epoch:
-  current: E2.5
-  subversion: "2.5"  # Independent Lifecycles
-  epoch_file: ".claude/haios/epochs/E2_5/EPOCH.md"
-  architecture_dir: ".claude/haios/epochs/E2_5/architecture"
-  arcs_dir: ".claude/haios/epochs/E2_5/arcs"
-  observations_dir: ".claude/haios/epochs/E2_5/observations"
+  current: E2.6
+  subversion: "2.6"  # Agent UX
+  epoch_file: ".claude/haios/epochs/E2_6/EPOCH.md"
+  architecture_dir: ".claude/haios/epochs/E2_6/architecture"
+  arcs_dir: ".claude/haios/epochs/E2_6/arcs"
+  observations_dir: ".claude/haios/epochs/E2_6/observations"
   # Prior epoch (for reference)
-  prior_epoch: ".claude/haios/epochs/E2_4/EPOCH.md"
+  prior_epoch: ".claude/haios/epochs/E2_5/EPOCH.md"
   # Foundational architecture (MUST load) - carries forward
   foundational:
     - S20-pressure-dynamics.md
     - S21-cognitive-notation.md
     - S22-skill-patterns.md
-    - S27-breath-model.md  # NEW: E2.4 discovery, foundational for E2.5
-  # Active arcs (E2.5 - implementation of E2.4 designs)
-  active_arcs:
-    - lifecycles      # NEW: CycleRunner pure function semantics
-    - queue           # NEW: Orthogonal queue tracking
-    - ceremonies      # NEW: Side-effect boundary implementations
-    - feedback        # NEW: Review ceremonies
-    - assets          # NEW: Typed, versioned asset production
-    - portability     # NEW: HAIOS as distributable plugin (Session 297)
+    - S27-breath-model.md  # E2.4 discovery, foundational
+  # Active arcs (E2.6 - Agent UX, pending arc decomposition)
+  active_arcs: []  # TBD: arcs to be defined during E2.6 planning
 
 # Governance toggles (from governance-toggles.yaml)
 toggles:

@@ -3905,3 +3905,4 @@
 {"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-12T22:07:47.170002"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-12T22:11:59.431456"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-12T22:11:59.469609"}
+{"type": "SessionEnded", "session": 358, "agent": "Hephaestus", "timestamp": "2026-02-12T22:13:21.578403"}
