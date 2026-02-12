@@ -7,6 +7,7 @@ status: active
 owner: Hephaestus
 created: {{DATE}}
 spawned_by: {{SPAWNED_BY}}
+spawned_children: []
 chapter: null
 arc: null
 closed: null

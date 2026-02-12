@@ -299,12 +299,29 @@ def validate_full_coverage(epoch_path: Path, arcs_dir: Path) -> ValidationResult
     return result
 
 
+def get_default_paths() -> tuple[Path, Path]:
+    """Get epoch and arcs paths from haios.yaml config.
+
+    Reads epoch.epoch_file and epoch.arcs_dir from ConfigLoader
+    instead of hardcoding epoch version. (WORK-100)
+
+    Returns:
+        Tuple of (epoch_path, arcs_dir) as Path objects
+    """
+    from config import ConfigLoader
+
+    config = ConfigLoader.get()
+    epoch_section = config.haios.get("epoch", {})
+    epoch_path = Path(epoch_section.get("epoch_file", ".claude/haios/epochs/E2_5/EPOCH.md"))
+    arcs_dir = Path(epoch_section.get("arcs_dir", ".claude/haios/epochs/E2_5/arcs"))
+    return epoch_path, arcs_dir
+
+
 if __name__ == "__main__":
     import sys
 
-    # Default paths for HAIOS
-    epoch_path = Path(".claude/haios/epochs/E2_4/EPOCH.md")
-    arcs_dir = Path(".claude/haios/epochs/E2_4/arcs")
+    # Read paths from haios.yaml config (WORK-100: no hardcoded epoch)
+    epoch_path, arcs_dir = get_default_paths()
 
     result = validate_full_coverage(epoch_path, arcs_dir)
 

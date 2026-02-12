@@ -140,3 +140,34 @@ class TestBidirectionalTraceability:
         result = validate_bidirectional(epoch_decisions, chapter_refs)
         assert not result.is_consistent
         assert "flow/CH-009 claims D99 which doesn't exist" in result.errors
+
+
+class TestGetDefaultPaths:
+    """Test: get_default_paths reads from haios.yaml, not hardcoded."""
+
+    def test_reads_from_config(self):
+        """get_default_paths returns paths from haios.yaml epoch section."""
+        from audit_decision_coverage import get_default_paths
+
+        epoch_path, arcs_dir = get_default_paths()
+        # Must NOT contain hardcoded E2_4
+        assert "E2_4" not in str(epoch_path), f"Hardcoded E2_4 found: {epoch_path}"
+        # Must match current haios.yaml config
+        assert "E2_5" in str(epoch_path), f"Expected E2_5 in path: {epoch_path}"
+        assert "E2_5" in str(arcs_dir), f"Expected E2_5 in arcs_dir: {arcs_dir}"
+
+    def test_returns_path_objects(self):
+        """get_default_paths returns Path objects."""
+        from audit_decision_coverage import get_default_paths
+
+        epoch_path, arcs_dir = get_default_paths()
+        assert isinstance(epoch_path, Path)
+        assert isinstance(arcs_dir, Path)
+
+    def test_paths_exist(self):
+        """Returned paths should point to existing files/dirs."""
+        from audit_decision_coverage import get_default_paths
+
+        epoch_path, arcs_dir = get_default_paths()
+        assert epoch_path.exists(), f"Epoch path does not exist: {epoch_path}"
+        assert arcs_dir.exists(), f"Arcs dir does not exist: {arcs_dir}"

@@ -1107,6 +1107,37 @@ class WorkEngine:
 
         return SpawnTree.format_tree(tree, use_ascii)
 
+    def get_work_lineage(self, id: str) -> Dict[str, Any]:
+        """Get parent and children of work item.
+
+        Reads spawned_by and spawned_children from frontmatter directly
+        (these fields are not part of WorkState dataclass).
+
+        Args:
+            id: Work item ID
+
+        Returns:
+            Dict with 'parent' (str or None) and 'children' (list of str)
+        """
+        work = self.get_work(id)
+        if work is None:
+            return {"parent": None, "children": []}
+
+        # Read frontmatter for spawned_by and spawned_children
+        path = work.path
+        content = path.read_text(encoding="utf-8")
+        parts = content.split("---", 2)
+        if len(parts) < 3:
+            return {"parent": None, "children": []}
+        fm = yaml.safe_load(parts[1]) or {}
+
+        parent = fm.get("spawned_by")
+        if parent in (None, "null", ""):
+            parent = None
+        children = fm.get("spawned_children", []) or []
+
+        return {"parent": parent, "children": children}
+
     def backfill(self, id: str, force: bool = False) -> bool:
         """Delegate to BackfillEngine."""
         if self._backfill_engine is None:
