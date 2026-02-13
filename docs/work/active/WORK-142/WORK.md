@@ -1,53 +1,80 @@
 ---
 template: work_item
 id: WORK-142
-title: "Retro-Cycle Ceremony Design and Implementation"
+title: Retro-Cycle Ceremony Design and Implementation
 type: design
 status: active
 owner: Hephaestus
 created: 2026-02-12
 spawned_by: null
-spawned_children: [WORK-143]
+spawned_children:
+- WORK-143
 chapter: null
 arc: null
 closed: null
 priority: high
 effort: large
-traces_to: [REQ-CEREMONY-001, REQ-CEREMONY-002, REQ-FEEDBACK-001]
-requirement_refs: []  # DEPRECATED: use traces_to instead
+traces_to:
+- REQ-CEREMONY-001
+- REQ-CEREMONY-002
+- REQ-FEEDBACK-001
+requirement_refs: []
 source_files:
-  - .claude/skills/observation-capture-cycle/SKILL.md
-  - .claude/skills/close-work-cycle/SKILL.md
-  - .claude/commands/close.md
+- .claude/skills/observation-capture-cycle/SKILL.md
+- .claude/skills/close-work-cycle/SKILL.md
+- .claude/commands/close.md
 acceptance_criteria:
-  - retro-cycle skill defined with input/output contract
-  - 4 REFLECT dimensions (WCBB, WSY, WDN, WMI) with evidence anchoring
-  - DERIVE phase produces K/S/S directives (proportional scaling)
-  - EXTRACT phase stores bugs and features to memory with typed provenance tags
-  - COMMIT phase stores all outputs with no deduplication
-  - Computable predicate for trivial/substantial threshold
-  - Escape hatch (--skip-retro) with governance event logging
-  - DoD-relevant findings flow from REFLECT to VALIDATE
-  - close-work-cycle updated to use RETRO phase
-  - /close command updated to remove observation-capture-cycle reference
-  - observation-capture-cycle deprecated
+- retro-cycle skill defined with input/output contract
+- 4 REFLECT dimensions (WCBB, WSY, WDN, WMI) with evidence anchoring
+- DERIVE phase produces K/S/S directives (proportional scaling)
+- EXTRACT phase stores bugs and features to memory with typed provenance tags
+- COMMIT phase stores all outputs with no deduplication
+- Computable predicate for trivial/substantial threshold
+- Escape hatch (--skip-retro) with governance event logging
+- DoD-relevant findings flow from REFLECT to VALIDATE
+- close-work-cycle updated to use RETRO phase
+- /close command updated to remove observation-capture-cycle reference
+- observation-capture-cycle deprecated
 blocked_by: []
-blocks: [WORK-143]
-enables: [WORK-143]
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+blocks:
+- WORK-143
+enables:
+- WORK-143
+queue_position: working
+cycle_phase: backlog
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-12T23:34:46
-    exited: null
+- node: backlog
+  entered: 2026-02-12 23:34:46
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: [85057, 85058, 85059, 85060, 85061, 85062, 85063, 85064, 85065, 85066, 85067, 85068, 85069, 85070]
+memory_refs:
+- 85057
+- 85058
+- 85059
+- 85060
+- 85061
+- 85062
+- 85063
+- 85064
+- 85065
+- 85066
+- 85067
+- 85068
+- 85069
+- 85070
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-12
-last_updated: 2026-02-12T23:34:46
+last_updated: '2026-02-13T19:07:49.415687'
+queue_history:
+- position: ready
+  entered: '2026-02-13T19:07:49.378405'
+  exited: '2026-02-13T19:07:49.411540'
+- position: working
+  entered: '2026-02-13T19:07:49.411540'
+  exited: null
 ---
 # WORK-142: Retro-Cycle Ceremony Design and Implementation
 

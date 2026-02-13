@@ -42,26 +42,26 @@ def test_gate_requires_content():
         "Must mention 'none observed' or explicit acknowledgment"
 
 
-def test_close_command_invokes_skill():
-    """Verify /close command still invokes observation-capture-cycle (backward compat)."""
+def test_close_command_invokes_retro_cycle():
+    """Verify /close command invokes retro-cycle (WORK-142 migration)."""
     close_path = Path(".claude/commands/close.md")
     content = close_path.read_text(encoding="utf-8")
 
-    assert "observation-capture-cycle" in content, \
-        "observation-capture-cycle must be mentioned in close command"
+    assert "retro-cycle" in content, \
+        "retro-cycle must be mentioned in close command"
 
     # Should still come before close-work-cycle
-    obs_pos = content.find("observation-capture-cycle")
+    retro_pos = content.find("retro-cycle")
     close_pos = content.find("close-work-cycle")
-    assert obs_pos < close_pos, \
-        "observation-capture-cycle must be invoked before close-work-cycle"
+    assert retro_pos < close_pos, \
+        "retro-cycle must be invoked before close-work-cycle"
 
 
-def test_close_work_cycle_references_skill():
-    """Verify close-work-cycle still references observation-capture-cycle."""
+def test_close_work_cycle_references_retro_cycle():
+    """Verify close-work-cycle references retro-cycle (WORK-142 migration)."""
     skill_path = Path(".claude/skills/close-work-cycle/SKILL.md")
     content = skill_path.read_text(encoding="utf-8")
 
-    # Should reference observation-capture-cycle as entry gate
-    assert "observation-capture-cycle" in content, \
-        "close-work-cycle must reference observation-capture-cycle"
+    # Should reference retro-cycle as predecessor
+    assert "retro-cycle" in content, \
+        "close-work-cycle must reference retro-cycle"

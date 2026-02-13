@@ -2,7 +2,8 @@
 name: close-work-cycle
 type: ceremony
 description: HAIOS Close Work Cycle for structured work item closure. Use when closing
-  work items. Guides VALIDATE->ARCHIVE->MEMORY workflow with DoD enforcement.
+  work items. Guides VALIDATE->ARCHIVE->CHAIN workflow with DoD enforcement.
+  Prerequisite: retro-cycle must complete before this cycle (invoked by /close).
 category:
   - closure
   - queue
@@ -25,17 +26,17 @@ output_contract:
     type: path
     guaranteed: on_success
     description: "Path to the closed work item file"
-  - field: memory_concept_id
-    type: integer
+  - field: memory_concept_ids
+    type: list
     guaranteed: on_success
-    description: "Memory concept ID from closure summary"
+    description: "Memory concept IDs from retro-cycle COMMIT (delegated)"
   - field: error
     type: string
     guaranteed: on_failure
     description: "Error description"
 side_effects:
   - "Status change (active -> complete)"
-  - "Memory commit (closure summary via ingester_ingest)"
+  - "Memory commit (delegated to retro-cycle COMMIT phase)"
   - "Log ceremony event"
   - "Git commit via checkpoint-cycle"
 recipes:
@@ -46,11 +47,11 @@ last_updated: '2026-02-03T23:03:31'
 ---
 # Close Work Cycle
 
-This skill defines the VALIDATE-ARCHIVE-MEMORY cycle for closing work items with Definition of Done (DoD) enforcement per ADR-033.
+This skill defines the VALIDATE-ARCHIVE-CHAIN cycle for closing work items with Definition of Done (DoD) enforcement per ADR-033. Prerequisite: retro-cycle must complete before this cycle (invoked by /close command).
 
 ## When to Use
 
-**Invoked automatically** by `/close` command after observation-capture-cycle.
+**Invoked automatically** by `/close` command after retro-cycle.
 **Manual invocation:** `Skill(skill="close-work-cycle")` when closing an existing work item.
 
 ---
@@ -58,25 +59,25 @@ This skill defines the VALIDATE-ARCHIVE-MEMORY cycle for closing work items with
 ## The Cycle
 
 ```
-[observation-capture-cycle] --> [dod-validation-cycle] --> VALIDATE --> ARCHIVE --> MEMORY --> CHAIN
-         │                                                                                       |
-         │                                                                                [route next]
-   reflection first                                                                              |
-   (RECALL->NOTICE->COMMIT)                                                             /-------------\
-                                                                                  type=investigation  has plan?   else
-                                                                                        |                  |          |
-                                                                                         |          implement  work-creation
-                                                                                    investigation    -cycle     -cycle
-                                                                                       -cycle
+[retro-cycle] --> [dod-validation-cycle] --> VALIDATE --> ARCHIVE --> CHAIN
+      │                                                                  |
+      │                                                           [route next]
+  structured reflection                                                  |
+  (REFLECT->DERIVE->                                            /-------------\
+   EXTRACT->COMMIT)                                       type=investigation  has plan?   else
+                                                                |                  |          |
+                                                                 |          implement  work-creation
+                                                            investigation    -cycle     -cycle
+                                                               -cycle
 ```
 
-**Entry Gates (MUST):**
+**Prerequisite (MUST):**
 
-1. **Observation Capture (E2-278):** Before starting this cycle, **MUST** invoke observation-capture-cycle:
+1. **Retro-Cycle (WORK-142):** Before starting this cycle, **MUST** complete retro-cycle:
    ```
-   Skill(skill="observation-capture-cycle")
+   Skill(skill="retro-cycle")
    ```
-   This forces genuine reflection in dedicated cognitive context before entering "closing mode."
+   This invocation is owned by `/close` command, not by close-work-cycle itself. retro-cycle structures autonomous reflection into typed, provenance-tagged memory entries (REFLECT->DERIVE->EXTRACT->COMMIT). If retro-cycle returned `dod_relevant_findings`, those are passed to VALIDATE phase.
 
 2. **DoD Validation:** Before VALIDATE phase, **MUST** invoke dod-validation-cycle:
    ```
@@ -111,12 +112,22 @@ just set-cycle close-work-cycle VALIDATE {work_id}
    - Read `traces_to:` from work item frontmatter
    - For each requirement ID, verify deliverables demonstrate requirement satisfaction
    - If requirement cannot be verified as addressed, BLOCK closure
-6. Prompt user for DoD confirmation
+6. **Review retro-cycle dod_relevant_findings (WORK-142):**
+   - If retro-cycle returned `dod_relevant_findings` (non-empty list), review each finding
+   - Evaluate whether any finding should block closure
+   - If blocking: report finding to operator, BLOCK closure until addressed
+   - If non-blocking: note findings in closure summary
+7. **Governance event check (moved from MEMORY phase, E2-108):**
+   - Check for cycle events: `grep "{id}" .claude/haios/governance-events.jsonl`
+   - If no events found, warn that governance may have been bypassed (soft gate)
+8. Prompt user for DoD confirmation
 
 **Exit Criteria:**
 - [ ] Work file exists and has status: active
 - [ ] All associated plans have status: complete
 - [ ] **MUST:** Traced requirement(s) verified as addressed (REQ-TRACE-003)
+- [ ] DoD-relevant findings from retro-cycle reviewed (if any)
+- [ ] Governance event check completed (warning if no events)
 - [ ] User confirms: tests pass, WHY captured, docs current
 
 **Tools:** Read, Glob, Grep
@@ -155,49 +166,7 @@ just set-cycle close-work-cycle ARCHIVE {work_id}
 
 ---
 
-### 3. MEMORY Phase
-
-**On Entry:**
-```bash
-just set-cycle close-work-cycle MEMORY {work_id}
-```
-
-**Goal:** Store closure summary to memory and verify governance events.
-
-**Actions:**
-
-#### 3a. Governance Event Check (E2-108)
-
-1. **Check for cycle events** (soft gate - warns but does not block):
-   ```bash
-   just events | grep "{id}"
-   ```
-   - If no events found for the work ID, warn that governance may have been bypassed
-   - Work item can still close, but warning surfaces potential governance bypass
-
-#### 3b. Memory Capture
-
-2. Store closure summary via `ingester_ingest`:
-   - Title, backlog_id, DoD status, associated documents
-   - Include observation summary if any captured in observation-capture-cycle
-   - Use source_path: `closure:{backlog_id}`
-
-#### 3c. Report Closure
-
-3. Report closure to user with memory concept ID
-
-**Exit Criteria:**
-- [ ] Governance event check completed (warning if no events)
-- [ ] Closure summary stored to memory
-- [ ] User informed of successful closure with memory concept ID
-
-**Tools:** governance_events.check_work_item_events, ingester_ingest
-
-**Note:** Status refresh is handled by `just close-work` in ARCHIVE phase (includes cascade and update-status).
-
----
-
-### 4. CHAIN Phase (Post-MEMORY)
+### 3. CHAIN Phase (Post-ARCHIVE)
 
 **On Entry:**
 ```bash
@@ -271,10 +240,9 @@ just clear-cycle
 
 | Phase | Primary Tool | Memory Integration |
 |-------|--------------|-------------------|
-| (Entry) observation-capture-cycle | Skill | Observation capture via RECALL->NOTICE->COMMIT |
-| VALIDATE | Read, Glob, Grep | Query for prior work (optional) |
+| (Prerequisite) retro-cycle | Skill (invoked by /close) | Typed reflection via REFLECT->DERIVE->EXTRACT->COMMIT |
+| VALIDATE | Read, Glob, Grep | dod_relevant_findings from retro-cycle |
 | ARCHIVE | Bash(just close-work) | - |
-| MEMORY | ingester_ingest | Closure summary |
 | CHAIN | Skill (checkpoint-cycle, routing) | Context preservation (E2-287) |
 
 ---
@@ -283,13 +251,14 @@ just clear-cycle
 
 | Phase | Question to Ask | If NO |
 |-------|-----------------|-------|
-| (Entry) | Observations captured? | Invoke observation-capture-cycle first |
+| (Prerequisite) | retro-cycle completed? | /close must invoke retro-cycle first |
 | VALIDATE | Does work file exist? | STOP - not found |
 | VALIDATE | Are all plans complete? | STOP or warn user |
 | VALIDATE | **Is traced requirement addressed? (REQ-TRACE-003)** | **STOP - requirement not satisfied** |
+| VALIDATE | Any DoD-relevant findings from retro-cycle? | Review and evaluate |
+| VALIDATE | Governance events exist for work_id? | Warn (soft gate) |
 | VALIDATE | Does user confirm DoD? | STOP - DoD not met |
 | ARCHIVE | Is work file archived? | Run `just close-work` |
-| MEMORY | Is closure stored? | Store via ingester |
 | CHAIN | Is next work identified? | Run `just ready` |
 
 ---
@@ -298,11 +267,11 @@ just clear-cycle
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
-| Three phases | VALIDATE -> ARCHIVE -> MEMORY | E2-278: OBSERVE extracted to observation-capture-cycle |
-| observation-capture-cycle as entry gate | Dedicated cognitive context | INV-059: Embedding causes completion mode bias |
+| Three inline phases | VALIDATE -> ARCHIVE -> CHAIN | WORK-142: MEMORY absorbed by retro-cycle COMMIT |
+| retro-cycle as prerequisite | /close invokes retro-cycle before close-work-cycle | WORK-142: Structured reflection with typed provenance replaces observation-capture-cycle |
 | Keep command lookup | Skill assumes work item found | Command handles "not found" case before skill |
 | Skill documents steps | Command + Skill redundancy | Command is authoritative; skill provides structure |
-| MEMORY phase after archive | After archive | Memory should reflect completed state |
+| Governance check in VALIDATE | Moved from removed MEMORY phase | WORK-142: Consolidates all checks before archive |
 | **CHAIN presents options, not auto-executes** | AskUserQuestion for caller choice | WORK-087: REQ-LIFECYCLE-004 "chaining is caller choice" |
 | **"Complete without spawn" first-class** | Listed as option 1 | REQ-LIFECYCLE-004: Valid outcome, not exceptional case |
 
@@ -310,10 +279,12 @@ just clear-cycle
 
 ## Related
 
-- **observation-capture-cycle skill:** Entry gate for genuine reflection (E2-278)
-- **observation-triage-cycle skill:** Processes captured observations
+- **retro-cycle skill:** Prerequisite for structured reflection (WORK-142, replaces observation-capture-cycle)
+- **observation-capture-cycle skill:** DEPRECATED, replaced by retro-cycle (WORK-142)
+- **observation-triage-cycle skill:** Processes retro-cycle provenance tags (WORK-143)
+- **dod-validation-cycle skill:** Invoked at start of VALIDATE phase
 - **work-creation-cycle skill:** Parallel workflow for creation
 - **implementation-cycle skill:** Parallel workflow for implementation
 - **investigation-cycle skill:** Parallel workflow for research
 - **ADR-033:** Work Item Lifecycle Governance
-- **/close command:** Invokes observation-capture-cycle then this skill
+- **/close command:** Invokes retro-cycle then this skill

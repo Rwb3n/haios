@@ -10,7 +10,7 @@ last_updated: '2026-02-04T21:53:57'
 ---
 # Close Work Cycle Agent
 
-Executes the full VALIDATE → ARCHIVE → MEMORY → CHAIN cycle in isolated context, returning a structured summary to the parent agent.
+Executes the full VALIDATE → ARCHIVE → CHAIN cycle in isolated context, returning a structured summary to the parent agent. Prerequisite: retro-cycle must complete before invocation (handled by /close command).
 
 ## Requirement Level
 
@@ -28,10 +28,9 @@ Parent agent invokes this when:
 1. **Receive** work_id from parent
 2. **Read** the skill definition: `.claude/skills/close-work-cycle/SKILL.md`
 3. **Execute** all phases per skill structure:
-   - (Entry) observation-capture-cycle first (if not already done)
-   - VALIDATE: Verify DoD criteria, check plans complete, verify traces_to addressed
+   - (Prerequisite) retro-cycle must have completed (invoked by /close)
+   - VALIDATE: Verify DoD criteria, check plans complete, verify traces_to addressed, review dod_relevant_findings, governance event check
    - ARCHIVE: Run `just close-work {id}` to update status
-   - MEMORY: Store closure summary, check governance events
    - CHAIN: Identify next work, present options
 4. **Return** structured summary to parent
 
@@ -39,9 +38,9 @@ Parent agent invokes this when:
 
 | Phase Exit | Gate | Action |
 |------------|------|--------|
-| Entry → VALIDATE | observation-captured | Verify observation-capture-cycle completed |
+| Entry → VALIDATE | retro-completed | Verify retro-cycle completed (invoked by /close) |
 | VALIDATE → ARCHIVE | dod-validated | Verify all DoD criteria pass, traces_to addressed |
-| ARCHIVE → MEMORY | status-updated | Verify `just close-work` succeeded |
+| ARCHIVE → CHAIN | status-updated | Verify `just close-work` succeeded |
 
 **You MUST report gate results in your output.** If any gate fails, return BLOCKED status.
 
@@ -58,7 +57,7 @@ Cycle Result: PASS | FAIL | BLOCKED
 - Duration: {estimate}
 
 ## Gates Honored
-- observation-captured: PASS | FAIL | SKIPPED
+- retro-completed: PASS | FAIL | SKIPPED
 - dod-validated: PASS | FAIL | SKIPPED
 - status-updated: PASS | FAIL | SKIPPED
 
@@ -98,11 +97,11 @@ Cycle Result: PASS
 
 ## Summary
 - Work ID: WORK-081
-- Phases completed: VALIDATE, ARCHIVE, MEMORY, CHAIN
+- Phases completed: VALIDATE, ARCHIVE, CHAIN
 - Duration: ~10 min
 
 ## Gates Honored
-- observation-captured: PASS
+- retro-completed: PASS
 - dod-validated: PASS
 - status-updated: PASS
 
@@ -134,7 +133,7 @@ None
 ## Tips
 
 - Read the skill file first - it's the source of truth for phase structure
-- Observation capture should happen BEFORE this agent is invoked (parent responsibility)
+- retro-cycle should complete BEFORE this agent is invoked (parent/close command responsibility)
 - Verify ALL DoD criteria before ARCHIVE - don't close incomplete work
 - Store meaningful learnings to memory, not just "work closed"
 - "Complete without spawn" is a valid Next Action per REQ-LIFECYCLE-004
@@ -147,11 +146,11 @@ None
 | DoD criteria not met | Return BLOCKED with specific failures |
 | `just close-work` fails | Return BLOCKED with error message |
 | No next work in queue | Return PASS with Next Action: "await_operator" |
-| Observations not captured | Return BLOCKED - parent must invoke observation-capture-cycle first |
+| Retro not completed | Return BLOCKED - parent must invoke retro-cycle first |
 
 ## Related
 
 - **close-work-cycle skill**: Source of truth for phase structure
-- **observation-capture-cycle skill**: Entry gate (parent invokes first)
+- **retro-cycle skill**: Prerequisite (parent/close command invokes first)
 - **dod-validation-cycle skill**: DoD validation bridge
 - **ingester_ingest**: Store closure learnings

@@ -33,6 +33,7 @@ EXISTING_CEREMONY_SKILLS = [
     "close-arc-ceremony",
     "close-epoch-ceremony",
     "observation-capture-cycle",
+    "retro-cycle",
     "observation-triage-cycle",
     "checkpoint-cycle",
     "session-start-ceremony",   # De-stubbed by WORK-120 (CH-014)

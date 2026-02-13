@@ -114,19 +114,19 @@ class TestMemoryCommitErrorHandling:
 
 
 class TestCloseWorkCycleComposition:
-    """Verify close-work-cycle references observation-capture-cycle as entry gate."""
+    """Verify close-work-cycle references retro-cycle as predecessor (WORK-142)."""
 
-    def test_close_work_cycle_composes_observation_capture(self):
-        """close-work-cycle references observation-capture-cycle as entry gate."""
+    def test_close_work_cycle_composes_retro_cycle(self):
+        """close-work-cycle references retro-cycle before VALIDATE phase."""
         content = Path(".claude/skills/close-work-cycle/SKILL.md").read_text(
             encoding="utf-8"
         )
-        assert "observation-capture-cycle" in content
-        # observation-capture must come before VALIDATE phase
-        obs_pos = content.find("observation-capture-cycle")
-        validate_pos = content.find("### 1. VALIDATE Phase")
-        assert obs_pos < validate_pos, (
-            "observation-capture-cycle must be referenced before VALIDATE phase"
+        assert "retro-cycle" in content
+        # retro-cycle must come before VALIDATE phase
+        retro_pos = content.find("retro-cycle")
+        validate_pos = content.find("VALIDATE")
+        assert retro_pos < validate_pos, (
+            "retro-cycle must be referenced before VALIDATE phase"
         )
 
 
@@ -137,7 +137,7 @@ class TestCeremonyRegistryMemory:
     """Verify ceremony_registry.yaml has all 3 memory ceremonies."""
 
     def test_registry_has_three_memory_ceremonies(self):
-        """ceremony_registry.yaml has all 3 memory ceremonies with contracts."""
+        """ceremony_registry.yaml has all 3 memory ceremonies with contracts (WORK-142: retro replaces obs-capture)."""
         registry = load_ceremony_registry()
         memory_ceremonies = [
             c for c in registry.ceremonies if _has_category(c, "memory")
@@ -146,7 +146,7 @@ class TestCeremonyRegistryMemory:
             f"Expected 3 memory ceremonies, got {len(memory_ceremonies)}"
         )
         names = {c.name for c in memory_ceremonies}
-        assert names == {"observation-capture", "observation-triage", "memory-commit"}
+        assert names == {"retro", "observation-triage", "memory-commit"}
         for c in memory_ceremonies:
             assert c.has_contract is True, f"{c.name} must have contract"
             assert c.has_skill is True, f"{c.name} must have skill"
