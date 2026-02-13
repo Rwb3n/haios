@@ -331,3 +331,129 @@ class TestThresholdConfiguration:
         # Uses the unified ConfigLoader which loads from .claude/haios/config/
         result = get_observation_threshold()
         assert result == 10  # Value from haios.yaml
+
+
+# =============================================================================
+# RETRO-TRIAGE TESTS (WORK-143)
+# =============================================================================
+
+from observations import (
+    query_retro_kss,
+    query_retro_bugs,
+    query_retro_features,
+    aggregate_kss_frequency,
+    surface_bug_candidates,
+    surface_feature_candidates,
+)
+
+
+class TestRetroTriageQuery:
+    """Tests for retro-triage query functions (WORK-143)."""
+
+    def test_query_retro_kss_returns_directive_entries(self):
+        """query_retro_kss returns parsed KSS directive entries from memory."""
+        def mock_db(sql):
+            return {
+                "rows": [
+                    [85109, "KEEP-1: TDD RED-GREEN approach across sessions"],
+                    [85111, "STOP-1: Leaving unquoted YAML description fields with colons"],
+                ],
+                "columns": ["id", "content"]
+            }
+        result = query_retro_kss(db_query_fn=mock_db)
+        assert len(result) == 2
+        assert result[0]["id"] == 85109
+        assert "KEEP-1:" in result[0]["content"]
+
+    def test_query_retro_bugs_returns_critique_entries(self):
+        """query_retro_bugs returns parsed bug entries from memory."""
+        def mock_db(sql):
+            return {
+                "rows": [[85097, "BUG (medium): spawn-work-ceremony missing stub: true"]],
+                "columns": ["id", "content"]
+            }
+        result = query_retro_bugs(db_query_fn=mock_db)
+        assert len(result) == 1
+        assert "BUG" in result[0]["content"]
+
+    def test_query_retro_features_returns_critique_entries(self):
+        """query_retro_features returns parsed feature entries from memory."""
+        def mock_db(sql):
+            return {
+                "rows": [[85098, "FEATURE (high): WORK-143 triage consumer update"]],
+                "columns": ["id", "content"]
+            }
+        result = query_retro_features(db_query_fn=mock_db)
+        assert len(result) == 1
+        assert "FEATURE" in result[0]["content"]
+
+    def test_query_retro_kss_handles_db_error(self):
+        """query_retro_kss returns empty list on DB error."""
+        def mock_db(sql):
+            return {"error": "no such table: concepts"}
+        result = query_retro_kss(db_query_fn=mock_db)
+        assert result == []
+
+    def test_query_retro_kss_none_returns_empty(self):
+        """query_retro_kss returns empty list when db_query_fn is None."""
+        result = query_retro_kss(db_query_fn=None)
+        assert result == []
+
+
+class TestKSSAggregation:
+    """Tests for K/S/S frequency aggregation (WORK-143)."""
+
+    def test_aggregate_kss_frequency_ranks_by_count(self):
+        """aggregate_kss_frequency ranks directives by frequency."""
+        entries = [
+            {"id": 1, "content": "KEEP-1: TDD RED-GREEN"},
+            {"id": 2, "content": "STOP-1: Hardcoding epochs"},
+            {"id": 3, "content": "KEEP-1: TDD RED-GREEN"},  # duplicate from another session
+            {"id": 4, "content": "START-1: Scaffold lint"},
+        ]
+        result = aggregate_kss_frequency(entries)
+        assert result["keep"][0]["directive"] == "TDD RED-GREEN"
+        assert result["keep"][0]["count"] == 2
+        assert len(result["stop"]) == 1
+        assert len(result["start"]) == 1
+
+    def test_aggregate_kss_frequency_empty_input(self):
+        """aggregate_kss_frequency returns empty buckets for empty input."""
+        result = aggregate_kss_frequency([])
+        assert result == {"keep": [], "stop": [], "start": []}
+
+
+class TestBugFeatureSurfacing:
+    """Tests for bug/feature candidate surfacing (WORK-143)."""
+
+    def test_surface_bug_candidates_parses_confidence(self):
+        """surface_bug_candidates parses confidence and sorts high first."""
+        entries = [
+            {"id": 1, "content": "BUG (high): YAML parsing breaks on colons"},
+            {"id": 2, "content": "BUG (low): minor doc drift in close.md"},
+        ]
+        result = surface_bug_candidates(entries)
+        assert len(result) == 2
+        assert result[0]["confidence"] == "high"  # sorted high first
+        assert result[1]["confidence"] == "low"
+        assert "YAML parsing" in result[0]["description"]
+
+    def test_surface_feature_candidates_parses_confidence(self):
+        """surface_feature_candidates parses confidence and sorts high first."""
+        entries = [
+            {"id": 1, "content": "FEATURE (high): triage consumer update"},
+            {"id": 2, "content": "FEATURE (medium): auto-lint scaffold output"},
+        ]
+        result = surface_feature_candidates(entries)
+        assert len(result) == 2
+        assert result[0]["confidence"] == "high"
+        assert result[1]["confidence"] == "medium"
+
+    def test_scan_archived_observations_unchanged(self, tmp_path):
+        """Existing filesystem scan behavior is preserved (backward compat)."""
+        work_dir = tmp_path / "docs" / "work" / "archive" / "E2-TEST"
+        work_dir.mkdir(parents=True)
+        obs_file = work_dir / "observations.md"
+        obs_file.write_text("---\ntriage_status: pending\n---\n## Gaps\n- [x] Test gap")
+        result = scan_archived_observations(base_path=tmp_path)
+        assert len(result) == 1

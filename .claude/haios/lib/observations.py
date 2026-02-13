@@ -1,6 +1,6 @@
 # generated: 2025-12-28
 # System Auto: last updated on: 2026-01-21T22:19:10
-"""Observation capture and triage module for HAIOS (E2-217, E2-218, E2-224).
+"""Observation capture, triage, and retro-triage module for HAIOS.
 
 Provides validation and surfacing for the observation capture gate
 in close-work-cycle. Prevents "Ceremonial completion" anti-pattern.
@@ -19,6 +19,14 @@ Triage Functions (E2-218):
 Threshold Functions (E2-224):
 8. get_pending_observation_count() - Count pending observations across archive
 9. should_trigger_triage() - Check if count exceeds threshold
+
+Retro-Triage Functions (WORK-143):
+10. query_retro_kss() - Query memory for K/S/S directive entries
+11. query_retro_bugs() - Query memory for bug candidate entries
+12. query_retro_features() - Query memory for feature candidate entries
+13. aggregate_kss_frequency() - Aggregate K/S/S directives by frequency
+14. surface_bug_candidates() - Parse bug entries with confidence sorting
+15. surface_feature_candidates() - Parse feature entries with confidence sorting
 """
 
 import re
@@ -473,6 +481,239 @@ def should_trigger_triage(count: int, threshold: int = DEFAULT_OBSERVATION_THRES
     return count > threshold
 
 
+# =============================================================================
+# RETRO-TRIAGE FUNCTIONS (WORK-143)
+# =============================================================================
+# Query retro-cycle outputs from memory by content patterns.
+# ingester_ingest stores retro outputs as:
+#   - type=Directive, content="KEEP-N: ..." / "STOP-N: ..." / "START-N: ..."
+#   - type=Critique, content="BUG (confidence): ..." / "FEATURE (confidence): ..."
+# source_adr does NOT contain provenance tags (A1 critique finding).
+# Follow-up: fix producer pipeline for proper provenance tags.
+
+import json as _json
+
+
+def _ensure_parsed(result) -> dict:
+    """Ensure db_query result is a parsed dict, not a JSON string (A7)."""
+    if isinstance(result, str):
+        try:
+            return _json.loads(result)
+        except (ValueError, TypeError):
+            return {"error": result}
+    return result
+
+
+def _rows_to_dicts(rows: list, columns: list) -> list[dict]:
+    """Convert DB rows + columns into list of dicts."""
+    return [dict(zip(columns, row)) for row in rows]
+
+
+def query_retro_kss(db_query_fn=None) -> list[dict]:
+    """Query memory for K/S/S directive entries (retro-cycle DERIVE output).
+
+    Queries concepts table for type=Directive with KEEP-/STOP-/START- content
+    prefixes, which is how ingester_ingest stores retro-kss output after
+    LLM extraction.
+
+    Args:
+        db_query_fn: Callable(sql) -> {columns, rows} or JSON string.
+                     If None, returns empty list.
+
+    Returns:
+        List of dicts with id, content keys.
+    """
+    if db_query_fn is None:
+        return []
+    result = _ensure_parsed(db_query_fn(
+        "SELECT id, content FROM concepts WHERE type = 'Directive' "
+        "AND (content LIKE 'KEEP-%' OR content LIKE 'STOP-%' OR content LIKE 'START-%') "
+        "ORDER BY id"
+    ))
+    if "error" in result:
+        return []
+    return _rows_to_dicts(result["rows"], result["columns"])
+
+
+def query_retro_bugs(db_query_fn=None) -> list[dict]:
+    """Query memory for bug candidate entries (retro-cycle EXTRACT output).
+
+    Queries concepts table for type=Critique with BUG prefix in content.
+
+    Args:
+        db_query_fn: Callable(sql) -> {columns, rows} or JSON string.
+
+    Returns:
+        List of dicts with id, content keys.
+    """
+    if db_query_fn is None:
+        return []
+    result = _ensure_parsed(db_query_fn(
+        "SELECT id, content FROM concepts WHERE type = 'Critique' "
+        "AND content LIKE 'BUG %' ORDER BY id DESC"
+    ))
+    if "error" in result:
+        return []
+    return _rows_to_dicts(result["rows"], result["columns"])
+
+
+def query_retro_features(db_query_fn=None) -> list[dict]:
+    """Query memory for feature candidate entries (retro-cycle EXTRACT output).
+
+    Queries concepts table for type=Critique with FEATURE prefix in content.
+
+    Args:
+        db_query_fn: Callable(sql) -> {columns, rows} or JSON string.
+
+    Returns:
+        List of dicts with id, content keys.
+    """
+    if db_query_fn is None:
+        return []
+    result = _ensure_parsed(db_query_fn(
+        "SELECT id, content FROM concepts WHERE type = 'Critique' "
+        "AND content LIKE 'FEATURE %' ORDER BY id DESC"
+    ))
+    if "error" in result:
+        return []
+    return _rows_to_dicts(result["rows"], result["columns"])
+
+
+def _normalize_directive(text: str) -> str:
+    """Normalize a K/S/S directive for frequency comparison."""
+    return re.sub(r'\s+', ' ', text.strip().lower())
+
+
+def _parse_kss_content(content: str) -> tuple:
+    """Parse a KSS directive content like 'KEEP-1: TDD RED-GREEN...' into (category, directive).
+
+    Handles formats:
+      - 'KEEP-1: directive text'  (numbered, from retro-cycle)
+      - 'Keep: directive text'     (unnumbered)
+      - '- KEEP-1: directive text' (list-prefixed, A3 fix)
+
+    Returns:
+        (category, directive) tuple where category is 'keep'/'stop'/'start',
+        or ('', '') if not parseable.
+    """
+    line = content.strip()
+    # Strip list prefix (A3)
+    if line.startswith("- "):
+        line = line[2:]
+    # Match KEEP-N: or Keep: patterns
+    match = re.match(r'^(KEEP|STOP|START)(?:-\d+)?:\s*(.+)', line, re.IGNORECASE)
+    if match:
+        return (match.group(1).lower(), match.group(2).strip())
+    return ('', '')
+
+
+def aggregate_kss_frequency(kss_entries: list) -> dict:
+    """Aggregate K/S/S directives by frequency across entries.
+
+    Each entry is a DB row with 'content' like 'KEEP-1: TDD RED-GREEN'.
+    Counts frequency of convergent directives (normalized for comparison),
+    returns ranked by count descending.
+
+    Args:
+        kss_entries: List from query_retro_kss(). Each has 'id' and 'content'.
+
+    Returns:
+        {"keep": [...], "stop": [...], "start": [...]}
+        Each item: {"directive": str, "count": int, "memory_ids": list[int]}
+    """
+    buckets = {"keep": {}, "stop": {}, "start": {}}
+
+    for entry in kss_entries:
+        content = entry.get("content", "")
+        memory_id = entry.get("id")
+
+        category, directive = _parse_kss_content(content)
+        if not category:
+            continue
+
+        key = _normalize_directive(directive)
+        if key not in buckets[category]:
+            buckets[category][key] = {
+                "directive": directive,  # preserve first occurrence casing
+                "count": 0,
+                "memory_ids": []
+            }
+        buckets[category][key]["count"] += 1
+        if memory_id is not None:
+            buckets[category][key]["memory_ids"].append(memory_id)
+
+    # Sort each bucket by count descending
+    result = {}
+    for category, items in buckets.items():
+        sorted_items = sorted(items.values(), key=lambda x: x["count"], reverse=True)
+        result[category] = sorted_items
+
+    return result
+
+
+def _parse_bug_feature_content(content: str) -> dict:
+    """Parse 'BUG (confidence): description' or 'FEATURE (confidence): description'.
+
+    Real examples from memory:
+      - 'BUG (medium): spawn-work-ceremony missing stub: true in frontmatter.'
+      - 'FEATURE (high): WORK-143 -- triage consumer update needed.'
+
+    Returns:
+        {"type": "bug"|"feature", "confidence": str, "description": str}
+        or empty dict if not parseable.
+    """
+    match = re.match(r'^(BUG|FEATURE)\s*\((\w+)\):\s*(.+)', content.strip(), re.IGNORECASE)
+    if match:
+        return {
+            "type": match.group(1).lower(),
+            "confidence": match.group(2).lower(),
+            "description": match.group(3).strip()
+        }
+    return {}
+
+
+def surface_bug_candidates(bug_entries: list) -> list:
+    """Parse bug entries into structured candidates sorted by confidence.
+
+    Args:
+        bug_entries: List from query_retro_bugs(). Each has 'id' and 'content'.
+
+    Returns:
+        List of dicts with type, confidence, description, memory_id.
+        Sorted by confidence (high > medium > low).
+    """
+    confidence_order = {"high": 0, "medium": 1, "low": 2}
+    bugs = []
+    for entry in bug_entries:
+        parsed = _parse_bug_feature_content(entry.get("content", ""))
+        if parsed.get("type") == "bug":
+            parsed["memory_id"] = entry.get("id")
+            bugs.append(parsed)
+    bugs.sort(key=lambda x: confidence_order.get(x.get("confidence", "low"), 3))
+    return bugs
+
+
+def surface_feature_candidates(feature_entries: list) -> list:
+    """Parse feature entries into structured candidates sorted by confidence.
+
+    Args:
+        feature_entries: List from query_retro_features(). Each has 'id' and 'content'.
+
+    Returns:
+        List of dicts with type, confidence, description, memory_id.
+        Sorted by confidence (high > medium > low).
+    """
+    confidence_order = {"high": 0, "medium": 1, "low": 2}
+    features = []
+    for entry in feature_entries:
+        parsed = _parse_bug_feature_content(entry.get("content", ""))
+        if parsed.get("type") == "feature":
+            parsed["memory_id"] = entry.get("id")
+            features.append(parsed)
+    features.sort(key=lambda x: confidence_order.get(x.get("confidence", "low"), 3))
+    return features
+
+
 # CLI entry point for testing
 if __name__ == "__main__":
     import sys
@@ -484,6 +725,9 @@ if __name__ == "__main__":
         print("  scaffold <work_id>  - Create observations.md")
         print("  scan                - Scan for uncaptured observations (active)")
         print("  triage              - Scan for untriaged observations (archive)")
+        print("  retro-kss           - Query and aggregate K/S/S directives from memory")
+        print("  retro-bugs          - Query and surface bug candidates from memory")
+        print("  retro-features      - Query and surface feature candidates from memory")
         sys.exit(1)
 
     command = sys.argv[1]
@@ -520,6 +764,77 @@ if __name__ == "__main__":
                 print(f"  {item['work_id']}: {len(item['observations'])} observations")
                 for obs in item['observations']:
                     print(f"    - [{obs['section']}] {obs['text'][:60]}...")
+
+    elif command == "retro-kss":
+        def _db_query(sql):
+            try:
+                from haios_etl.database import DatabaseManager
+                db = DatabaseManager()
+                conn = db.get_connection()
+                cursor = conn.cursor()
+                cursor.execute(sql)
+                columns = [desc[0] for desc in cursor.description]
+                rows = cursor.fetchall()
+                return {"columns": columns, "rows": [list(r) for r in rows]}
+            except Exception as e:
+                return {"error": str(e)}
+
+        entries = query_retro_kss(db_query_fn=_db_query)
+        if not entries:
+            print("No K/S/S directives found in memory.")
+        else:
+            agg = aggregate_kss_frequency(entries)
+            for cat in ("keep", "stop", "start"):
+                if agg[cat]:
+                    print(f"\n{cat.upper()}:")
+                    for item in agg[cat]:
+                        print(f"  [{item['count']}x] {item['directive']}")
+
+    elif command == "retro-bugs":
+        def _db_query(sql):
+            try:
+                from haios_etl.database import DatabaseManager
+                db = DatabaseManager()
+                conn = db.get_connection()
+                cursor = conn.cursor()
+                cursor.execute(sql)
+                columns = [desc[0] for desc in cursor.description]
+                rows = cursor.fetchall()
+                return {"columns": columns, "rows": [list(r) for r in rows]}
+            except Exception as e:
+                return {"error": str(e)}
+
+        entries = query_retro_bugs(db_query_fn=_db_query)
+        bugs = surface_bug_candidates(entries)
+        if not bugs:
+            print("No bug candidates found in memory.")
+        else:
+            print(f"Bug candidates ({len(bugs)}):")
+            for bug in bugs:
+                print(f"  [{bug['confidence']}] {bug['description']}")
+
+    elif command == "retro-features":
+        def _db_query(sql):
+            try:
+                from haios_etl.database import DatabaseManager
+                db = DatabaseManager()
+                conn = db.get_connection()
+                cursor = conn.cursor()
+                cursor.execute(sql)
+                columns = [desc[0] for desc in cursor.description]
+                rows = cursor.fetchall()
+                return {"columns": columns, "rows": [list(r) for r in rows]}
+            except Exception as e:
+                return {"error": str(e)}
+
+        entries = query_retro_features(db_query_fn=_db_query)
+        features = surface_feature_candidates(entries)
+        if not features:
+            print("No feature candidates found in memory.")
+        else:
+            print(f"Feature candidates ({len(features)}):")
+            for feat in features:
+                print(f"  [{feat['confidence']}] {feat['description']}")
 
     else:
         print(f"Unknown command: {command}")

@@ -1,6 +1,6 @@
 ---
 template: implementation_plan
-status: ready
+status: complete
 date: 2026-02-13
 backlog_id: WORK-143
 title: "Retro-Triage Consumer Update for Memory-Based Provenance Tags"

@@ -3,14 +3,14 @@ template: work_item
 id: WORK-143
 title: Retro-Triage Consumer Update for Memory-Based Provenance Tags
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-12
 spawned_by: WORK-142
 spawned_children: []
 chapter: null
 arc: null
-closed: null
+closed: '2026-02-13'
 priority: high
 effort: medium
 traces_to:
@@ -29,26 +29,35 @@ blocked_by:
 - WORK-142
 blocks: []
 enables: []
-queue_position: working
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
 - node: backlog
   entered: 2026-02-12 23:34:51
-  exited: null
+  exited: '2026-02-13T20:27:01.873840'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85114
+- 85115
+- 85116
+- 85117
+- 85134
+- 85135
 extensions: {}
 version: '2.0'
 generated: 2026-02-12
-last_updated: '2026-02-13T19:57:52.655826'
+last_updated: '2026-02-13T20:27:01.877498'
 queue_history:
 - position: ready
   entered: '2026-02-13T19:57:52.625799'
   exited: '2026-02-13T19:57:52.652296'
 - position: working
   entered: '2026-02-13T19:57:52.652296'
+  exited: '2026-02-13T20:27:01.873840'
+- position: done
+  entered: '2026-02-13T20:27:01.873840'
   exited: null
 ---
 # WORK-143: Retro-Triage Consumer Update for Memory-Based Provenance Tags

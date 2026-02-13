@@ -4237,3 +4237,5 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-143", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-13T19:57:52.651589"}
 {"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-143"], "from": "ready", "to": "working", "timestamp": "2026-02-13T19:57:52.659319", "rationale": "Selected in S363 survey-cycle", "agent": "Hephaestus"}
 {"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-13T19:57:52.659319"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-13T20:27:01.859647"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-13T20:27:01.899207"}
