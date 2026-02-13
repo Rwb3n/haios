@@ -148,13 +148,17 @@ class TestGetDefaultPaths:
     def test_reads_from_config(self):
         """get_default_paths returns paths from haios.yaml epoch section."""
         from audit_decision_coverage import get_default_paths
+        from config import ConfigLoader
+
+        config = ConfigLoader.get()
+        expected_epoch = config.haios.get("epoch", {}).get("epoch_file", "")
+        expected_arcs = config.haios.get("epoch", {}).get("arcs_dir", "")
 
         epoch_path, arcs_dir = get_default_paths()
-        # Must NOT contain hardcoded E2_4
-        assert "E2_4" not in str(epoch_path), f"Hardcoded E2_4 found: {epoch_path}"
-        # Must match current haios.yaml config
-        assert "E2_5" in str(epoch_path), f"Expected E2_5 in path: {epoch_path}"
-        assert "E2_5" in str(arcs_dir), f"Expected E2_5 in arcs_dir: {arcs_dir}"
+        # Must match current haios.yaml config (not hardcoded to any epoch)
+        # Compare as Path objects to avoid platform-specific separator differences
+        assert epoch_path == Path(expected_epoch), f"epoch_path {epoch_path} != config {expected_epoch}"
+        assert arcs_dir == Path(expected_arcs), f"arcs_dir {arcs_dir} != config {expected_arcs}"
 
     def test_returns_path_objects(self):
         """get_default_paths returns Path objects."""
