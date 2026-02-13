@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-139
-title: "Fix close-epoch-ceremony Stale File-Move Documentation"
+title: Fix close-epoch-ceremony Stale File-Move Documentation
 type: bugfix
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-12
 spawned_by: null
 spawned_children: []
 chapter: null
 arc: null
-closed: null
+closed: '2026-02-13'
 priority: low
 effort: small
 traces_to: []
@@ -18,25 +18,29 @@ requirement_refs: []
 source_files:
 - .claude/skills/close-epoch-ceremony/SKILL.md
 acceptance_criteria:
-- "close-epoch-ceremony SKILL.md no longer references mv or file moves for work items"
-- "ARCHIVE phase documents ADR-041 status-over-location approach"
+- close-epoch-ceremony SKILL.md no longer references mv or file moves for work items
+- ARCHIVE phase documents ADR-041 status-over-location approach
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-12T22:40:28
-    exited: null
+- node: backlog
+  entered: 2026-02-12 22:40:28
+  exited: '2026-02-13T08:38:45.101186'
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-12
-last_updated: 2026-02-12T22:40:28
+last_updated: '2026-02-13T08:38:45.104264'
+queue_history:
+- position: done
+  entered: '2026-02-13T08:38:45.101186'
+  exited: null
 ---
 # WORK-139: Fix close-epoch-ceremony Stale File-Move Documentation
 
