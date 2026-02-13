@@ -10,9 +10,9 @@ load_principles:
 load_memory_refs:
   - 85076  # WORK-142 closure learnings (YAML quoting, phase renumbering)
   - 85077
-  - 85084  # retro-reflect observations
-  - 85091  # retro-kss directives
-  - 85096  # retro-extract items
+  - 85099  # retro-reflect:WORK-142 observations (WCBB, WSY, WDN, WMI)
+  - 85109  # retro-kss:WORK-142 directives (Keep, Stop, Start)
+  - 85096  # retro-extract:WORK-142 items (bugs, features)
 
 pending:
   - WORK-143  # Triage consumer update for retro-* provenance tags (unblocked by WORK-142)

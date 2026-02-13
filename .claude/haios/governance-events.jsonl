@@ -4227,3 +4227,13 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-13T19:43:38.786009"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-13T19:48:52.166264"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-13T19:48:52.206617"}
+{"type": "SessionEnded", "session": 362, "agent": "Hephaestus", "timestamp": "2026-02-13T19:50:48.166552"}
+{"type": "SessionStarted", "session": 363, "agent": "Hephaestus", "timestamp": "2026-02-13T19:56:31.813470"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-13T19:57:52.616567"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-143", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-13T19:57:52.624800"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-143"], "from": "backlog", "to": "ready", "timestamp": "2026-02-13T19:57:52.630827", "rationale": "Blocker WORK-142 resolved, pending from S362 checkpoint", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-13T19:57:52.630827"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-13T19:57:52.644584"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-143", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-13T19:57:52.651589"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-143"], "from": "ready", "to": "working", "timestamp": "2026-02-13T19:57:52.659319", "rationale": "Selected in S363 survey-cycle", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-13T19:57:52.659319"}

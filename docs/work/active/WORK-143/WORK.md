@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-143
-title: "Retro-Triage Consumer Update for Memory-Based Provenance Tags"
+title: Retro-Triage Consumer Update for Memory-Based Provenance Tags
 type: implementation
 status: active
 owner: Hephaestus
@@ -13,33 +13,43 @@ arc: null
 closed: null
 priority: high
 effort: medium
-traces_to: [REQ-CEREMONY-002, REQ-FEEDBACK-001]
-requirement_refs: []  # DEPRECATED: use traces_to instead
+traces_to:
+- REQ-CEREMONY-002
+- REQ-FEEDBACK-001
+requirement_refs: []
 source_files:
-  - .claude/skills/observation-triage-cycle/SKILL.md
+- .claude/skills/observation-triage-cycle/SKILL.md
 acceptance_criteria:
-  - observation-triage-cycle updated to query memory by retro provenance tags
-  - Triage can consume retro-reflect, retro-kss, retro-extract provenance entries
-  - Frequency aggregation across K/S/S directives surfaces patterns
-  - Bug candidates with confidence tags surfaced for operator disposition
-  - Feature candidates with confidence tags surfaced for epoch-level triage
-blocked_by: [WORK-142]
+- observation-triage-cycle updated to query memory by retro provenance tags
+- Triage can consume retro-reflect, retro-kss, retro-extract provenance entries
+- Frequency aggregation across K/S/S directives surfaces patterns
+- Bug candidates with confidence tags surfaced for operator disposition
+- Feature candidates with confidence tags surfaced for epoch-level triage
+blocked_by:
+- WORK-142
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: working
+cycle_phase: backlog
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-12T23:34:51
-    exited: null
+- node: backlog
+  entered: 2026-02-12 23:34:51
+  exited: null
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-12
-last_updated: 2026-02-12T23:34:51
+last_updated: '2026-02-13T19:57:52.655826'
+queue_history:
+- position: ready
+  entered: '2026-02-13T19:57:52.625799'
+  exited: '2026-02-13T19:57:52.652296'
+- position: working
+  entered: '2026-02-13T19:57:52.652296'
+  exited: null
 ---
 # WORK-143: Retro-Triage Consumer Update for Memory-Based Provenance Tags
 
