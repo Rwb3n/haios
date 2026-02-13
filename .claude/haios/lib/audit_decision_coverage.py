@@ -299,6 +299,36 @@ def validate_full_coverage(epoch_path: Path, arcs_dir: Path) -> ValidationResult
     return result
 
 
+def get_exit_code(result: ValidationResult, *, strict: bool = False) -> int:
+    """Determine exit code based on validation result severity.
+
+    WORK-141: Distinguishes between clean, warnings-only, and errors.
+
+    Exit codes:
+        0 = clean (no warnings, no errors)
+        1 = errors present (inconsistent, orphan decisions, chapter claims)
+        2 = warnings only (missing assigned_to, missing implements_decisions)
+
+    With strict=True, warnings are treated as errors (exit code 1).
+
+    Args:
+        result: ValidationResult from validation
+        strict: If True, treat warnings as errors
+
+    Returns:
+        Exit code: 0 (clean), 1 (errors), or 2 (warnings-only)
+    """
+    has_errors = not result.is_consistent or len(result.errors) > 0 or len(result.orphan_decisions) > 0
+    has_warnings = len(result.warnings) > 0
+
+    if has_errors:
+        return 1
+    elif has_warnings:
+        return 1 if strict else 2
+    else:
+        return 0
+
+
 def get_default_paths() -> tuple[Path, Path]:
     """Get epoch and arcs paths from haios.yaml config.
 
@@ -319,6 +349,8 @@ def get_default_paths() -> tuple[Path, Path]:
 
 if __name__ == "__main__":
     import sys
+
+    strict = "--strict" in sys.argv
 
     # Read paths from haios.yaml config (WORK-100: no hardcoded epoch)
     epoch_path, arcs_dir = get_default_paths()
@@ -342,9 +374,12 @@ if __name__ == "__main__":
     if result.orphan_decisions:
         print(f"Orphan Decisions: {result.orphan_decisions}")
 
-    if result.is_consistent:
-        print("Status: CONSISTENT")
-        sys.exit(0)
+    # WORK-141: Exit code distinguishes clean/warnings/errors
+    exit_code = get_exit_code(result, strict=strict)
+    if exit_code == 0:
+        print("Status: CLEAN")
+    elif exit_code == 2:
+        print("Status: WARNINGS (use --strict to treat as errors)")
     else:
         print("Status: INCONSISTENT")
-        sys.exit(1)
+    sys.exit(exit_code)

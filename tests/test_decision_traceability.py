@@ -171,3 +171,69 @@ class TestGetDefaultPaths:
         epoch_path, arcs_dir = get_default_paths()
         assert epoch_path.exists(), f"Epoch path does not exist: {epoch_path}"
         assert arcs_dir.exists(), f"Arcs dir does not exist: {arcs_dir}"
+
+
+# =============================================================================
+# WORK-141: Exit Code Severity Tests
+# =============================================================================
+
+class TestExitCodeSeverity:
+    """Tests for WORK-141: exit code distinguishes warnings from errors."""
+
+    def test_clean_result_exit_0(self):
+        """No warnings, no errors → exit code 0."""
+        from audit_decision_coverage import get_exit_code, ValidationResult
+
+        result = ValidationResult()
+        assert get_exit_code(result) == 0
+
+    def test_errors_exit_1(self):
+        """Errors present → exit code 1."""
+        from audit_decision_coverage import get_exit_code, ValidationResult
+
+        result = ValidationResult()
+        result.errors.append("some error")
+        result.is_consistent = False
+        assert get_exit_code(result) == 1
+
+    def test_warnings_only_exit_2(self):
+        """Warnings but no errors → exit code 2."""
+        from audit_decision_coverage import get_exit_code, ValidationResult
+
+        result = ValidationResult()
+        result.warnings.append("D1 has no assigned_to field")
+        assert get_exit_code(result) == 2
+
+    def test_warnings_and_errors_exit_1(self):
+        """Both warnings and errors → exit code 1 (errors take precedence)."""
+        from audit_decision_coverage import get_exit_code, ValidationResult
+
+        result = ValidationResult()
+        result.warnings.append("D1 has no assigned_to field")
+        result.errors.append("orphan claim")
+        result.is_consistent = False
+        assert get_exit_code(result) == 1
+
+    def test_strict_mode_warnings_exit_1(self):
+        """With strict=True, warnings → exit code 1."""
+        from audit_decision_coverage import get_exit_code, ValidationResult
+
+        result = ValidationResult()
+        result.warnings.append("D1 has no assigned_to field")
+        assert get_exit_code(result, strict=True) == 1
+
+    def test_strict_mode_clean_exit_0(self):
+        """With strict=True but no issues → exit code 0."""
+        from audit_decision_coverage import get_exit_code, ValidationResult
+
+        result = ValidationResult()
+        assert get_exit_code(result, strict=True) == 0
+
+    def test_orphan_decisions_exit_1(self):
+        """Orphan decisions → exit code 1 (inconsistent)."""
+        from audit_decision_coverage import get_exit_code, ValidationResult
+
+        result = ValidationResult()
+        result.orphan_decisions.append("D2")
+        result.is_consistent = False
+        assert get_exit_code(result) == 1

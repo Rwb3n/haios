@@ -31,7 +31,7 @@ output_contract:
     guaranteed: on_failure
     description: "Error description"
 side_effects:
-  - "Archive (move completed work items, mark epoch complete)"
+  - "Archive (mark epoch complete, verify work item status fields)"
   - "Config transition (update haios.yaml epoch)"
 recipes:
 - audit-decision-coverage
@@ -108,21 +108,15 @@ just set-cycle close-epoch-ceremony ARCHIVE {epoch_id}
    ```markdown
    **Completed:** {YYYY-MM-DD} (Session {N})
    ```
-4. Move work items from `docs/work/active/` to `docs/work/archive/{epoch_id}/` (per ADR-041: epoch-level cleanup)
-   ```bash
-   # Create archive directory
-   mkdir -p docs/work/archive/{epoch_id}
-   # Move completed work items
-   mv docs/work/active/* docs/work/archive/{epoch_id}/
-   ```
-   **Note:** Only move items with `status: complete`. Items with `status: active` remain for the new epoch.
+4. Verify completed work items have `status: complete` in frontmatter
+   - **ADR-041: Status over location.** Work items stay in `docs/work/active/` — the `status` field determines state, not directory path. No file moves needed.
 
 **Exit Criteria:**
 - [ ] Epoch file has `**Status:** Complete`
 - [ ] Completion timestamp added
-- [ ] Completed work items archived
+- [ ] Completed work items have `status: complete` in frontmatter
 
-**Tools:** Edit, Bash(mkdir, mv)
+**Tools:** Edit, Read
 
 ---
 
@@ -174,7 +168,7 @@ just clear-cycle
 | Phase | Primary Tool | Output |
 |-------|--------------|--------|
 | VALIDATE | Read, Glob, Bash | DoD verification result |
-| ARCHIVE | Edit, Bash | Updated EPOCH.md, archived work items |
+| ARCHIVE | Edit, Read | Updated EPOCH.md, verified work item status |
 | TRANSITION | Edit | Updated haios.yaml |
 
 ---
@@ -187,7 +181,7 @@ just clear-cycle
 | VALIDATE | Are all decisions implemented? | Show audit errors, STOP |
 | VALIDATE | Are Exit Criteria all checked? | List unchecked items, STOP |
 | ARCHIVE | Is Status updated to Complete? | Edit EPOCH.md file |
-| ARCHIVE | Are work items archived? | Move to docs/work/archive/{epoch} |
+| ARCHIVE | Do completed items have status: complete? | Update status field (ADR-041: no file moves) |
 | TRANSITION | Is haios.yaml updated? | Edit config file |
 
 ---
@@ -197,7 +191,7 @@ just clear-cycle
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
 | Three phases | VALIDATE -> ARCHIVE -> TRANSITION | Epoch has unique archival and transition needs |
-| ARCHIVE includes work migration | Move work items to archive | ADR-041: epoch boundary is when work items move |
+| ARCHIVE verifies status | Confirm status: complete, no file moves | ADR-041: status over location — status field determines state |
 | No MEMORY phase | Epochs don't store learnings | WHY capture happens at work item level (ADR-033) |
 | No automatic /new-epoch | Manual config update | CH-008 not yet implemented |
 | Partial automation | Guide through manual steps | Pragmatic until full tooling exists |

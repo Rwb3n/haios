@@ -172,6 +172,65 @@ def audit_stale(threshold: int = 10) -> List[str]:
     return issues
 
 
+def audit_status_divergence(directory: str = 'docs/work/active') -> List[str]:
+    """Detect divergence between status field and current_node/node_history.
+
+    WORK-140: Flags items where the status field disagrees with the terminal
+    state implied by current_node. For example:
+    - status: archived but current_node: complete (E2-295 pattern)
+    - status: complete but current_node: backlog
+
+    Valid combinations:
+    - status: active → current_node is non-terminal (backlog, plan, implement, check, etc.)
+    - status: complete → current_node is terminal (done, complete)
+
+    Any other status value (e.g., 'archived') is itself flagged as divergent
+    since work items should use 'active' or 'complete' per ADR-041.
+
+    Args:
+        directory: Path to work items directory (default: docs/work/active)
+
+    Returns:
+        List of issue strings, empty if no divergence detected
+    """
+    issues = []
+    terminal_nodes = {'done', 'complete'}
+    valid_statuses = {'active', 'complete'}
+
+    for work_file in _iter_work_files_glob(directory):
+        fm = parse_frontmatter(work_file)
+        work_id = fm.get('id', '?')
+        status = fm.get('status', '')
+        current_node = fm.get('current_node', '')
+
+        if not status or not current_node:
+            continue
+
+        # Flag invalid status values
+        if status not in valid_statuses:
+            issues.append(
+                f"DIVERGE: {work_id} has invalid status '{status}' "
+                f"(expected active|complete), current_node='{current_node}'"
+            )
+            continue
+
+        # Check consistency: complete status should have terminal node
+        if status == 'complete' and current_node not in terminal_nodes:
+            issues.append(
+                f"DIVERGE: {work_id} status='{status}' but "
+                f"current_node='{current_node}' (expected {terminal_nodes})"
+            )
+
+        # Check consistency: active status should NOT have terminal node
+        if status == 'active' and current_node in terminal_nodes:
+            issues.append(
+                f"DIVERGE: {work_id} status='{status}' but "
+                f"current_node='{current_node}' (node is terminal but status is active)"
+            )
+
+    return issues
+
+
 # CLI entry point for direct execution
 if __name__ == '__main__':
     import sys
@@ -189,6 +248,9 @@ if __name__ == '__main__':
             print(issue)
     elif cmd == 'stale':
         for issue in audit_stale():
+            print(issue)
+    elif cmd == 'divergence':
+        for issue in audit_status_divergence():
             print(issue)
     else:
         print(f'Unknown command: {cmd}')

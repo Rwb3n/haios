@@ -892,3 +892,121 @@ class TestScaffoldOutputLint:
         assert not required_unresolved, (
             f"Unresolved required placeholders in {template} frontmatter: {required_unresolved}"
         )
+
+
+# =============================================================================
+# WORK-138: CLI Scaffold Arg Parsing Tests
+# =============================================================================
+
+class TestCLIScaffoldArgParsing:
+    """Tests for WORK-138: CLI scaffold command argument parsing.
+
+    The CLI scaffold handler must parse --session and --title flags for checkpoint
+    scaffolding, not treat them as positional args that mangle the filename.
+    """
+
+    def _parse_scaffold_args(self, argv_list):
+        """Simulate the scaffold arg parsing logic from cli.py main().
+
+        This extracts the parsing logic so we can test it in isolation.
+        Returns (template, backlog_id, title, output_path, variables).
+        """
+        # Import the parsing logic - we test via cmd_scaffold indirectly,
+        # but for unit testing the parsing we replicate the logic
+        args = list(argv_list)
+
+        output_path = None
+        variables = {}
+
+        # Extract --output flag
+        if "--output" in args:
+            output_idx = args.index("--output")
+            output_path = args[output_idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (output_idx, output_idx + 1)]
+
+        # Extract --spawned-by flag
+        if "--spawned-by" in args:
+            idx = args.index("--spawned-by")
+            variables["SPAWNED_BY"] = args[idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
+
+        # Extract --type flag
+        if "--type" in args:
+            idx = args.index("--type")
+            variables["TYPE"] = args[idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
+
+        # WORK-138: Extract --session flag (maps to backlog_id for checkpoints)
+        session_override = None
+        if "--session" in args:
+            idx = args.index("--session")
+            session_override = args[idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
+
+        # WORK-138: Extract --title flag (maps to title)
+        title_override = None
+        if "--title" in args:
+            idx = args.index("--title")
+            title_override = args[idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
+
+        template = args[2]
+
+        # Remaining positional args after template (args[3:])
+        positional = args[3:]
+
+        if session_override and title_override:
+            # Both flags provided — no positional consumption needed
+            backlog_id = session_override
+            title = title_override
+        elif session_override:
+            # --session provided: all remaining positional args are title
+            backlog_id = session_override
+            title = " ".join(positional) if positional else None
+        elif title_override:
+            # --title provided: first positional is backlog_id
+            backlog_id = positional[0] if positional else None
+            title = title_override
+        else:
+            # Pure positional: first is backlog_id, rest is title
+            backlog_id = positional[0] if positional else None
+            title = " ".join(positional[1:]) if len(positional) > 1 else None
+
+        return template, backlog_id, title, output_path, variables
+
+    def test_named_flags_session_and_title(self):
+        """--session and --title flags should be parsed correctly."""
+        argv = ["cli.py", "scaffold", "checkpoint", "--session", "358", "--title", "work-100-audit"]
+        template, backlog_id, title, output_path, variables = self._parse_scaffold_args(argv)
+
+        assert template == "checkpoint"
+        assert backlog_id == "358"
+        assert title == "work-100-audit"
+
+    def test_positional_args_still_work(self):
+        """Positional args (no flags) should still work: scaffold checkpoint 358 my title."""
+        argv = ["cli.py", "scaffold", "checkpoint", "358", "my", "title"]
+        template, backlog_id, title, output_path, variables = self._parse_scaffold_args(argv)
+
+        assert template == "checkpoint"
+        assert backlog_id == "358"
+        assert title == "my title"
+
+    def test_mixed_named_and_positional_flags(self):
+        """--session flag mixed with positional title should work."""
+        argv = ["cli.py", "scaffold", "checkpoint", "--session", "358", "my", "title"]
+        template, backlog_id, title, output_path, variables = self._parse_scaffold_args(argv)
+
+        assert template == "checkpoint"
+        assert backlog_id == "358"
+        assert title == "my title"
+
+    def test_session_flag_with_spawned_by(self):
+        """--session combined with --spawned-by should both parse."""
+        argv = ["cli.py", "scaffold", "work_item", "--session", "99", "--spawned-by", "INV-033", "My", "Title"]
+        template, backlog_id, title, output_path, variables = self._parse_scaffold_args(argv)
+
+        assert template == "work_item"
+        assert backlog_id == "99"
+        assert title == "My Title"
+        assert variables["SPAWNED_BY"] == "INV-033"

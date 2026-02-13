@@ -622,7 +622,7 @@ def main():
         return cmd_validate(sys.argv[2])
 
     elif cmd == "scaffold":
-        # Handle optional flags (E2-179: added --spawned-by)
+        # Handle optional flags (E2-179: added --spawned-by, WORK-138: --session/--title)
         output_path = None
         variables = {}
         args = list(sys.argv)  # Copy to avoid modifying original
@@ -645,12 +645,41 @@ def main():
             variables["TYPE"] = args[idx + 1]
             args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
 
-        if len(args) < 5:
-            print("Usage: cli.py scaffold <template> <backlog_id> <title> [--output <path>] [--spawned-by <id>] [--type <type>]")
-            return 1
+        # WORK-138: Extract --session flag (maps to backlog_id for checkpoints)
+        session_override = None
+        if "--session" in args:
+            idx = args.index("--session")
+            session_override = args[idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
+
+        # WORK-138: Extract --title flag (maps to title)
+        title_override = None
+        if "--title" in args:
+            idx = args.index("--title")
+            title_override = args[idx + 1]
+            args = [a for i, a in enumerate(args) if i not in (idx, idx + 1)]
+
         template = args[2]
-        backlog_id = args[3]
-        title = " ".join(args[4:])
+        positional = args[3:]  # Remaining positional args after template
+
+        # WORK-138: Resolve backlog_id and title from flags + positional args
+        if session_override and title_override:
+            backlog_id = session_override
+            title = title_override
+        elif session_override:
+            backlog_id = session_override
+            title = " ".join(positional) if positional else None
+        elif title_override:
+            backlog_id = positional[0] if positional else None
+            title = title_override
+        else:
+            # Pure positional: first is backlog_id, rest is title
+            if len(args) < 5:
+                print("Usage: cli.py scaffold <template> <backlog_id> <title> [--output <path>] [--spawned-by <id>] [--type <type>] [--session <n>] [--title <title>]")
+                return 1
+            backlog_id = args[3]
+            title = " ".join(args[4:])
+
         return cmd_scaffold(template, backlog_id, title, output_path, variables if variables else None)
 
     # E2-254: Context Load
