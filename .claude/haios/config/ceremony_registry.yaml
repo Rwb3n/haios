@@ -132,15 +132,15 @@ ceremonies:
     notes: null
 
   # Memory ceremonies (3)
-  - name: observation-capture
+  - name: retro
     category: memory
-    skill: observation-capture-cycle
-    signature: "Experience -> Observations"
+    skill: retro-cycle
+    signature: "WorkItem + Evidence -> TypedObservations + KSS + BugsFeatures"
     side_effects:
-      - "Write observations"
+      - "Store typed observations to memory with provenance tags"
     has_contract: true
     has_skill: true
-    notes: null
+    notes: "Replaces observation-capture (WORK-142). 4-phase pipeline: REFLECT->DERIVE->EXTRACT->COMMIT."
 
   - name: observation-triage
     category: memory

@@ -56,11 +56,12 @@ class TestChainPhaseCallerChoice:
     @pytest.fixture
     def chain_section(self, skill_content: str) -> str:
         """Extract CHAIN phase section from skill."""
-        # Try different header patterns (including Post-MEMORY suffix)
+        # Try different header patterns (WORK-142: MEMORY removed, CHAIN renumbered 4->3)
         for header in [
+            "### 3. CHAIN Phase (Post-ARCHIVE)",
             "### 4. CHAIN Phase (Post-MEMORY)",
             "### 4. CHAIN Phase",
-            "4. CHAIN Phase",
+            "### 3. CHAIN Phase",
             "CHAIN Phase"
         ]:
             section = extract_section(skill_content, header)
@@ -69,14 +70,14 @@ class TestChainPhaseCallerChoice:
 
         # Fallback: search for CHAIN Phase anywhere
         if "CHAIN Phase" in skill_content:
-            # Find the section manually
-            idx = skill_content.find("### 4. CHAIN")
-            if idx >= 0:
-                # Find next ### header
-                next_header = skill_content.find("\n### ", idx + 1)
-                if next_header > idx:
-                    return skill_content[idx:next_header]
-                return skill_content[idx:]
+            for prefix in ["### 3. CHAIN", "### 4. CHAIN"]:
+                idx = skill_content.find(prefix)
+                if idx >= 0:
+                    # Find next ### header
+                    next_header = skill_content.find("\n### ", idx + 1)
+                    if next_header > idx:
+                        return skill_content[idx:next_header]
+                    return skill_content[idx:]
 
         pytest.fail("CHAIN phase section not found in SKILL.md")
 

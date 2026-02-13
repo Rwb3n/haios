@@ -1,8 +1,9 @@
 ---
 name: observation-capture-cycle
 type: ceremony
-description: 4 questions for genuine reflection before work closure. Hard gate on
-  non-empty.
+deprecated: true
+description: "DEPRECATED: Replaced by retro-cycle (WORK-142). Use retro-cycle for structured
+  reflection with typed provenance. This skill is retained for reference only."
 category: memory
 input_contract:
   - field: work_id
@@ -35,9 +36,11 @@ recipes:
 generated: 2026-01-10
 last_updated: '2026-01-25T21:53:12'
 ---
-# Observation Capture
+# Observation Capture (DEPRECATED)
 
-Capture observations before closing work. Invoked by `/close` command.
+> **DEPRECATED (WORK-142, Session 362):** This skill has been replaced by `retro-cycle`, which provides structured multi-phase reflection with typed provenance tags. Use `Skill(skill="retro-cycle")` instead. This file is retained for historical reference only.
+
+Capture observations before closing work. Previously invoked by `/close` command.
 
 ## Questions
 

@@ -93,7 +93,7 @@ Session {N} ended.
 ## Pre-Conditions
 
 - **SHOULD** invoke `checkpoint-cycle` before session-end to capture state
-- **SHOULD** invoke `observation-capture-cycle` for any completed work items
+- **SHOULD** invoke `retro-cycle` for any completed work items (invoked by /close -- no separate invocation needed at session-end for closed items)
 - Session number auto-detected from `.claude/session` file if not provided
 
 ---

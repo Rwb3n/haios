@@ -42,21 +42,21 @@ Glob(pattern="docs/work/active/WORK-{backlog_id}-*.md")
 
 ---
 
-## Chain to Observation Capture
+## Chain to Retro Cycle
 
-After work item is found, first invoke observation-capture-cycle for genuine reflection:
+After work item is found, first invoke retro-cycle for structured reflection:
 
 ```
-Skill(skill="observation-capture-cycle")
+Skill(skill="retro-cycle")
 ```
 
-This forces the agent into dedicated cognitive space (RECALL -> NOTICE -> COMMIT) before entering "closing mode."
+This forces the agent into dedicated cognitive space (REFLECT -> DERIVE -> EXTRACT -> COMMIT) before entering "closing mode." Evidence-anchored observations are stored with typed provenance tags.
 
 ---
 
 ## Chain to Close Work Cycle
 
-After observation-capture-cycle completes, invoke close-work-cycle:
+After retro-cycle completes, invoke close-work-cycle:
 
 ```
 Skill(skill="close-work-cycle")
@@ -270,7 +270,7 @@ After closure, verify:
 
 Expected flow:
 1. Find work file: `docs/work/active/E2-031/WORK.md`
-2. Invoke observation-capture-cycle (RECALL->NOTICE->COMMIT)
+2. Invoke retro-cycle (REFLECT->DERIVE->EXTRACT->COMMIT)
 3. Check work directory for plans: `docs/work/active/E2-031/plans/`
 4. Read plan frontmatter to check statuses
 5. Prompt user for DoD confirmation

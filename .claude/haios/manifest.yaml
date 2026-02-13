@@ -64,7 +64,7 @@ components:
     - id: "workspace"
       source: "commands/workspace/"
 
-  # Skills (33 total)
+  # Skills (34 total)
   skills:
     - id: "arc-review"
       source: "skills/arc-review/"
@@ -143,6 +143,9 @@ components:
       category: "ceremony"
     - id: "requirements-review"
       source: "skills/requirements-review/"
+      category: "ceremony"
+    - id: "retro-cycle"
+      source: "skills/retro-cycle/"
       category: "ceremony"
     - id: "routing-gate"
       source: "skills/routing-gate/"

@@ -1,9 +1,9 @@
 ---
 name: close-work-cycle
 type: ceremony
-description: HAIOS Close Work Cycle for structured work item closure. Use when closing
-  work items. Guides VALIDATE->ARCHIVE->CHAIN workflow with DoD enforcement.
-  Prerequisite: retro-cycle must complete before this cycle (invoked by /close).
+description: "HAIOS Close Work Cycle for structured work item closure. Prerequisite:
+  retro-cycle must complete before this cycle (invoked by /close). Guides
+  VALIDATE->ARCHIVE->CHAIN workflow with DoD enforcement."
 category:
   - closure
   - queue

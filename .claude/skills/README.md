@@ -18,7 +18,8 @@ Skills are prompt injection components that provide domain-specific guidance and
 | `implementation-cycle` | Cycle | PLAN->DO->CHECK->DONE workflow for implementation |
 | `investigation-cycle` | Cycle | EXPLORE->HYPOTHESIZE->VALIDATE->CONCLUDE workflow for research |
 | `memory-agent` | Utility | Intelligent context retrieval and learning |
-| `observation-capture-cycle` | Cycle | 3 questions for genuine reflection before work closure (hard gate on non-empty) |
+| `observation-capture-cycle` | Cycle | **DEPRECATED** - replaced by `retro-cycle` (WORK-142) |
+| `retro-cycle` | Ceremony | Multi-step autonomous reflection with typed provenance (REFLECT->DERIVE->EXTRACT->COMMIT) |
 | `observation-triage-cycle` | Cycle | SCAN->TRIAGE->PROMOTE workflow for processing captured observations |
 | `plan-authoring-cycle` | Cycle | ANALYZE->AUTHOR->VALIDATE workflow for plan population |
 | `plan-validation-cycle` | Validation | CHECK->VALIDATE->APPROVE bridge for plan readiness |
@@ -35,8 +36,9 @@ Skills are prompt injection components that provide domain-specific guidance and
 - `ground-cycle`
 - `implementation-cycle`
 - `investigation-cycle`
-- `observation-capture-cycle`
+- `observation-capture-cycle` *(deprecated — replaced by `retro-cycle`)*
 - `observation-triage-cycle`
+- `retro-cycle`
 - `plan-authoring-cycle`
 - `survey-cycle`
 - `work-creation-cycle`
@@ -135,6 +137,8 @@ Skill(skill="skill-name")
 │   └── SKILL.md
 ├── plan-validation-cycle/
 │   ├── README.md
+│   └── SKILL.md
+├── retro-cycle/
 │   └── SKILL.md
 ├── routing-gate/
 │   └── SKILL.md
