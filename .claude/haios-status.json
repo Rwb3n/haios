@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-14T15:20:37",
+    "generated": "2026-02-14T16:13:21",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 367,
-        "current_session": 369,
+        "prior_session": 369,
+        "current_session": 370,
         "prior_date": "2026-02-14",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 85172,
-        "entities": 9898,
+        "concepts": 85196,
+        "entities": 9905,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3855,6 +3855,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-14-05-SESSION-370-work-075-plan-authored-and-approved.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-14",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "template": "implementation_plan",
             "status": "complete",
@@ -6823,7 +6832,7 @@
         {
             "path": "docs/checkpoints/2025-12-26-03-SESSION-123-m7d-quick-wins-and-work-item-cleanup.md",
             "last_updated": "2025-12-26T15:48:23",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/checkpoints/2025-12-26-04-SESSION-124-m7d-progress-and-governance-fixes.md",
@@ -6843,7 +6852,7 @@
         {
             "path": "docs/checkpoints/2025-12-27-03-SESSION-127-inv-041-complete-m7b-progress-work-item-directory-architecture.md",
             "last_updated": "2025-12-27T16:09:53",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/checkpoints/2025-12-27-04-SESSION-128-inv-027-e2-211-sqlite-concurrency-fix.md",
@@ -6883,7 +6892,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-04-SESSION-135-e2-218-observation-triage-and-e2-216-analysis.md",
             "last_updated": "2025-12-28T16:04:27",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/checkpoints/2025-12-28-05-SESSION-136-inv-042-e2-219-complete-and-routing-gate-design.md",
@@ -7003,7 +7012,7 @@
         {
             "path": "docs/checkpoints/2026-01-03-04-SESSION-160-e2-246-e2-247-e2-240-chariot-modules-complete.md",
             "last_updated": "2026-01-03T15:34:42",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/checkpoints/2026-01-03-05-SESSION-161-e2-242-inv-055-workengine-agentux-complete.md",
@@ -7942,9 +7951,9 @@
         }
     ],
     "workspace": {
-        "total_files": 539,
+        "total_files": 540,
         "by_template": {
-            "checkpoint": 367,
+            "checkpoint": 368,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7955,7 +7964,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 202,
+            "unknown": 203,
             "draft": 2,
             "approved": 6,
             "ready": 1,

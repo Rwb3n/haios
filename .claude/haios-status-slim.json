@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-14T15:20:38",
+    "generated": "2026-02-14T16:13:22",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 367,
-        "current_session": 369,
+        "prior_session": 369,
+        "current_session": 370,
         "prior_date": "2026-02-14",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 85172,
-        "entities": 9898,
+        "concepts": 85196,
+        "entities": 9905,
         "backlog_pending": 0
     },
     "infrastructure": {
