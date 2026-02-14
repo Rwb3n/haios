@@ -7,8 +7,8 @@ status: active
 owner: null
 created: 2026-02-02
 spawned_by: WORK-074
-chapter: null
-arc: feedback
+chapter: CH-039
+arc: traceability
 closed: null
 priority: medium
 effort: medium
@@ -23,9 +23,7 @@ acceptance_criteria:
 - SYSTEM-AUDIT.md has L4 Coverage section mapping requirements to artifacts
 - SYSTEM-AUDIT.md has Decision Coverage section mapping epoch decisions to chapters
 - SYSTEM-AUDIT.md has Gap Analysis section listing unimplemented requirements
-blocked_by:
-- WORK-069
-- WORK-070
+blocked_by: []
 blocks: []
 enables: []
 current_node: backlog
@@ -37,7 +35,7 @@ artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions:
-  epoch: E2.5
+  epoch: E2.6
 version: '2.0'
 generated: 2026-02-02
 last_updated: '2026-02-03T20:52:12'

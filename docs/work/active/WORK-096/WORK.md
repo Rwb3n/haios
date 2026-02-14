@@ -7,8 +7,8 @@ status: active
 owner: Hephaestus
 created: 2026-02-03
 spawned_by: WORK-095
-chapter: null
-arc: ceremonies
+chapter: CH-041
+arc: observability
 closed: null
 priority: low
 effort: small
@@ -34,7 +34,7 @@ artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions:
-  epoch: E2.5
+  epoch: E2.6
   lifecycle_type: implementation
   supersedes: E2-249
 version: '2.0'

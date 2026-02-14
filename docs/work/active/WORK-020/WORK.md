@@ -7,12 +7,15 @@ status: active
 owner: Hephaestus
 created: 2026-01-26
 spawned_by: obs-222-001
-chapter: CH-028
-arc: portability
+chapter: CH-032
+arc: discoverability
 closed: null
 priority: medium
 effort: medium
-traces_to: []
+traces_to:
+- REQ-DISCOVER-001
+- REQ-DISCOVER-002
+- REQ-DISCOVER-003
 requirement_refs: []
 source_files: []
 acceptance_criteria: []
@@ -28,7 +31,7 @@ artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions:
-  epoch: E2.5
+  epoch: E2.6
 version: '2.0'
 generated: 2026-01-26
 last_updated: '2026-02-03T20:51:14'

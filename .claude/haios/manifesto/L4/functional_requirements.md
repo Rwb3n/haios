@@ -1,5 +1,5 @@
 # generated: 2026-01-24
-# System Auto: last updated on: 2026-02-07T15:35:59
+# System Auto: last updated on: 2026-02-14T12:40:00
 # L4: Functional Requirements
 
 Level: L4
@@ -74,6 +74,14 @@ Derived from: L3 principles + agent_user_requirements.md
 | REQ-OBSERVE-002 | Observability | Session state visible via hooks (PreToolUse context) | L3.7 | additionalContext injection |
 | REQ-OBSERVE-003 | Observability | System health queryable (just status, haios-status.json) | L3.7 | Status file maintained |
 | REQ-OBSERVE-004 | Observability | Drift detection on coldstart | L3.1, L3.7 | ColdstartOrchestrator warnings |
+| REQ-OBSERVE-005 | Observability | MUST gate violations logged to governance events | L3.7, L3.15 | Gate skip → event logged |
+| REQ-DISCOVER-001 | Discoverability | All entry points (skills, agents, recipes, commands) inventoried and categorized | L3.7, L3.3 | Inventory covers 100% of entry points |
+| REQ-DISCOVER-002 | Discoverability | Three-tier entry point model (commands, skills, recipes) with clear boundaries | L3.4, L3.6 | Each entry point has exactly one tier |
+| REQ-DISCOVER-003 | Discoverability | Agent can discover capabilities via infrastructure, not CLAUDE.md | L3.3, L3.6 | Discovery mechanism returns capabilities without hardcoded paths |
+| REQ-DISCOVER-004 | Discoverability | All agents have capability cards (identity, tools, contracts) | L3.7, L3.2 | Each agent definition includes structured capability card |
+| REQ-REFERENCE-001 | Referenceability | Schema location strategy defined (central registry vs distributed) | L3.3, L3.6 | All schemas discoverable from single root |
+| REQ-REFERENCE-002 | Referenceability | Templates consume schemas via reference, not duplication | L3.3 | Zero duplicated schema definitions |
+| REQ-CEREMONY-004 | Ceremony | Epistemic review ceremony at investigation→implementation boundary | L3.2, L3.7 | KNOWN/INFERRED/UNKNOWN distinction forced before spawn |
 
 *Registry grows as requirements are enumerated from L3 principles.*
 
@@ -320,6 +328,7 @@ Parked items never enter work lifecycle until unparked.
 | **REQ-CEREMONY-001** | Ceremonies govern side-effects (commits, state changes, transitions) | L3.7 | State changes only occur within ceremony boundaries |
 | **REQ-CEREMONY-002** | Each ceremony has explicit input/output contract | L3.2, L3.7 | Ceremony skill documents contracts |
 | **REQ-CEREMONY-003** | Ceremonies are distinct from lifecycles (WHEN vs WHAT) | L3.4 | Ceremony does not transform work, only transitions state |
+| **REQ-CEREMONY-004** | Epistemic review ceremony MUST occur at investigation→implementation boundary | L3.2, L3.7 | KNOWN/INFERRED/UNKNOWN distinction forced before spawning implementation work |
 
 **Ceremony Definitions:**
 
@@ -564,6 +573,7 @@ work_path = config.get_path("work_item", id="WORK-080")
 | **REQ-OBSERVE-002** | Session state visible via hooks (PreToolUse context) | L3.7 | Agent sees `[STATE: DO]` in context |
 | **REQ-OBSERVE-003** | System health queryable (just status) | L3.7 | haios-status.json current |
 | **REQ-OBSERVE-004** | Drift detection on coldstart | L3.1, L3.7 | Orchestrator warns on drift |
+| **REQ-OBSERVE-005** | MUST gate violations logged to governance events | L3.7, L3.15 | Gate skip produces event in governance-events.jsonl |
 
 **Observability Layers:**
 
@@ -597,6 +607,45 @@ Agent sees what's blocked BEFORE attempting, reducing wasted attempts.
 - State is queryable at any time
 - Drift warnings are prominent, not buried
 - Observability enables debugging without reading code
+
+---
+
+## Discoverability Requirements (E2.6 - Session 366)
+
+*Derived from L3.7 (Traceability) + L3.3 (Context Must Persist) + L3.6 (Graceful Degradation)*
+
+*The agent must find what it needs through infrastructure, not memorized paths.*
+
+| ID | Requirement | Derives From | Acceptance Test |
+|----|-------------|--------------|-----------------|
+| **REQ-DISCOVER-001** | All entry points (skills, agents, recipes, commands) MUST be inventoried and categorized | L3.7, L3.3 | Inventory covers 100% of entry points with tier assignment |
+| **REQ-DISCOVER-002** | Three-tier entry point model: commands (user-facing), skills (agent-facing), recipes (implementation detail) | L3.4, L3.6 | Each entry point assigned to exactly one tier; no ambiguity |
+| **REQ-DISCOVER-003** | Agent MUST discover capabilities via infrastructure, not CLAUDE.md hardcoding | L3.3, L3.6 | Discovery mechanism returns available capabilities without reading CLAUDE.md |
+| **REQ-DISCOVER-004** | All agents MUST have capability cards (identity, tools, contracts) | L3.7, L3.2 | Each agent definition includes structured card per A2A-inspired pattern |
+
+**Invariants:**
+- Discovery is runtime, not compile-time (no hardcoded lists)
+- Three-tier model reduces cognitive load (L1.9: human as bottleneck)
+- Capability cards enable agent-to-agent discovery (A2A pattern)
+- CLAUDE.md references infrastructure, not individual paths
+
+---
+
+## Referenceability Requirements (E2.6 - Session 366)
+
+*Derived from L3.3 (Context Must Persist) + L3.6 (Graceful Degradation)*
+
+*Every schema, template, and configuration referenceable from a single root.*
+
+| ID | Requirement | Derives From | Acceptance Test |
+|----|-------------|--------------|-----------------|
+| **REQ-REFERENCE-001** | Schema location strategy MUST be defined (central registry vs distributed) | L3.3, L3.6 | All schemas discoverable from haios.yaml root |
+| **REQ-REFERENCE-002** | Templates MUST consume schemas via reference, not duplication | L3.3 | Zero duplicated schema definitions across templates |
+
+**Invariants:**
+- Schemas are single-source-of-truth (like ConfigLoader for paths)
+- Template references resolve at scaffold time, not hardcoded
+- Bootstrap pattern exists for new projects (portable)
 
 ---
 

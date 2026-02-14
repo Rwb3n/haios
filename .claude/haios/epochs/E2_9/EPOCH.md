@@ -1,5 +1,5 @@
 # generated: 2026-02-14
-# System Auto: last updated on: 2026-02-14T01:20:00
+# System Auto: last updated on: 2026-02-14T12:56:00
 # Epoch 2.9: Governance
 
 ## L4 Object Definition
@@ -56,12 +56,15 @@ All four are operator-initiated, top-down (not bottom-up feedback).
 
 ### Anticipated Work
 
-| Theme | Description |
-|-------|-------------|
-| Mid-epoch scope trim | Formal mechanism to park/defer/cut arcs mid-epoch |
-| Arc carryover ceremony | Explicit deferral of unfinished arcs with rationale |
-| Review ceremony chain | Session -> Process -> Scope -> System evolution |
-| Epoch transition ceremony | Formalized close-epoch with entry criteria for next |
+| Theme | Description | Source |
+|-------|-------------|--------|
+| Mid-epoch scope trim | Formal mechanism to park/defer/cut arcs mid-epoch | E2.5 scope lessons |
+| Arc carryover ceremony | Explicit deferral of unfinished arcs with rationale | E2.5 scope lessons |
+| Review ceremony chain | Session -> Process -> Scope -> System evolution | E2.5 S339 |
+| Epoch transition ceremony | Formalized close-epoch with entry criteria for next | E2.5 S339 |
+| Arc decomposition ceremony | SCOPE->STRESS_TEST->PREFLIGHT->CREATE->VERIFY pattern (S366 ran outside governance) | S366 retro, memory 85243-85260 |
+| blocked_by staleness detection | Auto-detect when blockers complete but blocked items not updated (WORK-075 was stale) | S366 retro, memory 85257 |
+| Batch work item metadata update | Reduce error-prone sequential edits when reassigning arc/chapter/epoch across N items | S366 retro, memory 85259 |
 
 ---
 

@@ -7,8 +7,8 @@ status: backlog
 owner: null
 created: 2026-02-12
 spawned_by: null
-chapter: null
-arc: portability
+chapter: CH-037
+arc: referenceability
 closed: null
 priority: low
 effort: small
@@ -31,7 +31,8 @@ node_history:
 artifacts: []
 cycle_docs: {}
 memory_refs: [85021, 85022, 85023, 85024]
-extensions: {}
+extensions:
+  epoch: E2.6
 version: "2.0"
 generated: 2026-02-12
 last_updated: 2026-02-12T20:53:05

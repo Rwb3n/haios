@@ -27,7 +27,7 @@ epoch:
     - S22-skill-patterns.md
     - S27-breath-model.md  # E2.4 discovery, foundational
   # Active arcs (E2.6 - Foundations, pending arc decomposition)
-  active_arcs: []  # TBD: arcs to be defined during E2.6 work
+  active_arcs: [discoverability, referenceability, traceability, observability]
   # Epoch sequence (planned S365)
   sequence:
     - id: E2.6

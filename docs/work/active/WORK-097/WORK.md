@@ -7,8 +7,8 @@ status: active
 owner: Hephaestus
 created: 2026-02-03
 spawned_by: WORK-095
-chapter: null
-arc: assets
+chapter: CH-038
+arc: traceability
 closed: null
 priority: medium
 effort: medium
@@ -39,7 +39,7 @@ memory_refs:
 - 81400
 - 81401
 extensions:
-  epoch: E2.5
+  epoch: E2.6
   lifecycle_type: investigation
   supersedes: INV-066
 version: '2.0'

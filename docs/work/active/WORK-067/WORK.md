@@ -7,13 +7,14 @@ status: active
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-065
-chapter: null
-arc: portability
+chapter: CH-035
+arc: referenceability
 closed: null
 priority: high
 effort: medium
 traces_to:
-- L0.12
+- REQ-REFERENCE-001
+- REQ-REFERENCE-002
 acceptance_criteria:
 - Schema location strategy defined (where do portable schemas live?)
 - Template reference pattern defined (how do templates consume schemas?)
@@ -33,10 +34,10 @@ cycle_docs: {}
 memory_refs:
 - 82952
 extensions:
-  epoch: E2.5
+  epoch: E2.6
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-03T20:52:08'
+last_updated: '2026-02-14T12:45:00'
 ---
 # WORK-067: HAIOS Portable Schema Architecture Investigation
 

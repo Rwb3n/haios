@@ -4241,3 +4241,6 @@
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-13T20:27:01.899207"}
 {"type": "SessionEnded", "session": 364, "agent": "Hephaestus", "timestamp": "2026-02-13T20:31:26.067174"}
 {"type": "SessionStarted", "session": 365, "agent": "Hephaestus", "timestamp": "2026-02-14T00:36:04.007463"}
+{"type": "SessionEnded", "session": 365, "agent": "Hephaestus", "timestamp": "2026-02-14T11:58:33.961059"}
+{"type": "SessionEnded", "session": 363, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-14T12:21:58.281156"}
+{"type": "SessionStarted", "session": 366, "agent": "Hephaestus", "timestamp": "2026-02-14T12:22:29.243848"}

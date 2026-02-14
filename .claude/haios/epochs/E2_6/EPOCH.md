@@ -1,12 +1,12 @@
 # generated: 2026-02-10
-# System Auto: last updated on: 2026-02-14T00:45:00
+# System Auto: last updated on: 2026-02-14T12:52:00
 # Epoch 2.6: Foundations
 
 ## L4 Object Definition
 
 **Epoch ID:** E2.6
 **Name:** Foundations
-**Status:** Planning
+**Status:** Active
 **Started:** 2026-02-14 (Session 365)
 **Prior:** E2.5 (Independent Lifecycles)
 **Next:** E2.7 (Composability)
@@ -90,27 +90,53 @@ Can it observe the system's state?      (observability)
 
 E2.6 is focused and narrow: the four -ilities applied to what we already have.
 
-### Work Items Assigned
+### Arc Decomposition (Session 366)
 
-| ID | Title | -ility | Priority |
-|----|-------|--------|----------|
-| WORK-020 | Discoverability Architecture | Discoverability | medium |
-| WORK-075 | System Audit as L4 Traceability | Traceability | medium |
-| WORK-097 | Plan Decomposition Traceability | Traceability | medium |
-| WORK-067 | Portable Schema Architecture | Referenceability | high |
-| WORK-082 | Epistemic Review Ceremony | Observability | medium |
-| WORK-096 | Agent UX Test in DoD Validation | Observability | low |
-| WORK-104 | Validation/Triage Cycle Mappings | Traceability | low |
-| WORK-135 | Manifest Auto-Sync | Observability | low |
+4 arcs, 3 chapters each = 12 chapters total. Spawn-deferral policy: investigation outputs not serving E2.6 exit criteria defer to E2.7+.
 
-### New Work (to be created)
+**ARC: discoverability** (CH-032 to CH-034)
+| CH | Title | Work Items | Requirements |
+|----|-------|-----------|-------------|
+| CH-032 | EntryPointInventory | WORK-020 | REQ-DISCOVER-001 |
+| CH-033 | ThreeTierArchitecture | WORK-020 | REQ-DISCOVER-002 |
+| CH-034 | DiscoveryMechanism | WORK-020 | REQ-DISCOVER-003 |
 
-| Theme | Description |
-|-------|-------------|
-| Agent Cards (A2A-inspired) | Agent identity, capabilities, contracts — discoverability of agents |
-| Legacy cleanup | 3 duplicated lib/ files, deprecated skill, stale templates — referenceability |
-| REFS/ integration | 11 reference docs nobody uses — discoverability |
-| Gate skip logging | Log MUST violations to governance-events.jsonl — observability |
+**ARC: referenceability** (CH-035 to CH-037)
+| CH | Title | Work Items | Requirements |
+|----|-------|-----------|-------------|
+| CH-035 | SchemaLocationStrategy | WORK-067 | REQ-REFERENCE-001 |
+| CH-036 | TemplateBootstrapPattern | WORK-067 | REQ-REFERENCE-002 |
+| CH-037 | ManifestDriftPrevention | WORK-135 | REQ-PORTABLE-001 |
+
+**ARC: traceability** (CH-038 to CH-040)
+| CH | Title | Work Items | Requirements |
+|----|-------|-----------|-------------|
+| CH-038 | DecompositionAndMappings | WORK-097, WORK-104 | REQ-ASSET-003, REQ-LIFECYCLE-001 |
+| CH-039 | L4CoverageAudit | WORK-075 | REQ-TRACE-005 |
+| CH-040 | GateSkipLogging | WORK-146 | REQ-OBSERVE-005 |
+
+**ARC: observability** (CH-041 to CH-043)
+| CH | Title | Work Items | Requirements |
+|----|-------|-----------|-------------|
+| CH-041 | EpistemicReviewAndUXDoD | WORK-082, WORK-096 | REQ-CEREMONY-004, REQ-CEREMONY-003 |
+| CH-042 | AgentCards | WORK-144 | REQ-DISCOVER-004 |
+| CH-043 | LegacyCleanup | WORK-145 | REQ-CONFIG-003 |
+
+### Work Items (11 total)
+
+| ID | Title | Arc | Chapter | Priority |
+|----|-------|-----|---------|----------|
+| WORK-020 | Discoverability Architecture | discoverability | CH-032 | medium |
+| WORK-067 | Portable Schema Architecture | referenceability | CH-035 | high |
+| WORK-075 | System Audit as L4 Traceability | traceability | CH-039 | medium |
+| WORK-082 | Epistemic Review Ceremony | observability | CH-041 | medium |
+| WORK-096 | Agent UX Test in DoD Validation | observability | CH-041 | low |
+| WORK-097 | Plan Decomposition Traceability | traceability | CH-038 | medium |
+| WORK-104 | Validation/Triage Cycle Mappings | traceability | CH-038 | low |
+| WORK-135 | Manifest Auto-Sync | referenceability | CH-037 | low |
+| WORK-144 | Agent Capability Cards | observability | CH-042 | medium |
+| WORK-145 | Legacy Duplication Cleanup | observability | CH-043 | low |
+| WORK-146 | Gate Skip Violation Logging | traceability | CH-040 | medium |
 
 ---
 

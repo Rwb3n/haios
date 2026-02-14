@@ -7,12 +7,13 @@ status: active
 owner: Hephaestus
 created: 2026-02-02
 spawned_by: INV-068
-chapter: null
-arc: feedback
+chapter: CH-041
+arc: observability
 closed: null
 priority: medium
 effort: medium
-traces_to: []
+traces_to:
+- REQ-CEREMONY-004
 requirement_refs: []
 source_files: []
 acceptance_criteria: []
@@ -29,7 +30,7 @@ artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions:
-  epoch: E2.5
+  epoch: E2.6
 version: '2.0'
 generated: 2026-02-02
 last_updated: '2026-02-03T20:52:16'

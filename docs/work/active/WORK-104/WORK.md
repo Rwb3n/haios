@@ -7,8 +7,8 @@ status: active
 owner: Hephaestus
 created: 2026-02-05
 spawned_by: Session-316-observation
-chapter: null
-arc: lifecycles
+chapter: CH-038
+arc: traceability
 closed: null
 priority: low
 effort: small
@@ -35,7 +35,7 @@ artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions:
-  epoch: E2.5
+  epoch: E2.6
   note: Blocked until validation-cycle and triage-cycle skills are created
 version: '2.0'
 generated: 2026-02-05
