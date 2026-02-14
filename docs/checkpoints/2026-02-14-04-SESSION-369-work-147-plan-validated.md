@@ -14,6 +14,10 @@ load_memory_refs:
   - 85298  # Bug: TRD queue_position enum stale
   - 85346  # WORK-147 implementation: schema registry techne
   - 85347  # WORK-147 implementation: schema registry techne (cont)
+  - 85348  # retro-reflect: WCBB/WSY/WDN/WMI observations
+  - 85353  # retro-kss: Keep TDD, Stop parent traversal, Start epoch transition gate
+  - 85357  # retro-extract: validate.py hardcoded enums bug, epoch transition feature
+  - 85361  # meta: ceremony overhead disproportionate for small work, proportional governance needed
 
 pending:
   - "Route to next work item (referenceability: WORK-135, or traceability/observability arcs)"
@@ -29,4 +33,5 @@ completed:
   - "10 new tests (all pass), 0 regressions (1367 pass, 16 pre-existing fail)"
   - "3 core schemas (work_item, queue, lifecycle), README with syntax docs"
   - "WORK-147 closed: DoD validated, retro-cycle complete (5 reflect, 4 KSS, 4 extract)"
+  - "Meta-observations captured: ceremony overhead disproportionate for small work, epoch transition ceremony gap (3 sessions drift), proportional governance (WORK-101) may need pull-forward"
 ---
