@@ -1,5 +1,5 @@
 # generated: 2026-02-10
-# System Auto: last updated on: 2026-02-14T12:52:00
+# System Auto: last updated on: 2026-02-14T14:42:00
 # Epoch 2.6: Foundations
 
 ## L4 Object Definition
@@ -126,27 +126,30 @@ E2.6 is focused and narrow: the four -ilities applied to what we already have.
 
 | ID | Title | Arc | Chapter | Priority |
 |----|-------|-----|---------|----------|
-| WORK-020 | Discoverability Architecture | discoverability | CH-032 | medium |
+| WORK-020 | Discoverability Architecture | discoverability | CH-032 | medium (COMPLETE S368) |
 | WORK-067 | Portable Schema Architecture | referenceability | CH-035 | high (COMPLETE S367) |
 | WORK-075 | System Audit as L4 Traceability | traceability | CH-039 | medium |
 | WORK-082 | Epistemic Review Ceremony | observability | CH-041 | medium |
 | WORK-096 | Agent UX Test in DoD Validation | observability | CH-041 | low |
-| WORK-097 | Plan Decomposition Traceability | traceability | CH-038 | medium |
+| WORK-097 | Plan Decomposition Traceability | traceability | CH-038 | medium (COMPLETE S368) |
 | WORK-104 | Validation/Triage Cycle Mappings | traceability | CH-038 | low |
 | WORK-135 | Manifest Auto-Sync | referenceability | CH-037 | low |
 | WORK-144 | Agent Capability Cards | observability | CH-042 | medium |
 | WORK-145 | Legacy Duplication Cleanup | observability | CH-043 | low |
 | WORK-146 | Gate Skip Violation Logging | traceability | CH-040 | medium |
 | WORK-147 | Schema Registry Implementation | referenceability | CH-036 | medium (spawned by WORK-067) |
+| WORK-148 | Remove Stub and Deprecated Skills | discoverability | CH-034 | low (spawned by WORK-020) |
+| WORK-149 | Three-Tier Entry Point Architecture ADR | discoverability | CH-034 | medium (spawned by WORK-020) |
+| WORK-150 | Plan Decomposition Traceability ADR | traceability | CH-038 | medium (spawned by WORK-097) |
 
 ---
 
 ## Exit Criteria
 
-- [ ] Agent can discover all skills, agents, recipes, templates via infrastructure (not CLAUDE.md)
+- [ ] Agent can discover all skills, agents, recipes, templates via infrastructure (not CLAUDE.md) — WORK-020 designed three-tier model; commands+skills+agents already auto-discovered by Claude Code; recipe hiding + capability cards needed for completion
 - [ ] All agent definitions include capability cards (A2A-inspired Agent Card pattern)
 - [ ] L4 requirements traceable to work items bidirectionally
-- [ ] Plan decomposition traceable to source requirements
+- [ ] Plan decomposition traceable to source requirements — WORK-097 designed spawn_type + decomposition_map pattern; ADR (WORK-150) pending
 - [ ] System status observable without manual file reads (status, audit, metrics)
 - [ ] Legacy duplication resolved (lib/ orphans, deprecated artifacts)
 - [ ] MUST gate violations logged to governance events

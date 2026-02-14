@@ -4258,3 +4258,20 @@
 {"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-067"], "from": "ready", "to": "working", "timestamp": "2026-02-14T13:58:30.290986"}
 {"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-14T13:58:30.291992"}
 {"type": "SessionEnded", "session": 367, "agent": "Hephaestus", "timestamp": "2026-02-14T14:14:55.967145"}
+{"type": "SessionStarted", "session": 368, "agent": "Hephaestus", "timestamp": "2026-02-14T14:27:00.627574"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-14T14:27:49.698907"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-020", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-14T14:27:49.705561"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-020"], "from": "backlog", "to": "ready", "timestamp": "2026-02-14T14:27:49.710576", "rationale": "Operator selected WORK-020 for S368 investigation per strategy: complete all investigations first", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-14T14:27:49.710576"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-14T14:27:49.727903"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-020", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-14T14:27:49.736059"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-020"], "from": "ready", "to": "working", "timestamp": "2026-02-14T14:27:49.743300", "rationale": "Starting investigation cycle S368", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-14T14:27:49.743300"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-14T14:42:18.318360"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-097", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-14T14:42:18.324999"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-097"], "from": "backlog", "to": "ready", "timestamp": "2026-02-14T14:42:18.329820", "rationale": "Operator strategy: complete all investigations first. WORK-020 done, WORK-097 next.", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-14T14:42:18.330437"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-14T14:42:18.343543"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-097", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-14T14:42:18.350224"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-097"], "from": "ready", "to": "working", "timestamp": "2026-02-14T14:42:18.355744", "rationale": "Starting investigation S368", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-14T14:42:18.355744"}

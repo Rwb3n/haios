@@ -1,5 +1,5 @@
 # generated: 2026-02-14
-# System Auto: last updated on: 2026-02-14T12:50:00
+# System Auto: last updated on: 2026-02-14T15:02:00
 # Arc: Traceability
 
 ## Definition
@@ -7,7 +7,7 @@
 **Arc ID:** traceability
 **Epoch:** E2.6
 **Theme:** Bidirectional tracing from L4 requirements to artifacts, with governance violation logging
-**Status:** Planning
+**Status:** In Progress
 
 ---
 
@@ -30,17 +30,17 @@ The traceability chain (L4 -> Epoch -> Arc -> Chapter -> Work Item -> Artifact) 
 
 ## Chapters
 
-| CH-ID | Title | Work Items | Requirements | Dependencies |
-|-------|-------|------------|--------------|--------------|
-| CH-038 | DecompositionAndMappings | WORK-097, WORK-104 | REQ-ASSET-003, REQ-LIFECYCLE-001 | None |
-| CH-039 | L4CoverageAudit | WORK-075 | REQ-TRACE-005 | None (blockers WORK-069/070 resolved) |
-| CH-040 | GateSkipLogging | WORK-146 | REQ-OBSERVE-005 | None |
+| CH-ID | Title | Work Items | Requirements | Dependencies | Status |
+|-------|-------|------------|--------------|--------------|--------|
+| CH-038 | DecompositionAndMappings | WORK-097 (complete), WORK-104, WORK-150 (spawned) | REQ-ASSET-003, REQ-LIFECYCLE-001 | None | In Progress |
+| CH-039 | L4CoverageAudit | WORK-075 | REQ-TRACE-005 | None (blockers WORK-069/070 resolved) | Planning |
+| CH-040 | GateSkipLogging | WORK-146 | REQ-OBSERVE-005 | None | Planning |
 
 ---
 
 ## Exit Criteria
 
-- [ ] Plan decomposition pattern documented with WORK.md/plan.md fields
+- [x] Plan decomposition pattern documented with WORK.md/plan.md fields (WORK-097 S368: spawn_type field + decomposition_map section)
 - [ ] Activity matrix has validation-cycle and triage-cycle phase mappings
 - [ ] L4 requirements bidirectionally traceable to work items and artifacts
 - [ ] MUST gate violations logged to governance-events.jsonl
@@ -61,4 +61,6 @@ The traceability chain (L4 -> Epoch -> Arc -> Chapter -> Work Item -> Artifact) 
 - @docs/work/active/WORK-097/WORK.md
 - @docs/work/active/WORK-104/WORK.md
 - @docs/work/active/WORK-146/WORK.md
+- @docs/work/active/WORK-150/WORK.md (spawned by WORK-097)
 - @.claude/haios/manifesto/L4/functional_requirements.md (REQ-TRACE-*, REQ-OBSERVE-005)
+- Memory: 85325, 85331 (WORK-097 findings)
