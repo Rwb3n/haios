@@ -4257,3 +4257,4 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-067", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-14T13:58:30.284975"}
 {"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-067"], "from": "ready", "to": "working", "timestamp": "2026-02-14T13:58:30.290986"}
 {"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-14T13:58:30.291992"}
+{"type": "SessionEnded", "session": 367, "agent": "Hephaestus", "timestamp": "2026-02-14T14:14:55.967145"}
