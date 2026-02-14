@@ -4757,3 +4757,17 @@
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-14T16:55:54.651527"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-14T16:55:54.704810"}
 {"type": "SessionEnded", "session": 371, "agent": "Hephaestus", "timestamp": "2026-02-14T16:57:35.338016"}
+{"type": "SessionStarted", "session": 372, "agent": "Hephaestus", "timestamp": "2026-02-14T17:15:18.228071"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-14T17:18:29.663699"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 0, "timestamp": "2026-02-14T17:18:29.667726"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-14T17:18:37.847997"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-082", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-14T17:18:37.860182"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-082"], "from": "backlog", "to": "ready", "timestamp": "2026-02-14T17:18:37.869211", "rationale": "S372: E2.6 observability arc, epistemic review ceremony investigation"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-14T17:18:37.869211"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-14T17:18:43.410727"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-082", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-14T17:18:43.418878"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-082"], "from": "ready", "to": "working", "timestamp": "2026-02-14T17:18:43.423387"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-14T17:18:43.423387"}
+{"type": "GateViolation", "gate_id": "scaffold_block", "work_id": "unknown", "violation_type": "block", "context": "BLOCKED: Direct work_item scaffold. Use '/new-work' command instead. Work items require work-creation-cycle to populate placeholders.", "timestamp": "2026-02-14T17:22:10.358095"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-14T17:28:18.010510"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-14T17:28:18.080917"}

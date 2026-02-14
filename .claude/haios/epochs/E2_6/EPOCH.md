@@ -1,5 +1,5 @@
 # generated: 2026-02-10
-# System Auto: last updated on: 2026-02-14T14:42:00
+# System Auto: last updated on: 2026-02-14T17:26:00
 # Epoch 2.6: Foundations
 
 ## L4 Object Definition
@@ -129,7 +129,7 @@ E2.6 is focused and narrow: the four -ilities applied to what we already have.
 | WORK-020 | Discoverability Architecture | discoverability | CH-032 | medium (COMPLETE S368) |
 | WORK-067 | Portable Schema Architecture | referenceability | CH-035 | high (COMPLETE S367) |
 | WORK-075 | System Audit as L4 Traceability | traceability | CH-039 | medium |
-| WORK-082 | Epistemic Review Ceremony | observability | CH-041 | medium |
+| WORK-082 | Epistemic Review Ceremony | observability | CH-041 | medium (COMPLETE S372) |
 | WORK-096 | Agent UX Test in DoD Validation | observability | CH-041 | low |
 | WORK-097 | Plan Decomposition Traceability | traceability | CH-038 | medium (COMPLETE S368) |
 | WORK-104 | Validation/Triage Cycle Mappings | traceability | CH-038 | low |
@@ -141,6 +141,7 @@ E2.6 is focused and narrow: the four -ilities applied to what we already have.
 | WORK-148 | Remove Stub and Deprecated Skills | discoverability | CH-034 | low (spawned by WORK-020) |
 | WORK-149 | Three-Tier Entry Point Architecture ADR | discoverability | CH-034 | medium (spawned by WORK-020) |
 | WORK-150 | Plan Decomposition Traceability ADR | traceability | CH-038 | medium (spawned by WORK-097) |
+| WORK-151 | Implement Epistemic Review in CONCLUDE | observability | CH-041 | medium (spawned by WORK-082) |
 
 ---
 

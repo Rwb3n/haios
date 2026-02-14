@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-14T16:55:56",
+    "generated": "2026-02-14T17:28:19",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 85224,
-        "entities": 9910,
+        "concepts": 85246,
+        "entities": 9918,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -6846,7 +6846,7 @@
         {
             "path": "docs/checkpoints/2025-12-26-04-SESSION-124-m7d-progress-and-governance-fixes.md",
             "last_updated": "2025-12-26T17:05:41",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/checkpoints/2025-12-27-01-SESSION-125-m7d-progress-and-skill-architecture-fixes.md",
@@ -6866,7 +6866,7 @@
         {
             "path": "docs/checkpoints/2025-12-27-04-SESSION-128-inv-027-e2-211-sqlite-concurrency-fix.md",
             "last_updated": "2025-12-27T17:24:29",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/checkpoints/2025-12-27-05-SESSION-129-inv-043-inv-044-directory-architecture-and-skill-chaining-design.md",
@@ -6906,7 +6906,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-05-SESSION-136-inv-042-e2-219-complete-and-routing-gate-design.md",
             "last_updated": "2025-12-28T17:12:45",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/checkpoints/2025-12-28-06-SESSION-137-inv-048-complete-and-anti-pattern-architecture-revision.md",
@@ -7496,7 +7496,7 @@
         {
             "path": "docs/plans/PLAN-E2-182-plan-authoring-cycle-skill.md",
             "last_updated": "2025-12-25T17:26:54",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/plans/PLAN-E2-183-plan-validation-cycle-bridge-skill.md",
@@ -7761,7 +7761,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-024-work-item-as-file-architecture.md",
             "last_updated": "2025-12-23T17:10:02",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-025-workflow-state-machine-architecture.md",
@@ -7771,7 +7771,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-026-unified-architecture-metaphor-integration.md",
             "last_updated": "2025-12-23T17:26:54",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-027-ingester-synthesis-concurrent-access-crash.md",
@@ -7916,7 +7916,7 @@
         {
             "path": "docs/ADR/ADR-040-haios-modular-black-box-architecture.md",
             "last_updated": "2025-12-31T17:20:07",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/ADR/ADR-041-svelte-governance-criteria.md",
