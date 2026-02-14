@@ -435,3 +435,7 @@ audit-stale:
 # Audit: Validate decision-to-chapter traceability (WORK-069)
 audit-decision-coverage:
     @python .claude/haios/lib/audit_decision_coverage.py
+
+# Audit: L4 requirement coverage against work items (WORK-075)
+audit-l4-coverage *ARGS:
+    @python scripts/audit_l4_coverage.py {{ARGS}}

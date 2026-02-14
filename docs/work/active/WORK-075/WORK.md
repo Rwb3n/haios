@@ -20,9 +20,9 @@ source_files:
 - .claude/haios/manifesto/L4/project_requirements.md
 - .claude/haios/manifesto/L4/functional_requirements.md
 acceptance_criteria:
-- SYSTEM-AUDIT.md has L4 Coverage section mapping requirements to artifacts
-- SYSTEM-AUDIT.md has Decision Coverage section mapping epoch decisions to chapters
-- SYSTEM-AUDIT.md has Gap Analysis section listing unimplemented requirements
+- system-audit-S365.md has L4 Coverage section mapping requirements to artifacts
+- system-audit-S365.md has Decision Coverage section mapping epoch decisions to chapters
+- system-audit-S365.md has Gap Analysis section listing unimplemented requirements
 blocked_by: []
 blocks: []
 enables: []
@@ -33,12 +33,18 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85372
+- 85373
+- 85375
 extensions:
   epoch: E2.6
 version: '2.0'
 generated: 2026-02-02
-last_updated: '2026-02-03T20:52:12'
+last_updated: '2026-02-14T16:02:53.612222'
+queue_history: []
+queue_position: backlog
+cycle_phase: backlog
 ---
 # WORK-075: System Audit as L4 Traceability Verification
 
@@ -142,7 +148,7 @@ SYSTEM-AUDIT verifies (L4 → Artifact coverage)
 - [ ] **L4 Coverage section** - Maps each L4 requirement to work items and artifacts
 - [ ] **Decision Coverage section** - Maps each E2.4 decision to chapters (uses WORK-069 schema)
 - [ ] **Gap Analysis section** - Lists requirements and decisions without implementation
-- [ ] **Automation consideration** - Document how `just audit-coverage` could generate these sections
+- [ ] **Automation consideration** - Document how `just audit-l4-coverage` generates these sections
 
 ---
 
