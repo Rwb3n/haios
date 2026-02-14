@@ -16,11 +16,15 @@ load_memory_refs:
   - 85405
   - 85409
   - 85412
+  - 85413
+  - 85415
 
 pending: []
 
 drift_observed:
   - "Pre-existing test failure count: 19 not 18 (ceremony_retrofit test added)"
+  - "haios-status.json / haios-status-slim.json need review (85413)"
+  - "checkpoint load_principles field is inert — ceremony without function (85415)"
 
 completed:
   - "WORK-075 closure verified (already closed in S370)"

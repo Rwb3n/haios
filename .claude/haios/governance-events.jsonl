@@ -4756,3 +4756,4 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-14T16:47:13.312233"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-14T16:55:54.651527"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-14T16:55:54.704810"}
+{"type": "SessionEnded", "session": 371, "agent": "Hephaestus", "timestamp": "2026-02-14T16:57:35.338016"}
