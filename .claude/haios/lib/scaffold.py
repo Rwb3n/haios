@@ -280,16 +280,45 @@ def load_template(template: str) -> str:
 
 
 def substitute_variables(content: str, variables: dict) -> str:
-    """Replace {{VAR}} placeholders with variable values.
+    """Replace {{VAR}} and {{schema:domain.key}} placeholders.
+
+    Schema references are resolved first via ConfigLoader, then
+    normal variable substitution occurs.
 
     Args:
         content: Template content with placeholders
         variables: Dict of variable names to values
 
     Returns:
-        Content with placeholders replaced.
+        Content with all placeholders replaced.
+
+    Raises:
+        ValueError: If a {{schema:X.Y}} reference cannot be resolved.
     """
     result = content
+
+    # Phase 1: Resolve {{schema:domain.key}} references (WORK-147)
+    schema_pattern = re.compile(r"\{\{schema:([a-zA-Z_]+)\.([a-zA-Z_]+)\}\}")
+
+    def _resolve_schema_match(match):
+        domain = match.group(1)
+        key = match.group(2)
+        try:
+            from config import ConfigLoader
+
+            config = ConfigLoader.get()
+            schema_entry = config.get_schema(domain, key)
+            # For enum entries with 'values' list, return pipe-delimited
+            if isinstance(schema_entry, dict) and "values" in schema_entry:
+                return "|".join(str(v) for v in schema_entry["values"])
+            # For other types, return string representation
+            return str(schema_entry)
+        except KeyError as e:
+            raise ValueError(f"Schema reference resolution failed: {e}")
+
+    result = schema_pattern.sub(_resolve_schema_match, result)
+
+    # Phase 2: Normal {{VAR}} replacement
     for key, value in variables.items():
         placeholder = "{{" + key + "}}"
         result = result.replace(placeholder, str(value))

@@ -87,6 +87,9 @@ paths:
   agents: ".claude/agents"
   hooks: ".claude/hooks"
 
+  # Schema registry (WORK-147: central schema location)
+  schemas: ".claude/haios/schemas"
+
   # Config paths
   haios_config: ".claude/haios/config"
   manifesto: ".claude/haios/manifesto"

@@ -1,0 +1,22 @@
+# Schema: Lifecycle Core Enums
+# Source: cycle_runner.py CYCLE_PHASES + governance_layer.py VALID_TRANSITIONS
+# Tier: core (portable to any project)
+version: "2.0"
+source: cycle_runner.py
+
+enums:
+  cycle_phase:
+    values: [backlog, plan, implement, check, done]
+    default: backlog
+
+  lifecycles:
+    values: [investigation, design, implementation, validation, triage]
+    default: implementation
+
+transitions:
+  cycle_phase:
+    backlog: [plan]
+    plan: [backlog, implement]
+    implement: [plan, check]
+    check: [implement, done]
+    done: []

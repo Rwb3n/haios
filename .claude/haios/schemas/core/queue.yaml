@@ -1,0 +1,19 @@
+# Schema: Queue Core Enums
+# Source: work_engine.py VALID_QUEUE_POSITIONS + QUEUE_TRANSITIONS (authoritative)
+# Tier: core (portable to any project)
+# Note: TRD says backlog|in_progress|done but implementation has 5 positions (memory 85298)
+version: "2.0"
+source: work_engine.py
+
+enums:
+  queue_position:
+    values: [parked, backlog, ready, working, done]
+    default: backlog
+
+transitions:
+  queue:
+    parked: [backlog]
+    backlog: [ready, parked]
+    ready: [working, backlog]
+    working: [done, ready]
+    done: []

@@ -1,7 +1,8 @@
 # generated: 2026-01-15
-# System Auto: last updated on: 2026-02-05T08:40:50
+# System Auto: last updated on: 2026-02-14T15:10:00
 # Work Queue Configuration (E2-290, INV-064 design)
 # Provides typed queues with cycle-locking for structured work execution
+# Updated: S369 — reconfigured for E2.6 Foundations (4 arcs)
 version: "1.1"
 
 # Queue type definitions
@@ -15,80 +16,75 @@ queue_types:
   chapter_aligned:
     ordering: "chapter_priority DESC, priority DESC"
 
-# Active queues
+# Active queues — E2.6 Foundations
 queues:
-  # LIFECYCLES queue - E2.5 Priority (Session 307: Foundation first)
-  # Per EPOCH.md: lifecycles arc is foundation, all other arcs depend on it
-  lifecycles:
-    type: fifo  # Ordered execution per dependency analysis
+  # DISCOVERABILITY arc (CH-032 to CH-034)
+  # CH-032/33/34 complete via WORK-020 (S368). Spawned work remains.
+  discoverability:
+    type: priority
     items:
-      - WORK-098  # Lifecycle Tooling Consumer Updates (BLOCKER - discovered S313, blocks 091/092)
-      - WORK-081  # Cycle-as-Subagent Delegation Pattern (foundational)
-      - WORK-088  # Phase Template Contracts (defines contracts before fracturing)
-      - WORK-089  # Fracture Design Lifecycle Templates
-      - WORK-090  # Fracture Implementation Lifecycle Templates
-      - WORK-091  # Fracture Validation Lifecycle Templates
-      - WORK-092  # Fracture Triage Lifecycle Templates
-      - WORK-086  # Batch Mode (builds on lifecycle infrastructure)
-    allowed_cycles: [implementation-cycle, investigation-cycle, work-creation-cycle]
-    rationale: "Session 307: Lifecycles arc is E2.5 foundation. All other arcs blocked until this completes."
+      - WORK-149  # Three-Tier Entry Point Architecture ADR (CH-034, medium)
+      - WORK-148  # Remove Stub and Deprecated Skills (CH-034, low)
+    allowed_cycles: [work-creation-cycle, implementation-cycle]
+    rationale: "S369: WORK-020 investigation complete. Spawned ADR and cleanup remain."
 
-  # QUEUE arc - E2.5 (depends on lifecycles)
-  queue-arc:
+  # REFERENCEABILITY arc (CH-035 to CH-037)
+  # CH-035 complete via WORK-067 (S367). CH-036/37 remain.
+  referenceability:
     type: fifo
-    items: []  # WORK-066 complete. Wiring work TBD after lifecycles.
-    allowed_cycles: [implementation-cycle]
-    rationale: "Queue position wiring depends on lifecycle patterns."
+    items:
+      - WORK-147  # Schema Registry & ConfigLoader Extension (CH-036, medium, spawned by WORK-067)
+      - WORK-135  # Manifest Auto-Sync Mechanism (CH-037, low)
+    allowed_cycles: [implementation-cycle, work-creation-cycle]
+    rationale: "S369: WORK-067 findings drive WORK-147 implementation. WORK-135 independent."
 
-  # CEREMONIES arc - E2.5 (depends on queue)
-  ceremonies:
+  # TRACEABILITY arc (CH-038 to CH-040)
+  # WORK-097 complete (S368). CH-038 partially done, CH-039/40 remain.
+  traceability:
     type: priority
     items:
-      - WORK-034  # Upstream Status Propagation
-      - WORK-096  # Agent UX Test in DoD Validation
-    allowed_cycles: [implementation-cycle]
-    rationale: "Ceremony implementations depend on queue and lifecycle patterns."
+      - WORK-150  # Plan Decomposition Traceability ADR (CH-038, medium, spawned by WORK-097)
+      - WORK-075  # System Audit as L4 Traceability Verification (CH-039, medium)
+      - WORK-146  # Gate Skip Violation Logging (CH-040, medium)
+      - WORK-104  # Validation/Triage Cycle Mappings (CH-038, low)
+    allowed_cycles: [investigation-cycle, implementation-cycle, work-creation-cycle]
+    rationale: "S369: WORK-097 spawned ADR. WORK-075 blockers resolved. WORK-146 new."
 
-  # FEEDBACK arc - E2.5 (depends on ceremonies)
-  feedback:
+  # OBSERVABILITY arc (CH-041 to CH-043)
+  # All items in planning stage.
+  observability:
     type: priority
     items:
-      - WORK-071  # Pre-Decomposition Review Gate Design
-      - WORK-075  # System Audit as L4 Traceability Verification
-      - WORK-082  # Epistemic Review Ceremony
-    allowed_cycles: [implementation-cycle, investigation-cycle]
-    rationale: "Feedback loops depend on ceremony infrastructure."
+      - WORK-082  # Epistemic Review Ceremony (CH-041, medium)
+      - WORK-144  # Agent Capability Cards (CH-042, medium)
+      - WORK-096  # Agent UX Test in DoD Validation (CH-041, low)
+      - WORK-145  # Legacy Duplication Cleanup (CH-043, low)
+    allowed_cycles: [investigation-cycle, implementation-cycle, work-creation-cycle]
+    rationale: "S369: All observability work starts fresh. WORK-082 is investigation."
 
-  # ASSETS arc - E2.5 (can parallel with ceremonies)
-  assets:
-    type: priority
-    items:
-      - WORK-093  # Lifecycle Asset Types
-      - WORK-097  # Plan Decomposition Traceability
-    allowed_cycles: [implementation-cycle]
-    rationale: "Asset typing can parallel ceremony work."
-
-  # PORTABILITY arc - E2.5 (lower priority)
-  portability:
-    type: priority
-    items:
-      - WORK-067  # Portable Schema Architecture Investigation
-      - WORK-020  # Discoverability Architecture
-    allowed_cycles: [implementation-cycle, investigation-cycle]
-    rationale: "Portability work can proceed when bandwidth allows."
-
-  # Default queue - catch-all for unassigned work
+  # Default queue - catch-all for unassigned E2.6 work
   default:
     type: priority
     items: auto  # Populated from get_ready() excluding named queues
     allowed_cycles: [implementation-cycle, investigation-cycle, work-creation-cycle]
 
+# Parked items — out of E2.6 scope (deferred to E2.7+)
+parked:
+  items:
+    - WORK-034  # Upstream Status Propagation (ceremonies, E2.9)
+    - WORK-071  # Pre-Decomposition Review Gate (governance, E2.9)
+    - WORK-093  # Lifecycle Asset Types (E2.5 assets arc, E2.7)
+    - WORK-101  # Proportional Governance Design (E2.9)
+    - WORK-102  # Session/Process Review Ceremonies (E2.9)
+    - WORK-136  # Checkpoint Staleness Detection (E2.7/E2.8)
+  rationale: "S369: Not mapped to E2.6 exit criteria. Deferred per epoch focus."
+
 # Policies
 policies:
   assignment:
-    default_queue: lifecycles  # E2.5 focus: lifecycles first
+    default_queue: referenceability  # E2.6 focus: WORK-147 is next per checkpoint
     auto_batch_threshold: 3
   cross_arc:
-    allowed: false  # Session 307: Stay in lifecycles until complete
+    allowed: true  # E2.6: arcs are independent, cross-arc allowed
   cycle_enforcement:
     strict: true

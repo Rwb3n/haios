@@ -1,0 +1,22 @@
+# Schema: Work Item Core Enums
+# Source: TRD-WORK-ITEM-UNIVERSAL + WORK-067 findings
+# Tier: core (portable to any project)
+version: "2.0"
+source: TRD-WORK-ITEM-UNIVERSAL
+
+enums:
+  status:
+    values: [active, blocked, complete, archived]
+    default: active
+
+  type:
+    values: [feature, investigation, bug, chore, spike]
+    default: feature
+
+  priority:
+    values: [critical, high, medium, low]
+    default: medium
+
+  effort:
+    values: [small, medium, large, unknown]
+    default: medium

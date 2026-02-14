@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-147
-title: "Implement Schema Registry and ConfigLoader Extension"
+title: Implement Schema Registry and ConfigLoader Extension
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-14
 spawned_by: WORK-067
 spawned_children: []
 chapter: CH-036
 arc: referenceability
-closed: null
+closed: '2026-02-14'
 priority: medium
 effort: medium
 traces_to:
@@ -21,7 +21,8 @@ source_files:
 - .claude/haios/lib/scaffold.py
 - .claude/haios/lib/validate.py
 acceptance_criteria:
-- Schema registry directory exists at .claude/haios/schemas/ with core/ and project/ subdirectories
+- Schema registry directory exists at .claude/haios/schemas/ with core/ and project/
+  subdirectories
 - ConfigLoader gains schemas property and get_schema(domain, key) method
 - At least one core schema file (work_item.yaml) populated with authoritative enums
 - substitute_variables() resolves {{schema:domain.key}} references
@@ -31,20 +32,32 @@ blocked_by: []
 blocks: []
 enables:
 - WORK-135
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-14T14:09:54
-    exited: null
+- node: backlog
+  entered: 2026-02-14 14:09:54
+  exited: '2026-02-14T15:20:35.535215'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85346
+- 85347
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-14
-last_updated: 2026-02-14T14:09:54
+last_updated: '2026-02-14T15:20:35.539347'
+queue_history:
+- position: ready
+  entered: '2026-02-14T15:05:25.873482'
+  exited: '2026-02-14T15:05:25.906889'
+- position: working
+  entered: '2026-02-14T15:05:25.906889'
+  exited: '2026-02-14T15:20:35.535215'
+- position: done
+  entered: '2026-02-14T15:20:35.535215'
+  exited: null
 ---
 # WORK-147: Implement Schema Registry and ConfigLoader Extension
 

@@ -46,6 +46,44 @@ class ConfigLoader:
         self._haios = self._load("haios.yaml")
         self._cycles = self._load("cycles.yaml")
         self._components = self._load("components.yaml")
+        self._schemas = self._load_schemas()
+
+    def _load_schemas(self) -> Dict[str, Dict[str, Any]]:
+        """Load all YAML schema files from schemas directory.
+
+        Scans both core/ and project/ subdirectories.
+        Schema key = "{tier}/{filename_without_ext}" (e.g., "core/work_item").
+
+        Returns:
+            Dict mapping schema keys to loaded YAML content.
+        """
+        schemas_path = self._haios.get("paths", {}).get("schemas")
+        if not schemas_path:
+            return {}
+
+        # Resolve relative to project root (CONFIG_DIR parent is .claude/haios/)
+        schemas_dir = CONFIG_DIR.parent.parent.parent / schemas_path
+        if not schemas_dir.exists():
+            return {}
+
+        result = {}
+        for tier_dir in schemas_dir.iterdir():
+            if not tier_dir.is_dir() or tier_dir.name.startswith("."):
+                continue
+            for schema_file in tier_dir.glob("*.yaml"):
+                key = f"{tier_dir.name}/{schema_file.stem}"
+                try:
+                    with open(schema_file, encoding="utf-8") as f:
+                        data = yaml.safe_load(f) or {}
+                    # A4 mitigation: validate schema format
+                    if not isinstance(data, dict):
+                        continue  # Skip non-dict files
+                    if "enums" not in data and "transitions" not in data:
+                        continue  # Skip files without expected sections
+                    result[key] = data
+                except Exception:
+                    pass  # Skip malformed files silently (graceful degradation)
+        return result
 
     def _load(self, filename: str) -> Dict[str, Any]:
         """Load a YAML config file, returning empty dict on failure."""
@@ -122,3 +160,42 @@ class ConfigLoader:
         if '{' in resolved:
             raise ValueError(f"Unresolved placeholder in path: {resolved}")
         return Path(resolved)
+
+    # Schema registry (WORK-147: central schema location)
+    @property
+    def schemas(self) -> Dict[str, Dict[str, Any]]:
+        """Schema registry content (core/ and project/ tiers)."""
+        return self._schemas
+
+    def get_schema(self, domain: str, key: str) -> Any:
+        """Get schema enum or section by domain and key.
+
+        Searches all tiers (core/ first, then project/) for the domain file,
+        then returns the value at the key path within 'enums' section.
+
+        Args:
+            domain: Schema file name without extension (e.g., "work_item")
+            key: Key within the enums section (e.g., "status", "type")
+
+        Returns:
+            Schema entry dict (typically has 'values', 'default' keys)
+
+        Raises:
+            KeyError: If domain or key not found in any tier
+        """
+        # Search tiers in order: core first, then project
+        for tier in ("core", "project"):
+            schema_key = f"{tier}/{domain}"
+            if schema_key in self._schemas:
+                schema = self._schemas[schema_key]
+                enums = schema.get("enums", {})
+                if key in enums:
+                    return enums[key]
+                # Also check top-level keys (for transitions, etc.)
+                if key in schema:
+                    return schema[key]
+
+        raise KeyError(
+            f"Schema '{domain}.{key}' not found. "
+            f"Available domains: {[k.split('/')[1] for k in self._schemas.keys()]}"
+        )
