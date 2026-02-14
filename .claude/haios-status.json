@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-14T16:13:21",
+    "generated": "2026-02-14T16:55:56",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 85196,
-        "entities": 9905,
+        "concepts": 85224,
+        "entities": 9910,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3864,6 +3864,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-14-06-SESSION-WORK-146-work-146-plan-authored-and-validated.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-14",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "template": "implementation_plan",
             "status": "complete",
@@ -6692,7 +6701,7 @@
         {
             "path": "docs/checkpoints/2025-12-22-02-SESSION-97-e2-131-cascade-fix-and-e2-111-plan.md",
             "last_updated": "2025-12-22T16:39:34",
-            "days_stale": 53
+            "days_stale": 54
         },
         {
             "path": "docs/checkpoints/2025-12-22-03-SESSION-98-m4-investigation-infrastructure-complete.md",
@@ -7052,7 +7061,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-05-SESSION-167-e2-255-cyclerunner-module-and-governance-pattern-fix.md",
             "last_updated": "2026-01-04T16:52:13",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/checkpoints/2026-01-04-06-SESSION-168-e2-248-complete-inv-056-epoch-22-hook-migration-design.md",
@@ -7337,7 +7346,7 @@
         {
             "path": "docs/plans/PLAN-E2-111-investigation-cycle-skill.md",
             "last_updated": "2025-12-22T16:53:04",
-            "days_stale": 53
+            "days_stale": 54
         },
         {
             "path": "docs/plans/PLAN-E2-112-investigation-agent.md",
@@ -7542,7 +7551,7 @@
         {
             "path": "docs/plans/PLAN-E2-211-add-sqlite-busytimeout-to-databasemanager.md",
             "last_updated": "2025-12-27T16:45:14",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/plans/PLAN-E2-FIX-001-SYNTHESIS-EMBEDDING-GAP.md",
@@ -7637,7 +7646,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-E2-016-enhanced-cli-status-design-investigation.md",
             "last_updated": "2025-12-26T16:40:55",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-025-precompact-hook-context-preservation.md",
@@ -7767,7 +7776,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-027-ingester-synthesis-concurrent-access-crash.md",
             "last_updated": "2025-12-27T16:29:58",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-028-agent-error-reporting-and-observability-gap.md",
@@ -7951,9 +7960,9 @@
         }
     ],
     "workspace": {
-        "total_files": 540,
+        "total_files": 541,
         "by_template": {
-            "checkpoint": 368,
+            "checkpoint": 369,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -7964,7 +7973,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 203,
+            "unknown": 204,
             "draft": 2,
             "approved": 6,
             "ready": 1,

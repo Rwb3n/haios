@@ -259,3 +259,84 @@ node_history:
         result = scan_incomplete_work(".")
         # Should not raise; result depends on actual project state
         assert isinstance(result, list)
+
+
+# =============================================================================
+# WORK-146: Gate Violation Logging
+# =============================================================================
+
+
+class TestGateViolationLogging:
+    """Tests for gate violation event logging (WORK-146, REQ-OBSERVE-005)."""
+
+    def test_log_gate_violation_creates_event(self, temp_events_file):
+        """Verify gate violation creates structured event with all fields."""
+        from governance_events import log_gate_violation, read_events
+
+        with patch("governance_events.EVENTS_FILE", temp_events_file):
+            log_gate_violation(
+                gate_id="ceremony_contract",
+                work_id="WORK-146",
+                violation_type="warn",
+                context="Missing input contract field",
+            )
+
+            events = read_events()
+            violations = [e for e in events if e["type"] == "GateViolation"]
+            assert len(violations) == 1
+            v = violations[0]
+            assert v["gate_id"] == "ceremony_contract"
+            assert v["work_id"] == "WORK-146"
+            assert v["violation_type"] == "warn"
+            assert v["context"] == "Missing input contract field"
+            assert "timestamp" in v
+
+    def test_log_gate_violation_returns_event(self, temp_events_file):
+        """Verify log_gate_violation returns the event dict."""
+        from governance_events import log_gate_violation
+
+        with patch("governance_events.EVENTS_FILE", temp_events_file):
+            result = log_gate_violation("sql_block", "WORK-100", "block", "Direct SQL")
+            assert result["type"] == "GateViolation"
+            assert result["gate_id"] == "sql_block"
+
+    def test_get_gate_violations_filters_by_work_id(self, temp_events_file):
+        """Verify get_gate_violations returns only violations for given work_id."""
+        from governance_events import log_gate_violation, get_gate_violations
+
+        with patch("governance_events.EVENTS_FILE", temp_events_file):
+            log_gate_violation("sql", "WORK-100", "block", "SQL detected")
+            log_gate_violation("ceremony", "WORK-146", "warn", "Contract missing")
+            log_gate_violation("powershell", "WORK-100", "block", "PS detected")
+
+            violations = get_gate_violations("WORK-100")
+            assert len(violations) == 2
+            assert all(v["work_id"] == "WORK-100" for v in violations)
+
+    def test_get_gate_violations_empty_when_none(self, temp_events_file):
+        """Verify get_gate_violations returns [] when no violations exist."""
+        from governance_events import get_gate_violations
+
+        with patch("governance_events.EVENTS_FILE", temp_events_file):
+            violations = get_gate_violations("WORK-999")
+            assert violations == []
+
+    def test_existing_log_functions_unaffected(self, temp_events_file):
+        """Verify existing log_phase_transition and log_validation_outcome still work."""
+        from governance_events import (
+            log_phase_transition,
+            log_validation_outcome,
+            log_gate_violation,
+            read_events,
+        )
+
+        with patch("governance_events.EVENTS_FILE", temp_events_file):
+            log_phase_transition("PLAN", "WORK-146", "Hephaestus")
+            log_validation_outcome("preflight", "WORK-146", "pass", "OK")
+            log_gate_violation("sql", "WORK-146", "block", "SQL")
+
+            events = read_events()
+            types = [e["type"] for e in events]
+            assert "CyclePhaseEntered" in types
+            assert "ValidationOutcome" in types
+            assert "GateViolation" in types

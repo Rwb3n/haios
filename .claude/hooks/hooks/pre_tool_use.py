@@ -461,8 +461,72 @@ def _matches_pattern(file_name: str, pattern: str) -> bool:
     return fnmatch.fnmatch(file_name, pattern)
 
 
+# =============================================================================
+# WORK-146: Gate Violation Logging (REQ-OBSERVE-005)
+# =============================================================================
+
+
+def _get_current_work_id() -> str:
+    """Get current work_id from cycle state. Returns 'unknown' on failure."""
+    try:
+        import subprocess
+
+        result = subprocess.run(
+            ["just", "get-cycle"],
+            capture_output=True,
+            text=True,
+            timeout=3,
+            cwd=str(Path(__file__).parent.parent.parent.parent),
+        )
+        parts = result.stdout.strip().split("/")
+        return parts[2] if len(parts) >= 3 else "unknown"
+    except Exception:
+        return "unknown"
+
+
+def _infer_gate_id(reason: str) -> str:
+    """Infer gate_id from denial/warning reason text."""
+    reason_lower = reason.lower()
+    if "sql" in reason_lower:
+        return "sql_block"
+    if "powershell" in reason_lower:
+        return "powershell_block"
+    if "scaffold" in reason_lower:
+        return "scaffold_block"
+    if "governed path" in reason_lower:
+        return "path_governance"
+    if "backlog_id" in reason_lower or "duplicate" in reason_lower:
+        return "backlog_id_uniqueness"
+    if "ceremony" in reason_lower and "contract" in reason_lower:
+        return "ceremony_contract"
+    if "memory_refs" in reason_lower:
+        return "memory_refs"
+    if "exit" in reason_lower and "gate" in reason_lower:
+        return "exit_gate"
+    if "activity" in reason_lower or "state" in reason_lower:
+        return "activity_governance"
+    return "unknown_gate"
+
+
+def _log_violation(gate_id: str, violation_type: str, reason: str) -> None:
+    """Log gate violation event. Fail-permissive."""
+    try:
+        lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
+        if str(lib_dir) not in sys.path:
+            sys.path.insert(0, str(lib_dir))
+
+        from governance_events import log_gate_violation
+
+        # Extract work_id from current cycle state (best-effort)
+        work_id = _get_current_work_id()
+        log_gate_violation(gate_id, work_id, violation_type, reason)
+    except Exception:
+        pass  # Fail-permissive: logging must never break agent workflow
+
+
 def _deny(reason: str) -> dict:
     """Return deny response with standard structure."""
+    _log_violation(_infer_gate_id(reason), "block", reason)
     return {
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
@@ -474,6 +538,7 @@ def _deny(reason: str) -> dict:
 
 def _allow_with_warning(reason: str) -> dict:
     """Return allow response with warning."""
+    _log_violation(_infer_gate_id(reason), "warn", reason)
     return {
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
@@ -562,6 +627,7 @@ def _deny_with_context(reason: str, state: str, layer) -> dict:
     Returns:
         hookSpecificOutput with permissionDecision=deny and additionalContext
     """
+    _log_violation(_infer_gate_id(reason), "block", reason)
     context = _build_additional_context(state, layer)
     return {
         "hookSpecificOutput": {

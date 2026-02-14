@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-146
-title: "Gate Skip Violation Logging"
+title: Gate Skip Violation Logging
 type: implementation
-status: active
+status: complete
 owner: null
 created: 2026-02-14
 spawned_by: S365-epoch-planning
 spawned_children: []
 chapter: CH-040
 arc: traceability
-closed: null
+closed: '2026-02-14'
 priority: medium
 effort: small
 traces_to:
@@ -27,21 +27,33 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-14T12:45:14
-    exited: null
+- node: backlog
+  entered: 2026-02-14 12:45:14
+  exited: '2026-02-14T16:55:54.677353'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85400
+- 85401
 extensions:
   epoch: E2.6
-version: "2.0"
+version: '2.0'
 generated: 2026-02-14
-last_updated: 2026-02-14T12:48:00
+last_updated: '2026-02-14T16:55:54.680927'
+queue_history:
+- position: ready
+  entered: '2026-02-14T16:27:49.658525'
+  exited: '2026-02-14T16:27:49.684744'
+- position: working
+  entered: '2026-02-14T16:27:49.684744'
+  exited: '2026-02-14T16:55:54.677353'
+- position: done
+  entered: '2026-02-14T16:55:54.677353'
+  exited: null
 ---
 # WORK-146: Gate Skip Violation Logging
 

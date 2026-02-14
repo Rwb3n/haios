@@ -11,6 +11,7 @@ Thresholds trigger actions when patterns are detected.
 Event Types:
 - CyclePhaseEntered: Logged when agent enters a cycle phase (PLAN, DO, CHECK, DONE)
 - ValidationOutcome: Logged when validation gate passes/blocks (preflight, dod, observation)
+- GateViolation: Logged when a MUST gate detects a violation (WORK-146, REQ-OBSERVE-005)
 - SessionStarted: Logged when a session begins (E2-236)
 - SessionEnded: Logged when a session ends (E2-236)
 
@@ -86,6 +87,56 @@ def log_validation_outcome(
         _check_repeated_failure(gate, work_id)
 
     return event
+
+
+def log_gate_violation(
+    gate_id: str, work_id: str, violation_type: str, context: str
+) -> dict:
+    """
+    Log gate violation event.
+
+    Emitted when a MUST gate detects a violation and allows it (warn mode)
+    or blocks it (block mode). Provides audit trail for governance bypasses.
+
+    Args:
+        gate_id: Gate/check identifier (e.g., "sql_block", "ceremony_contract",
+                 "no_governance_cycle")
+        work_id: Work item ID (e.g., "WORK-146") or "unknown" if outside
+                 work context
+        violation_type: "warn" (allowed but flagged) or "block" (denied)
+        context: Human-readable description of the violation
+
+    Returns:
+        The logged event dict
+    """
+    event = {
+        "type": "GateViolation",
+        "gate_id": gate_id,
+        "work_id": work_id,
+        "violation_type": violation_type,
+        "context": context,
+        "timestamp": datetime.now().isoformat(),
+    }
+    _append_event(event)
+    return event
+
+
+def get_gate_violations(work_id: str) -> list[dict]:
+    """
+    Get all gate violations for a work item.
+
+    Args:
+        work_id: Work item ID to filter by
+
+    Returns:
+        List of GateViolation event dicts
+    """
+    events = read_events()
+    return [
+        e
+        for e in events
+        if e.get("type") == "GateViolation" and e.get("work_id") == work_id
+    ]
 
 
 # =============================================================================
