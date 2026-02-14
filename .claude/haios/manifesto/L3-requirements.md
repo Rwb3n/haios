@@ -1,5 +1,5 @@
 # generated: 2026-01-01
-# System Auto: last updated on: 2026-02-03T00:00:49
+# System Auto: last updated on: 2026-02-14T11:34:00
 # L3: Functional Requirements - How HAIOS Behaves
 
 Level: L3
@@ -215,11 +215,15 @@ Architectural alignment items for future epochs:
 
 1. ~~**Work ID Naming Convention (S164):**~~ **DONE (WORK-030, S218)** - Now uses `WORK-XXX` format. Type determined by `type:` field, not ID prefix.
 
-2. **File TOC with Line Numbers (S164):** Large files waste context when agent scans for sections. Add structured TOC with line numbers (`## Section ... L102`) so agent can `Read(offset=N)` directly. Options: Markdown TOC, YAML frontmatter index, or RFC-style numbered sections. Could auto-generate via PostToolUse hook or just recipe on file save.
+2. **File TOC with Line Numbers (S164):** Large files waste context when agent scans for sections. Add structured TOC with line numbers (`## Section ... L102`) so agent can `Read(offset=N)` directly. *Target: E2.6 (discoverability).*
 
-3. **Confidence Gating (S175):** Distinct from Ambiguity Gating (INV-058). Ambiguity gating surfaces explicit operator decisions with known options. Confidence gating addresses agent uncertainty about its own conclusions - no explicit options, agent must self-assess. Requires FORESIGHT calibration to make self-reported confidence meaningful. Investigate: How to measure agent confidence reliably? Does self-reported confidence correlate with correctness? Gate mechanism design for plan-authoring and plan-validation cycles.
+3. **Confidence Gating (S175):** Agent self-assessment of uncertainty. Requires FORESIGHT calibration (E4). Distinct from Ambiguity Gating (INV-058). *Target: E4 (Cognitive Memory).*
 
-4. **S27 Breath Model Integration (S292, E2.5):** Work phases follow inhale/exhale rhythm. Pause points are ceremonies. Each lifecycle is a complete breath. Implementation in E2.5 will formalize this pattern.
+4. ~~**S27 Breath Model Integration (S292, E2.5):**~~ **DONE (E2.5).** Breath model implemented as foundational pattern. Extended in S365 with Opinionated/Delegative dual vocabulary — filed as E2.8 architecture artifact (`breath-architecture-handover.md`). Three open design questions (phase transition triggers, authority, third state) queued for E2.8.
+
+5. **Opinionated vs Delegative System Design (S365):** HAIOS inhales (delegative — explore, diverge) and exhales (opinionated — commit, converge). Fractal across session/lifecycle/epoch levels. The system should become more opinionated where agents waste tokens on decisions the system could make. *Target: E2.8 (Agent UX).* See: `E2_8/architecture/breath-architecture-handover.md`.
+
+6. **Domain-Agnostic Expansion Packs (S365):** HAIOS is the engine, projects are content packs. Spec corpus ingestion enables domain portability. *Target: E4 (Cognitive Memory).* Derives from L2 Serving Equation update.
 
 ---
 

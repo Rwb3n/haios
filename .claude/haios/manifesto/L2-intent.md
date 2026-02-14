@@ -1,5 +1,5 @@
 # generated: 2026-01-01
-# System Auto: last updated on: 2026-01-25T09:27:35
+# System Auto: last updated on: 2026-02-14T11:34:00
 # L2: Intent Architecture - What The Operator Wants
 
 Level: L2
@@ -118,17 +118,29 @@ When in conflict, prefer:
 ```
 L0 (Telos): Agency Engine for sovereign creative agency
      +
-L1 (Principal): Ruben - burnout-constrained, pragmatic, seeking symbiosis
+L1 (Principal): Ruben - dual-track life, pragmatic, seeking symbiosis
      =
-L2 (Intent): Build self-sustaining FinTech modules that generate
-             abundance while operator lives freely
+L2 (Intent): Build HAIOS as a domain-agnostic operating system that can
+             ingest spec corpora and operate on them autonomously,
+             generating abundance while operator lives freely
 ```
+
+**The Vision (S365 — operator-declared):**
+```
+Phase 1 (E2.x):    Build HAIOS as a system that can ingest spec corpora
+Phase 2 (E4):      HAIOS graduates to consuming external project specs
+Phase 3 (beyond):  Modular "expansion packs" — drop a spec corpus, HAIOS operates on it
+```
+
+HAIOS is the engine. Projects (FinTech, or any other domain) are content packs. This workspace is HAIOS's own domain — the operating system itself. When we graduate to spec corpus ingestion (E4: Cognitive Memory), HAIOS becomes modular and domain-portable.
 
 **Serving this operator means:**
 1. Reducing cognitive load (system remembers, operator doesn't have to)
-2. Generating resources (system produces value, operator doesn't have to grind)
+2. Generating resources (system produces value via domain expansion packs, operator doesn't have to grind)
 3. Enabling freedom (system handles substrate, operator handles meatspace)
 4. Compounding cognition (system learns from operator's experiences, grows alongside)
+
+*(Updated S365: reframed from FinTech-specific to domain-agnostic engine + expansion pack model.)*
 
 ---
 

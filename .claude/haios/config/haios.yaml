@@ -13,7 +13,7 @@ manifest:
 # Current epoch context (ADR-042: Arc > Chapter in hierarchy)
 epoch:
   current: E2.6
-  subversion: "2.6"  # Agent UX
+  subversion: "2.6"  # Foundations
   epoch_file: ".claude/haios/epochs/E2_6/EPOCH.md"
   architecture_dir: ".claude/haios/epochs/E2_6/architecture"
   arcs_dir: ".claude/haios/epochs/E2_6/arcs"
@@ -26,8 +26,28 @@ epoch:
     - S21-cognitive-notation.md
     - S22-skill-patterns.md
     - S27-breath-model.md  # E2.4 discovery, foundational
-  # Active arcs (E2.6 - Agent UX, pending arc decomposition)
-  active_arcs: []  # TBD: arcs to be defined during E2.6 planning
+  # Active arcs (E2.6 - Foundations, pending arc decomposition)
+  active_arcs: []  # TBD: arcs to be defined during E2.6 work
+  # Epoch sequence (planned S365)
+  sequence:
+    - id: E2.6
+      name: Foundations
+      theme: "traceability, referenceability, discoverability, observability"
+    - id: E2.7
+      name: Composability
+      theme: "flat metadata, engine functions, recipe rationalization"
+    - id: E2.8
+      name: Agent UX
+      theme: "agents spend tokens on work, not bookkeeping"
+    - id: E2.9
+      name: Governance
+      theme: "proportional governance, review ceremonies, scope management"
+    - id: E3
+      name: TBD
+      theme: "determined by investigation — SDK? Autonomy? Product?"
+    - id: E4
+      name: Cognitive Memory
+      theme: "three-paradigm memory, FORESIGHT, autonomous operation"
 
 # Governance toggles (from governance-toggles.yaml)
 toggles:

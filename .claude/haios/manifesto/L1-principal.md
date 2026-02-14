@@ -1,5 +1,5 @@
 # generated: 2026-01-01
-# System Auto: last updated on: 2026-01-25T09:26:35
+# System Auto: last updated on: 2026-02-14T11:34:00
 # L1: Principal - Who The Operator Is
 
 Level: L1
@@ -67,18 +67,18 @@ The system exists to serve this specific human - Ruben. Not abstract "users," no
 
 **Known Constraints:**
 
-**[L1.5] Burnout Threshold** - "Operator is at a critical burnout threshold. Cognitive and emotional resources are depleted." This is not temporary; it is a structural constraint that architecture must accommodate.
+**[L1.5] Dual-Track Life** - Operator works full-time in meatspace, progressing a career for the sake of human experience. HAIOS development happens in parallel, not instead of. This is not burnout-as-crisis but a structural time constraint that architecture must accommodate. *(Updated S365: reframed from "burnout threshold" — operator is actively managing, not depleted.)*
 
-**[L1.6] Limited Time** - Not infinite hours to dedicate. Every hour spent on HAIOS is an hour not spent on other survival/creation activities.
+**[L1.6] Limited Time** - Not infinite hours to dedicate. Every hour spent on HAIOS is an hour not spent on other commitments. The system must maximize value per operator-hour.
 
 **[L1.7] No Network** - Operating without the safety net of professional networks, institutional backing, or team redundancy.
 
-**[L1.8] Financial Precarity** - Repeated high-signal declarations of financial constraint. The system cannot demand resources that don't exist.
+**[L1.8] Financial Precarity** - Economic and societal commitments (bills, status) are not yet decoupled from personal commitments (health, wealth, fulfilment, challenge, risk, experimentation). The system cannot demand resources that don't exist. The plan is decoupling — HAIOS is part of that plan. *(Updated S365: added decoupling framing.)*
 
 **[L1.9] Human as Bottleneck** - The most unreliable, most easily exhausted component is in the critical path. Architecture must work around this.
 
 **[REQUIRES OPERATOR INPUT]:**
-- Current specific situation (what does "today" look like?)
+- ~~Current specific situation (what does "today" look like?)~~ *Answered S365: full-time meatspace career + parallel HAIOS development*
 - Time horizon expectations (what's the realistic timeline?)
 - External pressures (what deadlines or obligations exist?)
 

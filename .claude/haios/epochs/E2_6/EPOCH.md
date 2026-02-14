@@ -1,225 +1,159 @@
 # generated: 2026-02-10
-# System Auto: last updated on: 2026-02-10T22:36:00
-# Epoch 2.6: Agent UX
+# System Auto: last updated on: 2026-02-14T00:45:00
+# Epoch 2.6: Foundations
 
 ## L4 Object Definition
 
 **Epoch ID:** E2.6
-**Name:** Agent UX
+**Name:** Foundations
 **Status:** Planning
-**Started:** TBD
+**Started:** 2026-02-14 (Session 365)
 **Prior:** E2.5 (Independent Lifecycles)
+**Next:** E2.7 (Composability)
 
 ---
 
 ## Purpose
 
-Reduce agent cognitive overhead by replacing filesystem-hierarchy-driven governance with metadata-driven, function-callable governance. The agent should spend tokens on work, not bookkeeping.
+Reinforce the four -ilities before building on them: traceability, referenceability, discoverability, observability. The system works (E2.5 proved it) but agents can't efficiently find, reference, trace, or observe what exists.
 
 **The Mission:**
 ```
-Less file reading, more function calling.
-Flat storage, metadata relationships.
-Composable, configurable, discoverable.
+Can the agent find what it needs?       (discoverability)
+Can it reference what it found?         (referenceability)
+Can it trace decisions to requirements? (traceability)
+Can it observe the system's state?      (observability)
 ```
 
 **The Paradigm Shift:**
-- From: Hierarchy encoded in filesystem (epochs/E2_5/arcs/ceremonies/CH-012.md)
-- To: Hierarchy encoded in metadata (flat files, frontmatter relationships, engine queries)
+- From: Agent knows paths because CLAUDE.md tells it
+- To: Agent discovers, references, traces, and observes through infrastructure
 
 ---
 
-## What We Learned (E2.5)
+## What We Carry Forward
 
-### Session 339 Retrospective Findings
+### Across All Epochs (Accumulated Wisdom)
 
-#### What Went Well (Carry Forward)
-| Pattern | Evidence | Sessions |
-|---------|----------|----------|
-| Critique agent before every DO | Caught 3-10 genuine issues per review | 332-336 |
-| TDD RED-GREEN = zero-debug | 15/15, 19/19, 17/17, 13/13 first pass | 317-338 |
-| Plan(sonnet) + critique(haiku) | Cost-efficient model allocation | 317+ |
-| Operator retros at phase boundaries | Early issue detection | 314, 332 |
-| Structured bug capture -> batch fix | 4 bugs in ~15 min | 330 |
-| Critique-then-defer | Traceability without scope creep | 333-334 |
-| Pure additive hook extension | Cleanest integration pattern found | 335 |
-| stub:true frontmatter | Prevents agents treating stubs as functional | 333 |
+**Proven Patterns (KEEP):**
+| Pattern | Origin | Evidence |
+|---------|--------|----------|
+| TDD RED-GREEN = zero-debug | E2.5 | 6+ sessions, 100% first-pass rate |
+| Critique agent before every DO | E2.5 | 10+ sessions catching real issues |
+| Plan(sonnet) + Critique(haiku) model allocation | E2.5 | Cost-efficient, zero-iteration impl |
+| Pressure dynamics (inhale/exhale rhythm) | E2 (S20) | Fractal across all levels |
+| Breath model (pause = valid completion) | E2.4 (S27) | Ceremonies are pauses between breaths |
+| Pure additive hook extension | E2.5 | Cleanest integration pattern |
+| Batch bug capture -> batch fix | E2.5 | 4 bugs in ~15 min (S330) |
+| stub:true frontmatter | E2.5 | Prevents agents treating stubs as functional |
+| Critique-then-defer for scope control | E2.5 | Traceability without scope creep |
 
-#### Could've Gone Better (Address in E2.6)
-| Issue | Evidence | Proposed Fix |
-|-------|----------|-------------|
-| Test infra: _load_module fragility | ContextVar divergence (84783-84795) | WORK-117 (conftest.py unification) |
-| Checkpoint prior_session stale | Scaffolds wrong value (84276, 84799) | Fix in scaffold.py |
-| Template {{TYPE}} unsubstituted | No scaffold output lint (obs-330) | Add lint test |
-| stage-governance recipe stale | Missing skill/command dirs (obs-330) | Update justfile |
-| MUST gates skipped without logging | 3 instances across 3 sessions | Gate skip logging |
-| Ceremony overhead disproportionate | ~40% tokens governance vs ~30% impl (84332) | Proportional governance |
-| Closure doesn't cascade to parents | Chapter/arc status stale (84215, 84255) | Status cascade |
-| Chapter files do double-duty | Design spec + status tracker (84227) | Separate concerns |
-| Coldstart shows wrong epoch | Identity loader bug (84245) | Fix identity_loader |
-| Greek Triad taxonomy dead | 0 doxa, 14 episteme (all old), auto-classifier diverged | Investigate or accept |
-
-#### Stop Doing
-| Anti-pattern | Evidence |
-|-------------|----------|
-| Reading mutable state for computable values | session-start non-idempotent bug |
-| Over-investigating known bugs | Broad grep when source file known |
-| Skipping MUST gates without logging | 3 instances (84265, 84271, 84330) |
-| Working outside governance cycles | S333 governance bypass irony |
-| Letting chapter status rot | 4 queue chapters showed Planned despite Complete |
-
-#### Start Doing
-| Practice | Rationale |
-|----------|-----------|
-| Scaffold output lint | Assert no {{ remains after scaffold |
-| Auto-detect missing plan | Route to plan-authoring if no plan exists |
-| Gate skip logging | Log to governance-events.jsonl on MUST violation |
-| Status cascade on closure | close-work -> update chapter; close-chapter -> update arc |
-| just chapter-status {arc} | Quick chapter completion view |
-
-### E2.5 Scope Lessons
-
-| Observation | Detail |
+**Anti-Patterns (STOP):**
+| Anti-Pattern | Origin |
 |-------------|--------|
-| **Epoch scope inflation** | 6 arcs scoped at creation, 2 completed, 1 in progress, 3 never started |
-| **No mid-epoch scope trim** | No formal mechanism to adjust scope after creation |
-| **Arc carryover undefined** | Unfinished arcs sit as "Planned" with no deferral ceremony |
-| **Missing ceremonies** | Session Review, Process Review, Batch Scope Triage, System Evolution - all operator-initiated, top-down |
+| Reading mutable state for computable values | E2.5 |
+| Over-investigating known bugs | E2.5 |
+| Skipping MUST gates without logging | E2.5 |
+| Working outside governance cycles | E2.5 |
+| Letting status rot (chapter, arc, epoch) | E2.5 |
+| Full ceremony chain for trivial fixes | E2.5 |
+| Hardcoding epoch/arc paths | E2.5, E2.4 |
+| Scope inflation (6 arcs, completed 3) | E2.5 |
+
+**Architectural Principles (FOUNDATION):**
+| Principle | Origin | Status |
+|-----------|--------|--------|
+| Five-layer hierarchy (Principles->WoW->Ceremonies->Activities->Assets) | E2.4 | Designed, partially implemented |
+| Lifecycles as pure functions (Q->F, R->S, S->A, A*S->V, [I]->[PI]) | E2.5 | Implemented |
+| Queue orthogonal to lifecycle | E2.5 | Implemented |
+| Ceremonies = side-effect boundaries (WHEN not WHAT) | E2.5 | Implemented |
+| Four-dimensional work state (lifecycle+queue+cycle+activity) | E2.4 | Designed |
+| Module-first principle (commands->cli->modules->lib) | E2.3 | Partially enforced |
+| Agent as stateless identity (Dragon Quest class / A2A Agent Card) | E2.6 | NEW |
+
+### From Prior Epochs — NOT YET BUILT
+
+| Item | Origin | Why It Matters for Foundations |
+|------|--------|-------------------------------|
+| Provenance arc (ingester provenance, relationship capture) | E2.3 | Traceability of knowledge origin |
+| Migration arc (recipe audit, architecture triage) | E2.3 | Discoverability — know what's stale |
+| API documentation (CH-007) | E2 | Referenceability of module interfaces |
+| Tool discoverability (CH-008) | E2 | Discoverability — 70+ recipes undocumented |
+| Feedback arc (review ceremonies, status cascade) | E2.5 | Observability of work state |
+| Portability arc (ConfigLoader for all paths) | E2.5 | Referenceability — paths as constants |
+| Gate skip logging | E2.5 | Observability of governance violations |
+| Scaffold output lint | E2.5 | Observability of template quality |
 
 ---
 
-## Core Architecture Decision: Flat Storage + Metadata Relationships
+## Scope
 
-### The Pattern (Recurring)
+E2.6 is focused and narrow: the four -ilities applied to what we already have.
 
-| Epoch | What Moved | From | To |
-|-------|-----------|------|-----|
-| E2.3 | Work items | Nested directories | Flat + metadata |
-| E2.5 queue | Queue position | Filesystem location (active/ vs archive/) | queue_position: frontmatter |
-| **E2.6** | **Arcs, chapters** | **Filesystem hierarchy** | **Flat directories + metadata** |
+### Work Items Assigned
 
-### Proposed Structure
+| ID | Title | -ility | Priority |
+|----|-------|--------|----------|
+| WORK-020 | Discoverability Architecture | Discoverability | medium |
+| WORK-075 | System Audit as L4 Traceability | Traceability | medium |
+| WORK-097 | Plan Decomposition Traceability | Traceability | medium |
+| WORK-067 | Portable Schema Architecture | Referenceability | high |
+| WORK-082 | Epistemic Review Ceremony | Observability | medium |
+| WORK-096 | Agent UX Test in DoD Validation | Observability | low |
+| WORK-104 | Validation/Triage Cycle Mappings | Traceability | low |
+| WORK-135 | Manifest Auto-Sync | Observability | low |
+
+### New Work (to be created)
+
+| Theme | Description |
+|-------|-------------|
+| Agent Cards (A2A-inspired) | Agent identity, capabilities, contracts — discoverability of agents |
+| Legacy cleanup | 3 duplicated lib/ files, deprecated skill, stale templates — referenceability |
+| REFS/ integration | 11 reference docs nobody uses — discoverability |
+| Gate skip logging | Log MUST violations to governance-events.jsonl — observability |
+
+---
+
+## Exit Criteria
+
+- [ ] Agent can discover all skills, agents, recipes, templates via infrastructure (not CLAUDE.md)
+- [ ] All agent definitions include capability cards (A2A-inspired Agent Card pattern)
+- [ ] L4 requirements traceable to work items bidirectionally
+- [ ] Plan decomposition traceable to source requirements
+- [ ] System status observable without manual file reads (status, audit, metrics)
+- [ ] Legacy duplication resolved (lib/ orphans, deprecated artifacts)
+- [ ] MUST gate violations logged to governance events
+
+---
+
+## Epoch Sequence (Planned at S365)
 
 ```
-Current (hierarchy in filesystem):
-  epochs/E2_5/
-    arcs/
-      ceremonies/
-        CH-011.md
-        CH-012.md
-    observations/
-
-Proposed (hierarchy in metadata):
-  epochs/
-    E2_5.md               # epoch definition
-    E2_6.md
-  arcs/
-    ceremonies.md          # arc: epoch: E2.5 in frontmatter
-    feedback.md            # arc: epoch: E2.6 (re-assigned, no file move)
-    agent-ux.md            # new arc
-  chapters/
-    CH-011.md              # chapter: arc: ceremonies in frontmatter
-    CH-012.md
-  work/                    # already flat
-    WORK-111/
-    WORK-117/
+E2.6  Foundations       — traceability, referenceability, discoverability, observability
+E2.7  Composability     — flat metadata, engine functions, recipe rationalization
+E2.8  Agent UX          — agents spend tokens on work, not bookkeeping
+E2.9  Governance        — proportional governance, review ceremonies, scope management
+E3    TBD               — determined by investigation (SDK? Autonomy? Product?)
+E4    Cognitive Memory   — three-paradigm memory, FORESIGHT, autonomous operation
 ```
 
-### What This Enables
-
-| Capability | Current | With Flat + Metadata |
-|------------|---------|---------------------|
-| Move arc between epochs | Move files between directories | Change `epoch:` in frontmatter |
-| Park an arc | No mechanism | `status: parked` in frontmatter |
-| Find all arcs for epoch | Directory listing | Query: `arc.epoch == E2.5` |
-| Agent resolves chapter | Read nested path | `get_chapters(arc="ceremonies")` |
-| Just recipe discovers arcs | Hardcoded paths | `just arcs --epoch E2.5` (metadata query) |
+Each epoch is serialized. Each builds on the last. Scope inflation addressed by keeping epochs small and planning ahead.
 
 ---
 
-## Arcs
+## Supporting Artifacts
 
-### New Arcs
-
-| Arc | Theme | Requirements |
-|-----|-------|-------------|
-| **structural-migration** | Flat storage + metadata relationships for arcs/chapters | Foundation for all other arcs |
-| **recipe-composability** | Just recipes as thin wrappers over engine functions | Composable, configurable, discoverable |
-| **agent-ux** | Less reading, more calling. Agent spends tokens on work not bookkeeping | The user-facing goal |
-| **epoch-governance** | Scope trim, arc carryover, epoch review ceremonies | Missing ceremonies from S339 findings |
-
-### Carryover Arcs (Re-evaluate at E2.6 Planning)
-
-| Arc | Origin | Fit with Agent UX? | Recommendation |
-|-----|--------|---------------------|----------------|
-| **feedback** | E2.5 | Yes - agent learns from work, status cascades | Absorb - directly serves agent awareness |
-| **assets** | E2.5 | Partial - typed assets help agent but versioning is orthogonal | Selective - absorb schema/provenance, park versioning |
-| **portability** | E2.5 | Yes - flat metadata IS portability enablement | Absorb - structural-migration arc directly serves this |
-| **ceremonies** (CH-013 to CH-017) | E2.5 | Partial - CeremonyRunner fits, but renaming all skills is churn | Re-evaluate per chapter |
-
-### Parked Work Items (Inherited)
-
-| ID | Title | E2.6 Fit? |
-|----|-------|-----------|
-| WORK-101 | Proportional Governance Design | Yes - directly serves ceremony overhead reduction |
-| WORK-102 | Session and Process Review Ceremonies | Yes - missing ceremonies identified in S339 |
-| WORK-117 | Conftest.py unification | Yes - tactical, unblocks test work |
-
----
-
-## Exit Criteria (Draft - Refine at Planning)
-
-- [ ] Arcs and chapters stored flat with metadata relationships (not filesystem hierarchy)
-- [ ] Engine functions for arc/chapter/epoch queries (no manual path resolution)
-- [ ] Just recipes composable and config-driven (not hardcoded paths)
-- [ ] Agent token spend on governance < 20% of session (down from ~40%)
-- [ ] Mid-epoch scope trim mechanism exists
-- [ ] Arc carryover ceremony defined and used
-- [ ] Operator-initiated review ceremonies formalized (Session/Process/Scope)
-
----
-
-## Implementation Priority (Preliminary)
-
-1. **structural-migration** (foundation - everything else depends on flat metadata)
-2. **recipe-composability** (depends on engine functions from structural-migration)
-3. **epoch-governance** (can parallel with recipe work)
-4. **agent-ux** (depends on 1+2, measures success)
-5. **Carryover arcs** (absorbed into above or executed independently)
-
----
-
-## Observations Feeding This Epoch
-
-| Source | Key Finding |
-|--------|-------------|
-| obs-313 | Ceremonies need dynamic composition, not static skills |
-| obs-314 | Missing operator-initiated system evolution ceremony chain (4 gaps) |
-| obs-317 | Plan agent exemplar workflow (100k plan + mechanical builder) |
-| obs-330 | Bug fix batch sessions high-ROI, scaffold lint missing |
-| S339 retro | Greek Triad taxonomy dead, epoch scope inflation, arc carryover undefined |
-| obs-339 | System assessment: governance works but expensive, filesystem hierarchy wrong permanent structure, memory underutilized, scope inflation is the biggest risk |
-| mem:84332 | Ceremony overhead ~40% of tokens for small work items |
-| mem:84227 | Chapter files do double-duty (design + status) |
-| mem:84331 | Implementation-cycle should auto-detect missing plan |
-
----
-
-## Memory Refs
-
-Session 339 observation review: TBD (to be committed at session end)
-- Session 339 retrospective findings across S314-S338
-- Flat storage + metadata architecture proposal
-- E2.6 epoch planning discussion
+- `system-audit-S365.md` — Full archaeological audit (20 sections, all building blocks inventoried)
+- `retro-synthesis.md` — Cross-epoch retrospective trend analysis (90+ memory entries)
 
 ---
 
 ## References
 
 - @.claude/haios/epochs/E2_5/EPOCH.md (prior epoch)
-- @.claude/haios/epochs/E2_5/observations/obs-314-operator-initiated-system-evolution.md
-- @.claude/haios/epochs/E2_5/observations/obs-313-ceremony-composition-gap.md
-- @.claude/haios/epochs/E2_5/observations/obs-330-session-bugfixes.md
-- @docs/work/active/WORK-101/WORK.md (proportional governance)
-- @docs/work/active/WORK-102/WORK.md (review ceremonies)
-- @.claude/haios/epochs/E2_5/observations/obs-339-system-assessment.md (system hot take)
+- @.claude/haios/epochs/E2_6/system-audit-S365.md (system audit)
+- @.claude/haios/epochs/E2_6/retro-synthesis.md (trend analysis)
+- @.claude/haios/epochs/E2_7/EPOCH.md (next epoch)
+- @docs/work/active/WORK-020/WORK.md (discoverability)
+- @docs/work/active/WORK-067/WORK.md (portable schema)
+- @docs/work/active/WORK-075/WORK.md (L4 traceability)
