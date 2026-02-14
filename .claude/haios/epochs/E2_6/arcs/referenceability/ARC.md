@@ -7,7 +7,7 @@
 **Arc ID:** referenceability
 **Epoch:** E2.6
 **Theme:** Portable schemas, structured configuration, clear interface contracts
-**Status:** Planning
+**Status:** In Progress
 
 ---
 
@@ -31,18 +31,18 @@ Every schema, template, and configuration must be referenceable from a single ro
 
 | CH-ID | Title | Work Items | Requirements | Dependencies |
 |-------|-------|------------|--------------|--------------|
-| CH-035 | SchemaLocationStrategy | WORK-067 (EXPLORE/HYPOTHESIZE) | REQ-REFERENCE-001 | None |
-| CH-036 | TemplateBootstrapPattern | WORK-067 (VALIDATE/CONCLUDE) | REQ-REFERENCE-002 | CH-035 |
+| CH-035 | SchemaLocationStrategy | WORK-067 (complete) | REQ-REFERENCE-001 | None |
+| CH-036 | TemplateBootstrapPattern | WORK-067 findings + spawned impl | REQ-REFERENCE-002 | CH-035 |
 | CH-037 | ManifestDriftPrevention | WORK-135 | REQ-PORTABLE-001 | None |
 
 ---
 
 ## Exit Criteria
 
-- [ ] Schema location strategy documented (where schemas live, how discovered)
-- [ ] Template reference pattern defined (consume, not duplicate)
-- [ ] Bootstrap pattern for new projects defined
-- [ ] Core vs project-specific boundary clear
+- [x] Schema location strategy documented (WORK-067: `.claude/haios/schemas/` with core/ and project/ tiers)
+- [x] Template reference pattern defined (WORK-067: `{{schema:domain.key}}` resolved at scaffold time)
+- [x] Bootstrap pattern for new projects defined (WORK-067: copy core/, create project/, add schemas: to haios.yaml)
+- [x] Core vs project-specific boundary clear (WORK-067: TRD enums = core ~10, HAIOS enums = project ~35)
 - [ ] Manifest drift detectable automatically
 
 ---

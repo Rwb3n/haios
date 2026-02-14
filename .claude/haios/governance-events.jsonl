@@ -4244,3 +4244,16 @@
 {"type": "SessionEnded", "session": 365, "agent": "Hephaestus", "timestamp": "2026-02-14T11:58:33.961059"}
 {"type": "SessionEnded", "session": 363, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-14T12:21:58.281156"}
 {"type": "SessionStarted", "session": 366, "agent": "Hephaestus", "timestamp": "2026-02-14T12:22:29.243848"}
+{"type": "SessionEnded", "session": 366, "agent": "Hephaestus", "timestamp": "2026-02-14T13:03:24.910039"}
+{"type": "SessionStarted", "session": 367, "agent": "Hephaestus", "timestamp": "2026-02-14T13:38:20.944099"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-14T13:58:17.688254"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-067", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-02-14T13:58:17.695117"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 0, "timestamp": "2026-02-14T13:58:17.717315"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-14T13:58:24.319125"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-067", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-14T13:58:24.326249"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-067"], "from": "backlog", "to": "ready", "timestamp": "2026-02-14T13:58:24.331800", "rationale": "High priority, E2.6 referenceability arc entry point, schema decisions cascade"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-14T13:58:24.332798"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-14T13:58:30.276667"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-067", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-14T13:58:30.284975"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-067"], "from": "ready", "to": "working", "timestamp": "2026-02-14T13:58:30.290986"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-14T13:58:30.291992"}

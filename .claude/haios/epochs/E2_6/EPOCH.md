@@ -127,7 +127,7 @@ E2.6 is focused and narrow: the four -ilities applied to what we already have.
 | ID | Title | Arc | Chapter | Priority |
 |----|-------|-----|---------|----------|
 | WORK-020 | Discoverability Architecture | discoverability | CH-032 | medium |
-| WORK-067 | Portable Schema Architecture | referenceability | CH-035 | high |
+| WORK-067 | Portable Schema Architecture | referenceability | CH-035 | high (COMPLETE S367) |
 | WORK-075 | System Audit as L4 Traceability | traceability | CH-039 | medium |
 | WORK-082 | Epistemic Review Ceremony | observability | CH-041 | medium |
 | WORK-096 | Agent UX Test in DoD Validation | observability | CH-041 | low |
@@ -137,6 +137,7 @@ E2.6 is focused and narrow: the four -ilities applied to what we already have.
 | WORK-144 | Agent Capability Cards | observability | CH-042 | medium |
 | WORK-145 | Legacy Duplication Cleanup | observability | CH-043 | low |
 | WORK-146 | Gate Skip Violation Logging | traceability | CH-040 | medium |
+| WORK-147 | Schema Registry Implementation | referenceability | CH-036 | medium (spawned by WORK-067) |
 
 ---
 
