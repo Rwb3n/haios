@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-15T23:28:54",
+    "generated": "2026-02-15T23:58:50",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 85370,
-        "entities": 9964,
+        "concepts": 85387,
+        "entities": 9967,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -6386,12 +6386,12 @@
         {
             "path": "docs/checkpoints/2025-12-02-SESSION-19-collaboration-dogfood.md",
             "last_updated": "2025-12-02T23:39:43",
-            "days_stale": 74
+            "days_stale": 75
         },
         {
             "path": "docs/checkpoints/2025-12-02-SESSION-20-gap-a5-fix-reingest.md",
             "last_updated": "2025-12-02T23:39:25",
-            "days_stale": 74
+            "days_stale": 75
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-21-gap-audit-preflight.md",
@@ -7076,7 +7076,7 @@
         {
             "path": "docs/checkpoints/2025-12-29-07-SESSION-149-inv-052-architecture-redesign-meta-design.md",
             "last_updated": "2025-12-29T23:31:00",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/checkpoints/2025-12-30-01-SESSION-150-inv-052-architecture-redesign-meta-design-session-2.md",
@@ -7146,7 +7146,7 @@
         {
             "path": "docs/checkpoints/2026-01-03-07-SESSION-162-epoch-22-migration-planning-e2-251-through-e2-255.md",
             "last_updated": "2026-01-03T23:31:47",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2026-01-04-01-SESSION-163-e2-251-workengine-cascade-spawn-backfill-complete.md",
@@ -7221,7 +7221,7 @@
         {
             "path": "docs/checkpoints/2026-01-05-05-SESSION-177-e2-274-e2-275-complete-ambiguity-gating-done-critical-memory-loss-finding.md",
             "last_updated": "2026-01-05T23:29:59",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/checkpoints/2026-01-06-01-SESSION-177-epoch-chapter-arc-hierarchy-and-ground-cycle-discovery.md",
@@ -7261,7 +7261,7 @@
         {
             "path": "docs/checkpoints/2026-01-08-04-SESSION-184-e2-280-survey-skill-cycle-complete.md",
             "last_updated": "2026-01-08T23:38:02",
-            "days_stale": 37
+            "days_stale": 38
         },
         {
             "path": "docs/checkpoints/2026-01-09-01-SESSION-185-e2-279-phase-1-cascadeengine-extraction.md",
@@ -7301,7 +7301,7 @@
         {
             "path": "docs/checkpoints/2026-01-15-02-SESSION-193-e2-291-queue-wiring-and-session-state-investigation.md",
             "last_updated": "2026-01-15T23:32:30",
-            "days_stale": 30
+            "days_stale": 31
         },
         {
             "path": "docs/checkpoints/2026-01-16-01-SESSION-194-inv-065-session-state-cascade-investigation-complete.md",
@@ -7331,7 +7331,7 @@
         {
             "path": "docs/plans/PLAN-AGENT-ECOSYSTEM-002.md",
             "last_updated": "2025-11-30T23:54:59",
-            "days_stale": 76
+            "days_stale": 77
         },
         {
             "path": "docs/plans/PLAN-E2-001-MCP-TOOL-CONSOLIDATION.md",

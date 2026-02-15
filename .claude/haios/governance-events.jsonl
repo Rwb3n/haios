@@ -6039,3 +6039,8 @@
 {"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-15T23:14:04.834203"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-15T23:28:52.583032"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-15T23:28:52.625713"}
+{"type": "SessionEnded", "session": 379, "agent": "Hephaestus", "timestamp": "2026-02-15T23:37:49.013364"}
+{"type": "SessionStarted", "session": 380, "agent": "Hephaestus", "timestamp": "2026-02-15T23:39:24.245212"}
+{"type": "GateViolation", "gate_id": "path_governance", "work_id": "unknown", "violation_type": "block", "context": "BLOCKED: Governed path. Use '/new-plan <id> <title>' instead of raw Write.", "timestamp": "2026-02-15T23:45:24.220128"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-15T23:58:49.352341"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-15T23:58:49.405590"}

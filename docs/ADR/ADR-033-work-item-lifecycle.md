@@ -169,6 +169,16 @@ A work item is **COMPLETE** when ALL criteria are met:
 
 **WHY is most important.** Tests verify WHAT works. Docs explain HOW. But WHY - the reasoning behind decisions - is what compounds across sessions. Future agents can query "why did we choose X over Y?" and make informed decisions.
 
+### 3b. Optional DoD Criteria
+
+Beyond mandatory criteria, these optional criteria apply when trigger conditions are met:
+
+| Criterion | Trigger | Verification | Severity |
+|-----------|---------|--------------|----------|
+| Agent UX Test | source_files match component paths (.claude/skills/, .claude/agents/, .claude/commands/, modules/) | 4-question L3 checklist (L3-requirements.md, "The Agent UX Test" section) | WARN (non-blocking) |
+
+Optional criteria produce warnings in DoD validation output but do not block closure. They surface quality gaps for operator awareness.
+
 ### 4. Status Normalization
 
 Standardize on **`complete`** (not `completed`) across all templates:

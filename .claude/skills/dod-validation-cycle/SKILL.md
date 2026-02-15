@@ -60,6 +60,30 @@ CHECK --> VALIDATE --> APPROVE
 | Docs current | CLAUDE.md/READMEs updated if behavior changed |
 | Traced files complete | All associated plans status: complete |
 
+**Optional: Agent UX Test (L3 Agent Usability Requirements)**
+
+Triggered when work item `source_files` include paths matching:
+- `.claude/skills/`
+- `.claude/agents/`
+- `.claude/commands/`
+- `modules/`
+
+When triggered, evaluate these 4 questions:
+
+| # | Question | Check |
+|---|----------|-------|
+| 1 | Can an agent discover this? | Listed in `just --list`, haios-status-slim.json, or README |
+| 2 | Can an agent verify success? | Ground Truth check, test, or validation command exists |
+| 3 | Can an agent recover from failure? | Error messages are actionable, retry is safe |
+| 4 | Does this respect token budget? | Output is sized appropriately, slim version available |
+
+**Verdict:**
+- PASS: All 4 questions answered YES (with evidence)
+- WARN: 1-2 questions answered NO (flag for operator)
+- N/A: source_files don't match trigger paths
+
+This is a SHOULD criterion — failure warns but does not block closure.
+
 **Actions:**
 1. For each criterion, verify status
 2. Flag any failing criteria

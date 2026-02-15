@@ -33,6 +33,14 @@ Skill(skill="dod-validation-cycle")
 | Docs current | CLAUDE.md/READMEs updated |
 | Traced files | Associated plans complete |
 
+### Optional Criteria
+
+| Criterion | Trigger | Severity |
+|-----------|---------|----------|
+| Agent UX Test | source_files match component paths | WARN (non-blocking) |
+
+See SKILL.md VALIDATE phase for the 4-question checklist.
+
 ## Integration
 
 This skill is invoked as a **MUST gate** by close-work-cycle before its VALIDATE phase.
