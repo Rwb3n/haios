@@ -183,14 +183,57 @@ just set-cycle investigation-cycle CONCLUDE {work_id}
 **Actions:**
 1. Review findings against original objective
 2. Synthesize answer to the investigation question
-3. Identify spawned work items (ADRs, backlog items, new investigations)
-4. Create spawned items using `/new-*` commands with `spawned_by: {this_investigation_id}`
-5. **Epoch Artifact Reconciliation (MUST - Session 276)** - see below
-6. Store findings summary to memory via `ingester_ingest`
-7. Update investigation status: `status: complete`
-8. Populate `memory_refs` in work item frontmatter
+3. **Epistemic Review (MUST)** - see section 4a below
+4. Identify spawned work items (ADRs, backlog items, new investigations)
+5. Create spawned items using `/new-*` commands with `spawned_by: {this_investigation_id}`
+6. **Epoch Artifact Reconciliation (MUST - Session 276)** - see below
+7. Store findings summary to memory via `ingester_ingest`
+8. Update investigation status: `status: complete`
+9. Populate `memory_refs` in work item frontmatter
 
-#### 4a. Epoch Artifact Reconciliation (MUST)
+#### 4a. Epistemic Review (MUST)
+
+Before spawning work, categorize all findings into three categories:
+
+**Step 1: Categorize findings**
+
+| Category | What to Include | Format |
+|----------|----------------|--------|
+| KNOWN | Facts verified from files, tests, or direct observation | Fact + citation (file:line, memory ID, URL) |
+| INFERRED | Conclusions reached through reasoning | Premise → conclusion chain |
+| UNKNOWN | Gaps in knowledge with impact assessment | Gap + impact (blocking / non-blocking) |
+
+**Step 2: Render verdict**
+
+| Verdict | Condition | Action |
+|---------|-----------|--------|
+| PROCEED | No blocking unknowns | Continue to spawn work items |
+| DEFER | Significant unknowns exist | Present K/I/U to operator via AskUserQuestion for decision |
+| INVESTIGATE-MORE | Critical unknowns block all progress | Spawn follow-up investigation before any implementation work |
+
+**Step 3: If DEFER**
+
+Present the K/I/U summary to the operator using AskUserQuestion:
+- Header: "Epistemic Review"
+- Question: "Investigation has significant unknowns. Review findings and choose direction."
+- Options: "Proceed anyway" / "Investigate more" / "Defer to next session"
+
+After operator responds:
+1. **MUST** immediately write operator decision to CONCLUDE.md "Operator Decision" field BEFORE proceeding to step 4
+2. Route based on response:
+   - "Proceed anyway" → Continue to step 4 (spawn work normally); unknowns accepted
+   - "Investigate more" → Spawn follow-up investigation instead of implementation work
+   - "Defer to next session" → Skip spawn; record rationale; close CONCLUDE
+
+If AskUserQuestion fails or times out: treat as "Defer to next session" (fail-safe).
+
+**Rationale (WORK-082, Session 372):**
+- Location inside CONCLUDE preserves investigation context (standalone ceremony loses it)
+- Three-level verdict aligns with L3.6 Graceful Degradation (not binary block)
+- K/I/U structure aligns with L3.2 Evidence Over Assumption
+- DEFER respects L3.4 Duties Are Separated (operator decides on unknowns)
+
+#### 4b. Epoch Artifact Reconciliation (MUST)
 
 Investigations reveal ground truth. Before closing, reconcile findings with epoch structure:
 
@@ -227,13 +270,17 @@ For each chapter referenced in work item (`chapter:` field or `@` references):
 
 **Exit Criteria:**
 - [ ] Findings synthesized (answer to objective documented)
+- [ ] **MUST:** Epistemic review completed (K/I/U table populated with findings — not empty)
+- [ ] **MUST:** Verdict rendered and documented (PROCEED/DEFER/INVESTIGATE-MORE)
+- [ ] If DEFER: Operator consulted via AskUserQuestion and decision recorded in CONCLUDE.md
+- [ ] Agent verification: Read own CONCLUDE.md to confirm K/I/U table + verdict present before marking CONCLUDE complete
 - [ ] Spawned work items created with `spawned_by` field linking to investigation
 - [ ] **MUST:** Epoch artifacts reconciled (chapters, arc, epoch updated if applicable)
 - [ ] Learnings stored to memory (`ingester_ingest` called)
 - [ ] `memory_refs` populated in work item frontmatter
 - [ ] Investigation marked complete
 
-**Tools:** ingester_ingest, Edit, /new-adr, /new-plan, /new-work
+**Tools:** ingester_ingest, Edit, AskUserQuestion, /new-adr, /new-plan, /new-work
 
 ---
 

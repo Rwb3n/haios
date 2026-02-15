@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-151
-title: "Implement Epistemic Review Step in Investigation CONCLUDE Phase"
+title: Implement Epistemic Review Step in Investigation CONCLUDE Phase
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-14
 spawned_by: WORK-082
 spawned_children: []
 chapter: CH-041
 arc: observability
-closed: null
+closed: '2026-02-15'
 priority: medium
 effort: small
 traces_to:
@@ -20,28 +20,42 @@ source_files:
 - .claude/skills/investigation-cycle/SKILL.md
 - .claude/templates/investigation/CONCLUDE.md
 acceptance_criteria:
-- investigation-cycle SKILL.md CONCLUDE phase includes epistemic review step between findings synthesis and spawn
+- investigation-cycle SKILL.md CONCLUDE phase includes epistemic review step between
+  findings synthesis and spawn
 - CONCLUDE.md template output contract includes K/I/U section
 - Epistemic review has three-level verdict (PROCEED/DEFER/INVESTIGATE-MORE)
 - DEFER verdict presents K/I/U to operator via AskUserQuestion
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-14T17:22:16
-    exited: null
+- node: backlog
+  entered: 2026-02-14 17:22:16
+  exited: '2026-02-15T20:25:34.122566'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85437
+- 85438
+- 85446
 extensions:
   epoch: E2.6
-version: "2.0"
+version: '2.0'
 generated: 2026-02-14
-last_updated: 2026-02-14T17:22:16
+last_updated: '2026-02-15T20:25:34.126575'
+queue_history:
+- position: ready
+  entered: '2026-02-14T17:39:31.263665'
+  exited: '2026-02-14T17:39:31.289598'
+- position: working
+  entered: '2026-02-14T17:39:31.289598'
+  exited: '2026-02-15T20:25:34.122566'
+- position: done
+  entered: '2026-02-15T20:25:34.122566'
+  exited: null
 ---
 # WORK-151: Implement Epistemic Review Step in Investigation CONCLUDE Phase
 
