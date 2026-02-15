@@ -13,19 +13,13 @@ Contains:
 - status: System status generation
 - validate: File validation against templates
 - observations: Observation capture and triage
-- cascade: Work item cascade operations
-- spawn: Work item spawning
-- backfill: Backlog content backfill
 - node_cycle: Node lifecycle transitions
 - governance_events: Governance event logging
+- spawn_ceremonies: Spawn execution for spawn-work-ceremony skill
 - routing: Work routing decisions
 - dependencies: Dependency resolution
-- retrieval: Memory retrieval
-- synthesis: Content synthesis
-- extraction: Content extraction
 - error_capture: Error tracking
 - audit: System audit operations
 - errors: Error definitions
 - cli: CLI utilities
-- mcp_server: MCP server utilities
 """

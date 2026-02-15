@@ -22,7 +22,8 @@ from helpers import load_frontmatter
 
 SKILLS_DIR = Path(".claude/skills")
 
-# 13 existing skills that should be retrofitted with contract frontmatter
+# 12 existing skills that should be retrofitted with contract frontmatter
+# WORK-145: observation-capture-cycle removed (deprecated, replaced by retro-cycle)
 EXISTING_CEREMONY_SKILLS = [
     "queue-intake",
     "queue-prioritize",
@@ -32,7 +33,6 @@ EXISTING_CEREMONY_SKILLS = [
     "close-chapter-ceremony",
     "close-arc-ceremony",
     "close-epoch-ceremony",
-    "observation-capture-cycle",
     "retro-cycle",
     "observation-triage-cycle",
     "checkpoint-cycle",

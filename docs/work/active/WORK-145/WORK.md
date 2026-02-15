@@ -3,14 +3,14 @@ template: work_item
 id: WORK-145
 title: "Legacy Duplication Cleanup"
 type: implementation
-status: active
+status: complete
 owner: null
 created: 2026-02-14
 spawned_by: S365-epoch-planning
 spawned_children: []
 chapter: CH-043
 arc: observability
-closed: null
+closed: 2026-02-15
 priority: low
 effort: small
 traces_to:

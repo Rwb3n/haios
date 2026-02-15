@@ -18,7 +18,6 @@ Skills are prompt injection components that provide domain-specific guidance and
 | `implementation-cycle` | Cycle | PLAN->DO->CHECK->DONE workflow for implementation |
 | `investigation-cycle` | Cycle | EXPLORE->HYPOTHESIZE->VALIDATE->CONCLUDE workflow for research |
 | `memory-agent` | Utility | Intelligent context retrieval and learning |
-| `observation-capture-cycle` | Cycle | **DEPRECATED** - replaced by `retro-cycle` (WORK-142) |
 | `retro-cycle` | Ceremony | Multi-step autonomous reflection with typed provenance (REFLECT->DERIVE->EXTRACT->COMMIT) |
 | `observation-triage-cycle` | Cycle | SCAN->TRIAGE->PROMOTE workflow for processing captured observations |
 | `plan-authoring-cycle` | Cycle | ANALYZE->AUTHOR->VALIDATE workflow for plan population |
@@ -36,7 +35,6 @@ Skills are prompt injection components that provide domain-specific guidance and
 - `ground-cycle`
 - `implementation-cycle`
 - `investigation-cycle`
-- `observation-capture-cycle` *(deprecated — replaced by `retro-cycle`)*
 - `observation-triage-cycle`
 - `retro-cycle`
 - `plan-authoring-cycle`
@@ -127,8 +125,6 @@ Skill(skill="skill-name")
 ├── investigation-cycle/
 │   └── SKILL.md
 ├── memory-agent/
-│   └── SKILL.md
-├── observation-capture-cycle/
 │   └── SKILL.md
 ├── observation-triage-cycle/
 │   └── SKILL.md

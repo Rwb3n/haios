@@ -50,9 +50,6 @@ class TestLibModulesImportable:
                 "status",
                 "validate",
                 "observations",
-                "cascade",
-                "spawn",
-                "backfill",
                 "node_cycle",
                 "governance_events",
                 "routing",
@@ -78,7 +75,7 @@ class TestLibModulesImportable:
                     failed.append((mod, str(e)))
 
             assert len(failed) == 0, f"Failed to import core modules: {failed}"
-            assert len(imported) >= 17, f"Expected at least 17 core modules, got {len(imported)}"
+            assert len(imported) >= 13, f"Expected at least 13 core modules, got {len(imported)}"
         finally:
             # Clean up path
             sys.path.remove(str(haios_lib))

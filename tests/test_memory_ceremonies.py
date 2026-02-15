@@ -33,17 +33,16 @@ def _has_category(entry, cat):
 
 
 class TestMemoryCeremonyContracts:
-    """Verify all 3 memory ceremonies have valid ceremony contracts."""
+    """Verify memory ceremonies have valid ceremony contracts.
 
-    def test_observation_capture_has_ceremony_contract(self):
-        """observation-capture-cycle has type: ceremony and valid contracts."""
-        skill = load_frontmatter(".claude/skills/observation-capture-cycle/SKILL.md")
-        assert skill["type"] == "ceremony"
-        assert skill["category"] == "memory"
-        contract = CeremonyContract.from_frontmatter(skill)
-        assert len(contract.input_contract) >= 1
-        assert len(contract.output_contract) >= 1
-        assert len(contract.side_effects) >= 1
+    WORK-145: observation-capture-cycle deleted (deprecated, replaced by retro-cycle).
+    """
+
+    def test_observation_capture_cycle_removed(self):
+        """observation-capture-cycle skill was deleted (WORK-145)."""
+        from pathlib import Path
+        assert not Path(".claude/skills/observation-capture-cycle/SKILL.md").exists(), \
+            "observation-capture-cycle should be deleted (WORK-145)"
 
     def test_observation_triage_has_ceremony_contract(self):
         """observation-triage-cycle has type: ceremony and valid contracts."""

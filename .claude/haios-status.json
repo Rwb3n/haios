@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-15T21:58:43",
+    "generated": "2026-02-15T22:20:58",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 375,
-        "current_session": 376,
+        "prior_session": 376,
+        "current_session": 377,
         "prior_date": "2026-02-15",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 85312,
-        "entities": 9949,
+        "concepts": 85322,
+        "entities": 9954,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -79,7 +79,6 @@
             "investigation-cycle",
             "memory-agent",
             "memory-commit-ceremony",
-            "observation-capture-cycle",
             "observation-triage-cycle",
             "plan-authoring-cycle",
             "plan-validation-cycle",
@@ -3927,6 +3926,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-15-06-SESSION-377-work-093-closed-work-145-plan-validated.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-15",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "template": "implementation_plan",
             "status": "complete",
@@ -6365,7 +6373,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-25-embedding-fix-research-synthesis.md",
             "last_updated": "2025-12-04T22:02:49",
-            "days_stale": 72
+            "days_stale": 73
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
@@ -6935,7 +6943,7 @@
         {
             "path": "docs/checkpoints/2025-12-27-07-SESSION-131-e2-210-complete-e2-212-infrastructure-ready.md",
             "last_updated": "2025-12-27T22:04:17",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/checkpoints/2025-12-28-01-SESSION-132-e2-212-consumer-verification-and-memory-ux-investigation.md",
@@ -7055,7 +7063,7 @@
         {
             "path": "docs/checkpoints/2026-01-02-02-SESSION-156-inv-052-gap-resolution-and-consistency-alignment.md",
             "last_updated": "2026-01-02T22:02:15",
-            "days_stale": 43
+            "days_stale": 44
         },
         {
             "path": "docs/checkpoints/2026-01-03-01-SESSION-157-inv-052-documentation-consistency-fixes.md",
@@ -7135,7 +7143,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-09-SESSION-171-e2-264-complete-inv-057-needs-revision.md",
             "last_updated": "2026-01-04T22:18:45",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/checkpoints/2026-01-04-10-SESSION-172-inv-057-complete-e2-269-plan-authored.md",
@@ -8039,9 +8047,9 @@
         }
     ],
     "workspace": {
-        "total_files": 547,
+        "total_files": 548,
         "by_template": {
-            "checkpoint": 375,
+            "checkpoint": 376,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8052,7 +8060,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 210,
+            "unknown": 211,
             "draft": 2,
             "approved": 6,
             "ready": 1,

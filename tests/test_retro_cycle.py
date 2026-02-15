@@ -100,8 +100,7 @@ class TestRetroCycleConsumerIntegration:
         assert retro_pos < validate_pos, \
             "retro-cycle must be referenced before VALIDATE phase"
 
-    def test_observation_capture_cycle_deprecated(self):
-        """observation-capture-cycle has deprecated: true in frontmatter."""
-        fm = load_frontmatter(".claude/skills/observation-capture-cycle/SKILL.md")
-        assert fm.get("deprecated") is True, \
-            "observation-capture-cycle must have deprecated: true"
+    def test_observation_capture_cycle_removed(self):
+        """observation-capture-cycle skill was deleted (WORK-145)."""
+        assert not Path(".claude/skills/observation-capture-cycle/SKILL.md").exists(), \
+            "observation-capture-cycle should be deleted (WORK-145)"

@@ -85,23 +85,17 @@ context:
 | `status.py` | System status generation |
 | `validate.py` | File validation against templates |
 | `observations.py` | Observation capture and triage |
-| `cascade.py` | Work item cascade operations |
-| `spawn.py` | Work item spawning |
-| `backfill.py` | Backlog content backfill |
+| `spawn_ceremonies.py` | Spawn execution for spawn-work-ceremony skill (WORK-137/CH-017) |
 | `node_cycle.py` | Node lifecycle transitions |
 | `governance_events.py` | Governance event logging |
 | `queue_ceremonies.py` | Queue ceremony execution and event logging (CH-010, WORK-110). Runtime consumers: queue-unpark, queue-intake, queue-prioritize, queue-commit skills |
 | `routing.py` | Work routing decisions |
 | `dependencies.py` | Dependency resolution |
-| `retrieval.py` | Memory retrieval (requires haios_etl) |
-| `synthesis.py` | Content synthesis (requires haios_etl) |
-| `extraction.py` | Content extraction (requires haios_etl) |
 | `error_capture.py` | Error tracking |
 | `audit.py` | System audit operations |
 | `audit_decision_coverage.py` | Decision-to-chapter traceability validation (WORK-069) |
 | `errors.py` | Error definitions |
-| `cli.py` | CLI utilities (requires haios_etl) |
-| `mcp_server.py` | MCP server utilities (requires haios_etl) |
+| `cli.py` | CLI dispatcher utilities |
 
 ## Usage
 
@@ -131,7 +125,6 @@ from validate import validate_template
 
 ## Notes
 
-- Some modules (retrieval, synthesis, extraction, cli, mcp_server) have dependencies on
-  `haios_etl` package. These are used for ETL pipeline operations.
 - Core modules (database, scaffold, validate, node_cycle, etc.) have no external dependencies
   beyond standard library and can be imported standalone.
+- cascade, spawn, and backfill operations are now in modules/ (cascade_engine.py, spawn_tree.py, backfill_engine.py) — WORK-145 cleanup.
