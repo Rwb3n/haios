@@ -174,72 +174,80 @@ class TestScaffoldCommand:
 
 
 class TestLifecycleOutputDataclasses:
-    """Tests for LifecycleOutput type hierarchy (WORK-084)."""
+    """Tests for Asset type hierarchy (WORK-093, was WORK-084 LifecycleOutput)."""
 
     def test_lifecycle_output_base_dataclass(self):
-        """LifecycleOutput has required fields."""
+        """Asset (aliased as LifecycleOutput) has required provenance fields."""
         from cycle_runner import LifecycleOutput
         from datetime import datetime
 
         output = LifecycleOutput(
-            lifecycle="investigation",
-            work_id="INV-001",
+            asset_id="test-INV-001-v1",
+            type="test",
+            produced_by="investigation",
+            source_work="INV-001",
+            version=1,
             timestamp=datetime.now(),
-            status="success"
+            author="Hephaestus",
         )
-        assert output.lifecycle == "investigation"
-        assert output.work_id == "INV-001"
-        assert output.status == "success"
+        assert output.produced_by == "investigation"
+        assert output.source_work == "INV-001"
+        assert output.status == "success"  # default
 
     def test_findings_output_type(self):
-        """Findings extends LifecycleOutput with investigation-specific fields."""
+        """FindingsAsset (aliased as Findings) has investigation-specific fields."""
         from cycle_runner import Findings
         from datetime import datetime
 
         findings = Findings(
-            lifecycle="investigation",
-            work_id="INV-001",
+            asset_id="investigation-INV-001-v1",
+            type="findings",
+            produced_by="investigation",
+            source_work="INV-001",
+            version=1,
             timestamp=datetime.now(),
-            status="success",
+            author="Hephaestus",
             question="What causes the bug?",
-            conclusions=["Root cause is X"],
+            findings=["Root cause is X"],
             evidence=["Log file shows Y"],
-            open_questions=[]
         )
         assert findings.question == "What causes the bug?"
-        assert len(findings.conclusions) == 1
+        assert len(findings.findings) == 1
 
     def test_specification_output_type(self):
-        """Specification extends LifecycleOutput with design-specific fields."""
+        """SpecificationAsset (aliased as Specification) has design-specific fields."""
         from cycle_runner import Specification
         from datetime import datetime
 
         spec = Specification(
-            lifecycle="design",
-            work_id="WORK-084",
+            asset_id="design-WORK-084-v1",
+            type="specification",
+            produced_by="design",
+            source_work="WORK-084",
+            version=1,
             timestamp=datetime.now(),
-            status="success",
+            author="Hephaestus",
             requirements=["REQ-LIFECYCLE-001"],
             design_decisions=["Use dataclasses"],
-            interfaces={"run": "work_id, lifecycle -> LifecycleOutput"}
+            interface="run: work_id, lifecycle -> Asset",
         )
         assert "REQ-LIFECYCLE-001" in spec.requirements
-        assert "run" in spec.interfaces
+        assert "run" in spec.interface
 
 
 class TestCycleRunnerRun:
-    """Tests for CycleRunner.run() method (WORK-084)."""
+    """Tests for CycleRunner.run() method (WORK-093, was WORK-084)."""
 
     def test_run_returns_lifecycle_output(self):
-        """CycleRunner.run() returns LifecycleOutput subclass."""
+        """CycleRunner.run() returns Asset (aliased as LifecycleOutput)."""
         from cycle_runner import CycleRunner, LifecycleOutput
         from governance_layer import GovernanceLayer
 
         runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
         output = runner.run(work_id="WORK-084", lifecycle="design")
         assert isinstance(output, LifecycleOutput)
-        assert output.work_id == "WORK-084"
-        assert output.lifecycle == "design"
+        assert output.source_work == "WORK-084"
+        assert output.produced_by == "design"
 
     def test_run_does_not_auto_chain(self):
         """CycleRunner.run() returns output, does NOT trigger next lifecycle."""
@@ -429,7 +437,7 @@ class TestRunBatch:
         )
 
         for output in result.values():
-            assert output.lifecycle == "design"
+            assert output.produced_by == "design"
 
     def test_run_batch_preserves_work_id(self):
         """T12: Output work_ids match input work_ids."""
@@ -442,7 +450,7 @@ class TestRunBatch:
 
         assert set(result.keys()) == set(work_ids)
         for wid in work_ids:
-            assert result[wid].work_id == wid
+            assert result[wid].source_work == wid
 
     def test_run_batch_empty_list(self):
         """T13: Empty work_ids returns empty dict."""

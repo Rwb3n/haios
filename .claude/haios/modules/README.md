@@ -18,7 +18,8 @@ This directory contains the black-box modules that form the HAIOS runtime:
 | `spawn_tree.py` | Extracted (E2-279) | ~170 | Spawn tree traversal and formatting |
 | `backfill_engine.py` | Extracted (E2-279) | ~220 | Backlog content backfill |
 | `context_loader.py` | Implemented (E2-254) | ~300 | L0-L4 context loading, session tracking |
-| `cycle_runner.py` | Implemented (E2-255) | ~350 | Lifecycle phase gate validation, lifecycle phase lookup |
+| `assets.py` | Implemented (WORK-093) | ~200 | Typed lifecycle asset classes with provenance and serialization |
+| `cycle_runner.py` | Implemented (E2-255, WORK-093) | ~350 | Lifecycle phase gate validation, lifecycle phase lookup |
 | `ceremony_runner.py` | Implemented (WORK-118) | ~130 | Ceremony phase validation, ceremony invocation wrapper |
 | `requirement_extractor.py` | Implemented (WORK-015) | ~390 | Extract requirements from TRDs, manifesto, prose |
 | `corpus_loader.py` | Implemented (WORK-031) | ~180 | YAML-configurable file discovery for RequirementExtractor |
@@ -590,9 +591,9 @@ result = runner.invoke("close-work", work_id="WORK-118")
 print(f"Side effects: {result.side_effects}")
 ```
 
-## CycleRunner (E2-255, WORK-084)
+## CycleRunner (E2-255, WORK-093)
 
-Stateless phase gate validator for lifecycle skills. Now includes lifecycle output types (WORK-084). Ceremony phases extracted to CeremonyRunner (WORK-118).
+Stateless phase gate validator for lifecycle skills. Lifecycle output types defined in `assets.py` (WORK-093, was WORK-084). Ceremony phases extracted to CeremonyRunner (WORK-118).
 
 ### Functions
 
@@ -602,7 +603,7 @@ Stateless phase gate validator for lifecycle skills. Now includes lifecycle outp
 | `check_phase_entry(cycle_id, phase, work_id)` | Cycle + phase + work ID | `GateResult` |
 | `check_phase_exit(cycle_id, phase, work_id)` | Cycle + phase + work ID | `GateResult` |
 | `build_scaffold_command(template, work_id, title)` | Command template + IDs | `str` formatted command (E2-263) |
-| `run(work_id, lifecycle)` | Work ID + lifecycle name | `LifecycleOutput` subclass (WORK-084) |
+| `run(work_id, lifecycle)` | Work ID + lifecycle name | `Asset` subclass (WORK-093) |
 | `validate_phase_input(phase, work_id)` | Phase + work ID | `GateResult` (WORK-088) |
 | `validate_phase_output(phase, work_id)` | Phase + work ID | `GateResult` (WORK-088) |
 | `_load_phase_template(phase)` | Phase name | `Dict` with frontmatter (WORK-088) |
@@ -627,40 +628,46 @@ output_contract:
 
 `check_phase_entry` and `check_phase_exit` now call `validate_phase_input`/`validate_phase_output` respectively. MVP uses soft validation (warn but allow). Hard gates in CH-007.
 
-### Lifecycle Output Types (WORK-084, REQ-LIFECYCLE-001)
+### Lifecycle Asset Types (WORK-093, REQ-ASSET-001)
 
-Lifecycles are pure functions with explicit Input → Output signatures. The `run()` method returns typed outputs:
+Lifecycles are pure functions with explicit Input → Output signatures. Asset types are defined in `assets.py` and imported by `cycle_runner.py`. The `run()` method returns typed assets with full provenance:
 
-| Lifecycle | Output Type | Input → Output |
-|-----------|-------------|----------------|
-| `investigation` | `Findings` | Question → Findings |
-| `design` | `Specification` | Requirements → Specification |
-| `implementation` | `Artifact` | Specification → Artifact |
-| `validation` | `Verdict` | Artifact × Spec → Verdict |
-| `triage` | `PriorityList` | [Items] → [PrioritizedItems] |
+| Lifecycle | Asset Type | Input → Output |
+|-----------|------------|----------------|
+| `investigation` | `FindingsAsset` | Question → Findings |
+| `design` | `SpecificationAsset` | Requirements → Specification |
+| `implementation` | `ArtifactAsset` | Specification → Artifact |
+| `validation` | `VerdictAsset` | Artifact × Spec → Verdict |
+| `triage` | `PriorityListAsset` | [Items] → [PrioritizedItems] |
 
 ```python
+# assets.py
 @dataclass
-class LifecycleOutput:
-    """Base class for all lifecycle outputs."""
-    lifecycle: str
-    work_id: str
+class Asset:
+    """Base class - flat provenance structure (CH-023)."""
+    asset_id: str
+    type: str
+    produced_by: str        # lifecycle name
+    source_work: str        # WORK-XXX
+    version: int
     timestamp: datetime
-    status: Literal["success", "failure", "partial"]
+    author: str
+    status: Literal["success", "failure", "partial"] = "success"
+    inputs: List[str] = field(default_factory=list)
+    piped_from: Optional[str] = None
+
+    def to_dict(self) -> Dict[str, Any]: ...
+    def to_markdown(self) -> str: ...
 
 @dataclass
-class Findings(LifecycleOutput):
-    question: str
-    conclusions: List[str]
-    evidence: List[str]
-    open_questions: List[str]
-
-@dataclass
-class Specification(LifecycleOutput):
-    requirements: List[str]
-    design_decisions: List[str]
-    interfaces: Dict[str, Any]
+class FindingsAsset(Asset):
+    question: str = ""
+    findings: List[str] = field(default_factory=list)
+    conclusion: str = ""
+    evidence: List[str] = field(default_factory=list)
 ```
+
+Backward-compat aliases in `cycle_runner.py`: `LifecycleOutput = Asset`, `Findings = FindingsAsset`, etc.
 
 ### Supported Lifecycles (WORK-118: ceremony phases moved to CeremonyRunner)
 
@@ -682,7 +689,8 @@ Note: `get_cycle_phases()` falls back to `CEREMONY_PHASES` for backward compatib
 ### Usage
 
 ```python
-from cycle_runner import CycleRunner, CycleResult, LifecycleOutput, Specification
+from cycle_runner import CycleRunner, CycleResult
+from assets import Asset, FindingsAsset, SpecificationAsset
 from governance_layer import GovernanceLayer
 
 runner = CycleRunner(governance=GovernanceLayer(), work_engine=None)
@@ -696,23 +704,11 @@ result = runner.check_phase_entry("implementation-cycle", "DO", "E2-255")
 if result.allowed:
     print("Entered DO phase")
 
-# Check phase exit (validates exit criteria)
-result = runner.check_phase_exit("investigation-cycle", "CONCLUDE", "INV-055")
-if not result.allowed:
-    print(f"Cannot exit: {result.reason}")
-
-# Build scaffold command (E2-263)
-command = runner.build_scaffold_command(
-    template="/new-plan {id} {title}",
-    work_id="E2-263",
-    title="Scaffold Commands"
-)
-# Returns: "/new-plan E2-263 Scaffold Commands"
-
-# Execute lifecycle and get typed output (WORK-084)
-output = runner.run(work_id="WORK-084", lifecycle="design")
-# Returns: Specification(...) with work_id, timestamp, status, requirements, etc.
-# Caller decides whether to chain to next lifecycle (pure function behavior)
+# Execute lifecycle and get typed Asset (WORK-093)
+output = runner.run(work_id="WORK-093", lifecycle="design")
+# Returns: SpecificationAsset(...) with asset_id, produced_by, source_work, etc.
+print(output.to_dict())  # Serialized with ISO timestamp
+print(output.to_markdown())  # YAML frontmatter + structured body
 ```
 
 ### CLI Integration (E2-255)
@@ -795,7 +791,8 @@ python .claude/haios/modules/cli.py plan --from-corpus <corpus_config>
 | `spawn_tree.py` | SpawnTree module - tree traversal (E2-279) |
 | `backfill_engine.py` | BackfillEngine module - backlog backfill (E2-279) |
 | `context_loader.py` | ContextLoader module (E2-254) |
-| `cycle_runner.py` | CycleRunner module - lifecycle phases (E2-255, WORK-118) |
+| `assets.py` | Asset types module - typed lifecycle outputs (WORK-093) |
+| `cycle_runner.py` | CycleRunner module - lifecycle phases (E2-255, WORK-093) |
 | `ceremony_runner.py` | CeremonyRunner module - ceremony phases (WORK-118, CH-013) |
 | `requirement_extractor.py` | RequirementExtractor module (WORK-015) |
 | `corpus_loader.py` | CorpusLoader module (WORK-031) |

@@ -1570,7 +1570,7 @@ def test_batch_design_three_items_integration(tmp_path, governance):
     # Verify batch output
     assert len(batch_result) == 3
     assert all(v.status == "success" for v in batch_result.values())
-    assert all(v.lifecycle == "design" for v in batch_result.values())
+    assert all(v.produced_by == "design" for v in batch_result.values())
 
     # Verify get_in_lifecycle still finds all 3
     in_design = engine.get_in_lifecycle("design")

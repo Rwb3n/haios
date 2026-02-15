@@ -66,67 +66,35 @@ class CycleResult:
 
 
 # =============================================================================
-# WORK-084: Lifecycle Output Types (REQ-LIFECYCLE-001)
+# WORK-093: Asset Types (REQ-ASSET-001) — replaces WORK-084 MVP stubs
 # =============================================================================
 
+try:
+    from .assets import (
+        Asset,
+        ArtifactAsset,
+        FindingsAsset,
+        PriorityListAsset,
+        SpecificationAsset,
+        VerdictAsset,
+    )
+except ImportError:
+    from assets import (
+        Asset,
+        ArtifactAsset,
+        FindingsAsset,
+        PriorityListAsset,
+        SpecificationAsset,
+        VerdictAsset,
+    )
 
-@dataclass
-class LifecycleOutput:
-    """Base class for all lifecycle outputs (REQ-LIFECYCLE-001).
-
-    Lifecycles are pure functions: Input → Output, independently completable.
-    This base class defines the common fields for all lifecycle outputs.
-    """
-
-    lifecycle: str
-    work_id: str
-    timestamp: datetime
-    status: Literal["success", "failure", "partial"]
-
-
-@dataclass
-class Findings(LifecycleOutput):
-    """Output from Investigation lifecycle: Question → Findings."""
-
-    question: str
-    conclusions: List[str]
-    evidence: List[str]
-    open_questions: List[str]
-
-
-@dataclass
-class Specification(LifecycleOutput):
-    """Output from Design lifecycle: Requirements → Specification."""
-
-    requirements: List[str]
-    design_decisions: List[str]
-    interfaces: Dict[str, Any]
-
-
-@dataclass
-class Artifact(LifecycleOutput):
-    """Output from Implementation lifecycle: Specification → Artifact."""
-
-    files_created: List[str]
-    files_modified: List[str]
-    tests_passed: bool
-
-
-@dataclass
-class Verdict(LifecycleOutput):
-    """Output from Validation lifecycle: Artifact × Spec → Verdict."""
-
-    passed: bool
-    failures: List[str]
-    warnings: List[str]
-
-
-@dataclass
-class PriorityList(LifecycleOutput):
-    """Output from Triage lifecycle: [Items] → [PrioritizedItems]."""
-
-    items: List[str]
-    ranking_criteria: str
+# Backward compatibility aliases (WORK-084 names)
+LifecycleOutput = Asset
+Findings = FindingsAsset
+Specification = SpecificationAsset
+Artifact = ArtifactAsset
+Verdict = VerdictAsset
+PriorityList = PriorityListAsset
 
 
 # Lifecycle phase definitions (from S17.5 and existing skills)
@@ -330,122 +298,90 @@ class CycleRunner:
         return _build_scaffold_command(template, work_id, title)
 
     # =========================================================================
-    # WORK-084: Lifecycle Execution (REQ-LIFECYCLE-001)
+    # WORK-093: Lifecycle Execution (REQ-ASSET-001, REQ-LIFECYCLE-001)
     # =========================================================================
 
-    def run(self, work_id: str, lifecycle: str) -> LifecycleOutput:
+    def run(self, work_id: str, lifecycle: str) -> Asset:
         """
-        Execute lifecycle and return typed output. Does NOT auto-chain.
+        Execute lifecycle and return typed Asset. Does NOT auto-chain.
 
         This implements REQ-LIFECYCLE-001: Lifecycles are pure functions.
         Caller decides whether to chain to next lifecycle.
 
         Args:
-            work_id: Work item ID (e.g., "WORK-084", "INV-001")
+            work_id: Work item ID (e.g., "WORK-093", "INV-001")
             lifecycle: Lifecycle name ("investigation", "design", "implementation",
                        "validation", "triage")
 
         Returns:
-            Typed LifecycleOutput subclass based on lifecycle type:
-            - investigation → Findings
-            - design → Specification
-            - implementation → Artifact
-            - validation → Verdict
-            - triage → PriorityList
-            - unknown → LifecycleOutput (base)
+            Typed Asset subclass based on lifecycle type:
+            - investigation -> FindingsAsset
+            - design -> SpecificationAsset
+            - implementation -> ArtifactAsset
+            - validation -> VerdictAsset
+            - triage -> PriorityListAsset
+            - unknown -> Asset (base)
 
         Note:
-            MVP implementation returns typed output with default/empty values.
+            Returns typed output with default/empty values.
             Full content population requires integration with skill execution
             (see CH-005: PhaseTemplateContracts).
         """
-        # Map lifecycle to output type
-        output_types: Dict[str, type] = {
-            "investigation": Findings,
-            "design": Specification,
-            "implementation": Artifact,
-            "validation": Verdict,
-            "triage": PriorityList,
+        # Map lifecycle to asset type
+        asset_types: Dict[str, type] = {
+            "investigation": FindingsAsset,
+            "design": SpecificationAsset,
+            "implementation": ArtifactAsset,
+            "validation": VerdictAsset,
+            "triage": PriorityListAsset,
         }
 
-        # Get output type or default to base
-        output_class = output_types.get(lifecycle, LifecycleOutput)
+        # Get asset type or default to base
+        asset_class = asset_types.get(lifecycle, Asset)
 
         # Emit phase entered for observability
         self._emit_phase_entered(lifecycle, "RUN", work_id)
 
-        # Create timestamp for output
+        # Create timestamp and deterministic asset_id
         now = datetime.now()
+        asset_id = f"{lifecycle}-{work_id}-v1"
 
-        # MVP: Return output with basic fields populated
-        # Full implementation: populate from skill execution results
-        if output_class == LifecycleOutput:
-            return LifecycleOutput(
-                lifecycle=lifecycle,
-                work_id=work_id,
-                timestamp=now,
-                status="success"
-            )
+        # Common base fields for all assets
+        base_fields = {
+            "asset_id": asset_id,
+            "type": lifecycle if asset_class == Asset else {
+                FindingsAsset: "findings",
+                SpecificationAsset: "specification",
+                ArtifactAsset: "artifact",
+                VerdictAsset: "verdict",
+                PriorityListAsset: "priority_list",
+            }.get(asset_class, lifecycle),
+            "produced_by": lifecycle,
+            "source_work": work_id,
+            "version": 1,
+            "timestamp": now,
+            "author": "Hephaestus",
+            "status": "success",
+        }
 
-        # For typed outputs, provide default values for required fields
-        if output_class == Findings:
-            return Findings(
-                lifecycle=lifecycle,
-                work_id=work_id,
-                timestamp=now,
-                status="success",
-                question="",
-                conclusions=[],
-                evidence=[],
-                open_questions=[]
-            )
-        elif output_class == Specification:
-            return Specification(
-                lifecycle=lifecycle,
-                work_id=work_id,
-                timestamp=now,
-                status="success",
-                requirements=[],
-                design_decisions=[],
-                interfaces={}
-            )
-        elif output_class == Artifact:
-            return Artifact(
-                lifecycle=lifecycle,
-                work_id=work_id,
-                timestamp=now,
-                status="success",
-                files_created=[],
-                files_modified=[],
-                tests_passed=False
-            )
-        elif output_class == Verdict:
-            return Verdict(
-                lifecycle=lifecycle,
-                work_id=work_id,
-                timestamp=now,
-                status="success",
-                passed=False,
-                failures=[],
-                warnings=[]
-            )
-        elif output_class == PriorityList:
-            return PriorityList(
-                lifecycle=lifecycle,
-                work_id=work_id,
-                timestamp=now,
-                status="success",
-                items=[],
-                ranking_criteria=""
-            )
+        # Return base Asset for unknown lifecycles
+        if asset_class == Asset:
+            return Asset(**base_fields)
+
+        # For typed assets, add default values for subclass fields
+        if asset_class == FindingsAsset:
+            return FindingsAsset(**base_fields)
+        elif asset_class == SpecificationAsset:
+            return SpecificationAsset(**base_fields)
+        elif asset_class == ArtifactAsset:
+            return ArtifactAsset(**base_fields)
+        elif asset_class == VerdictAsset:
+            return VerdictAsset(**base_fields)
+        elif asset_class == PriorityListAsset:
+            return PriorityListAsset(**base_fields)
 
         # Fallback (should not reach here)
-        return LifecycleOutput(
-            lifecycle=lifecycle,
-            work_id=work_id,
-            timestamp=now,
-            status="success"
-        )
+        return Asset(**base_fields)
 
     # =========================================================================
     # WORK-086: Batch Execution (REQ-LIFECYCLE-003)
@@ -459,7 +395,7 @@ class CycleRunner:
         work_ids: List[str],
         lifecycle: str,
         until_phase: Optional[str] = None,
-    ) -> Dict[str, LifecycleOutput]:
+    ) -> Dict[str, Asset]:
         """
         Execute lifecycle for multiple work items sequentially.
 
@@ -472,7 +408,7 @@ class CycleRunner:
             until_phase: Accepted but no-ops in MVP (matches existing run() pattern)
 
         Returns:
-            Dict mapping work_id to LifecycleOutput for each item
+            Dict mapping work_id to Asset for each item
 
         Raises:
             ValueError: If lifecycle is not a known lifecycle name
@@ -486,7 +422,7 @@ class CycleRunner:
         if not work_ids:
             return {}
 
-        results: Dict[str, LifecycleOutput] = {}
+        results: Dict[str, Asset] = {}
 
         for work_id in work_ids:
             try:
@@ -494,10 +430,14 @@ class CycleRunner:
                 results[work_id] = output
             except Exception:
                 # Per-item error handling: set failure status, continue
-                results[work_id] = LifecycleOutput(
-                    lifecycle=lifecycle,
-                    work_id=work_id,
+                results[work_id] = Asset(
+                    asset_id=f"{lifecycle}-{work_id}-v1",
+                    type=lifecycle,
+                    produced_by=lifecycle,
+                    source_work=work_id,
+                    version=1,
                     timestamp=datetime.now(),
+                    author="Hephaestus",
                     status="failure",
                 )
 

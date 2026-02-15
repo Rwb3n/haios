@@ -13,6 +13,7 @@ Contains the core modules for HAIOS Chariot Architecture:
 - BackfillEngine (E2-279): Backlog content backfill
 - ContextLoader (E2-254): L0-L4 context loading, session tracking
 - CycleRunner (E2-255): Phase gate validation, cycle phase lookup
+- Assets (WORK-093): Typed lifecycle output classes with provenance
 """
 from .governance_layer import GovernanceLayer, GateResult
 from .memory_bridge import MemoryBridge, QueryResult, StoreResult
@@ -23,6 +24,10 @@ from .spawn_tree import SpawnTree  # E2-279
 from .backfill_engine import BackfillEngine  # E2-279
 from .context_loader import ContextLoader, GroundedContext
 from .cycle_runner import CycleRunner, CycleResult
+from .assets import (  # WORK-093
+    Asset, FindingsAsset, SpecificationAsset,
+    ArtifactAsset, VerdictAsset, PriorityListAsset,
+)
 
 __all__ = [
     "GovernanceLayer",
@@ -43,4 +48,10 @@ __all__ = [
     "GroundedContext",
     "CycleRunner",
     "CycleResult",
+    "Asset",  # WORK-093
+    "FindingsAsset",  # WORK-093
+    "SpecificationAsset",  # WORK-093
+    "ArtifactAsset",  # WORK-093
+    "VerdictAsset",  # WORK-093
+    "PriorityListAsset",  # WORK-093
 ]

@@ -3,13 +3,13 @@ template: work_item
 id: WORK-093
 title: Implement Lifecycle Asset Types (CH-023)
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-03
 spawned_by: E2.5-decomposition
 chapter: CH-023-LifecycleAssetTypes
 arc: assets
-closed: null
+closed: 2026-02-15
 priority: high
 effort: medium
 traces_to:
@@ -34,13 +34,22 @@ node_history:
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85483
+- 85484
+- 85485
+- 85486
+- 85487
+- 85488
 extensions:
   epoch: E2.5
   implementation_type: CREATE_NEW
 version: '2.0'
 generated: 2026-02-03
-last_updated: '2026-02-03T19:44:01'
+last_updated: '2026-02-15T21:53:24.163439'
+queue_history: []
+queue_position: backlog
+cycle_phase: backlog
 ---
 # WORK-093: Implement Lifecycle Asset Types (CH-023)
 
