@@ -6025,3 +6025,17 @@
 {"type": "GateViolation", "gate_id": "backlog_id_uniqueness", "work_id": "unknown", "violation_type": "block", "context": "BLOCKED: Duplicate backlog_id. WORK-149 already exists in docs\\work\\active\\WORK-149\\plans\\PLAN.md. Each work item must have a unique ID.", "timestamp": "2026-02-15T22:32:47.247198"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-15T22:49:39.807541"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-15T22:49:39.862300"}
+{"type": "SessionEnded", "session": 378, "agent": "Hephaestus", "timestamp": "2026-02-15T22:52:24.649529"}
+{"type": "GateViolation", "gate_id": "scaffold_block", "work_id": "unknown", "violation_type": "block", "context": "BLOCKED: Direct work_item scaffold. Use '/new-work' command instead. Work items require work-creation-cycle to populate placeholders.", "timestamp": "2026-02-15T22:56:18.689515"}
+{"type": "QueueCeremony", "ceremony": "Intake", "items": ["WORK-152"], "from": "new", "to": "backlog", "timestamp": "2026-02-15T22:57:06.838917", "rationale": "Plan template skew observation from S378 WORK-149. Queued for E2.7 Composability.", "agent": "Hephaestus"}
+{"type": "SessionStarted", "session": 379, "agent": "Hephaestus", "timestamp": "2026-02-15T23:12:22.028774"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-15T23:14:04.793761"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-150", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-15T23:14:04.799362"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-150"], "from": "backlog", "to": "ready", "timestamp": "2026-02-15T23:14:04.805602", "rationale": "Selected for S379 via survey-cycle", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-15T23:14:04.805602"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-15T23:14:04.821474"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-150", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-15T23:14:04.828039"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-150"], "from": "ready", "to": "working", "timestamp": "2026-02-15T23:14:04.833205", "rationale": "Starting ADR authoring S379", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-15T23:14:04.834203"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-15T23:28:52.583032"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-15T23:28:52.625713"}

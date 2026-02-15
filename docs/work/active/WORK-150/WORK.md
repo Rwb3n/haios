@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-150
-title: "Plan Decomposition Traceability ADR"
+title: Plan Decomposition Traceability ADR
 type: design
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-14
 spawned_by: WORK-097
 spawned_children: []
 chapter: CH-038
 arc: traceability
-closed: null
+closed: '2026-02-15'
 priority: medium
 effort: small
 traces_to:
@@ -27,21 +27,35 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-14T14:49:15
-    exited: null
-artifacts: []
+- node: backlog
+  entered: 2026-02-14 14:49:15
+  exited: '2026-02-15T23:28:52.605517'
+artifacts:
+- docs/ADR/ADR-046-plan-decomposition-traceability.md
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85545
+- 85546
+- 85547
 extensions:
   epoch: E2.6
-version: "2.0"
+version: '2.0'
 generated: 2026-02-14
-last_updated: 2026-02-14T14:49:15
+last_updated: '2026-02-15T23:28:52.608523'
+queue_history:
+- position: ready
+  entered: '2026-02-15T23:14:04.799362'
+  exited: '2026-02-15T23:14:04.828039'
+- position: working
+  entered: '2026-02-15T23:14:04.828039'
+  exited: '2026-02-15T23:28:52.605517'
+- position: done
+  entered: '2026-02-15T23:28:52.605517'
+  exited: null
 ---
 # WORK-150: Plan Decomposition Traceability ADR
 

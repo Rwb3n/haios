@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-15T22:49:41",
+    "generated": "2026-02-15T23:28:54",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 376,
-        "current_session": 377,
+        "prior_session": 378,
+        "current_session": 379,
         "prior_date": "2026-02-15",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 85339,
-        "entities": 9958,
+        "concepts": 85370,
+        "entities": 9964,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3935,6 +3935,24 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-15-07-SESSION-378-work-149-adr-045-three-tier-entry-points.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-15",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
+            "path": "docs/checkpoints/2026-02-15-08-SESSION-379-work-150-plan-authored.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-15",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "template": "implementation_plan",
             "status": "complete",
@@ -5330,6 +5348,15 @@
             "spawned_by": "WORK-149"
         },
         {
+            "path": "docs/ADR/ADR-046-plan-decomposition-traceability.md",
+            "template": "architecture_decision_record",
+            "status": "accepted",
+            "date": "2026-02-15",
+            "last_updated": "2026-02-15",
+            "backlog_id": null,
+            "spawned_by": "WORK-150"
+        },
+        {
             "path": "docs/reports/2025-11-30-EVALUATION-synthesis-pipeline.md",
             "template": "implementation_report",
             "status": "complete",
@@ -6343,6 +6370,12 @@
             "template": "architecture_decision_record"
         },
         {
+            "path": "docs/ADR/ADR-046-plan-decomposition-traceability.md",
+            "id": null,
+            "status": "accepted",
+            "template": "architecture_decision_record"
+        },
+        {
             "path": "docs/reports/2025-12-06-REPORT-epoch-2-enablement.md",
             "id": null,
             "status": "final",
@@ -6408,7 +6441,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-extraction-improvement-complete.md",
             "last_updated": "2025-12-04T22:58:40",
-            "days_stale": 72
+            "days_stale": 73
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-final.md",
@@ -6768,7 +6801,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-06-SESSION-95-e2-130-error-capture-rebuild-and-taxonomy-discussion.md",
             "last_updated": "2025-12-21T23:04:37",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/checkpoints/2025-12-22-01-SESSION-96-synthesis-review-and-backlog-archival.md",
@@ -7108,7 +7141,7 @@
         {
             "path": "docs/checkpoints/2026-01-03-06-SESSION-162-e2-250-chariot-module-integration-and-dod-framework.md",
             "last_updated": "2026-01-03T23:06:35",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2026-01-03-07-SESSION-162-epoch-22-migration-planning-e2-251-through-e2-255.md",
@@ -7183,7 +7216,7 @@
         {
             "path": "docs/checkpoints/2026-01-05-04-SESSION-176-e2-272-e2-273-ambiguity-gating-gates-1-2-complete.md",
             "last_updated": "2026-01-05T22:53:08",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/checkpoints/2026-01-05-05-SESSION-177-e2-274-e2-275-complete-ambiguity-gating-done-critical-memory-loss-finding.md",
@@ -7488,7 +7521,7 @@
         {
             "path": "docs/plans/PLAN-E2-130-error-capture-rebuild.md",
             "last_updated": "2025-12-21T23:02:26",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/plans/PLAN-E2-140-investigation-status-sync-hook.md",
@@ -7908,7 +7941,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-034-backlog-archival-and-status-rewiring.md",
             "last_updated": "2025-12-22T23:16:24",
-            "days_stale": 54
+            "days_stale": 55
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-035-skill-architecture-refactoring.md",
@@ -8062,24 +8095,24 @@
         }
     ],
     "workspace": {
-        "total_files": 549,
+        "total_files": 552,
         "by_template": {
-            "checkpoint": 376,
+            "checkpoint": 378,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
-            "architecture_decision_record": 16,
+            "architecture_decision_record": 17,
             "implementation_report": 4,
             "report": 3
         },
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 211,
+            "unknown": 213,
             "draft": 2,
             "approved": 6,
             "ready": 1,
-            "accepted": 15,
+            "accepted": 16,
             "proposed": 1,
             "final": 1,
             "completed": 2

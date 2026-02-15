@@ -15,6 +15,10 @@ load_memory_refs:
   - 85522  # Retro-kss WORK-149
   - 85525  # Retro-extract WORK-149
   - 85527  # Closure summary WORK-149
+  - 85528  # Plan template skew observation
+  - 85532  # Ceremony overhead proportionality observation
+  - 85535  # Fast path intake observation
+  - 85539  # Type-aware lifecycle observation
 
 pending: []
 
@@ -22,4 +26,5 @@ drift_observed: []
 
 completed:
   - "WORK-149: Three-Tier Entry Point Architecture ADR (ADR-045 accepted)"
+  - "WORK-152: Plan Template Fracturing by Work Type (created, backlog for E2.7)"
 ---
