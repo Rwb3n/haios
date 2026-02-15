@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-15T20:25:36",
+    "generated": "2026-02-15T20:41:18",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 85258,
-        "entities": 9921,
+        "concepts": 85270,
+        "entities": 9925,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -3891,6 +3891,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-15-02-SESSION-S373-close-work-151-epistemic-review-implementation-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-15",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "template": "implementation_plan",
             "status": "complete",
@@ -6774,7 +6783,7 @@
         {
             "path": "docs/checkpoints/2025-12-23-09-SESSION-108-e2-154-e2-155-e2-117-dag-automation-complete.md",
             "last_updated": "2025-12-23T20:36:57",
-            "days_stale": 53
+            "days_stale": 54
         },
         {
             "path": "docs/checkpoints/2025-12-23-10-SESSION-109-e2-153-m6-workcycle-complete.md",
@@ -6809,7 +6818,7 @@
         {
             "path": "docs/checkpoints/2025-12-24-06-SESSION-114-m7a-complete-and-yaml-fix.md",
             "last_updated": "2025-12-24T20:33:59",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/checkpoints/2025-12-25-01-SESSION-115-e2-173-milestone-discovery-and-pm-archival.md",
@@ -7004,7 +7013,7 @@
         {
             "path": "docs/checkpoints/2026-01-01-01-SESSION-153-inv-052-full-architecture-read-through.md",
             "last_updated": "2026-01-01T20:30:03",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/checkpoints/2026-01-01-02-SESSION-154-manifesto-corpus-l0-l4-complete.md",
@@ -7109,7 +7118,7 @@
         {
             "path": "docs/checkpoints/2026-01-05-01-SESSION-173-e2-269-e2-238-inv-052-implementation-and-plan-authoring.md",
             "last_updated": "2026-01-05T20:30:34",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/checkpoints/2026-01-05-02-SESSION-174-e2-238-e2-270-memory-autolink-and-command-powershell-elimination.md",
@@ -7139,7 +7148,7 @@
         {
             "path": "docs/checkpoints/2026-01-06-02-SESSION-178-e2-276-e2-277-ground-cycle-and-portal-system-plans-authored.md",
             "last_updated": "2026-01-06T20:27:14",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2026-01-07-01-SESSION-179-e2-277-portal-system-complete-session-work-durability-insight.md",
@@ -7494,7 +7503,7 @@
         {
             "path": "docs/plans/PLAN-E2-172-fix-yaml-timestamp-injection.md",
             "last_updated": "2025-12-24T20:26:22",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/plans/PLAN-E2-173-work-file-milestone-discovery.md",
@@ -7829,7 +7838,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-032-posttooluse-node-history-corruption.md",
             "last_updated": "2025-12-24T20:28:02",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-033-skill-as-node-entry-gate-formalization.md",
@@ -7993,9 +8002,9 @@
         }
     ],
     "workspace": {
-        "total_files": 543,
+        "total_files": 544,
         "by_template": {
-            "checkpoint": 371,
+            "checkpoint": 372,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8006,7 +8015,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 206,
+            "unknown": 207,
             "draft": 2,
             "approved": 6,
             "ready": 1,

@@ -233,6 +233,17 @@ phase_to_state:
   ground-cycle/MEMORY: EXPLORE
   ground-cycle/CONTEXT_MAP: EXPLORE
 
+  # validation-cycle (WORK-104: all phases map to CHECK)
+  validation-cycle/VERIFY: CHECK
+  validation-cycle/JUDGE: CHECK
+  validation-cycle/REPORT: CHECK
+
+  # triage-cycle (WORK-104: SCAN/ASSESS=EXPLORE, RANK=DESIGN, COMMIT=DONE)
+  triage-cycle/SCAN: EXPLORE
+  triage-cycle/ASSESS: EXPLORE
+  triage-cycle/RANK: DESIGN
+  triage-cycle/COMMIT: DONE
+
   # plan-validation-cycle (CRITIQUE removed WORK-121 S344, moved to implementation-cycle Gate 1)
   plan-validation-cycle/CHECK: CHECK
   plan-validation-cycle/SPEC_ALIGN: CHECK
