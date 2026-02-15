@@ -118,14 +118,19 @@ Side-effect boundaries. See `L4/functional_requirements.md` (REQ-CEREMONY-*).
 
 ## Agents
 
-| Agent | Model | Purpose |
-|-------|-------|---------|
-| critique-agent | opus | Assumption surfacing |
-| investigation-agent | opus | EXPLORE phase |
-| validation-agent | sonnet | CHECK phase |
-| preflight-checker | haiku | **REQUIRED** - Plan readiness |
-| schema-verifier | haiku | **REQUIRED** - SQL queries |
-| test-runner | haiku | Test execution |
+| Agent | Model | Requirement | Category | Purpose |
+|-------|-------|-------------|----------|---------|
+| critique-agent | opus | recommended | verification | Assumption surfacing |
+| investigation-agent | opus | **required** | utility | EXPLORE phase |
+| validation-agent | sonnet | recommended | verification | CHECK phase |
+| preflight-checker | haiku | **required** | gate | Plan readiness |
+| schema-verifier | haiku | **required** | gate | SQL queries |
+| test-runner | haiku | optional | utility | Test execution |
+| anti-pattern-checker | sonnet | recommended | verification | L1 claim verification |
+| why-capturer | haiku | recommended | utility | Learning extraction |
+| implementation-cycle-agent | sonnet | optional | cycle-delegation | Full impl cycle delegation |
+| investigation-cycle-agent | sonnet | optional | cycle-delegation | Full investigation delegation |
+| close-work-cycle-agent | sonnet | optional | cycle-delegation | Full close cycle delegation |
 
 ---
 
