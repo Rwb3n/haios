@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-149
-title: "Three-Tier Entry Point Architecture ADR"
+title: Three-Tier Entry Point Architecture ADR
 type: design
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-14
 spawned_by: WORK-020
 spawned_children: []
 chapter: CH-034
 arc: discoverability
-closed: null
+closed: '2026-02-15'
 priority: medium
 effort: small
 traces_to:
@@ -25,21 +25,26 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-14T14:38:34
-    exited: null
+- node: backlog
+  entered: 2026-02-14 14:38:34
+  exited: '2026-02-15T22:49:39.840044'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85527
 extensions:
   epoch: E2.6
-version: "2.0"
+version: '2.0'
 generated: 2026-02-14
-last_updated: 2026-02-14T14:38:34
+last_updated: '2026-02-15T22:49:39.843180'
+queue_history:
+- position: done
+  entered: '2026-02-15T22:49:39.840044'
+  exited: null
 ---
 # WORK-149: Three-Tier Entry Point Architecture ADR
 

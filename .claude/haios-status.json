@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-15T22:20:58",
+    "generated": "2026-02-15T22:49:41",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 85322,
-        "entities": 9954,
+        "concepts": 85339,
+        "entities": 9958,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -5321,6 +5321,15 @@
             "spawned_by": "WORK-005"
         },
         {
+            "path": "docs/ADR/ADR-045-three-tier-entry-point-architecture.md",
+            "template": "architecture_decision_record",
+            "status": "accepted",
+            "date": "2026-02-15",
+            "last_updated": "2026-02-15T22:35:00",
+            "backlog_id": null,
+            "spawned_by": "WORK-149"
+        },
+        {
             "path": "docs/reports/2025-11-30-EVALUATION-synthesis-pipeline.md",
             "template": "implementation_report",
             "status": "complete",
@@ -6328,6 +6337,12 @@
             "template": "architecture_decision_record"
         },
         {
+            "path": "docs/ADR/ADR-045-three-tier-entry-point-architecture.md",
+            "id": null,
+            "status": "accepted",
+            "template": "architecture_decision_record"
+        },
+        {
             "path": "docs/reports/2025-12-06-REPORT-epoch-2-enablement.md",
             "id": null,
             "status": "final",
@@ -6378,12 +6393,12 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
             "last_updated": "2025-12-04T22:47:20",
-            "days_stale": 72
+            "days_stale": 73
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-prototype-consolidation.md",
             "last_updated": "2025-12-04T22:30:47",
-            "days_stale": 72
+            "days_stale": 73
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-comprehensive-checkpoint.md",
@@ -7038,7 +7053,7 @@
         {
             "path": "docs/checkpoints/2025-12-30-02-SESSION-151-inv-052-architecture-documentation-complete.md",
             "last_updated": "2025-12-30T22:34:43",
-            "days_stale": 46
+            "days_stale": 47
         },
         {
             "path": "docs/checkpoints/2025-12-31-01-SESSION-152-inv-052-architecture-analysis-complete.md",
@@ -7053,7 +7068,7 @@
         {
             "path": "docs/checkpoints/2026-01-01-02-SESSION-154-manifesto-corpus-l0-l4-complete.md",
             "last_updated": "2026-01-01T22:23:49",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/checkpoints/2026-01-02-01-SESSION-155-coldstart-manifesto-integration.md",
@@ -7148,7 +7163,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-10-SESSION-172-inv-057-complete-e2-269-plan-authored.md",
             "last_updated": "2026-01-04T22:46:19",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/checkpoints/2026-01-05-01-SESSION-173-e2-269-e2-238-inv-052-implementation-and-plan-authoring.md",
@@ -7778,12 +7793,12 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-008-haios-status-json-optimization.md",
             "last_updated": "2025-12-22T22:37:14",
-            "days_stale": 54
+            "days_stale": 55
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-009-backlog-archival-governance.md",
             "last_updated": "2025-12-22T22:37:32",
-            "days_stale": 54
+            "days_stale": 55
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-010-memory-retrieval-architecture-mismatch.md",
@@ -7793,7 +7808,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-011-command-skill-architecture-gap.md",
             "last_updated": "2025-12-22T22:45:09",
-            "days_stale": 54
+            "days_stale": 55
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-012-static-registration-anti-pattern-mitigation.md",
@@ -7823,7 +7838,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-018-adaptive-coldstart-query-formulation.md",
             "last_updated": "2025-12-22T22:39:13",
-            "days_stale": 54
+            "days_stale": 55
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-020-llm-energy-channeling-patterns.md",
@@ -8047,13 +8062,13 @@
         }
     ],
     "workspace": {
-        "total_files": 548,
+        "total_files": 549,
         "by_template": {
             "checkpoint": 376,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
-            "architecture_decision_record": 15,
+            "architecture_decision_record": 16,
             "implementation_report": 4,
             "report": 3
         },
@@ -8064,7 +8079,7 @@
             "draft": 2,
             "approved": 6,
             "ready": 1,
-            "accepted": 14,
+            "accepted": 15,
             "proposed": 1,
             "final": 1,
             "completed": 2

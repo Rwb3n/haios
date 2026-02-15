@@ -6019,3 +6019,9 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-QH5", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-15T22:19:05.744492"}
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-15T22:19:05.811108"}
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-15T22:19:05.832188"}
+{"type": "SessionEnded", "session": 377, "agent": "Hephaestus", "timestamp": "2026-02-15T22:22:14.610270"}
+{"type": "SessionStarted", "session": 378, "agent": "Hephaestus", "timestamp": "2026-02-15T22:23:12.787476"}
+{"type": "GateViolation", "gate_id": "path_governance", "work_id": "unknown", "violation_type": "block", "context": "BLOCKED: Governed path. Use '/new-adr' command instead of raw Write/Edit.", "timestamp": "2026-02-15T22:31:42.790004"}
+{"type": "GateViolation", "gate_id": "backlog_id_uniqueness", "work_id": "unknown", "violation_type": "block", "context": "BLOCKED: Duplicate backlog_id. WORK-149 already exists in docs\\work\\active\\WORK-149\\plans\\PLAN.md. Each work item must have a unique ID.", "timestamp": "2026-02-15T22:32:47.247198"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-15T22:49:39.807541"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-15T22:49:39.862300"}

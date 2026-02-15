@@ -10,6 +10,7 @@
 | **Architecture** | `.claude/haios/manifesto/L4/technical_requirements.md` |
 | **Current Epoch** | `.claude/haios/epochs/E2_4/EPOCH.md` |
 | **Config** | `.claude/haios/config/haios.yaml` |
+| **Entry Point Tiers** | `docs/ADR/ADR-045-three-tier-entry-point-architecture.md` |
 
 ---
 
