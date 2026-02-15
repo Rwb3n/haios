@@ -30,7 +30,7 @@ recipes:
 - commit-session
 - session-end
 generated: 2025-12-25
-last_updated: '2026-01-19T13:44:59'
+last_updated: '2026-02-15'
 ---
 # Checkpoint Cycle
 
@@ -54,9 +54,17 @@ toggle in haios.yaml (currently: warn).
 
 ---
 
-## What to Do
+## Checkpoint Cycle Phases
 
-### 1. Populate the Manifest
+```
+FILL --> VERIFY --> CAPTURE
+```
+
+### 1. FILL Phase
+
+Populate the manifest with session work and learnings.
+
+**What to Do:**
 
 The checkpoint is a **loading manifest**, not an activity log.
 
@@ -70,7 +78,7 @@ The checkpoint is a **loading manifest**, not an activity log.
 | `drift_observed` | Principle violations noticed (if any) |
 | `completed` | What was done (for git commit message only) |
 
-### 2. Store Learnings
+**Store Learnings:**
 
 For each significant decision/learning this session:
 
@@ -84,7 +92,55 @@ ingester_ingest(
 
 Add returned concept IDs to `load_memory_refs`.
 
-### 3. Drift Observation Gate (SHOULD)
+**Exit Criteria:**
+- [ ] Manifest fields populated
+- [ ] Learnings stored to memory
+- [ ] Memory concept IDs added to load_memory_refs
+
+---
+
+### 3. VERIFY Phase
+
+**Goal:** Validate checkpoint manifest for anti-patterns and governance violations before capture.
+
+**Actions:**
+
+1. Invoke anti-pattern-checker agent on the checkpoint manifest:
+
+```python
+Task(subagent_type='anti-pattern-checker', input={
+  "document_path": checkpoint_path,
+  "document_type": "checkpoint",
+  "context": "Pre-commit validation before session ends"
+})
+```
+
+2. Review anti-pattern report:
+   - Check for missing required fields
+   - Verify load_memory_refs not empty (principle: no learning loss)
+   - Confirm drift_observed has companion observation files (if non-empty)
+
+3. If patterns found:
+   - Fix identified issues in manifest
+   - Re-run verification if critical issues
+   - Document exceptions (rare)
+
+**On PASS:** All fields valid, no anti-patterns detected → proceed to CAPTURE
+
+**On FAIL:** Anti-patterns detected → fix manifest and re-verify
+
+**Exit Criteria:**
+- [ ] anti-pattern-checker invoked successfully
+- [ ] Report reviewed and addressed
+- [ ] Manifest passes anti-pattern checks
+
+---
+
+### 2. CAPTURE Phase
+
+**Goal:** Commit checkpoint to git and session record.
+
+**Drift Observation Gate (SHOULD):**
 
 **If `drift_observed` is non-empty**, prompt before commit:
 
@@ -110,12 +166,27 @@ Use observation template:
 
 **Rationale:** Drift mentioned in checkpoint but not captured as observation gets lost. This nudge ensures drift surfaces for triage without being a hard gate.
 
-### 5. Commit
+**Commit:**
 
 ```bash
 just commit-session {session} "{title}"
 just session-end {session}
 ```
+
+**Exit Criteria:**
+- [ ] Drift decisions made (create observations or skip)
+- [ ] Manifest committed to git
+- [ ] Session record updated
+
+---
+
+## Composition Map
+
+| Phase | Goal | Tool | Artifact |
+|-------|------|------|----------|
+| FILL | Populate manifest | Edit | checkpoint.md with fields filled |
+| VERIFY | Anti-pattern check | Task | Anti-pattern report |
+| CAPTURE | Commit & record | Bash | Git commit + session record |
 
 ---
 
@@ -153,4 +224,4 @@ completed:
 
 **The checkpoint is a manifest. The memory is the content. Git is the log.**
 
-No ceremony. No exit criteria checklists. Fill the fields, store learnings, commit.
+No ceremony. No exit criteria checklists. Fill the fields, store learnings, verify, commit.

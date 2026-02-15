@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-144
-title: "Agent Capability Cards"
+title: Agent Capability Cards
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-14
 spawned_by: S365-epoch-planning
 spawned_children: []
 chapter: CH-042
 arc: observability
-closed: null
+closed: '2026-02-15'
 priority: medium
 effort: medium
 traces_to:
@@ -22,26 +22,42 @@ acceptance_criteria:
 - All 11 agents have structured capability cards
 - Cards include identity, tools, contracts, trigger conditions
 - Cards follow A2A-inspired pattern
-- Agent definitions discoverable via infrastructure
+- Agent definitions discoverable via infrastructure (YAML frontmatter = machine-readable
+  infrastructure per REQ-DISCOVER-003; discovery tooling deferred to E2.7)
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-14T12:45:14
-    exited: null
+- node: backlog
+  entered: 2026-02-14 12:45:14
+  exited: '2026-02-15T21:12:44.358730'
 artifacts: []
 cycle_docs: {}
 memory_refs:
 - 85211
+- 85463
+- 85464
+- 85465
+- 85466
+- 85467
 extensions:
   epoch: E2.6
-version: "2.0"
+version: '2.0'
 generated: 2026-02-14
-last_updated: 2026-02-14T12:48:00
+last_updated: '2026-02-15T21:12:44.362737'
+queue_history:
+- position: ready
+  entered: '2026-02-15T20:51:17.510508'
+  exited: '2026-02-15T20:51:24.334528'
+- position: working
+  entered: '2026-02-15T20:51:24.334528'
+  exited: '2026-02-15T21:12:44.358730'
+- position: done
+  entered: '2026-02-15T21:12:44.358730'
+  exited: null
 ---
 # WORK-144: Agent Capability Cards
 
@@ -65,10 +81,11 @@ last_updated: 2026-02-14T12:48:00
 
 <!-- VERIFICATION REQUIREMENT (Session 192 - E2-290 Learning) -->
 
-- [ ] Agent Card schema defined (YAML frontmatter fields)
-- [ ] All 11 agents updated with capability cards
-- [ ] Cards include: identity, description, tools, trigger conditions, input/output contracts
-- [ ] Discovery mechanism can enumerate agent capabilities from card metadata
+- [ ] Agent Card schema defined as extended YAML frontmatter fields (beyond existing name/description/tools/model)
+- [ ] Schema includes: trigger_conditions, input_contract, output_contract, invoked_by, requirement_level, related_agents
+- [ ] All 11 agent .md files updated with capability card frontmatter
+- [ ] Cards backward-compatible (existing frontmatter fields preserved, new fields added)
+- [ ] CLAUDE.md agent table updated to reference capability card fields instead of hardcoded descriptions
 
 ---
 

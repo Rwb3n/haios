@@ -5,8 +5,20 @@ description: Execute investigation-cycle autonomously in isolated context. Retur
 tools: Bash, Read, Glob, Grep, Edit, Write, Skill, WebSearch, WebFetch
 model: sonnet
 context: fork
+requirement_level: optional
+category: cycle-delegation
+trigger_conditions:
+  - Context approaching limits and work item is type investigation
+  - Research/discovery work needs focused exploration
+input_contract: "work_id"
+output_contract: "Structured summary with hypothesis verdicts, spawned work, gates honored, artifacts, next action"
+invoked_by:
+  - Parent agent when context is large
+related_agents:
+  - investigation-cycle skill (source of truth for phase structure)
+  - investigation-agent (EXPLORE phase assistance)
 generated: '2026-02-04'
-last_updated: '2026-02-04T21:53:33'
+last_updated: '2026-02-15T21:05:00'
 ---
 # Investigation Cycle Agent
 

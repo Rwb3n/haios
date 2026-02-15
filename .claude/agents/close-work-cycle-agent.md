@@ -5,8 +5,22 @@ description: Execute close-work-cycle autonomously in isolated context. Returns 
 tools: Bash, Read, Glob, Grep, Edit, Skill
 model: sonnet
 context: fork
+requirement_level: optional
+category: cycle-delegation
+trigger_conditions:
+  - Context approaching limits and work ready for closure
+  - Delegation preferred over inline close-work-cycle execution
+input_contract: "work_id"
+output_contract: "Structured summary with cycle result, gates honored, DoD checklist, artifacts, next action"
+invoked_by:
+  - /close command (parent delegation)
+  - Parent agent when context is large
+related_agents:
+  - close-work-cycle skill (source of truth for phase structure)
+  - retro-cycle skill (prerequisite)
+  - dod-validation-cycle skill (DoD validation)
 generated: '2026-02-04'
-last_updated: '2026-02-04T21:53:57'
+last_updated: '2026-02-15T21:05:00'
 ---
 # Close Work Cycle Agent
 

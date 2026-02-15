@@ -4,8 +4,20 @@ description: Validate plan readiness and enforce DO phase guardrails. Use before
   implementation.
 tools: Read, Glob
 model: haiku
+requirement_level: required
+category: gate
+trigger_conditions:
+  - PLAN-to-DO transition in implementation-cycle
+  - Plan readiness validation before implementation begins
+input_contract: "plan_path, file_manifest (optional)"
+output_contract: "JSON with ready, phase, issues, warnings, blocked, block_reason"
+invoked_by:
+  - implementation-cycle (PLAN exit gate, required)
+related_agents:
+  - critique-agent (assumption surfacing, runs before preflight)
+  - validation-agent (CHECK phase, runs after implementation)
 generated: '2025-12-25'
-last_updated: '2026-02-01T22:46:57'
+last_updated: '2026-02-15T21:05:00'
 ---
 # Preflight Checker
 

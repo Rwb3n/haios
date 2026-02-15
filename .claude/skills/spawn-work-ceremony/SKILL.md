@@ -3,12 +3,13 @@ name: spawn-work-ceremony
 type: ceremony
 description: "Create a linked work item from an existing work item."
 category: spawn
+stub: true
 input_contract:
   - field: parent_work_id
     type: string
     required: true
     description: "Source work item ID that spawns the new item"
-    pattern: "WORK-\\d{3}"
+    pattern: 'WORK-\d{3}'
   - field: title
     type: string
     required: true
@@ -40,7 +41,7 @@ side_effects:
   - "Create REFS.md portal for child item"
   - "Log SpawnWork event to governance-events.jsonl"
 generated: 2026-02-09
-last_updated: "2026-02-12"
+last_updated: "2026-02-15"
 ---
 # Spawn Work Ceremony
 

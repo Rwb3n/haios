@@ -5,8 +5,21 @@ description: Execute implementation-cycle autonomously in isolated context. Retu
 tools: Bash, Read, Glob, Grep, Edit, Write, Skill, Task
 model: sonnet
 context: fork
+requirement_level: optional
+category: cycle-delegation
+trigger_conditions:
+  - Context approaching limits and work item has approved plan
+  - Delegation preferred over inline implementation-cycle execution
+input_contract: "work_id, plan_path"
+output_contract: "Structured summary with cycle result, gates honored (preflight/design-review/deliverables), artifacts, next action"
+invoked_by:
+  - Parent agent when context is large
+related_agents:
+  - implementation-cycle skill (source of truth for phase structure)
+  - preflight-checker (PLAN phase gate)
+  - validation-agent (CHECK phase)
 generated: '2026-02-04'
-last_updated: '2026-02-04T21:53:08'
+last_updated: '2026-02-15T21:05:00'
 ---
 # Implementation Cycle Agent
 

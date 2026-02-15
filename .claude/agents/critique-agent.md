@@ -5,8 +5,21 @@ description: Pre-implementation assumption surfacing. Framework loaded from haio
 tools: Read, Glob
 model: opus
 color: yellow
+requirement_level: recommended
+category: verification
+trigger_conditions:
+  - Before DO phase in implementation-cycle
+  - When plan has significant architectural decisions
+input_contract: "plan_path, work_id"
+output_contract: "critique-report.md + assumptions.yaml with verdict (BLOCK/REVISE/PROCEED)"
+invoked_by:
+  - implementation-cycle (PLAN phase Gate 1)
+related_agents:
+  - anti-pattern-checker (post-hoc verification)
+  - validation-agent (CHECK phase)
+  - preflight-checker (plan readiness)
 generated: '2026-01-25'
-last_updated: '2026-02-01T22:46:39'
+last_updated: '2026-02-15T21:05:00'
 ---
 # Critique Agent
 

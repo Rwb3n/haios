@@ -1,24 +1,38 @@
 # generated: 2025-12-29
-# System Auto: last updated on: 2026-02-04T21:54:21
+# System Auto: last updated on: 2026-02-15T21:05:00
 # HAIOS Agents
 
 Subagents for isolated, focused operations within the HAIOS governance framework.
 
+## Capability Card Schema (WORK-144, REQ-DISCOVER-004)
+
+Each agent `.md` file includes structured capability card fields in YAML frontmatter:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `requirement_level` | enum | `required`, `recommended`, `optional` |
+| `category` | enum | `gate`, `verification`, `utility`, `cycle-delegation` |
+| `trigger_conditions` | list | When to invoke this agent |
+| `input_contract` | string | What the agent expects from its parent |
+| `output_contract` | string | What the agent returns to its parent |
+| `invoked_by` | list | Which skills/cycles invoke this agent |
+| `related_agents` | list | Cross-references to related agents |
+
 ## Available Agents (11)
 
-| Agent | Requirement | Purpose |
-|-------|-------------|---------|
-| **anti-pattern-checker** | SHOULD/MUST | Verify claims against 6 L1 anti-patterns before acceptance |
-| **close-work-cycle-agent** | Optional | Execute full close-work-cycle in isolated context (WORK-081) |
-| **critique-agent** | Optional | Pre-implementation assumption surfacing (E2-072) |
-| **implementation-cycle-agent** | Optional | Execute full implementation-cycle in isolated context (WORK-081) |
-| **investigation-agent** | Optional | EXPLORE phase evidence gathering for investigations |
-| **investigation-cycle-agent** | Optional | Execute full investigation-cycle in isolated context (WORK-081) |
-| **preflight-checker** | REQUIRED | Plan readiness + >3 file gate (E2-186) |
-| **schema-verifier** | REQUIRED | Isolated schema queries (blocks direct SQL) |
-| **test-runner** | Optional | Isolated test execution |
-| **validation-agent** | Optional | Unbiased CHECK phase validation |
-| **why-capturer** | Optional | Automated learning extraction |
+| Agent | Requirement | Category | Purpose |
+|-------|-------------|----------|---------|
+| **anti-pattern-checker** | recommended | verification | Verify claims against 6 L1 anti-patterns before acceptance |
+| **close-work-cycle-agent** | optional | cycle-delegation | Execute full close-work-cycle in isolated context |
+| **critique-agent** | recommended | verification | Pre-implementation assumption surfacing |
+| **implementation-cycle-agent** | optional | cycle-delegation | Execute full implementation-cycle in isolated context |
+| **investigation-agent** | required | utility | EXPLORE phase evidence gathering for investigations |
+| **investigation-cycle-agent** | optional | cycle-delegation | Execute full investigation-cycle in isolated context |
+| **preflight-checker** | required | gate | Plan readiness + >3 file gate |
+| **schema-verifier** | required | gate | Isolated schema queries (blocks direct SQL) |
+| **test-runner** | optional | utility | Isolated test execution |
+| **validation-agent** | recommended | verification | Unbiased CHECK phase validation |
+| **why-capturer** | recommended | utility | Automated learning extraction |
 
 ## Invocation Pattern
 

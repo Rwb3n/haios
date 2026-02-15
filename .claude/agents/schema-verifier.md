@@ -4,8 +4,18 @@ description: Verify database schema and run read-only queries. Returns table/col
   info in isolated context. Use before ANY database operation.
 tools: Read, mcp__haios-memory__schema_info, mcp__haios-memory__db_query
 model: haiku
+requirement_level: required
+category: gate
+trigger_conditions:
+  - Any SQL query against haios_memory.db
+  - Database schema verification needed
+input_contract: "table_name or query intent"
+output_contract: "Schema info (columns, types) or SELECT query results"
+invoked_by:
+  - Any agent needing database access (required by PreToolUse hook)
+related_agents: []
 generated: '2026-02-01'
-last_updated: '2026-02-01T22:46:59'
+last_updated: '2026-02-15T21:05:00'
 ---
 # Schema Verifier
 

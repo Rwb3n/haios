@@ -5,8 +5,21 @@ description: Phase-aware research agent for HAIOS investigations. Use during inv
   first, understands current phase (HYPOTHESIZE/EXPLORE/CONCLUDE).
 tools: Read, Grep, Glob, WebSearch, WebFetch, mcp__haios-memory__memory_search_with_experience
 model: opus
+requirement_level: required
+category: utility
+trigger_conditions:
+  - EXPLORE phase of investigation-cycle
+  - HYPOTHESIZE phase for hypothesis formation
+  - CONCLUDE phase for findings synthesis
+input_contract: "Phase keyword (HYPOTHESIZE/EXPLORE/CONCLUDE) + investigation context"
+output_contract: "Phase-specific output: hypotheses with confidence, evidence table with sources, or findings summary with spawn recommendations"
+invoked_by:
+  - investigation-cycle (EXPLORE phase, required)
+related_agents:
+  - investigation-cycle-agent (full cycle delegation)
+  - memory-agent skill (general memory retrieval)
 generated: 2025-12-22
-last_updated: '2026-02-01T22:46:44'
+last_updated: '2026-02-15T21:05:00'
 ---
 # Investigation Agent
 

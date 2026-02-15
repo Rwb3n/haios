@@ -5,8 +5,21 @@ description: Unbiased CHECK phase validation. Runs tests, demos features, checks
 tools: Bash, Read, Glob
 model: sonnet
 context: fork
+requirement_level: recommended
+category: verification
+trigger_conditions:
+  - CHECK phase of implementation-cycle
+  - Complex implementations needing unbiased verification
+input_contract: "plan_path, implementation summary"
+output_contract: "Structured summary with tests, demo, DoD checklist, verdict (Ready for DONE: YES/NO)"
+invoked_by:
+  - implementation-cycle (CHECK phase, recommended)
+related_agents:
+  - test-runner (focused pytest execution)
+  - preflight-checker (pre-DO validation)
+  - critique-agent (pre-implementation critique)
 generated: '2025-12-25'
-last_updated: '2026-02-01T22:46:46'
+last_updated: '2026-02-15T21:05:00'
 ---
 # Validation Agent
 

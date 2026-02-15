@@ -4,8 +4,22 @@ description: Verify claims against 6 L1 anti-patterns before acceptance. Use for
   milestone, or major completion claims.
 tools: Read, Grep, Glob
 model: sonnet
+requirement_level: recommended
+category: verification
+trigger_conditions:
+  - Epoch completion or milestone completion claims
+  - Major status claims with words like essentially, mostly, almost
+  - Before finalizing checkpoint summaries with completion claims
+input_contract: "claim text + context file path"
+output_contract: "JSON with verified, lenses (6 L1 checks), verdict (SUPPORTED/UNSUPPORTED), gaps"
+invoked_by:
+  - Manual invocation for routine claims
+  - checkpoint-cycle VERIFY phase
+related_agents:
+  - validation-agent (CHECK phase verification)
+  - critique-agent (pre-implementation assumption surfacing)
 generated: '2025-12-29'
-last_updated: '2026-02-01T22:46:49'
+last_updated: '2026-02-15T21:05:00'
 ---
 # Anti-Pattern Checker Agent
 

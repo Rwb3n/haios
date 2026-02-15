@@ -4,8 +4,20 @@ description: Extract and store learnings from completed work. Use during DONE ph
   to capture WHY per ADR-033.
 tools: Read, mcp__haios-memory__ingester_ingest
 model: haiku
+requirement_level: recommended
+category: utility
+trigger_conditions:
+  - DONE phase of implementation-cycle
+  - Work item closure when learnings should be captured
+input_contract: "backlog_id, plan_path, checkpoint_path (optional), context_summary (optional)"
+output_contract: "List of concept_ids stored to memory with classifications (techne/episteme/doxa)"
+invoked_by:
+  - implementation-cycle (DONE phase, recommended)
+  - close-work-cycle (closure learnings)
+related_agents:
+  - ingester_ingest (MCP tool for memory storage)
 generated: '2026-02-01'
-last_updated: '2026-02-01T22:47:04'
+last_updated: '2026-02-15T21:05:00'
 ---
 # WHY Capturer
 

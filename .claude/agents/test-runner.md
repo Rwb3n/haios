@@ -4,8 +4,19 @@ description: Execute pytest in isolated context. Returns structured pass/fail su
   Use during CHECK phase.
 tools: Bash, Read
 model: haiku
+requirement_level: optional
+category: utility
+trigger_conditions:
+  - CHECK phase of implementation-cycle
+  - Large test suites benefit from isolated execution
+input_contract: "test path or filter expression"
+output_contract: "Structured summary with pass/fail counts, duration, failed test names and errors"
+invoked_by:
+  - implementation-cycle (CHECK phase, optional)
+related_agents:
+  - validation-agent (broader CHECK phase validation)
 generated: '2026-02-01'
-last_updated: '2026-02-01T22:47:01'
+last_updated: '2026-02-15T21:05:00'
 ---
 # Test Runner
 
