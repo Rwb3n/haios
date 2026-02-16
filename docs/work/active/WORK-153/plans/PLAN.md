@@ -1,6 +1,6 @@
 ---
 template: implementation_plan
-status: approved
+status: complete
 date: 2026-02-16
 backlog_id: WORK-153
 title: "E2.7 Bug Batch: Ceremony Stubs, Doc Drift, Code Duplication"

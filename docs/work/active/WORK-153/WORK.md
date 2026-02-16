@@ -3,14 +3,14 @@ template: work_item
 id: WORK-153
 title: 'E2.7 Bug Batch: Ceremony Stubs, Doc Drift, Code Duplication'
 type: bugfix
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-16
 spawned_by: null
 spawned_children: []
 chapter: CH-049
 arc: infrastructure
-closed: null
+closed: '2026-02-16'
 priority: low
 effort: small
 traces_to:
@@ -30,13 +30,13 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
 - node: backlog
   entered: 2026-02-16 18:45:11
-  exited: null
+  exited: '2026-02-16T19:33:05.032090'
 artifacts: []
 cycle_docs: {}
 memory_refs:
@@ -46,8 +46,11 @@ memory_refs:
 extensions: {}
 version: '2.0'
 generated: 2026-02-16
-last_updated: '2026-02-16T19:31:28.657863'
-queue_history: []
+last_updated: '2026-02-16T19:33:05.035599'
+queue_history:
+- position: done
+  entered: '2026-02-16T19:33:05.032090'
+  exited: null
 ---
 # WORK-153: E2.7 Bug Batch: Ceremony Stubs, Doc Drift, Code Duplication
 
