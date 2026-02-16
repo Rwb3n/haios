@@ -14,11 +14,15 @@ load_memory_refs:
   - 85603  # retro-extract WORK-148
   - 85604  # closure WORK-148
 
-pending: []
+pending:
+  - "Observation triage of all retro-* provenance tags from E2.6 sessions (365-382)"
+  - "E2.7 arc decomposition (informed by triage results)"
 
 drift_observed:
   - "just set-cycle does not emit CycleTransition governance events (carried from S379)"
 
 completed:
   - "WORK-148: Remove Stub and Deprecated Skills (4 feedback stubs removed, registry updated, tests pass)"
+  - "E2.6 Foundations epoch closed (16/16 work items, 4/4 arcs, 7/7 exit criteria)"
+  - "E2.7 Composability epoch activated (haios.yaml transitioned)"
 ---
