@@ -732,6 +732,20 @@ if __name__ == "__main__":
 
     command = sys.argv[1]
 
+    # Shared DB query helper for retro-* CLI commands (WORK-153: deduplicated)
+    def _db_query(sql):
+        try:
+            from haios_etl.database import DatabaseManager
+            db = DatabaseManager()
+            conn = db.get_connection()
+            cursor = conn.cursor()
+            cursor.execute(sql)
+            columns = [desc[0] for desc in cursor.description]
+            rows = cursor.fetchall()
+            return {"columns": columns, "rows": [list(r) for r in rows]}
+        except Exception as e:
+            return {"error": str(e)}
+
     if command == "validate" and len(sys.argv) >= 3:
         result = validate_observations(sys.argv[2])
         print(f"Valid: {result['valid']}")
@@ -766,19 +780,6 @@ if __name__ == "__main__":
                     print(f"    - [{obs['section']}] {obs['text'][:60]}...")
 
     elif command == "retro-kss":
-        def _db_query(sql):
-            try:
-                from haios_etl.database import DatabaseManager
-                db = DatabaseManager()
-                conn = db.get_connection()
-                cursor = conn.cursor()
-                cursor.execute(sql)
-                columns = [desc[0] for desc in cursor.description]
-                rows = cursor.fetchall()
-                return {"columns": columns, "rows": [list(r) for r in rows]}
-            except Exception as e:
-                return {"error": str(e)}
-
         entries = query_retro_kss(db_query_fn=_db_query)
         if not entries:
             print("No K/S/S directives found in memory.")
@@ -791,19 +792,6 @@ if __name__ == "__main__":
                         print(f"  [{item['count']}x] {item['directive']}")
 
     elif command == "retro-bugs":
-        def _db_query(sql):
-            try:
-                from haios_etl.database import DatabaseManager
-                db = DatabaseManager()
-                conn = db.get_connection()
-                cursor = conn.cursor()
-                cursor.execute(sql)
-                columns = [desc[0] for desc in cursor.description]
-                rows = cursor.fetchall()
-                return {"columns": columns, "rows": [list(r) for r in rows]}
-            except Exception as e:
-                return {"error": str(e)}
-
         entries = query_retro_bugs(db_query_fn=_db_query)
         bugs = surface_bug_candidates(entries)
         if not bugs:
@@ -814,19 +802,6 @@ if __name__ == "__main__":
                 print(f"  [{bug['confidence']}] {bug['description']}")
 
     elif command == "retro-features":
-        def _db_query(sql):
-            try:
-                from haios_etl.database import DatabaseManager
-                db = DatabaseManager()
-                conn = db.get_connection()
-                cursor = conn.cursor()
-                cursor.execute(sql)
-                columns = [desc[0] for desc in cursor.description]
-                rows = cursor.fetchall()
-                return {"columns": columns, "rows": [list(r) for r in rows]}
-            except Exception as e:
-                return {"error": str(e)}
-
         entries = query_retro_features(db_query_fn=_db_query)
         features = surface_feature_candidates(entries)
         if not features:

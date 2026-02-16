@@ -457,3 +457,19 @@ class TestBugFeatureSurfacing:
         obs_file.write_text("---\ntriage_status: pending\n---\n## Gaps\n- [x] Test gap")
         result = scan_archived_observations(base_path=tmp_path)
         assert len(result) == 1
+
+
+class TestCodeQuality:
+    """WORK-153: Code quality checks for observations.py."""
+
+    def test_observations_db_query_not_duplicated(self):
+        """Verify _db_query helper is defined only once in observations.py __main__ block."""
+        import re
+        obs_path = Path(__file__).parent.parent / ".claude" / "haios" / "lib" / "observations.py"
+        content = obs_path.read_text(encoding="utf-8")
+        # Find __main__ block
+        main_idx = content.index("if __name__")
+        main_block = content[main_idx:]
+        # Count _db_query definitions
+        definitions = re.findall(r"def _db_query\(", main_block)
+        assert len(definitions) == 1, f"Expected 1 _db_query def in __main__, found {len(definitions)}"

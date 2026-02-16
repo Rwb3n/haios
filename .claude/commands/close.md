@@ -62,7 +62,7 @@ After retro-cycle completes, invoke close-work-cycle:
 Skill(skill="close-work-cycle")
 ```
 
-The skill guides through VALIDATE -> ARCHIVE -> MEMORY phases.
+The skill guides through VALIDATE -> ARCHIVE -> CHAIN phases.
 
 **Note:** The remaining steps below document the skill's phases for reference.
 

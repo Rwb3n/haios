@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-153
-title: "E2.7 Bug Batch: Ceremony Stubs, Doc Drift, Code Duplication"
+title: 'E2.7 Bug Batch: Ceremony Stubs, Doc Drift, Code Duplication'
 type: bugfix
 status: active
 owner: Hephaestus
@@ -14,36 +14,40 @@ closed: null
 priority: low
 effort: small
 traces_to:
-  - REQ-OBSERVE-005
+- REQ-OBSERVE-005
 requirement_refs: []
 source_files:
-  - .claude/skills/spawn-work-ceremony/SKILL.md
-  - .claude/skills/close-work-cycle/SKILL.md
-  - .claude/haios/lib/observations.py
+- .claude/skills/spawn-work-ceremony/SKILL.md
+- .claude/skills/close-work-cycle/SKILL.md
+- .claude/haios/lib/observations.py
 acceptance_criteria:
-  - "spawn-work-ceremony SKILL.md has stub: true in frontmatter"
-  - "close.md line 65 no longer references removed MEMORY phases"
-  - "observations.py _db_query helper defined once, not duplicated 3x in __main__"
-  - "MEMORY.md pre-existing test failure count updated to current actual"
-  - "cycle_phase stale 'backlog' bug documented with root cause analysis"
-  - "All existing tests still pass"
+- 'spawn-work-ceremony SKILL.md has stub: true in frontmatter'
+- close.md line 65 no longer references removed MEMORY phases
+- observations.py _db_query helper defined once, not duplicated 3x in __main__
+- MEMORY.md pre-existing test failure count updated to current actual
+- cycle_phase stale 'backlog' bug documented with root cause analysis
+- All existing tests still pass
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: backlog
+cycle_phase: backlog
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-16T18:45:11
-    exited: null
+- node: backlog
+  entered: 2026-02-16 18:45:11
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85657
+- 85658
+- 85659
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-16
-last_updated: 2026-02-16T18:45:11
+last_updated: '2026-02-16T19:31:28.657863'
+queue_history: []
 ---
 # WORK-153: E2.7 Bug Batch: Ceremony Stubs, Doc Drift, Code Duplication
 
@@ -93,6 +97,14 @@ Six bugs surfaced during S383 observation triage of E2.6 retro-* provenance tags
 ---
 
 ## History
+
+### 2026-02-16 - Implementation (Session 384)
+- Bug 1 (spawn-work-ceremony stub:true): Already fixed — `stub: true` present at SKILL.md:6
+- Bug 2 (close.md MEMORY reference): Fixed — line 65 updated to "CHAIN"
+- Bug 3 (observations.py _db_query duplication): Fixed — single definition, 3 inline copies removed
+- Bug 4 (MEMORY.md test counts): Fixed — updated to 1360/9/4 (S384 pytest run)
+- Bug 5 (cycle_phase staleness): **Root cause:** No cascade engine exists. cycle_phase is set at creation time and only updated by explicit ceremony calls (set-cycle, close). Items that skip plan-authoring never transition from "backlog" because no hook triggers the update. Proper fix requires WORK-034 (upstream status propagation engine). Accepted gap — deferred to WORK-034.
+- Bug 6 (CONCLUDE.md timestamp): Already documented as accepted gap (Memory 85449). No hook-level fix possible without template edit detection.
 
 ### 2026-02-16 - Created (Session 383)
 - Spawned from S383 observation triage cycle (PROMOTE phase)
