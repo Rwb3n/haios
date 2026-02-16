@@ -181,8 +181,8 @@ ceremonies:
     side_effects:
       - "Maybe update chapter scope"
     has_contract: true
-    has_skill: true
-    notes: "Stub skill created by WORK-112"
+    has_skill: false
+    notes: "Stub skill removed by WORK-148 (S382). Ceremony concept retained for future implementation."
 
   - name: arc-review
     category: feedback
@@ -191,8 +191,8 @@ ceremonies:
     side_effects:
       - "Maybe update arc direction"
     has_contract: true
-    has_skill: true
-    notes: "Stub skill created by WORK-112"
+    has_skill: false
+    notes: "Stub skill removed by WORK-148 (S382). Ceremony concept retained for future implementation."
 
   - name: epoch-review
     category: feedback
@@ -201,8 +201,8 @@ ceremonies:
     side_effects:
       - "Maybe update epoch goals"
     has_contract: true
-    has_skill: true
-    notes: "Stub skill created by WORK-112"
+    has_skill: false
+    notes: "Stub skill removed by WORK-148 (S382). Ceremony concept retained for future implementation."
 
   - name: requirements-review
     category: feedback
@@ -211,5 +211,5 @@ ceremonies:
     side_effects:
       - "Maybe update requirements"
     has_contract: true
-    has_skill: true
-    notes: "Stub skill created by WORK-112"
+    has_skill: false
+    notes: "Stub skill removed by WORK-148 (S382). Ceremony concept retained for future implementation."

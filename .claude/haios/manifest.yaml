@@ -64,17 +64,11 @@ components:
     - id: "workspace"
       source: "commands/workspace/"
 
-  # Skills (34 total)
+  # Skills (29 total)
   skills:
-    - id: "arc-review"
-      source: "skills/arc-review/"
-      category: "ceremony"
     - id: "audit"
       source: "skills/audit/"
       category: "utility"
-    - id: "chapter-review"
-      source: "skills/chapter-review/"
-      category: "ceremony"
     - id: "checkpoint-cycle"
       source: "skills/checkpoint-cycle/"
       category: "cycle"
@@ -96,9 +90,6 @@ components:
     - id: "dod-validation-cycle"
       source: "skills/dod-validation-cycle/"
       category: "bridge"
-    - id: "epoch-review"
-      source: "skills/epoch-review/"
-      category: "ceremony"
     - id: "extract-content"
       source: "skills/extract-content/"
       category: "utility"
@@ -137,9 +128,6 @@ components:
       category: "ceremony"
     - id: "queue-unpark"
       source: "skills/queue-unpark/"
-      category: "ceremony"
-    - id: "requirements-review"
-      source: "skills/requirements-review/"
       category: "ceremony"
     - id: "retro-cycle"
       source: "skills/retro-cycle/"

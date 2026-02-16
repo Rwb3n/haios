@@ -3,8 +3,10 @@
 WORK-112: Retrofit Ceremony Skills with Contracts
 Chapter: CH-011 (CeremonyContracts)
 
-Verifies that all 20 ceremony skills have YAML frontmatter contracts
-and that the ceremony registry reflects full contract coverage.
+Verifies that ceremony skills have YAML frontmatter contracts
+and that the ceremony registry reflects contract coverage.
+WORK-148: 4 feedback stub skills removed (arc-review, chapter-review,
+epoch-review, requirements-review). Registry entries retained with has_skill: false.
 """
 
 import sys
@@ -41,13 +43,10 @@ EXISTING_CEREMONY_SKILLS = [
     "memory-commit-ceremony",   # De-stubbed by WORK-133 (CH-016)
 ]
 
-# 5 remaining stub skills (WORK-112)
+# Remaining stub skills (WORK-112)
+# WORK-148: 4 feedback stubs removed (arc-review, chapter-review, epoch-review, requirements-review)
 STUB_CEREMONY_SKILLS = [
     "spawn-work-ceremony",
-    "chapter-review",
-    "arc-review",
-    "epoch-review",
-    "requirements-review",
 ]
 
 ALL_CEREMONY_SKILLS = EXISTING_CEREMONY_SKILLS + STUB_CEREMONY_SKILLS
@@ -94,7 +93,7 @@ class TestExistingSkillsRetrofitted:
 
 
 class TestStubSkillsCreated:
-    """Test 2: All 8 stub ceremony skills exist and have contract fields."""
+    """Test 2: Remaining stub ceremony skills exist and have contract fields."""
 
     @pytest.mark.parametrize("skill_name", STUB_CEREMONY_SKILLS)
     def test_stub_skill_exists(self, skill_name):
@@ -145,17 +144,28 @@ class TestRegistryContractCoverage:
         assert len(registry.ceremonies) == 20
 
     def test_new_stubs_have_skill_entries(self):
-        """The 8 new stub ceremonies must have has_skill: true and skill set."""
+        """The remaining stub ceremonies must have has_skill: true and skill set."""
         registry = load_ceremony_registry()
+        # WORK-148: 4 feedback stubs removed; only these remain as has_skill: true stubs
         stub_ceremony_names = [
             "session-start", "session-end", "memory-commit", "spawn-work",
-            "chapter-review", "arc-review", "epoch-review", "requirements-review",
         ]
         for name in stub_ceremony_names:
             entry = next((c for c in registry.ceremonies if c.name == name), None)
             assert entry is not None, f"Registry entry not found for '{name}'"
             assert entry.has_skill, f"Registry entry '{name}' should have has_skill: true"
             assert entry.skill is not None, f"Registry entry '{name}' should have skill set"
+
+    def test_removed_feedback_stubs_have_no_skill(self):
+        """WORK-148: Feedback ceremony stubs removed — has_skill must be false."""
+        registry = load_ceremony_registry()
+        removed_ceremony_names = [
+            "chapter-review", "arc-review", "epoch-review", "requirements-review",
+        ]
+        for name in removed_ceremony_names:
+            entry = next((c for c in registry.ceremonies if c.name == name), None)
+            assert entry is not None, f"Registry entry not found for '{name}'"
+            assert not entry.has_skill, f"Registry entry '{name}' should have has_skill: false (stub removed)"
 
 
 class TestContractsParseable:

@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-148
-title: "Remove Stub and Deprecated Skills"
+title: Remove Stub and Deprecated Skills
 type: cleanup
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-14
 spawned_by: WORK-020
 spawned_children: []
 chapter: CH-034
 arc: discoverability
-closed: null
+closed: '2026-02-16'
 priority: low
 effort: trivial
 traces_to:
@@ -23,27 +23,33 @@ source_files:
 - .claude/skills/requirements-review/SKILL.md
 - .claude/skills/observation-capture-cycle/SKILL.md
 acceptance_criteria:
-- 4 stub skills (arc-review, chapter-review, epoch-review, requirements-review) removed or converted to non-stub
+- 4 stub skills (arc-review, chapter-review, epoch-review, requirements-review) removed
+  or converted to non-stub
 - Deprecated observation-capture-cycle skill removed
 - System prompt no longer lists removed skills
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-14T14:38:34
-    exited: null
+- node: backlog
+  entered: 2026-02-14 14:38:34
+  exited: '2026-02-16T18:21:02.047949'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85604
 extensions:
   epoch: E2.6
-version: "2.0"
+version: '2.0'
 generated: 2026-02-14
-last_updated: 2026-02-14T14:38:34
+last_updated: '2026-02-16T18:21:02.050415'
+queue_history:
+- position: done
+  entered: '2026-02-16T18:21:02.047949'
+  exited: null
 ---
 # WORK-148: Remove Stub and Deprecated Skills
 
