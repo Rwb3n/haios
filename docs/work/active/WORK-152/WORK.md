@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-152
-title: "Plan Template Fracturing by Work Type"
+title: Plan Template Fracturing by Work Type
 type: design
-status: active
+status: complete
 owner: null
 created: 2026-02-15
 spawned_by: S378-observation
 spawned_children: []
 chapter: CH-047
 arc: composability
-closed: null
+closed: 2026-02-16
 priority: medium
 effort: medium
 traces_to:
@@ -19,28 +19,43 @@ requirement_refs: []
 source_files:
 - .claude/templates/_legacy/implementation_plan.md
 acceptance_criteria:
-- Plan templates exist per work type (implementation, design, investigation, cleanup)
+- Plan templates exist per work type (implementation, design, cleanup)
 - Each template contains only sections relevant to its work type
-- Existing plan-authoring-cycle and plan-validation-cycle updated to select template by type
+- Type mapping routes work item types (feature/bug/chore/design) to plan template types
+- scaffold_template auto-extracts TYPE from work item for transparent routing
+- validate_template routes by subtype for type-specific section coverage
+- Existing plan-authoring-cycle and plan-validation-cycle references updated
 - Skip rationale frequency drops to <20% of sections per plan
+- Tests for template selection routing (8 tests)
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
+queue_position: working
 cycle_phase: backlog
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-15T22:56:31
-    exited: null
+- node: backlog
+  entered: 2026-02-15 22:56:31
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: [85528, 85529, 85530, 85531]
+memory_refs:
+- 85528
+- 85529
+- 85530
+- 85531
 extensions:
   epoch: E2.7
-version: "2.0"
+version: '2.0'
 generated: 2026-02-15
-last_updated: 2026-02-15T22:57:00
+last_updated: '2026-02-16T22:38:28.453946'
+queue_history:
+- position: ready
+  entered: '2026-02-16T22:38:28.422585'
+  exited: '2026-02-16T22:38:28.450914'
+- position: working
+  entered: '2026-02-16T22:38:28.450914'
+  exited: null
 ---
 # WORK-152: Plan Template Fracturing by Work Type
 
