@@ -1,10 +1,11 @@
 # generated: 2026-01-24
-# System Auto: last updated on: 2026-01-26T20:11:29
+# System Auto: last updated on: 2026-02-16T20:00:00
 """
 Coldstart Orchestrator for Configuration Arc.
 
 CH-007: Wires IdentityLoader, SessionLoader, WorkLoader into unified coldstart.
 E2-236: Adds orphan session detection before context loading phases.
+WORK-154: Adds epoch transition validation phase after loaders.
 Follows sibling loader patterns (identity_loader.py, session_loader.py).
 
 Usage:
@@ -144,8 +145,32 @@ class ColdstartOrchestrator:
             else:
                 logger.warning(f"Unknown loader: {phase_id}")
 
+        # WORK-154: Epoch transition validation (after all loaders)
+        validation_output = self._run_epoch_validation()
+        if validation_output:
+            output.append("[PHASE: VALIDATION]")
+            output.append(validation_output)
+            output.append("\n[BREATHE]\n")
+
         output.append("[READY FOR SELECTION]")
         return "\n".join(output)
+
+    def _run_epoch_validation(self) -> Optional[str]:
+        """
+        Run epoch transition validation (WORK-154).
+
+        Validates queue config vs active_arcs and EPOCH.md status drift.
+        Returns formatted warnings or None if clean.
+        Surfaces error message on failure (Critique A8).
+        """
+        try:
+            from epoch_validator import EpochValidator
+            validator = EpochValidator()
+            result = validator.validate()
+            return result if result else None
+        except Exception as e:
+            logger.warning(f"Epoch validation failed: {e}")
+            return f"(Epoch validation unavailable: {e})"
 
 
 # CLI entry point for `just coldstart-orchestrator`

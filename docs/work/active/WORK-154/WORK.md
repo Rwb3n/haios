@@ -1,47 +1,64 @@
 ---
 template: work_item
 id: WORK-154
-title: "Epoch Transition Validation and Queue Config Sync"
+title: Epoch Transition Validation and Queue Config Sync
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-16
 spawned_by: null
 spawned_children: []
 chapter: CH-050
 arc: infrastructure
-closed: null
+closed: '2026-02-16'
 priority: medium
 effort: medium
 traces_to:
-  - REQ-OBSERVE-005
+- REQ-CONFIG-003
+- REQ-CEREMONY-001
 requirement_refs: []
 source_files:
-  - .claude/haios/config/work_queues.yaml
-  - .claude/haios/config/haios.yaml
-  - .claude/haios/lib/work_engine.py
+- .claude/haios/config/work_queues.yaml
+- .claude/haios/config/haios.yaml
+- .claude/haios/lib/work_engine.py
 acceptance_criteria:
-  - "Epoch transition validates work_queues.yaml against active_arcs"
-  - "EPOCH.md status table auto-syncs with work item closures (or validation warns on drift)"
-  - "Queue config migration path documented for epoch transitions"
-  - "Coldstart or session-start warns if queue config references stale epoch structures"
+- Epoch transition validates work_queues.yaml against active_arcs
+- EPOCH.md status table auto-syncs with work item closures (or validation warns on
+  drift)
+- Queue config migration path documented for epoch transitions
+- Coldstart or session-start warns if queue config references stale epoch structures
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-16T18:45:11
-    exited: null
+- node: backlog
+  entered: 2026-02-16 18:45:11
+  exited: '2026-02-16T20:04:18.825082'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85668
+- 85669
+- 85670
+- 85671
+- 85672
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-16
-last_updated: 2026-02-16T18:45:11
+last_updated: '2026-02-16T20:04:18.829854'
+queue_history:
+- position: ready
+  entered: '2026-02-16T19:39:40.895118'
+  exited: '2026-02-16T19:39:46.922344'
+- position: working
+  entered: '2026-02-16T19:39:46.922344'
+  exited: '2026-02-16T20:04:18.825082'
+- position: done
+  entered: '2026-02-16T20:04:18.825082'
+  exited: null
 ---
 # WORK-154: Epoch Transition Validation and Queue Config Sync
 
@@ -87,6 +104,21 @@ WORK-034 solves status cascade (child→parent). This item solves epoch-level st
 ---
 
 ## History
+
+### 2026-02-16 - Implemented (Session 385)
+- epoch_validator.py created with EpochValidator class (validate_queue_config, validate_epoch_status)
+- Integrated into coldstart_orchestrator.py as [PHASE: VALIDATION]
+- 10 TDD tests, all green, zero regressions (1371 passed)
+- Real drift detected: WORK-153 shown as Planning in EPOCH.md but complete in WORK.md
+
+**Epoch Transition Checklist (Migration Guide):**
+When transitioning between epochs, validate the following:
+1. Update `haios.yaml`: `epoch.current`, `epoch.epoch_file`, `epoch.active_arcs`, `epoch.arcs_dir`
+2. Update `work_queues.yaml`: queue names match new `active_arcs`, park/archive old arc queues
+3. Update EPOCH.md: status table reflects actual work item statuses (run coldstart to detect drift)
+4. Update `CLAUDE.md` quick links if epoch paths changed
+5. Verify: `just coldstart-orchestrator` shows no [PHASE: VALIDATION] drift warnings
+6. Reference: Memory 84818, 84821, 85056 (epoch transition patterns)
 
 ### 2026-02-16 - Created (Session 383)
 - Spawned from S383 observation triage cycle (Theme 3: Epoch/Status Sync Drift)
