@@ -6222,3 +6222,5 @@
 {"type": "SessionStarted", "session": 382, "agent": "Hephaestus", "timestamp": "2026-02-16T18:08:13.741181"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-16T18:21:02.018005"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-16T18:21:02.068928"}
+{"type": "SessionEnded", "session": 382, "agent": "Hephaestus", "timestamp": "2026-02-16T18:21:55.197311"}
+{"type": "SessionStarted", "session": 383, "agent": "Hephaestus", "timestamp": "2026-02-16T18:31:03.222428"}
