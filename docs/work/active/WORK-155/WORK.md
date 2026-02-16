@@ -8,8 +8,8 @@ owner: Hephaestus
 created: 2026-02-16
 spawned_by: null
 spawned_children: []
-chapter: null
-arc: null
+chapter: CH-047
+arc: composability
 closed: null
 priority: medium
 effort: medium

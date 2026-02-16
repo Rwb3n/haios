@@ -1,8 +1,8 @@
 # generated: 2026-01-15
-# System Auto: last updated on: 2026-02-14T15:10:00
+# System Auto: last updated on: 2026-02-16T19:10:00
 # Work Queue Configuration (E2-290, INV-064 design)
 # Provides typed queues with cycle-locking for structured work execution
-# Updated: S369 — reconfigured for E2.6 Foundations (4 arcs)
+# Updated: S384 — reconfigured for E2.7 Composability (3 arcs)
 version: "1.1"
 
 # Queue type definitions
@@ -16,75 +16,61 @@ queue_types:
   chapter_aligned:
     ordering: "chapter_priority DESC, priority DESC"
 
-# Active queues — E2.6 Foundations
+# Active queues — E2.7 Composability
 queues:
-  # DISCOVERABILITY arc (CH-032 to CH-034)
-  # CH-032/33/34 complete via WORK-020 (S368). Spawned work remains.
-  discoverability:
-    type: priority
-    items:
-      - WORK-149  # Three-Tier Entry Point Architecture ADR (CH-034, medium)
-      - WORK-148  # Remove Stub and Deprecated Skills (CH-034, low)
-    allowed_cycles: [work-creation-cycle, implementation-cycle]
-    rationale: "S369: WORK-020 investigation complete. Spawned ADR and cleanup remain."
-
-  # REFERENCEABILITY arc (CH-035 to CH-037)
-  # CH-035 complete via WORK-067 (S367). CH-036/37 remain.
-  referenceability:
+  # ENGINE-FUNCTIONS arc (CH-044 to CH-045)
+  # Hierarchy query engine + status cascade
+  engine-functions:
     type: fifo
     items:
-      - WORK-147  # Schema Registry & ConfigLoader Extension (CH-036, medium, spawned by WORK-067)
-      - WORK-135  # Manifest Auto-Sync Mechanism (CH-037, low)
-    allowed_cycles: [implementation-cycle, work-creation-cycle]
-    rationale: "S369: WORK-067 findings drive WORK-147 implementation. WORK-135 independent."
+      - WORK-034  # Upstream Status Propagation (CH-045, carry-forward)
+      # CH-044 HierarchyQueryEngine: new work item TBD
+    allowed_cycles: [work-creation-cycle, implementation-cycle]
+    rationale: "S384: WORK-034 carry-forward. CH-044 needs new work item for engine functions."
 
-  # TRACEABILITY arc (CH-038 to CH-040)
-  # WORK-097 complete (S368). CH-038 partially done, CH-039/40 remain.
-  traceability:
+  # COMPOSABILITY arc (CH-046 to CH-048)
+  # Flat metadata, template composability, recipe rationalization
+  composability:
     type: priority
     items:
-      - WORK-150  # Plan Decomposition Traceability ADR (CH-038, medium, spawned by WORK-097)
-      - WORK-075  # System Audit as L4 Traceability Verification (CH-039, medium)
-      - WORK-146  # Gate Skip Violation Logging (CH-040, medium)
-      - WORK-104  # Validation/Triage Cycle Mappings (CH-038, low)
-    allowed_cycles: [investigation-cycle, implementation-cycle, work-creation-cycle]
-    rationale: "S369: WORK-097 spawned ADR. WORK-075 blockers resolved. WORK-146 new."
+      - WORK-152  # Plan Template Fracturing by Work Type (CH-047, design)
+      - WORK-155  # Lifecycle Work-Type Awareness (CH-047, design)
+      # CH-046 FlatMetadataMigration: new work item TBD
+      # CH-048 RecipeRationalization: new work item TBD
+    allowed_cycles: [work-creation-cycle, implementation-cycle, investigation-cycle]
+    rationale: "S384: WORK-152/155 assigned to CH-047. CH-046/048 need new work items."
 
-  # OBSERVABILITY arc (CH-041 to CH-043)
-  # All items in planning stage.
-  observability:
-    type: priority
+  # INFRASTRUCTURE arc (CH-049 to CH-051)
+  # Bug fixes, epoch transition, staleness detection — no dependencies, parallel-safe
+  infrastructure:
+    type: batch
     items:
-      - WORK-082  # Epistemic Review Ceremony (CH-041, medium)
-      - WORK-144  # Agent Capability Cards (CH-042, medium)
-      - WORK-096  # Agent UX Test in DoD Validation (CH-041, low)
-      - WORK-145  # Legacy Duplication Cleanup (CH-043, low)
-    allowed_cycles: [investigation-cycle, implementation-cycle, work-creation-cycle]
-    rationale: "S369: All observability work starts fresh. WORK-082 is investigation."
+      - WORK-153  # E2.7 Bug Batch (CH-049, 6 bugs from triage)
+      - WORK-154  # Epoch Transition Validation (CH-050, implementation)
+      - WORK-136  # Checkpoint Staleness Detection (CH-051, investigation)
+    allowed_cycles: [implementation-cycle, investigation-cycle, work-creation-cycle]
+    rationale: "S384: Prerequisite quality work. No cross-arc dependencies. Start here."
 
-  # Default queue - catch-all for unassigned E2.6 work
+  # Default queue - catch-all for unassigned E2.7 work
   default:
     type: priority
     items: auto  # Populated from get_ready() excluding named queues
     allowed_cycles: [implementation-cycle, investigation-cycle, work-creation-cycle]
 
-# Parked items — out of E2.6 scope (deferred to E2.7+)
+# Parked items — out of E2.7 scope (deferred to E2.9 Governance)
 parked:
   items:
-    - WORK-034  # Upstream Status Propagation (ceremonies, E2.9)
     - WORK-071  # Pre-Decomposition Review Gate (governance, E2.9)
-    - WORK-093  # Lifecycle Asset Types (E2.5 assets arc, E2.7)
-    - WORK-101  # Proportional Governance Design (E2.9)
-    - WORK-102  # Session/Process Review Ceremonies (E2.9)
-    - WORK-136  # Checkpoint Staleness Detection (E2.7/E2.8)
-  rationale: "S369: Not mapped to E2.6 exit criteria. Deferred per epoch focus."
+    - WORK-101  # Proportional Governance Design (governance, E2.9)
+    - WORK-102  # Session/Process Review Ceremonies (governance, E2.9)
+  rationale: "S384: Governance-themed items deferred to E2.9. Not composability scope."
 
 # Policies
 policies:
   assignment:
-    default_queue: referenceability  # E2.6 focus: WORK-147 is next per checkpoint
+    default_queue: infrastructure  # E2.7 start: clean house first
     auto_batch_threshold: 3
   cross_arc:
-    allowed: true  # E2.6: arcs are independent, cross-arc allowed
+    allowed: true  # E2.7: arcs are independent, cross-arc allowed
   cycle_enforcement:
     strict: true

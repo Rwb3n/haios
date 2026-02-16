@@ -7,8 +7,8 @@
 # Plugin manifest (for portable plugin spec)
 manifest:
   name: haios
-  version: "2.6"
-  description: "Hybrid AI Operating System - Agent UX"
+  version: "2.7"
+  description: "Hybrid AI Operating System - Composability"
 
 # Current epoch context (ADR-042: Arc > Chapter in hierarchy)
 epoch:
@@ -26,8 +26,11 @@ epoch:
     - S21-cognitive-notation.md
     - S22-skill-patterns.md
     - S27-breath-model.md  # E2.4 discovery, foundational
-  # Active arcs (E2.7 - Composability, pending arc decomposition)
-  active_arcs: []
+  # Active arcs (E2.7 - Composability, decomposed S384)
+  active_arcs:
+    - engine-functions
+    - composability
+    - infrastructure
   # Epoch sequence (planned S365)
   sequence:
     - id: E2.6

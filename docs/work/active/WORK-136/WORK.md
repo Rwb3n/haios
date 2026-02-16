@@ -7,8 +7,8 @@ status: backlog
 owner: null
 created: 2026-02-12
 spawned_by: null
-chapter: null
-arc: ceremonies
+chapter: CH-051
+arc: infrastructure
 closed: null
 priority: low
 effort: small

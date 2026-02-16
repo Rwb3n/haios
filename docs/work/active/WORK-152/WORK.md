@@ -8,8 +8,8 @@ owner: null
 created: 2026-02-15
 spawned_by: S378-observation
 spawned_children: []
-chapter: null
-arc: null
+chapter: CH-047
+arc: composability
 closed: null
 priority: medium
 effort: medium

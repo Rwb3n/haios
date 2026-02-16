@@ -7,8 +7,8 @@ status: active
 owner: Hephaestus
 created: 2026-01-29
 spawned_by: null
-chapter: CH-005
-arc: ceremonies
+chapter: CH-045
+arc: engine-functions
 closed: null
 priority: medium
 effort: medium
