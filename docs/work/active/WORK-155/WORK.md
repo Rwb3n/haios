@@ -1,47 +1,65 @@
 ---
 template: work_item
 id: WORK-155
-title: "Lifecycle Work-Type Awareness Beyond Plan Templates"
+title: Lifecycle Work-Type Awareness Beyond Plan Templates
 type: design
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-16
 spawned_by: null
 spawned_children: []
 chapter: CH-047
 arc: composability
-closed: null
+closed: 2026-02-16
 priority: medium
 effort: medium
 traces_to:
-  - REQ-LIFECYCLE-001
+- REQ-LIFECYCLE-001
 requirement_refs: []
 source_files:
-  - .claude/skills/implementation-cycle/SKILL.md
-  - .claude/haios/config/activity_matrix.yaml
-  - .claude/templates/implementation/PLAN.md
+- .claude/skills/implementation-cycle/SKILL.md
+- .claude/haios/config/activity_matrix.yaml
+- .claude/templates/implementation/PLAN.md
 acceptance_criteria:
-  - "Design document specifying how lifecycle adapts to work type (implementation, design, investigation, cleanup)"
-  - "Ceremony chain adapts: design work skips TDD gates, investigation skips file manifests, cleanup skips detailed design"
-  - "Computable predicate pattern (retro-cycle Phase 0) extended to full implementation cycle"
-  - "WORK-152 (plan template fracturing) identified as first implementation step"
+- Design document specifying how lifecycle adapts to work type (implementation, design,
+  investigation, cleanup)
+- 'Ceremony chain adapts: design work skips TDD gates, investigation skips file manifests,
+  cleanup skips detailed design'
+- Computable predicate pattern (retro-cycle Phase 0) extended to full implementation
+  cycle
+- WORK-152 (plan template fracturing) identified as first implementation step
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: working
+cycle_phase: backlog
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-16T18:45:11
-    exited: null
+- node: backlog
+  entered: 2026-02-16 18:45:11
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85737
+- 85738
+- 85739
+- 85740
+- 85741
+- 85742
+- 85743
+- 85744
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-16
-last_updated: 2026-02-16T18:45:11
+last_updated: '2026-02-16T23:22:47.018999'
+queue_history:
+- position: ready
+  entered: '2026-02-16T23:22:46.988998'
+  exited: '2026-02-16T23:22:47.015454'
+- position: working
+  entered: '2026-02-16T23:22:47.015454'
+  exited: null
 ---
 # WORK-155: Lifecycle Work-Type Awareness Beyond Plan Templates
 

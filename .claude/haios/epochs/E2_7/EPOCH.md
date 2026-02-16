@@ -72,7 +72,7 @@ Compose, don't concatenate.
 |-------|-------|------------|--------|
 | CH-049 | BugBatch | WORK-153 | Complete |
 | CH-050 | EpochTransition | WORK-154 | Complete |
-| CH-051 | StalenessDetection | WORK-136, WORK-156 | Planning |
+| CH-051 | StalenessDetection | WORK-136, WORK-156 | Complete |
 
 ### Deferred to E2.9 (Governance)
 

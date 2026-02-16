@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-16T23:15:02",
+    "generated": "2026-02-16T23:43:40",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 85548,
-        "entities": 10024,
+        "concepts": 85568,
+        "entities": 10030,
         "backlog_pending": 0
     },
     "infrastructure": {
