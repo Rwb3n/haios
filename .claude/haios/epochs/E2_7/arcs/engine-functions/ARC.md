@@ -31,7 +31,7 @@ Replace manual path resolution and file reads with engine functions. Work items,
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
 | CH-044 | HierarchyQueryEngine | New (TBD) | REQ-TRACE-005 | None | Planning |
-| CH-045 | StatusCascade | WORK-034 | REQ-QUEUE-001 | CH-044 (engine functions needed for cascade) | Planning |
+| CH-045 | StatusCascade | WORK-034 | REQ-QUEUE-001 | CH-044 (engine functions needed for cascade) | Complete |
 
 ---
 

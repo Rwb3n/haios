@@ -39,6 +39,7 @@ side_effects:
   - "Memory commit (delegated to retro-cycle COMMIT phase)"
   - "Log ceremony event"
   - "Git commit via checkpoint-cycle"
+  - "Upstream status propagation to ARC.md (WORK-034)"
 recipes:
 - close-work
 - update-status
@@ -157,12 +158,22 @@ just set-cycle close-work-cycle ARCHIVE {work_id}
 
 2. Update any associated plans to `status: complete` (if not already)
 
+3. **Run upstream status propagation (WORK-034):**
+   ```python
+   from status_propagator import StatusPropagator
+   result = StatusPropagator().propagate(work_id)
+   ```
+   This checks if the closed work item's chapter is now complete (all chapter work items done),
+   and if so, updates the chapter status row in the parent ARC.md. Also checks arc completion.
+   Results: `chapter_completed` (ARC.md updated), `chapter_incomplete` (no change), `no_hierarchy` (no chapter/arc fields), or `arc_completed` (all chapters done).
+
 **Exit Criteria:**
 - [ ] `just close-work` succeeded
 - [ ] Work file has `status: complete` and `closed: {date}`
 - [ ] Associated plans marked complete
+- [ ] Status propagation executed (chapter/arc status synced)
 
-**Tools:** Bash(just close-work)
+**Tools:** Bash(just close-work), Python(status_propagator)
 
 ---
 

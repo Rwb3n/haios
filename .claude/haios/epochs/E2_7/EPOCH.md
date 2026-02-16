@@ -70,8 +70,8 @@ Compose, don't concatenate.
 
 | CH-ID | Title | Work Items | Status |
 |-------|-------|------------|--------|
-| CH-049 | BugBatch | WORK-153 | Planning |
-| CH-050 | EpochTransition | WORK-154 | Planning |
+| CH-049 | BugBatch | WORK-153 | Complete |
+| CH-050 | EpochTransition | WORK-154 | Complete |
 | CH-051 | StalenessDetection | WORK-136 | Planning |
 
 ### Deferred to E2.9 (Governance)
