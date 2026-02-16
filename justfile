@@ -111,6 +111,12 @@ update-status-dry:
 update-status-slim:
     python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from status import generate_slim_status, write_slim_status; slim = generate_slim_status(); write_slim_status(slim, '.claude/haios-status-slim.json'); print('Slim status updated')"
 
+# Sync manifest.yaml components with disk (WORK-135)
+# Usage: just manifest-sync          (apply changes)
+#        just manifest-sync --dry-run (preview only)
+manifest-sync *args:
+    python scripts/manifest_sync.py {{args}}
+
 # Cascade status change to dependent items (E2-251: Uses WorkEngine)
 cascade id status:
     python .claude/haios/modules/cli.py cascade {{id}} {{status}}

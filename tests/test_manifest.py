@@ -30,25 +30,38 @@ class TestManifest:
         assert "components" in manifest, "manifest must have 'components' section"
 
     def test_component_counts_match_file_system(self, manifest: dict):
-        """Verify manifest declares correct number of components."""
-        # Count actual files (excluding READMEs)
-        commands = [
-            f for f in Path(".claude/commands").glob("*.md") if f.name != "README.md"
-        ]
-        skills = list(Path(".claude/skills").glob("*/SKILL.md"))
-        agents = [
-            f for f in Path(".claude/agents").glob("*.md") if f.name != "README.md"
-        ]
+        """Verify manifest declares correct components with specific diff."""
+        # Commands: .md files excluding README.md
+        disk_commands = {
+            f.stem for f in Path(".claude/commands").glob("*.md") if f.name != "README.md"
+        }
+        manifest_commands = {c["id"] for c in manifest["components"]["commands"]}
+        missing_cmds = disk_commands - manifest_commands
+        extra_cmds = manifest_commands - disk_commands
+        assert not missing_cmds, f"Commands on disk but not in manifest: {missing_cmds}"
+        assert not extra_cmds, f"Commands in manifest but not on disk: {extra_cmds}"
 
-        assert len(manifest["components"]["commands"]) == len(
-            commands
-        ), f"Expected {len(commands)} commands, got {len(manifest['components']['commands'])}"
-        assert len(manifest["components"]["skills"]) == len(
-            skills
-        ), f"Expected {len(skills)} skills, got {len(manifest['components']['skills'])}"
-        assert len(manifest["components"]["agents"]) == len(
-            agents
-        ), f"Expected {len(agents)} agents, got {len(manifest['components']['agents'])}"
+        # Skills: dirs containing SKILL.md
+        disk_skills = {
+            d.parent.name for d in Path(".claude/skills").glob("*/SKILL.md")
+        }
+        manifest_skills = {s["id"] for s in manifest["components"]["skills"]}
+        missing_skills = disk_skills - manifest_skills
+        extra_skills = manifest_skills - disk_skills
+        assert not missing_skills, f"Skills on disk but not in manifest: {missing_skills}"
+        assert not extra_skills, f"Skills in manifest but not on disk: {extra_skills}"
+
+        # Agents: .md files excluding README.md
+        disk_agents = {
+            f.stem for f in Path(".claude/agents").glob("*.md") if f.name != "README.md"
+        }
+        manifest_agents = {a["id"] for a in manifest["components"]["agents"]}
+        missing_agents = disk_agents - manifest_agents
+        extra_agents = manifest_agents - disk_agents
+        assert not missing_agents, f"Agents on disk but not in manifest: {missing_agents}"
+        assert not extra_agents, f"Agents in manifest but not on disk: {extra_agents}"
+
+        # Hooks: fixed count
         assert (
             len(manifest["components"]["hooks"]) == 4
         ), f"Expected 4 hook handlers, got {len(manifest['components']['hooks'])}"
