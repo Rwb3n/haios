@@ -56,7 +56,7 @@ Compose, don't concatenate.
 | CH-ID | Title | Work Items | Status |
 |-------|-------|------------|--------|
 | CH-044 | HierarchyQueryEngine | New (TBD) | Planning |
-| CH-045 | StatusCascade | WORK-034 | Planning |
+| CH-045 | StatusCascade | WORK-034 | Complete |
 
 ### Arc 2: composability — "Compose, don't concatenate"
 
@@ -72,7 +72,7 @@ Compose, don't concatenate.
 |-------|-------|------------|--------|
 | CH-049 | BugBatch | WORK-153 | Complete |
 | CH-050 | EpochTransition | WORK-154 | Complete |
-| CH-051 | StalenessDetection | WORK-136 | Planning |
+| CH-051 | StalenessDetection | WORK-136, WORK-156 | Planning |
 
 ### Deferred to E2.9 (Governance)
 
@@ -94,12 +94,12 @@ Compose, don't concatenate.
 
 - [ ] Arcs and chapters stored flat with metadata relationships (Arc 2: CH-046)
 - [ ] Engine functions for hierarchy queries (Arc 1: CH-044)
-- [ ] Status cascades automatically on work/chapter/arc closure (Arc 1: CH-045)
+- [x] Status cascades automatically on work/chapter/arc closure (Arc 1: CH-045, WORK-034 closed S386)
 - [x] Lifecycle asset types implemented with typed I/O (WORK-093, closed 2026-02-15)
 - [ ] ConfigLoader used for all path resolution (Arc 2: CH-046)
 - [ ] Recipe surface area rationalized (Arc 2: CH-048)
-- [ ] Known bugs from E2.6 triage resolved (Arc 3: CH-049)
-- [ ] Epoch transition validation operational (Arc 3: CH-050)
+- [x] Known bugs from E2.6 triage resolved (Arc 3: CH-049, WORK-153 closed S384)
+- [x] Epoch transition validation operational (Arc 3: CH-050, WORK-154 closed S385)
 
 ---
 

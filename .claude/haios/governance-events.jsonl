@@ -6911,3 +6911,17 @@
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-16T20:51:41.458172"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-16T20:51:41.509653"}
 {"type": "StatusPropagation", "work_id": "WORK-034", "chapter": "CH-045", "arc": "engine-functions", "action": "chapter_completed", "timestamp": "2026-02-16T20:51:52.917360"}
+{"type": "SessionStarted", "session": 387, "agent": "Hephaestus", "timestamp": "2026-02-16T21:12:06.060646"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-16T21:15:53.824391"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-136", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-16T21:15:53.829516"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-136"], "from": "backlog", "to": "ready", "timestamp": "2026-02-16T21:15:53.834025", "rationale": "Last item in infrastructure arc (CH-051). Completes Arc 3.", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-16T21:15:53.834025"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-16T21:15:53.852847"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-136", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-16T21:15:53.858053"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-136"], "from": "ready", "to": "working", "timestamp": "2026-02-16T21:15:53.862585", "rationale": "Selected by operator in S387 survey-cycle", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-16T21:15:53.864088"}
+{"type": "CeremonyStart", "ceremony": "spawn-work", "timestamp": "2026-02-16T21:20:05.057472"}
+{"type": "SpawnWork", "ceremony": "spawn-work", "parent_work_id": "WORK-136", "new_work_id": "WORK-156", "title": "Implement Checkpoint Pending Staleness Detection", "work_type": "implementation", "timestamp": "2026-02-16T21:20:05.075606", "rationale": "Investigation WORK-136 confirmed approach: WORK-ID auto-resolution via WorkEngine + free-text age markers + WorkLoader sort bug fix", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "spawn-work", "side_effects": 3, "timestamp": "2026-02-16T21:20:05.075606"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-16T21:23:12.293570"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-16T21:23:12.341486"}

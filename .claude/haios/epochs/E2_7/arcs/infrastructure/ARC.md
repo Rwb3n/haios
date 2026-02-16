@@ -33,7 +33,7 @@ Prerequisite quality work before deeper E2.7 design. Fix known bugs from E2.6 tr
 |-------|-------|------------|--------------|--------------|--------|
 | CH-049 | BugBatch | WORK-153 | REQ-CEREMONY-001, REQ-CEREMONY-002 | None | Complete |
 | CH-050 | EpochTransition | WORK-154 | REQ-CONFIG-003 | None | Complete |
-| CH-051 | StalenessDetection | WORK-136 | REQ-CEREMONY-001 | None | Planning |
+| CH-051 | StalenessDetection | WORK-136, WORK-156 | REQ-CEREMONY-001 | None | Planning |
 
 ---
 
