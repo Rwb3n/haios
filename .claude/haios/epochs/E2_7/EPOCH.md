@@ -6,7 +6,8 @@
 
 **Epoch ID:** E2.7
 **Name:** Composability
-**Status:** Future
+**Status:** Active
+**Started:** 2026-02-16 (Session 382)
 **Prior:** E2.6 (Foundations)
 **Next:** E2.8 (Agent UX)
 

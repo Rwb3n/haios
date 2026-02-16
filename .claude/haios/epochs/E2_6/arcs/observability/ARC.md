@@ -7,7 +7,7 @@
 **Arc ID:** observability
 **Epoch:** E2.6
 **Theme:** System state visibility, epistemic discipline, agent capability cards, legacy cleanup
-**Status:** In Progress
+**Status:** Complete
 
 ---
 
@@ -41,9 +41,9 @@ The system must see itself. Epistemic state (KNOWN vs INFERRED vs UNKNOWN) is in
 ## Exit Criteria
 
 - [x] Epistemic review ceremony designed (KNOWN/INFERRED/UNKNOWN at investigation boundary) — WORK-082 S372: inside CONCLUDE, three-level verdict, WORK-151 spawned for implementation
-- [ ] Agent UX Test criterion added to dod-validation-cycle (optional)
-- [ ] All 11 agents have structured capability cards
-- [ ] Legacy duplication resolved (lib/ orphans, deprecated artifacts)
+- [x] Agent UX Test criterion added to dod-validation-cycle (WORK-096 S380: agent UX test in DoD validation)
+- [x] All 11 agents have structured capability cards (WORK-144: A2A-inspired agent cards)
+- [x] Legacy duplication resolved (WORK-145 S377: lib/ orphans and deprecated artifacts cleaned up)
 
 ---
 

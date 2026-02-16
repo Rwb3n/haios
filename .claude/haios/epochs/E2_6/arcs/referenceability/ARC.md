@@ -7,7 +7,7 @@
 **Arc ID:** referenceability
 **Epoch:** E2.6
 **Theme:** Portable schemas, structured configuration, clear interface contracts
-**Status:** In Progress
+**Status:** Complete
 
 ---
 
@@ -43,7 +43,7 @@ Every schema, template, and configuration must be referenceable from a single ro
 - [x] Template reference pattern defined (WORK-067: `{{schema:domain.key}}` resolved at scaffold time)
 - [x] Bootstrap pattern for new projects defined (WORK-067: copy core/, create project/, add schemas: to haios.yaml)
 - [x] Core vs project-specific boundary clear (WORK-067: TRD enums = core ~10, HAIOS enums = project ~35)
-- [ ] Manifest drift detectable automatically
+- [x] Manifest drift detectable automatically (WORK-135 S381: manifest auto-sync mechanism, diff detection, roundtrip validation)
 
 ---
 

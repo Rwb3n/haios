@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-16T18:21:03",
+    "generated": "2026-02-16T18:27:16",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 378,
-        "current_session": 379,
+        "prior_session": 379,
+        "current_session": 382,
         "prior_date": "2026-02-15",
         "completed": [],
         "completed_count": 0,
@@ -3949,6 +3949,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-16-01-SESSION-382-work-148-stub-skill-removal.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-16",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/plans/PLAN-ADR-031-IMPLEMENTATION.md",
             "template": "implementation_plan",
             "status": "complete",
@@ -6812,7 +6821,7 @@
         {
             "path": "docs/checkpoints/2025-12-22-03-SESSION-98-m4-investigation-infrastructure-complete.md",
             "last_updated": "2025-12-22T18:23:15",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/checkpoints/2025-12-22-04-SESSION-99-e2-114-e2-112-investigation-infrastructure-complete.md",
@@ -8121,9 +8130,9 @@
         }
     ],
     "workspace": {
-        "total_files": 552,
+        "total_files": 553,
         "by_template": {
-            "checkpoint": 378,
+            "checkpoint": 379,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8134,7 +8143,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 213,
+            "unknown": 214,
             "draft": 2,
             "approved": 6,
             "ready": 1,

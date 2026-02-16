@@ -7,7 +7,7 @@
 **Arc ID:** traceability
 **Epoch:** E2.6
 **Theme:** Bidirectional tracing from L4 requirements to artifacts, with governance violation logging
-**Status:** In Progress
+**Status:** Complete
 
 ---
 
@@ -41,10 +41,10 @@ The traceability chain (L4 -> Epoch -> Arc -> Chapter -> Work Item -> Artifact) 
 ## Exit Criteria
 
 - [x] Plan decomposition pattern documented with WORK.md/plan.md fields (WORK-097 S368: spawn_type field + decomposition_map section)
-- [ ] Activity matrix has validation-cycle and triage-cycle phase mappings
-- [ ] L4 requirements bidirectionally traceable to work items and artifacts
-- [ ] MUST gate violations logged to governance-events.jsonl
-- [ ] Gap analysis produced (unimplemented requirements/decisions)
+- [x] Activity matrix has validation-cycle and triage-cycle phase mappings (WORK-104: validation VERIFY/JUDGE/REPORT + triage SCAN/ASSESS/RANK/COMMIT mapped)
+- [x] L4 requirements bidirectionally traceable to work items and artifacts (WORK-075: system audit with L4 coverage analysis)
+- [x] MUST gate violations logged to governance-events.jsonl (WORK-146: gate skip violation logging implemented)
+- [x] Gap analysis produced (WORK-075: unimplemented requirements and decisions inventoried)
 
 ---
 

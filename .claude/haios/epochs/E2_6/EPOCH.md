@@ -6,8 +6,9 @@
 
 **Epoch ID:** E2.6
 **Name:** Foundations
-**Status:** Active
+**Status:** Complete
 **Started:** 2026-02-14 (Session 365)
+**Completed:** 2026-02-16 (Session 382)
 **Prior:** E2.5 (Independent Lifecycles)
 **Next:** E2.7 (Composability)
 
@@ -147,13 +148,13 @@ E2.6 is focused and narrow: the four -ilities applied to what we already have.
 
 ## Exit Criteria
 
-- [ ] Agent can discover all skills, agents, recipes, templates via infrastructure (not CLAUDE.md) — WORK-020 designed three-tier model; commands+skills+agents already auto-discovered by Claude Code; recipe hiding + capability cards needed for completion
-- [ ] All agent definitions include capability cards (A2A-inspired Agent Card pattern)
-- [ ] L4 requirements traceable to work items bidirectionally
-- [ ] Plan decomposition traceable to source requirements — WORK-097 designed spawn_type + decomposition_map pattern; ADR (WORK-150) pending
-- [ ] System status observable without manual file reads (status, audit, metrics)
-- [ ] Legacy duplication resolved (lib/ orphans, deprecated artifacts)
-- [ ] MUST gate violations logged to governance events
+- [x] Agent can discover all skills, agents, recipes, templates via infrastructure (not CLAUDE.md) — WORK-020 three-tier model + ADR-045; WORK-148 stub removal; Claude Code auto-discovery
+- [x] All agent definitions include capability cards (A2A-inspired Agent Card pattern) — WORK-144
+- [x] L4 requirements traceable to work items bidirectionally — WORK-075 system audit + L4 coverage analysis
+- [x] Plan decomposition traceable to source requirements — WORK-097 spawn_type + decomposition_map; ADR-046 (WORK-150) accepted
+- [x] System status observable without manual file reads (status, audit, metrics) — WORK-082 epistemic review + WORK-096 agent UX DoD + WORK-151 CONCLUDE implementation
+- [x] Legacy duplication resolved (lib/ orphans, deprecated artifacts) — WORK-145 cleanup complete
+- [x] MUST gate violations logged to governance events — WORK-146 gate skip violation logging
 
 ---
 

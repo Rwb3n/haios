@@ -7,7 +7,7 @@
 **Arc ID:** discoverability
 **Epoch:** E2.6
 **Theme:** Infrastructure for agent discovery of skills, recipes, commands, agents, templates
-**Status:** In Progress
+**Status:** Complete
 
 ---
 
@@ -43,7 +43,7 @@ The agent must find what it needs through infrastructure, not memorized paths. I
 - [x] Friction map of overlaps and gaps completed (WORK-020 S368: 7 friction points documented)
 - [x] Three-tier model defined with clear boundaries (WORK-020 S368: Tier 1 commands, Tier 2 skills+agents, Tier 3 recipes)
 - [x] Discovery mechanism designed (WORK-020 S368: Claude Code auto-discovery + capability cards + recipe hiding)
-- [ ] Consolidation work spawned (deferred to E2.7+ per spawn-deferral policy)
+- [x] Consolidation work spawned (WORK-148 S382: stubs removed; E2.7 deferred items documented in ARC spawn table)
 
 ---
 

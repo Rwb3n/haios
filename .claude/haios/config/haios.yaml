@@ -12,22 +12,22 @@ manifest:
 
 # Current epoch context (ADR-042: Arc > Chapter in hierarchy)
 epoch:
-  current: E2.6
-  subversion: "2.6"  # Foundations
-  epoch_file: ".claude/haios/epochs/E2_6/EPOCH.md"
-  architecture_dir: ".claude/haios/epochs/E2_6/architecture"
-  arcs_dir: ".claude/haios/epochs/E2_6/arcs"
-  observations_dir: ".claude/haios/epochs/E2_6/observations"
+  current: E2.7
+  subversion: "2.7"  # Composability
+  epoch_file: ".claude/haios/epochs/E2_7/EPOCH.md"
+  architecture_dir: ".claude/haios/epochs/E2_7/architecture"
+  arcs_dir: ".claude/haios/epochs/E2_7/arcs"
+  observations_dir: ".claude/haios/epochs/E2_7/observations"
   # Prior epoch (for reference)
-  prior_epoch: ".claude/haios/epochs/E2_5/EPOCH.md"
+  prior_epoch: ".claude/haios/epochs/E2_6/EPOCH.md"
   # Foundational architecture (MUST load) - carries forward
   foundational:
     - S20-pressure-dynamics.md
     - S21-cognitive-notation.md
     - S22-skill-patterns.md
     - S27-breath-model.md  # E2.4 discovery, foundational
-  # Active arcs (E2.6 - Foundations, pending arc decomposition)
-  active_arcs: [discoverability, referenceability, traceability, observability]
+  # Active arcs (E2.7 - Composability, pending arc decomposition)
+  active_arcs: []
   # Epoch sequence (planned S365)
   sequence:
     - id: E2.6
