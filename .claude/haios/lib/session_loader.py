@@ -54,11 +54,14 @@ class SessionLoader:
     This follows the IdentityLoader pattern (WORK-007).
     """
 
+    TERMINAL_STATUSES = {"complete", "archived", "dismissed", "invalid", "deferred"}
+
     def __init__(
         self,
         config_path: Optional[Path] = None,
         checkpoint_dir: Optional[Path] = None,
         memory_query_fn: Optional[Callable[[List[int]], str]] = None,
+        work_status_fn: Optional[Callable[[str], Optional[str]]] = None,
     ):
         """
         Initialize session loader.
@@ -67,6 +70,7 @@ class SessionLoader:
             config_path: Path to session.yaml (default: standard location)
             checkpoint_dir: Override checkpoint directory (for testing)
             memory_query_fn: Optional function to query memory IDs
+            work_status_fn: Optional function to check work item status (WORK-156)
 
         Note:
             Gracefully degrades if config file not found.
@@ -74,6 +78,7 @@ class SessionLoader:
         self.config_path = config_path or DEFAULT_CONFIG
         self._checkpoint_dir = checkpoint_dir
         self._memory_query_fn = memory_query_fn
+        self._work_status_fn = work_status_fn
         self._load_config()
 
     def _load_config(self) -> None:
@@ -134,6 +139,49 @@ class SessionLoader:
         # Default: format IDs for manual query (fallback)
         return f"Memory IDs to query: {ids}"
 
+    def validate_pending_items(
+        self,
+        pending: List[str],
+        checkpoint_session: Optional[int] = None,
+    ) -> List[str]:
+        """Annotate pending items with staleness information (WORK-156).
+
+        - WORK-ID items: check status via work_status_fn, annotate [RESOLVED] if terminal
+        - Free-text items: annotate with age marker (pending since session N)
+
+        Args:
+            pending: Raw pending items from checkpoint frontmatter
+            checkpoint_session: Session number from checkpoint (for age marker)
+
+        Returns:
+            Annotated list with staleness information
+        """
+        if not pending:
+            return pending
+
+        annotated = []
+        work_id_pattern = re.compile(r"(WORK-\d{3,})")
+
+        for item in pending:
+            match = work_id_pattern.search(str(item))
+            if match:
+                work_id = match.group(1)
+                if self._work_status_fn:
+                    status = self._work_status_fn(work_id)
+                    if status and status.lower() in self.TERMINAL_STATUSES:
+                        annotated.append(f"[RESOLVED] {item}")
+                        continue
+                # WORK-ID but no status fn or not terminal — pass through
+                annotated.append(str(item))
+            else:
+                # Free-text item — add age marker
+                if checkpoint_session is not None:
+                    annotated.append(f"(pending since session {checkpoint_session}) {item}")
+                else:
+                    annotated.append(str(item))
+
+        return annotated
+
     def extract(self) -> Dict[str, Any]:
         """
         Extract session context from latest checkpoint + memory.
@@ -161,7 +209,8 @@ class SessionLoader:
 
         result["prior_session"] = fm.get("session")
         result["completed"] = fm.get("completed", [])
-        result["pending"] = fm.get("pending", [])
+        raw_pending = fm.get("pending", [])
+        result["pending"] = self.validate_pending_items(raw_pending, result["prior_session"])
         result["drift_observed"] = fm.get("drift_observed", [])
         result["memory_refs"] = fm.get("load_memory_refs", [])
         result["memory_content"] = self._query_memory_ids(result["memory_refs"])

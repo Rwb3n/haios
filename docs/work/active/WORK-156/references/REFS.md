@@ -2,7 +2,7 @@
 type: portal-index
 work_id: WORK-156
 generated: 2026-02-16
-last_updated: 2026-02-16T21:20:05.068460
+last_updated: '2026-02-16T21:57:58.349716'
 ---
 # References: WORK-156
 
@@ -16,4 +16,4 @@ last_updated: 2026-02-16T21:20:05.068460
 (none)
 
 ## Memory Concepts
-(none)
+- [[concept:85718]]

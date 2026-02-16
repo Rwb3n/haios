@@ -107,6 +107,34 @@ class ColdstartOrchestrator:
             logger.warning(f"Orphan detection failed: {e}")
             return None
 
+    def _make_work_status_fn(self):
+        """Create work status lookup for staleness detection (WORK-156).
+
+        Note: WorkEngine is in modules/, ColdstartOrchestrator is in lib/.
+        Requires sys.path addition for cross-directory import (A2 critique fix).
+        WorkEngine requires GovernanceLayer argument (A1 critique fix).
+
+        Returns:
+            Callable that takes WORK-ID and returns status string, or None on failure.
+        """
+        try:
+            import sys
+            modules_path = str(Path(__file__).parent.parent / "modules")
+            if modules_path not in sys.path:
+                sys.path.insert(0, modules_path)
+            from work_engine import WorkEngine
+            from governance_layer import GovernanceLayer
+            governance = GovernanceLayer()
+            engine = WorkEngine(governance=governance)
+
+            def lookup(work_id: str):
+                work = engine.get_work(work_id)
+                return work.status if work else None
+            return lookup
+        except Exception as e:
+            logger.warning(f"Work status lookup unavailable: {e}")
+            return None
+
     def run(self) -> str:
         """
         Execute all phases with breathing room.
@@ -133,8 +161,15 @@ class ColdstartOrchestrator:
             if loader_factory:
                 output.append(f"[PHASE: {phase_id.upper()}]")
                 try:
-                    # Instantiate and call loader
-                    loader = loader_factory()
+                    # WORK-156: Wire work_status_fn for session loader
+                    if phase_id == "session":
+                        try:
+                            loader = loader_factory(work_status_fn=self._make_work_status_fn())
+                        except TypeError:
+                            # Graceful fallback if factory doesn't accept work_status_fn (e.g., mocks)
+                            loader = loader_factory()
+                    else:
+                        loader = loader_factory()
                     output.append(loader.load())
                 except Exception as e:
                     logger.warning(f"Loader {phase_id} failed: {e}")

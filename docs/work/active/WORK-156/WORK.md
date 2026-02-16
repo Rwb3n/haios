@@ -1,46 +1,58 @@
 ---
 template: work_item
 id: WORK-156
-title: "Implement Checkpoint Pending Staleness Detection"
+title: Implement Checkpoint Pending Staleness Detection
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-16
 spawned_by: WORK-136
 spawned_children: []
 chapter: CH-051
 arc: infrastructure
-closed: null
+closed: '2026-02-16'
 priority: medium
 effort: small
-traces_to: [REQ-CEREMONY-001]
+traces_to:
+- REQ-CEREMONY-001
 requirement_refs: []
 source_files:
-  - ".claude/haios/lib/session_loader.py"
-  - ".claude/haios/lib/work_loader.py"
-  - ".claude/haios/lib/coldstart_orchestrator.py"
+- .claude/haios/lib/session_loader.py
+- .claude/haios/lib/work_loader.py
+- .claude/haios/lib/coldstart_orchestrator.py
 acceptance_criteria:
-  - "Stale WORK-ID pending items are annotated as [RESOLVED] at coldstart"
-  - "Free-text pending items show age marker (pending since session N)"
-  - "WorkLoader sort bug fixed (max by session number, not lexicographic)"
-  - "All existing tests pass, new tests cover staleness detection"
+- Stale WORK-ID pending items are annotated as [RESOLVED] at coldstart
+- Free-text pending items show age marker (pending since session N)
+- WorkLoader sort bug fixed (max by session number, not lexicographic)
+- All existing tests pass, new tests cover staleness detection
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-16T21:20:05
-    exited: null
+- node: backlog
+  entered: 2026-02-16 21:20:05
+  exited: '2026-02-16T21:59:42.877491'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85718
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-16
-last_updated: 2026-02-16T21:20:05
+last_updated: '2026-02-16T21:59:42.881011'
+queue_history:
+- position: ready
+  entered: '2026-02-16T21:38:46.423333'
+  exited: '2026-02-16T21:38:46.448463'
+- position: working
+  entered: '2026-02-16T21:38:46.448463'
+  exited: '2026-02-16T21:59:42.877491'
+- position: done
+  entered: '2026-02-16T21:59:42.877491'
+  exited: null
 ---
 # WORK-156: Implement Checkpoint Pending Staleness Detection
 

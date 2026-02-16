@@ -119,6 +119,87 @@ load_memory_refs: []
 
 
 # =============================================================================
+# WORK-156: Checkpoint pending item staleness detection
+# =============================================================================
+
+
+class TestValidatePendingItems:
+    """WORK-156: validate_pending_items annotates stale pending items."""
+
+    def test_validate_pending_resolves_terminal_work_id(self, tmp_path):
+        """T1: WORK-ID with terminal status gets [RESOLVED] prefix."""
+        from session_loader import SessionLoader
+
+        loader = SessionLoader(checkpoint_dir=tmp_path, work_status_fn=lambda wid: "complete")
+        result = loader.validate_pending_items(["WORK-100: Do something"], checkpoint_session=385)
+        assert result == ["[RESOLVED] WORK-100: Do something"]
+
+    def test_validate_pending_keeps_active_work_id(self, tmp_path):
+        """T2: WORK-ID with active status passes through unchanged."""
+        from session_loader import SessionLoader
+
+        loader = SessionLoader(checkpoint_dir=tmp_path, work_status_fn=lambda wid: "active")
+        result = loader.validate_pending_items(["WORK-101: Still working"], checkpoint_session=385)
+        assert result == ["WORK-101: Still working"]
+
+    def test_validate_pending_age_marker_free_text(self, tmp_path):
+        """T3: Free-text items get age marker with session number."""
+        from session_loader import SessionLoader
+
+        loader = SessionLoader(checkpoint_dir=tmp_path)
+        result = loader.validate_pending_items(["Fix the bug in checkout"], checkpoint_session=385)
+        assert result == ["(pending since session 385) Fix the bug in checkout"]
+
+    def test_validate_pending_mixed_items(self, tmp_path):
+        """T4: Mixed WORK-ID and free-text items annotated correctly."""
+        from session_loader import SessionLoader
+
+        def mock_status(wid):
+            return {"WORK-100": "complete", "WORK-101": "active"}.get(wid)
+
+        loader = SessionLoader(checkpoint_dir=tmp_path, work_status_fn=mock_status)
+        result = loader.validate_pending_items(
+            ["WORK-100: Done", "Fix bug", "WORK-101: Active"], checkpoint_session=385
+        )
+        assert result == [
+            "[RESOLVED] WORK-100: Done",
+            "(pending since session 385) Fix bug",
+            "WORK-101: Active",
+        ]
+
+    def test_validate_pending_no_status_fn_passthrough(self, tmp_path):
+        """T5: Without work_status_fn, WORK-ID items pass through unchanged."""
+        from session_loader import SessionLoader
+
+        loader = SessionLoader(checkpoint_dir=tmp_path)
+        result = loader.validate_pending_items(["WORK-100: Something"], checkpoint_session=385)
+        assert result == ["WORK-100: Something"]
+
+
+class TestExtractIntegration:
+    """WORK-156: extract() integrates validate_pending_items."""
+
+    def test_extract_annotates_pending_items(self, tmp_path):
+        """T8: extract() calls validate_pending_items on pending items."""
+        from session_loader import SessionLoader
+
+        cp_dir = tmp_path / "docs" / "checkpoints"
+        cp_dir.mkdir(parents=True)
+        (cp_dir / "2026-02-16-SESSION-387-checkpoint.md").write_text(
+            '---\nsession: 387\npending:\n  - "WORK-100: Resolved task"\n  - "Free text item"\n---'
+        )
+
+        loader = SessionLoader(
+            checkpoint_dir=cp_dir,
+            work_status_fn=lambda wid: "complete" if wid == "WORK-100" else None,
+        )
+        extracted = loader.extract()
+
+        assert "[RESOLVED]" in extracted["pending"][0]
+        assert "pending since session 387" in extracted["pending"][1]
+
+
+# =============================================================================
 # WORK-130: Checkpoint discovery sorts by session number, not filename
 # =============================================================================
 

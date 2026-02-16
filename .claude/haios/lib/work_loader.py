@@ -117,16 +117,32 @@ class WorkLoader:
                 })
         return items
 
+    def _find_latest_checkpoint(self) -> Optional[Path]:
+        """Find most recent checkpoint by session number (WORK-156: not lexicographic).
+
+        Matches SessionLoader._find_latest_checkpoint (WORK-130 fix).
+        Extracts SESSION-NNN from filenames and picks the highest session number.
+        Falls back to 0 for files without SESSION-NNN pattern.
+        """
+        if not self.checkpoint_dir.exists():
+            return None
+        checkpoints = [cp for cp in self.checkpoint_dir.glob("*.md") if cp.name != "README.md"]
+        if not checkpoints:
+            return None
+
+        def _session_number(path: Path) -> int:
+            """Extract session number from filename like '...-SESSION-348-...'."""
+            match = re.search(r"SESSION-(\d+)", path.name, re.IGNORECASE)
+            return int(match.group(1)) if match else 0
+
+        return max(checkpoints, key=_session_number)
+
     def _get_pending_from_checkpoint(self) -> List[str]:
         """Get pending items from latest checkpoint."""
-        if not self.checkpoint_dir.exists():
+        checkpoint = self._find_latest_checkpoint()
+        if not checkpoint:
             return []
-        checkpoints = sorted(self.checkpoint_dir.glob("*.md"), reverse=True)
-        # Filter out README.md
-        checkpoints = [cp for cp in checkpoints if cp.name != "README.md"]
-        if not checkpoints:
-            return []
-        content = checkpoints[0].read_text(encoding="utf-8")
+        content = checkpoint.read_text(encoding="utf-8")
         # Parse frontmatter
         match = re.search(r"^---\s*\n(.*?)\n---", content, re.DOTALL)
         if match:

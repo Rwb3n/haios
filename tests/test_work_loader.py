@@ -79,6 +79,50 @@ class TestWorkLoaderFormat:
         assert "WARNING" in formatted or "prior epoch" in formatted.lower()
 
 
+# =============================================================================
+# WORK-156: WorkLoader checkpoint sort bug fix
+# =============================================================================
+
+
+class TestWorkLoaderCheckpointSort:
+    """WORK-156: _get_pending_from_checkpoint uses session-number sort."""
+
+    def test_work_loader_find_latest_by_session_number(self, tmp_path):
+        """T6: Picks checkpoint by highest session number, not lexicographic."""
+        from work_loader import WorkLoader
+
+        cp_dir = tmp_path / "docs" / "checkpoints"
+        cp_dir.mkdir(parents=True)
+        (cp_dir / "2026-02-11-SESSION-345-closure.md").write_text(
+            "---\nsession: 345\npending:\n  - old\n---"
+        )
+        (cp_dir / "2026-02-11-07-SESSION-348-bug-fixes.md").write_text(
+            "---\nsession: 348\npending:\n  - new\n---"
+        )
+        (cp_dir / "2026-02-11-01-SESSION-340-tiny.md").write_text(
+            "---\nsession: 340\npending:\n  - oldest\n---"
+        )
+
+        loader = WorkLoader(checkpoint_dir=cp_dir, queue_fn=lambda: [])
+        pending = loader._get_pending_from_checkpoint()
+        assert pending == ["new"], f"Should pick SESSION-348 (highest), got {pending}"
+
+    def test_work_loader_excludes_readme(self, tmp_path):
+        """T7: README.md excluded from checkpoint discovery."""
+        from work_loader import WorkLoader
+
+        cp_dir = tmp_path / "docs" / "checkpoints"
+        cp_dir.mkdir(parents=True)
+        (cp_dir / "README.md").write_text("# Checkpoints")
+        (cp_dir / "2026-02-11-SESSION-340-x.md").write_text(
+            "---\nsession: 340\npending:\n  - item\n---"
+        )
+
+        loader = WorkLoader(checkpoint_dir=cp_dir, queue_fn=lambda: [])
+        pending = loader._get_pending_from_checkpoint()
+        assert pending == ["item"]
+
+
 class TestWorkLoaderLoad:
     """Tests for WorkLoader load method."""
 
