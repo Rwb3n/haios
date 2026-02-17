@@ -4,6 +4,7 @@ id: WORK-002
 title: Create .claude/session File
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-21
 spawned_by: CH-002

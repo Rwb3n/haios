@@ -4,6 +4,7 @@ id: WORK-016
 title: Node Transitions Value Assessment
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-26
 spawned_by: obs-244-01

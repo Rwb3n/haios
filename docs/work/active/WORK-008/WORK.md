@@ -4,6 +4,7 @@ id: WORK-008
 title: ContextLoader Identity Integration
 type: feature
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-22
 spawned_by: WORK-007

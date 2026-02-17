@@ -3,6 +3,7 @@ template: work_item
 id: E2-231
 title: Add just validate-refs Recipe
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2025-12-29
 closed: 2026-02-12

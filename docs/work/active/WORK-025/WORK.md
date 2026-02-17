@@ -4,6 +4,7 @@ id: WORK-025
 title: Delete stale .claude/lib/*.py files - keep only __init__.py shim
 type: task
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-27
 spawned_by: WORK-024

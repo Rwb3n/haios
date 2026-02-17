@@ -4,6 +4,7 @@ id: WORK-068
 title: Agent Model Configuration - Add model field to HAIOS agents
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-056

@@ -4,6 +4,7 @@ id: WORK-012
 title: HAIOS Agent Registration Architecture
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-25
 spawned_by: E2-072 observation (Session 236)

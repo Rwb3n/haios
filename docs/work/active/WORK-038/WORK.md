@@ -4,6 +4,7 @@ id: WORK-038
 title: Fix Content Truncation Bug in Ingester
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-30
 spawned_by: OBS-263-003

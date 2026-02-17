@@ -4,6 +4,7 @@ id: WORK-072
 title: E2.4 Full System Audit
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: null

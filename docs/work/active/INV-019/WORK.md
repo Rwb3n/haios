@@ -4,6 +4,7 @@ id: INV-019
 title: Requirements Synthesis from Memory
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2025-12-23
 closed: '2026-01-25'

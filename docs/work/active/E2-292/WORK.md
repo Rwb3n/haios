@@ -3,6 +3,7 @@ template: work_item
 id: E2-292
 title: Wire set-cycle Recipe Calls into Cycle Skills
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-16
 closed: 2026-02-12

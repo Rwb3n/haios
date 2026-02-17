@@ -4,6 +4,7 @@ id: WORK-005
 title: Implement Loader Base for Configuration Arc
 type: feature
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-21
 spawned_by: null

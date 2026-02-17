@@ -3,6 +3,7 @@ template: work_item
 id: E2-237
 title: Cycle Definitions Config File
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2025-12-30
 closed: 2026-02-12

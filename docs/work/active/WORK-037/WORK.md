@@ -4,6 +4,7 @@ id: WORK-037
 title: Investigation Cycle Redesign - EXPLORE-FIRST Pattern
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-30
 spawned_by: WORK-036

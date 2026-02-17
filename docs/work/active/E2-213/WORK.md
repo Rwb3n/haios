@@ -3,6 +3,7 @@ template: work_item
 id: E2-213
 title: Investigation Subtype Field
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2025-12-27
 closed: 2026-02-12

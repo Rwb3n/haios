@@ -4,6 +4,7 @@ id: WORK-083
 title: Memory Synthesis Sessions 280-292
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-02
 spawned_by: null

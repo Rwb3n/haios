@@ -4,6 +4,7 @@ id: WORK-043
 title: CH-001 InvestigationFracture - Split Monolithic Template
 type: design
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-30
 spawned_by: null

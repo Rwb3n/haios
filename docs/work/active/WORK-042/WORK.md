@@ -4,6 +4,7 @@ id: WORK-042
 title: CH-004 PreToolUseIntegration - Wire Governed Activities to Hook
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-30
 spawned_by: null

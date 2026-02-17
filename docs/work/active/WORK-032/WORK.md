@@ -4,6 +4,7 @@ id: WORK-032
 title: PlannerAgent Module Implementation
 type: feature
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-29
 spawned_by: null

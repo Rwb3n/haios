@@ -3,6 +3,7 @@ template: work_item
 id: INV-041
 title: Single Source Path Constants Architecture
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2025-12-28
 closed: '2026-02-02'

@@ -3,6 +3,7 @@ template: work_item
 id: E2-299
 title: WORK.md Typo Fix and Field Audit
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-17
 closed: '2026-01-17'

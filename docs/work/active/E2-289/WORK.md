@@ -3,6 +3,7 @@ template: work_item
 id: E2-289
 title: Execute Hierarchy Rename Chapter to Arc
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-15
 closed: 2026-02-12

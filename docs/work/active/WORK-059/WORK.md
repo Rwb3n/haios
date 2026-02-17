@@ -4,6 +4,7 @@ id: WORK-059
 title: Claude Code Task System vs HAIOS WorkEngine Comparison
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-056

@@ -4,6 +4,7 @@ id: WORK-030
 title: Universal WORK-XXX ID Format Enforcement
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-28
 spawned_by: WORK-028

@@ -4,6 +4,7 @@ id: WORK-028
 title: MCP haios-memory Server Connection Failure
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-28
 spawned_by: null

@@ -4,6 +4,7 @@ id: WORK-004
 title: Update Coldstart to Read .claude/session
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-21
 spawned_by: CH-002

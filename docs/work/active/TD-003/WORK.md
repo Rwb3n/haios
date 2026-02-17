@@ -3,6 +3,7 @@ template: work_item
 id: TD-003
 title: "Multi-Index Architecture"
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2025-12-23
 closed: 2026-02-12

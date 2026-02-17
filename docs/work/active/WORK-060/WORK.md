@@ -4,6 +4,7 @@ id: WORK-060
 title: Claude Code Platform Features - plansDirectory, MCP improvements, auto-reload
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-056

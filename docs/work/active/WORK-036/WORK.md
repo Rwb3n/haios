@@ -4,6 +4,7 @@ id: WORK-036
 title: Investigation Template vs Explore Agent Effectiveness
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-30
 spawned_by: null

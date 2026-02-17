@@ -3,6 +3,7 @@ template: work_item
 id: E2-164
 title: "Coldstart L1 Context Review"
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2025-12-24
 closed: 2026-02-12

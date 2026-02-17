@@ -4,6 +4,7 @@ id: WORK-033
 title: Pipeline Orchestrator Module (CH-006)
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-29
 spawned_by: null

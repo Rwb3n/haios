@@ -4,6 +4,7 @@ id: WORK-006
 title: Migrate .claude/lib to portable plugin directory
 type: chore
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-21
 spawned_by: null

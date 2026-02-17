@@ -4,6 +4,7 @@ id: WORK-077
 title: close-arc-ceremony Skill Implementation
 type: implementation
 status: complete
+queue_position: done
 owner: null
 created: 2026-02-02
 spawned_by: WORK-070

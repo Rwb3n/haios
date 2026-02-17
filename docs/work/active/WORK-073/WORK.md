@@ -4,6 +4,7 @@ id: WORK-073
 title: E2.4 System Audit Verification Pass
 type: investigation
 status: complete
+queue_position: done
 owner: null
 created: 2026-02-01
 spawned_by: WORK-072

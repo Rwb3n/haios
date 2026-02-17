@@ -4,6 +4,7 @@ id: WORK-058
 title: Claude Code Session/Context Management - SESSION_ID, agent_type, context:fork
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-056

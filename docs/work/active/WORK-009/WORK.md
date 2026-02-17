@@ -4,6 +4,7 @@ id: WORK-009
 title: Coldstart Orchestrator - Wire ContextLoader
 type: feature
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-22
 spawned_by: WORK-008

@@ -4,6 +4,7 @@ id: WORK-057
 title: Claude Code Hook Enhancements - additionalContext, skill hooks, once:true
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-056

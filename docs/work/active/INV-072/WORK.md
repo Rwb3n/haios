@@ -4,6 +4,7 @@ id: INV-072
 title: Spawn ID Collision - Completed Work Items Reused
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-26
 spawned_by: null

@@ -3,6 +3,7 @@ template: work_item
 id: E2-294
 title: Wire implementation-cycle and investigation-cycle with set-cycle
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-16
 closed: 2026-01-17

@@ -3,6 +3,7 @@ template: work_item
 id: E2-072
 title: Critique Subagent (Assumption Surfacing)
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2025-12-23
 closed: '2026-01-25'

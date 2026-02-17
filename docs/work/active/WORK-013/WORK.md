@@ -4,6 +4,7 @@ id: WORK-013
 title: INV Prefix Deprecation and Pruning
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-25
 spawned_by: Session 236 observation triage

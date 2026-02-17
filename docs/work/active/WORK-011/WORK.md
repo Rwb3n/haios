@@ -4,6 +4,7 @@ id: WORK-011
 title: Coldstart Orchestrator - Wire Loaders into Unified Coldstart
 type: feature
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-24
 spawned_by: null

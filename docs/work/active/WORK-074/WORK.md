@@ -4,6 +4,7 @@ id: WORK-074
 title: E2.4 System Audit Third Pass - Explore Agent
 type: investigation
 status: complete
+queue_position: done
 owner: null
 created: 2026-02-02
 spawned_by: WORK-073

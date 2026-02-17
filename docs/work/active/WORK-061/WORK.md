@@ -4,6 +4,7 @@ id: WORK-061
 title: EXPLORE-FIRST Investigation Cycle Implementation
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-037

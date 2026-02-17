@@ -4,6 +4,7 @@ id: WORK-041
 title: Design CH-003 GovernanceRules
 type: design
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-30
 spawned_by: null

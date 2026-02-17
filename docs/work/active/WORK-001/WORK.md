@@ -4,6 +4,7 @@ id: WORK-001
 title: Implement Universal Work Item Structure
 type: feature
 status: complete
+queue_position: done
 created: 2026-01-18
 closed: '2026-01-19'
 owner: null

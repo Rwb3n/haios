@@ -3,6 +3,7 @@ template: work_item
 id: INV-064
 title: Work Hierarchy Rename and Queue Architecture
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-15
 closed: 2026-02-12

@@ -4,6 +4,7 @@ id: WORK-063
 title: Add context:fork to validation-agent
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-058

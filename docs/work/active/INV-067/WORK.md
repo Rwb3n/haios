@@ -3,6 +3,7 @@ template: work_item
 id: INV-067
 title: Observation Backlog Verification and Triage
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-17
 closed: '2026-01-17'

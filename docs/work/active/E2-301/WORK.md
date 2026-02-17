@@ -3,6 +3,7 @@ template: work_item
 id: E2-301
 title: Update S17 Modular Architecture Spec
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-18
 closed: '2026-01-18'

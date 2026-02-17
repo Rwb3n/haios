@@ -4,6 +4,7 @@ id: WORK-014
 title: Type-Based Routing Migration
 type: chore
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-25
 spawned_by: WORK-013

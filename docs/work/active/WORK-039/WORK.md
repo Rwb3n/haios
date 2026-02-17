@@ -4,6 +4,7 @@ id: WORK-039
 title: Scaffold CH-001 ActivityMatrix
 type: design
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-30
 spawned_by: null

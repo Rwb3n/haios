@@ -4,6 +4,7 @@ id: WORK-023
 title: scan_incomplete_work false positives - ignores status field
 type: bug
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-26
 spawned_by: null

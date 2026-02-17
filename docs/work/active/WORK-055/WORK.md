@@ -4,6 +4,7 @@ id: WORK-055
 title: Multi-Level Governance - Decomposition Leakage Pattern
 type: investigation
 status: complete
+queue_position: done
 owner: null
 created: 2026-01-31
 spawned_by: obs-268-1

@@ -4,6 +4,7 @@ id: E2-304
 title: Add Status-Aware ID Validation to Work Creation
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-26
 spawned_by: INV-072

@@ -3,6 +3,7 @@ template: work_item
 id: E2-293
 title: Add set-queue Recipe and Extend session_state Schema
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-16
 closed: 2026-01-16

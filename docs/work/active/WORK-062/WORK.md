@@ -4,6 +4,7 @@ id: WORK-062
 title: Add CC Task Usage Guideline to CLAUDE.md
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-059

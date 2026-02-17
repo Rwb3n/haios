@@ -4,6 +4,7 @@ id: E2-306
 title: Remove Legacy new-investigation Compound Recipe
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-27
 spawned_by: INV-070

@@ -4,6 +4,7 @@ id: CH-005
 title: Session Loader - Build session context loader for coldstart Phase 2
 type: feature
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-24
 spawned_by: null

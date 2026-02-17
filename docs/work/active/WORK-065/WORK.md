@@ -4,6 +4,7 @@ id: WORK-065
 title: Queue Position Model - Backlog/Todo/InProgress/Done Visibility
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: null

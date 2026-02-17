@@ -4,6 +4,7 @@ id: WORK-070
 title: Multi-Level DoD Cascade Design
 type: design
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-055

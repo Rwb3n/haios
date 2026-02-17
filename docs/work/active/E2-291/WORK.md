@@ -3,6 +3,7 @@ template: work_item
 id: E2-291
 title: Wire Queue into Survey-Cycle and Routing-Gate
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-15
 closed: '2026-01-15'

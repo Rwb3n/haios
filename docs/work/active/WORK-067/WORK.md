@@ -50,7 +50,7 @@ queue_history:
 - position: working
   entered: '2026-02-14T13:58:30.285962'
   exited: null
-queue_position: working
+queue_position: done
 cycle_phase: done
 ---
 # WORK-067: HAIOS Portable Schema Architecture Investigation

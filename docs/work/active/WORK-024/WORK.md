@@ -4,6 +4,7 @@ id: WORK-024
 title: Prune deprecated .claude/lib/ - consolidate to .claude/haios/lib/
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-26
 spawned_by: null

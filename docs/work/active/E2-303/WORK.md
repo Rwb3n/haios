@@ -3,6 +3,7 @@ template: work_item
 id: E2-303
 title: Update S2 Section 7 Config Files Diagram
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-18
 closed: '2026-01-18'

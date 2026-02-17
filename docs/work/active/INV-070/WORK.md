@@ -4,6 +4,7 @@ id: INV-070
 title: Legacy Scaffold Recipe Audit
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-27
 spawned_by: WORK-027

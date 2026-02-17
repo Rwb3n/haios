@@ -3,6 +3,7 @@ template: work_item
 id: E2-161
 title: "Auto-link Documents to Work File"
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2025-12-24
 closed: 2026-02-12

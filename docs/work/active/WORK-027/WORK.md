@@ -4,6 +4,7 @@ id: WORK-027
 title: Update test imports from .claude/lib to .claude/haios/lib
 type: task
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-27
 spawned_by: WORK-024

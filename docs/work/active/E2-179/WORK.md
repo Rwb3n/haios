@@ -3,6 +3,7 @@ template: work_item
 id: E2-179
 title: Scaffold Recipe Optional Frontmatter Args
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2025-12-25
 closed: '2026-01-19'

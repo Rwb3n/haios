@@ -30,7 +30,7 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: working
+queue_position: done
 cycle_phase: backlog
 current_node: backlog
 node_history:

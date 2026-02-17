@@ -4,6 +4,7 @@ id: WORK-040
 title: Design CH-002 StateDefinitions
 type: design
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-30
 spawned_by: null

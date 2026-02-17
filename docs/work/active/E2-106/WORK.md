@@ -3,6 +3,7 @@ template: work_item
 id: E2-106
 title: "FORESIGHT Preparation - Cycle Prediction Fields"
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2025-12-23
 closed: 2026-02-12

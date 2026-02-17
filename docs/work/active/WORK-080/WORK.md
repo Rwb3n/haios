@@ -4,6 +4,7 @@ id: WORK-080
 title: Single Source Path Constants Implementation
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-02
 spawned_by: INV-041

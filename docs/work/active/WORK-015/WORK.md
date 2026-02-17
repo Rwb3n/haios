@@ -4,6 +4,7 @@ id: WORK-015
 title: RequirementExtractor Module Implementation
 type: feature
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-25
 spawned_by: null

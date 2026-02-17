@@ -4,6 +4,7 @@ id: INV-071
 title: Work Item Triage Strategy for E2.3 Migration
 type: investigation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-25
 spawned_by: null

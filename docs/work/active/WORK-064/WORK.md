@@ -4,6 +4,7 @@ id: WORK-064
 title: PreToolUse additionalContext Implementation
 type: implementation
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-02-01
 spawned_by: WORK-057

@@ -3,6 +3,7 @@ template: work_item
 id: INV-054
 title: Validation Cycle Fitness for Purpose
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-03
 closed: 2026-02-12

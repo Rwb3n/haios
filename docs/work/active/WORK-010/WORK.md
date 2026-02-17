@@ -4,6 +4,7 @@ id: WORK-010
 title: Work Loader for Coldstart Phase 3
 type: feature
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-24
 spawned_by: null

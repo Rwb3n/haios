@@ -4,6 +4,7 @@ id: WORK-079
 title: CHAIN Phase Stop Pattern Investigation
 type: investigation
 status: complete
+queue_position: done
 owner: null
 created: 2026-02-02
 spawned_by: null

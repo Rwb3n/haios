@@ -4,6 +4,7 @@ id: WORK-029
 title: Cleanup Dead MCP Code in .claude/haios/lib
 type: cleanup
 status: complete
+queue_position: done
 owner: Hephaestus
 created: 2026-01-28
 spawned_by: WORK-028
