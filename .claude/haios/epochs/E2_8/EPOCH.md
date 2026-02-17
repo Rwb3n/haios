@@ -143,8 +143,10 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 
 **Exit criteria:**
 - [ ] All confirmed bugs from E2.7 triage resolved (85712, 85557, 85795, 85573, 85132)
+- [ ] Checkpoint same-session sort bug fixed (session_loader.py:120 — max() doesn't break ties on sequence number)
+- [ ] Queue state machine admin cleanup transition added (backlog->done when status=complete, mem:85840)
 
-**Evidence:** Direct from retro extractions. Batch pattern validated (mem:84963).
+**Evidence:** Direct from retro extractions + S393 coldstart observation. Batch pattern validated (mem:84963).
 
 ---
 
@@ -174,8 +176,9 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 - [ ] Mechanical ceremony phases migrated to hooks/modules
 - [ ] Contracts designed for progressive disclosure
 - [ ] All agents have structured capability cards
-- [ ] Open-epoch-ceremony skill exists (full ceremony loop standardized)
-- [ ] Confirmed bugs from E2.7 triage resolved
+- [x] Open-epoch-ceremony skill exists (full ceremony loop standardized) (S393)
+- [ ] Confirmed bugs from E2.7/E2.8 triage resolved (including checkpoint sort, queue state machine)
+- [ ] Coldstart produces accurate context after epoch transition (no stale epoch, no stale checkpoint)
 
 ---
 
