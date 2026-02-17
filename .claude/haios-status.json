@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-17T19:20:22",
+    "generated": "2026-02-17T19:45:46",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,7 +8,7 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 392,
+        "prior_session": 393,
         "current_session": 393,
         "prior_date": "2026-02-17",
         "completed": [],
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 85610,
-        "entities": 10042,
+        "concepts": 85617,
+        "entities": 10043,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -4118,6 +4118,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-17-03-SESSION-393-work-157-implemented-and-closed.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-17",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/checkpoints/checkpoint-386.md",
             "template": "checkpoint",
             "status": null,
@@ -7035,7 +7044,7 @@
         {
             "path": "docs/checkpoints/2025-12-23-08-SESSION-107-e2-152-complete-e2-154-planned.md",
             "last_updated": "2025-12-23T19:42:27",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/checkpoints/2025-12-23-09-SESSION-108-e2-154-e2-155-e2-117-dag-automation-complete.md",
@@ -7200,7 +7209,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-07-SESSION-138-e2-224-e2-221-observation-threshold-and-routing-gate.md",
             "last_updated": "2025-12-28T19:33:21",
-            "days_stale": 50
+            "days_stale": 51
         },
         {
             "path": "docs/checkpoints/2025-12-28-08-SESSION-139-e2-223-e2-222-routing-gate-integration-and-threshold-config.md",
@@ -7350,7 +7359,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-06-SESSION-168-e2-248-complete-inv-056-epoch-22-hook-migration-design.md",
             "last_updated": "2026-01-04T19:36:09",
-            "days_stale": 43
+            "days_stale": 44
         },
         {
             "path": "docs/checkpoints/2026-01-04-07-SESSION-169-e2-259-260-261-module-extensions-complete.md",
@@ -7425,7 +7434,7 @@
         {
             "path": "docs/checkpoints/2026-01-08-02-SESSION-182-e22-survey-svelte-governance-investigation-created.md",
             "last_updated": "2026-01-08T19:42:36",
-            "days_stale": 39
+            "days_stale": 40
         },
         {
             "path": "docs/checkpoints/2026-01-08-03-SESSION-183-inv-061-e2-278-adr-041-status-over-location.md",
@@ -7715,7 +7724,7 @@
         {
             "path": "docs/plans/PLAN-E2-114-spawn-tree-query.md",
             "last_updated": "2025-12-22T19:29:29",
-            "days_stale": 56
+            "days_stale": 57
         },
         {
             "path": "docs/plans/PLAN-E2-115-investigation-closure.md",
@@ -7870,7 +7879,7 @@
         {
             "path": "docs/plans/PLAN-E2-186-promote-preflight-checker-to-required.md",
             "last_updated": "2025-12-25T19:29:13",
-            "days_stale": 53
+            "days_stale": 54
         },
         {
             "path": "docs/plans/PLAN-E2-189-dod-validation-cycle-skill.md",
@@ -8319,9 +8328,9 @@
         }
     ],
     "workspace": {
-        "total_files": 561,
+        "total_files": 562,
         "by_template": {
-            "checkpoint": 387,
+            "checkpoint": 388,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8332,7 +8341,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 222,
+            "unknown": 223,
             "draft": 2,
             "approved": 6,
             "ready": 1,

@@ -1,6 +1,6 @@
 ---
 template: implementation_plan
-status: approved
+status: complete
 date: 2026-02-17
 backlog_id: WORK-158
 title: "ConfigLoader Path Migration"
@@ -214,12 +214,18 @@ some_path = PROJECT_ROOT / "docs" / "work" / "active"
 # AFTER:
 from config import ConfigLoader
 # ... (one import per file, at top)
-_config = ConfigLoader.get()
-# ...
-some_path = PROJECT_ROOT / _config.get_path("work_active")
+# Per-function ConfigLoader.get() calls (A5 critique: NOT module-level)
+def some_function():
+    config = ConfigLoader.get()
+    some_path = PROJECT_ROOT / config.get_path("work_active")
 ```
 
 **Key insight:** `get_path()` returns a relative `Path`. We still need `PROJECT_ROOT /` prefix for absolute resolution. The migration changes the hardcoded relative path to a config-driven one, not the absolute resolution mechanism.
+
+**Test fixture strategy (A3 critique):** ConfigLoader is a singleton reading from disk. For tests:
+- Use `monkeypatch.setattr` on ConfigLoader's `_haios` dict to inject test paths
+- Or use `ConfigLoader.reset()` + patch `ConfigLoader._load()` to return test YAML
+- Per-function calls (not module-level) ensure `reset()` takes effect between tests
 
 ### Per-File Migration Map
 
@@ -237,10 +243,12 @@ some_path = PROJECT_ROOT / _config.get_path("work_active")
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
 | Keep PROJECT_ROOT prefix | Yes — `PROJECT_ROOT / config.get_path(key)` | get_path() returns relative paths. Absolute resolution still needs root. |
-| Module-level config | `_config = ConfigLoader.get()` at module level | Singleton pattern — one instance shared across all functions in file |
+| Per-function config access | `config = ConfigLoader.get()` inside each function (A5 critique) | Module-level evaluated at import time, breaks test isolation. Per-function respects reset(). |
+| Test isolation via monkeypatch | Patch ConfigLoader._haios dict or _load() method (A3 critique) | ConfigLoader reads from hardcoded disk path. tmp_path alone insufficient. |
 | No base_path injection change | Keep existing __file__-based PROJECT_ROOT | Migration scope is path constants, not root resolution mechanism |
 | loader.py special case | Keep base_path parameter, use config for default | loader.py has explicit base_path injection for testing |
 | 7 new keys only | Don't restructure existing keys | Minimal change — add what's missing, don't reorganize |
+| Audit external imports first | Grep for `from status import` etc. before migrating (A4 critique) | External code depending on path variables would break silently |
 
 ### Edge Cases
 

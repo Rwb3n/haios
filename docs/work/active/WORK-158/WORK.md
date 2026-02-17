@@ -3,14 +3,14 @@ template: work_item
 id: WORK-158
 title: ConfigLoader Path Migration
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-17
 spawned_by: null
 spawned_children: []
 chapter: CH-046
 arc: composability
-closed: null
+closed: '2026-02-17'
 priority: high
 effort: large
 traces_to:
@@ -34,27 +34,35 @@ blocks:
 - CH-048
 enables:
 - CH-048
-queue_position: working
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
 - node: backlog
   entered: 2026-02-17 08:22:37
-  exited: null
+  exited: '2026-02-17T19:45:44.719932'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85463
+- 85802
+- 85803
+- 85804
+- 85805
 extensions:
   epoch: E2.7
 version: '2.0'
 generated: 2026-02-17
-last_updated: '2026-02-17T19:25:55.336077'
+last_updated: '2026-02-17T19:45:44.722934'
 queue_history:
 - position: ready
   entered: '2026-02-17T19:25:55.303645'
   exited: '2026-02-17T19:25:55.331963'
 - position: working
   entered: '2026-02-17T19:25:55.331963'
+  exited: '2026-02-17T19:45:44.719932'
+- position: done
+  entered: '2026-02-17T19:45:44.719932'
   exited: null
 ---
 # WORK-158: Flat Metadata Migration and ConfigLoader

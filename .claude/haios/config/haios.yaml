@@ -93,6 +93,14 @@ paths:
   # Schema registry (WORK-147: central schema location)
   schemas: ".claude/haios/schemas"
 
+  # Work state paths (WORK-158)
+  work_blocked: "docs/work/blocked"
+  plans: "docs/plans"
+  investigations: "docs/investigations"
+  backlog: "docs/pm/backlog.md"
+  session: ".claude/session"
+  memory_db: "haios_memory.db"
+
   # Config paths
   haios_config: ".claude/haios/config"
   manifesto: ".claude/haios/manifesto"

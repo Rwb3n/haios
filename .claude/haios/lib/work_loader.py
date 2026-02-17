@@ -31,6 +31,8 @@ import re
 import yaml
 import logging
 
+from config import ConfigLoader
+
 logger = logging.getLogger(__name__)
 
 # Path setup (same pattern as session_loader.py)
@@ -87,7 +89,7 @@ class WorkLoader:
         """Get checkpoint directory from config or override."""
         if self._checkpoint_dir:
             return self._checkpoint_dir
-        return PROJECT_ROOT / self.config.get("checkpoint_dir", "docs/checkpoints/")
+        return PROJECT_ROOT / ConfigLoader.get().get_path("checkpoints")
 
     def _default_queue_fn(self) -> List[Dict]:
         """Run `just queue` and parse output."""
@@ -156,7 +158,7 @@ class WorkLoader:
     def _check_epoch_alignment(self, queue: List[Dict]) -> tuple:
         """Check if queue items match current epoch."""
         # Get current epoch from config
-        haios_config_path = PROJECT_ROOT / ".claude/haios/config/haios.yaml"
+        haios_config_path = PROJECT_ROOT / ConfigLoader.get().get_path("haios_config") / "haios.yaml"
         try:
             with open(haios_config_path, "r", encoding="utf-8") as f:
                 haios = yaml.safe_load(f) or {}

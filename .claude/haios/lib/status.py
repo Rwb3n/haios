@@ -33,6 +33,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Optional
 
+from config import ConfigLoader
+
 # Project root is 4 levels up from .claude/haios/lib/
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 
@@ -71,7 +73,7 @@ def get_agents() -> list[str]:
     Returns:
         Sorted list of agent names (from YAML frontmatter 'name' field).
     """
-    agents_dir = PROJECT_ROOT / ".claude" / "agents"
+    agents_dir = PROJECT_ROOT / ConfigLoader.get().get_path("agents")
     agents = []
 
     if not agents_dir.exists():
@@ -100,7 +102,7 @@ def get_commands() -> list[str]:
     Returns:
         Sorted list of command names (prefixed with /).
     """
-    commands_dir = PROJECT_ROOT / ".claude" / "commands"
+    commands_dir = PROJECT_ROOT / ConfigLoader.get().get_path("commands")
     commands = []
 
     if not commands_dir.exists():
@@ -126,7 +128,7 @@ def get_skills() -> list[str]:
     Returns:
         Sorted list of skill names.
     """
-    skills_dir = PROJECT_ROOT / ".claude" / "skills"
+    skills_dir = PROJECT_ROOT / ConfigLoader.get().get_path("skills")
     skills = []
 
     if not skills_dir.exists():
@@ -161,7 +163,7 @@ def get_memory_stats() -> Optional[dict[str, int]]:
     try:
         from database import DatabaseManager
 
-        db_path = PROJECT_ROOT / "haios_memory.db"
+        db_path = PROJECT_ROOT / ConfigLoader.get().get_path("memory_db")
         if not db_path.exists():
             return None
 
@@ -181,7 +183,7 @@ def get_backlog_stats() -> dict[str, Any]:
     Returns:
         Dict with active_count, by_priority, last_session.
     """
-    backlog_path = PROJECT_ROOT / "docs" / "pm" / "backlog.md"
+    backlog_path = PROJECT_ROOT / ConfigLoader.get().get_path("backlog")
     stats = {
         "active_count": 0,
         "last_session": 0,
@@ -263,7 +265,7 @@ def get_session_delta() -> dict[str, Any]:
     Returns:
         Dict with prior_session, current_session, completed, added, etc.
     """
-    checkpoints_dir = PROJECT_ROOT / "docs" / "checkpoints"
+    checkpoints_dir = PROJECT_ROOT / ConfigLoader.get().get_path("checkpoints")
     delta = {
         "prior_session": None,
         "current_session": None,
@@ -328,8 +330,8 @@ def _find_completed_items(item_ids: set[str]) -> list[str]:
     Checks plan status and backlog [CLOSED] markers.
     """
     completed = []
-    plans_dir = PROJECT_ROOT / "docs" / "plans"
-    backlog_path = PROJECT_ROOT / "docs" / "pm" / "backlog.md"
+    plans_dir = PROJECT_ROOT / ConfigLoader.get().get_path("plans")
+    backlog_path = PROJECT_ROOT / ConfigLoader.get().get_path("backlog")
 
     backlog_content = ""
     if backlog_path.exists():
@@ -373,8 +375,8 @@ def get_milestone_progress(existing_milestones: dict) -> dict[str, Any]:
         return {}
 
     result = {}
-    backlog_path = PROJECT_ROOT / "docs" / "pm" / "backlog.md"
-    plans_dir = PROJECT_ROOT / "docs" / "plans"
+    backlog_path = PROJECT_ROOT / ConfigLoader.get().get_path("backlog")
+    plans_dir = PROJECT_ROOT / ConfigLoader.get().get_path("plans")
 
     backlog_content = ""
     if backlog_path.exists():
@@ -438,7 +440,7 @@ def get_blocked_items() -> list[dict[str, Any]]:
         List of dicts with 'id' and 'blocked_by' keys.
     """
     blocked = []
-    plans_dir = PROJECT_ROOT / "docs" / "plans"
+    plans_dir = PROJECT_ROOT / ConfigLoader.get().get_path("plans")
 
     if not plans_dir.exists():
         return blocked
@@ -537,14 +539,14 @@ def get_live_files() -> list[dict[str, Any]]:
         List of file dicts with path, template, status, date, etc.
     """
     governed_paths = [
-        PROJECT_ROOT / "docs" / "checkpoints",
-        PROJECT_ROOT / "docs" / "plans",
-        PROJECT_ROOT / "docs" / "investigations",
-        PROJECT_ROOT / "docs" / "ADR",
-        PROJECT_ROOT / "docs" / "reports",
-        PROJECT_ROOT / "docs" / "work" / "active",
-        PROJECT_ROOT / "docs" / "work" / "blocked",
-        PROJECT_ROOT / "docs" / "work" / "archive",
+        PROJECT_ROOT / ConfigLoader.get().get_path("checkpoints"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("plans"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("investigations"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("adr"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("reports"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("work_active"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("work_blocked"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("work_archive"),
     ]
 
     files = []
@@ -748,9 +750,9 @@ def get_work_items() -> list[dict[str, Any]]:
         List of work item dicts with id, title, status, current_node, priority.
     """
     work_dirs = [
-        PROJECT_ROOT / "docs" / "work" / "active",
-        PROJECT_ROOT / "docs" / "work" / "blocked",
-        PROJECT_ROOT / "docs" / "work" / "archive",
+        PROJECT_ROOT / ConfigLoader.get().get_path("work_active"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("work_blocked"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("work_archive"),
     ]
 
     items = []
@@ -784,9 +786,9 @@ def get_active_work_cycle() -> Optional[dict[str, Any]]:
     Returns:
         Dict with id, title, current_node, cycle_type, lifecycle_phase, or None.
     """
-    active_dir = PROJECT_ROOT / "docs" / "work" / "active"
-    plans_dir = PROJECT_ROOT / "docs" / "plans"
-    inv_dir = PROJECT_ROOT / "docs" / "investigations"
+    active_dir = PROJECT_ROOT / ConfigLoader.get().get_path("work_active")
+    plans_dir = PROJECT_ROOT / ConfigLoader.get().get_path("plans")
+    inv_dir = PROJECT_ROOT / ConfigLoader.get().get_path("investigations")
 
     if not active_dir.exists():
         return None
@@ -973,7 +975,7 @@ def generate_slim_status() -> dict[str, Any]:
 
 def _get_active_work() -> list[str]:
     """Get active work items (HIGH and URGENT priority)."""
-    backlog_path = PROJECT_ROOT / "docs" / "pm" / "backlog.md"
+    backlog_path = PROJECT_ROOT / ConfigLoader.get().get_path("backlog")
     active_work = []
 
     if not backlog_path.exists():
@@ -1032,12 +1034,12 @@ def _discover_milestones_from_backlog() -> dict:
 
     NOTE: Skips items that have work files - work files are source of truth (E2-173).
     """
-    backlog_path = PROJECT_ROOT / "docs" / "pm" / "backlog.md"
-    plans_dir = PROJECT_ROOT / "docs" / "plans"
+    backlog_path = PROJECT_ROOT / ConfigLoader.get().get_path("backlog")
+    plans_dir = PROJECT_ROOT / ConfigLoader.get().get_path("plans")
     work_dirs = [
-        PROJECT_ROOT / "docs" / "work" / "active",
-        PROJECT_ROOT / "docs" / "work" / "blocked",
-        PROJECT_ROOT / "docs" / "work" / "archive",
+        PROJECT_ROOT / ConfigLoader.get().get_path("work_active"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("work_blocked"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("work_archive"),
     ]
 
     if not backlog_path.exists():
@@ -1124,9 +1126,9 @@ def _discover_milestones_from_work_files() -> dict:
         Dict mapping milestone keys to milestone data with items, complete, progress.
     """
     work_dirs = [
-        PROJECT_ROOT / "docs" / "work" / "active",
-        PROJECT_ROOT / "docs" / "work" / "blocked",
-        PROJECT_ROOT / "docs" / "work" / "archive",
+        PROJECT_ROOT / ConfigLoader.get().get_path("work_active"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("work_blocked"),
+        PROJECT_ROOT / ConfigLoader.get().get_path("work_archive"),
     ]
 
     milestones = {}
@@ -1237,7 +1239,7 @@ if __name__ == "__main__":
     slim = generate_slim_status()
 
     if len(sys.argv) > 1 and sys.argv[1] == "--write":
-        output_path = PROJECT_ROOT / ".claude" / "haios-status-slim.json"
+        output_path = PROJECT_ROOT / ConfigLoader.get().get_path("status_slim")
         write_slim_status(slim, str(output_path))
         print(f"Written to {output_path}")
     else:

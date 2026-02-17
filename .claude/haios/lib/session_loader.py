@@ -32,6 +32,8 @@ import re
 import yaml
 import logging
 
+from config import ConfigLoader
+
 logger = logging.getLogger(__name__)
 
 # Path setup (same pattern as identity_loader.py)
@@ -95,7 +97,7 @@ class SessionLoader:
         """Get checkpoint directory from config or override."""
         if self._checkpoint_dir:
             return self._checkpoint_dir
-        return PROJECT_ROOT / self.config.get("checkpoint_dir", "docs/checkpoints/")
+        return PROJECT_ROOT / ConfigLoader.get().get_path("checkpoints")
 
     def _find_latest_checkpoint(self) -> Optional[Path]:
         """Find most recent checkpoint by session number (WORK-130: not filename sort).

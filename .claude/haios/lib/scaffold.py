@@ -35,6 +35,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
+from config import ConfigLoader
+
 # Project root is 4 levels up from .claude/haios/lib/
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 
@@ -125,7 +127,7 @@ def _work_file_exists(backlog_id: str) -> bool:
     Returns:
         True if work file exists in docs/work/active/, False otherwise.
     """
-    work_dir = PROJECT_ROOT / "docs" / "work" / "active"
+    work_dir = PROJECT_ROOT / ConfigLoader.get().get_path("work_active")
     if not work_dir.exists():
         return False
 
@@ -150,7 +152,7 @@ def _get_work_status(backlog_id: str) -> Optional[str]:
     """
     import yaml
 
-    work_path = PROJECT_ROOT / "docs" / "work" / "active" / backlog_id / "WORK.md"
+    work_path = PROJECT_ROOT / ConfigLoader.get().get_path("work_item", id=backlog_id)
     if not work_path.exists():
         return None
 
@@ -177,7 +179,7 @@ def _get_work_type(backlog_id: str) -> Optional[str]:
     """
     import yaml
 
-    work_path = PROJECT_ROOT / "docs" / "work" / "active" / backlog_id / "WORK.md"
+    work_path = PROJECT_ROOT / ConfigLoader.get().get_path("work_item", id=backlog_id)
     if not work_path.exists():
         return None
 
@@ -213,7 +215,7 @@ def get_next_work_id() -> str:
     Returns:
         Next sequential work ID in format WORK-XXX (e.g., "WORK-001", "WORK-042")
     """
-    work_dir = PROJECT_ROOT / "docs" / "work" / "active"
+    work_dir = PROJECT_ROOT / ConfigLoader.get().get_path("work_active")
     max_num = 0
 
     if work_dir.exists():
@@ -254,7 +256,7 @@ def generate_output_path(
 
     # E2-212: Route plans/investigations into work directory if it exists
     if template in ("implementation_plan", "investigation") and backlog_id:
-        work_dir = PROJECT_ROOT / "docs" / "work" / "active" / backlog_id
+        work_dir = PROJECT_ROOT / ConfigLoader.get().get_path("work_active") / backlog_id
         if work_dir.exists():
             if template == "implementation_plan":
                 return f"docs/work/active/{backlog_id}/plans/PLAN.md"
@@ -293,11 +295,11 @@ def load_template(template: str) -> str:
     Raises:
         FileNotFoundError: If template file doesn't exist.
     """
-    template_path = PROJECT_ROOT / ".claude" / "templates" / f"{template}.md"
+    template_path = PROJECT_ROOT / ConfigLoader.get().get_path("templates") / f"{template}.md"
 
     if not template_path.exists():
         # Fallback to _legacy/ for templates moved during fracturing (CH-006)
-        legacy_path = PROJECT_ROOT / ".claude" / "templates" / "_legacy" / f"{template}.md"
+        legacy_path = PROJECT_ROOT / ConfigLoader.get().get_path("templates") / "_legacy" / f"{template}.md"
         if legacy_path.exists():
             template_path = legacy_path
         else:
@@ -347,7 +349,7 @@ def load_plan_template(work_type: str = "implementation") -> str:
         Template content string.
     """
     plan_type = get_plan_type(work_type)
-    plan_dir = PROJECT_ROOT / ".claude" / "templates" / "plans"
+    plan_dir = PROJECT_ROOT / ConfigLoader.get().get_path("templates") / "plans"
     type_path = plan_dir / f"{plan_type}.md"
     if type_path.exists():
         return type_path.read_text(encoding="utf-8-sig")
@@ -441,7 +443,7 @@ def get_current_session() -> int | str:
         Current session number as int, or "??" if unavailable.
     """
     # Primary: .claude/session file (written by `just session-start`)
-    session_path = PROJECT_ROOT / ".claude" / "session"
+    session_path = PROJECT_ROOT / ConfigLoader.get().get_path("session")
     if session_path.exists():
         try:
             lines = session_path.read_text(encoding="utf-8").strip().splitlines()
@@ -454,7 +456,7 @@ def get_current_session() -> int | str:
             pass  # Fall through to status file
 
     # Fallback: haios-status.json
-    status_path = PROJECT_ROOT / ".claude" / "haios-status.json"
+    status_path = PROJECT_ROOT / ConfigLoader.get().get_path("status")
     if not status_path.exists():
         return "??"
 
@@ -482,7 +484,7 @@ def get_prev_session() -> int | str:
         return current - 1
 
     # Fallback: haios-status.json (may be stale)
-    status_path = PROJECT_ROOT / ".claude" / "haios-status.json"
+    status_path = PROJECT_ROOT / ConfigLoader.get().get_path("status")
     if not status_path.exists():
         return "??"
 

@@ -33,6 +33,8 @@ import re
 from pathlib import Path
 from typing import Optional
 
+from config import ConfigLoader
+
 # Project root is 4 levels up from .claude/haios/lib/
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 
@@ -146,10 +148,10 @@ def scaffold_observations(work_id: str) -> Optional[Path]:
     from scaffold import scaffold_template
 
     # Check if work directory exists
-    work_dir = PROJECT_ROOT / "docs" / "work" / "active" / work_id
+    work_dir = PROJECT_ROOT / ConfigLoader.get().get_path("work_active") / work_id
     if not work_dir.exists():
         # Try archive
-        work_dir = PROJECT_ROOT / "docs" / "work" / "archive" / work_id
+        work_dir = PROJECT_ROOT / ConfigLoader.get().get_path("work_archive") / work_id
         if not work_dir.exists():
             return None
 
@@ -171,7 +173,7 @@ def scan_uncaptured_observations() -> list[dict]:
         List of dicts with work_id, status, and message for items needing attention.
     """
     results = []
-    active_dir = PROJECT_ROOT / "docs" / "work" / "active"
+    active_dir = PROJECT_ROOT / ConfigLoader.get().get_path("work_active")
 
     if not active_dir.exists():
         return results
@@ -217,12 +219,12 @@ def _find_observations_file(work_id: str) -> Optional[Path]:
         Path to observations.md or None if not found.
     """
     # Try active first
-    active_path = PROJECT_ROOT / "docs" / "work" / "active" / work_id / "observations.md"
+    active_path = PROJECT_ROOT / ConfigLoader.get().get_path("work_active") / work_id / "observations.md"
     if active_path.exists():
         return active_path
 
     # Try archive
-    archive_path = PROJECT_ROOT / "docs" / "work" / "archive" / work_id / "observations.md"
+    archive_path = PROJECT_ROOT / ConfigLoader.get().get_path("work_archive") / work_id / "observations.md"
     if archive_path.exists():
         return archive_path
 

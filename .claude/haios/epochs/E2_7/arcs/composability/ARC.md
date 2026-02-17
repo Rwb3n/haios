@@ -34,7 +34,7 @@ Make building blocks composable. Arcs and chapters move to flat storage with met
 
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
-| CH-046 | FlatMetadataMigration | WORK-158 | REQ-CONFIG-001, REQ-CONFIG-003 | None | Planning |
+| CH-046 | FlatMetadataMigration | WORK-158 | REQ-CONFIG-001, REQ-CONFIG-003 | None | Complete |
 | CH-047 | TemplateComposability | WORK-152, WORK-155 | REQ-ASSET-001, REQ-ASSET-004 | None | Complete |
 | CH-048 | RecipeRationalization | New (TBD) | REQ-CONFIG-004 | CH-046 (flat metadata enables recipe simplification) | Planning |
 
