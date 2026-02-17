@@ -79,21 +79,28 @@ Each agent has a stateless identity card: role, capabilities, tools, triggers, w
 
 ### Arc 1: call — "The agent should not read what it can call"
 
-Move mechanical ceremony phases from SKILL.md (agent reads) to hooks/modules (auto-execute). Proportional scaling for phases that require judgment.
+Move mechanical ceremony phases from SKILL.md (agent reads) to hooks/modules (auto-execute). Proportional scaling for phases that require judgment. **Coldstart must inject all operational context — zero Read instructions. The orchestrator output IS the agent's operating knowledge.**
 
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
 | CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Planning |
 | CH-059 | CeremonyAutomation | New | REQ-CEREMONY-002 | CH-058 | Planning |
 | CH-060 | SessionBoundaryFix | New | REQ-CEREMONY-001 | None | Planning |
+| CH-061 | ColdstartContextInjection | New | REQ-CONFIG-001, L3.3 | None | Planning |
 
 **Exit criteria:**
 - [ ] Governance overhead measurably reduced (target: perceptible improvement over E2.5 baseline)
 - [ ] Trivial items skip heavy ceremony phases (computable predicates, extending retro-cycle Phase 0 pattern)
 - [ ] Mechanical ceremony phases migrated to hooks/modules (session-end, checkpoint population, cycle_phase advancement)
 - [ ] Session boundary gap governed (post-closure transition runs reliably)
+- [ ] Coldstart injects ALL operational context (zero manual Read steps in coldstart skill)
+- [ ] Minimum viable context contract enforced: identity + mission + prior + work + operational HOW
 
-**Evidence:** mem:84332, 85390, 85606 (104% problem), 85609/85385/85387 (session boundary gap), 85607/85363 (retro Phase 0 prototype)
+**Principle: Coldstart produces an operational agent, not an informed one.** After `/coldstart`, the agent must be able to execute work without reading any additional files. The orchestrator output is the captain's briefing packet — standing orders (hooks) are already active, the briefing provides everything else.
+
+**S393/S394 evidence:** 200k agent failed to operate because coldstart injected WHO and WHAT but not HOW. Agent wrote raw Python imports (4 failures) instead of using `just ready`. Coldstart "succeeded" but produced a non-operational agent.
+
+**Evidence:** mem:84332, 85390, 85606 (104% problem), 85609/85385/85387 (session boundary gap), 85607/85363 (retro Phase 0 prototype), 85915-85922 (200k agent bypass observation), 85923-85924 (minimum viable context)
 
 ---
 
@@ -103,17 +110,12 @@ Extend engine functions for context loading. Memory-first retrieval. Progressive
 
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
-| CH-061 | ColdstartContextInjection | New | REQ-CONFIG-001, L3.3 | None | Planning |
 | CH-062 | ProgressiveContracts | New | REQ-ASSET-001 | None | Planning |
 
 **Exit criteria:**
-- [ ] Minimum viable context contract defined (identity + mission + prior + work + operational HOW)
-- [ ] Operational patterns (module paths, recipe usage, Tier model) injected by coldstart, not manual read
-- [ ] Lightweight coldstart variant exists for housekeeping sessions
+- [ ] Lightweight coldstart variant exists for housekeeping sessions (tiered: full vs quick)
 - [ ] Contracts designed for progressive disclosure (agent reads what it needs, not everything)
 - [ ] Context loading uses engine functions and memory before file reads
-
-**S393/S394 evidence:** 200k agent failed to operate after coldstart because HOW context (CLAUDE.md operational patterns) was not injected. Agent wrote raw Python imports (4 failures) instead of using `just ready`. Coldstart succeeded technically but produced an agent that didn't know how to use the system.
 
 **Evidence:** mem:84835, 84836 (coldstart overhead), 85459 (most tokens on context loading), 85815 (Dimension 2: context switching)
 
