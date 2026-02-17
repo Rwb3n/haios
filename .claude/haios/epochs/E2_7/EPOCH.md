@@ -51,11 +51,11 @@ Compose, don't concatenate.
 
 ## Arcs (Decomposed S384)
 
-### Arc 1: engine-functions — "Functions over file reads"
+### Arc 1: engine-functions — "Functions over file reads" (COMPLETE - S393)
 
 | CH-ID | Title | Work Items | Status |
 |-------|-------|------------|--------|
-| CH-044 | HierarchyQueryEngine | WORK-157 | Planning |
+| CH-044 | HierarchyQueryEngine | WORK-157 | Complete |
 | CH-045 | StatusCascade | WORK-034 | Complete |
 
 ### Arc 2: composability — "Compose, don't concatenate"

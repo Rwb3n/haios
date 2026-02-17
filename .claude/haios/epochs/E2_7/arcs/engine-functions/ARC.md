@@ -7,7 +7,8 @@
 **Arc ID:** engine-functions
 **Epoch:** E2.7
 **Theme:** Functions over file reads — engine query functions and status cascade
-**Status:** Active
+**Status:** Complete
+**Completed:** 2026-02-17 (Session 393)
 
 ---
 
@@ -37,9 +38,9 @@ Replace manual path resolution and file reads with engine functions. Work items,
 
 ## Exit Criteria
 
-- [ ] Engine functions for hierarchy queries exist and are callable (get_arcs, get_chapters, get_work)
-- [ ] Status cascades automatically on work/chapter/arc closure
-- [ ] No manual path resolution for hierarchy navigation
+- [x] Engine functions for hierarchy queries exist and are callable (get_arcs, get_chapters, get_work)
+- [x] Status cascades automatically on work/chapter/arc closure
+- [x] No manual path resolution for hierarchy navigation
 
 ---
 
