@@ -21,7 +21,7 @@ blocked_by:
 - WORK-106
 blocks: []
 enables: []
-queue_position: backlog
+queue_position: done
 cycle_phase: backlog
 current_node: backlog
 node_history:

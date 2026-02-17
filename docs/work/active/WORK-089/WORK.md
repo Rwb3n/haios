@@ -50,7 +50,7 @@ extensions:
 version: '2.0'
 generated: 2026-02-03
 last_updated: '2026-02-04T23:07:47.620303'
-queue_position: backlog
+queue_position: done
 cycle_phase: backlog
 ---
 # WORK-089: Fracture Design Lifecycle Templates (CH-006)

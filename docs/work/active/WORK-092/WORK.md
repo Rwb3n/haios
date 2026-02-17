@@ -41,7 +41,7 @@ extensions:
 version: '2.0'
 generated: 2026-02-03
 last_updated: '2026-02-05T20:33:40.216380'
-queue_position: backlog
+queue_position: done
 cycle_phase: backlog
 ---
 # WORK-092: Fracture Triage Lifecycle Templates (CH-006)

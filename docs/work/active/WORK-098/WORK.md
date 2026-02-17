@@ -52,7 +52,7 @@ extensions:
 version: '2.0'
 generated: 2026-02-05
 last_updated: '2026-02-05T18:38:45.640269'
-queue_position: backlog
+queue_position: done
 cycle_phase: backlog
 ---
 # WORK-098: Lifecycle Tooling Consumer Updates

@@ -66,7 +66,7 @@ extensions:
 version: '2.0'
 generated: 2026-02-01
 last_updated: '2026-02-04T21:17:34.827099'
-queue_position: backlog
+queue_position: done
 cycle_phase: backlog
 ---
 # WORK-066: Queue Position Field and Cycle Wiring Implementation

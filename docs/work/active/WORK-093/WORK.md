@@ -48,7 +48,7 @@ version: '2.0'
 generated: 2026-02-03
 last_updated: '2026-02-15T21:53:24.163439'
 queue_history: []
-queue_position: backlog
+queue_position: done
 cycle_phase: backlog
 ---
 # WORK-093: Implement Lifecycle Asset Types (CH-023)

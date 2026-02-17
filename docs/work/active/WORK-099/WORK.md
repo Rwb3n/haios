@@ -32,7 +32,7 @@ blocked_by: []
 blocks:
 - WORK-091
 enables: []
-queue_position: backlog
+queue_position: done
 cycle_phase: backlog
 current_node: backlog
 node_history:

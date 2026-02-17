@@ -45,7 +45,7 @@ extensions:
 version: '2.0'
 generated: 2026-02-03
 last_updated: '2026-02-05T22:15:08.370996'
-queue_position: backlog
+queue_position: done
 cycle_phase: active
 ---
 # WORK-086: Implement Batch Mode (CH-003)
