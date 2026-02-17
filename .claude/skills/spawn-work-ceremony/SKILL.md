@@ -3,7 +3,6 @@ name: spawn-work-ceremony
 type: ceremony
 description: "Create a linked work item from an existing work item."
 category: spawn
-stub: true
 input_contract:
   - field: parent_work_id
     type: string

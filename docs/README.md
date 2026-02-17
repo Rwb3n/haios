@@ -4,7 +4,7 @@
 
 > **Progressive Disclosure:** Quick Reference (YOU ARE HERE) -> [Strategic Overview](epistemic_state.md) -> [Detailed Specs](specs/)
 
-**System Status:** OPERATIONAL | 81k+ concepts | 18 skills | 13 MCP tools | Epoch 2.2 Active
+**System Status:** OPERATIONAL | 85k+ concepts | 33 skills | 13 MCP tools | Epoch 2.7 Active
 
 ---
 
@@ -15,7 +15,7 @@ If you're a new agent or resuming after context loss:
 1. **CRITICAL - Vision Alignment:** [vision/VISION-INTERPRETATION-SESSION.md](vision/2025-11-30-VISION-INTERPRETATION-SESSION.md) - MANDATORY FIRST READ
 2. **Technical Vision:** [VISION_ANCHOR.md](VISION_ANCHOR.md) - Architecture (ReasoningBank + LangExtract)
 3. **Current State:** [epistemic_state.md](epistemic_state.md) - What's done, what's next
-4. **Run Tests:** `pytest` - Verify system integrity (747 tests)
+4. **Run Tests:** `pytest` - Verify system integrity (1432+ tests)
 
 ---
 
@@ -32,7 +32,7 @@ If you're a new agent or resuming after context loss:
 | MCP Server | ONLINE | 13 tools exposed |
 | Schema v3 | AUTHORITATIVE | 17 tables |
 
-**Test:** `pytest` (747 tests)
+**Test:** `pytest` (1432+ tests)
 
 ---
 
@@ -180,9 +180,9 @@ haios/
 
 ## Session History
 
-190 sessions from October 2025 to January 2026. See [checkpoints/](checkpoints/) for individual session documents.
+393 sessions from October 2025 to February 2026. See [checkpoints/](checkpoints/) for individual session documents.
 
-**Current Focus (Epoch 2.2):** Skill decomposition, pressure dynamics, session manifest loading.
+**Current Focus (Epoch 2.7):** Composability — flat metadata, engine functions, recipe rationalization.
 
 ---
 
@@ -216,5 +216,17 @@ haios/
 
 ---
 
-**Last Updated:** 2026-01-14 (Session 190)
+## Entry Points (ADR-045: Three-Tier Architecture)
+
+| Tier | Name | Audience | Count | Discovery |
+|------|------|----------|-------|-----------|
+| 1 | Commands | Operator (chat) | 19 | `/command` in Claude Code |
+| 2 | Skills + Agents | Agent | ~45 | `Skill()` / `Task()` auto-discovered |
+| 3 | Recipes | Internal | ~100 | `just X` called by Tier 1/2 only |
+
+**Key rule:** Agent MUST NOT run `just X` directly. All recipe access goes through Tier 2 skill wrappers.
+
+---
+
+**Last Updated:** 2026-02-17 (Session 393)
 **Navigation:** [Strategic Overview](epistemic_state.md) | [Vision](VISION_ANCHOR.md) | [Operations](OPERATIONS.md) | [MCP](MCP_INTEGRATION.md)

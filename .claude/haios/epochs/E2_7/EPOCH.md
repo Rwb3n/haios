@@ -58,13 +58,13 @@ Compose, don't concatenate.
 | CH-044 | HierarchyQueryEngine | WORK-157 | Complete |
 | CH-045 | StatusCascade | WORK-034 | Complete |
 
-### Arc 2: composability — "Compose, don't concatenate"
+### Arc 2: composability — "Compose, don't concatenate" (COMPLETE - S393)
 
 | CH-ID | Title | Work Items | Status |
 |-------|-------|------------|--------|
-| CH-046 | FlatMetadataMigration | WORK-158 | Planning |
+| CH-046 | FlatMetadataMigration | WORK-158 | Complete |
 | CH-047 | TemplateComposability | WORK-152, WORK-155 | Complete |
-| CH-048 | RecipeRationalization | New (TBD) | Planning |
+| CH-048 | RecipeRationalization | WORK-159 | Complete |
 
 ### Arc 3: infrastructure — "Clean the house first"
 

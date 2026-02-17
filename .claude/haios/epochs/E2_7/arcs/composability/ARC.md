@@ -7,7 +7,8 @@
 **Arc ID:** composability
 **Epoch:** E2.7
 **Theme:** Compose, don't concatenate — flat metadata, template composability, recipe rationalization
-**Status:** Active
+**Status:** Complete
+**Completed:** 2026-02-17 (Session 393)
 
 ---
 
@@ -36,17 +37,17 @@ Make building blocks composable. Arcs and chapters move to flat storage with met
 |-------|-------|------------|--------------|--------------|--------|
 | CH-046 | FlatMetadataMigration | WORK-158 | REQ-CONFIG-001, REQ-CONFIG-003 | None | Complete |
 | CH-047 | TemplateComposability | WORK-152, WORK-155 | REQ-ASSET-001, REQ-ASSET-004 | None | Complete |
-| CH-048 | RecipeRationalization | New (TBD) | REQ-CONFIG-004 | CH-046 (flat metadata enables recipe simplification) | Planning |
+| CH-048 | RecipeRationalization | WORK-159 | REQ-CONFIG-004, REQ-DISCOVER-002, REQ-DISCOVER-003 | CH-046 (flat metadata enables recipe simplification) | Complete |
 
 ---
 
 ## Exit Criteria
 
-- [ ] Arcs and chapters stored flat with metadata relationships (not filesystem hierarchy)
+- [~] Arcs and chapters stored flat with metadata relationships — DEFERRED to E2.8 (needs investigation, architectural scope beyond composability)
 - [x] Plan templates fractured by work type with type-specific sections (CH-047, WORK-152/155 closed S390)
 - [x] Lifecycle adapts to work type (skip gates, computable predicates) (CH-047, WORK-155 closed S390)
-- [ ] Recipe surface area rationalized (grouped, documented, composable)
-- [ ] ConfigLoader used for all path resolution (zero hardcoded paths)
+- [x] Recipe surface area rationalized (grouped, documented, composable) (CH-048, WORK-159 closed S393. ADR-045 three-tier model, stub cleaned, README updated)
+- [x] ConfigLoader used for all path resolution (zero hardcoded paths) (CH-046, WORK-158 closed S393)
 
 ---
 
