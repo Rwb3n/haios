@@ -122,11 +122,11 @@ Agent Cards for infrastructure-driven capability discovery. Agents find each oth
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
 | CH-063 | AgentCards | New | REQ-DISCOVER-002, REQ-DISCOVER-003 | None | Planning |
-| CH-064 | TriageConsumerUpdate | WORK-143 | REQ-CEREMONY-001 | None | Planning |
+| CH-064 | InfrastructureCeremonies | New | REQ-CEREMONY-001, REQ-CEREMONY-002 | None | Planning |
 
 **Exit criteria:**
 - [ ] All agents have structured capability cards discoverable via infrastructure
-- [ ] Triage pipeline reads retro-* provenance tags (typed observation consumption)
+- [ ] Open-epoch-ceremony skill exists (mirror of close-epoch-ceremony)
 - [ ] Agents not hardcoded in CLAUDE.md — discovered via infrastructure
 
 **Evidence:** mem:85154, 85210 (agents not discoverable), 85098/85108 (WORK-143 triage consumer), 85476 (capability card query tool)
@@ -148,6 +148,12 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 
 ---
 
+### Completed (carry-forward satisfied)
+
+| ID | Title | Notes |
+|----|-------|-------|
+| WORK-143 | Retro-Triage Consumer Update | Closed prior to E2.8. Triage reads retro-* provenance tags. |
+
 ### Deferred (not E2.8)
 
 | Item | Destination | Rationale |
@@ -155,8 +161,9 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 | Flat metadata storage for arcs/chapters | E2.9+ | Needs investigation, architectural scope |
 | Batch mode for trivial operations | Folds into Arc 1 CH-058 | Proportional scaling subsumes batch |
 | Full memory system overhaul | E4 (Cognitive Memory) | Three-paradigm memory, FORESIGHT |
-| WORK-071 Pre-Decomposition Review Gate | E2.9 (Governance) | Governance-themed |
-| WORK-102 Session/Process Review Ceremonies | E2.9 (Governance) | Governance-themed |
+| WORK-071 Pre-Decomposition Review Gate | E2.9 (Governance) | Governance-themed, parked |
+| WORK-101 Proportional Governance Design | E2.9 if not completed in E2.8 | Currently parked, assigned to CH-058 but needs unpark |
+| WORK-102 Session/Process Review Ceremonies | E2.9 (Governance) | Governance-themed, backlog |
 
 ---
 
@@ -167,7 +174,7 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 - [ ] Mechanical ceremony phases migrated to hooks/modules
 - [ ] Contracts designed for progressive disclosure
 - [ ] All agents have structured capability cards
-- [ ] Triage pipeline reads typed provenance tags
+- [ ] Open-epoch-ceremony skill exists (full ceremony loop standardized)
 - [ ] Confirmed bugs from E2.7 triage resolved
 
 ---
