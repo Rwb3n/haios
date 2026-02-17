@@ -8436,3 +8436,6 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-106", "result": "block", "reason": "Invalid queue transition: backlog -> done", "timestamp": "2026-02-17T21:09:11.471568"}
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-109", "result": "block", "reason": "Invalid queue transition: backlog -> done", "timestamp": "2026-02-17T21:09:11.514521"}
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-145", "result": "block", "reason": "Invalid queue transition: backlog -> done", "timestamp": "2026-02-17T21:09:11.554088"}
+{"type": "SessionStarted", "session": 394, "agent": "Hephaestus", "timestamp": "2026-02-17T21:57:15.538025"}
+{"type": "SessionEnded", "session": 393, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-17T22:00:03.576671"}
+{"type": "SessionEnded", "session": 393, "agent": "Hephaestus", "timestamp": "2026-02-17T22:01:35.865967"}

@@ -1,8 +1,8 @@
 # generated: 2026-01-15
-# System Auto: last updated on: 2026-02-16T19:10:00
+# System Auto: last updated on: 2026-02-17T21:55:00
 # Work Queue Configuration (E2-290, INV-064 design)
 # Provides typed queues with cycle-locking for structured work execution
-# Updated: S384 — reconfigured for E2.7 Composability (3 arcs)
+# Updated: S393 — reconfigured for E2.8 Agent UX (4 arcs, pending decomposition)
 version: "1.1"
 
 # Queue type definitions
@@ -16,61 +16,29 @@ queue_types:
   chapter_aligned:
     ordering: "chapter_priority DESC, priority DESC"
 
-# Active queues — E2.7 Composability
+# Active queues — E2.8 Agent UX
+# Note: Arcs decomposed in S393 EPOCH.md but ARC.md files not yet created.
+# Queue items will be populated as work items are created for each arc.
 queues:
-  # ENGINE-FUNCTIONS arc (CH-044 to CH-045)
-  # Hierarchy query engine + status cascade
-  engine-functions:
-    type: fifo
-    items:
-      - WORK-034  # Upstream Status Propagation (CH-045, carry-forward)
-      # CH-044 HierarchyQueryEngine: new work item TBD
-    allowed_cycles: [work-creation-cycle, implementation-cycle]
-    rationale: "S384: WORK-034 carry-forward. CH-044 needs new work item for engine functions."
-
-  # COMPOSABILITY arc (CH-046 to CH-048)
-  # Flat metadata, template composability, recipe rationalization
-  composability:
-    type: priority
-    items:
-      - WORK-152  # Plan Template Fracturing by Work Type (CH-047, design)
-      - WORK-155  # Lifecycle Work-Type Awareness (CH-047, design)
-      # CH-046 FlatMetadataMigration: new work item TBD
-      # CH-048 RecipeRationalization: new work item TBD
-    allowed_cycles: [work-creation-cycle, implementation-cycle, investigation-cycle]
-    rationale: "S384: WORK-152/155 assigned to CH-047. CH-046/048 need new work items."
-
-  # INFRASTRUCTURE arc (CH-049 to CH-051)
-  # Bug fixes, epoch transition, staleness detection — no dependencies, parallel-safe
-  infrastructure:
-    type: batch
-    items:
-      - WORK-153  # E2.7 Bug Batch (CH-049, 6 bugs from triage)
-      - WORK-154  # Epoch Transition Validation (CH-050, implementation)
-      - WORK-136  # Checkpoint Staleness Detection (CH-051, investigation)
-    allowed_cycles: [implementation-cycle, investigation-cycle, work-creation-cycle]
-    rationale: "S384: Prerequisite quality work. No cross-arc dependencies. Start here."
-
-  # Default queue - catch-all for unassigned E2.7 work
+  # Default queue - catch-all for E2.8 work
   default:
     type: priority
     items: auto  # Populated from get_ready() excluding named queues
     allowed_cycles: [implementation-cycle, investigation-cycle, work-creation-cycle]
 
-# Parked items — out of E2.7 scope (deferred to E2.9 Governance)
+# Parked items — out of E2.8 scope
 parked:
   items:
     - WORK-071  # Pre-Decomposition Review Gate (governance, E2.9)
-    - WORK-101  # Proportional Governance Design (governance, E2.9)
     - WORK-102  # Session/Process Review Ceremonies (governance, E2.9)
-  rationale: "S384: Governance-themed items deferred to E2.9. Not composability scope."
+  rationale: "S393: Governance-themed items deferred to E2.9. WORK-101 unparked for E2.8 CH-058."
 
 # Policies
 policies:
   assignment:
-    default_queue: infrastructure  # E2.7 start: clean house first
+    default_queue: default  # E2.8: single queue until arc work items created
     auto_batch_threshold: 3
   cross_arc:
-    allowed: true  # E2.7: arcs are independent, cross-arc allowed
+    allowed: true  # E2.8: arcs are independent
   cycle_enforcement:
     strict: true
