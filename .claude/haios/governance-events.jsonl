@@ -7603,3 +7603,11 @@
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-17T19:20:20.658312"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-17T19:20:20.702867"}
 {"type": "StatusPropagation", "work_id": "WORK-157", "chapter": "CH-044", "arc": "engine-functions", "action": "arc_completed", "timestamp": "2026-02-17T19:20:33.053001"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-17T19:25:55.296019"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-158", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-17T19:25:55.303645"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-158"], "from": "backlog", "to": "ready", "timestamp": "2026-02-17T19:25:55.309179", "rationale": "Selected for S393 after WORK-157 closure", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-17T19:25:55.309179"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-17T19:25:55.325348"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-158", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-17T19:25:55.331963"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-158"], "from": "ready", "to": "working", "timestamp": "2026-02-17T19:25:55.338076", "rationale": "Starting plan authoring for ConfigLoader path migration", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-17T19:25:55.338076"}

@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-158
-title: "Flat Metadata Migration and ConfigLoader"
+title: ConfigLoader Path Migration
 type: feature
 status: active
 owner: Hephaestus
@@ -22,32 +22,40 @@ source_files:
 - .claude/haios/lib/scaffold.py
 - .claude/haios/modules/work_engine.py
 acceptance_criteria:
-- "ConfigLoader.get_path() used for all path resolution (zero hardcoded PROJECT_ROOT / 'docs' patterns)"
-- "Arc and chapter metadata stored in flat files with metadata relationships (not filesystem hierarchy)"
-- "Existing arc/chapter/work queries work with flat storage"
-- "17 hardcoded path patterns identified and migrated to ConfigLoader"
-- "Tests for ConfigLoader path resolution"
-- "No regressions in existing test suite"
+- ConfigLoader.get_path() used for all path resolution (zero hardcoded PROJECT_ROOT
+  / 'docs' patterns)
+- All hardcoded path patterns identified via audit (grep for PROJECT_ROOT /)
+- Each pattern migrated to ConfigLoader.get_path() with appropriate key
+- New path keys added to haios.yaml paths section as needed
+- Tests for ConfigLoader path resolution
+- No regressions in existing test suite
 blocked_by: []
 blocks:
 - CH-048
 enables:
 - CH-048
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: working
+cycle_phase: backlog
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-17T08:22:37
-    exited: null
+- node: backlog
+  entered: 2026-02-17 08:22:37
+  exited: null
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions:
   epoch: E2.7
-version: "2.0"
+version: '2.0'
 generated: 2026-02-17
-last_updated: 2026-02-17T08:22:37
+last_updated: '2026-02-17T19:25:55.336077'
+queue_history:
+- position: ready
+  entered: '2026-02-17T19:25:55.303645'
+  exited: '2026-02-17T19:25:55.331963'
+- position: working
+  entered: '2026-02-17T19:25:55.331963'
+  exited: null
 ---
 # WORK-158: Flat Metadata Migration and ConfigLoader
 
@@ -61,9 +69,13 @@ last_updated: 2026-02-17T08:22:37
 
 **Evidence:** scaffold.py has `PROJECT_ROOT / "docs" / "work" / "active"` in 5+ locations. work_engine.py, validate.py, and modules have similar patterns. EPOCH.md exit criteria explicitly require "ConfigLoader used for all path resolution."
 
-**Scope:**
-1. Migrate all hardcoded path patterns to `ConfigLoader.get_path()`
-2. Design flat metadata storage for arcs/chapters (may spawn investigation first)
+**Scope (narrowed S393):**
+1. Audit all hardcoded path patterns (grep for PROJECT_ROOT /)
+2. Migrate each pattern to ConfigLoader.get_path()
+3. Add missing path keys to haios.yaml paths section
+
+**Out of scope (spawned separately):**
+- Flat metadata storage for arcs/chapters (investigation needed first)
 
 ---
 
@@ -87,8 +99,7 @@ last_updated: 2026-02-17T08:22:37
 
 - [ ] Audit of all hardcoded path patterns (grep for `PROJECT_ROOT /`)
 - [ ] All paths migrated to `ConfigLoader.get_path()` calls
-- [ ] Flat metadata storage design for arcs and chapters
-- [ ] Migration of existing arc/chapter files to flat storage
+- [ ] New path keys added to haios.yaml as needed
 - [ ] Tests for ConfigLoader path resolution
 - [ ] No regressions in existing test suite
 
