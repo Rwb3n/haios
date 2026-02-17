@@ -84,7 +84,7 @@ Move mechanical ceremony phases from SKILL.md (agent reads) to hooks/modules (au
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
 | CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Planning |
-| CH-059 | CeremonyAutomation | New | REQ-CEREMONY-002 | CH-058 | Planning |
+| CH-059 | CeremonyAutomation-CritiqueAsHook | New | REQ-CEREMONY-002 | CH-058 | Planning |
 | CH-060 | SessionBoundaryFix | New | REQ-CEREMONY-001 | None | Planning |
 | CH-061 | ColdstartContextInjection | New | REQ-CONFIG-001, L3.3 | None | Planning |
 
@@ -95,6 +95,8 @@ Move mechanical ceremony phases from SKILL.md (agent reads) to hooks/modules (au
 - [ ] Session boundary gap governed (post-closure transition runs reliably)
 - [ ] Coldstart injects ALL operational context (zero manual Read steps in coldstart skill)
 - [ ] Minimum viable context contract enforced: identity + mission + prior + work + operational HOW
+
+**Principle: Critique is the inhale-to-exhale transition gate.** Every transition from exploring/planning to committing/executing should have assumption surfacing. The weight scales with commitment: none (trivial) → checklist (hook-injected) → full (critique-agent subagent) → operator (design dialogue). Detection is a PreToolUse hook (zero agent tokens). The predicate is computable from work item type, plan existence, and transition type. This answers the breath-architecture-handover.md open question: the critique pattern IS the phase transition mechanism.
 
 **Principle: Coldstart produces an operational agent, not an informed one.** After `/coldstart`, the agent must be able to execute work without reading any additional files. The orchestrator output is the captain's briefing packet — standing orders (hooks) are already active, the briefing provides everything else.
 
