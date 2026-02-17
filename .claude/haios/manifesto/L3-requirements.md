@@ -31,6 +31,7 @@ Mutability: IMMUTABLE (principles, not rules)
 | L3.16 | LLM Nature | No Episodic Memory | - | L3.3 enforcement |
 | L3.17 | LLM Nature | Pattern-Matches | - | L3.2 enforcement |
 | L3.18 | LLM Nature | Completes Literally | - | L3.7 enforcement |
+| L3.19 | Principle | Coordination by Intent | L3.4, L3.3, L0.11 | REQ-COORD-* |
 
 ---
 
@@ -66,6 +67,11 @@ Assume components will fail. Design so failures are contained, not cascading.
 
 ### [L3.7] Traceability
 Every action connects to purpose. Nothing happens in isolation.
+
+### [L3.19] Coordination by Intent
+Agents coordinate through shared understanding of intent (standing orders, persistent context), not through real-time direction. When an agent cannot consult the operator, it acts on the best available understanding of the operator's objectives, constrained by L3.8.
+
+*Added Session 393. Derived from organisational theory (span of control, unity of command, Drucker MBO), military doctrine (Royal Navy fleet coordination, Nelson's mission-type tactics), and the five naval coordination primitives: standing orders (hooks), sealed orders (ceremony skills), signal flags (subagent tasks), captain's discretion (agent judgment within L3 principles), ship's log (memory system). See Memory 85848-85909.*
 
 ---
 
@@ -225,7 +231,9 @@ Architectural alignment items for future epochs:
 
 6. **Domain-Agnostic Expansion Packs (S365):** HAIOS is the engine, projects are content packs. Spec corpus ingestion enables domain portability. *Target: E4 (Cognitive Memory).* Derives from L2 Serving Equation update.
 
+7. **Coordination Architecture (S393, Organisational Theory):** Multi-agent coordination model informed by organisational theory (span of control, unity of command, Drucker MBO), military doctrine (Royal Navy fleet coordination, mission-type tactics), and programming paradigms (Unix pipes, functional composition). Five naval primitives mapped to HAIOS: standing orders (hooks, zero cost), sealed orders (ceremony skills), signal flags (subagent tasks), captain's discretion (agent judgment), ship's log (memory). Investigation target: centralized vs distributed vs hierarchical coordination. *Target: E3.* See: Memory 85848-85909, `strategic-insight:session-393-organisational-theory`.
+
 ---
 
 *L3 contains principles. L4 (CLAUDE.md, INV-052, configs) contains specific rules that implement these principles.*
-*Enumerated Session 237 for bidirectional traceability*
+*Enumerated Session 237 for bidirectional traceability. L3.19 added Session 393.*
