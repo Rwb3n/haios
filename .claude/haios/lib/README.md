@@ -97,7 +97,8 @@ context:
 | `errors.py` | Error definitions |
 | `cli.py` | CLI dispatcher utilities |
 | `epoch_validator.py` | Epoch transition consistency validator (WORK-154) |
-| `status_propagator.py` | Upstream status propagation from work closure to ARC.md chapter rows (WORK-034). Runtime consumer: close-work-cycle ARCHIVE phase |
+| `hierarchy_engine.py` | Hierarchy query engine for epoch/arc/chapter/work navigation (WORK-157, CH-044). Runtime consumers: StatusPropagator, modules |
+| `status_propagator.py` | Upstream status propagation from work closure to ARC.md chapter rows (WORK-034). Uses HierarchyQueryEngine (CH-044). Runtime consumer: close-work-cycle ARCHIVE phase |
 | `ceremony_contracts.py` | Ceremony input/output contract enforcement (WORK-113) |
 | `dod_validation.py` | Definition of Done validation |
 

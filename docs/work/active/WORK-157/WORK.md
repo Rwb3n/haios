@@ -3,14 +3,14 @@ template: work_item
 id: WORK-157
 title: Hierarchy Query Engine
 type: feature
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-17
 spawned_by: null
 spawned_children: []
 chapter: CH-044
 arc: engine-functions
-closed: null
+closed: '2026-02-17'
 priority: high
 effort: large
 traces_to:
@@ -31,27 +31,31 @@ blocked_by: []
 blocks: []
 enables:
 - CH-048
-queue_position: working
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
 - node: backlog
   entered: 2026-02-17 08:22:37
-  exited: null
+  exited: '2026-02-17T19:20:20.679932'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 85798
 extensions:
   epoch: E2.7
 version: '2.0'
 generated: 2026-02-17
-last_updated: '2026-02-17T18:50:57.146729'
+last_updated: '2026-02-17T19:20:20.684080'
 queue_history:
 - position: ready
   entered: '2026-02-17T18:50:57.116571'
   exited: '2026-02-17T18:50:57.143204'
 - position: working
   entered: '2026-02-17T18:50:57.143204'
+  exited: '2026-02-17T19:20:20.679932'
+- position: done
+  entered: '2026-02-17T19:20:20.679932'
   exited: null
 ---
 # WORK-157: Hierarchy Query Engine

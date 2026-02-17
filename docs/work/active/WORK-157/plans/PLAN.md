@@ -1,6 +1,6 @@
 ---
 template: implementation_plan
-status: approved
+status: complete
 date: 2026-02-17
 backlog_id: WORK-157
 title: "Hierarchy Query Engine"
@@ -43,7 +43,7 @@ Provide callable engine functions (`get_arcs()`, `get_chapters()`, `get_work()`,
 | Files to create | 2 | `.claude/haios/lib/hierarchy_engine.py`, `tests/test_hierarchy_engine.py` |
 | Files to modify | 1 | `.claude/haios/lib/status_propagator.py` (replace hardcoded scan with engine calls) |
 | Lines of code (new) | ~200 | Based on StatusPropagator (273 lines) as reference for similar parsing |
-| Tests to write | 10 | 4 functions x 2 cases + 2 edge cases |
+| Tests to write | 12 | 4 functions x 2 cases + 4 edge/critique cases |
 | Dependencies | 2 | ConfigLoader (lib/config.py), yaml |
 
 ### Complexity Factors
@@ -209,7 +209,33 @@ def test_get_work_includes_completed_items(tmp_path):
     assert items[0].status == "complete"
 ```
 
-### Test 10: Integration - StatusPropagator uses HierarchyQueryEngine
+### Test 10: get_work skips malformed WORK.md gracefully (A9 critique)
+```python
+def test_get_work_skips_malformed_yaml(tmp_path):
+    _setup_hierarchy(tmp_path)
+    # Create a malformed WORK.md in active dir
+    bad_dir = tmp_path / "docs" / "work" / "active" / "WORK-BAD"
+    bad_dir.mkdir(parents=True)
+    (bad_dir / "WORK.md").write_text("---\n: invalid: yaml: {{{\n---\n", encoding="utf-8")
+    engine = HierarchyQueryEngine(base_path=tmp_path)
+    items = engine.get_work("CH-044")  # Should still return valid items
+    assert len(items) == 1
+    assert items[0].id == "WORK-157"
+```
+
+### Test 11: get_hierarchy uses work item epoch over config (A10 critique)
+```python
+def test_get_hierarchy_uses_work_item_epoch(tmp_path):
+    _setup_hierarchy(tmp_path)
+    # Work item has extensions.epoch: E2.7, config has epoch.current: E2.7
+    engine = HierarchyQueryEngine(base_path=tmp_path)
+    chain = engine.get_hierarchy("WORK-157")
+    assert chain.epoch == "E2.7"
+    # Verify it reads from work item, not just config
+    # (Would differ during epoch transition when config moves to E2.8)
+```
+
+### Test 12: Integration - StatusPropagator uses HierarchyQueryEngine
 ```python
 def test_status_propagator_uses_hierarchy_engine(tmp_path):
     """Verify StatusPropagator delegates to HierarchyQueryEngine."""
@@ -339,7 +365,8 @@ class HierarchyQueryEngine:
         Get full hierarchy chain for a work item (work -> chapter -> arc -> epoch).
 
         Reads work item frontmatter for chapter/arc fields.
-        Resolves epoch from haios.yaml epoch.current.
+        Resolves epoch from work item extensions.epoch first (A10 critique),
+        falls back to haios.yaml epoch.current if not present.
 
         Args:
             work_id: Work item ID (e.g., "WORK-157")
@@ -355,14 +382,18 @@ class HierarchyQueryEngine:
 
 ```python
 def _parse_arc_chapters(self, arc_file: Path, arc_name: str) -> List[ChapterInfo]:
-    """Parse chapter table rows from ARC.md."""
+    """Parse chapter table rows from ARC.md.
+
+    Note (A4 critique): ChapterInfo.work_items is INFORMATIONAL only (from ARC.md table).
+    For authoritative chapter membership, use get_work(chapter_id) which scans WORK.md files.
+    """
     content = arc_file.read_text(encoding="utf-8")
     chapters = []
     for line in content.split("\n"):
-        # Match: | CH-XXX | Title | Work Items | ... | Status |
+        # Match: | CH-XXX | Title | Work Items | Requirements | Dependencies | Status |
         if re.match(r"\s*\|\s*CH-\d+", line):
             cells = [c.strip() for c in line.split("|") if c.strip()]
-            if len(cells) >= 4:
+            if len(cells) >= 6:  # A2 critique: must be 6-column table
                 ch_id = cells[0]       # CH-044
                 title = cells[1]       # HierarchyQueryEngine
                 work_str = cells[2]    # "WORK-157" or "WORK-152, WORK-155"
@@ -392,39 +423,59 @@ def _parse_arc_metadata(self, arc_file: Path) -> dict:
     return {"theme": theme, "status": status}
 ```
 
-**Work item chapter lookup:**
+**Work item parsing (A5 critique: extracts ALL WorkInfo fields, not just chapter/arc):**
 
 ```python
-def _get_work_chapter_arc(self, work_id: str) -> Optional[tuple]:
-    """Read chapter/arc from work item WORK.md frontmatter."""
-    work_file = self._active_dir / work_id / "WORK.md"
+def _parse_work_info(self, work_dir: Path) -> Optional[WorkInfo]:
+    """Parse full WorkInfo from a WORK.md file.
+
+    Extracts all 6 fields needed for WorkInfo: id, title, status, type, chapter, arc.
+    Returns None if file missing, malformed, or lacks chapter/arc fields.
+    Wrapped in try/except per A9 critique (malformed YAML tolerance).
+    """
+    work_file = work_dir / "WORK.md"
     if not work_file.exists():
         return None
-    content = work_file.read_text(encoding="utf-8")
-    parts = content.split("---", 2)
-    if len(parts) < 3:
-        return None
-    fm = yaml.safe_load(parts[1]) or {}
-    chapter = fm.get("chapter")
-    arc = fm.get("arc")
-    if not chapter or not arc:
-        return None
-    return (chapter, arc)
+    try:
+        content = work_file.read_text(encoding="utf-8")
+        parts = content.split("---", 2)
+        if len(parts) < 3:
+            return None
+        fm = yaml.safe_load(parts[1]) or {}
+        chapter = fm.get("chapter")
+        arc = fm.get("arc")
+        if not chapter or not arc:
+            return None
+        return WorkInfo(
+            id=fm.get("id", work_dir.name),
+            title=fm.get("title", ""),
+            status=fm.get("status", "active"),
+            type=fm.get("type", ""),
+            chapter=chapter,
+            arc=arc,
+        )
+    except Exception:
+        return None  # A9: skip malformed files gracefully
 ```
 
 ### Path Resolution
 
 All paths via haios.yaml config:
 ```python
-# haios.yaml paths used:
-config = self._load_haios_config()
+# haios.yaml paths used (lazy-loaded, A11 critique):
+config = self._load_haios_config()  # Only called by get_arcs(), not in __init__
 arcs_dir = config.get("epoch", {}).get("arcs_dir", "")    # ".claude/haios/epochs/E2_7/arcs"
 active_arcs = config.get("epoch", {}).get("active_arcs", [])  # ["engine-functions", "composability", "infrastructure"]
-current_epoch = config.get("epoch", {}).get("current", "")     # "E2.7"
+default_epoch = config.get("epoch", {}).get("current", "")     # "E2.7" (fallback only)
 
 # Resolved paths:
 arc_file = self._base_path / arcs_dir / arc_name / "ARC.md"
 active_dir = self._base_path / "docs" / "work" / "active"     # Via ConfigLoader.get_path("work_active")
+
+# Epoch resolution (A10 critique):
+# 1. Read work item frontmatter extensions.epoch (primary)
+# 2. Fall back to haios.yaml epoch.current (default)
+epoch = fm.get("extensions", {}).get("epoch", default_epoch)
 ```
 
 ### Call Chain Context
@@ -483,6 +534,12 @@ from typing import List, Optional
 | haios.yaml direct read | Yes, not via ConfigLoader | ConfigLoader doesn't expose epoch.active_arcs. Direct yaml.safe_load follows StatusPropagator pattern. |
 | Injectable base_path | Yes (default auto-detect) | Matches StatusPropagator, CascadeEngine testing patterns. |
 | No caching | Stateless reads on each call | Matches WorkEngine/StatusPropagator pattern. Files may change between calls. |
+| Column guard >= 6 | Changed from >= 4 (A2 critique) | ARC.md chapter table is always 6 columns. Lenient guard could misparse shorter tables. |
+| Dual source documented | get_work() is authoritative, ChapterInfo.work_items is informational (A4 critique) | File scan reflects actual frontmatter; ARC.md table may be stale. is_chapter_complete() uses get_work(). |
+| Full WorkInfo parsing | _parse_work_info() extracts all 6 fields (A5 critique) | is_chapter_complete() needs status field. Incomplete parsing would cause silent failures. |
+| try/except per file | Skip malformed WORK.md files gracefully (A9 critique) | Single corrupted file must not abort entire get_work() scan. Defensive over existing pattern. |
+| Epoch from work item | extensions.epoch primary, config fallback (A10 critique) | Correct across epoch transitions when carry-forward items have prior epoch. |
+| Lazy config loading | haios.yaml read only in get_arcs(), not __init__ (A11 critique) | get_work() and get_hierarchy() don't need haios.yaml. Avoids breaking StatusPropagator test fixtures. |
 
 ### Input/Output Examples
 
@@ -529,6 +586,10 @@ HierarchyChain(work_id="WORK-157", chapter="CH-044", arc="engine-functions", epo
 | Chapter with multiple work items | Parse comma-separated IDs from table cell | Test 2, 9 |
 | haios.yaml missing | get_arcs returns [] | Test 8 |
 | Work item in archive (not active) | Not included in get_work() (scans active only) | By design — matches StatusPropagator |
+| Malformed WORK.md YAML (A9) | Skipped gracefully via try/except, returns None | New test needed |
+| ARC.md table < 6 columns (A2) | Row skipped (guard: len(cells) >= 6) | Implicit in existing tests |
+| Work item with extensions.epoch (A10) | Uses work item epoch, not config | New test needed |
+| Work item without extensions.epoch | Falls back to haios.yaml epoch.current | Test 6 (existing) |
 
 ### Open Questions
 
@@ -549,7 +610,7 @@ No. StatusPropagator only scans active, and completed items remain in active per
 ## Implementation Steps
 
 ### Step 1: Write Failing Tests
-- [ ] Create `tests/test_hierarchy_engine.py` with all 10 tests
+- [ ] Create `tests/test_hierarchy_engine.py` with all 12 tests
 - [ ] Create `_setup_hierarchy()` helper fixture (haios.yaml + ARC.md + WORK.md files)
 - [ ] Verify all tests fail (red) — ImportError from missing module
 
@@ -560,7 +621,7 @@ No. StatusPropagator only scans active, and completed items remain in active per
 - [ ] Implement `get_chapters()` — parses ARC.md chapter table
 - [ ] Implement `get_work()` — scans active dir, filters by chapter
 - [ ] Implement `get_hierarchy()` — reads WORK.md frontmatter + haios.yaml
-- [ ] Tests 1-9 pass (green)
+- [ ] Tests 1-11 pass (green)
 
 ### Step 3: Integrate with StatusPropagator
 - [ ] Add HierarchyQueryEngine import to status_propagator.py
@@ -633,7 +694,7 @@ No. StatusPropagator only scans active, and completed items remain in active per
 | File | Expected State | Verified | Notes |
 |------|---------------|----------|-------|
 | `.claude/haios/lib/hierarchy_engine.py` | 4 query functions + 4 dataclasses | [ ] | |
-| `tests/test_hierarchy_engine.py` | 10+ tests covering all functions + edge cases | [ ] | |
+| `tests/test_hierarchy_engine.py` | 12 tests covering all functions + edge/critique cases | [ ] | |
 | `.claude/haios/lib/status_propagator.py` | Uses HierarchyQueryEngine, TODO removed | [ ] | |
 | `.claude/haios/lib/README.md` | **MUST:** Lists hierarchy_engine.py | [ ] | |
 | `Grep: TODO(CH-044)` | **MUST:** Zero remaining references | [ ] | |
@@ -641,7 +702,7 @@ No. StatusPropagator only scans active, and completed items remain in active per
 **Verification Commands:**
 ```bash
 pytest tests/test_hierarchy_engine.py tests/test_status_propagator.py -v
-# Expected: 18+ tests passed (10 new + 8 existing)
+# Expected: 20+ tests passed (12 new + 8 existing)
 ```
 
 **Binary Verification (Yes/No):**

@@ -43,8 +43,7 @@ class StatusPropagator:
     All I/O is injectable via base_path for testing.
     Production use auto-detects project root from __file__.
 
-    # TODO(CH-044): Replace active dir scan with HierarchyQueryEngine.get_chapter_work_items()
-    # when CH-044 is implemented.
+    CH-044 resolved: Uses HierarchyQueryEngine for chapter work item queries.
     """
 
     def __init__(
@@ -56,6 +55,10 @@ class StatusPropagator:
         self._events_file = events_file or (
             self._base_path / ".claude" / "haios" / "governance-events.jsonl"
         )
+        # Lazy import to avoid circular dependency issues
+        from hierarchy_engine import HierarchyQueryEngine
+
+        self._hierarchy = HierarchyQueryEngine(base_path=self._base_path)
 
     def propagate(self, work_id: str) -> dict:
         """
@@ -135,9 +138,9 @@ class StatusPropagator:
         """
         Check if all work items assigned to chapter_id are complete.
 
-        Scans all active work items and checks status of those with
-        matching chapter field. Returns False for unfunded chapters
-        (no work items found).
+        Delegates to HierarchyQueryEngine.get_work() for chapter membership
+        (authoritative source per A4 critique). Returns False for unfunded
+        chapters (no work items found).
 
         Args:
             chapter_id: Chapter ID (e.g., "CH-045")
@@ -145,26 +148,10 @@ class StatusPropagator:
         Returns:
             True if all chapter work items have complete status, False otherwise.
         """
-        active_dir = self._base_path / "docs" / "work" / "active"
-        if not active_dir.exists():
-            return False
-        chapter_items = []
-        for work_path in active_dir.iterdir():
-            if not work_path.is_dir():
-                continue
-            work_file = work_path / "WORK.md"
-            if not work_file.exists():
-                continue
-            content = work_file.read_text(encoding="utf-8")
-            parts = content.split("---", 2)
-            if len(parts) < 3:
-                continue
-            fm = yaml.safe_load(parts[1]) or {}
-            if fm.get("chapter") == chapter_id:
-                chapter_items.append(fm.get("status", "active"))
-        if not chapter_items:
+        items = self._hierarchy.get_work(chapter_id)
+        if not items:
             return False  # No items = not complete (unfunded)
-        return all(s.lower() in COMPLETE_STATUSES for s in chapter_items)
+        return all(item.status.lower() in COMPLETE_STATUSES for item in items)
 
     def update_arc_chapter_status(
         self, arc_name: str, chapter_id: str, new_status: str
