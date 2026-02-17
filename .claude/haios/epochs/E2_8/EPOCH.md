@@ -87,6 +87,7 @@ Move mechanical ceremony phases from SKILL.md (agent reads) to hooks/modules (au
 | CH-059 | CeremonyAutomation-CritiqueAsHook | New | REQ-CEREMONY-002 | CH-058 | Planning |
 | CH-060 | SessionBoundaryFix | New | REQ-CEREMONY-001 | None | Planning |
 | CH-061 | ColdstartContextInjection | New | REQ-CONFIG-001, L3.3 | None | Planning |
+| CH-066 | MCPOperationsServer | New | REQ-DISCOVER-002, REQ-CONFIG-001 | CH-061 | Planning |
 
 **Exit criteria:**
 - [ ] Governance overhead measurably reduced (target: perceptible improvement over E2.5 baseline)
@@ -95,6 +96,8 @@ Move mechanical ceremony phases from SKILL.md (agent reads) to hooks/modules (au
 - [ ] Session boundary gap governed (post-closure transition runs reliably)
 - [ ] Coldstart injects ALL operational context (zero manual Read steps in coldstart skill)
 - [ ] Minimum viable context contract enforced: identity + mission + prior + work + operational HOW
+- [ ] haios-operations MCP server exposes work/hierarchy/session/scaffold tools as agent-native interface
+- [ ] Just recipes retired for agent use — MCP tools replace Tier 2 operations, just remains Tier 3 (operator terminal only)
 
 **Principle: Critique is the inhale-to-exhale transition gate.** Every transition from exploring/planning to committing/executing should have assumption surfacing. The weight scales with commitment: none (trivial) → checklist (hook-injected) → full (critique-agent subagent) → operator (design dialogue). Detection is a PreToolUse hook (zero agent tokens). The predicate is computable from work item type, plan existence, and transition type. This answers the breath-architecture-handover.md open question: the critique pattern IS the phase transition mechanism.
 
@@ -187,6 +190,8 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 - [x] Open-epoch-ceremony skill exists (full ceremony loop standardized) (S393)
 - [ ] Confirmed bugs from E2.7/E2.8 triage resolved (including checkpoint sort, queue state machine)
 - [ ] Coldstart produces accurate context after epoch transition (no stale epoch, no stale checkpoint)
+- [ ] haios-operations MCP server replaces just recipes as agent-native Tier 2 interface
+- [ ] Just recipes retired for agent use (Tier 3 operator-terminal only)
 
 ---
 
