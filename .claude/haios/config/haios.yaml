@@ -7,8 +7,8 @@
 # Plugin manifest (for portable plugin spec)
 manifest:
   name: haios
-  version: "2.7"
-  description: "Hybrid AI Operating System - Composability"
+  version: "2.8"
+  description: "Hybrid AI Operating System - Agent UX"
 
 # Current epoch context (ADR-042: Arc > Chapter in hierarchy)
 epoch:
