@@ -3,14 +3,14 @@ template: work_item
 id: WORK-101
 title: Proportional Governance Design
 type: design
-status: blocked
+status: active
 owner: Hephaestus
 created: 2026-02-05
 spawned_by: Session-314-review
-chapter: null
-arc: lifecycles
+chapter: CH-058
+arc: call
 closed: null
-priority: medium
+priority: high
 effort: medium
 traces_to:
 - REQ-LIFECYCLE-001
@@ -30,7 +30,7 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: parked
+queue_position: backlog
 cycle_phase: backlog
 current_node: backlog
 node_history:
@@ -41,15 +41,16 @@ artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions:
-  epoch: E2.6
-  parked_for: E2.6
-  parked_reason: New design work, not E2.5 implementation scope
+  epoch: E2.8
+  unparked_session: 394
+  unparked_reason: "E2.8 Arc 1 (call) — CH-058 ProportionalGovernanceDesign"
+  previously_parked_for: E2.6
   cross_cuts:
   - lifecycles
   - ceremonies
 version: '2.0'
 generated: 2026-02-05
-last_updated: '2026-02-05T21:35:28'
+last_updated: '2026-02-17T22:15:00'
 ---
 # WORK-101: Proportional Governance Design
 
@@ -87,11 +88,16 @@ Session 314 review surfaced that governance overhead is uniform regardless of wo
 - [ ] REQ-CEREMONY-004 proportional ceremony depth requirement authored
 - [ ] Close-work-cycle SKILL.md updated with pytest gate
 - [ ] Complexity threshold criteria defined and documented
-- [ ] Chapter added to lifecycles or ceremonies arc
+- [ ] Assigned to CH-058 (call arc, E2.8)
 
 ---
 
 ## History
+
+### 2026-02-17 - Unparked (Session 394)
+- Unparked for E2.8 Arc 1 (call) — assigned to CH-058 ProportionalGovernanceDesign
+- Priority raised to high (prerequisite for WORK-160 CeremonyAutomation)
+- Arc changed from lifecycles to call
 
 ### 2026-02-05 - Created (Session 314)
 - Surfaced during session review discussion with operator

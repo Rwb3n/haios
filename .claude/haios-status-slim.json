@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-17T20:05:44",
+    "generated": "2026-02-17T22:26:33",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 85619,
-        "entities": 10043,
+        "concepts": 85745,
+        "entities": 10067,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -77,6 +77,7 @@
             "memory-agent",
             "memory-commit-ceremony",
             "observation-triage-cycle",
+            "open-epoch-ceremony",
             "plan-authoring-cycle",
             "plan-validation-cycle",
             "queue-commit",

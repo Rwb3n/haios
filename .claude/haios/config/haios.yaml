@@ -26,8 +26,12 @@ epoch:
     - S21-cognitive-notation.md
     - S22-skill-patterns.md
     - S27-breath-model.md  # E2.4 discovery, foundational
-  # Active arcs (E2.8 - Agent UX, pending decomposition)
-  active_arcs: []  # Awaiting arc decomposition for E2.8
+  # Active arcs (E2.8 - Agent UX, decomposed S394)
+  active_arcs:
+    - call
+    - query
+    - discover
+    - infrastructure
   # Epoch sequence (planned S365)
   sequence:
     - id: E2.6
