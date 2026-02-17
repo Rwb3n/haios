@@ -236,7 +236,21 @@ Organize findings by theme. Let patterns emerge from evidence, don't force struc
 - Operator challenges, reshapes, approves
 - Iterate 1-2 rounds to consensus
 
-#### 4d. Write arc structure
+#### 4d. Critique decomposition (inhale-to-exhale transition gate)
+
+Before committing the arc structure, apply critique at the decomposition level:
+
+**Questions to surface:**
+- Is 1 chapter = 1 work item realistic, or will chapters spawn during plan authoring?
+- Are any chapters overscoped (design + implementation in one item)?
+- Are dependencies between chapters correctly identified?
+- Does the decomposition match the epoch's exit criteria (every criterion traceable to a chapter)?
+
+**S393 evidence:** E2.7 had 2/8 chapters that needed 2 work items, and 2 more were descoped to stay at 1. E2.8's S394 decomposition created 1:1 mapping — likely optimistic for CH-059 (ceremony automation + critique-as-hook) and CH-061 (coldstart context injection).
+
+**Scaling:** This is the "operator" level of the critique predicate (epoch/arc transitions). Use AskUserQuestion to surface scope assumptions with the operator before committing.
+
+#### 4e. Write arc structure
 For each arc:
 1. Create `arcs/{arc_name}/ARC.md` with:
    - Definition (ID, Epoch, Theme, Status)
