@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-162
-title: "Lightweight Coldstart"
+title: "Coldstart Context Injection"
 type: design
 status: active
 owner: Hephaestus
@@ -9,7 +9,7 @@ created: 2026-02-17
 spawned_by: Session-394-decomposition
 spawned_children: []
 chapter: CH-061
-arc: query
+arc: call
 closed: null
 priority: high
 effort: medium
@@ -20,10 +20,12 @@ source_files:
   - .claude/skills/coldstart/SKILL.md
   - .claude/haios/modules/coldstart_orchestrator.py
 acceptance_criteria:
-  - "Tiered coldstart system designed (full, light, minimal)"
-  - "Criteria for each tier defined (when to use which)"
-  - "Lightweight variant loads in <50% tokens of full coldstart"
-  - "Housekeeping sessions use minimal tier by default"
+  - "Minimum viable context contract defined: identity + mission + prior + work + operational HOW"
+  - "Coldstart skill has ZERO Read instructions — all context injected by orchestrator"
+  - "Operational patterns (module paths, Tier model, recipe usage) injected, not manual read"
+  - "Tiered coldstart system designed (full, light, minimal) with criteria for each"
+  - "After coldstart, agent can execute work without reading any additional files"
+  - "S393/S394 evidence addressed: 200k agent operational failure after coldstart"
 blocked_by: []
 blocks: []
 enables: []

@@ -26,6 +26,9 @@ acceptance_criteria:
   - "Session-end ceremony runs automatically via hook (not agent-read skill)"
   - "Checkpoint population automated for standard fields"
   - "cycle_phase advancement automated via PostToolUse hook"
+  - "Critique-as-hook: PreToolUse detects inhale-to-exhale skill transitions, injects critique automatically"
+  - "Four critique levels implemented: none (trivial), checklist (hook), full (subagent), operator (dialogue)"
+  - "Computable predicate determines critique level from work item type, plan existence, transition type"
   - "Zero regression in existing ceremony behavior"
 blocked_by:
   - WORK-101
