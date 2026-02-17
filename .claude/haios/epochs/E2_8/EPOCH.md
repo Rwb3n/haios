@@ -103,13 +103,17 @@ Extend engine functions for context loading. Memory-first retrieval. Progressive
 
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
-| CH-061 | LightweightColdstart | New | REQ-CONFIG-001 | None | Planning |
+| CH-061 | ColdstartContextInjection | New | REQ-CONFIG-001, L3.3 | None | Planning |
 | CH-062 | ProgressiveContracts | New | REQ-ASSET-001 | None | Planning |
 
 **Exit criteria:**
+- [ ] Minimum viable context contract defined (identity + mission + prior + work + operational HOW)
+- [ ] Operational patterns (module paths, recipe usage, Tier model) injected by coldstart, not manual read
 - [ ] Lightweight coldstart variant exists for housekeeping sessions
 - [ ] Contracts designed for progressive disclosure (agent reads what it needs, not everything)
 - [ ] Context loading uses engine functions and memory before file reads
+
+**S393/S394 evidence:** 200k agent failed to operate after coldstart because HOW context (CLAUDE.md operational patterns) was not injected. Agent wrote raw Python imports (4 failures) instead of using `just ready`. Coldstart succeeded technically but produced an agent that didn't know how to use the system.
 
 **Evidence:** mem:84835, 84836 (coldstart overhead), 85459 (most tokens on context loading), 85815 (Dimension 2: context switching)
 
