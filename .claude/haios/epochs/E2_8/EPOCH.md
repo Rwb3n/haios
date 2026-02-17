@@ -6,7 +6,8 @@
 
 **Epoch ID:** E2.8
 **Name:** Agent UX
-**Status:** Future
+**Status:** Active
+**Started:** 2026-02-17 (Session 393)
 **Prior:** E2.7 (Composability)
 **Next:** E2.9 (Governance)
 

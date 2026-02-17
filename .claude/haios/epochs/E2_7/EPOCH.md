@@ -6,8 +6,9 @@
 
 **Epoch ID:** E2.7
 **Name:** Composability
-**Status:** Active
+**Status:** Complete
 **Started:** 2026-02-16 (Session 382)
+**Completed:** 2026-02-17 (Session 393)
 **Prior:** E2.6 (Foundations)
 **Next:** E2.8 (Agent UX)
 
@@ -92,12 +93,12 @@ Compose, don't concatenate.
 
 ## Exit Criteria
 
-- [ ] Arcs and chapters stored flat with metadata relationships (Arc 2: CH-046)
-- [ ] Engine functions for hierarchy queries (Arc 1: CH-044)
+- [~] Arcs and chapters stored flat with metadata relationships — DEFERRED to E2.8 (architectural investigation needed)
+- [x] Engine functions for hierarchy queries (Arc 1: CH-044, WORK-157 closed S393)
 - [x] Status cascades automatically on work/chapter/arc closure (Arc 1: CH-045, WORK-034 closed S386)
 - [x] Lifecycle asset types implemented with typed I/O (WORK-093, closed 2026-02-15)
-- [ ] ConfigLoader used for all path resolution (Arc 2: CH-046)
-- [ ] Recipe surface area rationalized (Arc 2: CH-048)
+- [x] ConfigLoader used for all path resolution (Arc 2: CH-046, WORK-158 closed S393)
+- [x] Recipe surface area rationalized (Arc 2: CH-048, WORK-159 closed S393)
 - [x] Known bugs from E2.6 triage resolved (Arc 3: CH-049, WORK-153 closed S384)
 - [x] Epoch transition validation operational (Arc 3: CH-050, WORK-154 closed S385)
 
@@ -118,4 +119,5 @@ Compose, don't concatenate.
 - @docs/work/active/WORK-154/WORK.md (epoch transition)
 - @docs/work/active/WORK-155/WORK.md (lifecycle type-awareness)
 - @docs/work/active/WORK-157/WORK.md (hierarchy query engine)
-- @docs/work/active/WORK-158/WORK.md (flat metadata migration)
+- @docs/work/active/WORK-158/WORK.md (ConfigLoader path migration)
+- @docs/work/active/WORK-159/WORK.md (recipe rationalization)
