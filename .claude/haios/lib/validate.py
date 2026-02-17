@@ -84,6 +84,45 @@ def get_template_registry() -> dict[str, dict[str, Any]]:
                 "Ground Truth Verification (Before Closing)",
             ],
         },
+        "implementation_plan_design": {
+            "required_fields": ["template", "status", "date", "backlog_id"],
+            "optional_fields": [
+                "version", "author", "plan_id", "title", "session", "priority",
+                "lifecycle_phase", "subtype", "directive_id", "parent_id", "completed_session",
+                "completion_note", "spawned_by", "blocked_by", "related", "milestone",
+                "parent_plan", "children", "absorbs", "enables", "execution_layer",
+            ],
+            "allowed_status": ["draft", "ready", "approved", "rejected", "complete"],
+            "expected_sections": [
+                "Goal",
+                "Effort Estimation (Ground Truth)",
+                "Current State vs Desired State",
+                "Detailed Design",
+                "Implementation Steps",
+                "Verification",
+                "Risks & Mitigations",
+                "Progress Tracker",
+                "Ground Truth Verification (Before Closing)",
+            ],
+        },
+        "implementation_plan_cleanup": {
+            "required_fields": ["template", "status", "date", "backlog_id"],
+            "optional_fields": [
+                "version", "author", "plan_id", "title", "session", "priority",
+                "lifecycle_phase", "subtype", "directive_id", "parent_id", "completed_session",
+                "completion_note", "spawned_by", "blocked_by", "related", "milestone",
+                "parent_plan", "children", "absorbs", "enables", "execution_layer",
+            ],
+            "allowed_status": ["draft", "ready", "approved", "rejected", "complete"],
+            "expected_sections": [
+                "Goal",
+                "Effort Estimation (Ground Truth)",
+                "Implementation Steps",
+                "Verification",
+                "Progress Tracker",
+                "Ground Truth Verification (Before Closing)",
+            ],
+        },
         "architecture_decision_record": {
             "required_fields": ["template", "status", "date", "adr_id"],
             "optional_fields": [
@@ -547,6 +586,13 @@ def validate_template(file_path: str) -> dict[str, Any]:
         return result
 
     template_type = metadata["template"]
+
+    # WORK-152: Route plan templates by subtype for type-specific validation
+    if template_type == "implementation_plan" and "subtype" in metadata:
+        subtype_key = f"implementation_plan_{metadata['subtype']}"
+        if subtype_key in registry:
+            template_type = subtype_key
+
     result["template_type"] = template_type
 
     if template_type not in registry:

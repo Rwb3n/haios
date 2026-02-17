@@ -18,7 +18,7 @@ Templates for scaffolding commands. Used by `ScaffoldTemplate.ps1` to create new
 | Template | Output | Variables | Status |
 |----------|--------|-----------|--------|
 | `checkpoint` | Session checkpoint | SESSION, TITLE, DATE | Active |
-| `implementation_plan` | Implementation plan | TITLE, ID, DATE | Active |
+| `implementation_plan` | Implementation plan | TITLE, ID, DATE, TYPE | Active (routes by work type via `plans/`) |
 | `architecture_decision_record` | ADR | NUMBER, TITLE, DATE | Active |
 | `investigation` | Investigation (DISCOVERY phase) | BACKLOG_ID, TITLE, DATE | **NEW (ADR-034)** |
 | `work_item` | Work item file (M6-WorkCycle) | BACKLOG_ID, TITLE, TIMESTAMP | **NEW (E2-150)** |
@@ -42,6 +42,20 @@ The following templates are deprecated but kept for backward compatibility:
 - **`handoff_investigation`** - Replaced by: `investigation` template
 
 Use `/new-investigation` instead of `/new-handoff investigation`.
+
+### Plan Templates by Work Type (WORK-152)
+
+The `implementation_plan` template is fractured by work type into `.claude/templates/plans/`:
+
+| Template | Work Types | Sections |
+|----------|-----------|----------|
+| `plans/implementation.md` | feature, spike | Full (~15 sections, TDD, code diffs) |
+| `plans/design.md` | design | Streamlined (~9 sections, no code sections) |
+| `plans/cleanup.md` | bug, chore | Minimal (~6 sections) |
+
+Routing is automatic via `scaffold_template()` — reads work item `type` field and maps to the correct template. See `plans/README.md` for details.
+
+---
 
 ## Variable Syntax
 

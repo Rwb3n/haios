@@ -1077,3 +1077,135 @@ Test
             result = validate_template(str(test_file))
             type_errors = [e for e in result.get("errors", []) if "type" in e.lower()]
             assert len(type_errors) == 0, f"Type '{work_type}' should be valid"
+
+
+class TestPlanTemplateSubtypeValidation:
+    """Tests for WORK-152: Plan template fracturing — validate.py integration."""
+
+    def test_validate_registry_design_plan_sections(self):
+        """Design plan expected_sections excludes code-specific sections."""
+        from validate import get_template_registry
+
+        registry = get_template_registry()
+        assert "implementation_plan_design" in registry, "Design plan registry entry missing"
+
+        design_sections = registry["implementation_plan_design"]["expected_sections"]
+        assert "Goal" in design_sections
+        assert "Effort Estimation (Ground Truth)" in design_sections
+        assert "Implementation Steps" in design_sections
+        assert "Verification" in design_sections
+        # Code-specific sections should NOT be in design template
+        assert "Tests First (TDD)" not in design_sections
+
+    def test_validate_registry_cleanup_plan_sections(self):
+        """Cleanup plan expected_sections is minimal."""
+        from validate import get_template_registry
+
+        registry = get_template_registry()
+        assert "implementation_plan_cleanup" in registry, "Cleanup plan registry entry missing"
+
+        cleanup_sections = registry["implementation_plan_cleanup"]["expected_sections"]
+        impl_sections = registry["implementation_plan"]["expected_sections"]
+        assert "Goal" in cleanup_sections
+        assert len(cleanup_sections) < len(impl_sections), (
+            f"Cleanup ({len(cleanup_sections)}) should have fewer sections than implementation ({len(impl_sections)})"
+        )
+
+    def test_validate_template_routes_by_subtype(self, tmp_path):
+        """Plans with subtype: design validate against design expected_sections."""
+        from validate import validate_template
+
+        # Create a design plan with only design-relevant sections
+        content = """---
+template: implementation_plan
+subtype: design
+status: approved
+date: 2026-02-16
+backlog_id: WORK-TEST
+title: "Test Design Plan"
+session: 389
+version: "1.5"
+---
+# Implementation Plan: Test Design Plan
+
+## Goal
+
+Design the test feature for validation.
+
+## Effort Estimation (Ground Truth)
+
+### Scope Metrics
+
+| Metric | Value | Source |
+|--------|-------|--------|
+| Files to modify | 1 | test.py |
+
+### Effort Estimate
+
+| Phase | Estimate | Confidence |
+|-------|----------|------------|
+| Design | 30 min | High |
+
+## Current State vs Desired State
+
+### Current State
+
+No design exists.
+
+### Desired State
+
+Design documented in ADR format.
+
+## Detailed Design
+
+### Key Design Decisions
+
+| Decision | Choice | Rationale |
+|----------|--------|-----------|
+| Format | ADR | Standard architecture decision format |
+
+## Implementation Steps
+
+### Step 1: Author ADR
+- [ ] Write the ADR document
+
+## Verification
+
+- [ ] ADR exists and is complete
+
+## Risks & Mitigations
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| Scope creep | Med | Stick to ADR format |
+
+## Progress Tracker
+
+| Session | Date | Status | Notes |
+|---------|------|--------|-------|
+| 389 | 2026-02-16 | In progress | Initial |
+
+## Ground Truth Verification (Before Closing)
+
+| File | Expected State | Verified |
+|------|---------------|----------|
+| ADR-TEST.md | Exists | [ ] |
+
+## References
+
+@docs/ADR/ADR-TEST.md
+@docs/work/active/WORK-TEST/WORK.md
+"""
+        test_file = tmp_path / "PLAN.md"
+        test_file.write_text(content)
+
+        result = validate_template(str(test_file))
+
+        # Should NOT have errors about missing "Tests First (TDD)" section
+        missing_errors = [e for e in result.get("errors", []) if "Tests First" in e]
+        assert len(missing_errors) == 0, (
+            f"Design plan should not require 'Tests First' section, got errors: {missing_errors}"
+        )
+
+        # Should validate as implementation_plan_design type
+        assert result.get("template_type") == "implementation_plan_design"

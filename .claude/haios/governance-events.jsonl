@@ -7088,3 +7088,38 @@
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-16T21:59:42.855045"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-16T21:59:42.910673"}
 {"type": "StatusPropagation", "work_id": "WORK-156", "chapter": "CH-051", "arc": "infrastructure", "action": "arc_completed", "timestamp": "2026-02-16T21:59:54.242061"}
+{"type": "SessionEnded", "session": 388, "agent": "Hephaestus", "timestamp": "2026-02-16T22:01:10.232548"}
+{"type": "SessionStarted", "session": 389, "agent": "Hephaestus", "timestamp": "2026-02-16T22:30:00.270355"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-16T22:38:28.414834"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-152", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-16T22:38:28.422585"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-152"], "from": "backlog", "to": "ready", "timestamp": "2026-02-16T22:38:28.428850", "rationale": "E2.7 composability arc CH-047 \u2014 selected by survey-cycle S389", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-16T22:38:28.428850"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-16T22:38:28.444173"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-152", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-16T22:38:28.450914"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-152"], "from": "ready", "to": "working", "timestamp": "2026-02-16T22:38:28.456555", "rationale": "Starting work S389", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-16T22:38:28.456555"}
+{"type": "SessionEnded", "session": 387, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-16T23:13:23.660655"}
+{"type": "SessionStarted", "session": 390, "agent": "Hephaestus", "timestamp": "2026-02-16T23:13:49.190951"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-16T23:22:46.983082"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-155", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-16T23:22:46.988998"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-155"], "from": "backlog", "to": "ready", "timestamp": "2026-02-16T23:22:46.994184", "rationale": "Only E2.7-scoped ready item, continues CH-047 after WORK-152 closure", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-16T23:22:46.995194"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-16T23:22:47.009418"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-155", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-16T23:22:47.015454"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-155"], "from": "ready", "to": "working", "timestamp": "2026-02-16T23:22:47.021002", "rationale": "Session 390 work selection via survey-cycle", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-16T23:22:47.021002"}
+{"type": "SessionEnded", "session": 390, "agent": "Hephaestus", "timestamp": "2026-02-16T23:45:04.524043"}
+{"type": "SessionEnded", "session": 389, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-17T08:00:50.464147"}
+{"type": "SessionStarted", "session": 391, "agent": "Hephaestus", "timestamp": "2026-02-17T08:01:18.068598"}
+{"type": "SessionStarted", "session": 392, "agent": "Hephaestus", "timestamp": "2026-02-17T08:08:44.324901"}
+{"type": "SessionEnded", "session": 392, "agent": "Hephaestus", "timestamp": "2026-02-17T08:26:15.789326"}
+{"type": "SessionEnded", "session": 391, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-17T18:48:17.567493"}
+{"type": "SessionStarted", "session": 393, "agent": "Hephaestus", "timestamp": "2026-02-17T18:48:47.526296"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-17T18:50:57.109053"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-157", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-17T18:50:57.116571"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-157"], "from": "backlog", "to": "ready", "timestamp": "2026-02-17T18:50:57.121710", "rationale": "Selected for S393 - foundational engine functions for E2.7", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-17T18:50:57.121710"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-17T18:50:57.137649"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-157", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-17T18:50:57.143204"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-157"], "from": "ready", "to": "working", "timestamp": "2026-02-17T18:50:57.149389", "rationale": "Starting plan authoring for HierarchyQueryEngine", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-17T18:50:57.149389"}

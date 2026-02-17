@@ -166,6 +166,33 @@ def _get_work_status(backlog_id: str) -> Optional[str]:
     return None
 
 
+def _get_work_type(backlog_id: str) -> Optional[str]:
+    """Get type of existing work item for plan template routing (WORK-152).
+
+    Args:
+        backlog_id: Work item ID to check
+
+    Returns:
+        Type string if work item exists, None otherwise.
+    """
+    import yaml
+
+    work_path = PROJECT_ROOT / "docs" / "work" / "active" / backlog_id / "WORK.md"
+    if not work_path.exists():
+        return None
+
+    try:
+        content = work_path.read_text(encoding="utf-8")
+        parts = content.split("---", 2)
+        if len(parts) >= 3:
+            fm = yaml.safe_load(parts[1])
+            return fm.get("type")
+    except Exception:
+        pass
+
+    return None
+
+
 def _create_work_subdirs(work_dir: Path, subdirs: list[str]) -> None:
     """Create subdirectories for work item directory (E2-212).
 
@@ -277,6 +304,55 @@ def load_template(template: str) -> str:
             raise FileNotFoundError(f"Template not found: {template_path}")
 
     return template_path.read_text(encoding="utf-8-sig")
+
+
+# Work item type -> plan template type mapping (WORK-152, Critique A1)
+# Work item types: feature, investigation, bug, chore, spike, design
+# Plan template types: implementation, design, cleanup
+PLAN_TYPE_MAP = {
+    "feature": "implementation",
+    "investigation": "implementation",  # investigations use investigation-cycle, not plan templates
+    "bug": "cleanup",
+    "chore": "cleanup",
+    "spike": "implementation",
+    "design": "design",
+}
+
+
+def get_plan_type(work_type: str) -> str:
+    """Map work item type to plan template type.
+
+    Args:
+        work_type: Work item type field value (feature, bug, chore, etc.)
+
+    Returns:
+        Plan template type (implementation, design, cleanup).
+        Defaults to "implementation" for unmapped types.
+    """
+    return PLAN_TYPE_MAP.get(work_type, "implementation")
+
+
+def load_plan_template(work_type: str = "implementation") -> str:
+    """Load work-type-specific plan template.
+
+    Routes to .claude/templates/plans/{plan_type}.md if it exists,
+    otherwise falls back to the monolithic implementation_plan template
+    via load_template().
+
+    Args:
+        work_type: Work item type from WORK.md type field.
+                   Mapped to plan template type via get_plan_type().
+
+    Returns:
+        Template content string.
+    """
+    plan_type = get_plan_type(work_type)
+    plan_dir = PROJECT_ROOT / ".claude" / "templates" / "plans"
+    type_path = plan_dir / f"{plan_type}.md"
+    if type_path.exists():
+        return type_path.read_text(encoding="utf-8-sig")
+    # Fallback to monolithic template for unknown types
+    return load_template("implementation_plan")
 
 
 def substitute_variables(content: str, variables: dict) -> str:
@@ -455,8 +531,17 @@ def scaffold_template(
             raise ValueError("Either output_path or title must be provided")
         output_path = generate_output_path(template, backlog_id, title)
 
-    # Load template
-    content = load_template(template)
+    # Load template - route plan templates by work type (WORK-152)
+    if template == "implementation_plan":
+        # Auto-extract TYPE from work item if not provided (Critique A2)
+        if "TYPE" not in variables and backlog_id:
+            work_type = _get_work_type(backlog_id)
+            if work_type:
+                variables["TYPE"] = work_type
+        work_type = variables.get("TYPE", "implementation")
+        content = load_plan_template(work_type)
+    else:
+        content = load_template(template)
 
     # Add default variables
     today = datetime.now().strftime("%Y-%m-%d")

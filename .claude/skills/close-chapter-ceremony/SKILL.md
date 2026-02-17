@@ -73,6 +73,7 @@ just set-cycle close-chapter-ceremony VALIDATE {chapter_id}
 
 **DoD Criteria (REQ-DOD-001):**
 - [ ] All work items with `chapter: {chapter_id}` have `status: complete`
+- [ ] **MUST** verify each work item's plan deliverables/Ground Truth checkboxes are checked (status field alone is insufficient)
 - [ ] Chapter exit criteria (in chapter file) all checked
 - [ ] `implements_decisions` all verified via `just audit-decision-coverage`
 
@@ -84,7 +85,8 @@ just set-cycle close-chapter-ceremony VALIDATE {chapter_id}
    Grep(pattern="chapter: {chapter_id}", path="docs/work/active")
    ```
 4. For each work item found, verify `status: complete` in frontmatter
-5. Run audit-decision-coverage and parse output for chapter-specific errors:
+5. **MUST** read each work item's plan (if exists) and verify Ground Truth Verification / deliverable checkboxes are checked. `status: complete` in frontmatter is NOT sufficient — uncommitted code or unchecked deliverables means the work is incomplete regardless of status field.
+6. Run audit-decision-coverage and parse output for chapter-specific errors:
    ```bash
    just audit-decision-coverage
    ```
@@ -175,6 +177,7 @@ just clear-cycle
 | Phase | Question to Ask | If NO |
 |-------|-----------------|-------|
 | VALIDATE | Are all work items complete? | List incomplete items, STOP |
+| VALIDATE | Are plan deliverables/Ground Truth verified? | Read plans, list unchecked items, STOP |
 | VALIDATE | Are Exit Criteria all checked? | List unchecked items, STOP |
 | VALIDATE | Does audit pass for implements_decisions? | Show audit errors, STOP |
 | MARK | Is Status updated to Complete? | Edit chapter file |

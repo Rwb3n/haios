@@ -331,5 +331,6 @@ This provides independent validation before implementation-cycle can begin.
 - **work-creation-cycle skill:** Parallel workflow for work items
 - **close-work-cycle skill:** Parallel workflow for closure
 - **implementation-cycle skill:** Uses this skill during PLAN phase
-- **Implementation plan template:** `.claude/templates/_legacy/implementation_plan.md`
+- **Plan templates:** `.claude/templates/plans/` (fractured by work type: implementation, design, cleanup)
+- **Legacy template:** `.claude/templates/_legacy/implementation_plan.md` (fallback)
 - **/new-plan command:** Creates plan files

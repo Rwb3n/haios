@@ -34,8 +34,8 @@ Make building blocks composable. Arcs and chapters move to flat storage with met
 
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
-| CH-046 | FlatMetadataMigration | New (TBD) | REQ-CONFIG-001, REQ-CONFIG-003 | None | Planning |
-| CH-047 | TemplateComposability | WORK-152, WORK-155 | REQ-ASSET-001, REQ-ASSET-004 | None | Planning |
+| CH-046 | FlatMetadataMigration | WORK-158 | REQ-CONFIG-001, REQ-CONFIG-003 | None | Planning |
+| CH-047 | TemplateComposability | WORK-152, WORK-155 | REQ-ASSET-001, REQ-ASSET-004 | None | Complete |
 | CH-048 | RecipeRationalization | New (TBD) | REQ-CONFIG-004 | CH-046 (flat metadata enables recipe simplification) | Planning |
 
 ---
@@ -43,8 +43,8 @@ Make building blocks composable. Arcs and chapters move to flat storage with met
 ## Exit Criteria
 
 - [ ] Arcs and chapters stored flat with metadata relationships (not filesystem hierarchy)
-- [ ] Plan templates fractured by work type with type-specific sections
-- [ ] Lifecycle adapts to work type (skip gates, computable predicates)
+- [x] Plan templates fractured by work type with type-specific sections (CH-047, WORK-152/155 closed S390)
+- [x] Lifecycle adapts to work type (skip gates, computable predicates) (CH-047, WORK-155 closed S390)
 - [ ] Recipe surface area rationalized (grouped, documented, composable)
 - [ ] ConfigLoader used for all path resolution (zero hardcoded paths)
 

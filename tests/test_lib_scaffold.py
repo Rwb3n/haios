@@ -1010,3 +1010,126 @@ class TestCLIScaffoldArgParsing:
         assert backlog_id == "99"
         assert title == "My Title"
         assert variables["SPAWNED_BY"] == "INV-033"
+
+
+class TestPlanTemplateRouting:
+    """Tests for WORK-152: Plan template fracturing by work type."""
+
+    def test_get_plan_type_maps_feature_to_implementation(self):
+        """Work item type 'feature' maps to plan template type 'implementation'."""
+        from scaffold import get_plan_type
+
+        assert get_plan_type("feature") == "implementation"
+
+    def test_get_plan_type_maps_bug_to_cleanup(self):
+        """Work item type 'bug' maps to plan template type 'cleanup'."""
+        from scaffold import get_plan_type
+
+        assert get_plan_type("bug") == "cleanup"
+
+    def test_get_plan_type_maps_chore_to_cleanup(self):
+        """Work item type 'chore' maps to plan template type 'cleanup'."""
+        from scaffold import get_plan_type
+
+        assert get_plan_type("chore") == "cleanup"
+
+    def test_get_plan_type_maps_design_to_design(self):
+        """Work item type 'design' maps to plan template type 'design'."""
+        from scaffold import get_plan_type
+
+        assert get_plan_type("design") == "design"
+
+    def test_get_plan_type_maps_spike_to_implementation(self):
+        """Work item type 'spike' maps to plan template type 'implementation'."""
+        from scaffold import get_plan_type
+
+        assert get_plan_type("spike") == "implementation"
+
+    def test_get_plan_type_unknown_falls_back_to_implementation(self):
+        """Unknown work item type defaults to 'implementation'."""
+        from scaffold import get_plan_type
+
+        assert get_plan_type("unknown_type") == "implementation"
+
+    def test_load_plan_template_routes_by_type(self, tmp_path, monkeypatch):
+        """load_plan_template('design') returns design-specific template."""
+        import scaffold
+
+        monkeypatch.setattr(scaffold, "PROJECT_ROOT", tmp_path)
+
+        plans_dir = tmp_path / ".claude" / "templates" / "plans"
+        plans_dir.mkdir(parents=True)
+        (plans_dir / "design.md").write_text(
+            "---\ntemplate: implementation_plan\nsubtype: design\n---\n# Design Plan\n",
+            encoding="utf-8",
+        )
+
+        result = scaffold.load_plan_template("design")
+        assert "Design Plan" in result
+
+    def test_load_plan_template_fallback_to_legacy(self, tmp_path, monkeypatch):
+        """load_plan_template('unknown_type') falls back to implementation_plan."""
+        import scaffold
+
+        monkeypatch.setattr(scaffold, "PROJECT_ROOT", tmp_path)
+
+        # No plans/ directory exists, but legacy template does
+        legacy_dir = tmp_path / ".claude" / "templates" / "_legacy"
+        legacy_dir.mkdir(parents=True)
+        (legacy_dir / "implementation_plan.md").write_text(
+            "---\ntemplate: implementation_plan\n---\n# Implementation Plan: {{TITLE}}\n",
+            encoding="utf-8",
+        )
+
+        result = scaffold.load_plan_template("unknown_type")
+        assert "Implementation Plan" in result
+
+    def test_load_plan_template_default_is_implementation(self, tmp_path, monkeypatch):
+        """load_plan_template() with no arg loads implementation template."""
+        import scaffold
+
+        monkeypatch.setattr(scaffold, "PROJECT_ROOT", tmp_path)
+
+        plans_dir = tmp_path / ".claude" / "templates" / "plans"
+        plans_dir.mkdir(parents=True)
+        (plans_dir / "implementation.md").write_text(
+            "---\ntemplate: implementation_plan\n---\n# Implementation Plan\n## Tests First (TDD)\n",
+            encoding="utf-8",
+        )
+
+        result = scaffold.load_plan_template()
+        assert "Tests First" in result
+
+    def test_scaffold_template_auto_extracts_type(self, tmp_path, monkeypatch):
+        """scaffold_template reads work item type and routes to correct template."""
+        import scaffold
+
+        monkeypatch.setattr(scaffold, "PROJECT_ROOT", tmp_path)
+
+        # Create work item with type: design
+        work_dir = tmp_path / "docs" / "work" / "active" / "WORK-TEST"
+        work_dir.mkdir(parents=True)
+        (work_dir / "plans").mkdir()
+        (work_dir / "WORK.md").write_text(
+            "---\ntemplate: work_item\nid: WORK-TEST\ntitle: Test\ntype: design\nstatus: active\n---\n",
+            encoding="utf-8",
+        )
+
+        # Create design plan template
+        plans_dir = tmp_path / ".claude" / "templates" / "plans"
+        plans_dir.mkdir(parents=True)
+        (plans_dir / "design.md").write_text(
+            "---\ntemplate: implementation_plan\nsubtype: design\nstatus: draft\ndate: {{DATE}}\nbacklog_id: {{BACKLOG_ID}}\ntitle: \"{{TITLE}}\"\nauthor: Hephaestus\nsession: {{SESSION}}\nversion: \"1.5\"\ngenerated: {{DATE}}\nlast_updated: {{TIMESTAMP}}\n---\n# Design Plan: {{TITLE}}\n## Goal\nDesign-specific content\n",
+            encoding="utf-8",
+        )
+
+        result = scaffold.scaffold_template(
+            "implementation_plan",
+            output_path=str(work_dir / "plans" / "PLAN.md"),
+            backlog_id="WORK-TEST",
+            title="Test Design Plan",
+        )
+
+        # Read the output file and verify design template was used
+        content = Path(result).read_text(encoding="utf-8")
+        assert "Design-specific content" in content

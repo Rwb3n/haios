@@ -215,4 +215,5 @@ Skill(skill="checkpoint-cycle")
 - **plan-authoring-cycle skill:** Populates plan sections
 - **implementation-cycle skill:** Uses validated plans
 - **close-work-cycle skill:** Parallel validation pattern
-- **Implementation plan template:** `.claude/templates/_legacy/implementation_plan.md`
+- **Plan templates:** `.claude/templates/plans/` (fractured by work type: implementation, design, cleanup)
+- **Legacy template:** `.claude/templates/_legacy/implementation_plan.md` (fallback)

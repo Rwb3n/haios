@@ -55,15 +55,15 @@ Compose, don't concatenate.
 
 | CH-ID | Title | Work Items | Status |
 |-------|-------|------------|--------|
-| CH-044 | HierarchyQueryEngine | New (TBD) | Planning |
+| CH-044 | HierarchyQueryEngine | WORK-157 | Planning |
 | CH-045 | StatusCascade | WORK-034 | Complete |
 
 ### Arc 2: composability — "Compose, don't concatenate"
 
 | CH-ID | Title | Work Items | Status |
 |-------|-------|------------|--------|
-| CH-046 | FlatMetadataMigration | New (TBD) | Planning |
-| CH-047 | TemplateComposability | WORK-152, WORK-155 | Planning |
+| CH-046 | FlatMetadataMigration | WORK-158 | Planning |
+| CH-047 | TemplateComposability | WORK-152, WORK-155 | Complete |
 | CH-048 | RecipeRationalization | New (TBD) | Planning |
 
 ### Arc 3: infrastructure — "Clean the house first"
@@ -117,3 +117,5 @@ Compose, don't concatenate.
 - @docs/work/active/WORK-153/WORK.md (bug batch)
 - @docs/work/active/WORK-154/WORK.md (epoch transition)
 - @docs/work/active/WORK-155/WORK.md (lifecycle type-awareness)
+- @docs/work/active/WORK-157/WORK.md (hierarchy query engine)
+- @docs/work/active/WORK-158/WORK.md (flat metadata migration)
