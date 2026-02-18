@@ -3,14 +3,14 @@ template: work_item
 id: WORK-161
 title: "Session Boundary Fix"
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-17
 spawned_by: Session-394-decomposition
 spawned_children: []
 chapter: CH-060
 arc: call
-closed: null
+closed: 2026-02-18
 priority: high
 effort: medium
 traces_to:
@@ -27,19 +27,37 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: done
+cycle_phase: done
+current_node: done
 node_history:
   - node: backlog
     entered: 2026-02-17T22:08:08
+    exited: 2026-02-18T22:00:00
+  - node: plan
+    entered: 2026-02-18T22:00:00
+    exited: 2026-02-18T22:10:00
+  - node: do
+    entered: 2026-02-18T22:10:00
+    exited: 2026-02-18T22:30:00
+  - node: check
+    entered: 2026-02-18T22:30:00
+    exited: 2026-02-18T22:35:00
+  - node: done
+    entered: 2026-02-18T22:35:00
     exited: null
-artifacts: []
+artifacts:
+  - .claude/haios/lib/session_end_actions.py
+  - .claude/hooks/hooks/stop.py
+  - tests/test_session_end_actions.py
 cycle_docs: {}
 memory_refs:
   - 85609
   - 85385
   - 85387
+  - 86576
+  - 86590
+  - 86595
 extensions:
   epoch: E2.8
 version: "2.0"
@@ -78,15 +96,22 @@ Session boundary gap is ungoverned (mem:85609, 85385, 85387). The last 2-3 cerem
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Audit current session boundary behavior (what runs, what doesn't)
-- [ ] Implement Stop hook for session-end ceremony essentials
-- [ ] Ensure governance events logged on session boundary
-- [ ] Orphan session detection mechanism
-- [ ] Tests for session boundary transitions
+- [x] Audit current session boundary behavior (what runs, what doesn't)
+- [x] Implement Stop hook for session-end ceremony essentials
+- [x] Ensure governance events logged on session boundary
+- [x] Orphan session detection mechanism (enabled via SessionEnded events; detect_orphan_session() pre-existed)
+- [x] Tests for session boundary transitions (18 tests: 14 unit + 4 integration)
 
 ---
 
 ## History
+
+### 2026-02-18 - Implemented and Closed (Session 396)
+- Created session_end_actions.py (4 fail-permissive functions in lib/)
+- Restructured stop.py: transcript gates learning only, session-end always runs
+- 18 tests (14 unit + 4 integration), all passing, zero regressions
+- Retro-cycle completed: 8 observations, 3 K/S/S, 2 extractions
+- Also added EnterPlanMode/ExitPlanMode to PreToolUse hook matcher
 
 ### 2026-02-17 - Created (Session 394)
 - Spawned during E2.8 arc decomposition
