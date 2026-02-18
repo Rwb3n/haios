@@ -114,6 +114,7 @@ Side-effect boundaries. See `L4/functional_requirements.md` (REQ-CEREMONY-*).
 - SQL query → `schema-verifier` subagent
 - Close work → `/close <id>`
 - Create governed doc → `/new-*` command
+- Proportional governance (L3.20): effort=small items MAY use lightweight phases per REQ-LIFECYCLE-005. Tiers: Trivial (none) → Small (checklist) → Standard (full) → Architectural (operator). See `L4/functional_requirements.md` for threshold predicates.
 
 ---
 
@@ -155,4 +156,4 @@ Side-effect boundaries. See `L4/functional_requirements.md` (REQ-CEREMONY-*).
 ---
 
 *For full requirements, see `.claude/haios/manifesto/L4/`*
-*Last Updated: 2026-02-18 | Version: Epoch 2.8 Agent UX (Session 397)*
+*Last Updated: 2026-02-18 | Version: Epoch 2.8 Agent UX (Session 398)*
