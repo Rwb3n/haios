@@ -17,16 +17,17 @@ traces_to:
 - REQ-CEREMONY-001
 requirement_refs: []
 source_files:
-- .claude/haios/manifesto/L3/principles.md
+- .claude/haios/manifesto/L3-requirements.md
 - .claude/haios/manifesto/L4/functional_requirements.md
 - .claude/skills/close-work-cycle/SKILL.md
 - .claude/skills/investigation-cycle/SKILL.md
+- .claude/skills/retro-cycle/SKILL.md
 acceptance_criteria:
-- L3.8 Proportional Governance principle defined
-- REQ-LIFECYCLE-005 fast-path requirement defined
-- REQ-CEREMONY-004 proportional depth requirement defined
-- Close-work-cycle updated with pytest hard gate for code work items
-- Complexity threshold criteria documented
+- "L3.20 Proportional Governance principle defined (L3.8 was placeholder, L3.8 is No Autonomous Irreversibility)"
+- "REQ-LIFECYCLE-005 fast-path requirement defined"
+- "REQ-CEREMONY-005 proportional depth requirement defined (REQ-CEREMONY-004 is Epistemic review)"
+- "Close-work-cycle updated with pytest hard gate for code work items"
+- "Complexity threshold criteria documented"
 blocked_by: []
 blocks: []
 enables: []
@@ -66,9 +67,9 @@ Session 314 review surfaced that governance overhead is uniform regardless of wo
 
 | Level | Action | What |
 |-------|--------|------|
-| L3 | ADD | `[L3.8] Proportional Governance` - overhead scales with risk |
+| L3 | ADD | `[L3.20] Proportional Governance` - overhead scales with risk |
 | L4 | ADD | `REQ-LIFECYCLE-005` - fast-path for effort=small work items |
-| L4 | ADD | `REQ-CEREMONY-004` - proportional ceremony depth |
+| L4 | ADD | `REQ-CEREMONY-005` - proportional ceremony depth |
 | L4 | MODIFY | Close-work ceremony contract to include pytest hard gate |
 | Memory | STORE | Inline fix threshold: < 5 lines, no architecture = fix inline |
 
@@ -83,10 +84,10 @@ Session 314 review surfaced that governance overhead is uniform regardless of wo
 
 ## Deliverables
 
-- [ ] L3.8 Proportional Governance principle authored
-- [ ] REQ-LIFECYCLE-005 fast-path lifecycle requirement authored
-- [ ] REQ-CEREMONY-004 proportional ceremony depth requirement authored
-- [ ] Close-work-cycle SKILL.md updated with pytest gate
+- [ ] L3.20 Proportional Governance principle authored in L3-requirements.md
+- [ ] REQ-LIFECYCLE-005 fast-path lifecycle requirement authored in functional_requirements.md
+- [ ] REQ-CEREMONY-005 proportional ceremony depth requirement authored in functional_requirements.md
+- [ ] Close-work-cycle SKILL.md updated with pytest hard gate for code work items
 - [ ] Complexity threshold criteria defined and documented
 - [ ] Assigned to CH-058 (call arc, E2.8)
 
@@ -107,7 +108,9 @@ Session 314 review surfaced that governance overhead is uniform regardless of wo
 
 ## References
 
-- @.claude/haios/manifesto/L3/principles.md
+- @.claude/haios/manifesto/L3-requirements.md
 - @.claude/haios/manifesto/L4/functional_requirements.md
 - @.claude/skills/close-work-cycle/SKILL.md
 - @.claude/skills/investigation-cycle/SKILL.md
+- @.claude/skills/retro-cycle/SKILL.md
+- @.claude/haios/epochs/E2_8/EPOCH.md
