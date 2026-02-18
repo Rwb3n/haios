@@ -17,8 +17,7 @@ queue_types:
     ordering: "chapter_priority DESC, priority DESC"
 
 # Active queues — E2.8 Agent UX
-# Note: Arcs decomposed in S393 EPOCH.md but ARC.md files not yet created.
-# Queue items will be populated as work items are created for each arc.
+# ARC.md files created S395. Work items populated across all 4 arcs.
 queues:
   # Default queue - catch-all for E2.8 work
   default:

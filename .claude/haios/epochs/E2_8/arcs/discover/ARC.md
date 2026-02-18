@@ -45,7 +45,7 @@ Agent Cards for infrastructure-driven capability discovery. Agents find each oth
 ## Exit Criteria
 
 - [ ] All agents have structured capability cards discoverable via infrastructure
-- [ ] Open-epoch-ceremony skill exists (full ceremony loop standardized)
+- [x] Open-epoch-ceremony skill exists (full ceremony loop standardized) (S393)
 - [ ] Agents not hardcoded in CLAUDE.md — discovered via infrastructure
 
 ---

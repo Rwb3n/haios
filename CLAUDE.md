@@ -96,7 +96,7 @@ Side-effect boundaries. See `L4/functional_requirements.md` (REQ-CEREMONY-*).
 | PreToolUse | Governance enforcement, state injection |
 | PostToolUse | Timestamps, cascade triggers |
 | UserPromptSubmit | Date/time, vitals |
-| Stop | ReasoningBank extraction |
+| Stop | ReasoningBank extraction + session-end actions (WORK-161) |
 
 ### Commands
 | Command | Purpose |
@@ -155,4 +155,4 @@ Side-effect boundaries. See `L4/functional_requirements.md` (REQ-CEREMONY-*).
 ---
 
 *For full requirements, see `.claude/haios/manifesto/L4/`*
-*Last Updated: 2026-02-03 | Version: Epoch 2.5 Design (Session 294)*
+*Last Updated: 2026-02-18 | Version: Epoch 2.8 Agent UX (Session 397)*

@@ -85,7 +85,7 @@ Move mechanical ceremony phases from SKILL.md (agent reads) to hooks/modules (au
 |-------|-------|------------|--------------|--------------|--------|
 | CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Planning |
 | CH-059 | CeremonyAutomation-CritiqueAsHook | New | REQ-CEREMONY-002 | CH-058 | Planning |
-| CH-060 | SessionBoundaryFix | New | REQ-CEREMONY-001 | None | Planning |
+| CH-060 | SessionBoundaryFix | WORK-161 | REQ-CEREMONY-001 | None | Complete |
 | CH-061 | ColdstartContextInjection | New | REQ-CONFIG-001, L3.3 | None | Planning |
 | CH-066 | MCPOperationsServer | New | REQ-DISCOVER-002, REQ-CONFIG-001 | CH-061 | Planning |
 
@@ -93,7 +93,7 @@ Move mechanical ceremony phases from SKILL.md (agent reads) to hooks/modules (au
 - [ ] Governance overhead measurably reduced (target: perceptible improvement over E2.5 baseline)
 - [ ] Trivial items skip heavy ceremony phases (computable predicates, extending retro-cycle Phase 0 pattern)
 - [ ] Mechanical ceremony phases migrated to hooks/modules (session-end, checkpoint population, cycle_phase advancement)
-- [ ] Session boundary gap governed (post-closure transition runs reliably)
+- [x] Session boundary gap governed (post-closure transition runs reliably) (WORK-161, S396)
 - [ ] Coldstart injects ALL operational context (zero manual Read steps in coldstart skill)
 - [ ] Minimum viable context contract enforced: identity + mission + prior + work + operational HOW
 - [ ] haios-operations MCP server exposes work/hierarchy/session/scaffold tools as agent-native interface

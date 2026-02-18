@@ -44,7 +44,7 @@ This arc moves what it can from Tier 3 (SKILL.md) to Tier 1/2 (hooks/modules).
 |-------|-------|------------|--------------|--------------|--------|
 | CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Planning |
 | CH-059 | CeremonyAutomation | New | REQ-CEREMONY-002 | CH-058 | Planning |
-| CH-060 | SessionBoundaryFix | New | REQ-CEREMONY-001 | None | Planning |
+| CH-060 | SessionBoundaryFix | WORK-161 | REQ-CEREMONY-001 | None | Complete |
 
 ---
 
@@ -53,7 +53,7 @@ This arc moves what it can from Tier 3 (SKILL.md) to Tier 1/2 (hooks/modules).
 - [ ] Governance overhead measurably reduced (target: perceptible improvement over E2.5 baseline)
 - [ ] Trivial items skip heavy ceremony phases (computable predicates, extending retro-cycle Phase 0 pattern)
 - [ ] Mechanical ceremony phases migrated to hooks/modules (session-end, checkpoint population, cycle_phase advancement)
-- [ ] Session boundary gap governed (post-closure transition runs reliably)
+- [x] Session boundary gap governed (post-closure transition runs reliably) (WORK-161, S396)
 
 ---
 

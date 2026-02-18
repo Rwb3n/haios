@@ -8935,3 +8935,5 @@
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-18T08:35:12.244537"}
 {"type": "StatusPropagation", "work_id": "WORK-166", "chapter": "CH-065", "arc": "infrastructure", "action": "arc_completed", "timestamp": "2026-02-18T08:35:22.540881"}
 {"type": "SessionStarted", "session": 396, "agent": "Hephaestus", "timestamp": "2026-02-18T21:55:12.139667"}
+{"type": "SessionEnded", "session": 395, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-18T22:49:31.924970"}
+{"type": "SessionStarted", "session": 397, "agent": "Hephaestus", "timestamp": "2026-02-18T22:50:10.521010"}
