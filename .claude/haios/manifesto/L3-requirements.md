@@ -5,7 +5,7 @@
 Level: L3
 Status: CANONICAL
 Access: All agents except pure utilities
-Mutability: IMMUTABLE (principles, not rules)
+Mutability: IMMUTABLE (append-only under operator authorization)
 
 ---
 
@@ -32,6 +32,7 @@ Mutability: IMMUTABLE (principles, not rules)
 | L3.17 | LLM Nature | Pattern-Matches | - | L3.2 enforcement |
 | L3.18 | LLM Nature | Completes Literally | - | L3.7 enforcement |
 | L3.19 | Principle | Coordination by Intent | L3.4, L3.3, L0.11 | REQ-COORD-* |
+| L3.20 | Principle | Proportional Governance | L3.10, L2.20, L1.6, L1.9 | REQ-LIFECYCLE-005, REQ-CEREMONY-005 |
 
 ---
 
@@ -72,6 +73,11 @@ Every action connects to purpose. Nothing happens in isolation.
 Agents coordinate through shared understanding of intent (standing orders, persistent context), not through real-time direction. When an agent cannot consult the operator, it acts on the best available understanding of the operator's objectives, constrained by L3.8.
 
 *Added Session 393. Derived from organisational theory (span of control, unity of command, Drucker MBO), military doctrine (Royal Navy fleet coordination, Nelson's mission-type tactics), and the five naval coordination primitives: standing orders (hooks), sealed orders (ceremony skills), signal flags (subagent tasks), captain's discretion (agent judgment within L3 principles), ship's log (memory system). See Memory 85848-85909.*
+
+### [L3.20] Proportional Governance
+Governance overhead scales with blast radius, not uniformly. Trivial changes get trivial oversight; architectural decisions get full ceremony. The weight of governance must be proportional to the risk and complexity of the work being governed. L3.10 prohibits grinding as a boundary (what NOT to do); L3.20 requires proportionality as a positive obligation (what TO do). These are complementary, not redundant.
+
+*Added Session 398 under operator authorization (same precedent as L3.19, S393). Derived from E2.5 finding that full ceremony chain consumes ~104% of 200k context budget (mem:85390), E2.8 Arc 1 "call" theme, and validated retro-cycle Phase 0 prototype (mem:85607). Derives from L3.10 (No Grinding the Operator), L2.20, L1.6 (Limited Time), L1.9 (Human as Bottleneck).*
 
 ---
 
@@ -236,4 +242,4 @@ Architectural alignment items for future epochs:
 ---
 
 *L3 contains principles. L4 (CLAUDE.md, INV-052, configs) contains specific rules that implement these principles.*
-*Enumerated Session 237 for bidirectional traceability. L3.19 added Session 393.*
+*Enumerated Session 237 for bidirectional traceability. L3.19 added Session 393. L3.20 added Session 398.*

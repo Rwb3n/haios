@@ -42,7 +42,7 @@ This arc moves what it can from Tier 3 (SKILL.md) to Tier 1/2 (hooks/modules).
 
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
-| CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Planning |
+| CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Complete |
 | CH-059 | CeremonyAutomation | New | REQ-CEREMONY-002 | CH-058 | Planning |
 | CH-060 | SessionBoundaryFix | WORK-161 | REQ-CEREMONY-001 | None | Complete |
 
@@ -59,7 +59,7 @@ This arc moves what it can from Tier 3 (SKILL.md) to Tier 1/2 (hooks/modules).
 
 ## Notes
 
-- WORK-101 (Proportional Governance Design) is currently parked — needs unpark for CH-058
+- WORK-101 (Proportional Governance Design) unparked Session 394, assigned to CH-058. Plan approved S397.
 - Retro-cycle Phase 0 (S393, mem:85607/85363) is the prototype: computable predicate skips retro for trivial items
 - Session boundary gap (mem:85609, 85385, 85387): last 2-3 ceremonies in a session never run because context exhausted
 

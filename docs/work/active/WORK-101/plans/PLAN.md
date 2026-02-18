@@ -1,14 +1,14 @@
 ---
 template: implementation_plan
 subtype: design
-status: approved
+status: complete
 date: 2026-02-18
 backlog_id: WORK-101
 title: "Proportional Governance Design"
 author: Hephaestus
 lifecycle_phase: plan
 session: 397
-version: "1.5"
+version: "1.8"
 generated: 2026-02-18
 last_updated: 2026-02-18T23:05:34
 ---
@@ -51,9 +51,9 @@ Define L3.20 Proportional Governance principle, two L4 requirements (REQ-LIFECYC
 
 | Metric | Value | Source |
 |--------|-------|--------|
-| Files to modify | 3 | L3-requirements.md, functional_requirements.md, close-work-cycle/SKILL.md |
+| Files to modify | 5 | L3-requirements.md, functional_requirements.md, close-work-cycle/SKILL.md, CLAUDE.md, WORK-101/WORK.md (C1 revision) |
 | New files to create | 0 | All edits to existing files |
-| Dependencies | 2 | CLAUDE.md (documents governance), EPOCH.md (references CH-058) |
+| Dependencies | 1 | EPOCH.md (references CH-058) |
 
 ### Effort Estimate
 
@@ -182,6 +182,7 @@ ALL of: effort=small AND source_files <= 3 AND no ADR AND no architectural decis
 - Every phase transition logs a CycleTransition governance event, even in fast-path
 - Fast-path can be overridden by operator (AskUserQuestion if uncertain)
 - Threshold criteria must be documented alongside requirement
+- If `source_files:` field is absent or empty in WORK.md, default to Standard tier (conservative safe default). Absent data MUST NOT produce a more permissive classification. (B1 critique finding)
 ```
 
 #### REQ-CEREMONY-005 Proportional Ceremony Depth (New Requirement)
@@ -220,6 +221,7 @@ Note: (b) depends on CH-059 CeremonyAutomation. Until then, (a) is the acceptanc
 - Tier selection is logged to governance events (traceability)
 - Operator can escalate any tier upward (never downward without explicit override)
 - Retro-cycle Phase 0 is the prototype for this pattern (validated E2.6-E2.8)
+- Tier scaling governs ceremony weight WITHIN a lifecycle, not cross-lifecycle boundary ceremonies. The Trivial/None tier does NOT exempt the investigation-to-implementation boundary from REQ-CEREMONY-004 (epistemic review). Cross-lifecycle boundaries are governed by their own requirements, independent of tier. (B4 critique finding)
 ```
 
 #### Close-Work-Cycle Pytest Hard Gate
@@ -250,11 +252,12 @@ The threshold criteria are the fast-path predicates above, documented in a singl
 |-----------|---------|-------|----------|---------------|
 | effort | small | small | medium+ | any |
 | source_files | <= 2 | <= 3 | any | any |
-| type | implementation | implementation | any | design |
 | plan exists | no | MAY exist | yes | yes |
 | ADR referenced | no | no | no | yes |
 | Governance tier | None | Checklist | Full | Operator |
 | **Predicate** | ALL conditions match | ALL conditions match | Default (neither Trivial nor Small) | type=design OR ADR in traces_to |
+
+**Note (C2 — critique finding):** The `type` dimension was removed from this table because the Architectural predicate (`type=design OR ADR in traces_to`) already catches all design items. Including `type: implementation` as a condition in Trivial/Small would contradict the per-tier predicate text (which does not check type). The Architectural predicate is the authoritative type-based routing — Trivial/Small predicates check effort, source_files, plan existence, and ADR reference only.
 
 ### Open Questions
 
@@ -281,8 +284,9 @@ Scoped to relevant test files when identifiable (from plan or source_files), ful
 ## Implementation Steps
 
 ### Step 1: Author L3.20 Proportional Governance
+- [ ] **FIRST (C4 — atomic with L3.20):** Update L3-requirements.md `Mutability:` from `IMMUTABLE (principles, not rules)` to `IMMUTABLE (append-only under operator authorization)` (A1 critique finding — matching L3.19 S393 precedent). Must happen before L3.20 is written to prevent mid-implementation header contradiction.
 - [ ] Add L3.20 to Element Registry table in L3-requirements.md
-- [ ] Add L3.20 principle text after L3.19 in Core Behavioral Principles section
+- [ ] Add L3.20 principle text after L3.19 in Core Behavioral Principles section. **Insertion point (A11):** immediately after the `### [L3.19] Coordination by Intent` block, before the `## Context Architecture` section header. L3.20 is a Principle (like L3.1-L3.7, L3.19), NOT a Boundary (L3.8-L3.12) or LLM Nature item (L3.13-L3.18).
 - [ ] Verify derivation chain references (L2.20, L1.6, L1.9)
 
 ### Step 2: Author L4 Requirements
@@ -298,13 +302,13 @@ Scoped to relevant test files when identifiable (from plan or source_files), ful
 - [ ] Update Key Design Decisions table with pytest gate rationale
 
 ### Step 4: Update References and Traceability
-- [ ] **MUST:** Update CLAUDE.md Governance Quick Reference to mention L3.20
-- [ ] **MUST:** Update WORK-101 `traces_to:` to include REQ-LIFECYCLE-005 and REQ-CEREMONY-005 (A6 critique finding)
+- [ ] **MUST:** Update CLAUDE.md Governance Quick Reference to mention L3.20. **Content (A12):** Add a "Proportional Governance" entry under the Governance Triggers table explaining: effort=small work items MAY use lightweight phases per L3.20/REQ-LIFECYCLE-005. Include pointer to L4 functional_requirements.md for threshold criteria. This gives agents actionable guidance, not just a name reference.
+- [ ] **MUST (sequencing A10):** Update WORK-101 `traces_to:` to include REQ-LIFECYCLE-005 and REQ-CEREMONY-005 (A6 critique finding). **Step 2 MUST be complete first** — requirement IDs must exist in functional_requirements.md before WORK.md references them (REQ-TRACE-002).
 - [ ] **MUST:** Update WORK-101 memory_refs with stored concept IDs
 - [ ] Verify no stale references to old IDs (L3.8, REQ-CEREMONY-004) in proportional governance context
+- [ ] **MUST (B2):** Update WORK-101 WORK.md Context section (lines 76-78) to replace phase-skipping language with lightweight-phase language. Current: "EXPLORE -> CONCLUDE (skip HYPOTHESIZE/VALIDATE when self-evident)" and "DO -> DONE (skip PLAN/CHECK when < 20 lines)". Replace with: "All phases execute with lightweight weight (e.g., inline reasoning instead of separate documents)" — aligning with A4 invariant and REQ-FLOW-001.
 
-### Step 5: Update L3 Header
-- [ ] **MUST:** Update L3-requirements.md `Mutability:` from `IMMUTABLE (principles, not rules)` to `IMMUTABLE (append-only under operator authorization)` (A1 critique finding — matching L3.19 S393 precedent)
+### ~~Step 5: Update L3 Header~~ (Merged into Step 1 per C4 — atomic write)
 
 ---
 
@@ -336,6 +340,10 @@ Scoped to relevant test files when identifiable (from plan or source_files), ful
 | Session | Date | Checkpoint | Status | Notes |
 |---------|------|------------|--------|-------|
 | 397 | 2026-02-18 | - | PLAN authored | Critique REVISE verdict — 9 findings, all addressed (A1-A9) |
+| 398 | 2026-02-18 | - | PLAN revised v1.6 | Fresh critique pass 1: 3 findings (A10-A12), all addressed. Step 1/4 clarified. |
+| 398 | 2026-02-18 | - | PLAN revised v1.7 | Critique pass 2: 4 findings (B1-B4), 3 addressed (B1,B2,B4). B3 advisory. |
+| 398 | 2026-02-18 | - | PLAN revised v1.8 | Critique pass 3: 4 findings (C1-C4), 3 addressed (C1,C2,C4). C3 advisory. Step 5 merged into Step 1. |
+| 398 | 2026-02-18 | - | DO→CHECK→DONE | All 4 steps executed. 5 files modified. Ground Truth verified. WHY captured. |
 
 ---
 
@@ -362,7 +370,8 @@ Scoped to relevant test files when identifiable (from plan or source_files), ful
 | `.claude/haios/manifesto/L3-requirements.md` | L3.20 principle + registry entry | [ ] | |
 | `.claude/haios/manifesto/L4/functional_requirements.md` | REQ-LIFECYCLE-005, REQ-CEREMONY-005, threshold table | [ ] | |
 | `.claude/skills/close-work-cycle/SKILL.md` | Pytest hard gate in VALIDATE phase | [ ] | |
-| `CLAUDE.md` | References L3.20 / proportional governance | [ ] | |
+| `CLAUDE.md` | Proportional Governance entry in Governance Triggers (A12) | [ ] | |
+| `docs/work/active/WORK-101/WORK.md` | traces_to updated, Context section corrected (B2) | [ ] | |
 
 **Binary Verification (Yes/No):**
 

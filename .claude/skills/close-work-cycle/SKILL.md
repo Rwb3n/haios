@@ -99,6 +99,14 @@ just set-cycle close-work-cycle VALIDATE {work_id}
 
 **Guardrails (MUST follow):**
 1. **Tests MUST pass** - Prompt user to confirm
+1b. **Pytest Hard Gate (WORK-101, code items only):**
+    - If work item has `type: implementation` AND `source_files:` contains `.py` files:
+      - **MUST** run `pytest tests/ -v` (or scoped to relevant test files)
+      - If any test fails: **BLOCK** closure. Return to DO phase.
+      - If no tests exist for changed files: **WARN** (soft gate, not block)
+    - If work item is `type: design` or `type: investigation`: Skip pytest gate (N/A).
+      Rationale: these types produce documents, not executable artifacts.
+    - This gate applies regardless of governance tier (REQ-CEREMONY-005) — Trivial-tier type=implementation items MUST pass pytest at closure. Tier governs within-lifecycle ceremony weight, not closure gates.
 2. **WHY MUST be captured** - Check for memory_refs in associated docs
 3. **Docs MUST be current** - CLAUDE.md, READMEs updated
 4. **Traced files MUST be complete** - Associated plans have status: complete
@@ -269,6 +277,7 @@ just clear-cycle
 | VALIDATE | Any DoD-relevant findings from retro-cycle? | Review and evaluate |
 | VALIDATE | Governance events exist for work_id? | Warn (soft gate) |
 | VALIDATE | Does user confirm DoD? | STOP - DoD not met |
+| VALIDATE | **Pytest gate pass? (type=implementation + .py)** | **BLOCK - return to DO** |
 | ARCHIVE | Is work file archived? | Run `just close-work` |
 | CHAIN | Is next work identified? | Run `just ready` |
 
@@ -285,6 +294,7 @@ just clear-cycle
 | Governance check in VALIDATE | Moved from removed MEMORY phase | WORK-142: Consolidates all checks before archive |
 | **CHAIN presents options, not auto-executes** | AskUserQuestion for caller choice | WORK-087: REQ-LIFECYCLE-004 "chaining is caller choice" |
 | **"Complete without spawn" first-class** | Listed as option 1 | REQ-LIFECYCLE-004: Valid outcome, not exceptional case |
+| **Pytest hard gate for code items** | BLOCK closure if tests fail (type=implementation + .py) | WORK-101: REQ-CEREMONY-005 tier-independent closure gate. Design/investigation items exempt (produce docs, not code). |
 
 ---
 

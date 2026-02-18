@@ -82,6 +82,8 @@ Derived from: L3 principles + agent_user_requirements.md
 | REQ-REFERENCE-001 | Referenceability | Schema location strategy defined (central registry vs distributed) | L3.3, L3.6 | All schemas discoverable from single root |
 | REQ-REFERENCE-002 | Referenceability | Templates consume schemas via reference, not duplication | L3.3 | Zero duplicated schema definitions |
 | REQ-CEREMONY-004 | Ceremony | Epistemic review ceremony at investigation→implementation boundary | L3.2, L3.7 | KNOWN/INFERRED/UNKNOWN distinction forced before spawn |
+| REQ-LIFECYCLE-005 | Lifecycle | Fast-path: effort=small work items MAY use lightweight phases | L3.20, L3.6 | Trivial work item completes lifecycle with reduced ceremony weight |
+| REQ-CEREMONY-005 | Ceremony | Ceremony depth scales proportionally: none→checklist→full→operator | L3.20, L3.7 | Ceremony weight matches work complexity tier |
 
 *Registry grows as requirements are enumerated from L3 principles.*
 
@@ -360,6 +362,98 @@ Parked items never enter work lifecycle until unparked.
 - Every state transition must occur within a ceremony
 - Ceremonies log events for audit (L3.7 traceability)
 - Ceremonies can be invoked from lifecycle pause points
+
+---
+
+## Fast-Path Lifecycle Requirements (E2.8 - Session 398)
+
+*Derived from L3.20 (Proportional Governance) + L3.6 (Graceful Degradation)*
+
+| ID | Requirement | Derives From | Acceptance Test |
+|----|-------------|--------------|-----------------|
+| **REQ-LIFECYCLE-005** | Effort=small work items MAY use lightweight phases within lifecycle. Phases are not skipped but their ceremony weight is reduced. | L3.20, L3.6 | Work item with effort=small completes lifecycle without full ceremony chain |
+
+**Fast-Path Predicates (computable, extending retro-cycle Phase 0):**
+
+| Condition | How to Compute | Source |
+|-----------|----------------|--------|
+| effort=small | Read WORK.md `effort:` field | Frontmatter |
+| source_files <= 3 | Read WORK.md `source_files:` list length | Frontmatter |
+| No architectural decisions | No ADR referenced in `traces_to:` AND no `type: design` | Frontmatter |
+| No plan exists | Glob `docs/work/active/{id}/plans/PLAN.md` returns empty | Filesystem |
+
+**Per-Tier Predicates (separate predicates per tier):**
+
+**Trivial tier (governance: None):**
+ALL of: effort=small AND source_files <= 2 AND no plan AND no ADR AND no architectural decisions
+
+**Small tier (governance: Checklist):**
+ALL of: effort=small AND source_files <= 3 AND no ADR AND no architectural decisions
+(differs from Trivial: plan MAY exist, source_files up to 3)
+
+**Standard tier (governance: Full):** Default when neither Trivial nor Small predicates match.
+
+**Architectural tier (governance: Operator):** type=design OR ADR in traces_to.
+
+**Complexity Threshold Criteria:**
+
+| Dimension | Trivial | Small | Standard | Architectural |
+|-----------|---------|-------|----------|---------------|
+| effort | small | small | medium+ | any |
+| source_files | <= 2 | <= 3 | any | any |
+| plan exists | no | MAY exist | yes | yes |
+| ADR referenced | no | no | no | yes |
+| Governance tier | None | Checklist | Full | Operator |
+| **Predicate** | ALL conditions match | ALL conditions match | Default (neither Trivial nor Small) | type=design OR ADR in traces_to |
+
+**Fast-Path Lightweight Phases (phases are never skipped, only reduced in weight):**
+
+| Lifecycle | Standard | Fast-Path (lightweight) |
+|-----------|----------|------------------------|
+| Investigation | EXPLORE → HYPOTHESIZE → VALIDATE → CONCLUDE | All 4 phases execute. HYPOTHESIZE/VALIDATE lightweight: inline reasoning, no separate doc. |
+| Implementation | PLAN → DO → CHECK → DONE | All 4 phases execute. PLAN lightweight: CycleTransition event logged + inline note in WORK.md (no separate PLAN.md file required). |
+| Close | retro → dod-validate → VALIDATE → ARCHIVE → CHAIN | retro(trivial via Phase 0) → VALIDATE(lightweight) → ARCHIVE → CHAIN |
+
+**Invariants:**
+- Fast-path is computable (zero agent judgment)
+- Phases are lightweight, not skipped (preserves REQ-FLOW invariant)
+- Every phase transition logs a CycleTransition governance event, even in fast-path
+- Fast-path can be overridden by operator (AskUserQuestion if uncertain)
+- Threshold criteria must be documented alongside requirement
+- If `source_files:` field is absent or empty in WORK.md, default to Standard tier (conservative safe default). Absent data MUST NOT produce a more permissive classification.
+- `source_files` is a *prospective* predicate (declared scope before work begins), distinct from retro-cycle Phase 0's `files_changed` (retrospective, git diff after work). Both are valid for their lifecycle position.
+
+---
+
+## Proportional Ceremony Depth (E2.8 - Session 398)
+
+*Derived from L3.20 (Proportional Governance) + L3.7 (Traceability)*
+
+| ID | Requirement | Derives From | Acceptance Test |
+|----|-------------|--------------|-----------------|
+| **REQ-CEREMONY-005** | Ceremony depth MUST scale proportionally with work complexity. Four tiers: none → checklist → full → operator. | L3.20, L3.7 | Trivial item gets none/checklist; design item gets full/operator |
+
+**Four-Tier Scaling Model:**
+
+| Tier | Weight | Trigger | Mechanism | Token Cost |
+|------|--------|---------|-----------|------------|
+| None | 0 | Trivial (fast-path predicate true) | Skip ceremony entirely | ~0 |
+| Checklist | Low | Small (effort=small, has plan) | Hook injects checklist, agent checks items | ~500 tokens |
+| Full | High | Standard (effort=medium+) | Full ceremony skill execution | ~5000+ tokens |
+| Operator | Maximum | Architectural (type=design, new ADR) | Critique-agent + operator dialogue | ~10000+ tokens |
+
+**Detection Mechanism:**
+(a) Manual verification (now): agent correctly applies tier determination logic from work item metadata when prompted.
+(b) Automated verification (after CH-059): PreToolUse hook computes tier from work item metadata (zero agent tokens).
+Computable from: `effort`, `type`, `source_files` count, plan existence, ADR reference.
+Note: (b) depends on CH-059 CeremonyAutomation. Until then, (a) is the acceptance test.
+
+**Invariants:**
+- Detection is computable (hook, not agent judgment)
+- Tier selection is logged to governance events (traceability)
+- Operator can escalate any tier upward (never downward without explicit override)
+- Retro-cycle Phase 0 is the prototype for this pattern (validated E2.6-E2.8)
+- Tier scaling governs ceremony weight WITHIN a lifecycle, not cross-lifecycle boundary ceremonies. The Trivial/None tier does NOT exempt the investigation-to-implementation boundary from REQ-CEREMONY-004 (epistemic review). Cross-lifecycle boundaries are governed by their own requirements, independent of tier.
 
 ---
 

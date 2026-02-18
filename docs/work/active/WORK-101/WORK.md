@@ -3,18 +3,20 @@ template: work_item
 id: WORK-101
 title: Proportional Governance Design
 type: design
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-05
 spawned_by: Session-314-review
 chapter: CH-058
 arc: call
-closed: null
+closed: '2026-02-18'
 priority: high
 effort: medium
 traces_to:
 - REQ-LIFECYCLE-001
 - REQ-CEREMONY-001
+- REQ-LIFECYCLE-005
+- REQ-CEREMONY-005
 requirement_refs: []
 source_files:
 - .claude/haios/manifesto/L3-requirements.md
@@ -23,35 +25,41 @@ source_files:
 - .claude/skills/investigation-cycle/SKILL.md
 - .claude/skills/retro-cycle/SKILL.md
 acceptance_criteria:
-- "L3.20 Proportional Governance principle defined (L3.8 was placeholder, L3.8 is No Autonomous Irreversibility)"
-- "REQ-LIFECYCLE-005 fast-path requirement defined"
-- "REQ-CEREMONY-005 proportional depth requirement defined (REQ-CEREMONY-004 is Epistemic review)"
-- "Close-work-cycle updated with pytest hard gate for code work items"
-- "Complexity threshold criteria documented"
+- L3.20 Proportional Governance principle defined (L3.8 was placeholder, L3.8 is No
+  Autonomous Irreversibility)
+- REQ-LIFECYCLE-005 fast-path requirement defined
+- REQ-CEREMONY-005 proportional depth requirement defined (REQ-CEREMONY-004 is Epistemic
+  review)
+- Close-work-cycle updated with pytest hard gate for code work items
+- Complexity threshold criteria documented
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
 - node: backlog
   entered: 2026-02-05 18:52:04
-  exited: null
+  exited: '2026-02-18T23:56:02.728897'
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions:
   epoch: E2.8
   unparked_session: 394
-  unparked_reason: "E2.8 Arc 1 (call) — CH-058 ProportionalGovernanceDesign"
+  unparked_reason: E2.8 Arc 1 (call) — CH-058 ProportionalGovernanceDesign
   previously_parked_for: E2.6
   cross_cuts:
   - lifecycles
   - ceremonies
 version: '2.0'
 generated: 2026-02-05
-last_updated: '2026-02-17T22:15:00'
+last_updated: '2026-02-18T23:56:02.732892'
+queue_history:
+- position: done
+  entered: '2026-02-18T23:56:02.728897'
+  exited: null
 ---
 # WORK-101: Proportional Governance Design
 
@@ -73,10 +81,10 @@ Session 314 review surfaced that governance overhead is uniform regardless of wo
 | L4 | MODIFY | Close-work ceremony contract to include pytest hard gate |
 | Memory | STORE | Inline fix threshold: < 5 lines, no architecture = fix inline |
 
-**Fast-path examples:**
-- Investigation: EXPLORE -> CONCLUDE (skip HYPOTHESIZE/VALIDATE when self-evident)
-- Implementation: DO -> DONE (skip PLAN/CHECK when < 20 lines with existing tests)
-- Close: commit directly (skip checkpoint for effort=small)
+**Fast-path examples (lightweight phases, not skipped — REQ-FLOW-001 invariant):**
+- Investigation: All 4 phases execute. HYPOTHESIZE/VALIDATE lightweight: inline reasoning, no separate doc.
+- Implementation: All 4 phases execute. PLAN lightweight: CycleTransition event + inline note (no separate PLAN.md).
+- Close: retro(trivial via Phase 0) → VALIDATE(lightweight) → ARCHIVE → CHAIN
 
 **Threshold criteria (proposed):** effort=small AND source_files <= 3 AND no architectural decisions
 

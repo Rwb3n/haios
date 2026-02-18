@@ -8937,3 +8937,9 @@
 {"type": "SessionStarted", "session": 396, "agent": "Hephaestus", "timestamp": "2026-02-18T21:55:12.139667"}
 {"type": "SessionEnded", "session": 395, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-18T22:49:31.924970"}
 {"type": "SessionStarted", "session": 397, "agent": "Hephaestus", "timestamp": "2026-02-18T22:50:10.521010"}
+{"type": "SessionEnded", "session": 396, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-18T23:27:13.816459"}
+{"type": "SessionStarted", "session": 398, "agent": "Hephaestus", "timestamp": "2026-02-18T23:27:36.611428"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-18T23:56:02.708477"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-18T23:56:02.756221"}
+{"type": "StatusPropagation", "work_id": "WORK-101", "chapter": "CH-058", "arc": "call", "action": "chapter_completed", "timestamp": "2026-02-18T23:56:17.221432"}
+{"type": "GateViolation", "gate_id": "path_governance", "work_id": "WORK-101", "violation_type": "block", "context": "BLOCKED: Governed path. Use '/new-checkpoint' command instead of raw Write/Edit.", "timestamp": "2026-02-18T23:57:38.345260"}
