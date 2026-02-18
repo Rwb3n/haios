@@ -36,7 +36,7 @@ Bug fixes and deferred items from E2.7 triage. Clean foundation for the UX arcs.
 
 ## Exit Criteria
 
-- [ ] All confirmed bugs from E2.7 triage resolved
+- [x] All confirmed bugs from E2.7 triage resolved (WORK-166, S395)
 
 ---
 

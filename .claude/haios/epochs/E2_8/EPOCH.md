@@ -150,12 +150,12 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
-| CH-065 | BugBatch-E28 | New | REQ-CEREMONY-001 | None | Planning |
+| CH-065 | BugBatch-E28 | WORK-166 | REQ-CEREMONY-001 | None | Complete |
 
 **Exit criteria:**
-- [ ] All confirmed bugs from E2.7 triage resolved (85712, 85557, 85795, 85573, 85132)
-- [ ] Checkpoint same-session sort bug fixed (session_loader.py:120 — max() doesn't break ties on sequence number)
-- [ ] Queue state machine admin cleanup transition added (backlog->done when status=complete, mem:85840)
+- [x] All confirmed bugs from E2.7 triage resolved (85712, 85557, 85795, 85573, 85132) (WORK-166, S395)
+- [x] Checkpoint same-session sort bug fixed (session_loader.py:120) (WORK-166, S395)
+- [x] Queue state machine admin cleanup transition added (backlog->done) (WORK-166, S395)
 
 **Evidence:** Direct from retro extractions + S393 coldstart observation. Batch pattern validated (mem:84963).
 
@@ -175,7 +175,7 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 | Batch mode for trivial operations | Folds into Arc 1 CH-058 | Proportional scaling subsumes batch |
 | Full memory system overhaul | E4 (Cognitive Memory) | Three-paradigm memory, FORESIGHT |
 | WORK-071 Pre-Decomposition Review Gate | E2.9 (Governance) | Governance-themed, parked |
-| WORK-101 Proportional Governance Design | E2.9 if not completed in E2.8 | Currently parked, assigned to CH-058 but needs unpark |
+| WORK-101 Proportional Governance Design | E2.9 if not completed in E2.8 | Unparked S393, assigned to CH-058, queue: backlog |
 | WORK-102 Session/Process Review Ceremonies | E2.9 (Governance) | Governance-themed, backlog |
 
 ---
@@ -188,7 +188,7 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 - [ ] Contracts designed for progressive disclosure
 - [ ] All agents have structured capability cards
 - [x] Open-epoch-ceremony skill exists (full ceremony loop standardized) (S393)
-- [ ] Confirmed bugs from E2.7/E2.8 triage resolved (including checkpoint sort, queue state machine)
+- [x] Confirmed bugs from E2.7/E2.8 triage resolved (checkpoint sort, queue state machine) (WORK-166, S395)
 - [ ] Coldstart produces accurate context after epoch transition (no stale epoch, no stale checkpoint)
 - [ ] haios-operations MCP server replaces just recipes as agent-native Tier 2 interface
 - [ ] Just recipes retired for agent use (Tier 3 operator-terminal only)
