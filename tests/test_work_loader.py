@@ -134,3 +134,31 @@ class TestWorkLoaderLoad:
         result = loader.load()
         assert isinstance(result, str)
         assert "WORK" in result.upper()
+
+
+# =============================================================================
+# WORK-166: Checkpoint same-session sort tie-breaking
+# =============================================================================
+
+
+class TestWorkLoaderCheckpointSortTieBreaking:
+    """WORK-166: _find_latest_checkpoint breaks ties by date prefix."""
+
+    def test_find_latest_checkpoint_tiebreak(self, tmp_path):
+        """WORK-166 T2: Same session number, different date prefix — pick latest prefix."""
+        from work_loader import WorkLoader
+
+        cp_dir = tmp_path / "docs" / "checkpoints"
+        cp_dir.mkdir(parents=True)
+        (cp_dir / "2025-12-21-04-SESSION-94-early.md").write_text(
+            "---\nsession: 94\npending:\n  - early\n---\n"
+        )
+        (cp_dir / "2025-12-21-05-SESSION-94-late.md").write_text(
+            "---\nsession: 94\npending:\n  - late\n---\n"
+        )
+
+        loader = WorkLoader(checkpoint_dir=cp_dir, queue_fn=lambda: [])
+        pending = loader._get_pending_from_checkpoint()
+
+        assert pending == ["late"], \
+            f"Should pick -05- prefix (latest), got {pending}"

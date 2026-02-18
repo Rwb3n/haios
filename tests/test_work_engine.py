@@ -2154,3 +2154,25 @@ def test_close_sets_cycle_phase_done_from_plan(tmp_path, governance):
     work = engine.get_work("WORK-CP2")
     assert work.cycle_phase == "done", \
         "close() should set cycle_phase to 'done' regardless of prior phase"
+
+
+# =============================================================================
+# WORK-166: Queue state machine backlog -> done admin transition
+# =============================================================================
+
+
+def test_queue_transition_backlog_to_done(tmp_path, governance):
+    """WORK-166 T3: backlog -> done (admin cleanup) is valid."""
+    from work_engine import is_valid_queue_transition
+
+    assert is_valid_queue_transition("backlog", "done") is True
+
+
+def test_queue_transitions_backward_compat(tmp_path, governance):
+    """WORK-166 T4: Adding backlog->done doesn't break existing transitions."""
+    from work_engine import is_valid_queue_transition
+
+    assert is_valid_queue_transition("backlog", "ready") is True
+    assert is_valid_queue_transition("backlog", "parked") is True
+    assert is_valid_queue_transition("working", "done") is True
+    assert is_valid_queue_transition("done", "backlog") is False  # Still terminal

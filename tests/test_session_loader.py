@@ -248,3 +248,43 @@ class TestCheckpointDiscoveryOrder:
         extracted = loader.extract()
 
         assert extracted["prior_session"] == 343
+
+
+# =============================================================================
+# WORK-166: Checkpoint same-session sort tie-breaking
+# =============================================================================
+
+
+class TestCheckpointSortTieBreaking:
+    """WORK-166: _find_latest_checkpoint breaks ties by date prefix when session numbers match."""
+
+    def test_find_latest_checkpoint_tiebreak(self, tmp_path):
+        """WORK-166 T1: Same session number, different date prefix — pick latest prefix."""
+        from session_loader import SessionLoader
+
+        cp_dir = tmp_path / "docs" / "checkpoints"
+        cp_dir.mkdir(parents=True)
+        (cp_dir / "2025-12-21-04-SESSION-94-early.md").write_text("---\nsession: 94\n---\n")
+        (cp_dir / "2025-12-21-05-SESSION-94-late.md").write_text("---\nsession: 94\n---\n")
+
+        loader = SessionLoader(checkpoint_dir=cp_dir)
+        result = loader._find_latest_checkpoint()
+
+        assert result is not None
+        assert "05-SESSION-94-late" in result.name, \
+            f"Should pick -05- prefix (latest), got {result.name}"
+
+    def test_find_latest_checkpoint_no_date_prefix_backward_compat(self, tmp_path):
+        """WORK-166 T5: Checkpoints without date prefix still sort by session number."""
+        from session_loader import SessionLoader
+
+        cp_dir = tmp_path / "docs" / "checkpoints"
+        cp_dir.mkdir(parents=True)
+        (cp_dir / "SESSION-100-foo.md").write_text("---\nsession: 100\n---\n")
+        (cp_dir / "SESSION-99-bar.md").write_text("---\nsession: 99\n---\n")
+
+        loader = SessionLoader(checkpoint_dir=cp_dir)
+        result = loader._find_latest_checkpoint()
+
+        assert result is not None
+        assert "SESSION-100" in result.name

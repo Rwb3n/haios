@@ -123,26 +123,26 @@ E2.6 is focused and narrow: the four -ilities applied to what we already have.
 | CH-042 | AgentCards | WORK-144 | REQ-DISCOVER-004 |
 | CH-043 | LegacyCleanup | WORK-145 | REQ-CONFIG-003 |
 
-### Work Items (11 total)
+### Work Items (16 total, all COMPLETE)
 
 | ID | Title | Arc | Chapter | Priority |
 |----|-------|-----|---------|----------|
 | WORK-020 | Discoverability Architecture | discoverability | CH-032 | medium (COMPLETE S368) |
 | WORK-067 | Portable Schema Architecture | referenceability | CH-035 | high (COMPLETE S367) |
-| WORK-075 | System Audit as L4 Traceability | traceability | CH-039 | medium |
+| WORK-075 | System Audit as L4 Traceability | traceability | CH-039 | medium (COMPLETE S370) |
 | WORK-082 | Epistemic Review Ceremony | observability | CH-041 | medium (COMPLETE S372) |
-| WORK-096 | Agent UX Test in DoD Validation | observability | CH-041 | low |
+| WORK-096 | Agent UX Test in DoD Validation | observability | CH-041 | low (COMPLETE S380) |
 | WORK-097 | Plan Decomposition Traceability | traceability | CH-038 | medium (COMPLETE S368) |
-| WORK-104 | Validation/Triage Cycle Mappings | traceability | CH-038 | low |
-| WORK-135 | Manifest Auto-Sync | referenceability | CH-037 | low |
-| WORK-144 | Agent Capability Cards | observability | CH-042 | medium |
-| WORK-145 | Legacy Duplication Cleanup | observability | CH-043 | low |
-| WORK-146 | Gate Skip Violation Logging | traceability | CH-040 | medium |
-| WORK-147 | Schema Registry Implementation | referenceability | CH-036 | medium (spawned by WORK-067) |
-| WORK-148 | Remove Stub and Deprecated Skills | discoverability | CH-034 | low (spawned by WORK-020) |
-| WORK-149 | Three-Tier Entry Point Architecture ADR | discoverability | CH-034 | medium (spawned by WORK-020) |
-| WORK-150 | Plan Decomposition Traceability ADR | traceability | CH-038 | medium (spawned by WORK-097) |
-| WORK-151 | Implement Epistemic Review in CONCLUDE | observability | CH-041 | medium (spawned by WORK-082) |
+| WORK-104 | Validation/Triage Cycle Mappings | traceability | CH-038 | low (COMPLETE S374) |
+| WORK-135 | Manifest Auto-Sync | referenceability | CH-037 | low (COMPLETE S381) |
+| WORK-144 | Agent Capability Cards | observability | CH-042 | medium (COMPLETE S375) |
+| WORK-145 | Legacy Duplication Cleanup | observability | CH-043 | low (COMPLETE S377) |
+| WORK-146 | Gate Skip Violation Logging | traceability | CH-040 | medium (COMPLETE S371) |
+| WORK-147 | Schema Registry Implementation | referenceability | CH-036 | medium (COMPLETE S369, spawned by WORK-067) |
+| WORK-148 | Remove Stub and Deprecated Skills | discoverability | CH-034 | low (COMPLETE S382, spawned by WORK-020) |
+| WORK-149 | Three-Tier Entry Point Architecture ADR | discoverability | CH-034 | medium (COMPLETE S378, spawned by WORK-020) |
+| WORK-150 | Plan Decomposition Traceability ADR | traceability | CH-038 | medium (COMPLETE S379, spawned by WORK-097) |
+| WORK-151 | Implement Epistemic Review in CONCLUDE | observability | CH-041 | medium (COMPLETE S373, spawned by WORK-082) |
 
 ---
 

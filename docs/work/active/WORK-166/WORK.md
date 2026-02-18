@@ -1,54 +1,67 @@
 ---
 template: work_item
 id: WORK-166
-title: "Bug Batch E2.8"
+title: Bug Batch E2.8
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-17
 spawned_by: Session-394-decomposition
 spawned_children: []
 chapter: CH-065
 arc: infrastructure
-closed: null
+closed: '2026-02-18'
 priority: high
 effort: medium
 traces_to:
-  - REQ-CEREMONY-001
+- REQ-CEREMONY-001
 requirement_refs: []
 source_files:
-  - .claude/haios/modules/session_loader.py
-  - .claude/haios/modules/work_engine.py
+- .claude/haios/lib/session_loader.py
+- .claude/haios/lib/work_loader.py
+- .claude/haios/modules/work_engine.py
 acceptance_criteria:
-  - "Checkpoint same-session sort bug fixed"
-  - "Queue state machine backlog->done transition added"
-  - "All confirmed E2.7 triage bugs resolved or explicitly deferred"
-  - "Zero test regressions"
+- Checkpoint same-session sort bug fixed
+- Queue state machine backlog->done transition added
+- All confirmed E2.7 triage bugs resolved or explicitly deferred
+- Zero test regressions
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-17T22:08:08
-    exited: null
+- node: backlog
+  entered: 2026-02-17 22:08:08
+  exited: '2026-02-18T08:35:12.217091'
 artifacts: []
 cycle_docs: {}
 memory_refs:
-  - 84963
-  - 85712
-  - 85557
-  - 85795
-  - 85573
-  - 85132
+- 84963
+- 85712
+- 85557
+- 85795
+- 85573
+- 85132
+- 86047
+- 86048
 extensions:
   epoch: E2.8
-  batch_pattern: "validated (mem:84963)"
-version: "2.0"
+  batch_pattern: validated (mem:84963)
+version: '2.0'
 generated: 2026-02-17
-last_updated: 2026-02-17T22:08:08
+last_updated: '2026-02-18T08:35:12.221488'
+queue_history:
+- position: ready
+  entered: '2026-02-18T08:11:49.900941'
+  exited: '2026-02-18T08:11:49.926431'
+- position: working
+  entered: '2026-02-18T08:11:49.926431'
+  exited: '2026-02-18T08:35:12.217091'
+- position: done
+  entered: '2026-02-18T08:35:12.217091'
+  exited: null
 ---
 # WORK-166: Bug Batch E2.8
 

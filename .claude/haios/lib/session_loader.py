@@ -112,10 +112,22 @@ class SessionLoader:
         if not checkpoints:
             return None
 
-        def _session_number(path: Path) -> int:
-            """Extract session number from filename like '...-SESSION-348-...'."""
-            match = re.search(r"SESSION-(\d+)", path.name, re.IGNORECASE)
-            return int(match.group(1)) if match else 0
+        def _session_number(path: Path) -> tuple:
+            """Extract session number and date sequence for sort ordering.
+
+            Returns (session_number, date_prefix, filename) tuple for deterministic ordering.
+            Session number is primary key, date prefix breaks ties, filename is final tiebreaker.
+            Date prefix like '2025-12-21-05' is lexicographically sortable.
+
+            WORK-166: Fixes same-session sort bug where max() picked arbitrarily among
+            checkpoints with identical session numbers (e.g., SESSION-94 appearing 3 times).
+            """
+            session_match = re.search(r"SESSION-(\d+)", path.name, re.IGNORECASE)
+            session_num = int(session_match.group(1)) if session_match else 0
+            # Date prefix pattern: YYYY-MM-DD-NN- (e.g., "2025-12-21-05-")
+            date_match = re.match(r"(\d{4}-\d{2}-\d{2}-\d{2})", path.name)
+            date_prefix = date_match.group(1) if date_match else ""
+            return (session_num, date_prefix, path.name)
 
         return max(checkpoints, key=_session_number)
 

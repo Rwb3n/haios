@@ -135,7 +135,7 @@ VALID_QUEUE_POSITIONS = {"parked", "backlog", "ready", "working", "done"}
 # CH-009: Queue lifecycle state machine (REQ-QUEUE-003, REQ-QUEUE-005)
 QUEUE_TRANSITIONS = {
     "parked": ["backlog"],           # Unpark
-    "backlog": ["ready", "parked"],  # Prioritize or Park
+    "backlog": ["ready", "parked", "done"],  # Prioritize, Park, or Admin cleanup (caller must set status=complete)
     "ready": ["working", "backlog"], # Commit or Deprioritize
     "working": ["done"],             # Release
     "done": [],                      # Terminal
