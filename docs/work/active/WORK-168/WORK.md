@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-168
-title: "Cycle Phase Auto-Advancement"
+title: Cycle Phase Auto-Advancement
 type: implementation
 status: active
 owner: Hephaestus
@@ -14,42 +14,50 @@ closed: null
 priority: high
 effort: small
 traces_to:
-  - REQ-CEREMONY-005
-  - REQ-OBSERVE-001
+- REQ-CEREMONY-005
+- REQ-OBSERVE-001
 requirement_refs: []
 source_files:
-  - .claude/hooks/hooks/post_tool_use.py
-  - .claude/haios/lib/session_end_actions.py
-  - .claude/haios/modules/cycle_runner.py
+- .claude/hooks/hooks/post_tool_use.py
+- .claude/haios/lib/session_end_actions.py
+- .claude/haios/modules/cycle_runner.py
 acceptance_criteria:
-  - "PostToolUse hook detects lifecycle skill completion and updates session_state in haios-status-slim.json"
-  - "session_state.current_phase and session_state.active_cycle updated correctly"
-  - "Governance event logged for each phase transition via log_phase_transition"
-  - "Fail-permissive: errors in auto-advancement never break the hook chain"
-  - "just set-cycle continues to work as a manual override"
-  - "Tests verify phase advancement for implementation-cycle and investigation-cycle"
+- PostToolUse hook detects lifecycle skill completion and updates session_state in
+  haios-status-slim.json
+- session_state.current_phase and session_state.active_cycle updated correctly
+- Governance event logged for each phase transition via log_phase_transition
+- 'Fail-permissive: errors in auto-advancement never break the hook chain'
+- just set-cycle continues to work as a manual override
+- Tests verify phase advancement for implementation-cycle and investigation-cycle
 blocked_by: []
 blocks:
-  - WORK-171
+- WORK-171
 enables:
-  - WORK-171
-queue_position: backlog
+- WORK-171
+queue_position: working
 cycle_phase: backlog
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-19T00:17:34
-    exited: null
+- node: backlog
+  entered: 2026-02-19 00:17:34
+  exited: null
 artifacts: []
 cycle_docs: {}
 memory_refs:
-  - 85390
+- 85390
 extensions:
   epoch: E2.8
   parent: WORK-160
-version: "2.0"
+version: '2.0'
 generated: 2026-02-19
-last_updated: 2026-02-19T00:20:00
+last_updated: '2026-02-19T19:01:26.839815'
+queue_history:
+- position: ready
+  entered: '2026-02-19T19:01:26.810146'
+  exited: '2026-02-19T19:01:26.837309'
+- position: working
+  entered: '2026-02-19T19:01:26.837309'
+  exited: null
 ---
 # WORK-168: Cycle Phase Auto-Advancement
 
