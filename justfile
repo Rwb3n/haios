@@ -334,8 +334,9 @@ tree-current:
     python -c "import sys, json; sys.path.insert(0, '.claude/haios/lib'); s=json.load(open('.claude/haios-status-slim.json')); m=s.get('milestone',{}); print(f'{m.get(\"id\",\"?\")}: {m.get(\"progress\",0)}%'); import subprocess; subprocess.run(['python', 'scripts/plan_tree.py', '--milestone', m.get('id','')])"
 
 # Show what's ready to work on (unblocked items)
+# WORK-175/S405: Migrated from plan_tree.py to WorkEngine.get_ready() (single code path)
 ready:
-    python scripts/plan_tree.py --ready
+    python -c "import sys; sys.path.insert(0, '.claude/haios/modules'); from work_engine import WorkEngine; from governance_layer import GovernanceLayer; e=WorkEngine(governance=GovernanceLayer()); items=e.get_ready(); print('READY (unblocked across all milestones):'); [print(f'  {x.id}: {x.title}') for x in sorted(items, key=lambda x: x.id)]"
 
 # Show work queue (E2-290: Priority ordered)
 queue name="default":
