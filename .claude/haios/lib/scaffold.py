@@ -628,7 +628,109 @@ def scaffold_template(
     # Write output file
     full_output_path.write_text(content, encoding="utf-8")
 
+    # WORK-177: Auto-update chapter manifest if CHAPTER variable provided
+    if template == "work_item" and variables.get("CHAPTER"):
+        _try_update_chapter_manifest(
+            backlog_id or "",
+            title or "",
+            variables.get("CHAPTER", ""),
+            variables.get("TYPE", "implementation"),
+        )
+
     return str(full_output_path)
+
+
+def update_chapter_manifest(
+    work_id: str,
+    title: str,
+    chapter_id: str,
+    work_type: str = "implementation",
+    base_path: Optional[Path] = None,
+) -> dict:
+    """Update chapter CHAPTER.md work items table with new row. WORK-177.
+
+    Locates the chapter file by glob pattern matching CH-{id}-* directory
+    under the current epoch's arcs. Appends a row to the work items table
+    if the work ID is not already present.
+
+    Fail-permissive: returns result dict, never raises.
+
+    Assumes 4-column | ID | Title | Status | Type | schema. Legacy chapters
+    with different schemas will receive structurally correct but semantically
+    misaligned rows.
+
+    Args:
+        work_id: Work item ID (e.g., "WORK-177")
+        title: Work item title
+        chapter_id: Chapter ID (e.g., "CH-059")
+        work_type: Work type (default: "implementation")
+        base_path: Project root (injectable for testing)
+
+    Returns:
+        {"updated": True/False, "reason": str, "chapter_file": str|None}
+    """
+    root = base_path or PROJECT_ROOT
+    # Glob for chapter directory: .claude/haios/epochs/*/arcs/*/chapters/{chapter_id}-*
+    pattern = f".claude/haios/epochs/*/arcs/*/chapters/{chapter_id}-*/CHAPTER.md"
+    matches = list(root.glob(pattern))
+    if not matches:
+        return {"updated": False, "reason": "chapter_file_not_found", "chapter_file": None}
+
+    chapter_file = matches[0]  # First match (should be unique)
+    content = chapter_file.read_text(encoding="utf-8")
+
+    # Check for duplicate
+    if f"| {work_id} |" in content:
+        return {"updated": False, "reason": "already_present", "chapter_file": str(chapter_file)}
+
+    # Find the work items table and append row before the next section
+    # Table format: | ID | Title | Status | Type |
+    new_row = f"| {work_id} | {title} | Backlog | {work_type} |"
+
+    # Strategy: find last table row (starts with |) before the next --- or ## section
+    lines = content.split("\n")
+    insert_idx = None
+    in_work_items = False
+    for i, line in enumerate(lines):
+        if line.strip().startswith("## Work Items"):
+            in_work_items = True
+            continue
+        if in_work_items:
+            if line.strip().startswith("|"):
+                insert_idx = i  # Track last table row
+            elif line.strip() == "---" or line.strip().startswith("##"):
+                break  # Reached next section
+
+    if insert_idx is None:
+        return {"updated": False, "reason": "table_not_found", "chapter_file": str(chapter_file)}
+
+    lines.insert(insert_idx + 1, new_row)
+    chapter_file.write_text("\n".join(lines), encoding="utf-8")
+
+    return {"updated": True, "reason": "row_added", "chapter_file": str(chapter_file)}
+
+
+def _try_update_chapter_manifest(
+    work_id: str, title: str, chapter_id: str, work_type: str
+) -> None:
+    """Fail-permissive wrapper for update_chapter_manifest. WORK-177.
+
+    Never raises. Emits warnings.warn() on non-update or exception
+    for operator observability (critique A5: fail-permissive != invisible).
+    """
+    import warnings
+    try:
+        result = update_chapter_manifest(work_id, title, chapter_id, work_type)
+        if not result.get("updated"):
+            warnings.warn(
+                f"WORK-177: Chapter manifest not updated for {work_id}: {result.get('reason')}",
+                stacklevel=2,
+            )
+    except Exception as exc:
+        warnings.warn(
+            f"WORK-177: Chapter manifest update failed (non-blocking): {exc}",
+            stacklevel=2,
+        )
 
 
 # CLI entry point

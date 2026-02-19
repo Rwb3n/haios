@@ -1,49 +1,65 @@
 ---
 template: work_item
 id: WORK-177
-title: "Chapter Manifest Auto-Update on Work Creation"
+title: Chapter Manifest Auto-Update on Work Creation
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-19
 spawned_by: WORK-173
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-02-19'
 priority: low
 effort: small
 traces_to:
-  - REQ-CEREMONY-001
-  - REQ-TRACE-004
+- REQ-CEREMONY-001
+- REQ-TRACE-004
 requirement_refs: []
 source_files:
-  - .claude/haios/lib/scaffold.py
-  - .claude/haios/modules/work_engine.py
+- .claude/haios/lib/scaffold.py
+- .claude/haios/modules/work_engine.py
+- .claude/haios/lib/spawn_ceremonies.py
 acceptance_criteria:
-  - "When a work item is created with a chapter field, the chapter's CHAPTER.md work items table is auto-updated"
-  - "Auto-update follows fail-permissive pattern (never blocks work creation)"
-  - "Tests verify chapter manifest is updated after work creation"
+- When a work item is created with a chapter field, the chapter's CHAPTER.md work
+  items table is auto-updated
+- Auto-update follows fail-permissive pattern (never blocks work creation)
+- Tests verify chapter manifest is updated after work creation
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: done
+cycle_phase: done
+current_node: plan
 node_history:
-  - node: backlog
-    entered: 2026-02-19T22:35:07
-    exited: null
+- node: backlog
+  entered: 2026-02-19 22:35:07
+  exited: '2026-02-19T22:40:16.474787'
+- node: plan
+  entered: '2026-02-19T22:40:16.509295'
+  exited: '2026-02-19T23:08:36.564815'
 artifacts: []
 cycle_docs: {}
 memory_refs:
-  - 86887
-  - 86893
+- 86887
+- 86893
+- 84297
 extensions:
   epoch: E2.8
-version: "2.0"
+version: '2.0'
 generated: 2026-02-19
-last_updated: 2026-02-19T22:35:07
+last_updated: '2026-02-19T23:08:36.568810'
+queue_history:
+- position: ready
+  entered: '2026-02-19T22:40:16.474787'
+  exited: '2026-02-19T22:40:16.505099'
+- position: working
+  entered: '2026-02-19T22:40:16.505099'
+  exited: '2026-02-19T23:08:36.564815'
+- position: done
+  entered: '2026-02-19T23:08:36.564815'
+  exited: null
 ---
 # WORK-177: Chapter Manifest Auto-Update on Work Creation
 
