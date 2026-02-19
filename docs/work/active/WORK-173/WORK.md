@@ -26,6 +26,7 @@ acceptance_criteria:
   - "Cleared references follow fail-permissive pattern (never blocks closure)"
   - "Cascade runs as part of close-work-cycle ARCHIVE phase or just close-work recipe"
   - "Tests verify blocked_by is cleared in downstream items"
+  - "close_work_item(work_id) lib function sets status: complete and closed: {date} in WORK.md via regex replacement (same pattern as sync_work_md_phase from WORK-171)"
 blocked_by: []
 blocks: []
 enables: []
@@ -67,9 +68,11 @@ Observed in S399: WORK-160 had stale `blocked_by: [WORK-101]` after WORK-101 clo
 ## Deliverables
 
 - [ ] blocked_by cascade function in lib/ (fail-permissive)
+- [ ] close_work_item(work_id) lib function: sets status/closed fields via regex replacement
 - [ ] Integration into close-work recipe or status_propagator
 - [ ] Tests verifying cascade clears references
-- [ ] close-work-cycle SKILL.md updated if needed
+- [ ] Tests verifying close_work_item writes status: complete and closed: {date}
+- [ ] close-work-cycle SKILL.md updated to reference lib/ functions instead of manual edits
 
 ---
 
