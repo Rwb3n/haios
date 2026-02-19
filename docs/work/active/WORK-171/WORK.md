@@ -29,8 +29,7 @@ acceptance_criteria:
   - "SKILL.md files updated to reference lib/ functions instead of listing conditions"
   - "Zero regression: all existing ceremony behavior preserved"
   - "Tests verify each migrated phase produces identical outcomes"
-blocked_by:
-  - WORK-168
+blocked_by: []
 blocks: []
 enables: []
 queue_position: backlog
@@ -79,6 +78,7 @@ This capstone work item migrates at least 3 specific mechanical phases from Tier
 - [ ] PostToolUse auto-logging of ceremony governance events
 - [ ] Updated retro-cycle SKILL.md Phase 0 to reference lib/ function
 - [ ] Tests in `tests/test_retro_scale.py` and `tests/test_phase_migration.py`
+- [ ] Auto-sync WORK.md cycle_phase field on phase advancement (retro FEATURE-1 from WORK-168)
 
 ---
 
