@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-19T21:39:12",
+    "generated": "2026-02-19T21:46:50",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 86647,
-        "entities": 10207,
+        "concepts": 86655,
+        "entities": 10211,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -7046,7 +7046,7 @@
         {
             "path": "docs/checkpoints/2025-12-22-05-SESSION-100-m4-complete-inv-020-channeling-patterns.md",
             "last_updated": "2025-12-22T21:41:04",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/checkpoints/2025-12-23-01-SESSION-101-inv-022-work-cycle-dag-architecture-complete.md",
@@ -7256,7 +7256,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-09-SESSION-140-e2-220-e2-225-e2-024-ground-truth-verification-and-dependency-validator.md",
             "last_updated": "2025-12-28T21:42:56",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/checkpoints/2025-12-28-10-SESSION-141-e2-037-e2-086-closure-e2-108-gate-observability-plan.md",
@@ -7476,7 +7476,7 @@
         {
             "path": "docs/checkpoints/2026-01-08-03-SESSION-183-inv-061-e2-278-adr-041-status-over-location.md",
             "last_updated": "2026-01-08T21:41:27",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/checkpoints/2026-01-08-04-SESSION-184-e2-280-survey-skill-cycle-complete.md",
@@ -8376,7 +8376,7 @@
         {
             "path": "docs/ADR/ADR-041-svelte-governance-criteria.md",
             "last_updated": "2026-01-08T21:45:06",
-            "days_stale": 41
+            "days_stale": 42
         },
         {
             "path": "docs/ADR/ADR-042-hierarchy-rename-chapter-to-arc.md",

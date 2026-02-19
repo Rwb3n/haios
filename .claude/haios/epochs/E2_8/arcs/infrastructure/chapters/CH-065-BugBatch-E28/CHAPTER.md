@@ -8,7 +8,7 @@
 **Arc:** infrastructure
 **Epoch:** E2.8
 **Name:** Bug Batch E2.8
-**Status:** Complete
+**Status:** In Progress
 
 ---
 
@@ -23,6 +23,7 @@ Batch fix confirmed bugs from E2.7 triage and S393 operator report. Clean founda
 | ID | Title | Status | Type |
 |----|-------|--------|------|
 | WORK-166 | Bug Batch E2.8 | Complete | implementation |
+| WORK-175 | Fix plan_tree.py --ready Blocked_by Filter | Active | implementation |
 
 ---
 

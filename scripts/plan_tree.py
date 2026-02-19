@@ -48,9 +48,20 @@ def get_work_info(work_path: str) -> dict:
         info["backlog_id"] = match.group(1)
     if match := re.search(r'^status:\s*(\S+)', content, re.MULTILINE):
         info["status"] = match.group(1)
+    # Parse blocked_by: supports both inline [A, B] and YAML list format
     if match := re.search(r'blocked_by:\s*\[([^\]]*)\]', content):
+        # Inline format: blocked_by: [WORK-100, WORK-101]
         blockers = match.group(1)
-        info["blocked_by"] = [b.strip() for b in blockers.split(',') if b.strip()]
+        info["blocked_by"] = [b.strip().strip("'\"") for b in blockers.split(',') if b.strip()]
+    else:
+        # YAML list format: blocked_by:\n  - WORK-100\n  - WORK-101
+        yaml_list = re.findall(r'blocked_by:\s*\n((?:\s*-\s*\S+\n?)+)', content)
+        if yaml_list:
+            info["blocked_by"] = [
+                item.strip().lstrip('- ').strip()
+                for item in yaml_list[0].strip().split('\n')
+                if item.strip().startswith('-')
+            ]
     if match := re.search(r'^title:\s*["\']?([^"\'\n]+)', content, re.MULTILINE):
         info["title"] = match.group(1).strip('"\'')
 
@@ -98,18 +109,31 @@ def main():
 
     if ready_only:
         print("READY (unblocked across all milestones):")
-        # Scan ALL work files in active/, not just milestone-registered items
         # Session 187: Milestones deprecated, chapters are the new taxonomy
         # Session 241: Match WorkEngine terminal statuses (was only filtering 'complete')
+        # WORK-175 (Session 405): Resolve blocked_by against actual work item status
+        # (was checking against deprecated milestones 'all_complete' set)
         terminal_statuses = {"complete", "archived", "dismissed", "invalid", "deferred"}
         for item_id, plan in plans.items():
             status = plan.get("status", "")
             if status in terminal_statuses:
                 continue
             blockers = plan.get("blocked_by", [])
-            if not blockers or all(b in all_complete for b in blockers):
-                title = plan.get("title", "")
-                print(f"  {item_id}: {title[:50]}")
+            if blockers:
+                # Check if ALL blockers have terminal status (resolved)
+                actually_blocked = False
+                for blocker_id in blockers:
+                    blocker = plans.get(blocker_id)
+                    if blocker is None:
+                        # Blocker not found (deleted/moved) — treat as resolved
+                        continue
+                    if blocker.get("status", "") not in terminal_statuses:
+                        actually_blocked = True
+                        break
+                if actually_blocked:
+                    continue
+            title = plan.get("title", "")
+            print(f"  {item_id}: {title[:50]}")
         return
 
     # Full tree view - iterate all milestones
