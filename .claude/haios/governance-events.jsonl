@@ -9765,3 +9765,6 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-19T22:26:45.079181"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-19T22:31:31.465542"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-19T22:31:31.514564"}
+{"type": "SessionEnded", "session": 406, "agent": "Hephaestus", "timestamp": "2026-02-19T22:33:20.834562"}
+{"type": "GateViolation", "gate_id": "scaffold_block", "work_id": "unknown", "violation_type": "block", "context": "BLOCKED: Direct work_item scaffold. Use '/new-work' command instead. Work items require work-creation-cycle to populate placeholders.", "timestamp": "2026-02-19T22:34:54.566817"}
+{"type": "QueueCeremony", "ceremony": "Intake", "items": ["WORK-177"], "from": "new", "to": "backlog", "timestamp": "2026-02-19T22:35:49.708507", "rationale": "Spawned from WORK-173 retro FEATURE-1: chapter manifest auto-update", "agent": "Hephaestus"}

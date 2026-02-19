@@ -34,6 +34,7 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-173 | Blocked_by Cascade on Work Closure | Active | implementation |
 | WORK-174 | WorkState Dataclass Expansion | Backlog | implementation |
 | WORK-176 | Plan-Authoring-Cycle Subagent Delegation | Backlog | implementation |
+| WORK-177 | Chapter Manifest Auto-Update on Work Creation | Backlog | implementation |
 
 ---
 
