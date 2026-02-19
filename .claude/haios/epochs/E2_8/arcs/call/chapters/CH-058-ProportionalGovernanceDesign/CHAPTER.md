@@ -8,7 +8,7 @@
 **Arc:** call
 **Epoch:** E2.8
 **Name:** Proportional Governance Design
-**Status:** Planning
+**Status:** Complete
 
 ---
 
@@ -24,17 +24,17 @@ Define the L3 principle and L4 requirements for proportional governance — gove
 
 | ID | Title | Status | Type |
 |----|-------|--------|------|
-| WORK-101 | Proportional Governance Design | Active | design |
+| WORK-101 | Proportional Governance Design | Complete | design |
 
 ---
 
 ## Exit Criteria
 
-- [ ] L3.20 Proportional Governance principle defined
-- [ ] REQ-LIFECYCLE-005 fast-path requirement defined
-- [ ] REQ-CEREMONY-005 proportional depth requirement defined
-- [ ] Close-work-cycle updated with pytest hard gate
-- [ ] Complexity threshold criteria documented
+- [x] L3.20 Proportional Governance principle defined (S398)
+- [x] REQ-LIFECYCLE-005 fast-path requirement defined (S398)
+- [x] REQ-CEREMONY-005 proportional depth requirement defined (S398)
+- [x] Close-work-cycle updated with pytest hard gate (S398)
+- [x] Complexity threshold criteria documented (S398)
 
 ---
 

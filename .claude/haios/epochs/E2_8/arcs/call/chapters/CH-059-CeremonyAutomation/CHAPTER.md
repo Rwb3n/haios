@@ -8,7 +8,7 @@
 **Arc:** call
 **Epoch:** E2.8
 **Name:** Ceremony Automation
-**Status:** Planning
+**Status:** In Progress
 
 ---
 
@@ -25,6 +25,11 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | ID | Title | Status | Type |
 |----|-------|--------|------|
 | WORK-160 | Ceremony Automation | Active | implementation |
+| WORK-167 | Governance Tier Detection | Complete | implementation |
+| WORK-168 | Cycle Phase Auto-Advancement | Backlog | implementation |
+| WORK-169 | Critique-as-Hook | Backlog | implementation |
+| WORK-170 | Checkpoint Field Auto-Population | Backlog | implementation |
+| WORK-171 | Mechanical Phase Migration | Backlog | implementation |
 
 ---
 
