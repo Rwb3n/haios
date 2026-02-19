@@ -84,7 +84,7 @@ Move mechanical ceremony phases from SKILL.md (agent reads) to hooks/modules (au
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
 | CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Complete |
-| CH-059 | CeremonyAutomation | WORK-160, WORK-167-171 | REQ-CEREMONY-002, REQ-CEREMONY-005 | CH-058 | In Progress |
+| CH-059 | CeremonyAutomation | WORK-160, WORK-167-176 | REQ-CEREMONY-002, REQ-CEREMONY-005 | CH-058 | In Progress |
 | CH-060 | SessionBoundaryFix | WORK-161 | REQ-CEREMONY-001 | None | Complete |
 | CH-061 | ColdstartContextInjection | New | REQ-CONFIG-001, L3.3 | None | Planning |
 | CH-066 | MCPOperationsServer | New | REQ-DISCOVER-002, REQ-CONFIG-001 | CH-061 | Planning |
@@ -150,7 +150,7 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
-| CH-065 | BugBatch-E28 | WORK-166 | REQ-CEREMONY-001 | None | Complete |
+| CH-065 | BugBatch-E28 | WORK-166, WORK-175 | REQ-CEREMONY-001 | None | In Progress |
 
 **Exit criteria:**
 - [x] All confirmed bugs from E2.7 triage resolved (85712, 85557, 85795, 85573, 85132) (WORK-166, S395)
@@ -166,6 +166,8 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 | ID | Title | Notes |
 |----|-------|-------|
 | WORK-143 | Retro-Triage Consumer Update | Closed prior to E2.8. Triage reads retro-* provenance tags. |
+| WORK-101 | Proportional Governance Design | Closed S398. L3.20, REQ-LIFECYCLE-005, REQ-CEREMONY-005, threshold criteria. CH-058. |
+| WORK-168 | Cycle Phase Auto-Advancement | Closed S403. PostToolUse Part 8 auto-advances session_state. CH-059. |
 
 ### Deferred (not E2.8)
 
@@ -175,8 +177,9 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 | Batch mode for trivial operations | Folds into Arc 1 CH-058 | Proportional scaling subsumes batch |
 | Full memory system overhaul | E4 (Cognitive Memory) | Three-paradigm memory, FORESIGHT |
 | WORK-071 Pre-Decomposition Review Gate | E2.9 (Governance) | Governance-themed, parked |
-| WORK-101 Proportional Governance Design | E2.9 if not completed in E2.8 | Unparked S393, assigned to CH-058, queue: backlog |
 | WORK-102 Session/Process Review Ceremonies | E2.9 (Governance) | Governance-themed, backlog |
+| Decomposition ceremony with deterministic gates | E2.9 (Governance) | Governance-themed, needs skill/contract design (mem:86685, 86610, 86637) |
+| get_next_work_id() atomicity | E2.9+ | Edge case, no concurrent agents yet (mem:86602, 86624) |
 
 ---
 
