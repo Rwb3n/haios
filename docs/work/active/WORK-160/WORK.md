@@ -7,7 +7,12 @@ status: active
 owner: Hephaestus
 created: 2026-02-17
 spawned_by: Session-394-decomposition
-spawned_children: []
+spawned_children:
+  - WORK-167
+  - WORK-168
+  - WORK-169
+  - WORK-170
+  - WORK-171
 chapter: CH-059
 arc: call
 closed: null
@@ -15,12 +20,14 @@ priority: high
 effort: large
 traces_to:
   - REQ-CEREMONY-002
+  - REQ-CEREMONY-005
+  - REQ-LIFECYCLE-005
 requirement_refs: []
 source_files:
   - .claude/skills/implementation-cycle/SKILL.md
   - .claude/skills/close-work-cycle/SKILL.md
   - .claude/skills/retro-cycle/SKILL.md
-  - .claude/hooks/PreToolUse/governance-state.md
+  - .claude/hooks/hooks/pre_tool_use.py
 acceptance_criteria:
   - "At least 3 mechanical ceremony phases migrated from SKILL.md to hooks/modules"
   - "Session-end ceremony runs automatically via hook (not agent-read skill)"
@@ -30,8 +37,7 @@ acceptance_criteria:
   - "Four critique levels implemented: none (trivial), checklist (hook), full (subagent), operator (dialogue)"
   - "Computable predicate determines critique level from work item type, plan existence, transition type"
   - "Zero regression in existing ceremony behavior"
-blocked_by:
-  - WORK-101
+blocked_by: []
 blocks: []
 enables: []
 queue_position: backlog
@@ -49,7 +55,7 @@ memory_refs:
   - 85607
 extensions:
   epoch: E2.8
-  depends_on_design: WORK-101
+  depends_on_design: "WORK-101 (complete, S398)"
 version: "2.0"
 generated: 2026-02-17
 last_updated: 2026-02-17T22:08:08
@@ -98,6 +104,11 @@ This work item migrates mechanical (judgment-free) ceremony phases from Tier 3 (
 ---
 
 ## History
+
+### 2026-02-19 - Decomposed (Session 399)
+- Decomposed into 5 children: WORK-167 (Tier Detection), WORK-168 (Cycle Auto-Advance), WORK-169 (Critique-as-Hook), WORK-170 (Checkpoint Auto), WORK-171 (Phase Migration)
+- Acceptance criterion #2 (session-end automation) already satisfied by WORK-161 (S396)
+- WORK-160 completes when all 5 children complete + #2 (already done)
 
 ### 2026-02-17 - Created (Session 394)
 - Spawned during E2.8 arc decomposition

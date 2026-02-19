@@ -288,10 +288,39 @@ Store all outputs to memory with typed provenance tags. No deduplication at writ
 
 ### Storage Implementation
 
+**MUST: Full Detail Preservation (S399 Operator Directive)**
+
+Each ingester_ingest call **MUST** preserve the full detail from the phase output. The content field is NOT a summary — it is the complete structured output. Downstream consumers (triage, future agents) must be able to act on stored data without re-deriving it from source artifacts.
+
+**retro-reflect content MUST include for each observation:**
+- Observation ID (e.g., WCBB-1, WSY-2)
+- Severity tag (if assigned)
+- Full description (not abbreviated)
+- Evidence anchor: exact file path with line numbers, exact diff reference, exact governance event, or exact test name
+- Impact statement
+
+**retro-kss content MUST include for each directive:**
+- K/S/S category and ID (e.g., K1, S2, S3)
+- Full directive text (not abbreviated)
+- Traceability: which REFLECT observation(s) it traces to (by ID)
+- For START directives: target file path and implementation sketch
+- For STOP directives: evidence of the anti-pattern with file path
+
+**retro-extract content MUST include for each item:**
+- Type (bug/feature)
+- Title
+- File path(s) affected
+- Reproduction steps (bugs) or implementation scope (features)
+- Confidence level with rationale
+- Severity level (bugs)
+- Source dimension (WCBB/WSY/WDN/WMI)
+
+**Anti-pattern (S399):** Storing compressed summaries like "STOP: Don't use EnterPlanMode" loses the evidence anchors, file paths, and traceability that make the observation actionable. A future agent reading this cannot determine WHERE the hook should be added, WHAT the redirect message should say, or WHY the pattern is wrong. Full detail is the minimum viable signal.
+
 For each provenance type:
 ```
 ingester_ingest(
-  content="<structured output from phase>",
+  content="<FULL structured output from phase — see detail requirements above>",
   source_path="retro-reflect:{work_id}",  # or retro-kss, retro-extract
   content_type_hint="techne"
 )

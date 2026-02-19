@@ -14,6 +14,7 @@ Event Types:
 - GateViolation: Logged when a MUST gate detects a violation (WORK-146, REQ-OBSERVE-005)
 - SessionStarted: Logged when a session begins (E2-236)
 - SessionEnded: Logged when a session ends (E2-236)
+- TierDetected: Logged when governance tier is computed for a work item (WORK-167)
 
 Usage:
     from governance_events import log_phase_transition, log_validation_outcome
@@ -180,6 +181,30 @@ def log_session_end(session_number: int, agent: str) -> dict:
         "type": "SessionEnded",
         "session": session_number,
         "agent": agent,
+        "timestamp": datetime.now().isoformat(),
+    }
+    _append_event(event)
+    return event
+
+
+def log_tier_detected(work_id: str, tier: str) -> dict:
+    """
+    Log TierDetected governance event (WORK-167).
+
+    Logged when governance tier is computed for a work item.
+    Tiers: trivial, small, standard, architectural (REQ-CEREMONY-005).
+
+    Args:
+        work_id: Work item ID (e.g., "WORK-167")
+        tier: Detected tier (trivial, small, standard, architectural)
+
+    Returns:
+        The logged event dict
+    """
+    event = {
+        "type": "TierDetected",
+        "work_id": work_id,
+        "tier": tier,
         "timestamp": datetime.now().isoformat(),
     }
     _append_event(event)

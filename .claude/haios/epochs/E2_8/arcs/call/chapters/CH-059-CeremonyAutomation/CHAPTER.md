@@ -1,0 +1,58 @@
+# generated: 2026-02-19
+# System Auto: last updated on: 2026-02-19T00:00:00
+# Chapter: CeremonyAutomation
+
+## Chapter Definition
+
+**Chapter ID:** CH-059
+**Arc:** call
+**Epoch:** E2.8
+**Name:** Ceremony Automation
+**Status:** Planning
+
+---
+
+## Purpose
+
+Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent reads) to hooks/modules (Tier 1/2, auto-execute). Phases requiring judgment remain as skills. This is the implementation of CH-058's proportional governance design.
+
+**Core insight:** Ceremony skills are markdown — the agent is the runtime (mem:84857). Moving mechanical phases to hooks/modules eliminates token cost for judgment-free operations. Retro-cycle Phase 0 (mem:85607, 85363) is the prototype: computable predicates skip retro for trivial items.
+
+---
+
+## Work Items
+
+| ID | Title | Status | Type |
+|----|-------|--------|------|
+| WORK-160 | Ceremony Automation | Active | implementation |
+
+---
+
+## Exit Criteria
+
+- [ ] At least 3 mechanical ceremony phases migrated from SKILL.md to hooks/modules
+- [ ] Session-end ceremony runs automatically via hook (not agent-read skill)
+- [ ] Checkpoint population automated for standard fields
+- [ ] cycle_phase advancement automated via PostToolUse hook
+- [ ] Critique-as-hook detects inhale-to-exhale transitions, injects critique automatically
+- [ ] Zero regression in existing ceremony behavior
+
+---
+
+## Dependencies
+
+| Direction | Target | Reason |
+|-----------|--------|--------|
+| Blocked by | CH-058 (ProportionalGovernanceDesign) | CH-058 defines the design this chapter implements |
+| None | - | No outbound blocks |
+
+---
+
+## References
+
+- @.claude/haios/epochs/E2_8/arcs/call/ARC.md (parent arc)
+- @.claude/haios/epochs/E2_8/EPOCH.md (parent epoch)
+- @docs/work/active/WORK-160/WORK.md (work item)
+- @docs/work/active/WORK-101/WORK.md (prerequisite design)
+- @.claude/skills/retro-cycle/SKILL.md (Phase 0 prototype)
+- Memory: 85390 (104% problem), 84857 (ceremony=markdown), 85607 (retro Phase 0)

@@ -101,6 +101,8 @@ context:
 | `status_propagator.py` | Upstream status propagation from work closure to ARC.md chapter rows (WORK-034). Uses HierarchyQueryEngine (CH-044). Runtime consumer: close-work-cycle ARCHIVE phase |
 | `ceremony_contracts.py` | Ceremony input/output contract enforcement (WORK-113) |
 | `dod_validation.py` | Definition of Done validation |
+| `session_end_actions.py` | Session-end housekeeping for Stop hook (WORK-161). Fail-permissive: read_session_number, log_session_ended, clear_cycle_state, detect_uncommitted_changes |
+| `tier_detector.py` | Governance tier detection (WORK-167). Pure function detect_tier() computes trivial/small/standard/architectural from WORK.md frontmatter per REQ-LIFECYCLE-005. Foundation for WORK-169 (Critique-as-Hook) |
 
 ## Usage
 
