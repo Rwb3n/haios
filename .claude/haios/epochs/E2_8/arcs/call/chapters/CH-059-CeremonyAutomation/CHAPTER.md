@@ -30,6 +30,7 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-169 | Critique-as-Hook | Backlog | implementation |
 | WORK-170 | Checkpoint Field Auto-Population | Backlog | implementation |
 | WORK-171 | Mechanical Phase Migration | Backlog | implementation |
+| WORK-172 | Block EnterPlanMode via PreToolUse Hook | Backlog | implementation |
 
 ---
 

@@ -771,3 +771,43 @@ node_history: []
         # Verify work file was updated
         content = work_file.read_text()
         assert "80001" in content or "80002" in content
+
+
+class TestPreToolUseEnterPlanModeBlock:
+    """Test WORK-172: Block EnterPlanMode via PreToolUse hook."""
+
+    def test_blocks_enter_plan_mode(self):
+        """Verify EnterPlanMode tool is denied with redirect to /new-plan."""
+        from hooks.pre_tool_use import handle
+
+        hook_data = {"tool_name": "EnterPlanMode", "tool_input": {}}
+        result = handle(hook_data)
+
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
+        assert "/new-plan" in result["hookSpecificOutput"]["permissionDecisionReason"]
+        assert "governed plans" in result["hookSpecificOutput"]["permissionDecisionReason"].lower()
+
+    def test_enter_plan_mode_gate_id(self):
+        """Verify _infer_gate_id returns meaningful gate_id for EnterPlanMode block."""
+        from hooks.pre_tool_use import _infer_gate_id
+
+        reason = "HAIOS uses governed plans. Use /new-plan instead."
+        gate_id = _infer_gate_id(reason)
+
+        assert gate_id == "enter_plan_mode_block"
+        assert gate_id != "unknown_gate"
+
+    def test_enter_plan_mode_logs_gate_violation(self, mocker):
+        """Verify GateViolation governance event is logged when EnterPlanMode is blocked."""
+        from hooks.pre_tool_use import handle, _log_violation
+
+        mock_log = mocker.patch("hooks.pre_tool_use._log_violation")
+
+        hook_data = {"tool_name": "EnterPlanMode", "tool_input": {}}
+        handle(hook_data)
+
+        mock_log.assert_called_once()
+        args = mock_log.call_args[0]
+        assert args[0] == "enter_plan_mode_block"  # gate_id
+        assert args[1] == "block"  # violation_type

@@ -77,6 +77,13 @@ def handle(hook_data: dict) -> Optional[dict]:
             return activity_result
         # Otherwise continue checking other governance rules
 
+    # WORK-172: Block EnterPlanMode (S399 operator directive)
+    if tool_name == "EnterPlanMode":
+        return _deny(
+            "BLOCKED: HAIOS uses governed plans. Use /new-plan {backlog_id} instead. "
+            "EnterPlanMode writes to ungoverned path with no frontmatter or governance chain."
+        )
+
     # Check Bash for SQL and PowerShell
     if tool_name == "Bash":
         command = tool_input.get("command", "")
@@ -493,6 +500,8 @@ def _infer_gate_id(reason: str) -> str:
         return "powershell_block"
     if "scaffold" in reason_lower:
         return "scaffold_block"
+    if "governed plans" in reason_lower or "enterplanmode" in reason_lower:
+        return "enter_plan_mode_block"
     if "governed path" in reason_lower:
         return "path_governance"
     if "backlog_id" in reason_lower or "duplicate" in reason_lower:

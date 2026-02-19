@@ -1,27 +1,29 @@
 ---
 template: work_item
 id: WORK-172
-title: "Block EnterPlanMode via PreToolUse Hook"
+title: Block EnterPlanMode via PreToolUse Hook
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-19
 spawned_by: null
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: 2026-02-19
 priority: high
 effort: trivial
 traces_to:
-  - REQ-CEREMONY-001
+- REQ-GOVERN-002
+- REQ-OBSERVE-005
 requirement_refs: []
 source_files:
-  - .claude/hooks/hooks/pre_tool_use.py
+- .claude/hooks/hooks/pre_tool_use.py
+- tests/test_hooks.py
 acceptance_criteria:
-  - "PreToolUse hook denies tool_name=='EnterPlanMode' with redirect message to /new-plan"
-  - "Governance event logged (GateViolation) when EnterPlanMode is blocked"
-  - "Test verifies EnterPlanMode is blocked"
+- PreToolUse hook denies tool_name=='EnterPlanMode' with redirect message to /new-plan
+- Governance event logged (GateViolation) when EnterPlanMode is blocked
+- Test verifies EnterPlanMode is blocked
 blocked_by: []
 blocks: []
 enables: []
@@ -29,20 +31,24 @@ queue_position: backlog
 cycle_phase: backlog
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-19T20:14:06
-    exited: null
+- node: backlog
+  entered: 2026-02-19 20:14:06
+  exited: null
 artifacts: []
 cycle_docs: {}
 memory_refs:
-  - 86604
-  - 86656
-  - 86682
+- 86604
+- 86656
+- 86682
+- 86833
+- 86834
+- 86835
 extensions:
   epoch: E2.8
-version: "2.0"
+version: '2.0'
 generated: 2026-02-19
-last_updated: 2026-02-19T20:14:06
+last_updated: '2026-02-19T21:39:06.758332'
+queue_history: []
 ---
 # WORK-172: Block EnterPlanMode via PreToolUse Hook
 
@@ -60,14 +66,21 @@ Currently blocked only by MEMORY.md operator directive — no hook enforcement e
 
 ## Deliverables
 
-- [ ] PreToolUse hook check for EnterPlanMode added to pre_tool_use.py
-- [ ] Deny response with message: "HAIOS uses governed plans. Use /new-plan {backlog_id} instead."
-- [ ] GateViolation governance event logged
-- [ ] Test in tests/ verifying the block
+- [x] PreToolUse hook check for EnterPlanMode added to pre_tool_use.py
+- [x] Deny response with message: "HAIOS uses governed plans. Use /new-plan {backlog_id} instead."
+- [x] GateViolation governance event logged (with gate_id="enter_plan_mode_block" via _infer_gate_id() branch)
+- [x] Test in tests/test_hooks.py verifying the block (3 tests: block, gate_id, log_violation)
 
 ---
 
 ## History
+
+### 2026-02-19 - Implemented (Session 405)
+- Added EnterPlanMode check to handle() in pre_tool_use.py (lines 82-86)
+- Added _infer_gate_id() branch: "governed plans" → "enter_plan_mode_block" (lines 503-504)
+- Order fix: "governed plans" checked before "governed path" to avoid substring false match
+- 3 tests added: block, gate_id, log_violation — all pass, zero regressions
+- WHY captured: mem:86833, 86834
 
 ### 2026-02-19 - Created (Session 403)
 - From E2.8 retro triage: 15+ convergent entries (mem:86604, 86656, 86682)
