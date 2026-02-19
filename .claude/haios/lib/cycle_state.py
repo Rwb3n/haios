@@ -1,5 +1,6 @@
 """
 Cycle phase auto-advancement for PostToolUse hook (WORK-168).
+WORK.md cycle_phase sync (WORK-171).
 
 Follows session_end_actions.py pattern:
 - Pure functions in lib/
@@ -8,6 +9,7 @@ Follows session_end_actions.py pattern:
 - Testable without hook infrastructure
 """
 import json
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -108,6 +110,11 @@ def advance_cycle_phase(
         data["session_state"] = session_state
         slim_file.write_text(json.dumps(data, indent=4), encoding="utf-8")
 
+        # Sync WORK.md cycle_phase (WORK-171, fail-permissive)
+        work_id = session_state.get("work_id")
+        if work_id:
+            sync_work_md_phase(work_id, next_phase, project_root=root)
+
         # Log governance event (fail-permissive)
         try:
             from governance_events import log_phase_transition
@@ -119,5 +126,47 @@ def advance_cycle_phase(
 
         return True
 
+    except Exception:
+        return False
+
+
+def sync_work_md_phase(
+    work_id: str,
+    phase: str,
+    project_root: Optional[Path] = None,
+) -> bool:
+    """Write cycle_phase field to WORK.md frontmatter (WORK-171).
+
+    Uses targeted regex line-replacement (not full YAML re-serialization)
+    to avoid frontmatter corruption. Pattern from work_item.py:56-71.
+
+    Args:
+        work_id: Work item ID (e.g., "WORK-171")
+        phase: New phase value (e.g., "DO", "CHECK")
+        project_root: Project root. Defaults to derived path.
+
+    Returns:
+        True if written, False on error or missing file (fail-permissive).
+    """
+    try:
+        root = project_root or _default_project_root()
+        work_file = root / "docs" / "work" / "active" / work_id / "WORK.md"
+        if not work_file.exists():
+            return False
+
+        content = work_file.read_text(encoding="utf-8")
+
+        # Verify cycle_phase field exists before writing
+        if not re.search(r"^cycle_phase:\s", content, re.MULTILINE):
+            return False
+
+        updated = re.sub(
+            r"^cycle_phase:\s.*$",
+            f"cycle_phase: {phase}",
+            content,
+            flags=re.MULTILINE,
+        )
+        work_file.write_text(updated, encoding="utf-8")
+        return True
     except Exception:
         return False

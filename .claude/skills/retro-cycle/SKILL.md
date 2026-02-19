@@ -118,23 +118,14 @@ Collapsing phases conflates observation with action, losing the signal quality t
 
 ## Phase 0: Scale Assessment
 
-**Computable predicate** determines trivial vs substantial:
+**Computable predicate** — call `assess_scale(work_id)` from `.claude/haios/lib/retro_scale.py`:
 
-```
-trivial = (files_changed <= 2)
-      AND (no plan exists in docs/work/active/{work_id}/plans/)
-      AND (no test files changed)
-      AND (no CycleTransition governance events for this work_id)
+```python
+from retro_scale import assess_scale
+scaling = assess_scale(work_id)  # Returns "trivial" or "substantial"
 ```
 
-**How to compute each condition:**
-
-1. `files_changed`: Read `git diff --name-only` for commits associated with the work scope
-2. `no plan`: `Glob(pattern="docs/work/active/{work_id}/plans/PLAN.md")` returns empty
-3. `no test files`: None of the changed files match `tests/**`
-4. `no CycleTransition`: `grep "CycleTransition.*{work_id}" .claude/haios/governance-events.jsonl` returns empty
-
-All 4 conditions are machine-checkable. If ALL are true, scale = trivial. Otherwise, scale = substantial.
+The function checks 4 machine-checkable conditions (files_changed <= 2, no plan exists, no test files changed, no CyclePhaseEntered governance events). See `retro_scale.py` for details. Defaults to "substantial" on any error (fail-safe).
 
 ### Escape Hatch: --skip-retro
 
@@ -422,7 +413,7 @@ If memory storage fails for any provenance type:
 | No dedup at write time | Frequency IS signal | Agents are stateless across sessions. Independent convergence = stronger signal |
 | Evidence anchoring | MUST reference artifact | Generic statements without evidence get lost. Evidence enables downstream triage |
 | 4 phases not 1 | REFLECT/DERIVE/EXTRACT/COMMIT | Observation != synthesis != classification != persistence |
-| Proportional scaling | Computable predicate | files_changed, plan, tests, CycleTransition -- all machine-checkable |
+| Proportional scaling | Computable predicate | files_changed, plan, tests, CyclePhaseEntered -- all machine-checkable |
 | Absorb MEMORY phase | Closure summary in COMMIT | Reduces ceremony overhead. Single pass for all memory stores |
 | deprecated: true not stub: true | observation-capture-cycle kept valid | stub: true breaks test_existing_skills_not_marked_stub |
 

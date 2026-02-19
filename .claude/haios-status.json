@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-19T19:50:17",
+    "generated": "2026-02-19T21:03:20",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 397,
-        "current_session": 398,
+        "prior_session": 398,
+        "current_session": 403,
         "prior_date": "2026-02-18",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 86600,
-        "entities": 10179,
+        "concepts": 86637,
+        "entities": 10202,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -4155,6 +4155,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-19-01-SESSION-403-work-168-cycle-phase-auto-advancement-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-19",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/checkpoints/checkpoint-386.md",
             "template": "checkpoint",
             "status": null,
@@ -6607,7 +6616,7 @@
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-21-gap-audit-preflight.md",
             "last_updated": "2025-12-03T20:58:26",
-            "days_stale": 77
+            "days_stale": 78
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-22-gap-b3-complete.md",
@@ -7032,7 +7041,7 @@
         {
             "path": "docs/checkpoints/2025-12-22-04-SESSION-99-e2-114-e2-112-investigation-infrastructure-complete.md",
             "last_updated": "2025-12-22T20:25:03",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/checkpoints/2025-12-22-05-SESSION-100-m4-complete-inv-020-channeling-patterns.md",
@@ -7077,7 +7086,7 @@
         {
             "path": "docs/checkpoints/2025-12-23-09-SESSION-108-e2-154-e2-155-e2-117-dag-automation-complete.md",
             "last_updated": "2025-12-23T20:36:57",
-            "days_stale": 57
+            "days_stale": 58
         },
         {
             "path": "docs/checkpoints/2025-12-23-10-SESSION-109-e2-153-m6-workcycle-complete.md",
@@ -7112,7 +7121,7 @@
         {
             "path": "docs/checkpoints/2025-12-24-06-SESSION-114-m7a-complete-and-yaml-fix.md",
             "last_updated": "2025-12-24T20:33:59",
-            "days_stale": 56
+            "days_stale": 57
         },
         {
             "path": "docs/checkpoints/2025-12-25-01-SESSION-115-e2-173-milestone-discovery-and-pm-archival.md",
@@ -7142,7 +7151,7 @@
         {
             "path": "docs/checkpoints/2025-12-25-06-SESSION-119-m8-skillarch-complete-bug-hunt-fixes.md",
             "last_updated": "2025-12-25T19:56:26",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/checkpoints/2025-12-25-07-SESSION-120-inv-036-audit-and-e2-165-checkpoint-skill.md",
@@ -7197,7 +7206,7 @@
         {
             "path": "docs/checkpoints/2025-12-27-06-SESSION-130-e2-209-complete-e2-210-implementation-with-calibration-needed.md",
             "last_updated": "2025-12-27T20:16:49",
-            "days_stale": 53
+            "days_stale": 54
         },
         {
             "path": "docs/checkpoints/2025-12-27-07-SESSION-131-e2-210-complete-e2-212-infrastructure-ready.md",
@@ -7242,7 +7251,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-08-SESSION-139-e2-223-e2-222-routing-gate-integration-and-threshold-config.md",
             "last_updated": "2025-12-28T20:55:23",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/checkpoints/2025-12-28-09-SESSION-140-e2-220-e2-225-e2-024-ground-truth-verification-and-dependency-validator.md",
@@ -7307,7 +7316,7 @@
         {
             "path": "docs/checkpoints/2026-01-01-01-SESSION-153-inv-052-full-architecture-read-through.md",
             "last_updated": "2026-01-01T20:30:03",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/checkpoints/2026-01-01-02-SESSION-154-manifesto-corpus-l0-l4-complete.md",
@@ -7392,7 +7401,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-07-SESSION-169-e2-259-260-261-module-extensions-complete.md",
             "last_updated": "2026-01-04T20:22:08",
-            "days_stale": 45
+            "days_stale": 46
         },
         {
             "path": "docs/checkpoints/2026-01-04-08-SESSION-170-e2-262-e2-263-complete-hook-migration-ready.md",
@@ -7412,7 +7421,7 @@
         {
             "path": "docs/checkpoints/2026-01-05-01-SESSION-173-e2-269-e2-238-inv-052-implementation-and-plan-authoring.md",
             "last_updated": "2026-01-05T20:30:34",
-            "days_stale": 44
+            "days_stale": 45
         },
         {
             "path": "docs/checkpoints/2026-01-05-02-SESSION-174-e2-238-e2-270-memory-autolink-and-command-powershell-elimination.md",
@@ -7437,12 +7446,12 @@
         {
             "path": "docs/checkpoints/2026-01-06-01-SESSION-177-epoch-chapter-arc-hierarchy-and-ground-cycle-discovery.md",
             "last_updated": "2026-01-06T20:03:12",
-            "days_stale": 43
+            "days_stale": 44
         },
         {
             "path": "docs/checkpoints/2026-01-06-02-SESSION-178-e2-276-e2-277-ground-cycle-and-portal-system-plans-authored.md",
             "last_updated": "2026-01-06T20:27:14",
-            "days_stale": 43
+            "days_stale": 44
         },
         {
             "path": "docs/checkpoints/2026-01-07-01-SESSION-179-e2-277-portal-system-complete-session-work-durability-insight.md",
@@ -7507,7 +7516,7 @@
         {
             "path": "docs/checkpoints/2026-01-15-01-SESSION-192-queue-architecture-and-governance-hardening.md",
             "last_updated": "2026-01-15T20:49:30",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/checkpoints/2026-01-15-02-SESSION-193-e2-291-queue-wiring-and-session-state-investigation.md",
@@ -7607,7 +7616,7 @@
         {
             "path": "docs/checkpoints/2026-01-19-04-SESSION-212-e2-235-closed-statusline-context-visibility.md",
             "last_updated": "2026-01-19T20:36:20",
-            "days_stale": 30
+            "days_stale": 31
         },
         {
             "path": "docs/checkpoints/2026-01-19-05-SESSION-212-e2-179-plan-authoring-in-progress.md",
@@ -7797,7 +7806,7 @@
         {
             "path": "docs/plans/PLAN-E2-112-investigation-agent.md",
             "last_updated": "2025-12-22T19:54:01",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/plans/PLAN-E2-113-investigation-events.md",
@@ -7817,7 +7826,7 @@
         {
             "path": "docs/plans/PLAN-E2-117-milestone-auto-discovery.md",
             "last_updated": "2025-12-23T20:23:54",
-            "days_stale": 57
+            "days_stale": 58
         },
         {
             "path": "docs/plans/PLAN-E2-120-complete-powershell-to-python-migration.md",
@@ -7827,7 +7836,7 @@
         {
             "path": "docs/plans/PLAN-E2-125-full-status-module.md",
             "last_updated": "2025-12-21T20:56:48",
-            "days_stale": 59
+            "days_stale": 60
         },
         {
             "path": "docs/plans/PLAN-E2-126-frontmatter-timestamp-migration.md",
@@ -7877,17 +7886,17 @@
         {
             "path": "docs/plans/PLAN-E2-153-unified-metaphor-section.md",
             "last_updated": "2025-12-23T20:56:40",
-            "days_stale": 57
+            "days_stale": 58
         },
         {
             "path": "docs/plans/PLAN-E2-154-scaffold-on-entry-hook.md",
             "last_updated": "2025-12-23T19:59:53",
-            "days_stale": 57
+            "days_stale": 58
         },
         {
             "path": "docs/plans/PLAN-E2-155-node-exit-gates.md",
             "last_updated": "2025-12-23T20:14:34",
-            "days_stale": 57
+            "days_stale": 58
         },
         {
             "path": "docs/plans/PLAN-E2-160-work-file-prerequisite-gate.md",
@@ -7897,7 +7906,7 @@
         {
             "path": "docs/plans/PLAN-E2-162-node-transition-just-recipes.md",
             "last_updated": "2025-12-24T19:51:02",
-            "days_stale": 56
+            "days_stale": 57
         },
         {
             "path": "docs/plans/PLAN-E2-165-checkpoint-skill-with-git-commit.md",
@@ -7912,7 +7921,7 @@
         {
             "path": "docs/plans/PLAN-E2-172-fix-yaml-timestamp-injection.md",
             "last_updated": "2025-12-24T20:26:22",
-            "days_stale": 56
+            "days_stale": 57
         },
         {
             "path": "docs/plans/PLAN-E2-173-work-file-milestone-discovery.md",
@@ -7972,7 +7981,7 @@
         {
             "path": "docs/plans/PLAN-E2-191-work-file-population-governance-gate.md",
             "last_updated": "2025-12-25T19:52:20",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/plans/PLAN-E2-200-create-invariantsmd-with-extracted-evergreen-facts.md",
@@ -7992,7 +8001,7 @@
         {
             "path": "docs/plans/PLAN-E2-210-context-threshold-auto-checkpoint.md",
             "last_updated": "2025-12-27T20:41:52",
-            "days_stale": 53
+            "days_stale": 54
         },
         {
             "path": "docs/plans/PLAN-E2-211-add-sqlite-busytimeout-to-databasemanager.md",
@@ -8127,7 +8136,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-E2-116-at-reference-necessity-in-checkpoints.md",
             "last_updated": "2025-12-22T20:43:32",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-160-work-file-prerequisite-gate-design.md",
@@ -8232,7 +8241,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-029-status-generation-architecture-gap.md",
             "last_updated": "2025-12-24T20:54:21",
-            "days_stale": 56
+            "days_stale": 57
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-030-milestone-architecture-in-work-based-system.md",
@@ -8247,7 +8256,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-032-posttooluse-node-history-corruption.md",
             "last_updated": "2025-12-24T20:28:02",
-            "days_stale": 56
+            "days_stale": 57
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-033-skill-as-node-entry-gate-formalization.md",
@@ -8267,7 +8276,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-036-coldstart-checkpoint-heartbeat-context-value-audit.md",
             "last_updated": "2025-12-25T20:42:45",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-037-context-level-architecture-and-source-optimization.md",
@@ -8411,9 +8420,9 @@
         }
     ],
     "workspace": {
-        "total_files": 565,
+        "total_files": 566,
         "by_template": {
-            "checkpoint": 391,
+            "checkpoint": 392,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8424,7 +8433,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 226,
+            "unknown": 227,
             "draft": 2,
             "approved": 6,
             "ready": 1,

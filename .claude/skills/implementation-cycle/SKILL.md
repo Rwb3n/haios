@@ -392,7 +392,13 @@ Write Test (FAIL) --> Run --> Write Code --> Run (PASS) --> Refactor --> Loop
 
 ### Phase Transition Logging
 
-Phase transitions are logged automatically via governance hooks. View with:
+Phase transitions are logged automatically via PostToolUse hook (WORK-168). The hook also:
+- **Auto-advances** session_state to the next phase after each lifecycle skill invocation
+- **Auto-syncs** the WORK.md `cycle_phase` field to match session_state (WORK-171)
+
+No manual `just set-cycle` calls are needed — phase advancement is automatic.
+
+View metrics with:
 ```bash
 just governance-metrics
 ```
