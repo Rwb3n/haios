@@ -43,7 +43,7 @@ This arc moves what it can from Tier 3 (SKILL.md) to Tier 1/2 (hooks/modules).
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
 | CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Complete |
-| CH-059 | CeremonyAutomation | WORK-160, WORK-167-171 | REQ-CEREMONY-002, REQ-CEREMONY-005 | CH-058 | In Progress |
+| CH-059 | CeremonyAutomation | WORK-160, WORK-167-176 | REQ-CEREMONY-002, REQ-CEREMONY-005 | CH-058 | In Progress |
 | CH-060 | SessionBoundaryFix | WORK-161 | REQ-CEREMONY-001 | None | Complete |
 
 ---

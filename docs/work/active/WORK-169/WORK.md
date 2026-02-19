@@ -28,8 +28,7 @@ acceptance_criteria:
   - "Governance event logged with tier and transition type"
   - "Zero regression: existing PreToolUse checks still fire first"
   - "Tests cover all 4 tiers and at least 2 transition types"
-blocked_by:
-  - WORK-167
+blocked_by: []
 blocks: []
 enables: []
 queue_position: backlog

@@ -162,7 +162,9 @@ just set-cycle close-work-cycle ARCHIVE {work_id}
    This atomically performs:
    - Update `status: active` to `status: complete`
    - Update `closed: null` to `closed: {YYYY-MM-DD}`
-   - Run cascade and update-status
+   - Run cascade (report unblocked items)
+   - Clear blocked_by references in downstream WORK.md files (WORK-173, fail-permissive)
+   - Run update-status
 
 2. Update any associated plans to `status: complete` (if not already)
 

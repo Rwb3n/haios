@@ -104,6 +104,7 @@ context:
 | `session_end_actions.py` | Session-end housekeeping for Stop hook (WORK-161). Fail-permissive: read_session_number, log_session_ended, clear_cycle_state, detect_uncommitted_changes |
 | `tier_detector.py` | Governance tier detection (WORK-167). Pure function detect_tier() computes trivial/small/standard/architectural from WORK.md frontmatter per REQ-LIFECYCLE-005. Foundation for WORK-169 (Critique-as-Hook) |
 | `cycle_state.py` | Cycle phase auto-advancement (WORK-168). Pure function advance_cycle_phase() reads CYCLE_PHASES and advances session_state in haios-status-slim.json. PostToolUse Part 8 consumer. Follows session_end_actions.py pattern (fail-permissive) |
+| `blocked_by_cascade.py` | Blocked_by cascade on work closure (WORK-173). clear_blocked_by() removes closed item's ID from all active WORK.md blocked_by fields. Fail-permissive with warning events to governance-events.jsonl. Runtime consumer: justfile close-work recipe |
 
 ## Usage
 

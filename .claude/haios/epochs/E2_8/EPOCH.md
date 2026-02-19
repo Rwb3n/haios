@@ -150,7 +150,7 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
-| CH-065 | BugBatch-E28 | WORK-166, WORK-175 | REQ-CEREMONY-001 | None | In Progress |
+| CH-065 | BugBatch-E28 | WORK-166, WORK-175 | REQ-CEREMONY-001 | None | Complete |
 
 **Exit criteria:**
 - [x] All confirmed bugs from E2.7 triage resolved (85712, 85557, 85795, 85573, 85132) (WORK-166, S395)

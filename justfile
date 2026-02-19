@@ -64,10 +64,11 @@ link-spawn parent milestone +ids:
     python .claude/haios/modules/cli.py link-spawn {{parent}} {{milestone}} {{ids}}
 
 # Close work item atomically (E2-215, E2-250: Uses WorkEngine)
-# Combines: status update, closed date, archive move, cascade, status refresh
+# Combines: status update, closed date, archive move, cascade, blocked_by clear, status refresh
 close-work id:
     python .claude/haios/modules/cli.py close {{id}}
     just cascade {{id}} complete
+    python .claude/haios/modules/cli.py clear-blocked-by {{id}}
     just update-status
 
 # Validate observation capture gate for work item (E2-217)

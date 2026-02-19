@@ -148,6 +148,28 @@ def cmd_cascade(work_id: str, new_status: str) -> int:
     return 0
 
 
+def cmd_clear_blocked_by(work_id: str) -> int:
+    """Clear blocked_by references to work_id in all active WORK.md files.
+
+    WORK-173: Fail-permissive — always returns 0. Errors logged to
+    governance-events.jsonl via _log_warning().
+    """
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(Path(__file__).parent.parent / "lib"))
+        from blocked_by_cascade import clear_blocked_by
+        result = clear_blocked_by(work_id)
+        if result["cleared"]:
+            print(f"Cleared blocked_by refs: {', '.join(result['cleared'])}")
+        if result["errors"]:
+            print(f"Errors (logged): {', '.join(result['errors'])}")
+        if not result["cleared"] and not result["errors"]:
+            print(f"No items blocked by {work_id}")
+    except Exception as exc:
+        print(f"Warning: blocked_by cascade failed: {exc}")
+    return 0  # Always 0 — fail-permissive (A3)
+
+
 def cmd_spawn_tree(root_id: str) -> int:
     """Build and display spawn tree."""
     engine = get_engine()
@@ -583,6 +605,13 @@ def main():
             print("Usage: cli.py cascade <work_id> <new_status>")
             return 1
         return cmd_cascade(sys.argv[2], sys.argv[3])
+
+    # WORK-173: Blocked_by cascade on work closure
+    elif cmd == "clear-blocked-by":
+        if len(sys.argv) != 3:
+            print("Usage: cli.py clear-blocked-by <work_id>")
+            return 1
+        return cmd_clear_blocked_by(sys.argv[2])
 
     elif cmd == "spawn-tree":
         if len(sys.argv) != 3:

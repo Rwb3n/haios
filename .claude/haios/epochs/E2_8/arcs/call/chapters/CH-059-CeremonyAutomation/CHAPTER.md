@@ -26,11 +26,14 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 |----|-------|--------|------|
 | WORK-160 | Ceremony Automation | Active | implementation |
 | WORK-167 | Governance Tier Detection | Complete | implementation |
-| WORK-168 | Cycle Phase Auto-Advancement | Backlog | implementation |
+| WORK-168 | Cycle Phase Auto-Advancement | Complete | implementation |
 | WORK-169 | Critique-as-Hook | Backlog | implementation |
 | WORK-170 | Checkpoint Field Auto-Population | Backlog | implementation |
 | WORK-171 | Mechanical Phase Migration | Backlog | implementation |
-| WORK-172 | Block EnterPlanMode via PreToolUse Hook | Backlog | implementation |
+| WORK-172 | Block EnterPlanMode via PreToolUse Hook | Complete | implementation |
+| WORK-173 | Blocked_by Cascade on Work Closure | Active | implementation |
+| WORK-174 | WorkState Dataclass Expansion | Backlog | implementation |
+| WORK-176 | Plan-Authoring-Cycle Subagent Delegation | Backlog | implementation |
 
 ---
 
