@@ -7,7 +7,9 @@ status: complete
 owner: Hephaestus
 created: 2026-02-19
 spawned_by: WORK-173
-spawned_children: []
+spawned_children:
+- WORK-178
+- WORK-179
 chapter: CH-059
 arc: call
 closed: '2026-02-19'
@@ -49,7 +51,7 @@ extensions:
   epoch: E2.8
 version: '2.0'
 generated: 2026-02-19
-last_updated: '2026-02-19T23:08:36.568810'
+last_updated: '2026-02-19T23:15:57.279457'
 queue_history:
 - position: ready
   entered: '2026-02-19T22:40:16.474787'
