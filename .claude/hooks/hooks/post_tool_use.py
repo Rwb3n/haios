@@ -4,14 +4,15 @@
 PostToolUse Hook Handler (E2-085).
 
 Post-processing for file operations:
-1. Error capture (E2-130) - captures tool failures to memory
-2. Memory auto-link (E2-238) - auto-links memory_refs on ingester_ingest
-3. Timestamp injection - adds generated/last updated timestamps
-4. Template validation - validates governed documents
-5. Discoverable artifact refresh (INV-012) - refreshes status on skill/agent/command changes
-6. Cycle transition logging (E2-097) - logs phase changes in plans
-7. Investigation status sync (E2-140) - syncs INV-* file status on archive
-8. Scaffold-on-entry (E2-154) - suggests scaffold commands on work file node changes
+0. Error capture (E2-130) - captures tool failures to memory
+0.5. Memory auto-link (E2-238) - auto-links memory_refs on ingester_ingest
+8. Cycle phase auto-advancement (WORK-168) - advances session_state on lifecycle skill completion
+2. Timestamp injection - adds generated/last updated timestamps (DISABLED S327)
+3. Template validation - validates governed documents
+4. Discoverable artifact refresh (INV-012) - refreshes status on skill/agent/command changes
+5. Cycle transition logging (E2-097) - logs phase changes in plans
+6. Investigation status sync (E2-140) - syncs INV-* file status on archive
+7. Scaffold-on-entry (E2-154) - suggests scaffold commands on work file node changes
 """
 import json
 import re
@@ -55,6 +56,22 @@ def handle(hook_data: dict) -> Optional[str]:
         autolink_msg = _auto_link_memory_refs(hook_data)
         if autolink_msg:
             messages.append(autolink_msg)
+        return "\n".join(messages) if messages else None
+
+    # Part 8: Cycle phase auto-advancement (WORK-168)
+    if tool_name == "Skill":
+        skill_name = hook_data.get("tool_input", {}).get("skill", "")
+        if skill_name:
+            try:
+                lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
+                if str(lib_dir) not in sys.path:
+                    sys.path.insert(0, str(lib_dir))
+                from cycle_state import advance_cycle_phase
+                advanced = advance_cycle_phase(skill_name)
+                if advanced:
+                    messages.append(f"[CYCLE] Auto-advanced phase after {skill_name}")
+            except Exception:
+                pass  # Fail-permissive: never break hook chain
         return "\n".join(messages) if messages else None
 
     # File-specific processing only for editing tools
