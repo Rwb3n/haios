@@ -11078,3 +11078,16 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-20T22:55:40.173265"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-20T23:00:22.118102"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-20T23:00:22.176949"}
+{"type": "SessionEnded", "session": 411, "agent": "Hephaestus", "timestamp": "2026-02-20T23:04:56.935498"}
+{"type": "SessionStarted", "session": 412, "agent": "Hephaestus", "timestamp": "2026-02-20T23:10:02.620674"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-20T23:12:14.564455"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-162", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-20T23:12:14.571489"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-162"], "from": "backlog", "to": "ready", "timestamp": "2026-02-20T23:12:14.577124", "rationale": "Operator selected for S412 \u2014 Coldstart Context Injection design", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-20T23:12:14.577124"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-20T23:12:14.596986"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-162", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-20T23:12:14.603655"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-162"], "from": "ready", "to": "working", "timestamp": "2026-02-20T23:12:14.609149", "rationale": "Starting design work S412", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-20T23:12:14.610731"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-20T23:42:49.863736"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-20T23:42:49.912652"}
+{"type": "StatusPropagation", "work_id": "WORK-162", "chapter": "CH-061", "arc": "call", "action": "chapter_completed", "timestamp": "2026-02-20T23:43:06.635630"}

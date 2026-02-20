@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-20T23:00:24",
+    "generated": "2026-02-20T23:42:52",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,9 +8,9 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 406,
-        "current_session": 410,
-        "prior_date": "2026-02-19",
+        "prior_session": 410,
+        "current_session": 411,
+        "prior_date": "2026-02-20",
         "completed": [],
         "completed_count": 0,
         "added": [],
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 86888,
-        "entities": 10315,
+        "concepts": 86943,
+        "entities": 10332,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -275,6 +275,7 @@
             ],
             "optional_fields": [
                 "version",
+                "plan_version",
                 "author",
                 "plan_id",
                 "title",
@@ -294,7 +295,9 @@
                 "children",
                 "absorbs",
                 "enables",
-                "execution_layer"
+                "execution_layer",
+                "input_contract",
+                "output_contract"
             ],
             "allowed_status": [
                 "draft",
@@ -312,8 +315,11 @@
                 "Implementation Steps",
                 "Verification",
                 "Risks & Mitigations",
-                "Progress Tracker",
-                "Ground Truth Verification (Before Closing)"
+                "Ground Truth Verification (Before Closing)",
+                "Layer 0: Inventory",
+                "Layer 1: Specification",
+                "Layer 2: Implementation Steps",
+                "Ground Truth Verification"
             ]
         },
         {
@@ -4191,6 +4197,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-20-02-SESSION-411-work-174-workstate-dataclass-expansion.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-20",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/checkpoints/checkpoint-386.md",
             "template": "checkpoint",
             "status": null,
@@ -5604,6 +5619,15 @@
             "spawned_by": "WORK-150"
         },
         {
+            "path": "docs/ADR/ADR-047-tiered-coldstart-context-injection.md",
+            "template": "architecture_decision_record",
+            "status": "accepted",
+            "date": "2026-02-20",
+            "last_updated": "2026-02-20T23:15:00",
+            "backlog_id": null,
+            "spawned_by": "WORK-162"
+        },
+        {
             "path": "docs/reports/2025-11-30-EVALUATION-synthesis-pipeline.md",
             "template": "implementation_report",
             "status": "complete",
@@ -6623,6 +6647,12 @@
             "template": "architecture_decision_record"
         },
         {
+            "path": "docs/ADR/ADR-047-tiered-coldstart-context-injection.md",
+            "id": null,
+            "status": "accepted",
+            "template": "architecture_decision_record"
+        },
+        {
             "path": "docs/reports/2025-12-06-REPORT-epoch-2-enablement.md",
             "id": null,
             "status": "final",
@@ -6633,12 +6663,12 @@
         {
             "path": "docs/checkpoints/2025-12-02-SESSION-19-collaboration-dogfood.md",
             "last_updated": "2025-12-02T23:39:43",
-            "days_stale": 79
+            "days_stale": 80
         },
         {
             "path": "docs/checkpoints/2025-12-02-SESSION-20-gap-a5-fix-reingest.md",
             "last_updated": "2025-12-02T23:39:25",
-            "days_stale": 79
+            "days_stale": 80
         },
         {
             "path": "docs/checkpoints/2025-12-03-SESSION-21-gap-audit-preflight.md",
@@ -7048,7 +7078,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-06-SESSION-95-e2-130-error-capture-rebuild-and-taxonomy-discussion.md",
             "last_updated": "2025-12-21T23:04:37",
-            "days_stale": 60
+            "days_stale": 61
         },
         {
             "path": "docs/checkpoints/2025-12-22-01-SESSION-96-synthesis-review-and-backlog-archival.md",
@@ -7323,7 +7353,7 @@
         {
             "path": "docs/checkpoints/2025-12-29-07-SESSION-149-inv-052-architecture-redesign-meta-design.md",
             "last_updated": "2025-12-29T23:31:00",
-            "days_stale": 52
+            "days_stale": 53
         },
         {
             "path": "docs/checkpoints/2025-12-30-01-SESSION-150-inv-052-architecture-redesign-meta-design-session-2.md",
@@ -7388,12 +7418,12 @@
         {
             "path": "docs/checkpoints/2026-01-03-06-SESSION-162-e2-250-chariot-module-integration-and-dod-framework.md",
             "last_updated": "2026-01-03T23:06:35",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/checkpoints/2026-01-03-07-SESSION-162-epoch-22-migration-planning-e2-251-through-e2-255.md",
             "last_updated": "2026-01-03T23:31:47",
-            "days_stale": 47
+            "days_stale": 48
         },
         {
             "path": "docs/checkpoints/2026-01-04-01-SESSION-163-e2-251-workengine-cascade-spawn-backfill-complete.md",
@@ -7468,7 +7498,7 @@
         {
             "path": "docs/checkpoints/2026-01-05-05-SESSION-177-e2-274-e2-275-complete-ambiguity-gating-done-critical-memory-loss-finding.md",
             "last_updated": "2026-01-05T23:29:59",
-            "days_stale": 45
+            "days_stale": 46
         },
         {
             "path": "docs/checkpoints/2026-01-06-01-SESSION-177-epoch-chapter-arc-hierarchy-and-ground-cycle-discovery.md",
@@ -7508,7 +7538,7 @@
         {
             "path": "docs/checkpoints/2026-01-08-04-SESSION-184-e2-280-survey-skill-cycle-complete.md",
             "last_updated": "2026-01-08T23:38:02",
-            "days_stale": 42
+            "days_stale": 43
         },
         {
             "path": "docs/checkpoints/2026-01-09-01-SESSION-185-e2-279-phase-1-cascadeengine-extraction.md",
@@ -7548,7 +7578,7 @@
         {
             "path": "docs/checkpoints/2026-01-15-02-SESSION-193-e2-291-queue-wiring-and-session-state-investigation.md",
             "last_updated": "2026-01-15T23:32:30",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2026-01-16-01-SESSION-194-inv-065-session-state-cascade-investigation-complete.md",
@@ -7708,6 +7738,11 @@
         {
             "path": "docs/checkpoints/2026-01-21-08-SESSION-223-work-006-migration-fix-work-007-identity-loader-created.md",
             "last_updated": "2026-01-21T22:30:43",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/checkpoints/2026-01-21-09-SESSION-224-work-007-plan-authoring-complete.md",
+            "last_updated": "2026-01-21T23:10:40",
             "days_stale": 30
         },
         {
@@ -7923,7 +7958,7 @@
         {
             "path": "docs/plans/PLAN-E2-130-error-capture-rebuild.md",
             "last_updated": "2025-12-21T23:02:26",
-            "days_stale": 60
+            "days_stale": 61
         },
         {
             "path": "docs/plans/PLAN-E2-140-investigation-status-sync-hook.md",
@@ -8343,7 +8378,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-034-backlog-archival-and-status-rewiring.md",
             "last_updated": "2025-12-22T23:16:24",
-            "days_stale": 59
+            "days_stale": 60
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-035-skill-architecture-refactoring.md",
@@ -8507,29 +8542,29 @@
         }
     ],
     "workspace": {
-        "total_files": 569,
+        "total_files": 571,
         "by_template": {
-            "checkpoint": 395,
+            "checkpoint": 396,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
-            "architecture_decision_record": 17,
+            "architecture_decision_record": 18,
             "implementation_report": 4,
             "report": 3
         },
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 230,
+            "unknown": 231,
             "draft": 2,
             "approved": 6,
             "ready": 1,
-            "accepted": 16,
+            "accepted": 17,
             "proposed": 1,
             "final": 1,
             "completed": 2
         },
-        "stale_count": 375
+        "stale_count": 376
     },
     "alignment": {
         "aligned": [
