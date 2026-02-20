@@ -48,12 +48,20 @@ output_contract:
     type: list
     guaranteed: on_success
     description: "Feature candidates with confidence tags from retro-extract"
+  - field: refactor_candidates
+    type: list
+    guaranteed: on_success
+    description: "Refactor candidates with confidence tags from retro-extract"
+  - field: upgrade_candidates
+    type: list
+    guaranteed: on_success
+    description: "Upgrade candidates with confidence tags from retro-extract"
 side_effects:
   - "Promote observations to work items or investigations"
   - "Store insights to memory via ingester_ingest"
   - "Update triage_status in observation files"
 generated: 2025-12-28
-last_updated: '2026-02-13T20:30:00'
+last_updated: '2026-02-20T19:10:00'
 ---
 # Observation Triage Cycle
 
@@ -109,6 +117,16 @@ mcp__haios-memory__db_query(sql="SELECT id, content FROM concepts WHERE type = '
 mcp__haios-memory__db_query(sql="SELECT id, content FROM concepts WHERE type = 'Critique' AND content LIKE 'FEATURE %' ORDER BY id DESC")
 ```
 
+**Refactor Candidates:**
+```
+mcp__haios-memory__db_query(sql="SELECT id, content FROM concepts WHERE type = 'Critique' AND content LIKE 'REFACTOR %' ORDER BY id DESC")
+```
+
+**Upgrade Candidates:**
+```
+mcp__haios-memory__db_query(sql="SELECT id, content FROM concepts WHERE type = 'Critique' AND content LIKE 'UPGRADE %' ORDER BY id DESC")
+```
+
 Report counts for each category.
 
 #### 1b. Filesystem Scan (legacy)
@@ -120,7 +138,7 @@ just triage-observations
 Report count of items with pending observations.
 
 **Exit Criteria:**
-- [ ] Memory scan completed (K/S/S, bugs, features)
+- [ ] Memory scan completed (K/S/S, bugs, features, refactors, upgrades)
 - [ ] Filesystem scan completed
 - [ ] Counts reported for both sources
 
@@ -153,6 +171,21 @@ From feature query results, parse `FEATURE (confidence): description` format:
 - Sort by confidence (high first)
 - Present to operator for epoch-level triage (spawn:WORK, discuss, dismiss)
 
+**Refactor Candidate Surfacing:**
+From refactor query results, parse `REFACTOR (confidence): description` format:
+- Extract confidence tag and description
+- Sort by confidence (high first)
+- Refactors are typically bundled with related work — present to operator for bundling decision (spawn:WORK, bundle-with:{id}, discuss, dismiss)
+
+**Upgrade Candidate Surfacing:**
+From upgrade query results, parse `UPGRADE (confidence): description` format:
+- Extract confidence tag and description
+- Sort by confidence (high first)
+- Upgrades are prioritised against capacity — present to operator for capacity triage (spawn:WORK, discuss, dismiss)
+
+**Suggested Priority Consumption:**
+Retro-extract items now include `suggested_priority: now|next|later` with rationale. When surfacing candidates, display the suggested priority alongside confidence to give the operator a head start. Triage makes the final call — the suggestion is context from the agent that did the work, not a binding decision.
+
 #### 2b. Legacy Triage (filesystem source)
 
 **Triage Dimensions (Industry Standard):**
@@ -180,7 +213,7 @@ Priority? [P0/P1/P2/P3]: P2
 ```
 
 **Exit Criteria:**
-- [ ] Retro-triage: K/S/S aggregation presented, bug/feature candidates surfaced
+- [ ] Retro-triage: K/S/S aggregation presented, bug/feature/refactor/upgrade candidates surfaced
 - [ ] Legacy triage: All filesystem observations triaged with valid dimensions
 - [ ] Combined triaged list ready for promotion
 
@@ -222,7 +255,7 @@ Priority? [P0/P1/P2/P3]: P2
 
 | Phase | Primary Tool | Output |
 |-------|--------------|--------|
-| SCAN (memory) | mcp__haios-memory__db_query | K/S/S directives, bug/feature candidates |
+| SCAN (memory) | mcp__haios-memory__db_query | K/S/S directives, bug/feature/refactor/upgrade candidates |
 | SCAN (filesystem) | Bash, Read | List of pending observations |
 | TRIAGE (retro) | AskUserQuestion | KSS aggregation, candidate disposition |
 | TRIAGE (legacy) | AskUserQuestion | Triaged observation list |
@@ -251,6 +284,8 @@ Priority? [P0/P1/P2/P3]: P2
 | Dual-source scan (WORK-143) | Memory + filesystem | Retro-cycle stores to memory; legacy observations in files. Both sources feed triage. |
 | Content-pattern queries (WORK-143) | Query by type + content prefix, NOT source_adr | A1 critique: ingester_ingest source_path not stored in source_adr. Content patterns verified against actual data. |
 | MCP db_query for memory scan (WORK-143) | Agent calls db_query directly | Python functions use db_query_fn injection for testability. Agent uses MCP tool at runtime. |
+| 4-type EXTRACT taxonomy | bug/feature/refactor/upgrade | Types route differently: bugs urgent, features backlog, refactors bundled, upgrades capacity-gated. Aligns with retro-cycle EXTRACT expansion. |
+| Suggested priority consumption | Display retro-extract suggested_priority | Agent has freshest urgency context. Triage displays but overrides. Hybrid (Option C). |
 
 ---
 

@@ -183,12 +183,28 @@ def _check_governed_activity(tool_name: str, tool_input: dict) -> Optional[dict]
                 return _deny_with_context(skill_result.reason, state, layer)
 
             # 4b. Ceremony contract validation (WORK-114)
+            # Note: if ceremony contract fires, its early-return skips critique injection.
+            # Acceptable: no ceremony-registered skills are in TRANSITION_SKILLS (WORK-169).
             ceremony_result = _check_ceremony_contract(skill_name, tool_input)
             if ceremony_result:
                 # Merge state context into ceremony result
                 ctx = _build_additional_context(state, layer)
                 ceremony_result["hookSpecificOutput"]["additionalContext"] = ctx
                 return ceremony_result
+
+            # 4c. Critique injection (WORK-169)
+            critique_ctx = _check_critique_injection(skill_name)
+            if critique_ctx:
+                # Merge critique injection with state context
+                base_ctx = _build_additional_context(state, layer)
+                merged_ctx = f"{base_ctx}\n{critique_ctx}"
+                return {
+                    "hookSpecificOutput": {
+                        "hookEventName": "PreToolUse",
+                        "permissionDecision": "allow",
+                        "additionalContext": merged_ctx,
+                    }
+                }
 
         # 5. Check activity
         result = layer.check_activity(primitive, state, context)
@@ -916,3 +932,22 @@ def _check_ceremony_contract(skill_name: str, tool_input: dict) -> Optional[dict
 
     except Exception:
         return None  # Fail-permissive on any error
+
+
+def _check_critique_injection(skill_name: str) -> Optional[str]:
+    """Check if critique injection is needed for this skill invocation (WORK-169).
+
+    Delegates to critique_injector.compute_critique_injection(). Fail-permissive.
+
+    Returns:
+        Critique injection text, or None if no injection needed.
+    """
+    try:
+        lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
+        if str(lib_dir) not in sys.path:
+            sys.path.insert(0, str(lib_dir))
+
+        from critique_injector import compute_critique_injection
+        return compute_critique_injection(skill_name)
+    except Exception:
+        return None  # Fail-permissive

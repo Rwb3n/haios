@@ -24,7 +24,7 @@ output_contract:
   - field: reflect_findings
     type: list
     guaranteed: on_success
-    description: "Evidence-anchored observations from 4 REFLECT dimensions"
+    description: "Evidence-anchored observations from 5 REFLECT dimensions"
   - field: kss_directives
     type: object
     guaranteed: on_success
@@ -32,7 +32,7 @@ output_contract:
   - field: extracted_items
     type: list
     guaranteed: on_success
-    description: "Bug/feature items with confidence tags"
+    description: "Bug/feature/refactor/upgrade items with confidence tags and suggested priority"
   - field: memory_concept_ids
     type: list
     guaranteed: on_success
@@ -52,11 +52,11 @@ output_contract:
 side_effects:
   - "Store reflections to memory (retro-reflect provenance)"
   - "Store K/S/S directives to memory (retro-kss provenance)"
-  - "Store bug/feature extractions to memory (retro-extract provenance)"
+  - "Store bug/feature/refactor/upgrade extractions to memory (retro-extract provenance)"
   - "Store closure summary to memory (absorbs close-work-cycle MEMORY phase)"
   - "Log ceremony event to governance-events.jsonl"
 generated: 2026-02-13
-last_updated: 2026-02-13T19:30:00
+last_updated: 2026-02-20T19:05:00
 ---
 # Retro-Cycle
 
@@ -81,15 +81,15 @@ Multi-step autonomous reflection with typed provenance for work closure. Replace
   |     |     substantial? -> full 4-phase pipeline
   |     |     --skip-retro? -> governance event, return early
   |     |
-  |     +-> Phase 1: REFLECT (WCBB, WSY, WDN, WMI)
+  |     +-> Phase 1: REFLECT (WWW, WCBB, WSY, WDN, WMI)
   |     |     Evidence-anchored observations
   |     |     DoD-relevant findings tagged
   |     |
   |     +-> Phase 2: DERIVE (Keep / Stop / Start)
   |     |     Proportional to scale assessment
   |     |
-  |     +-> Phase 3: EXTRACT (Bugs + Features)
-  |     |     Confidence-tagged, NO auto-spawn
+  |     +-> Phase 3: EXTRACT (Bugs, Features, Refactors, Upgrades)
+  |     |     Confidence-tagged, priority-suggested, NO auto-spawn
   |     |
   |     +-> Phase 4: COMMIT (All to memory)
   |           Typed provenance: retro-reflect, retro-kss, retro-extract
@@ -109,7 +109,7 @@ Each phase operates under different cognitive pressure:
 |-------|----------|----------|
 | REFLECT | Observation (what happened?) | Data gathering with evidence anchoring |
 | DERIVE | Synthesis (what to do about it?) | Pattern extraction from observations |
-| EXTRACT | Classification (what type of action?) | Bug vs feature vs behavioral |
+| EXTRACT | Classification (what type of action?) | Bug/feature/refactor/upgrade with priority signal |
 | COMMIT | Persistence (store with provenance) | Memory writes with typed tags |
 
 Collapsing phases conflates observation with action, losing the signal quality that typed provenance enables. Each phase has a distinct input/output contract and can degrade independently.
@@ -139,12 +139,13 @@ If `skip_retro` is set:
 
 ## Phase 1: REFLECT
 
-Capture observations across 4 dimensions, anchored to specific evidence.
+Capture observations across 5 dimensions, anchored to specific evidence.
 
 ### Dimensions
 
 | Dimension | Code | What It Captures | Orientation |
 |-----------|------|-----------------|-------------|
+| What went well? | WWW | Success patterns, effective techniques, why something worked | Evaluative (positive) |
 | What could've been better? | WCBB | Quality gaps, process friction | Evaluative (negative) |
 | What surprised you? | WSY | Unexpected behaviors, wrong assumptions | Epistemic |
 | What drift did you notice? | WDN | Reality vs docs, code vs spec | Systemic |
@@ -181,7 +182,7 @@ If any REFLECT observation identifies something that should block closure:
 
 | Scale | REFLECT Behavior |
 |-------|-----------------|
-| Trivial | Single pass: answer all 4 dimensions briefly (1-2 sentences each) |
+| Trivial | Single pass: answer all 5 dimensions briefly (1-2 sentences each) |
 | Substantial | Full analysis: per-dimension deep dive with multiple observations |
 
 ### Degradation
@@ -225,30 +226,48 @@ If REFLECT produced zero observations (edge case), DERIVE is skipped. Log: "No o
 
 ## Phase 3: EXTRACT
 
-Classify actionable items from REFLECT observations into bugs and features.
+Classify actionable items from REFLECT observations into typed work candidates with priority signals.
 
 ### Classification
 
-| Type | Criteria | Confidence Levels |
-|------|----------|------------------|
-| **Bug** | Something broken, wrong, or inconsistent | high / medium / low |
-| **Feature** | Something missing that would improve the system | high / medium / low |
+| Type | Criteria | Distinct Because |
+|------|----------|-----------------|
+| **Bug** | Something broken, wrong, or inconsistent | Fix required — something regressed or never worked |
+| **Feature** | Capability gap, never existed | New build required |
+| **Refactor** | Works but poorly structured | No new capability — structural improvement |
+| **Upgrade** | Works but performance-capped or outdated | Enhancement of existing capability |
+
+These types flow differently through triage: bugs may be urgent, features go to backlog, refactors get bundled with related work, upgrades get prioritised against capacity. Without the distinction, refactors get misclassified as bugs or features, losing signal.
 
 ### Output Format
 
 For each extracted item:
 ```yaml
-- type: bug|feature
+- type: bug|feature|refactor|upgrade
   title: "Brief description"
   evidence: "File path, test name, or diff reference"
   confidence: high|medium|low
   severity: dod-relevant|high|medium|low  # bugs only
-  source_dimension: WCBB|WSY|WDN|WMI
+  source_dimension: WWW|WCBB|WSY|WDN|WMI
+  suggested_priority: now|next|later
+  priority_rationale: "Why this urgency level"
 ```
+
+### Suggested Priority (Option C — Hybrid)
+
+Each extracted item includes a `suggested_priority` field. The agent that just completed the work has the freshest context on urgency. Triage can override, but starting with a suggestion is better than starting cold.
+
+| Priority | Meaning |
+|----------|---------|
+| **now** | Should be addressed in the current or next session |
+| **next** | Should be addressed in the current arc/chapter |
+| **later** | Backlog candidate, no urgency |
+
+Definition of done and owner assignment belong in triage since those require system-wide visibility. This is an EXTRACT enrichment, not a separate cognitive step.
 
 ### No Auto-Spawn (REQ-LIFECYCLE-004)
 
-Extracted bugs and features are stored to memory only. They are NOT automatically converted to work items. Surfacing happens at the downstream triage ceremony (WORK-143).
+Extracted items are stored to memory only. They are NOT automatically converted to work items. Surfacing happens at the downstream triage ceremony (WORK-143).
 
 **Rationale:** Chaining is caller choice. The agent producing observations is not the right agent to decide whether they warrant new work items. Frequency across sessions is a stronger signal than single-session confidence.
 
@@ -273,9 +292,9 @@ Store all outputs to memory with typed provenance tags. No deduplication at writ
 
 | Tag | Source Path Pattern | Content | Type Hint |
 |-----|-------------------|---------|-----------|
-| retro-reflect | `retro-reflect:{work_id}` | Raw 4-dimensional observations with evidence anchors | techne |
+| retro-reflect | `retro-reflect:{work_id}` | Raw 5-dimensional observations with evidence anchors | techne |
 | retro-kss | `retro-kss:{work_id}` | Keep/Stop/Start directives with traceability | techne |
-| retro-extract | `retro-extract:{work_id}` | Bug/feature items with confidence and severity | techne |
+| retro-extract | `retro-extract:{work_id}` | Bug/feature/refactor/upgrade items with confidence, severity, and suggested priority | techne |
 
 ### Storage Implementation
 
@@ -284,7 +303,7 @@ Store all outputs to memory with typed provenance tags. No deduplication at writ
 Each ingester_ingest call **MUST** preserve the full detail from the phase output. The content field is NOT a summary — it is the complete structured output. Downstream consumers (triage, future agents) must be able to act on stored data without re-deriving it from source artifacts.
 
 **retro-reflect content MUST include for each observation:**
-- Observation ID (e.g., WCBB-1, WSY-2)
+- Observation ID (e.g., WWW-1, WCBB-1, WSY-2)
 - Severity tag (if assigned)
 - Full description (not abbreviated)
 - Evidence anchor: exact file path with line numbers, exact diff reference, exact governance event, or exact test name
@@ -298,13 +317,14 @@ Each ingester_ingest call **MUST** preserve the full detail from the phase outpu
 - For STOP directives: evidence of the anti-pattern with file path
 
 **retro-extract content MUST include for each item:**
-- Type (bug/feature)
+- Type (bug/feature/refactor/upgrade)
 - Title
 - File path(s) affected
-- Reproduction steps (bugs) or implementation scope (features)
+- Reproduction steps (bugs), implementation scope (features), structural target (refactors), or enhancement target (upgrades)
 - Confidence level with rationale
-- Severity level (bugs)
-- Source dimension (WCBB/WSY/WDN/WMI)
+- Severity level (bugs only)
+- Source dimension (WWW/WCBB/WSY/WDN/WMI)
+- Suggested priority (now/next/later) with rationale — agent has freshest context on urgency, triage makes final call
 
 **Anti-pattern (S399):** Storing compressed summaries like "STOP: Don't use EnterPlanMode" loses the evidence anchors, file paths, and traceability that make the observation actionable. A future agent reading this cannot determine WHERE the hook should be added, WHAT the redirect message should say, or WHY the pattern is wrong. Full detail is the minimum viable signal.
 
@@ -369,7 +389,7 @@ If memory storage fails for any provenance type:
 
 | Responsibility | From | To |
 |----------------|------|-----|
-| 4 reflection questions | observation-capture-cycle | retro-cycle REFLECT (evidence-anchored WCBB/WSY/WDN/WMI) |
+| 5 reflection dimensions | observation-capture-cycle | retro-cycle REFLECT (evidence-anchored WWW/WCBB/WSY/WDN/WMI) |
 | Memory storage of observations | observation-capture-cycle (ingester_ingest, doxa) | retro-cycle COMMIT (typed provenance: retro-reflect, retro-kss, retro-extract) |
 | Closure summary storage | close-work-cycle MEMORY phase | retro-cycle COMMIT phase |
 | Governance event check | close-work-cycle MEMORY phase | close-work-cycle VALIDATE phase |
@@ -409,12 +429,15 @@ If memory storage fails for any provenance type:
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
 | RETRO before VALIDATE | Reordered from post-archive | INV-059: completion mode bias. Reflecting before confirming DoD preserves cognitive separation |
-| No auto-spawn | Bugs/features to memory only | REQ-LIFECYCLE-004: chaining is caller choice. Surfaced at triage |
+| No auto-spawn | Extracted items to memory only | REQ-LIFECYCLE-004: chaining is caller choice. Surfaced at triage |
 | No dedup at write time | Frequency IS signal | Agents are stateless across sessions. Independent convergence = stronger signal |
 | Evidence anchoring | MUST reference artifact | Generic statements without evidence get lost. Evidence enables downstream triage |
 | 4 phases not 1 | REFLECT/DERIVE/EXTRACT/COMMIT | Observation != synthesis != classification != persistence |
 | Proportional scaling | Computable predicate | files_changed, plan, tests, CyclePhaseEntered -- all machine-checkable |
 | Absorb MEMORY phase | Closure summary in COMMIT | Reduces ceremony overhead. Single pass for all memory stores |
+| WWW dimension added | 5 dimensions not 4 | Observation (WWW) and action (Keep) are different cognitive pressures. WWW captures why something worked with evidence; Keep captures whether to continue it |
+| 4-type EXTRACT taxonomy | bug/feature/refactor/upgrade | Types flow differently through triage. Without distinction, refactors get misclassified as bugs or features, losing routing signal |
+| Suggested priority (hybrid) | Agent suggests, triage decides | Agent has freshest context on urgency. Triage has cross-session frequency data. Starting with a suggestion beats starting cold |
 | deprecated: true not stub: true | observation-capture-cycle kept valid | stub: true breaks test_existing_skills_not_marked_stub |
 
 ---

@@ -211,6 +211,33 @@ def log_tier_detected(work_id: str, tier: str) -> dict:
     return event
 
 
+def log_critique_injected(work_id: str, tier: str, phase: str, skill: str) -> dict:
+    """
+    Log CritiqueInjected governance event (WORK-169).
+
+    Logged when critique injection fires for an inhale-to-exhale transition.
+
+    Args:
+        work_id: Work item ID (e.g., "WORK-169")
+        tier: Governance tier (trivial, small, standard, architectural)
+        phase: Current lifecycle phase (e.g., "PLAN", "EXPLORE")
+        skill: Skill that triggered the injection (e.g., "implementation-cycle")
+
+    Returns:
+        The logged event dict
+    """
+    event = {
+        "type": "CritiqueInjected",
+        "work_id": work_id,
+        "tier": tier,
+        "phase": phase,
+        "skill": skill,
+        "timestamp": datetime.now().isoformat(),
+    }
+    _append_event(event)
+    return event
+
+
 def detect_orphan_session(events_file: Optional[Path] = None) -> Optional[dict]:
     """
     Detect orphan session (started but never ended).

@@ -786,7 +786,7 @@ class TestScaffoldOutputLint:
     ]
 
     # Fields that are operator-fill (not auto-populated by scaffold)
-    OPERATOR_FILL_FIELDS = {"SPAWNED_BY", "MILESTONE", "PRIORITY", "CHAPTER", "ARC", "AUTHOR", "ID"}
+    OPERATOR_FILL_FIELDS = {"SPAWNED_BY", "MILESTONE", "PRIORITY", "CHAPTER", "ARC", "AUTHOR", "ID", "WORK_ID", "PLAN_REF"}
 
     @pytest.fixture
     def scaffold_env(self, tmp_path):

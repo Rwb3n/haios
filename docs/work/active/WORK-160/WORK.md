@@ -1,64 +1,71 @@
 ---
 template: work_item
 id: WORK-160
-title: "Ceremony Automation"
+title: Ceremony Automation
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-17
 spawned_by: Session-394-decomposition
 spawned_children:
-  - WORK-167
-  - WORK-168
-  - WORK-169
-  - WORK-170
-  - WORK-171
+- WORK-167
+- WORK-168
+- WORK-169
+- WORK-170
+- WORK-171
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-02-20'
 priority: high
 effort: large
 traces_to:
-  - REQ-CEREMONY-002
-  - REQ-CEREMONY-005
-  - REQ-LIFECYCLE-005
+- REQ-CEREMONY-002
+- REQ-CEREMONY-005
+- REQ-LIFECYCLE-005
 requirement_refs: []
 source_files:
-  - .claude/skills/implementation-cycle/SKILL.md
-  - .claude/skills/close-work-cycle/SKILL.md
-  - .claude/skills/retro-cycle/SKILL.md
-  - .claude/hooks/hooks/pre_tool_use.py
+- .claude/skills/implementation-cycle/SKILL.md
+- .claude/skills/close-work-cycle/SKILL.md
+- .claude/skills/retro-cycle/SKILL.md
+- .claude/hooks/hooks/pre_tool_use.py
 acceptance_criteria:
-  - "At least 3 mechanical ceremony phases migrated from SKILL.md to hooks/modules"
-  - "Session-end ceremony runs automatically via hook (not agent-read skill)"
-  - "Checkpoint population automated for standard fields"
-  - "cycle_phase advancement automated via PostToolUse hook"
-  - "Critique-as-hook: PreToolUse detects inhale-to-exhale skill transitions, injects critique automatically"
-  - "Four critique levels implemented: none (trivial), checklist (hook), full (subagent), operator (dialogue)"
-  - "Computable predicate determines critique level from work item type, plan existence, transition type"
-  - "Zero regression in existing ceremony behavior"
+- At least 3 mechanical ceremony phases migrated from SKILL.md to hooks/modules
+- Session-end ceremony runs automatically via hook (not agent-read skill)
+- Checkpoint population automated for standard fields
+- cycle_phase advancement automated via PostToolUse hook
+- 'Critique-as-hook: PreToolUse detects inhale-to-exhale skill transitions, injects
+  critique automatically'
+- 'Four critique levels implemented: none (trivial), checklist (hook), full (subagent),
+  operator (dialogue)'
+- Computable predicate determines critique level from work item type, plan existence,
+  transition type
+- Zero regression in existing ceremony behavior
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-17T22:08:08
-    exited: null
+- node: backlog
+  entered: 2026-02-17 22:08:08
+  exited: '2026-02-20T22:24:17.408417'
 artifacts: []
 cycle_docs: {}
 memory_refs:
-  - 85390
-  - 84857
-  - 85607
+- 85390
+- 84857
+- 85607
 extensions:
   epoch: E2.8
-  depends_on_design: "WORK-101 (complete, S398)"
-version: "2.0"
+  depends_on_design: WORK-101 (complete, S398)
+version: '2.0'
 generated: 2026-02-17
-last_updated: 2026-02-17T22:08:08
+last_updated: '2026-02-20T22:24:17.411968'
+queue_history:
+- position: done
+  entered: '2026-02-20T22:24:17.408417'
+  exited: null
 ---
 # WORK-160: Ceremony Automation
 
@@ -94,12 +101,12 @@ This work item migrates mechanical (judgment-free) ceremony phases from Tier 3 (
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Identify all mechanical ceremony phases (audit of SKILL.md files)
-- [ ] Migrate session-end ceremony to PostToolUse/Stop hook
-- [ ] Automate checkpoint standard field population
-- [ ] Automate cycle_phase advancement via hook
-- [ ] Tests for each migrated phase
-- [ ] Documentation of which phases remain as skills and why
+- [x] Identify all mechanical ceremony phases (audit of SKILL.md files) — WORK-171
+- [x] Migrate session-end ceremony to PostToolUse/Stop hook — WORK-161 (S396)
+- [x] Automate checkpoint standard field population — WORK-170
+- [x] Automate cycle_phase advancement via hook — WORK-168
+- [x] Tests for each migrated phase — all children have tests
+- [x] Documentation of which phases remain as skills and why — WORK-171 (SKILL.md references lib/ functions)
 
 ---
 

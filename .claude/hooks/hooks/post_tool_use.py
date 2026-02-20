@@ -105,6 +105,11 @@ def handle(hook_data: dict) -> Optional[str]:
     if validation_msg:
         messages.append(validation_msg)
 
+    # Part 2.5: Checkpoint auto-population (WORK-170)
+    checkpoint_msg = _auto_populate_checkpoint(path)
+    if checkpoint_msg:
+        messages.append(checkpoint_msg)
+
     # Part 3: Discoverable artifact refresh
     refresh_msg = _refresh_discoverable_artifacts(path)
     if refresh_msg:
@@ -940,3 +945,23 @@ def _scaffold_on_node_entry(path: Path, hook_data: dict) -> Optional[str]:
         pass
 
     return None
+
+
+def _auto_populate_checkpoint(path: Path) -> Optional[str]:
+    """Auto-populate checkpoint fields on Write to docs/checkpoints/ (WORK-170).
+
+    Delegates to checkpoint_auto.populate_checkpoint_fields(). Fail-permissive.
+    """
+    try:
+        path_str = str(path).replace("\\", "/")
+        if "/checkpoints/" not in path_str:
+            return None
+
+        lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
+        if str(lib_dir) not in sys.path:
+            sys.path.insert(0, str(lib_dir))
+
+        from checkpoint_auto import populate_checkpoint_fields
+        return populate_checkpoint_fields(path)
+    except Exception:
+        return None  # Fail-permissive

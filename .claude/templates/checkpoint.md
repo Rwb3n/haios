@@ -3,6 +3,8 @@ template: checkpoint
 session: {{SESSION}}
 prior_session: {{PREV_SESSION}}
 date: {{DATE}}
+work_id: {{WORK_ID}}
+plan_ref: {{PLAN_REF}}
 
 load_principles: []
 # Add principles relevant to pending work (coldstart injects these)
