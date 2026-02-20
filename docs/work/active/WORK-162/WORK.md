@@ -7,7 +7,8 @@ status: complete
 owner: Hephaestus
 created: 2026-02-17
 spawned_by: Session-394-decomposition
-spawned_children: []
+spawned_children:
+  - WORK-180
 chapter: CH-061
 arc: call
 closed: '2026-02-20'

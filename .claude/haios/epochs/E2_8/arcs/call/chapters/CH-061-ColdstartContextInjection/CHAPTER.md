@@ -8,7 +8,7 @@
 **Arc:** call
 **Epoch:** E2.8
 **Name:** Coldstart Context Injection
-**Status:** Planning
+**Status:** In Progress
 
 ---
 
@@ -26,7 +26,8 @@ Make coldstart inject ALL operational context so the agent needs zero Read instr
 
 | ID | Title | Status | Type |
 |----|-------|--------|------|
-| WORK-162 | Coldstart Context Injection | Backlog | implementation |
+| WORK-162 | Coldstart Context Injection (Design) | Complete | design |
+| WORK-180 | Implement ADR-047 Tiered Coldstart | Backlog | implementation |
 
 ---
 
