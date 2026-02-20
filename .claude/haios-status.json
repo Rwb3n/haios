@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-20T22:24:20",
+    "generated": "2026-02-20T23:00:24",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 405,
-        "current_session": 406,
+        "prior_session": 406,
+        "current_session": 410,
         "prior_date": "2026-02-19",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 86847,
-        "entities": 10305,
+        "concepts": 86888,
+        "entities": 10315,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -4182,6 +4182,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-20-01-SESSION-410-work-160-ceremony-automation-closure.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-20",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/checkpoints/checkpoint-386.md",
             "template": "checkpoint",
             "status": null,
@@ -6664,12 +6673,12 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-FINAL-extraction-improvement.md",
             "last_updated": "2025-12-04T22:47:20",
-            "days_stale": 77
+            "days_stale": 78
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-26-prototype-consolidation.md",
             "last_updated": "2025-12-04T22:30:47",
-            "days_stale": 77
+            "days_stale": 78
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-comprehensive-checkpoint.md",
@@ -6679,7 +6688,7 @@
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-extraction-improvement-complete.md",
             "last_updated": "2025-12-04T22:58:40",
-            "days_stale": 77
+            "days_stale": 78
         },
         {
             "path": "docs/checkpoints/2025-12-04-SESSION-27-final.md",
@@ -7324,7 +7333,7 @@
         {
             "path": "docs/checkpoints/2025-12-30-02-SESSION-151-inv-052-architecture-documentation-complete.md",
             "last_updated": "2025-12-30T22:34:43",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/checkpoints/2025-12-31-01-SESSION-152-inv-052-architecture-analysis-complete.md",
@@ -7434,7 +7443,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-10-SESSION-172-inv-057-complete-e2-269-plan-authored.md",
             "last_updated": "2026-01-04T22:46:19",
-            "days_stale": 46
+            "days_stale": 47
         },
         {
             "path": "docs/checkpoints/2026-01-05-01-SESSION-173-e2-269-e2-238-inv-052-implementation-and-plan-authoring.md",
@@ -7454,7 +7463,7 @@
         {
             "path": "docs/checkpoints/2026-01-05-04-SESSION-176-e2-272-e2-273-ambiguity-gating-gates-1-2-complete.md",
             "last_updated": "2026-01-05T22:53:08",
-            "days_stale": 45
+            "days_stale": 46
         },
         {
             "path": "docs/checkpoints/2026-01-05-05-SESSION-177-e2-274-e2-275-complete-ambiguity-gating-done-critical-memory-loss-finding.md",
@@ -7694,6 +7703,11 @@
         {
             "path": "docs/checkpoints/2026-01-21-07-SESSION-221-work-006-lib-migration-complete.md",
             "last_updated": "2026-01-21T20:47:52",
+            "days_stale": 30
+        },
+        {
+            "path": "docs/checkpoints/2026-01-21-08-SESSION-223-work-006-migration-fix-work-007-identity-loader-created.md",
+            "last_updated": "2026-01-21T22:30:43",
             "days_stale": 30
         },
         {
@@ -8214,12 +8228,12 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-008-haios-status-json-optimization.md",
             "last_updated": "2025-12-22T22:37:14",
-            "days_stale": 59
+            "days_stale": 60
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-009-backlog-archival-governance.md",
             "last_updated": "2025-12-22T22:37:32",
-            "days_stale": 59
+            "days_stale": 60
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-010-memory-retrieval-architecture-mismatch.md",
@@ -8229,7 +8243,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-011-command-skill-architecture-gap.md",
             "last_updated": "2025-12-22T22:45:09",
-            "days_stale": 59
+            "days_stale": 60
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-012-static-registration-anti-pattern-mitigation.md",
@@ -8259,7 +8273,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-018-adaptive-coldstart-query-formulation.md",
             "last_updated": "2025-12-22T22:39:13",
-            "days_stale": 59
+            "days_stale": 60
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-020-llm-energy-channeling-patterns.md",
@@ -8493,9 +8507,9 @@
         }
     ],
     "workspace": {
-        "total_files": 568,
+        "total_files": 569,
         "by_template": {
-            "checkpoint": 394,
+            "checkpoint": 395,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8506,7 +8520,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 229,
+            "unknown": 230,
             "draft": 2,
             "approved": 6,
             "ready": 1,
@@ -8515,7 +8529,7 @@
             "final": 1,
             "completed": 2
         },
-        "stale_count": 374
+        "stale_count": 375
     },
     "alignment": {
         "aligned": [

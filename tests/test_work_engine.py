@@ -2176,3 +2176,88 @@ def test_queue_transitions_backward_compat(tmp_path, governance):
     assert is_valid_queue_transition("backlog", "parked") is True
     assert is_valid_queue_transition("working", "done") is True
     assert is_valid_queue_transition("done", "backlog") is False  # Still terminal
+
+
+# =============================================================================
+# WORK-174: WorkState Dataclass Expansion — 5 new governance fields
+# =============================================================================
+
+SAMPLE_WORK_MD_WITH_NEW_FIELDS = """---
+template: work_item
+id: WORK-TEST
+title: Test Work Item
+status: active
+current_node: backlog
+effort: small
+chapter: CH-059
+arc: call
+traces_to:
+  - REQ-CEREMONY-005
+spawned_children:
+  - WORK-168
+  - WORK-169
+blocked_by: []
+node_history:
+- node: backlog
+  entered: '2026-01-03T10:00:00'
+  exited: null
+memory_refs: []
+---
+# WORK-TEST: Test Work Item
+"""
+
+
+def test_workstate_parses_effort(tmp_path, engine, setup_work_item):
+    """WORK-174 T1: effort field parsed from WORK.md frontmatter."""
+    setup_work_item("WORK-TEST", SAMPLE_WORK_MD_WITH_NEW_FIELDS)
+    result = engine.get_work("WORK-TEST")
+    assert result.effort == "small"
+
+
+def test_workstate_parses_chapter(tmp_path, engine, setup_work_item):
+    """WORK-174 T2: chapter field parsed from WORK.md frontmatter."""
+    setup_work_item("WORK-TEST", SAMPLE_WORK_MD_WITH_NEW_FIELDS)
+    result = engine.get_work("WORK-TEST")
+    assert result.chapter == "CH-059"
+
+
+def test_workstate_parses_arc(tmp_path, engine, setup_work_item):
+    """WORK-174 T3: arc field parsed from WORK.md frontmatter."""
+    setup_work_item("WORK-TEST", SAMPLE_WORK_MD_WITH_NEW_FIELDS)
+    result = engine.get_work("WORK-TEST")
+    assert result.arc == "call"
+
+
+def test_workstate_parses_traces_to(tmp_path, engine, setup_work_item):
+    """WORK-174 T4: traces_to field parsed from WORK.md frontmatter."""
+    setup_work_item("WORK-TEST", SAMPLE_WORK_MD_WITH_NEW_FIELDS)
+    result = engine.get_work("WORK-TEST")
+    assert result.traces_to == ["REQ-CEREMONY-005"]
+
+
+def test_workstate_parses_spawned_children(tmp_path, engine, setup_work_item):
+    """WORK-174 T5: spawned_children field parsed from WORK.md frontmatter."""
+    setup_work_item("WORK-TEST", SAMPLE_WORK_MD_WITH_NEW_FIELDS)
+    result = engine.get_work("WORK-TEST")
+    assert result.spawned_children == ["WORK-168", "WORK-169"]
+
+
+def test_workstate_defaults_for_missing_new_fields(tmp_path, engine, setup_work_item):
+    """WORK-174 T6: Legacy WORK.md without new fields gets safe defaults."""
+    setup_work_item("E2-TEST")
+    result = engine.get_work("E2-TEST")
+    assert result.effort == ""
+    assert result.chapter == ""
+    assert result.arc == ""
+    assert result.traces_to == []
+    assert result.spawned_children == []
+
+
+def test_existing_workstate_fields_still_work(tmp_path, engine, setup_work_item):
+    """WORK-174 T7: Existing WorkState fields unchanged by expansion."""
+    setup_work_item("E2-TEST")
+    result = engine.get_work("E2-TEST")
+    assert result.id == "E2-TEST"
+    assert result.title == "Test Work Item"
+    assert result.status == "active"
+    assert result.source_files == []  # Already parsed (pre-existing)

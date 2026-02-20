@@ -233,3 +233,64 @@ class TestBoundaryConditions:
         )
         result = detect_tier("WORK-012", project_root=tmp_path)
         assert result == "standard"
+
+
+# ---------------------------------------------------------------------------
+# WORK-174: detect_tier with optional WorkState parameter
+# ---------------------------------------------------------------------------
+
+# Add modules/ to path for WorkState import
+sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "modules"))
+
+from work_engine import WorkState
+
+
+class TestTierDetectionWithWorkState:
+    """WORK-174: detect_tier accepts optional WorkState instead of raw YAML."""
+
+    def test_detect_tier_with_workstate_trivial(self, tmp_path):
+        """WORK-174 T8: WorkState path returns trivial for small item with 1 file."""
+        # Create WORK.md so detect_tier doesn't short-circuit on missing file
+        work_dir = tmp_path / "docs" / "work" / "active" / "WORK-TEST"
+        work_dir.mkdir(parents=True)
+        (work_dir / "WORK.md").write_text(
+            "---\nid: WORK-TEST\n---\n# WORK-TEST\n", encoding="utf-8"
+        )
+        # Do NOT create plans/PLAN.md (trivial requires no plan)
+
+        work_state = WorkState(
+            id="WORK-TEST", title="Test", status="active",
+            current_node="backlog", effort="small",
+            source_files=["a.py"], traces_to=[],
+        )
+        result = detect_tier("WORK-TEST", project_root=tmp_path, work_state=work_state)
+        assert result == "trivial"
+
+    def test_detect_tier_with_workstate_architectural(self, tmp_path):
+        """WORK-174 T8b: WorkState path detects architectural via ADR reference."""
+        work_dir = tmp_path / "docs" / "work" / "active" / "WORK-ARCH"
+        work_dir.mkdir(parents=True)
+        (work_dir / "WORK.md").write_text(
+            "---\nid: WORK-ARCH\n---\n# WORK-ARCH\n", encoding="utf-8"
+        )
+
+        work_state = WorkState(
+            id="WORK-ARCH", title="Test", status="active",
+            current_node="backlog", effort="small",
+            source_files=["a.py"], traces_to=["ADR-045"],
+        )
+        result = detect_tier("WORK-ARCH", project_root=tmp_path, work_state=work_state)
+        assert result == "architectural"
+
+    def test_detect_tier_without_workstate_unchanged(self, tmp_path):
+        """WORK-174 T8c: Without work_state param, existing raw YAML path still works."""
+        _write_work_md(
+            tmp_path, "WORK-RAW",
+            effort="small",
+            source_files=["a.py"],
+            traces_to=[],
+            work_type="implementation",
+        )
+        # Call without work_state — uses raw YAML path
+        result = detect_tier("WORK-RAW", project_root=tmp_path)
+        assert result == "trivial"

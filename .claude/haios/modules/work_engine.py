@@ -113,6 +113,12 @@ class WorkState:
     extensions: Dict[str, Any] = field(default_factory=dict)  # WORK-001: Project-specific fields
     path: Optional[Path] = None
     priority: str = "medium"  # E2-290: For queue ordering
+    # WORK-174: Governance-relevant fields (read-only, not round-tripped by _write_work_file)
+    effort: str = ""
+    chapter: str = ""
+    arc: str = ""
+    traces_to: List[str] = field(default_factory=list)
+    spawned_children: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -992,6 +998,12 @@ class WorkEngine:
             extensions=fm.get("extensions", {}) or {},
             path=path,
             priority=fm.get("priority", "medium"),  # E2-290: Queue ordering
+            # WORK-174: Governance-relevant fields (read-only)
+            effort=fm.get("effort", ""),
+            chapter=fm.get("chapter", ""),
+            arc=fm.get("arc", ""),
+            traces_to=fm.get("traces_to", []) or [],
+            spawned_children=fm.get("spawned_children", []) or [],
         )
 
     def _write_work_file(self, work: WorkState) -> None:

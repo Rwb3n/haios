@@ -101,7 +101,8 @@ def _log_tier_event(work_id: str, tier: str) -> None:
         pass  # Fail-permissive: logging failure must not affect tier return
 
 
-def detect_tier(work_id: str, project_root: Optional[Path] = None) -> str:
+def detect_tier(work_id: str, project_root: Optional[Path] = None,
+                work_state: Optional[object] = None) -> str:
     """Compute governance tier from work item frontmatter.
 
     Evaluates computable predicates from REQ-LIFECYCLE-005 to classify
@@ -117,6 +118,10 @@ def detect_tier(work_id: str, project_root: Optional[Path] = None) -> str:
         work_id: Work item ID (e.g., "WORK-167").
         project_root: Project root path. Defaults to derived path
                       (same pattern as session_end_actions.py).
+        work_state: Optional WorkState object (WORK-174). When provided,
+                    fields are extracted from it instead of raw YAML parsing.
+                    Uses duck typing (Optional[object]) to avoid circular
+                    import between lib/ and modules/.
 
     Returns:
         One of: "trivial", "small", "standard", "architectural".
@@ -131,16 +136,23 @@ def detect_tier(work_id: str, project_root: Optional[Path] = None) -> str:
             _log_tier_event(work_id, _DEFAULT_TIER)
             return _DEFAULT_TIER
 
-        fm = _parse_frontmatter(work_file)
-        if fm is None:
-            _log_tier_event(work_id, _DEFAULT_TIER)
-            return _DEFAULT_TIER
+        # WORK-174: Extract fields from WorkState if provided, else raw YAML
+        if work_state is not None:
+            work_type = getattr(work_state, "type", None)
+            effort = getattr(work_state, "effort", None) or None  # "" -> None
+            source_files = getattr(work_state, "source_files", None) or None  # [] -> None
+            traces_to = getattr(work_state, "traces_to", None) or []
+        else:
+            fm = _parse_frontmatter(work_file)
+            if fm is None:
+                _log_tier_event(work_id, _DEFAULT_TIER)
+                return _DEFAULT_TIER
 
-        # Extract fields
-        work_type = fm.get("type")
-        effort = fm.get("effort")
-        source_files = fm.get("source_files")
-        traces_to = fm.get("traces_to") or []
+            # Extract fields
+            work_type = fm.get("type")
+            effort = fm.get("effort")
+            source_files = fm.get("source_files")
+            traces_to = fm.get("traces_to") or []
 
         # --- Architectural (checked first — escalation always wins) ---
         if work_type == "design" or _has_adr_reference(traces_to):
