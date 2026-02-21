@@ -86,7 +86,7 @@ Move mechanical ceremony phases from SKILL.md (agent reads) to hooks/modules (au
 | CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Complete |
 | CH-059 | CeremonyAutomation | WORK-160, WORK-167-176 | REQ-CEREMONY-002, REQ-CEREMONY-005 | CH-058 | In Progress |
 | CH-060 | SessionBoundaryFix | WORK-161 | REQ-CEREMONY-001 | None | Complete |
-| CH-061 | ColdstartContextInjection | WORK-162 (complete), WORK-180 | REQ-CONFIG-001, L3.3 | None | In Progress |
+| CH-061 | ColdstartContextInjection | WORK-162, WORK-180 | REQ-CONFIG-001, L3.3 | None | Complete |
 | CH-066 | MCPOperationsServer | New | REQ-DISCOVER-002, REQ-CONFIG-001 | CH-061 | Planning |
 
 **Exit criteria:**
