@@ -226,33 +226,47 @@ caller_function()
      Producer: plan-author agent
      Consumer: DO agent + orchestrator
 
+     The orchestrator reads spec_ref, extracts that section from Layer 1,
+     and includes it in the sub-agent prompt. This makes dispatch mechanical.
+
+     spec_ref format: "Layer N > Section > Subsection"
+     Examples:
+       "Layer 1 > Tests"
+       "Layer 1 > Design > File 1 (NEW)"
+       "Layer 0 > Consumer Files"
+
      The orchestrator verifies each step before proceeding to the next. -->
 
 ### Step 1: Write Failing Tests (RED)
+- **spec_ref:** Layer 1 > Tests
 - **input:** Layer 0 inventory complete, Layer 1 test specs defined
 - **action:** Create test file(s) from Layer 1 Tests section
 - **output:** Test file(s) exist, all tests fail
 - **verify:** `pytest [test_file] -v 2>&1 | grep -c "FAILED\|ERROR"` equals [N]
 
 ### Step 2: Implement Primary Module (GREEN)
+- **spec_ref:** Layer 1 > Design > File 1 (NEW)
 - **input:** Step 1 complete (tests exist and fail)
 - **action:** Create/modify primary file(s) from Layer 1 Design section
 - **output:** All tests pass
 - **verify:** `pytest [test_file] -v` exits 0, `[N] passed` in output
 
 ### Step 3: Integrate
+- **spec_ref:** Layer 1 > Design > File 2 (MODIFY)
 - **input:** Step 2 complete (tests green)
-- **action:** Add call-site / wiring per Layer 1 Design (File 2)
+- **action:** Add call-site / wiring per Layer 1 Design
 - **output:** Runtime consumer calls the new code
 - **verify:** `grep "[function_name]" [consumer_file]` returns 1+ match
 
 ### Step 4: Update Consumers
+- **spec_ref:** Layer 0 > Consumer Files
 - **input:** Step 3 complete
 - **action:** Update files from Layer 0 Consumer Files table
 - **output:** No stale references
 - **verify:** `grep "[old_pattern]" . -r --include="*.py" --include="*.md"` returns 0 matches
 
 ### Step 5: Update Documentation
+- **spec_ref:** Layer 0 > Primary Files + Consumer Files (README rows)
 - **input:** Step 4 complete
 - **action:** Update README.md in each directory with new/changed files
 - **output:** READMEs reflect actual file state
