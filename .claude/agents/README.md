@@ -18,7 +18,7 @@ Each agent `.md` file includes structured capability card fields in YAML frontma
 | `invoked_by` | list | Which skills/cycles invoke this agent |
 | `related_agents` | list | Cross-references to related agents |
 
-## Available Agents (11)
+## Available Agents (12)
 
 | Agent | Requirement | Category | Purpose |
 |-------|-------------|----------|---------|
@@ -28,6 +28,7 @@ Each agent `.md` file includes structured capability card fields in YAML frontma
 | **implementation-cycle-agent** | optional | cycle-delegation | Execute full implementation-cycle in isolated context |
 | **investigation-agent** | required | utility | EXPLORE phase evidence gathering for investigations |
 | **investigation-cycle-agent** | optional | cycle-delegation | Execute full investigation-cycle in isolated context |
+| **plan-authoring-agent** | optional | cycle-delegation | Execute plan-authoring-cycle in isolated context |
 | **preflight-checker** | required | gate | Plan readiness + >3 file gate |
 | **schema-verifier** | required | gate | Isolated schema queries (blocks direct SQL) |
 | **test-runner** | optional | utility | Isolated test execution |

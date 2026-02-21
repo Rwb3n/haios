@@ -62,8 +62,16 @@ Task(subagent_type='critique-agent', model='sonnet', prompt='Critique work item 
 **Actions:**
 1. Read the plan file: `docs/work/active/{backlog_id}/plans/PLAN.md` (or legacy `docs/plans/PLAN-{backlog_id}-*.md`)
 2. Verify plan has filled-in sections (not template placeholders)
-3. Check `status: draft` -> if so, fill in design first
-4. **MUST:** Read referenced specifications (see MUST Gate below)
+3. Check `status: draft` -> if so, delegate to plan-authoring subagent:
+   ```
+   Task(subagent_type='plan-authoring-agent', model='sonnet',
+        prompt='Author plan for {backlog_id}. Work: docs/work/active/{backlog_id}/WORK.md. Plan: docs/work/active/{backlog_id}/plans/PLAN.md. Follow plan-authoring-cycle skill phases: AMBIGUITY->ANALYZE->AUTHOR->VALIDATE. Return completed plan with status: approved.')
+   ```
+   After subagent returns:
+   - If `COMPLETE`: verify plan status is `approved`, continue to step 4.
+   - If `BLOCKED` (unresolved operator_decisions): read WORK.md `operator_decisions`, invoke `AskUserQuestion` with options, update WORK.md `resolved: true, chosen: <value>`, then re-invoke subagent.
+   - If `BLOCKED` (missing source spec): read subagent Issues output for missing path, surface to operator via `AskUserQuestion`, block DO phase until resolved.
+4. **MUST:** Read the plan (whether authored by subagent or pre-existing) and verify referenced specifications match (see MUST Gate below)
 5. Optional: Run preflight checker (E2-093 when available)
 
 **MUST Gate: Read Source Specifications (E2-254 Learning)**
@@ -132,7 +140,7 @@ Validates plan completeness and file scope. DO phase is blocked until all three 
 
 > **S397 Operator Directive:** Preflight is structural verification. MUST run as haiku subagent, not inline.
 
-**Tools:** Read, Glob, Task(critique-agent, model=sonnet), Task(preflight-checker, model=haiku), Task(plan-validation, model=haiku)
+**Tools:** Read, Glob, AskUserQuestion, Task(plan-authoring-agent, model=sonnet), Task(critique-agent, model=sonnet), Task(preflight-checker, model=haiku), Task(plan-validation, model=haiku)
 
 ---
 
@@ -334,7 +342,7 @@ just clear-cycle
 
 | Phase | Primary Tool | Optional Subagent | Command |
 |-------|--------------|-------------------|---------|
-| PLAN  | Read, Glob   | preflight-checker | /new-plan |
+| PLAN  | Read, Glob   | plan-authoring-agent*, preflight-checker | /new-plan |
 | DO    | Write, Edit  | -                 | - |
 | CHECK | Bash(pytest) | test-runner       | /validate |
 | DONE  | Edit, Write  | why-capturer      | - |

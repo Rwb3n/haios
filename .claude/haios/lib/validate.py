@@ -65,14 +65,17 @@ def get_template_registry() -> dict[str, dict[str, Any]]:
         "implementation_plan": {
             "required_fields": ["template", "status", "date", "backlog_id"],
             "optional_fields": [
-                "version", "author", "plan_id", "title", "session", "priority",
+                "version", "plan_version", "author", "plan_id", "title", "session", "priority",
                 "lifecycle_phase", "subtype", "directive_id", "parent_id", "completed_session",
                 "completion_note", "spawned_by", "blocked_by", "related", "milestone",
                 "parent_plan", "children", "absorbs", "enables", "execution_layer",
+                "input_contract", "output_contract",
             ],
             "allowed_status": ["draft", "ready", "approved", "rejected", "complete"],
+            # Dual acceptance: v1.5 (legacy) and v2.0 (4-layer) section names both valid
             "expected_sections": [
                 "Goal",
+                # v1.5 sections (legacy — remove when all active plans migrated)
                 "Effort Estimation (Ground Truth)",
                 "Current State vs Desired State",
                 "Tests First (TDD)",
@@ -80,9 +83,34 @@ def get_template_registry() -> dict[str, dict[str, Any]]:
                 "Implementation Steps",
                 "Verification",
                 "Risks & Mitigations",
-                "Progress Tracker",
                 "Ground Truth Verification (Before Closing)",
+                # v2.0 sections (4-layer structure)
+                "Layer 0: Inventory",
+                "Layer 1: Specification",
+                "Layer 2: Implementation Steps",
+                "Ground Truth Verification",
             ],
+            # Section coverage: plan must have EITHER v1.5 set OR v2.0 set (not both required)
+            "section_coverage_mode": "any_set",
+            "section_sets": {
+                "v1.5": [
+                    "Goal",
+                    "Effort Estimation (Ground Truth)",
+                    "Current State vs Desired State",
+                    "Tests First (TDD)",
+                    "Detailed Design",
+                    "Implementation Steps",
+                    "Verification",
+                    "Ground Truth Verification (Before Closing)",
+                ],
+                "v2.0": [
+                    "Goal",
+                    "Layer 0: Inventory",
+                    "Layer 1: Specification",
+                    "Layer 2: Implementation Steps",
+                    "Ground Truth Verification",
+                ],
+            },
         },
         "implementation_plan_design": {
             "required_fields": ["template", "status", "date", "backlog_id"],
@@ -409,12 +437,29 @@ def check_section_coverage(template_type: str, content: str) -> dict[str, Any]:
         "placeholder_sections": [],
     }
 
-    expected = get_expected_sections(template_type)
+    registry = get_template_registry()
+    rules = registry.get(template_type, {})
+    found_sections = extract_sections(content)
+
+    # Dual acceptance (v2.0): if section_sets defined, check best-matching set
+    section_sets = rules.get("section_sets")
+    if section_sets:
+        # Score each set by how many sections are present
+        best_set_name = None
+        best_score = -1
+        for set_name, set_sections in section_sets.items():
+            score = sum(1 for s in set_sections if s in found_sections)
+            if score > best_score:
+                best_score = score
+                best_set_name = set_name
+        # Use the best-matching set as the expected sections
+        expected = section_sets.get(best_set_name, [])
+    else:
+        expected = get_expected_sections(template_type)
+
     if not expected:
         # No section requirements for this template type
         return result
-
-    found_sections = extract_sections(content)
 
     for section in expected:
         # Check if section heading exists

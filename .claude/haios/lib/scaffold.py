@@ -337,9 +337,8 @@ def get_plan_type(work_type: str) -> str:
 def load_plan_template(work_type: str = "implementation") -> str:
     """Load work-type-specific plan template.
 
-    Routes to .claude/templates/plans/{plan_type}.md if it exists,
-    otherwise falls back to the monolithic implementation_plan template
-    via load_template().
+    Routes to .claude/templates/plans/{plan_type}-v2.md first (4-layer structure),
+    then falls back to {plan_type}.md (v1.5), then to legacy monolithic template.
 
     Args:
         work_type: Work item type from WORK.md type field.
@@ -350,10 +349,15 @@ def load_plan_template(work_type: str = "implementation") -> str:
     """
     plan_type = get_plan_type(work_type)
     plan_dir = PROJECT_ROOT / ConfigLoader.get().get_path("templates") / "plans"
+    # Prefer v2.0 (4-layer) template
+    v2_path = plan_dir / f"{plan_type}-v2.md"
+    if v2_path.exists():
+        return v2_path.read_text(encoding="utf-8-sig")
+    # Fall back to v1.5 type-specific template
     type_path = plan_dir / f"{plan_type}.md"
     if type_path.exists():
         return type_path.read_text(encoding="utf-8-sig")
-    # Fallback to monolithic template for unknown types
+    # Final fallback to monolithic template for unknown types
     return load_template("implementation_plan")
 
 

@@ -103,3 +103,5 @@ The skill will:
 | status | `draft`, `approved`, `rejected`, `complete` |
 
 Templates default to `status: draft`. Typical lifecycle: draft → approved → complete.
+
+> **Note:** When invoked from implementation-cycle PLAN phase, plan authoring is delegated to `plan-authoring-agent` subagent instead of inline skill invocation. The `/new-plan` command continues to use inline skill for interactive use.
