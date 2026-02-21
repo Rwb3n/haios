@@ -151,52 +151,79 @@ Validates plan completeness and file scope. DO phase is blocked until all three 
 just set-cycle implementation-cycle DO {work_id}
 ```
 
-**Goal:** Implement the design from the plan.
+**Goal:** Execute the plan's implementation steps via sub-agent delegation.
 
-**Guardrails (SHOULD follow):**
-1. **List affected files BEFORE writing** - Create manifest of files to modify
-2. **One logical change at a time** - Atomic commits, easier rollback
-3. **If >3 files, pause for confirmation** - Large scope = higher risk
+**The Three Contracts:**
+- **Scope contract:** `docs/work/active/{backlog_id}/WORK.md` (WHAT — deliverables, AC)
+- **Content contract:** `docs/work/active/{backlog_id}/plans/PLAN.md` (HOW — spec, steps, verification)
+- **Dispatch contract:** This skill (HOW to orchestrate — agent sequence, handoffs, failure modes)
 
-**File Manifest Format:**
-```markdown
-## Files to Modify
-- [ ] path/to/file1.py - Add function X
-- [ ] path/to/file2.py - Update import
-- [ ] tests/test_file.py - Add test for X
-```
+**Dispatch Protocol (v2.0 plans with `spec_ref`):**
 
-> If manifest has >3 files, SHOULD confirm scope with operator before proceeding.
-> Preflight Checker (E2-093) will enforce this when available.
+For plans with `plan_version: "2.0"` in frontmatter, the DO phase dispatches mechanically:
 
-**Actions:**
-1. Create file manifest (list all files to modify)
-2. **MUST** write failing tests first (from plan's Tests section) - no code before tests
+1. Read plan Layer 2 (Implementation Steps)
+2. For each step (or batch of related steps):
+   a. Read the step's `spec_ref` field
+   b. Extract the referenced section from Layer 1
+   c. Delegate to DO sub-agent:
+   ```
+   Task(subagent_type='implementation-cycle-agent', prompt='
+     Execute this implementation step.
+
+     Step: {step_name}
+     Action: {step_action}
+
+     Specification (from plan):
+     {extracted_spec_ref_content}
+
+     Expected output: {step_output}
+     Verification: {step_verify}
+
+     Write the code. Run the verification command. Report result.
+   ')
+   ```
+   d. Run the step's `verify` command to confirm output
+   e. If verify fails: re-delegate with failure context, or fix inline (max 2 retries)
+   f. If verify passes: proceed to next step
+
+3. After all steps complete, invoke design-review-validation
+
+**Step Batching (recommended):**
+- Steps 1+2 (RED+GREEN) batch naturally — TDD cycle is one delegation unit
+- Steps 3 (integrate) is a separate delegation — different files, different concern
+- Steps 4+5 (consumers+docs) batch naturally — both are update sweeps
+
+**Fallback (v1.5 plans without `spec_ref`):**
+
+For plans without `plan_version: "2.0"`, fall back to inline execution:
+
+1. Read plan's Layer 1 / Detailed Design section
+2. **MUST** write failing tests first (from plan's Tests section)
 3. Implement ONE change at a time (RED -> GREEN -> REFACTOR)
 4. Follow plan's Implementation Steps
-5. Use memory-agent skill for prior learnings
 
 **TDD Enforcement (Session 90):**
-- Tests **MUST** exist before implementation code
+- Tests **MUST** exist before implementation code (in both v1.5 and v2.0 flows)
 - For non-pytest code (PowerShell, configs), define manual verification steps in plan
 - If no tests possible, document why in plan and get operator approval
 
 **Exit Criteria:**
-- [ ] Tests written BEFORE implementation code
-- [ ] File manifest complete and followed
-- [ ] All planned code changes made
-- [ ] Implementation matches Detailed Design
-- [ ] Each change tested before next
-- [ ] **MUST:** Invoke `Skill(skill="design-review-validation")` before proceeding to CHECK
+- [ ] All Layer 2 steps verified (v2.0) OR all Implementation Steps complete (v1.5)
+- [ ] Each step's verify command passed
+- [ ] Implementation matches Layer 1 Specification / Detailed Design
+- [ ] **MUST:** Invoke design-review-validation as sonnet subagent before proceeding to CHECK
 
 **Exit Gate (MUST):**
-Before transitioning to CHECK phase, **MUST** invoke design-review-validation:
+Before transitioning to CHECK phase, **MUST** invoke design-review-validation as a sonnet subagent:
 ```
-Skill(skill="design-review-validation")
+Task(subagent_type='design-review-validation-agent', model='sonnet', prompt='Run design-review-validation for {backlog_id}. Plan: docs/work/active/{backlog_id}/plans/PLAN.md. Implementation files: [list from Layer 0 Primary Files]. Compare implementation against Layer 1 Specification. Report: PASS (aligned) or FAIL (deviations). For each deviation: file, expected, actual, intentional/error classification.')
 ```
-This verifies implementation aligns with Detailed Design. CHECK phase is blocked until validation passes.
+This verifies implementation aligns with Layer 1 Specification / Detailed Design. CHECK phase is blocked until validation passes.
 
-**Tools:** Write, Edit, Bash(pytest), Skill(memory-agent), Skill(design-review-validation), Task(preflight-checker)
+> **Rationale:** design-review-validation requires judgment (comparing plan intent to code) — sonnet model appropriate. Delegating saves main-agent context for DO phase implementation work.
+
+**Tools:** Write, Edit, Bash(pytest), Task(implementation-cycle-agent), Task(design-review-validation-agent, model=sonnet)
 
 ---
 
@@ -215,20 +242,22 @@ just set-cycle implementation-cycle CHECK {work_id}
 3. **DEMO the feature** - Exercise the new code path to surface bugs (Session 90)
 4. Run plan's Ground Truth Verification
 5. Check DoD criteria (ADR-033)
-6. **MUST: Verify WORK.md Deliverables** (Session 192 - E2-290 Learning)
+6. **MUST: Delegate deliverables verification to haiku subagent** (Session 192 - E2-290 Learning)
 7. **If creating discoverable artifact:** Verify runtime discovery (see below)
 8. **(Optional) Invoke validation-agent** for unbiased review: `Task(subagent_type='validation-agent')`
 
-**MUST Gate: Deliverables Verification (Session 192)**
-Before declaring CHECK complete:
-1. **MUST** read `docs/work/active/{backlog_id}/WORK.md`
-2. **MUST** find the `## Deliverables` section
-3. **MUST** verify EACH deliverable checkbox can be checked:
-   - For each `- [ ]` item, confirm the work is actually done
-   - If ANY deliverable is incomplete, **BLOCK** - return to DO phase
-4. **MUST** also check plan's Implementation Steps are all complete
+**MUST Gate: Deliverables Verification (Session 192 / WORK-178)**
+Before declaring CHECK complete, delegate to haiku subagent:
+```
+Task(subagent_type='preflight-checker', model='haiku', prompt='Verify deliverables for {backlog_id}. Work item: docs/work/active/{backlog_id}/WORK.md. Plan: docs/work/active/{backlog_id}/plans/PLAN.md. For EACH deliverable in the Deliverables section: confirm the work is done (file exists, content matches, grep confirms). For each plan Implementation Step: confirm it is complete. Report PASS (all done) or BLOCK (list incomplete items). If BLOCK: list each incomplete deliverable with reason.')
+```
+
+- **PASS:** All deliverables verified. Proceed to remaining CHECK steps.
+- **BLOCK:** Incomplete deliverables reported. Return to DO phase, address gaps, then re-run CHECK.
 
 > **Anti-pattern prevented:** "Tests pass = Done" (E2-290 Session 192). Agent declared victory after tests passed but skipped 2 of 7 deliverables. Tests verify code works, deliverables verify scope is complete. Both are required.
+
+> **Rationale (WORK-178):** Deliverables verification is structural (read file, scan checklist, report pass/fail) — no judgment required. Haiku model appropriate. Saves main-agent context for value-add work.
 
 **Demo Step (Session 90 - TDD Gap Discovery):**
 - Demo **MUST** exercise the happy path at minimum
@@ -270,7 +299,7 @@ foresight_prep:
 - [ ] Discoverable artifacts appear in runtime status (or N/A)
 - [ ] (Optional) foresight_prep calibration fields updated
 
-**Tools:** Bash(pytest), Read, Task(test-runner), Task(validation-agent), /validate, just update-status
+**Tools:** Bash(pytest), Read, Task(test-runner), Task(validation-agent), Task(preflight-checker, model=haiku), /validate, just update-status
 
 ---
 
@@ -340,13 +369,13 @@ just clear-cycle
 
 ## Composition Map
 
-| Phase | Primary Tool | Optional Subagent | Command |
-|-------|--------------|-------------------|---------|
-| PLAN  | Read, Glob   | plan-authoring-agent*, preflight-checker | /new-plan |
-| DO    | Write, Edit  | -                 | - |
-| CHECK | Bash(pytest) | test-runner       | /validate |
-| DONE  | Edit, Write  | why-capturer      | - |
-| CHAIN | Bash, Skill  | -                 | /close |
+| Phase | Primary Tool | Subagent | Command |
+|-------|--------------|----------|---------|
+| PLAN  | Read, Glob   | plan-authoring-agent (sonnet)*, preflight-checker (haiku) | /new-plan |
+| DO    | Write, Edit  | design-review-validation-agent (sonnet, exit gate) | - |
+| CHECK | Bash(pytest) | test-runner (haiku), preflight-checker/deliverables (haiku) | /validate |
+| DONE  | Edit, Write  | why-capturer | - |
+| CHAIN | Bash, Skill  | - | /close |
 
 ---
 

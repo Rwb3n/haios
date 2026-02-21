@@ -12,8 +12,12 @@ This is a **Validation Skill** (bridge) that verifies implementation aligns with
 
 ## When to Use
 
-**Manual invocation:** `Skill(skill="design-review-validation")` after implementation.
-**Called from:** implementation-cycle DO phase exit (optional quality gate).
+**Manual invocation:** `Skill(skill="design-review-validation")` after implementation (standalone use).
+**Called from:** implementation-cycle DO phase exit as sonnet subagent (WORK-178):
+```
+Task(subagent_type='design-review-validation-agent', model='sonnet', prompt='...')
+```
+See implementation-cycle SKILL.md DO phase Exit Gate for full prompt template.
 
 ---
 

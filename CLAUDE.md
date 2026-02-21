@@ -133,6 +133,8 @@ Side-effect boundaries. See `L4/functional_requirements.md` (REQ-CEREMONY-*).
 | implementation-cycle-agent | sonnet | optional | cycle-delegation | Full impl cycle delegation |
 | investigation-cycle-agent | sonnet | optional | cycle-delegation | Full investigation delegation |
 | close-work-cycle-agent | sonnet | optional | cycle-delegation | Full close cycle delegation |
+| plan-authoring-agent | sonnet | optional | cycle-delegation | Plan authoring in isolated context |
+| design-review-validation-agent | sonnet | optional | verification | DO phase exit gate (design alignment) |
 
 ---
 

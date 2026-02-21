@@ -14,17 +14,19 @@ This is a **Validation Skill** (bridge) that acts as a quality gate between impl
 |-------|---------|
 | COMPARE | Read design and implementation |
 | VERIFY | Check alignment on key points |
-| L4_ALIGN | Verify L4 functional requirements implemented |
 | APPROVE | Confirm or document deviations |
 
 ## Usage
 
-**Manual:**
+**Manual (standalone):**
 ```
 Skill(skill="design-review-validation")
 ```
 
-**From implementation-cycle:** Optional quality gate before CHECK phase.
+**From implementation-cycle (WORK-178):** Required exit gate — invoked as sonnet subagent:
+```
+Task(subagent_type='design-review-validation-agent', model='sonnet', prompt='...')
+```
 
 ## Files
 
