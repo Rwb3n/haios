@@ -1,7 +1,19 @@
 # generated: 2026-01-24
-# System Auto: last updated on: 2026-01-24T20:46:20
+# System Auto: last updated on: 2026-02-21T00:38:00
 # Coldstart phase orchestration config per CH-007 spec
 # WORK-011: Wires IdentityLoader, SessionLoader, WorkLoader into unified coldstart
+# WORK-180: Tiered coldstart per ADR-047
+
+tier_detection:
+  max_age_hours: 24  # Checkpoint older than this -> escalate to Full
+
+tiers:
+  full:
+    phases: [identity, session, work, epoch, operations]
+  light:
+    phases: [session, work]
+  minimal:
+    phases: [session]
 
 phases:
   - id: identity
@@ -11,4 +23,10 @@ phases:
     breathe: true
 
   - id: work
+    breathe: false
+
+  - id: epoch
+    breathe: true
+
+  - id: operations
     breathe: false

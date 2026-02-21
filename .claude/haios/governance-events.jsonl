@@ -11091,3 +11091,21 @@
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-20T23:42:49.863736"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-20T23:42:49.912652"}
 {"type": "StatusPropagation", "work_id": "WORK-162", "chapter": "CH-061", "arc": "call", "action": "chapter_completed", "timestamp": "2026-02-20T23:43:06.635630"}
+{"type": "SessionEnded", "session": 412, "agent": "Hephaestus", "timestamp": "2026-02-20T23:44:52.668755"}
+{"type": "SessionStarted", "session": 413, "agent": "Hephaestus", "timestamp": "2026-02-21T00:06:06.018822"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-21T00:08:02.066314"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-180", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-02-21T00:08:02.074378"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 0, "timestamp": "2026-02-21T00:08:02.124619"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-21T00:08:21.091989"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-180", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-21T00:08:21.100357"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-180"], "from": "backlog", "to": "ready", "timestamp": "2026-02-21T00:08:21.108711", "rationale": "Top of queue, direct continuation from S412 ADR-047 design"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-21T00:08:21.108711"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-21T00:08:33.681170"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-180", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-21T00:08:33.688772"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-180"], "from": "ready", "to": "working", "timestamp": "2026-02-21T00:08:33.696875"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-21T00:08:33.696875"}
+{"type": "SessionStarted", "session": 414, "agent": "Hephaestus", "timestamp": "2026-02-21T07:51:33.246686"}
+{"type": "SessionEnded", "session": 413, "agent": "SYNTHETIC_RECOVERY", "timestamp": "2026-02-21T07:56:50.186442"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-21T08:09:48.146562"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-21T08:09:48.195648"}
+{"type": "StatusPropagation", "work_id": "WORK-180", "chapter": "CH-061", "arc": "call", "action": "chapter_completed", "timestamp": "2026-02-21T08:10:02.743401"}

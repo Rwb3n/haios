@@ -3,7 +3,7 @@ allowed-tools: Read, Glob, Bash, mcp__haios-memory__memory_search_with_experienc
   mcp__haios-memory__db_query
 description: Initialize session by loading essential context files
 generated: '2025-12-25'
-last_updated: '2026-01-24T20:49:21'
+last_updated: '2026-02-21T00:40:00'
 ---
 
 # Cold Start Initialization
@@ -23,7 +23,7 @@ Extract:
 
 ---
 
-## Step 2: Load Context via Orchestrator (WORK-011)
+## Step 2: Load Context via Orchestrator (WORK-011, WORK-180)
 
 Run the unified coldstart orchestrator:
 
@@ -31,34 +31,41 @@ Run the unified coldstart orchestrator:
 just coldstart-orchestrator
 ```
 
-This invokes ColdstartOrchestrator which runs all three loaders in sequence:
-1. **[PHASE: IDENTITY]** - Mission, principles, constraints from manifesto
-2. **[BREATHE]** - Process before continuing
-3. **[PHASE: SESSION]** - Prior session, memory refs, drift warnings, pending
-4. **[BREATHE]** - Process before continuing
-5. **[PHASE: WORK]** - Queue items, epoch alignment warnings
+**Tier selection (ADR-047):** The orchestrator auto-detects the appropriate tier, or you can specify one explicitly:
 
-**No manual Read calls needed** - all context is injected by the orchestrator.
+```bash
+just coldstart-orchestrator --tier full     # New epoch/arc work, first session after transition
+just coldstart-orchestrator --tier light    # Continuation of prior session work
+just coldstart-orchestrator --tier minimal  # Housekeeping (doc fixes, drift correction)
+```
+
+| Tier | When | Phases |
+|------|------|--------|
+| **Full** (default) | New work, stale checkpoint (>24h), no checkpoint | Identity + Session + Work + Epoch + Operations + Validation |
+| **Light** | Fresh checkpoint with pending work | Session + Work |
+| **Minimal** | Housekeeping tasks | Session only |
+
+The orchestrator runs loaders in sequence with `[BREATHE]` markers:
+1. **[PHASE: IDENTITY]** - Mission, principles, constraints from manifesto
+2. **[PHASE: SESSION]** - Prior session, memory refs, drift warnings, pending
+3. **[PHASE: WORK]** - Queue items, epoch alignment warnings
+4. **[PHASE: EPOCH]** - Epoch status, arc chapters, exit criteria
+5. **[PHASE: OPERATIONS]** - Tier model, recipe catalogue, agent table, common patterns
+6. **[PHASE: VALIDATION]** - Epoch drift warnings (full tier only)
+
+**All context is injected by the orchestrator** — no manual Read calls needed for epoch, arc, or operational context.
 
 The output includes:
 - `=== IDENTITY ===` block with extracted manifesto essence (~50 lines)
 - `=== SESSION CONTEXT ===` with drift warnings PROMINENT
 - `=== WORK OPTIONS ===` with queue and pending items
+- `=== EPOCH CONTEXT ===` with arc/chapter status and exit criteria
+- `=== OPERATIONS ===` with tier model, recipes, agents, governance triggers
 - `[READY FOR SELECTION]` marker when complete
 
 ---
 
-## Step 3: Load Epoch Context (MUST)
-
-**MUST** read from paths in haios.yaml:
-
-1. Read `epoch.epoch_file` - current epoch definition
-2. For each arc in `epoch.active_arcs`:
-   - Read `{epoch.arcs_dir}/{arc}/ARC.md`
-
----
-
-## Step 4: Query Memory Refs
+## Step 3: Query Memory Refs
 
 If the SESSION CONTEXT output shows "Memory IDs to query: [...]":
 
@@ -68,13 +75,7 @@ Query those IDs via db_query or let the orchestrator handle it.
 
 ---
 
-## Step 5: Load Agent Instructions
-
-Read `CLAUDE.md` - agent bootstrap and quick reference.
-
----
-
-## Step 6: Session Start
+## Step 4: Session Start
 
 ```bash
 just session-start {N}
@@ -84,17 +85,17 @@ Where N = current session + 1 from `.claude/session` (read last line as integer,
 
 ---
 
-## Step 7: Summary Output
+## Step 5: Summary Output
 
 Provide brief summary:
-- **Context loaded:** Via orchestrator (identity, session, work phases)
-- **Epoch context:** Which epoch + which arcs loaded
+- **Context loaded:** Via orchestrator (which tier, which phases)
+- **Epoch context:** From orchestrator [PHASE: EPOCH] output
 - **Memory loaded:** From orchestrator output
-- **Drift warnings:** Any from session context output
+- **Drift warnings:** Any from session context or validation output
 
 ---
 
-## Step 8: Invoke Survey Cycle
+## Step 6: Invoke Survey Cycle
 
 **MUST** chain to survey-cycle for work selection:
 
@@ -109,8 +110,20 @@ Survey-cycle owns routing:
 
 ---
 
+## Escape Hatch
+
+If an agent in Light or Minimal tier discovers it needs more context mid-session:
+
+```bash
+just coldstart-orchestrator --extend epoch operations
+```
+
+**Note:** `--extend` is not yet implemented (deferred to WORK-181). Currently prints a message. Use `--tier full` as a workaround.
+
+---
+
 ## Key Principle
 
-**Ground yourself first. Config -> Orchestrator -> Epoch -> Survey.**
+**Ground yourself first. Config -> Orchestrator -> Survey.**
 
 Coldstart loads context. Survey-cycle selects work. Agent doesn't skip the chain.

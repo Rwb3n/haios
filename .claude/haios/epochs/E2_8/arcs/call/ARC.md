@@ -45,6 +45,8 @@ This arc moves what it can from Tier 3 (SKILL.md) to Tier 1/2 (hooks/modules).
 | CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Complete |
 | CH-059 | CeremonyAutomation | WORK-160, WORK-167-176 | REQ-CEREMONY-002, REQ-CEREMONY-005 | CH-058 | In Progress |
 | CH-060 | SessionBoundaryFix | WORK-161 | REQ-CEREMONY-001 | None | Complete |
+| CH-061 | ColdstartContextInjection | WORK-162 (complete), WORK-180 | REQ-CONFIG-001, L3.3 | None | Complete |
+| CH-066 | MCPOperationsServer | New | REQ-DISCOVER-002, REQ-CONFIG-001 | CH-061 | Planning |
 
 ---
 
@@ -54,6 +56,10 @@ This arc moves what it can from Tier 3 (SKILL.md) to Tier 1/2 (hooks/modules).
 - [ ] Trivial items skip heavy ceremony phases (computable predicates, extending retro-cycle Phase 0 pattern)
 - [ ] Mechanical ceremony phases migrated to hooks/modules (session-end, checkpoint population, cycle_phase advancement)
 - [x] Session boundary gap governed (post-closure transition runs reliably) (WORK-161, S396)
+- [ ] Coldstart injects ALL operational context (zero manual Read steps in coldstart skill)
+- [ ] Minimum viable context contract enforced: identity + mission + prior + work + operational HOW
+- [ ] haios-operations MCP server exposes work/hierarchy/session/scaffold tools as agent-native interface
+- [ ] Just recipes retired for agent use — MCP tools replace Tier 2 operations, just remains Tier 3 (operator terminal only)
 
 ---
 

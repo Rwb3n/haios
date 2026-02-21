@@ -1,55 +1,80 @@
 ---
 template: work_item
 id: WORK-180
-title: "Implement ADR-047 Tiered Coldstart"
+title: Implement ADR-047 Tiered Coldstart
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-20
 spawned_by: WORK-162
 spawned_children: []
 chapter: CH-061
 arc: call
-closed: null
+closed: '2026-02-21'
 priority: high
 effort: large
 traces_to:
-  - REQ-CONFIG-001
-  - L3.3
+- REQ-CONFIG-001
+- L3.3
 requirement_refs: []
 source_files:
-  - .claude/haios/lib/coldstart_orchestrator.py
-  - .claude/haios/lib/identity_loader.py
-  - .claude/haios/config/coldstart.yaml
-  - .claude/commands/coldstart.md
+- .claude/haios/lib/coldstart_orchestrator.py
+- .claude/haios/lib/identity_loader.py
+- .claude/haios/config/coldstart.yaml
+- .claude/commands/coldstart.md
 acceptance_criteria:
-  - "EpochLoader implemented: reads EPOCH.md + active ARC.md files live, extracts/compresses status, chapters, exit criteria"
-  - "OperationsLoader implemented: reads justfile, CLAUDE.md, ADR-045 live, injects tier model, recipe catalogue, module paths"
-  - "Tier selection logic: ColdstartOrchestrator accepts tier argument, auto-detection with staleness threshold"
-  - "CLI argument forwarding: argparse in __main__, --extend flag, justfile recipe forwards args"
-  - "coldstart.yaml updated with tier_detection, tier definitions, new phase entries"
-  - "coldstart.md updated: zero manual Read steps, tier argument documented, --extend escape hatch documented"
-  - "Tests: unit tests for both loaders, integration tests for tier auto-detection (4 paths)"
-  - "Verification: full coldstart produces zero manual Reads, token savings measured vs baseline"
+- 'EpochLoader implemented: reads EPOCH.md + active ARC.md files live, extracts/compresses
+  status, chapters, exit criteria'
+- 'OperationsLoader implemented: reads justfile, CLAUDE.md, ADR-045 live, injects
+  tier model, recipe catalogue, module paths'
+- 'Tier selection logic: ColdstartOrchestrator accepts tier argument, auto-detection
+  with staleness threshold'
+- 'CLI argument forwarding: argparse in __main__, --extend flag, justfile recipe forwards
+  args'
+- coldstart.yaml updated with tier_detection, tier definitions, new phase entries
+- 'coldstart.md updated: zero manual Read steps, tier argument documented, --extend
+  escape hatch documented'
+- 'Tests: unit tests for both loaders, integration tests for tier auto-detection (4
+  paths)'
+- 'Verification: full coldstart produces zero manual Reads, token savings measured
+  vs baseline'
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-20T23:49:53
-    exited: null
+- node: backlog
+  entered: 2026-02-20 23:49:53
+  exited: '2026-02-21T08:09:48.167365'
 artifacts: []
 cycle_docs: {}
 memory_refs:
-  - 87131
+- 87131
+- 87182
+- 87183
+- 87184
+- 87185
+- 87186
+- 87187
+- 87188
+- 87189
 extensions:
   epoch: E2.8
-version: "2.0"
+version: '2.0'
 generated: 2026-02-20
-last_updated: 2026-02-20T23:49:53
+last_updated: '2026-02-21T08:09:48.171087'
+queue_history:
+- position: ready
+  entered: '2026-02-21T00:08:21.100357'
+  exited: '2026-02-21T00:08:33.689772'
+- position: working
+  entered: '2026-02-21T00:08:33.689772'
+  exited: '2026-02-21T08:09:48.167365'
+- position: done
+  entered: '2026-02-21T08:09:48.167365'
+  exited: null
 ---
 # WORK-180: Implement ADR-047 Tiered Coldstart
 
@@ -93,16 +118,16 @@ This is a parent work item. The implementing agent MAY decompose into children o
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] EpochLoader class in .claude/haios/lib/epoch_loader.py
-- [ ] OperationsLoader class in .claude/haios/lib/operations_loader.py
-- [ ] ColdstartOrchestrator tier selection + auto-detection logic
-- [ ] CLI argparse + --extend flag in coldstart_orchestrator.py
-- [ ] Justfile recipe updated to forward arguments
-- [ ] coldstart.yaml tier configuration
-- [ ] coldstart.md zero-manual-Read version
-- [ ] Unit tests for EpochLoader and OperationsLoader
-- [ ] Integration tests for tier auto-detection (4 paths)
-- [ ] Token savings verification (before/after measurement)
+- [x] EpochLoader class in .claude/haios/lib/epoch_loader.py
+- [x] OperationsLoader class in .claude/haios/lib/operations_loader.py
+- [x] ColdstartOrchestrator tier selection + auto-detection logic
+- [x] CLI argparse + --extend flag in coldstart_orchestrator.py
+- [x] Justfile recipe updated to forward arguments
+- [x] coldstart.yaml tier configuration
+- [x] coldstart.md zero-manual-Read version
+- [x] Unit tests for EpochLoader and OperationsLoader
+- [x] Integration tests for tier auto-detection (4 paths)
+- [x] Token savings verification (before/after measurement)
 
 ---
 

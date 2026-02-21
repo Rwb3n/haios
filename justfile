@@ -210,8 +210,9 @@ work-options:
 
 # WORK-011: Unified coldstart with ColdstartOrchestrator
 # Runs all three loaders (identity, session, work) with [BREATHE] markers
-coldstart-orchestrator:
-    python .claude/haios/modules/cli.py coldstart
+# WORK-180: Forwards args (e.g., --tier full) to orchestrator per ADR-047
+coldstart-orchestrator *args:
+    python .claude/haios/modules/cli.py coldstart {{args}}
 
 # =============================================================================
 # TESTING RECIPES

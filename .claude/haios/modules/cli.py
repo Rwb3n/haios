@@ -277,12 +277,16 @@ def cmd_context_load(project_root: Path = None, role: str = "main") -> int:
 # =============================================================================
 
 
-def cmd_coldstart() -> int:
+def cmd_coldstart(tier: str = "auto") -> int:
     """
     Run coldstart orchestrator - unified context loading with breathing room.
 
     WORK-011 (CH-007): Wires IdentityLoader, SessionLoader, WorkLoader into
     unified coldstart with [BREATHE] markers between phases.
+    WORK-180: Adds tier argument for tiered coldstart per ADR-047.
+
+    Args:
+        tier: "auto", "full", "light", or "minimal". Default: "auto".
 
     Returns:
         0 on success
@@ -298,7 +302,7 @@ def cmd_coldstart() -> int:
         )
 
     orch = ColdstartOrchestrator()
-    print(orch.run())
+    print(orch.run(tier=tier))
     return 0
 
 
@@ -715,9 +719,14 @@ def main():
     elif cmd == "context-load":
         return cmd_context_load()
 
-    # WORK-011: Coldstart Orchestrator
+    # WORK-011: Coldstart Orchestrator (WORK-180: tier forwarding)
     elif cmd == "coldstart":
-        return cmd_coldstart()
+        tier = "auto"
+        if "--tier" in sys.argv:
+            idx = sys.argv.index("--tier")
+            if idx + 1 < len(sys.argv):
+                tier = sys.argv[idx + 1]
+        return cmd_coldstart(tier=tier)
 
     # E2-255: Cycle Phases
     elif cmd == "cycle-phases":
