@@ -11557,3 +11557,25 @@
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-22T00:42:10.413551"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-22T00:42:10.457589"}
 {"type": "StatusPropagation", "work_id": "WORK-183", "chapter": "CH-065", "arc": "infrastructure", "action": "arc_completed", "timestamp": "2026-02-22T00:42:25.825463"}
+{"type": "SessionEnded", "session": 418, "agent": "Hephaestus", "timestamp": "2026-02-22T00:43:37.453678"}
+{"type": "SessionStarted", "session": 419, "agent": "Hephaestus", "timestamp": "2026-02-22T08:57:15.489605"}
+{"type": "GateViolation", "gate_id": "scaffold_block", "work_id": "unknown", "violation_type": "block", "context": "BLOCKED: Direct work_item scaffold. Use '/new-work' command instead. Work items require work-creation-cycle to populate placeholders.", "timestamp": "2026-02-22T09:17:41.333862"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-185", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-22T09:20:00.393158"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-186", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-22T09:20:00.406297"}
+{"type": "SessionStarted", "session": 420, "agent": "Hephaestus", "timestamp": "2026-02-22T09:28:53.284394"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-22T09:32:28.167913"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-163", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-22T09:32:28.173999"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-163"], "from": "backlog", "to": "ready", "timestamp": "2026-02-22T09:32:28.179530", "rationale": "Selected by operator for S420. CH-062 Progressive Contracts - core E2.8 exit criterion.", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-22T09:32:28.179530"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-22T09:32:38.895980"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-163", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-22T09:32:38.903216"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-163"], "from": "ready", "to": "working", "timestamp": "2026-02-22T09:32:38.908773", "rationale": "S420 active work item", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-22T09:32:38.908773"}
+{"type": "CeremonyStart", "ceremony": "spawn-work", "timestamp": "2026-02-22T10:15:01.645402"}
+{"type": "SpawnWork", "ceremony": "spawn-work", "parent_work_id": "WORK-163", "new_work_id": "WORK-187", "title": "Fracture Implementation-Cycle SKILL.md into Phase Files", "work_type": "implementation", "timestamp": "2026-02-22T10:15:01.680297", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "spawn-work", "side_effects": 3, "timestamp": "2026-02-22T10:15:01.681804"}
+{"type": "CeremonyStart", "ceremony": "spawn-work", "timestamp": "2026-02-22T10:15:14.949822"}
+{"type": "SpawnWork", "ceremony": "spawn-work", "parent_work_id": "WORK-163", "new_work_id": "WORK-188", "title": "Hook Auto-Injection for Phase Contracts", "work_type": "implementation", "timestamp": "2026-02-22T10:15:14.961281", "agent": "Hephaestus"}
+{"type": "CeremonyEnd", "ceremony": "spawn-work", "side_effects": 3, "timestamp": "2026-02-22T10:15:14.961281"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-22T10:19:59.446668"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-22T10:19:59.488684"}

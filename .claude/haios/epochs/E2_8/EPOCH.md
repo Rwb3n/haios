@@ -1,5 +1,5 @@
 # generated: 2026-02-14
-# System Auto: last updated on: 2026-02-17T20:50:00
+# System Auto: last updated on: 2026-02-22T08:58:00
 # Epoch 2.8: Agent UX
 
 ## L4 Object Definition
@@ -84,10 +84,12 @@ Move mechanical ceremony phases from SKILL.md (agent reads) to hooks/modules (au
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
 | CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Complete |
-| CH-059 | CeremonyAutomation | WORK-160, WORK-167-176 | REQ-CEREMONY-002, REQ-CEREMONY-005 | CH-058 | In Progress |
+| CH-059 | CeremonyAutomation | ~~WORK-160~~, ~~WORK-167~~, ~~WORK-168~~, WORK-169-176 | REQ-CEREMONY-002, REQ-CEREMONY-005 | CH-058 | In Progress |
 | CH-060 | SessionBoundaryFix | WORK-161 | REQ-CEREMONY-001 | None | Complete |
 | CH-061 | ColdstartContextInjection | WORK-162, WORK-180 | REQ-CONFIG-001, L3.3 | None | Complete |
 | CH-066 | MCPOperationsServer | New | REQ-DISCOVER-002, REQ-CONFIG-001 | CH-061 | Planning |
+
+**CH-066 Design Note (S419):** Tool naming must be intuitive. `just work` is a good example — the name communicates intent immediately. MCP tool names should follow the same principle: `work_create`, `work_park`, `session_start` — not `execute_queue_transition` or `scaffold_template`. The operator's observation: "just work < good name" validates naming as a first-class UX concern for the MCP operations server.
 
 **Exit criteria:**
 - [ ] Governance overhead measurably reduced (target: perceptible improvement over E2.5 baseline)

@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-22T00:42:13",
+    "generated": "2026-02-22T10:20:02",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 416,
-        "current_session": 417,
+        "prior_session": 417,
+        "current_session": 418,
         "prior_date": "2026-02-21",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 87141,
-        "entities": 10396,
+        "concepts": 87208,
+        "entities": 10425,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -4253,6 +4253,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-22-01-SESSION-418-work-183-fix-13-pre-existing-test-failures.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-22",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/checkpoints/checkpoint-386.md",
             "template": "checkpoint",
             "status": null,
@@ -5675,6 +5684,15 @@
             "spawned_by": "WORK-162"
         },
         {
+            "path": "docs/ADR/ADR-048-progressive-contracts-phase-per-file-skill-fracturing.md",
+            "template": "architecture_decision_record",
+            "status": "proposed",
+            "date": "2026-02-22",
+            "last_updated": null,
+            "backlog_id": "WORK-163",
+            "spawned_by": "WORK-163"
+        },
+        {
             "path": "docs/reports/2025-11-30-EVALUATION-synthesis-pipeline.md",
             "template": "implementation_report",
             "status": "complete",
@@ -6700,6 +6718,12 @@
             "template": "architecture_decision_record"
         },
         {
+            "path": "docs/ADR/ADR-048-progressive-contracts-phase-per-file-skill-fracturing.md",
+            "id": "WORK-163",
+            "status": "proposed",
+            "template": "architecture_decision_record"
+        },
+        {
             "path": "docs/reports/2025-12-06-REPORT-epoch-2-enablement.md",
             "id": null,
             "status": "final",
@@ -7130,7 +7154,7 @@
         {
             "path": "docs/checkpoints/2025-12-22-01-SESSION-96-synthesis-review-and-backlog-archival.md",
             "last_updated": "2025-12-22T09:40:58",
-            "days_stale": 61
+            "days_stale": 62
         },
         {
             "path": "docs/checkpoints/2025-12-22-02-SESSION-97-e2-131-cascade-fix-and-e2-111-plan.md",
@@ -7155,7 +7179,7 @@
         {
             "path": "docs/checkpoints/2025-12-23-01-SESSION-101-inv-022-work-cycle-dag-architecture-complete.md",
             "last_updated": "2025-12-23T09:46:29",
-            "days_stale": 60
+            "days_stale": 61
         },
         {
             "path": "docs/checkpoints/2025-12-23-02-SESSION-102-investigation-cleanup-and-e2-140-planning.md",
@@ -7230,12 +7254,12 @@
         {
             "path": "docs/checkpoints/2025-12-25-01-SESSION-115-e2-173-milestone-discovery-and-pm-archival.md",
             "last_updated": "2025-12-25T08:31:59",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/checkpoints/2025-12-25-02-SESSION-116-inv-033-inv-035-m8-skillarch-milestone.md",
             "last_updated": "2025-12-25T10:10:39",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/checkpoints/2025-12-25-03-SESSION-116-inv-033-e2-177-e2-176-gate-contract-formalization.md",
@@ -7365,7 +7389,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-10-SESSION-141-e2-037-e2-086-closure-e2-108-gate-observability-plan.md",
             "last_updated": "2025-12-29T09:17:07",
-            "days_stale": 54
+            "days_stale": 55
         },
         {
             "path": "docs/checkpoints/2025-12-29-01-SESSION-142-e2-108-triage-cycle-m7c-progress.md",
@@ -7480,7 +7504,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-02-SESSION-164-e2-252-governancelayer-scaffold-validate-complete.md",
             "last_updated": "2026-01-04T01:14:30",
-            "days_stale": 48
+            "days_stale": 49
         },
         {
             "path": "docs/checkpoints/2026-01-04-03-SESSION-165-e2-253-complete-e2-254-plan-ready.md",
@@ -7605,12 +7629,12 @@
         {
             "path": "docs/checkpoints/2026-01-12-01-SESSION-188-e2-283-e2-inv-062-complete-sdk-discovery.md",
             "last_updated": "2026-01-12T01:04:29",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/checkpoints/2026-01-12-02-SESSION-189-e2-286-plan-approved.md",
             "last_updated": "2026-01-12T01:43:17",
-            "days_stale": 40
+            "days_stale": 41
         },
         {
             "path": "docs/checkpoints/2026-01-14-01-SESSION-190-soft-enforcement-chain-complete.md",
@@ -8080,7 +8104,7 @@
         {
             "path": "docs/plans/PLAN-E2-160-work-file-prerequisite-gate.md",
             "last_updated": "2025-12-24T10:11:57",
-            "days_stale": 59
+            "days_stale": 60
         },
         {
             "path": "docs/plans/PLAN-E2-162-node-transition-just-recipes.md",
@@ -8385,7 +8409,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-022-work-cycle-dag-unified-architecture.md",
             "last_updated": "2025-12-23T09:40:38",
-            "days_stale": 60
+            "days_stale": 61
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-023-reasoningbank-feedback-loop-architecture.md",
@@ -8440,7 +8464,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-033-skill-as-node-entry-gate-formalization.md",
             "last_updated": "2025-12-25T08:55:31",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-034-backlog-archival-and-status-rewiring.md",
@@ -8450,7 +8474,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-035-skill-architecture-refactoring.md",
             "last_updated": "2025-12-25T10:05:51",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-036-coldstart-checkpoint-heartbeat-context-value-audit.md",
@@ -8540,12 +8564,12 @@
         {
             "path": "docs/ADR/ADR-038-m2-governance-symphony-architecture.md",
             "last_updated": "2025-12-29T10:09:49",
-            "days_stale": 54
+            "days_stale": 55
         },
         {
             "path": "docs/ADR/ADR-039-work-item-as-file-architecture.md",
             "last_updated": "2025-12-24T09:33:53",
-            "days_stale": 59
+            "days_stale": 60
         },
         {
             "path": "docs/ADR/ADR-040-haios-modular-black-box-architecture.md",
@@ -8609,25 +8633,25 @@
         }
     ],
     "workspace": {
-        "total_files": 576,
+        "total_files": 578,
         "by_template": {
-            "checkpoint": 401,
+            "checkpoint": 402,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
-            "architecture_decision_record": 18,
+            "architecture_decision_record": 19,
             "implementation_report": 4,
             "report": 3
         },
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 236,
+            "unknown": 237,
             "draft": 2,
             "approved": 6,
             "ready": 1,
             "accepted": 17,
-            "proposed": 1,
+            "proposed": 2,
             "final": 1,
             "completed": 2
         },
@@ -9198,6 +9222,10 @@
             {
                 "path": "docs/ADR/ADR-039-work-item-as-file-architecture.md",
                 "backlog_id": "ADR-039"
+            },
+            {
+                "path": "docs/ADR/ADR-048-progressive-contracts-phase-per-file-skill-fracturing.md",
+                "backlog_id": "WORK-163"
             }
         ],
         "orphan_files": []
@@ -9322,6 +9350,9 @@
         ],
         "INV-024": [
             "ADR-039"
+        ],
+        "WORK-163": [
+            "WORK-163"
         ]
     }
 }
