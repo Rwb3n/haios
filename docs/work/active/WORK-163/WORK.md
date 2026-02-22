@@ -10,6 +10,7 @@ spawned_by: Session-394-decomposition
 spawned_children:
 - WORK-187
 - WORK-188
+- WORK-189
 chapter: CH-062
 arc: query
 closed: '2026-02-22'
@@ -45,7 +46,7 @@ extensions:
   epoch: E2.8
 version: '2.0'
 generated: 2026-02-17
-last_updated: '2026-02-22T10:19:59.470681'
+last_updated: '2026-02-22T10:27:49.248101'
 queue_history:
 - position: ready
   entered: '2026-02-22T09:32:28.173999'
