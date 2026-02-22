@@ -67,13 +67,11 @@ def handle(hook_data: dict) -> str:
     # Part 1: Date/time context
     output_parts.append(_get_datetime_context())
 
-    # Part 1.5: Context threshold check (E2-210)
-    # DISABLED Session 179: Context estimate is unreliable, causes noise
-    # transcript_path = hook_data.get("transcript_path", "")
-    # context_warning = _check_context_threshold(transcript_path)
-    # if context_warning:
-    #     output_parts.append("")
-    #     output_parts.append(context_warning)
+    # Part 1.5: Context usage from transcript JSONL (WORK-189, replaces E2-210)
+    transcript_path = hook_data.get("transcript_path", "")
+    context_usage = _get_context_usage(transcript_path)
+    if context_usage:
+        output_parts.append(context_usage)
 
     # Part 2: HAIOS Vitals (E2-119: refresh status before reading)
     # DISABLED Session 179: Vitals structure outdated after E2.2 chapter redesign
@@ -214,6 +212,67 @@ def _get_phase_contract(cwd: str) -> Optional[str]:
 
         content = phase_file.read_text(encoding="utf-8")
         return f"--- Phase Contract: {active_cycle}/{current_phase} ---\n{content}\n---"
+    except Exception:
+        return None
+
+
+def _get_context_usage(transcript_path: str) -> Optional[str]:
+    """
+    Extract real context window usage from transcript JSONL (WORK-189).
+
+    Parses the last assistant message's API usage metadata to calculate
+    context window consumption. Reflects usage as of last completed
+    assistant response — current prompt tokens not yet recorded.
+    Replaces the unreliable file-size heuristic (disabled S179).
+
+    Pattern from: github.com/harrymunro/nelson/scripts/count-tokens.py
+
+    Args:
+        transcript_path: Path to Claude Code transcript JSONL file.
+
+    Returns:
+        Formatted string like "[CONTEXT: 75% used]", or None if unavailable.
+    """
+    if not transcript_path:
+        return None
+
+    path = Path(transcript_path)
+    if not path.exists():
+        return None
+
+    try:
+        last_usage = None
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    record = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if record.get("type") != "assistant":
+                    continue
+                msg = record.get("message")
+                if not isinstance(msg, dict) or "usage" not in msg:
+                    continue
+                last_usage = msg["usage"]
+
+        if last_usage is None:
+            return None
+
+        input_tokens = last_usage.get("input_tokens", 0)
+        cache_creation = last_usage.get("cache_creation_input_tokens", 0)
+        cache_read = last_usage.get("cache_read_input_tokens", 0)
+        total = input_tokens + cache_creation + cache_read
+
+        if total == 0:
+            return None  # No usage data found — graceful degradation (A13)
+
+        context_limit = 200_000
+        pct = min(100.0, (total / context_limit) * 100)
+
+        return f"[CONTEXT: {pct:.0f}% used]"
     except Exception:
         return None
 
@@ -425,6 +484,7 @@ def _get_lifecycle_guidance(prompt: str, cwd: str) -> Optional[str]:
     return None
 
 
+# SUPERSEDED by _get_context_usage (WORK-189)
 def _estimate_context_usage(transcript_path: str) -> float:
     """
     Estimate context usage percentage from transcript file size.
@@ -452,6 +512,7 @@ def _estimate_context_usage(transcript_path: str) -> float:
         return 0.0
 
 
+# SUPERSEDED by _get_context_usage (WORK-189)
 def _check_context_threshold(transcript_path: str, threshold: float = 80.0) -> Optional[str]:
     """
     Check if context usage exceeds threshold.
