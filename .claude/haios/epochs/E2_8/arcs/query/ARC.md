@@ -36,7 +36,7 @@ Progressive disclosure means: load summary first, details on demand. Engine func
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
 | CH-061 | ColdstartContextInjection | WORK-162 (complete), WORK-180 | REQ-CONFIG-001, L3.3 | None | In Progress |
-| CH-062 | ProgressiveContracts | New | REQ-ASSET-001 | None | Planning |
+| CH-062 | ProgressiveContracts | New | REQ-ASSET-001 | None | Complete |
 
 ---
 

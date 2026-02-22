@@ -170,3 +170,33 @@ def sync_work_md_phase(
         return True
     except Exception:
         return False
+
+
+def read_phase_contract(
+    cycle_name: str,
+    phase_name: str,
+    project_root: Optional[Path] = None,
+) -> Optional[str]:
+    """Read phase contract file for the given cycle and phase.
+
+    Reads from .claude/skills/{cycle_name}/phases/{phase_name}.md.
+    Fall-permissive: returns None if file not found or any error. Never raises.
+
+    Args:
+        cycle_name: Lifecycle cycle name (e.g., "implementation-cycle")
+        phase_name: Phase name in uppercase (e.g., "DO", "PLAN", "CHECK")
+        project_root: Project root path. Defaults to derived path.
+
+    Returns:
+        File content as string, or None if missing or error.
+    """
+    try:
+        root = project_root or _default_project_root()
+        phase_file = (
+            root / ".claude" / "skills" / cycle_name / "phases" / f"{phase_name}.md"
+        )
+        if not phase_file.exists():
+            return None
+        return phase_file.read_text(encoding="utf-8")
+    except Exception:
+        return None

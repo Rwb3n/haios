@@ -58,7 +58,7 @@ def handle(hook_data: dict) -> Optional[str]:
             messages.append(autolink_msg)
         return "\n".join(messages) if messages else None
 
-    # Part 8: Cycle phase auto-advancement (WORK-168)
+    # Part 8: Cycle phase auto-advancement (WORK-168) + phase contract injection (WORK-188)
     if tool_name == "Skill":
         skill_name = hook_data.get("tool_input", {}).get("skill", "")
         if skill_name:
@@ -66,10 +66,29 @@ def handle(hook_data: dict) -> Optional[str]:
                 lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
                 if str(lib_dir) not in sys.path:
                     sys.path.insert(0, str(lib_dir))
-                from cycle_state import advance_cycle_phase
+                from cycle_state import advance_cycle_phase, read_phase_contract
                 advanced = advance_cycle_phase(skill_name)
                 if advanced:
                     messages.append(f"[CYCLE] Auto-advanced phase after {skill_name}")
+                    # Inject phase contract for the new phase (WORK-188, ADR-048)
+                    try:
+                        slim_file = (
+                            Path(__file__).parent.parent.parent.parent
+                            / ".claude" / "haios-status-slim.json"
+                        )
+                        slim = json.loads(slim_file.read_text(encoding="utf-8"))
+                        session_state = slim.get("session_state", {})
+                        new_phase = session_state.get("current_phase")
+                        cycle_key = session_state.get("active_cycle")
+                        if new_phase and cycle_key:
+                            contract = read_phase_contract(cycle_key, new_phase)
+                            if contract:
+                                messages.append(
+                                    f"\n--- Phase Contract: {cycle_key}/{new_phase} ---\n"
+                                    f"{contract}\n---"
+                                )
+                    except Exception:
+                        pass  # Fail-permissive: injection failure is non-fatal
             except Exception:
                 pass  # Fail-permissive: never break hook chain
         return "\n".join(messages) if messages else None

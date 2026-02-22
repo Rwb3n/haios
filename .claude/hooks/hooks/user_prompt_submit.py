@@ -92,6 +92,12 @@ def handle(hook_data: dict) -> str:
         output_parts.append("")
         output_parts.append(session_warning)
 
+    # Part 2.6: Phase contract injection (WORK-188, ADR-048)
+    phase_contract = _get_phase_contract(cwd)
+    if phase_contract:
+        output_parts.append("")
+        output_parts.append(phase_contract)
+
     # Part 3: Dynamic thresholds
     # DISABLED Session 259: Thresholds read deprecated milestone data
     # Milestones replaced by Arcs/Chapters in E2.3 - needs status redesign
@@ -162,6 +168,52 @@ def _get_session_state_warning(cwd: str) -> Optional[str]:
                 "---"
             )
         return None
+    except Exception:
+        return None
+
+
+def _get_phase_contract(cwd: str) -> Optional[str]:
+    """
+    Inject current phase's behavioral contract from phase file.
+
+    ADR-048 belt-and-suspenders: on every prompt, if an active lifecycle cycle
+    is running, read and inject the current phase's contract file so the agent
+    always has the behavioral contract in context (recovery after compaction).
+
+    Phase files live at: .claude/skills/{cycle}/phases/{PHASE}.md
+
+    Fall-permissive: returns None if no active cycle, phase file missing, or any error.
+
+    Args:
+        cwd: Working directory path
+
+    Returns:
+        Formatted phase contract string, or None if not applicable.
+    """
+    if not cwd:
+        return None
+
+    slim_path = Path(cwd) / ".claude" / "haios-status-slim.json"
+    if not slim_path.exists():
+        return None
+
+    try:
+        slim = json.loads(slim_path.read_text(encoding="utf-8-sig"))
+        session_state = slim.get("session_state", {})
+        active_cycle = session_state.get("active_cycle")
+        current_phase = session_state.get("current_phase")
+
+        if not active_cycle or not current_phase:
+            return None
+
+        phase_file = (
+            Path(cwd) / ".claude" / "skills" / active_cycle / "phases" / f"{current_phase}.md"
+        )
+        if not phase_file.exists():
+            return None
+
+        content = phase_file.read_text(encoding="utf-8")
+        return f"--- Phase Contract: {active_cycle}/{current_phase} ---\n{content}\n---"
     except Exception:
         return None
 

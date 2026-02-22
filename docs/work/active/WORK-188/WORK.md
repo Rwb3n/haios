@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-188
-title: "Hook Auto-Injection for Phase Contracts"
+title: Hook Auto-Injection for Phase Contracts
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-22
 spawned_by: WORK-163
 spawned_children: []
 chapter: CH-062
 arc: query
-closed: null
+closed: '2026-02-22'
 priority: medium
 effort: small
 traces_to:
@@ -21,30 +21,40 @@ source_files:
 - .claude/hooks/hooks/user_prompt_submit.py
 - .claude/haios/lib/cycle_state.py
 acceptance_criteria:
-- "PostToolUse injects phase contract after advance_cycle_phase fires"
-- "UserPromptSubmit injects current phase contract on every prompt"
-- "Injection reads from .claude/skills/{cycle}/phases/{phase}.md"
-- "Graceful degradation if phase file missing (fall-permissive)"
-- "Existing tests still pass"
+- PostToolUse injects phase contract after advance_cycle_phase fires
+- UserPromptSubmit injects current phase contract on every prompt
+- Injection reads from .claude/skills/{cycle}/phases/{phase}.md
+- Graceful degradation if phase file missing (fall-permissive)
+- Existing tests still pass
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-22T10:15:14
-    exited: null
+- node: backlog
+  entered: 2026-02-22 10:15:14
+  exited: '2026-02-22T12:09:00.077480'
 artifacts: []
 cycle_docs: {}
 memory_refs:
 - 85815
+- 72314
+- 87437
+- 87438
+- 87439
+- 87440
+- 87441
 extensions:
   epoch: E2.8
-version: "2.0"
+version: '2.0'
 generated: 2026-02-22
-last_updated: 2026-02-22T10:15:14
+last_updated: '2026-02-22T12:09:00.079988'
+queue_history:
+- position: done
+  entered: '2026-02-22T12:09:00.077480'
+  exited: null
 ---
 # WORK-188: Hook Auto-Injection for Phase Contracts
 
@@ -76,11 +86,11 @@ Depends on WORK-187 (phase files must exist before hooks can inject them).
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] PostToolUse extension: inject phase contract after advance_cycle_phase
-- [ ] UserPromptSubmit extension: inject current phase contract on every prompt
-- [ ] Phase contract reader function in lib/ (shared by both hooks)
-- [ ] Tests for injection logic
-- [ ] All existing tests pass
+- [x] PostToolUse extension: inject phase contract after advance_cycle_phase
+- [x] UserPromptSubmit extension: inject current phase contract on every prompt
+- [x] Phase contract reader function in lib/ (shared by both hooks)
+- [x] Tests for injection logic (8 tests, all green)
+- [x] All existing tests pass (1597 passed, 0 failed)
 
 ---
 
@@ -89,6 +99,7 @@ Depends on WORK-187 (phase files must exist before hooks can inject them).
 ### 2026-02-22 - Created (Session 420)
 - Spawned from WORK-163 (Progressive Contracts design)
 - ADR-048 specifies dual hook injection (belt and suspenders)
+- Dependency: WORK-187 (phase files must exist) — completed S421, dependency resolved
 
 ---
 
