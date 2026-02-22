@@ -141,7 +141,9 @@ def test_coldstart_runs_epoch_validation(monkeypatch):
 
     monkeypatch.setattr(ev_mod, "EpochValidator", MockEpochValidator)
 
-    output = orch.run()
+    from unittest.mock import patch
+    with patch.object(orch, '_check_for_orphans', return_value=None):
+        output = orch.run(tier="full")  # Explicit full tier to ensure validation runs
     assert "[PHASE: VALIDATION]" in output
     assert "WORK-999" in output
 

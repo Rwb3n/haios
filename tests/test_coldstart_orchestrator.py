@@ -100,7 +100,8 @@ def test_breathe_markers_between_phases(tmp_path):
         "session": lambda: MockLoader("SESS"),
     }
 
-    output = orch.run()
+    with patch.object(orch, '_check_for_orphans', return_value=None):
+        output = orch.run()
 
     assert "[BREATHE]" in output
     # Breathe appears after identity, not after session

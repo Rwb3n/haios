@@ -41,13 +41,13 @@ EXISTING_CEREMONY_SKILLS = [
     "session-start-ceremony",   # De-stubbed by WORK-120 (CH-014)
     "session-end-ceremony",     # De-stubbed by WORK-120 (CH-014)
     "memory-commit-ceremony",   # De-stubbed by WORK-133 (CH-016)
+    "spawn-work-ceremony",      # De-stubbed (fully implemented)
 ]
 
 # Remaining stub skills (WORK-112)
 # WORK-148: 4 feedback stubs removed (arc-review, chapter-review, epoch-review, requirements-review)
-STUB_CEREMONY_SKILLS = [
-    "spawn-work-ceremony",
-]
+# WORK-183: spawn-work-ceremony moved to EXISTING (fully implemented)
+STUB_CEREMONY_SKILLS = []
 
 ALL_CEREMONY_SKILLS = EXISTING_CEREMONY_SKILLS + STUB_CEREMONY_SKILLS
 

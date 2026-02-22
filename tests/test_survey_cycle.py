@@ -28,15 +28,7 @@ class TestSurveyCycleSkill:
         assert "CHOOSE" in content, "Must have CHOOSE phase"
         assert "ROUTE" in content, "Must have ROUTE phase"
 
-    def test_survey_cycle_has_pressure_annotations(self):
-        """Verify SURVEY skill has [volumous] and [tight] pressure annotations per S20."""
-        skill_path = Path(".claude/skills/survey-cycle/SKILL.md")
-        assert skill_path.exists(), "SKILL.md must exist"
-        content = skill_path.read_text()
-        # GATHER, ASSESS, OPTIONS should be volumous
-        assert "[volumous]" in content, "Must have volumous phases"
-        # CHOOSE, ROUTE should be tight
-        assert "[tight]" in content, "Must have tight phases"
+    # test_survey_cycle_has_pressure_annotations removed (WORK-183): pressure annotations removed from survey-cycle
 
     def test_survey_cycle_in_manifest(self):
         """Verify survey-cycle appears in haios manifest for discovery."""

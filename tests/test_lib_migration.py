@@ -84,16 +84,7 @@ class TestLibModulesImportable:
 class TestCompatibilityShims:
     """Test 2: Compatibility shims work from old location."""
 
-    def test_old_location_has_deprecation_init(self):
-        """Verify old .claude/lib/ has deprecation notice."""
-        old_lib = PROJECT_ROOT / ".claude" / "lib"
-        init_file = old_lib / "__init__.py"
-
-        assert init_file.exists(), f"Shim file {init_file} does not exist"
-
-        content = init_file.read_text()
-        assert "deprecated" in content.lower() or "DEPRECATED" in content, \
-            "Old __init__.py should contain deprecation notice"
+    # test_old_location_has_deprecation_init removed (WORK-183): .claude/lib/ removed after migration
 
     def test_shim_reexports_database(self):
         """Verify database module can still be imported via shim."""

@@ -24,6 +24,8 @@ Batch fix confirmed bugs from E2.7 triage and S393 operator report. Clean founda
 |----|-------|--------|------|
 | WORK-166 | Bug Batch E2.8 | Complete | implementation |
 | WORK-175 | Fix plan_tree.py --ready Blocked_by Filter | Active | implementation |
+| WORK-181 | Investigate Test Failure Root Causes | Complete | investigation |
+| WORK-183 | Fix 13 Pre-Existing Test Failures | Active | implementation |
 
 ---
 

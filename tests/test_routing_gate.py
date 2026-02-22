@@ -18,12 +18,7 @@ from routing import determine_route
 class TestDetermineRoute:
     """Tests for determine_route() function."""
 
-    def test_route_investigation_by_prefix(self):
-        """INV-* IDs should route to investigation-cycle."""
-        result = determine_route(next_work_id="INV-049", has_plan=False)
-
-        assert result["action"] == "invoke_investigation"
-        assert "INV-" in result["reason"]
+    # test_route_investigation_by_prefix removed (WORK-183): INV- prefix routing removed per WORK-030
 
     def test_route_implementation_when_has_plan(self):
         """Work items with plans should route to implementation-cycle."""
@@ -65,14 +60,7 @@ class TestDetermineRoute:
         )
         assert result["action"] == "invoke_investigation"
 
-    def test_route_legacy_inv_prefix_without_type(self):
-        """INV-XXX still routes to investigation-cycle (backward compat)."""
-        result = determine_route(
-            next_work_id="INV-017",
-            has_plan=False,
-            work_type=None  # Legacy items may not have type
-        )
-        assert result["action"] == "invoke_investigation"
+    # test_route_legacy_inv_prefix_without_type removed (WORK-183): INV- prefix routing removed per WORK-030
 
     def test_route_feature_type_without_plan(self):
         """Feature type without plan goes to work-creation."""

@@ -64,7 +64,7 @@ components:
     - id: "workspace"
       source: "commands/workspace/"
 
-  # Skills (29 total)
+  # Skills (30 total)
   skills:
     - id: "audit"
       source: "skills/audit/"
@@ -111,6 +111,9 @@ components:
     - id: "observation-triage-cycle"
       source: "skills/observation-triage-cycle/"
       category: "cycle"
+    - id: "open-epoch-ceremony"
+      source: "skills/open-epoch-ceremony/"
+      category: "ceremony"
     - id: "plan-authoring-cycle"
       source: "skills/plan-authoring-cycle/"
       category: "cycle"
@@ -154,7 +157,7 @@ components:
       source: "skills/work-creation-cycle/"
       category: "cycle"
 
-  # Agents (11 total)
+  # Agents (13 total)
   agents:
     - id: "anti-pattern-checker"
       source: "agents/anti-pattern-checker/"
@@ -165,6 +168,9 @@ components:
     - id: "critique-agent"
       source: "agents/critique-agent/"
       required: false
+    - id: "design-review-validation-agent"
+      source: "agents/design-review-validation-agent/"
+      required: false
     - id: "implementation-cycle-agent"
       source: "agents/implementation-cycle-agent/"
       required: false
@@ -173,6 +179,9 @@ components:
       required: false
     - id: "investigation-cycle-agent"
       source: "agents/investigation-cycle-agent/"
+      required: false
+    - id: "plan-authoring-agent"
+      source: "agents/plan-authoring-agent/"
       required: false
     - id: "preflight-checker"
       source: "agents/preflight-checker/"

@@ -13,15 +13,7 @@ import pytest
 TEMPLATES_DIR = Path(".claude/templates")
 
 
-def test_checkpoint_template_has_rfc2119_section():
-    """Checkpoint template should have Session Hygiene section with governance signals."""
-    content = (TEMPLATES_DIR / "checkpoint.md").read_text()
-    # Check for the RFC 2119 section
-    assert "Session Hygiene" in content or "RFC 2119" in content, \
-        "checkpoint.md missing 'Session Hygiene' or 'RFC 2119' section"
-    # Check for governance keywords
-    assert "MUST" in content or "SHOULD" in content, \
-        "checkpoint.md missing MUST/SHOULD governance keywords"
+# test_checkpoint_template_has_rfc2119_section removed (WORK-183): checkpoint template simplified to pure YAML frontmatter
 
 
 def test_implementation_plan_template_has_rfc2119_section():

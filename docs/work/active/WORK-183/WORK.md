@@ -1,55 +1,63 @@
 ---
 template: work_item
 id: WORK-183
-title: "Fix 13 Pre-Existing Test Failures"
+title: Fix 13 Pre-Existing Test Failures
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-21
 spawned_by: WORK-181
 spawned_children: []
 chapter: CH-065
 arc: infrastructure
-closed: null
+closed: '2026-02-22'
 priority: medium
 effort: small
 traces_to:
-  - REQ-CEREMONY-001
+- REQ-CEREMONY-001
 requirement_refs: []
 source_files:
-  - tests/test_agent_capability_cards.py
-  - tests/test_ceremony_retrofit.py
-  - tests/test_coldstart_orchestrator.py
-  - tests/test_epoch_validator.py
-  - tests/test_hooks.py
-  - tests/test_lib_migration.py
-  - tests/test_lib_status.py
-  - tests/test_manifest.py
-  - tests/test_routing_gate.py
-  - tests/test_survey_cycle.py
-  - tests/test_template_rfc2119.py
+- tests/test_agent_capability_cards.py
+- tests/test_ceremony_retrofit.py
+- tests/test_coldstart_orchestrator.py
+- tests/test_epoch_validator.py
+- tests/test_hooks.py
+- tests/test_lib_migration.py
+- tests/test_lib_status.py
+- tests/test_manifest.py
+- tests/test_routing_gate.py
+- tests/test_survey_cycle.py
+- tests/test_template_rfc2119.py
 acceptance_criteria:
-  - "All 13 test failures fixed or retired with documented rationale"
-  - "Zero new test failures introduced"
-  - "Full test suite passes (1565+ pass, 0 fail)"
+- All 13 test failures fixed or retired with documented rationale
+- Zero new test failures introduced
+- Full test suite passes (1565+ pass, 0 fail)
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-21T23:53:40
-    exited: null
+- node: backlog
+  entered: 2026-02-21 23:53:40
+  exited: '2026-02-22T00:42:10.435255'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 87296
+- 87297
+- 87298
+- 87329
 extensions:
   epoch: E2.8
-version: "2.0"
+version: '2.0'
 generated: 2026-02-21
-last_updated: 2026-02-21T23:53:40
+last_updated: '2026-02-22T00:42:10.439331'
+queue_history:
+- position: done
+  entered: '2026-02-22T00:42:10.435255'
+  exited: null
 ---
 # WORK-183: Fix 13 Pre-Existing Test Failures
 
@@ -98,10 +106,10 @@ WORK-181 investigation found all 13 pre-existing test failures are test drift â€
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Category 1: Update 3 stale assertions (agent count, stub list, manifest)
-- [ ] Category 2: Retire or update 6 deprecated-functionality tests
-- [ ] Category 3: Fix 4 environment-dependent tests with proper mocking
-- [ ] Full pytest suite passes with 0 failures
+- [x] Category 1: Update 3 stale assertions (agent count, stub list, manifest)
+- [x] Category 2: Retire or update 6 deprecated-functionality tests
+- [x] Category 3: Fix 4 environment-dependent tests with proper mocking
+- [x] Full pytest suite passes with 0 failures (1571 passed, 0 failed, S418)
 
 ---
 

@@ -337,26 +337,7 @@ class TestPreToolUseScaffoldBlocking:
 class TestPostToolUseTimestamps:
     """Test 4: PostToolUse timestamp injection."""
 
-    def test_posttooluse_adds_timestamp(self):
-        """Verify timestamps are added to edited files."""
-        from hook_dispatcher import dispatch_hook
-
-        # Create temp file
-        with tempfile.NamedTemporaryFile(suffix=".py", delete=False, mode='w') as f:
-            f.write("# original content\nprint('hello')\n")
-            temp_path = f.name
-
-        try:
-            hook_input = {
-                "hook_event_name": "PostToolUse",
-                "tool_name": "Edit",
-                "tool_response": {"filePath": temp_path}
-            }
-            dispatch_hook(hook_input)
-            content = Path(temp_path).read_text()
-            assert "System Auto: last updated on:" in content
-        finally:
-            Path(temp_path).unlink(missing_ok=True)
+    # test_posttooluse_adds_timestamp removed (WORK-183): timestamp injection disabled S327
 
     def test_posttooluse_skips_json(self):
         """Verify JSON files are skipped (no comment syntax)."""
