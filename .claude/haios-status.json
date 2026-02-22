@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-22T16:05:28",
+    "generated": "2026-02-22T16:30:42",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 422,
-        "current_session": 423,
+        "prior_session": 423,
+        "current_session": 424,
         "prior_date": "2026-02-22",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 87391,
-        "entities": 10483,
+        "concepts": 87435,
+        "entities": 10495,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -4298,6 +4298,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-22-06-SESSION-424-work-190-work-191-batch-bug-fix.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-22",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/checkpoints/checkpoint-386.md",
             "template": "checkpoint",
             "status": null,
@@ -7355,7 +7364,7 @@
         {
             "path": "docs/checkpoints/2025-12-27-03-SESSION-127-inv-041-complete-m7b-progress-work-item-directory-architecture.md",
             "last_updated": "2025-12-27T16:09:53",
-            "days_stale": 56
+            "days_stale": 57
         },
         {
             "path": "docs/checkpoints/2025-12-27-04-SESSION-128-inv-027-e2-211-sqlite-concurrency-fix.md",
@@ -7725,7 +7734,7 @@
         {
             "path": "docs/checkpoints/2026-01-17-06-SESSION-201-e2-298-e2-300-consumer-migration-and-contextloader-planning.md",
             "last_updated": "2026-01-17T16:14:22",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2026-01-18-01-SESSION-202-e2-300-revert-and-inv-069-architecture-audit-setup.md",
@@ -8470,7 +8479,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-027-ingester-synthesis-concurrent-access-crash.md",
             "last_updated": "2025-12-27T16:29:58",
-            "days_stale": 56
+            "days_stale": 57
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-028-agent-error-reporting-and-observability-gap.md",
@@ -8669,9 +8678,9 @@
         }
     ],
     "workspace": {
-        "total_files": 582,
+        "total_files": 583,
         "by_template": {
-            "checkpoint": 406,
+            "checkpoint": 407,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8682,7 +8691,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 241,
+            "unknown": 242,
             "draft": 2,
             "approved": 6,
             "ready": 1,

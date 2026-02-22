@@ -24,7 +24,7 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 
 | ID | Title | Status | Type |
 |----|-------|--------|------|
-| WORK-160 | Ceremony Automation | Active | implementation |
+| WORK-160 | Ceremony Automation | Complete | implementation |
 | WORK-167 | Governance Tier Detection | Complete | implementation |
 | WORK-168 | Cycle Phase Auto-Advancement | Complete | implementation |
 | WORK-169 | Critique-as-Hook | Backlog | implementation |
@@ -38,8 +38,11 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-178 | CHECK Phase Subagent Delegation | Backlog | implementation |
 | WORK-179 | Queue Commit Cycle Phase Auto-Advance Investigation | Backlog | investigation |
 | WORK-189 | Context Window Usage Injection via UserPromptSubmit Hook | Complete | implementation |
-| WORK-190 | backlog_id_uniqueness Gate False Positive on WORK-1XX IDs | Active | bug |
-| WORK-191 | queue-commit Ceremony Contract Missing work_id Field | Active | bug |
+| WORK-190 | backlog_id_uniqueness Gate False Positive on WORK-1XX IDs | Complete | bug |
+| WORK-191 | queue-commit Ceremony Contract Missing work_id Field | Complete | bug |
+| WORK-194 | UserPromptSubmit Hook Injection Candidates Evaluation | Complete | investigation |
+| WORK-195 | UserPromptSubmit Slim-Read-Once Refactor | Backlog | implementation |
+| WORK-196 | UserPromptSubmit Hook Injection Batch (Session, Working, Duration) | Backlog | implementation |
 
 ---
 

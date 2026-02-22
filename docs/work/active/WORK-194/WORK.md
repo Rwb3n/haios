@@ -1,16 +1,18 @@
 ---
 template: work_item
 id: WORK-194
-title: "UserPromptSubmit Hook Injection Candidates Evaluation"
+title: UserPromptSubmit Hook Injection Candidates Evaluation
 type: investigation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-22
 spawned_by: WORK-189
-spawned_children: []
+spawned_children:
+- WORK-195
+- WORK-196
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-02-22'
 priority: medium
 effort: small
 traces_to:
@@ -19,30 +21,45 @@ requirement_refs: []
 source_files:
 - .claude/hooks/hooks/user_prompt_submit.py
 acceptance_criteria:
-- "Each candidate injection evaluated for: token cost, data source, implementation effort, value to agent"
-- "Clear recommendation per candidate: implement now, defer, or reject"
-- "Spawns implementation work items for approved candidates"
+- 'Each candidate injection evaluated for: token cost, data source, implementation
+  effort, value to agent'
+- 'Clear recommendation per candidate: implement now, defer, or reject'
+- Spawns implementation work items for approved candidates
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-22T15:41:56
-    exited: null
+- node: backlog
+  entered: 2026-02-22 15:41:56
+  exited: '2026-02-22T16:30:39.931518'
 artifacts: []
 cycle_docs: {}
 memory_refs:
 - 87537
 - 87538
 - 87539
+- 87580
+- 87581
+- 87582
+- 87583
 extensions:
   epoch: E2.8
-version: "2.0"
+version: '2.0'
 generated: 2026-02-22
-last_updated: 2026-02-22T15:41:56
+last_updated: '2026-02-22T16:30:39.934607'
+queue_history:
+- position: ready
+  entered: '2026-02-22T16:21:00.113969'
+  exited: '2026-02-22T16:21:11.025131'
+- position: working
+  entered: '2026-02-22T16:21:11.025131'
+  exited: '2026-02-22T16:30:39.931518'
+- position: done
+  entered: '2026-02-22T16:30:39.931518'
+  exited: null
 ---
 # WORK-194: UserPromptSubmit Hook Injection Candidates Evaluation
 
@@ -77,13 +94,34 @@ For each candidate:
 
 ## Deliverables
 
-- [ ] Evaluation table for all 4 candidates
-- [ ] Recommendation per candidate (implement/defer/reject)
-- [ ] Spawned implementation work items for approved candidates
+- [x] Evaluation table for all 4 candidates
+- [x] Recommendation per candidate (implement/defer/reject)
+- [x] Spawned implementation work items for approved candidates (WORK-195, WORK-196)
 
 ---
 
 ## History
+
+### 2026-02-22 - Completed (Session 425)
+
+**Evaluation Table:**
+
+| Candidate | Injection | Tokens | Data Source | Effort | Value | Recommendation |
+|-----------|-----------|--------|-------------|--------|-------|----------------|
+| 1. Session number | `[SESSION: 425]` | ~5 | `.claude/session` (50 bytes) | Trivial | High | **Implement** |
+| 2. Working item | `[WORKING: WORK-194]` | ~5 | slim JSON `session_state.work_id` (already parsed) | Trivial | High | **Implement** |
+| 3. Time-in-session | `[DURATION: 61m]` | ~5 | `.claude/session` mtime (stat() syscall) | Small | Medium | **Implement** |
+| 4. Pending count | `[READY: 6 items]` | ~5 | WorkEngine (heavy import, all WORK.md) | Medium-High | Low | **Defer** |
+
+**Key findings:**
+- Candidates 1+3 share a single Path object (read content + stat mtime)
+- Candidate 2 piggybacks on existing slim JSON parse (already read by `_get_session_state_warning`)
+- Candidate 4 deferred: WorkEngine imports GovernanceLayer, parses all active WORK.md — too heavy for per-prompt
+- Bonus finding: slim JSON read 4x per handle() call — spawned WORK-195 prerequisite refactor
+
+**Spawned:**
+- WORK-195: Slim-read-once refactor (prerequisite)
+- WORK-196: Hook injection batch — session, working, duration (blocked by WORK-195)
 
 ### 2026-02-22 - Created (Session 423)
 - Operator-Hephaestus discussion during WORK-189 closure CHAIN phase
@@ -94,4 +132,6 @@ For each candidate:
 ## References
 
 - @docs/work/active/WORK-189/WORK.md (parent: context window injection)
+- @docs/work/active/WORK-195/WORK.md (spawned: slim refactor)
+- @docs/work/active/WORK-196/WORK.md (spawned: injection batch)
 - Memory: 87537-87539 (context budget calibration data from S423)
