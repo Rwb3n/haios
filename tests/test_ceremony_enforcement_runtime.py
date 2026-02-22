@@ -128,6 +128,45 @@ class TestCeremonyContractEnforcement:
             assert result is not None
             assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
 
+    def test_extract_ceremony_inputs_parses_work_id_from_args(self):
+        """WORK-191: _extract_ceremony_inputs parses WORK-XXX from args string.
+
+        Skill tool_input is {"skill": "queue-commit", "args": "WORK-190"}.
+        The function should extract work_id from args.
+        """
+        from pre_tool_use import _extract_ceremony_inputs
+
+        inputs = _extract_ceremony_inputs({"skill": "queue-commit", "args": "WORK-190"})
+        assert inputs.get("work_id") == "WORK-190"
+
+    def test_extract_ceremony_inputs_no_args_returns_empty(self):
+        """WORK-191: No args string returns empty dict (backward compat)."""
+        from pre_tool_use import _extract_ceremony_inputs
+
+        inputs = _extract_ceremony_inputs({"skill": "queue-commit"})
+        assert inputs == {}
+
+    def test_extract_ceremony_inputs_no_work_id_in_args(self):
+        """WORK-191: Args without WORK-XXX pattern returns empty dict."""
+        from pre_tool_use import _extract_ceremony_inputs
+
+        inputs = _extract_ceremony_inputs({"skill": "queue-commit", "args": "some text"})
+        assert "work_id" not in inputs
+
+    def test_queue_commit_with_work_id_in_args_passes_contract(self):
+        """WORK-191: queue-commit with WORK-XXX in args should pass contract validation.
+
+        End-to-end: _check_ceremony_contract should return None (pass) when
+        args contains a valid work_id.
+        """
+        from pre_tool_use import _check_ceremony_contract
+
+        result = _check_ceremony_contract(
+            "queue-commit", {"skill": "queue-commit", "args": "WORK-190"}
+        )
+        # Should pass — work_id extracted from args satisfies contract
+        assert result is None
+
     def test_missing_skill_file_returns_none(self):
         """If ceremony skill SKILL.md doesn't exist, skip validation gracefully."""
         from pre_tool_use import _check_ceremony_contract

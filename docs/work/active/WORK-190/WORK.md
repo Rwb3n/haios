@@ -1,44 +1,68 @@
 ---
 template: work_item
 id: WORK-190
-title: "backlog_id_uniqueness Gate False Positive on WORK-1XX IDs"
+title: backlog_id_uniqueness Gate False Positive on WORK-1XX IDs
 type: bug
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-22
 spawned_by: WORK-189
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-02-22'
 priority: medium
 effort: small
 traces_to:
-- REQ-OBSERVE-005
+- REQ-GOVERN-001
 requirement_refs: []
 source_files:
 - .claude/hooks/hooks/pre_tool_use.py
 acceptance_criteria:
-- "backlog_id_uniqueness gate does not fire false positives for WORK-1XX IDs against legacy E2-1XX plan files"
-- "Gate regex correctly distinguishes WORK-XXX from E2-XXX ID formats"
-- "Existing tests still pass"
+- backlog_id_uniqueness gate does not fire false positives for WORK-1XX IDs against
+  legacy E2-1XX plan files
+- Gate regex correctly distinguishes WORK-XXX from E2-XXX ID formats
+- Existing tests still pass
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-22T15:20:16
-    exited: null
+- node: backlog
+  entered: 2026-02-22 15:20:16
+  exited: '2026-02-22T16:05:12.040194'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 87542
+- 87543
+- 87544
+- 87545
+- 87546
+- 87547
+- 87548
+- 87549
+- 87550
+- 87551
+- 87552
+- 87578
+- 87579
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-22
-last_updated: 2026-02-22T15:20:16
+last_updated: '2026-02-22T16:05:12.043480'
+queue_history:
+- position: ready
+  entered: '2026-02-22T15:46:34.768791'
+  exited: '2026-02-22T15:46:52.475167'
+- position: working
+  entered: '2026-02-22T15:46:52.475167'
+  exited: '2026-02-22T16:05:12.040194'
+- position: done
+  entered: '2026-02-22T16:05:12.040194'
+  exited: null
 ---
 # WORK-190: backlog_id_uniqueness Gate False Positive on WORK-1XX IDs
 
@@ -70,13 +94,19 @@ Evidence: governance-events.jsonl — GateViolation at 2026-02-22T15:07:57. Also
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Gate regex fixed to distinguish WORK-XXX from E2-XXX ID formats
-- [ ] No false positives on WORK-1XX IDs
-- [ ] Existing tests pass
+- [x] Gate regex fixed to distinguish WORK-XXX from E2-XXX ID formats
+- [x] No false positives on WORK-1XX IDs
+- [x] Existing tests pass
 
 ---
 
 ## History
+
+### 2026-02-22 - Completed (Session 424)
+- Root cause: _check_backlog_id_uniqueness extracted backlog_id from entire file content, not just YAML frontmatter
+- Fix: Added _extract_frontmatter() helper, gate now searches only frontmatter between --- delimiters
+- 3 new tests, 7 total pass. Full suite: 1609 passed, 0 regressions.
+- Critique caught: traces_to misalignment (corrected REQ-OBSERVE-005 -> REQ-GOVERN-001), chapter manifest gap (added to CH-059)
 
 ### 2026-02-22 - Created (Session 423)
 - Extracted from WORK-189 retro-cycle (BUG-1)

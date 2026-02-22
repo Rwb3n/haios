@@ -1,44 +1,54 @@
 ---
 template: work_item
 id: WORK-191
-title: "queue-commit Ceremony Contract Missing work_id Field"
+title: queue-commit Ceremony Contract Missing work_id Field
 type: bug
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-22
 spawned_by: WORK-189
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-02-22'
 priority: medium
 effort: small
 traces_to:
 - REQ-CEREMONY-001
 requirement_refs: []
 source_files:
-- .claude/haios/lib/queue_ceremonies.py
+- .claude/hooks/hooks/pre_tool_use.py
 acceptance_criteria:
-- "queue-commit ceremony contract does not fire missing work_id warnings on valid invocations"
-- "Contract validation correctly receives work_id from invocation path"
-- "Existing tests still pass"
+- queue-commit ceremony contract does not fire missing work_id warnings on valid invocations
+- Contract validation correctly receives work_id from invocation path
+- Existing tests still pass
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-22T15:20:16
-    exited: null
+- node: backlog
+  entered: 2026-02-22 15:20:16
+  exited: '2026-02-22T16:05:25.781012'
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-22
-last_updated: 2026-02-22T15:20:16
+last_updated: '2026-02-22T16:05:25.784101'
+queue_history:
+- position: ready
+  entered: '2026-02-22T15:46:41.719646'
+  exited: '2026-02-22T15:46:59.422507'
+- position: working
+  entered: '2026-02-22T15:46:59.422507'
+  exited: '2026-02-22T16:05:25.781012'
+- position: done
+  entered: '2026-02-22T16:05:25.781012'
+  exited: null
 ---
 # WORK-191: queue-commit Ceremony Contract Missing work_id Field
 
@@ -70,13 +80,19 @@ Evidence: governance-events.jsonl:12009-12011 — 3 events (2 warn, 1 block) dur
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] queue-commit ceremony contract receives work_id from invocation path
-- [ ] No false missing-field warnings on valid queue-commit calls
-- [ ] Existing tests pass
+- [x] queue-commit ceremony contract receives work_id from invocation path
+- [x] No false missing-field warnings on valid queue-commit calls
+- [x] Existing tests pass
 
 ---
 
 ## History
+
+### 2026-02-22 - Completed (Session 424)
+- Root cause: _extract_ceremony_inputs() returned {} because Skill tool_input args is free-text string
+- Fix: Parse args string with re.search(r'(WORK-\d{3,})', args) to extract work_id
+- 4 new tests, 10 total pass. Full suite: 1609 passed, 0 regressions.
+- Note: Fix is in pre_tool_use.py (hook layer), not queue_ceremonies.py (lib layer). Critique A2 confirmed: contract enforcement happens in hook, not in lib.
 
 ### 2026-02-22 - Created (Session 423)
 - Extracted from WORK-189 retro-cycle (BUG-2)

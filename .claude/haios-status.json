@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-22T15:19:01",
+    "generated": "2026-02-22T16:05:28",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 421,
-        "current_session": 422,
+        "prior_session": 422,
+        "current_session": 423,
         "prior_date": "2026-02-22",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 87339,
-        "entities": 10467,
+        "concepts": 87391,
+        "entities": 10483,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -4289,6 +4289,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-22-05-SESSION-423-work-189-context-window-usage-injection.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-22",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/checkpoints/checkpoint-386.md",
             "template": "checkpoint",
             "status": null,
@@ -7326,7 +7335,7 @@
         {
             "path": "docs/checkpoints/2025-12-26-03-SESSION-123-m7d-quick-wins-and-work-item-cleanup.md",
             "last_updated": "2025-12-26T15:48:23",
-            "days_stale": 57
+            "days_stale": 58
         },
         {
             "path": "docs/checkpoints/2025-12-26-04-SESSION-124-m7d-progress-and-governance-fixes.md",
@@ -7386,7 +7395,7 @@
         {
             "path": "docs/checkpoints/2025-12-28-04-SESSION-135-e2-218-observation-triage-and-e2-216-analysis.md",
             "last_updated": "2025-12-28T16:04:27",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/checkpoints/2025-12-28-05-SESSION-136-inv-042-e2-219-complete-and-routing-gate-design.md",
@@ -7506,7 +7515,7 @@
         {
             "path": "docs/checkpoints/2026-01-03-04-SESSION-160-e2-246-e2-247-e2-240-chariot-modules-complete.md",
             "last_updated": "2026-01-03T15:34:42",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/checkpoints/2026-01-03-05-SESSION-161-e2-242-inv-055-workengine-agentux-complete.md",
@@ -7711,7 +7720,7 @@
         {
             "path": "docs/checkpoints/2026-01-17-05-SESSION-200-e2-299-e2-234-typo-fix-and-stale-work-cleanup.md",
             "last_updated": "2026-01-17T15:42:02",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2026-01-17-06-SESSION-201-e2-298-e2-300-consumer-migration-and-contextloader-planning.md",
@@ -7736,7 +7745,7 @@
         {
             "path": "docs/checkpoints/2026-01-18-04-SESSION-205-e2-303-hierarchy-fix-and-observation-triage.md",
             "last_updated": "2026-01-18T15:45:48",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/checkpoints/2026-01-18-05-SESSION-206-e23-epoch-creation-and-strategic-review.md",
@@ -8526,7 +8535,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-040a-plan-tree-missing-titles-bug.md",
             "last_updated": "2025-12-26T15:20:08",
-            "days_stale": 57
+            "days_stale": 58
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-041-autonomous-session-loop-gap-analysis.md",
@@ -8660,9 +8669,9 @@
         }
     ],
     "workspace": {
-        "total_files": 581,
+        "total_files": 582,
         "by_template": {
-            "checkpoint": 405,
+            "checkpoint": 406,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8673,7 +8682,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 240,
+            "unknown": 241,
             "draft": 2,
             "approved": 6,
             "ready": 1,

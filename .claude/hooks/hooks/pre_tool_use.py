@@ -664,6 +664,28 @@ def _deny_with_context(reason: str, state: str, layer) -> dict:
     }
 
 
+def _extract_frontmatter(content: str) -> Optional[str]:
+    """Extract YAML frontmatter from markdown content.
+
+    Frontmatter is the text between the first pair of --- delimiters
+    at the start of the file. Returns None if no valid frontmatter found.
+
+    Args:
+        content: Full file content (markdown with optional frontmatter)
+
+    Returns:
+        Frontmatter string (without delimiters), or None if not found.
+    """
+    stripped = content.lstrip()
+    if not stripped.startswith("---"):
+        return None
+    # Find the closing ---
+    end_idx = stripped.find("---", 3)
+    if end_idx == -1:
+        return None
+    return stripped[3:end_idx]
+
+
 def _check_backlog_id_uniqueness(file_path: str, content: str) -> Optional[dict]:
     """
     Block creation of files with duplicate backlog_id values (E2-141).
@@ -685,9 +707,14 @@ def _check_backlog_id_uniqueness(file_path: str, content: str) -> Optional[dict]
     if not content:
         return None
 
-    # Extract backlog_id from content
-    # Match: backlog_id: E2-NNN or backlog_id: INV-NNN
-    match = re.search(r'backlog_id:\s*([A-Z0-9]+-\d+)', content)
+    # Extract backlog_id from YAML frontmatter only (WORK-190: not body text).
+    # Frontmatter is between first pair of --- delimiters.
+    frontmatter = _extract_frontmatter(content)
+    if not frontmatter:
+        return None
+
+    # Match: backlog_id: E2-NNN, WORK-NNN, INV-NNN, etc.
+    match = re.search(r'backlog_id:\s*([A-Z0-9]+-\d+)', frontmatter)
     if not match:
         return None
 
@@ -857,10 +884,22 @@ def _extract_ceremony_inputs(tool_input: dict) -> dict:
     """Extract ceremony inputs from Skill tool_input.
 
     At PreToolUse time, Skill tool_input is {"skill": "name", "args": "..."}.
-    Args is a free-text string. We cannot reliably extract structured inputs.
-    Return empty dict — contract validation will flag missing required fields.
+    Args is a free-text string. Parse known patterns (WORK-190 fix: WORK-XXX).
+
+    Returns:
+        Dict of extracted inputs. May contain 'work_id' if WORK-XXX found in args.
     """
-    return {}
+    inputs = {}
+    args = tool_input.get("args", "")
+    if not args:
+        return inputs
+
+    # Extract work_id pattern (WORK-NNN) from args string
+    work_match = re.search(r'(WORK-\d{3,})', args)
+    if work_match:
+        inputs["work_id"] = work_match.group(1)
+
+    return inputs
 
 
 def _check_ceremony_contract(skill_name: str, tool_input: dict) -> Optional[dict]:

@@ -37,7 +37,9 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-177 | Chapter Manifest Auto-Update on Work Creation | Complete | implementation |
 | WORK-178 | CHECK Phase Subagent Delegation | Backlog | implementation |
 | WORK-179 | Queue Commit Cycle Phase Auto-Advance Investigation | Backlog | investigation |
-| WORK-189 | Context Window Usage Injection via UserPromptSubmit Hook | Active | implementation |
+| WORK-189 | Context Window Usage Injection via UserPromptSubmit Hook | Complete | implementation |
+| WORK-190 | backlog_id_uniqueness Gate False Positive on WORK-1XX IDs | Active | bug |
+| WORK-191 | queue-commit Ceremony Contract Missing work_id Field | Active | bug |
 
 ---
 

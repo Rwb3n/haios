@@ -90,3 +90,84 @@ class TestBacklogIdUniqueness:
         )
 
         assert result is None  # Allow - editing same file
+
+    def test_ignores_backlog_id_in_body_text(self, tmp_path, monkeypatch):
+        """WORK-190: backlog_id in body text must NOT trigger false positive.
+
+        When frontmatter has backlog_id: WORK-190 but body text references
+        backlog_id: E2-141 (e.g., in code examples or references), the gate
+        should extract WORK-190 from frontmatter, not E2-141 from body.
+        """
+        from pre_tool_use import _check_backlog_id_uniqueness
+
+        docs_dir = tmp_path / "docs" / "plans"
+        docs_dir.mkdir(parents=True)
+
+        # Existing legacy plan with E2-141
+        existing = docs_dir / "PLAN-E2-141-existing.md"
+        existing.write_text("---\nbacklog_id: E2-141\n---\n# Legacy Content")
+
+        monkeypatch.chdir(tmp_path)
+
+        # New file with WORK-190 in frontmatter, but E2-141 mentioned in body
+        new_file = str(tmp_path / "docs" / "work" / "active" / "WORK-190" / "plans" / "PLAN.md")
+        content = (
+            "---\nbacklog_id: WORK-190\n---\n"
+            "# Implementation Plan\n\n"
+            "This fixes the backlog_id: E2-141 gate that was created in Session 103.\n"
+        )
+
+        result = _check_backlog_id_uniqueness(new_file, content)
+
+        # Should allow — WORK-190 is unique, body text E2-141 reference is irrelevant
+        assert result is None
+
+    def test_extracts_from_frontmatter_not_body(self, tmp_path, monkeypatch):
+        """WORK-190: Gate must extract backlog_id from frontmatter only.
+
+        File with no frontmatter backlog_id but body text containing
+        backlog_id: E2-141 should NOT trigger the gate.
+        """
+        from pre_tool_use import _check_backlog_id_uniqueness
+
+        docs_dir = tmp_path / "docs" / "plans"
+        docs_dir.mkdir(parents=True)
+
+        existing = docs_dir / "PLAN-E2-141-existing.md"
+        existing.write_text("---\nbacklog_id: E2-141\n---\n# Content")
+
+        monkeypatch.chdir(tmp_path)
+
+        # File without backlog_id in frontmatter, only in body
+        new_file = str(docs_dir / "some-doc.md")
+        content = (
+            "---\ntitle: Some Doc\n---\n"
+            "# Body\n\n"
+            "Example: backlog_id: E2-141\n"
+        )
+
+        result = _check_backlog_id_uniqueness(new_file, content)
+
+        # Should allow — no backlog_id in frontmatter
+        assert result is None
+
+    def test_frontmatter_duplicate_still_blocked(self, tmp_path, monkeypatch):
+        """WORK-190: Actual frontmatter duplicates are still correctly blocked."""
+        from pre_tool_use import _check_backlog_id_uniqueness
+
+        docs_dir = tmp_path / "docs" / "plans"
+        docs_dir.mkdir(parents=True)
+
+        existing = docs_dir / "PLAN-WORK-190-existing.md"
+        existing.write_text("---\nbacklog_id: WORK-190\n---\n# Content")
+
+        monkeypatch.chdir(tmp_path)
+
+        new_file = str(docs_dir / "PLAN-WORK-190-new.md")
+        content = "---\nbacklog_id: WORK-190\n---\n# New Content"
+
+        result = _check_backlog_id_uniqueness(new_file, content)
+
+        assert result is not None
+        assert result["hookSpecificOutput"]["permissionDecision"] == "deny"
+        assert "WORK-190" in result["hookSpecificOutput"]["permissionDecisionReason"]
