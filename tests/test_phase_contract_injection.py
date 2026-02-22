@@ -238,16 +238,17 @@ class TestUserPromptSubmitInjection:
         """Test 6: Active cycle with existing phase file returns contract."""
         ups = _import_user_prompt_submit()
 
-        # Create slim and phase file
-        _create_slim_json(
-            tmp_path,
-            active_cycle="implementation-cycle",
-            current_phase="DO",
-        )
+        # WORK-195: Pass slim dict directly (function no longer reads from disk)
+        slim = {
+            "session_state": {
+                "active_cycle": "implementation-cycle",
+                "current_phase": "DO",
+            }
+        }
         phase_content = "# DO Phase\nExecute the plan."
         _create_phase_file(tmp_path, "implementation-cycle", "DO", phase_content)
 
-        result = ups._get_phase_contract(str(tmp_path))
+        result = ups._get_phase_contract(str(tmp_path), slim)
 
         assert result is not None
         assert "Phase Contract: implementation-cycle/DO" in result
@@ -257,21 +258,24 @@ class TestUserPromptSubmitInjection:
         """Test 7: No active cycle returns None."""
         ups = _import_user_prompt_submit()
 
-        _create_slim_json(tmp_path, active_cycle=None, current_phase=None)
+        # WORK-195: Pass slim dict directly
+        slim = {"session_state": {"active_cycle": None, "current_phase": None}}
 
-        result = ups._get_phase_contract(str(tmp_path))
+        result = ups._get_phase_contract(str(tmp_path), slim)
         assert result is None
 
     def test_user_prompt_submit_missing_phase_file_returns_none(self, tmp_path):
         """Test 8: Active cycle but missing phase file returns None."""
         ups = _import_user_prompt_submit()
 
-        _create_slim_json(
-            tmp_path,
-            active_cycle="implementation-cycle",
-            current_phase="DO",
-        )
+        # WORK-195: Pass slim dict directly
+        slim = {
+            "session_state": {
+                "active_cycle": "implementation-cycle",
+                "current_phase": "DO",
+            }
+        }
         # No phase file created
 
-        result = ups._get_phase_contract(str(tmp_path))
+        result = ups._get_phase_contract(str(tmp_path), slim)
         assert result is None

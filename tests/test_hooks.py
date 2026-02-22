@@ -164,14 +164,10 @@ class TestSessionStateWarning:
 
         from user_prompt_submit import _get_session_state_warning
 
-        # Create slim status with null active_cycle
+        # WORK-195: Pass slim dict directly (no longer reads from disk)
         slim = {"session_state": {"active_cycle": None}}
-        slim_dir = tmp_path / ".claude"
-        slim_dir.mkdir(parents=True)
-        slim_path = slim_dir / "haios-status-slim.json"
-        slim_path.write_text(json.dumps(slim))
 
-        warning = _get_session_state_warning(str(tmp_path))
+        warning = _get_session_state_warning(str(tmp_path), slim)
 
         assert warning is not None
         assert "No active governance cycle" in warning
@@ -185,14 +181,10 @@ class TestSessionStateWarning:
 
         from user_prompt_submit import _get_session_state_warning
 
-        # Create slim status with active cycle
+        # WORK-195: Pass slim dict directly (no longer reads from disk)
         slim = {"session_state": {"active_cycle": "implementation-cycle"}}
-        slim_dir = tmp_path / ".claude"
-        slim_dir.mkdir(parents=True)
-        slim_path = slim_dir / "haios-status-slim.json"
-        slim_path.write_text(json.dumps(slim))
 
-        warning = _get_session_state_warning(str(tmp_path))
+        warning = _get_session_state_warning(str(tmp_path), slim)
 
         assert warning is None
 
@@ -204,14 +196,10 @@ class TestSessionStateWarning:
 
         from user_prompt_submit import _get_session_state_warning
 
-        # Create slim status without session_state (old format)
+        # WORK-195: Pass slim dict directly — old format without session_state
         slim = {"generated": "2026-01-14"}
-        slim_dir = tmp_path / ".claude"
-        slim_dir.mkdir(parents=True)
-        slim_path = slim_dir / "haios-status-slim.json"
-        slim_path.write_text(json.dumps(slim))
 
-        warning = _get_session_state_warning(str(tmp_path))
+        warning = _get_session_state_warning(str(tmp_path), slim)
 
         # Should not crash, should return None (no warning for old format)
         assert warning is None

@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-195
-title: "UserPromptSubmit Slim-Read-Once Refactor"
+title: UserPromptSubmit Slim-Read-Once Refactor
 type: implementation
 status: active
 owner: Hephaestus
@@ -19,28 +19,36 @@ requirement_refs: []
 source_files:
 - .claude/hooks/hooks/user_prompt_submit.py
 acceptance_criteria:
-- "haios-status-slim.json read and parsed exactly once per handle() invocation"
-- "Parsed slim dict passed to all functions that need it (_get_session_state_warning, _get_phase_contract)"
-- "Existing tests pass with no behavior change"
+- haios-status-slim.json read and parsed exactly once per handle() invocation
+- Parsed slim dict passed to all functions that need it (_get_session_state_warning,
+  _get_phase_contract)
+- Existing tests pass with no behavior change
 blocked_by: []
 blocks:
 - WORK-196
 enables:
 - WORK-196
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: working
+cycle_phase: backlog
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-22T16:24:41
-    exited: null
+- node: backlog
+  entered: 2026-02-22 16:24:41
+  exited: null
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-22
-last_updated: 2026-02-22T16:24:41
+last_updated: '2026-02-22T16:33:08.902551'
+queue_history:
+- position: ready
+  entered: '2026-02-22T16:33:08.872071'
+  exited: '2026-02-22T16:33:08.900033'
+- position: working
+  entered: '2026-02-22T16:33:08.900033'
+  exited: null
 ---
 # WORK-195: UserPromptSubmit Slim-Read-Once Refactor
 

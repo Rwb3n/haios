@@ -82,16 +82,18 @@ def handle(hook_data: dict) -> str:
     # if vitals:
     #     output_parts.append("")
     cwd = hook_data.get("cwd", "")
-    # vitals disabled - no append
+
+    # WORK-195: Read slim JSON once, pass to all consumers
+    slim = _read_slim(cwd)
 
     # Part 2.5: Session state warning (E2-287)
-    session_warning = _get_session_state_warning(cwd)
+    session_warning = _get_session_state_warning(cwd, slim)
     if session_warning:
         output_parts.append("")
         output_parts.append(session_warning)
 
     # Part 2.6: Phase contract injection (WORK-188, ADR-048)
-    phase_contract = _get_phase_contract(cwd)
+    phase_contract = _get_phase_contract(cwd, slim)
     if phase_contract:
         output_parts.append("")
         output_parts.append(phase_contract)
@@ -127,29 +129,45 @@ def _get_datetime_context() -> str:
     return f"Today is {day_of_week}, {datetime_str}"
 
 
-def _get_session_state_warning(cwd: str) -> Optional[str]:
+def _read_slim(cwd: str) -> Optional[dict]:
+    """Read and parse haios-status-slim.json once per handle() call.
+
+    Returns parsed dict or None if unavailable (graceful degradation).
+    WORK-195: Extracted from per-function reads to avoid redundant I/O.
+    """
+    if not cwd:
+        return None
+    slim_path = Path(cwd) / ".claude" / "haios-status-slim.json"
+    if not slim_path.exists():
+        return None
+    try:
+        return json.loads(slim_path.read_text(encoding="utf-8-sig"))
+    except Exception:
+        return None
+
+
+def _get_session_state_warning(cwd: str, slim: Optional[dict] = None) -> Optional[str]:
     """
     Check if agent is working outside an active governance cycle.
 
     E2-287: Soft enforcement - inject warning when session_state.active_cycle is null.
     This creates friction for governance bypass without blocking.
 
+    WORK-195: Accepts pre-parsed slim dict from handle(). No internal file read.
+
     Args:
         cwd: Working directory path
+        slim: Pre-parsed haios-status-slim.json dict, or None if unavailable.
 
     Returns:
         Warning message if no active cycle, None otherwise.
     """
     if not cwd:
         return None
-
-    slim_path = Path(cwd) / ".claude" / "haios-status-slim.json"
-    if not slim_path.exists():
+    if slim is None:
         return None
 
     try:
-        slim = json.loads(slim_path.read_text(encoding="utf-8-sig"))
-
         # If session_state key doesn't exist, this is old format - no warning (backward compat)
         if "session_state" not in slim:
             return None
@@ -170,7 +188,7 @@ def _get_session_state_warning(cwd: str) -> Optional[str]:
         return None
 
 
-def _get_phase_contract(cwd: str) -> Optional[str]:
+def _get_phase_contract(cwd: str, slim: Optional[dict] = None) -> Optional[str]:
     """
     Inject current phase's behavioral contract from phase file.
 
@@ -182,21 +200,21 @@ def _get_phase_contract(cwd: str) -> Optional[str]:
 
     Fall-permissive: returns None if no active cycle, phase file missing, or any error.
 
+    WORK-195: Accepts pre-parsed slim dict from handle(). No internal file read.
+
     Args:
         cwd: Working directory path
+        slim: Pre-parsed haios-status-slim.json dict, or None if unavailable.
 
     Returns:
         Formatted phase contract string, or None if not applicable.
     """
     if not cwd:
         return None
-
-    slim_path = Path(cwd) / ".claude" / "haios-status-slim.json"
-    if not slim_path.exists():
+    if slim is None:
         return None
 
     try:
-        slim = json.loads(slim_path.read_text(encoding="utf-8-sig"))
         session_state = slim.get("session_state", {})
         active_cycle = session_state.get("active_cycle")
         current_phase = session_state.get("current_phase")
@@ -231,7 +249,7 @@ def _get_context_usage(transcript_path: str) -> Optional[str]:
         transcript_path: Path to Claude Code transcript JSONL file.
 
     Returns:
-        Formatted string like "[CONTEXT: 75% used]", or None if unavailable.
+        Formatted string like "[CONTEXT: 25% remaining]", or None if unavailable.
     """
     if not transcript_path:
         return None
@@ -272,12 +290,13 @@ def _get_context_usage(transcript_path: str) -> Optional[str]:
         context_limit = 200_000
         pct = min(100.0, (total / context_limit) * 100)
 
-        return f"[CONTEXT: {pct:.0f}% used]"
+        remaining = 100.0 - pct
+        return f"[CONTEXT: {remaining:.0f}% remaining]"
     except Exception:
         return None
 
 
-def _get_vitals(cwd: str) -> Optional[str]:
+def _get_vitals(cwd: str, slim: Optional[dict] = None) -> Optional[str]:
     """
     Read haios-status-slim.json and format vitals block.
 
@@ -285,17 +304,15 @@ def _get_vitals(cwd: str) -> Optional[str]:
 
     E2-206: Removed static infrastructure (commands, skills, agents, MCPs, recipes)
     as these are already documented in CLAUDE.md and don't change mid-session.
+
+    WORK-195: Accepts pre-parsed slim dict from handle(). No internal file read.
     """
     if not cwd:
         return None
-
-    slim_path = Path(cwd) / ".claude" / "haios-status-slim.json"
-    if not slim_path.exists():
+    if slim is None:
         return None
 
     try:
-        # Use utf-8-sig to handle BOM (common in Windows-generated files)
-        slim = json.loads(slim_path.read_text(encoding="utf-8-sig"))
         lines = ["--- HAIOS Vitals ---"]
 
         # Milestone with progress
@@ -348,17 +365,22 @@ def _get_vitals(cwd: str) -> Optional[str]:
         return None
 
 
-def _get_thresholds(cwd: str) -> Optional[str]:
+def _get_thresholds(cwd: str, slim: Optional[dict] = None) -> Optional[str]:
     """
     Check for threshold violations and return urgency signals.
 
     Uses full haios-status.json for workspace.stale access.
+    Uses slim dict for session_delta momentum check.
+
+    WORK-195: Accepts pre-parsed slim dict from handle(). Slim read removed.
+    Note: haios-status.json (full status) read remains — it's a different file.
     """
     if not cwd:
         return None
+    if slim is None:
+        return None
 
     status_path = Path(cwd) / ".claude" / "haios-status.json"
-    slim_path = Path(cwd) / ".claude" / "haios-status-slim.json"
 
     messages = []
 
@@ -389,9 +411,7 @@ def _get_thresholds(cwd: str) -> Optional[str]:
                             messages.append(f"ATTENTION: {stale_count} stale items need review")
 
         # MOMENTUM: completed > 3 in last session (from slim)
-        if slim_path.exists():
-            slim = json.loads(slim_path.read_text(encoding="utf-8-sig"))
-            if session_delta := slim.get("session_delta"):
+        if session_delta := slim.get("session_delta"):
                 if session_delta.get("completed_count", 0) > 3:
                     messages.append(
                         f"MOMENTUM: +{session_delta['completed_count']} items completed "
@@ -527,7 +547,7 @@ def _check_context_threshold(transcript_path: str, threshold: float = 80.0) -> O
     pct = _estimate_context_usage(transcript_path)
     if pct >= threshold:
         return (
-            f"CONTEXT: ~{pct:.0f}% used. "
+            f"CONTEXT: ~{100.0 - pct:.0f}% remaining. "
             "Consider /new-checkpoint before context exhaustion."
         )
     return None
