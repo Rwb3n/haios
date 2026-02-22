@@ -73,17 +73,18 @@ class TestPlanAuthoringAgent:
         ), "Agent card must reference plan-authoring-cycle SKILL.md"
 
     def test_implementation_cycle_delegates_to_subagent(self):
-        """implementation-cycle SKILL.md PLAN phase must contain subagent invocation pattern."""
-        skill_path = ROOT / ".claude" / "skills" / "implementation-cycle" / "SKILL.md"
-        assert skill_path.exists(), f"Skill not found: {skill_path}"
-        content = skill_path.read_text(encoding="utf-8")
+        """implementation-cycle phases/PLAN.md must contain subagent invocation pattern."""
+        # After fracturing (WORK-187), plan-authoring delegation lives in phases/PLAN.md
+        plan_phase_path = ROOT / ".claude" / "skills" / "implementation-cycle" / "phases" / "PLAN.md"
+        assert plan_phase_path.exists(), f"Phase file not found: {plan_phase_path}"
+        content = plan_phase_path.read_text(encoding="utf-8")
 
         assert (
             "plan-authoring-agent" in content
-        ), "implementation-cycle SKILL.md must reference plan-authoring-agent"
+        ), "implementation-cycle phases/PLAN.md must reference plan-authoring-agent"
         assert (
             "Task(subagent_type='plan-authoring-agent'" in content
-        ), "implementation-cycle SKILL.md must contain Task invocation pattern"
+        ), "implementation-cycle phases/PLAN.md must contain Task invocation pattern"
 
     def test_agent_listed_in_readme(self):
         """plan-authoring-agent must appear in the agents README table."""

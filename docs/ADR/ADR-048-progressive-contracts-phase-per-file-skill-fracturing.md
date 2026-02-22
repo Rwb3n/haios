@@ -1,13 +1,13 @@
 ---
 template: architecture_decision_record
-status: proposed
+status: accepted
 date: 2026-02-22
 adr_id: ADR-048
 title: "Progressive Contracts - Phase-Per-File Skill Fracturing"
 author: Hephaestus
 session: 420
 lifecycle_phase: decide
-decision: pending
+decision: accepted
 spawned_by: WORK-163
 related: [ADR-045, ADR-047]
 backlog_id: WORK-163
@@ -16,7 +16,7 @@ version: "1.1"
 ---
 # ADR-048: Progressive Contracts - Phase-Per-File Skill Fracturing
 
-> **Status:** Proposed
+> **Status:** Accepted
 > **Date:** 2026-02-22
 > **Decision:** Pending
 

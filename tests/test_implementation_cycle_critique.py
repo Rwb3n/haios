@@ -19,46 +19,34 @@ class TestImplementationCycleCritiqueGate:
 
     def test_implementation_cycle_plan_phase_references_critique(self):
         """PLAN phase exit gate must reference critique-agent."""
-        skill_path = Path(".claude/skills/implementation-cycle/SKILL.md")
-        content = skill_path.read_text()
+        # After fracturing (WORK-187), critique content lives in phases/PLAN.md
+        plan_phase_path = Path(".claude/skills/implementation-cycle/phases/PLAN.md")
+        content = plan_phase_path.read_text()
 
-        # Must mention critique-agent in the document
         assert "critique-agent" in content, (
-            "implementation-cycle SKILL.md must reference critique-agent"
-        )
-
-        # Must be in PLAN phase section (before DO phase)
-        plan_section_start = content.index("### 1. PLAN Phase")
-        do_section_start = content.index("### 2. DO Phase")
-        plan_section = content[plan_section_start:do_section_start]
-
-        assert "critique-agent" in plan_section, (
-            "critique-agent must appear in PLAN phase section, not elsewhere"
+            "implementation-cycle phases/PLAN.md must reference critique-agent"
         )
 
     def test_plan_phase_exit_criteria_includes_critique(self):
         """PLAN phase exit criteria must include critique with verdicts."""
-        skill_path = Path(".claude/skills/implementation-cycle/SKILL.md")
-        content = skill_path.read_text()
-
-        plan_section_start = content.index("### 1. PLAN Phase")
-        do_section_start = content.index("### 2. DO Phase")
-        plan_section = content[plan_section_start:do_section_start]
+        # After fracturing (WORK-187), critique content lives in phases/PLAN.md
+        plan_phase_path = Path(".claude/skills/implementation-cycle/phases/PLAN.md")
+        content = plan_phase_path.read_text()
 
         # Exit criteria must mention critique
-        assert "critique" in plan_section.lower(), (
+        assert "critique" in content.lower(), (
             "PLAN phase must mention critique"
         )
 
         # Must describe the revise loop
-        assert "revise" in plan_section.lower(), (
+        assert "revise" in content.lower(), (
             "PLAN phase must describe critique-revise loop"
         )
 
         # Must describe the three verdicts
-        assert "PROCEED" in plan_section, "Must describe PROCEED verdict"
-        assert "REVISE" in plan_section, "Must describe REVISE verdict"
-        assert "BLOCK" in plan_section, "Must describe BLOCK verdict"
+        assert "PROCEED" in content, "Must describe PROCEED verdict"
+        assert "REVISE" in content, "Must describe REVISE verdict"
+        assert "BLOCK" in content, "Must describe BLOCK verdict"
 
 
 class TestPlanValidationCycleCritiqueRemoval:

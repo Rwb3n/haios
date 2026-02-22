@@ -26,8 +26,7 @@ acceptance_criteria:
 - "Injection reads from .claude/skills/{cycle}/phases/{phase}.md"
 - "Graceful degradation if phase file missing (fall-permissive)"
 - "Existing tests still pass"
-blocked_by:
-- WORK-187
+blocked_by: []
 blocks: []
 enables: []
 queue_position: backlog  # WORK-105: parked|backlog|ready|working|done

@@ -24,7 +24,9 @@ Design contracts for progressive disclosure — agents read what they need, not 
 
 | ID | Title | Status | Type |
 |----|-------|--------|------|
-| WORK-163 | Progressive Contracts | Backlog | design |
+| WORK-163 | Progressive Contracts | Done | design |
+| WORK-187 | Fracture Implementation-Cycle SKILL.md into Phase Files | Active | implementation |
+| WORK-188 | Hook Auto-Injection for Phase Contracts | Active | implementation |
 
 ---
 

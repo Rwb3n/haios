@@ -1,50 +1,69 @@
 ---
 template: work_item
 id: WORK-187
-title: "Fracture Implementation-Cycle SKILL.md into Phase Files"
+title: Fracture Implementation-Cycle SKILL.md into Phase Files
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-22
 spawned_by: WORK-163
 spawned_children: []
 chapter: CH-062
 arc: query
-closed: null
+closed: '2026-02-22'
 priority: medium
 effort: small
 traces_to:
 - REQ-ASSET-001
+- REQ-TEMPLATE-002
 requirement_refs: []
 source_files:
 - .claude/skills/implementation-cycle/SKILL.md
 acceptance_criteria:
-- "implementation-cycle SKILL.md reduced to slim router (~80 lines)"
-- "5 phase files created (PLAN.md, DO.md, CHECK.md, DONE.md, CHAIN.md)"
-- "2 reference files created (decisions.md, composition.md)"
-- "Each phase file is self-contained (no cross-phase references)"
-- "Existing tests still pass"
+- implementation-cycle SKILL.md reduced to slim router (~80 lines)
+- 5 phase files created (PLAN.md, DO.md, CHECK.md, DONE.md, CHAIN.md)
+- 2 reference files created (decisions.md, composition.md)
+- Each phase file is self-contained (no cross-phase references)
+- Existing tests still pass
 blocked_by: []
 blocks:
 - WORK-188
-enables:
-- WORK-188
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+enables: []
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-22T10:15:01
-    exited: null
+- node: backlog
+  entered: 2026-02-22 10:15:01
+  exited: '2026-02-22T11:12:25.289161'
 artifacts: []
 cycle_docs: {}
 memory_refs:
 - 85815
+- 87398
+- 87399
+- 87400
+- 87401
+- 87402
+- 87403
+- 87404
+- 87434
+- 87435
 extensions:
   epoch: E2.8
-version: "2.0"
+version: '2.0'
 generated: 2026-02-22
-last_updated: 2026-02-22T10:15:01
+last_updated: '2026-02-22T11:12:25.292699'
+queue_history:
+- position: ready
+  entered: '2026-02-22T10:38:01.930578'
+  exited: '2026-02-22T10:38:01.955489'
+- position: working
+  entered: '2026-02-22T10:38:01.955489'
+  exited: '2026-02-22T11:12:25.289161'
+- position: done
+  entered: '2026-02-22T11:12:25.289161'
+  exited: null
 ---
 # WORK-187: Fracture Implementation-Cycle SKILL.md into Phase Files
 
@@ -76,15 +95,15 @@ This work item covers the content restructuring: splitting the monolithic SKILL.
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Slim router SKILL.md (~80 lines: cycle diagram, phase table, "When to Use")
-- [ ] phases/PLAN.md (full PLAN behavioral contract)
-- [ ] phases/DO.md (full DO behavioral contract)
-- [ ] phases/CHECK.md (full CHECK behavioral contract)
-- [ ] phases/DONE.md (full DONE behavioral contract)
-- [ ] phases/CHAIN.md (full CHAIN behavioral contract)
-- [ ] reference/decisions.md (design decisions, rationale)
-- [ ] reference/composition.md (composition map, quick reference)
-- [ ] All existing tests pass
+- [x] Slim router SKILL.md (~80 lines: cycle diagram, phase table, "When to Use")
+- [x] phases/PLAN.md (full PLAN behavioral contract)
+- [x] phases/DO.md (full DO behavioral contract)
+- [x] phases/CHECK.md (full CHECK behavioral contract)
+- [x] phases/DONE.md (full DONE behavioral contract)
+- [x] phases/CHAIN.md (full CHAIN behavioral contract)
+- [x] reference/decisions.md (design decisions, rationale)
+- [x] reference/composition.md (composition map, quick reference)
+- [x] All existing tests pass (1589 passed, 0 failed, 8 skipped — S421)
 
 ---
 
