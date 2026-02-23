@@ -501,7 +501,7 @@ class TestContextThreshold:
             warning = _check_context_threshold("/fake/path")
             assert warning is not None
             assert "CONTEXT:" in warning
-            assert "85%" in warning
+            assert "15%" in warning  # 100 - 85 = 15% remaining
             assert "checkpoint" in warning.lower()
 
     def test_check_context_threshold_silent_below_80(self):
