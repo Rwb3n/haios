@@ -1,47 +1,67 @@
 ---
 template: work_item
 id: WORK-203
-title: "Session Event Log for Agent Ambient Visibility"
+title: Session Event Log for Agent Ambient Visibility
 type: investigation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-23
 spawned_by: null
-spawned_children: []
+spawned_children:
+- WORK-206
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-02-23'
 priority: medium
 effort: small
 traces_to:
-  - REQ-CEREMONY-001
+- REQ-CEREMONY-001
 requirement_refs: []
 source_files:
-  - .claude/hooks/
-  - .claude/haios/governance-events.jsonl
+- .claude/hooks/
+- .claude/haios/governance-events.jsonl
 acceptance_criteria:
-  - "Analysis of what session events are worth persisting (commits, phase transitions, spawns, test results)"
-  - "Proposed injection points: which hooks already fire at the right moments"
-  - "Format design: append-only log vs structured file, retention policy"
-  - "Consumption design: coldstart summary, on-demand command, phase-transition injection"
-  - "Token cost analysis: writing cost vs reading cost vs current reconstruction-from-memory cost"
+- Analysis of what session events are worth persisting (commits, phase transitions,
+  spawns, test results)
+- 'Proposed injection points: which hooks already fire at the right moments'
+- 'Format design: append-only log vs structured file, retention policy'
+- 'Consumption design: coldstart summary, on-demand command, phase-transition injection'
+- 'Token cost analysis: writing cost vs reading cost vs current reconstruction-from-memory
+  cost'
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
-  - node: backlog
-    entered: 2026-02-23T13:10:20
-    exited: null
+- node: backlog
+  entered: 2026-02-23 13:10:20
+  exited: '2026-02-23T15:43:42.903337'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 87845
+- 87846
+- 87847
+- 87848
+- 87849
+- 87872
+- 87728
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-23
-last_updated: 2026-02-23T13:10:20
+last_updated: '2026-02-23T15:43:42.907434'
+queue_history:
+- position: ready
+  entered: '2026-02-23T15:32:55.424901'
+  exited: '2026-02-23T15:33:05.523583'
+- position: working
+  entered: '2026-02-23T15:33:05.523583'
+  exited: '2026-02-23T15:43:42.903337'
+- position: done
+  entered: '2026-02-23T15:43:42.903337'
+  exited: null
 ---
 # WORK-203: Session Event Log for Agent Ambient Visibility
 
@@ -78,14 +98,32 @@ The agent reconstructed a full session summary from working memory, but noted: "
 
 <!-- VERIFICATION REQUIREMENT (Session 192 - E2-290 Learning) -->
 
-- [ ] Investigation document with findings and recommendations
-- [ ] Event taxonomy: which events, what data, what format
-- [ ] Injection point analysis: which hooks, what cost
-- [ ] Consumption design: when to read, how to summarize
+- [x] Investigation document with findings and recommendations
+- [x] Event taxonomy: which events, what data, what format
+- [x] Injection point analysis: which hooks, what cost
+- [x] Consumption design: when to read, how to summarize
 
 ---
 
 ## History
+
+### 2026-02-23 - Investigation Complete (Session 433)
+
+**Hypotheses (all CONFIRMED):**
+- H1: Separate session-scoped mechanism justified (filtering governance-events.jsonl is too expensive — 2.3MB, 14K events, no session field)
+- H2: All 5 event types detectable by existing hooks (phase transitions via WORK-168/201, commits and tests via PostToolUse/Bash, spawns via Write detection)
+- H3: Coldstart summary is highest-value consumption point (replaces stale checkpoint frontmatter, cheaper than memory reconstruction)
+- H4: Separate file `.claude/haios/session-log.jsonl`, reset per session (distinct lifecycle from audit-trail governance events)
+
+**Design:**
+- File: `.claude/haios/session-log.jsonl` — compact JSONL, ~15-30 events/session, ~500-1500 bytes
+- Write: PostToolUse appends events (phase, commit, test, spawn, close)
+- Reset: `just session-start` truncates file
+- Read: SessionLoader formats ~5-10 line summary at coldstart
+- Token cost: 0 context tokens for writes (hook-side), <150 tokens for coldstart read
+
+**Epistemic Review:** PROCEED — no blocking unknowns
+**Spawned:** WORK-206 (Implement Session Event Log)
 
 ### 2026-02-23 - Created (Session 430)
 - Operator asked about agent ambient visibility during post-closure conversation
