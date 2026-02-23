@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-23T12:22:42",
+    "generated": "2026-02-23T13:12:03",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -4361,6 +4361,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-23-06-SESSION-430-work-200-closed-proportional-close-ceremony-implemented.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-23",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/checkpoints/checkpoint-386.md",
             "template": "checkpoint",
             "status": null,
@@ -7223,7 +7232,7 @@
         {
             "path": "docs/checkpoints/2025-12-21-01-SESSION-92-e2-120-phase-1-plugin-architecture-migration.md",
             "last_updated": "2025-12-21T13:00:13",
-            "days_stale": 63
+            "days_stale": 64
         },
         {
             "path": "docs/checkpoints/2025-12-21-02-SESSION-93-e2-120-phase-2a-status-module-core.md",
@@ -7288,7 +7297,7 @@
         {
             "path": "docs/checkpoints/2025-12-23-03-SESSION-103-e2-140-investigation-status-sync-complete.md",
             "last_updated": "2025-12-23T12:44:43",
-            "days_stale": 61
+            "days_stale": 62
         },
         {
             "path": "docs/checkpoints/2025-12-23-05-SESSION-104-e2-145-e2-142-e2-146-triple-implementation.md",
@@ -7508,7 +7517,7 @@
         {
             "path": "docs/checkpoints/2025-12-29-04-SESSION-145-e2-233-m8-skillarch-complete.md",
             "last_updated": "2025-12-29T12:53:24",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/checkpoints/2025-12-29-05-SESSION-146-m7b-workinfra-e2075-superseded.md",
@@ -7718,7 +7727,7 @@
         {
             "path": "docs/checkpoints/2026-01-10-01-SESSION-186-e2-279-complete-checkpoint-architecture.md",
             "last_updated": "2026-01-10T12:44:27",
-            "days_stale": 43
+            "days_stale": 44
         },
         {
             "path": "docs/checkpoints/2026-01-10-02-SESSION-187-e2-284-complete-ready-bug-fix.md",
@@ -7768,7 +7777,7 @@
         {
             "path": "docs/checkpoints/2026-01-17-02-SESSION-197-observation-triage-investigation-setup.md",
             "last_updated": "2026-01-17T12:27:05",
-            "days_stale": 36
+            "days_stale": 37
         },
         {
             "path": "docs/checkpoints/2026-01-17-03-SESSION-198-inv-067-closure-and-epoch2-readme-styling.md",
@@ -7803,7 +7812,7 @@
         {
             "path": "docs/checkpoints/2026-01-18-03-SESSION-204-e2-302-s2-lifecycle-diagram-cleanup.md",
             "last_updated": "2026-01-18T13:06:56",
-            "days_stale": 35
+            "days_stale": 36
         },
         {
             "path": "docs/checkpoints/2026-01-18-04-SESSION-205-e2-303-hierarchy-fix-and-observation-triage.md",
@@ -8158,7 +8167,7 @@
         {
             "path": "docs/plans/PLAN-E2-141-backlog-id-uniqueness-gate.md",
             "last_updated": "2025-12-23T12:39:59",
-            "days_stale": 61
+            "days_stale": 62
         },
         {
             "path": "docs/plans/PLAN-E2-142-investigation-subagent-enforcement.md",
@@ -8173,7 +8182,7 @@
         {
             "path": "docs/plans/PLAN-E2-145-validate-script-section-enforcement.md",
             "last_updated": "2025-12-23T13:03:59",
-            "days_stale": 61
+            "days_stale": 62
         },
         {
             "path": "docs/plans/PLAN-E2-146-validation-error-message-placeholder-sections.md",
@@ -8443,7 +8452,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-E2-160-work-file-prerequisite-gate-design.md",
             "last_updated": "2025-12-29T12:26:37",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-FIX-002-ingester-embedding-gap.md",
@@ -8588,7 +8597,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-038-l1-invariants-content-completeness-audit.md",
             "last_updated": "2025-12-26T12:40:24",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-039-information-architecture-policy-audit.md",
@@ -8608,7 +8617,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-042-synthesis-skill-architecture.md",
             "last_updated": "2025-12-29T12:26:00",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-043-work-item-directory-architecture.md",
@@ -8732,9 +8741,9 @@
         }
     ],
     "workspace": {
-        "total_files": 589,
+        "total_files": 590,
         "by_template": {
-            "checkpoint": 413,
+            "checkpoint": 414,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8745,7 +8754,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 248,
+            "unknown": 249,
             "draft": 2,
             "approved": 6,
             "ready": 1,
