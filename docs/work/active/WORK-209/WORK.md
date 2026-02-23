@@ -3,14 +3,14 @@ template: work_item
 id: WORK-209
 title: Enforce Session and Process Review Computable Predicates via Hooks
 type: implementation
-status: open
+status: complete
 owner: Hephaestus
 created: 2026-02-23
 spawned_by: WORK-102
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-02-23'
 priority: high
 effort: medium
 traces_to:
@@ -19,8 +19,12 @@ traces_to:
 - REQ-FEEDBACK-007
 requirement_refs: []
 source_files:
-- .claude/hooks/hooks/post_tool_use.py
 - .claude/haios/lib/session_review_predicate.py (new)
+- .claude/hooks/hooks/stop.py
+- .claude/hooks/hooks/pre_tool_use.py
+- tests/test_session_review_predicate.py (new)
+- tests/test_pre_tool_use_process_review.py (new)
+- .claude/haios/lib/README.md
 acceptance_criteria:
 - Session Review trigger predicate extracted to lib/ function (computable, testable)
 - Stop hook or session-end flow injects 'MUST run session-review-cycle' when predicate
@@ -31,26 +35,33 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: working
-cycle_phase: DO
+queue_position: done
+cycle_phase: done
 current_node: DO
 node_history:
 - node: backlog
   entered: 2026-02-23 18:07:51
-  exited: null
+  exited: '2026-02-23T19:02:41.644339'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 778
+- 779
+- 780
+- 781
 extensions: {}
 version: '2.0'
 generated: 2026-02-23
-last_updated: '2026-02-23T18:21:13.148321'
+last_updated: '2026-02-23T19:02:41.648524'
 queue_history:
 - position: ready
   entered: '2026-02-23T18:21:13.113009'
   exited: '2026-02-23T18:21:13.145759'
 - position: working
   entered: '2026-02-23T18:21:13.145759'
+  exited: '2026-02-23T19:02:41.644339'
+- position: done
+  entered: '2026-02-23T19:02:41.644339'
   exited: null
 ---
 # WORK-209: Enforce Session and Process Review Computable Predicates via Hooks

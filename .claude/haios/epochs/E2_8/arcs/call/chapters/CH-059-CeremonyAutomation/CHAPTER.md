@@ -49,7 +49,7 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-203 | Session Event Log for Agent Ambient Visibility | Complete | investigation |
 | WORK-205 | Survey-Cycle Auto-Prioritize for Backlog Items | Parked | implementation |
 | WORK-206 | Implement Session Event Log | Complete | implementation |
-| WORK-209 | Enforce Session/Process Review Computable Predicates via Hooks | Working | implementation |
+| WORK-209 | Enforce Session/Process Review Computable Predicates via Hooks | Complete | implementation |
 
 ---
 
