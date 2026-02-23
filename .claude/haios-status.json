@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-23T11:28:25",
+    "generated": "2026-02-23T11:48:04",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,9 +8,9 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 425,
-        "current_session": 426,
-        "prior_date": "2026-02-22",
+        "prior_session": 426,
+        "current_session": 428,
+        "prior_date": "2026-02-23",
         "completed": [],
         "completed_count": 0,
         "added": [],
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 87503,
-        "entities": 10509,
+        "concepts": 87540,
+        "entities": 10516,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -4325,6 +4325,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-23-02-SESSION-428-work-196-hook-injection-batch-complete.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-23",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/checkpoints/checkpoint-386.md",
             "template": "checkpoint",
             "status": null,
@@ -7247,7 +7256,7 @@
         {
             "path": "docs/checkpoints/2025-12-23-02-SESSION-102-investigation-cleanup-and-e2-140-planning.md",
             "last_updated": "2025-12-23T11:31:41",
-            "days_stale": 61
+            "days_stale": 62
         },
         {
             "path": "docs/checkpoints/2025-12-23-03-SESSION-103-e2-140-investigation-status-sync-complete.md",
@@ -7352,7 +7361,7 @@
         {
             "path": "docs/checkpoints/2025-12-26-01-SESSION-121-inv-037-context-level-architecture-and-invariants-implementation.md",
             "last_updated": "2025-12-26T11:39:24",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/checkpoints/2025-12-26-02-SESSION-122-inv-037-038-039-l1-architecture-and-information-architecture-audit.md",
@@ -8117,7 +8126,7 @@
         {
             "path": "docs/plans/PLAN-E2-140-investigation-status-sync-hook.md",
             "last_updated": "2025-12-23T11:41:03",
-            "days_stale": 61
+            "days_stale": 62
         },
         {
             "path": "docs/plans/PLAN-E2-141-backlog-id-uniqueness-gate.md",
@@ -8257,7 +8266,7 @@
         {
             "path": "docs/plans/PLAN-E2-201-update-coldstart-to-load-invariantsmd.md",
             "last_updated": "2025-12-26T11:28:29",
-            "days_stale": 58
+            "days_stale": 59
         },
         {
             "path": "docs/plans/PLAN-E2-206-slim-vitals-remove-static-infrastructure.md",
@@ -8696,9 +8705,9 @@
         }
     ],
     "workspace": {
-        "total_files": 585,
+        "total_files": 586,
         "by_template": {
-            "checkpoint": 409,
+            "checkpoint": 410,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8709,7 +8718,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 244,
+            "unknown": 245,
             "draft": 2,
             "approved": 6,
             "ready": 1,

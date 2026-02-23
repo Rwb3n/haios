@@ -14485,3 +14485,9 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T11:17:59.003248"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-23T11:28:22.647443"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-23T11:28:22.700138"}
+{"type": "SessionEnded", "session": 428, "agent": "Hephaestus", "timestamp": "2026-02-23T11:29:47.933278"}
+{"type": "SessionStarted", "session": 429, "agent": "Hephaestus", "timestamp": "2026-02-23T11:34:54.944593"}
+{"type": "GateViolation", "gate_id": "scaffold_block", "work_id": "WORK-199", "violation_type": "block", "context": "BLOCKED: Direct work_item scaffold. Use '/new-work' command instead. Work items require work-creation-cycle to populate placeholders.", "timestamp": "2026-02-23T11:42:35.398254"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-23T11:48:01.282888"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-23T11:48:01.339876"}
+{"type": "StatusPropagation", "work_id": "WORK-199", "chapter": "CH-058", "arc": "call", "action": "chapter_completed", "timestamp": "2026-02-23T11:48:17.296152"}
