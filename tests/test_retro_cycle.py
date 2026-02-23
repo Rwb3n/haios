@@ -78,6 +78,33 @@ class TestRetroCyclePhases:
         for tag in ["retro-reflect", "retro-kss", "retro-extract"]:
             assert tag in content, f"Provenance tag {tag} must be documented"
 
+    def test_reflect_phase_marked_inline(self):
+        """REFLECT phase has inline execution context marker (S436 operator directive)."""
+        content = Path(".claude/skills/retro-cycle/SKILL.md").read_text(encoding="utf-8")
+        # Marker must appear before DERIVE section
+        reflect_marker_pos = content.find("Execution Context: INLINE")
+        derive_pos = content.find("## Phase 2: DERIVE")
+        assert reflect_marker_pos != -1, "REFLECT phase must have INLINE execution context marker"
+        assert reflect_marker_pos < derive_pos, "INLINE marker must appear before DERIVE section"
+        # Anti-delegation note must be present
+        content_lower = content.lower()
+        assert "never wrap" in content_lower or "do not delegate" in content_lower, \
+            "REFLECT must have explicit anti-delegation language"
+
+    def test_extract_commit_phases_delegate_to_haiku(self):
+        """EXTRACT and COMMIT phases have haiku delegation blocks (S436 operator directive)."""
+        content = Path(".claude/skills/retro-cycle/SKILL.md").read_text(encoding="utf-8")
+        # Both delegation markers must be present
+        assert "DELEGATE to haiku subagent" in content, \
+            "EXTRACT/COMMIT must have haiku delegation markers"
+        assert "model='haiku'" in content, \
+            "Delegation blocks must specify model='haiku'"
+        # Delegation markers must appear after REFLECT section
+        reflect_pos = content.find("## Phase 1: REFLECT")
+        first_delegate_pos = content.find("DELEGATE to haiku subagent")
+        assert first_delegate_pos > reflect_pos, \
+            "Delegation markers must appear after REFLECT section (not in inline phases)"
+
 
 class TestRetroCycleConsumerIntegration:
     """Verify retro-cycle is properly integrated into close pipeline."""

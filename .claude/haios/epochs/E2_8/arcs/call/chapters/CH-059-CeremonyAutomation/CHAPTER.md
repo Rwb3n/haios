@@ -50,6 +50,9 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-205 | Survey-Cycle Auto-Prioritize for Backlog Items | Parked | implementation |
 | WORK-206 | Implement Session Event Log | Complete | implementation |
 | WORK-209 | Enforce Session/Process Review Computable Predicates via Hooks | Complete | implementation |
+| WORK-210 | Split Retro-Cycle into Inline Reflect plus Delegated Close | Complete | implementation |
+| WORK-211 | Post-Retro Enrichment Subagent Design | Backlog | implementation |
+| WORK-212 | Mechanical Phase Delegation to Haiku Subagents | Backlog | refactor |
 
 ---
 

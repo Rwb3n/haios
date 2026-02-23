@@ -139,6 +139,12 @@ If `skip_retro` is set:
 
 ## Phase 1: REFLECT
 
+> **Execution Context: INLINE (main agent MUST execute this phase directly)**
+> REFLECT requires full session context that only the main agent holds — recent tool calls,
+> decisions made, surprises encountered. Delegating to a subagent is lossy because the
+> subagent reconstructs context from files, not from live session state. S436 operator
+> directive: REFLECT stays inline. Never wrap this phase in a Task() call.
+
 Capture observations across 5 dimensions, anchored to specific evidence.
 
 ### Dimensions
@@ -197,6 +203,11 @@ If evidence sources are unavailable (e.g., no plan, no governance events):
 
 ## Phase 2: DERIVE
 
+> **Execution Context: INLINE (main agent MUST execute this phase directly)**
+> DERIVE synthesizes from REFLECT observations. The observations exist in the main agent's
+> working context — a subagent would have to read them from a file, losing the cognitive
+> chain from observation to directive. S436 operator directive: DERIVE stays inline.
+
 Extract Keep/Stop/Start directives from REFLECT observations.
 
 ### K/S/S Framework
@@ -225,6 +236,23 @@ If REFLECT produced zero observations (edge case), DERIVE is skipped. Log: "No o
 ---
 
 ## Phase 3: EXTRACT
+
+> **Execution Context: DELEGATE to haiku subagent (S436 operator directive)**
+> EXTRACT is mechanical classification — takes REFLECT observations and assigns type
+> (bug/feature/refactor/upgrade), confidence, priority. No live session context required;
+> the observations are written output from Phase 1. Delegate to save main-agent tokens.
+
+**Delegation pattern:**
+```
+Task(
+  subagent_type='general-purpose',
+  model='haiku',
+  prompt='Execute retro-cycle EXTRACT phase for {work_id}.
+    REFLECT findings (summary, not full text — chunk if >2000 tokens): {reflect_findings_text}
+    Classify each actionable item. Output format per SKILL.md Phase 3 Classification table.
+    Return: extracted_items list in YAML format.'
+)
+```
 
 Classify actionable items from REFLECT observations into typed work candidates with priority signals.
 
@@ -285,6 +313,26 @@ If REFLECT produced no actionable items, EXTRACT produces an empty list. This is
 ---
 
 ## Phase 4: COMMIT
+
+> **Execution Context: DELEGATE to haiku subagent (S436 operator directive)**
+> COMMIT is mechanical persistence — calls ingester_ingest 4 times with structured outputs
+> from REFLECT/DERIVE/EXTRACT phases. No cognitive context required. Delegate to save
+> main-agent tokens.
+
+**Delegation pattern:**
+```
+Task(
+  subagent_type='general-purpose',
+  model='haiku',
+  prompt='Execute retro-cycle COMMIT phase for {work_id}.
+    reflect_findings: {reflect_findings_json}
+    kss_directives: {kss_directives_json}
+    extracted_items: {extracted_items_json}
+    scaling: {scaling}
+    Store each per SKILL.md Phase 4 Provenance Tags. Return: memory_concept_ids list.
+    Verify: after each ingester_ingest, confirm concept_ids is non-empty (S407 silent-drop check).'
+)
+```
 
 Store all outputs to memory with typed provenance tags. No deduplication at write time.
 

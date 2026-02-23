@@ -312,3 +312,27 @@ class TestLightweightClosePatterns:
             assert expected_pattern in content, (
                 f"Expected pattern '{expected_pattern}' not found in {file_path}"
             )
+
+
+class TestCloseWorkCycleDelegation:
+    """WORK-210: ARCHIVE and CHAIN phases delegate to haiku subagent (S436)."""
+
+    def test_archive_chain_delegate_to_haiku(self):
+        """ARCHIVE and CHAIN phases have haiku delegation blocks per S436 directive."""
+        content = Path(".claude/skills/close-work-cycle/SKILL.md").read_text(encoding="utf-8")
+        # Delegation marker must be present
+        assert "DELEGATE to haiku subagent" in content, \
+            "close-work-cycle ARCHIVE/CHAIN must have haiku delegation markers"
+        assert "model='haiku'" in content, \
+            "Delegation blocks must specify model='haiku'"
+        # Verify delegation appears near both ARCHIVE and CHAIN sections
+        archive_pos = content.find("ARCHIVE Phase")
+        chain_pos = content.find("CHAIN Phase")
+        # Use substring window search (not startswith) to match both
+        # "DELEGATE to haiku subagent" and "PARTIAL DELEGATE to haiku subagent"
+        archive_window = content[archive_pos:archive_pos + 700]
+        chain_window = content[chain_pos:chain_pos + 700]
+        assert "DELEGATE to haiku subagent" in archive_window, \
+            "Haiku delegation must appear near ARCHIVE Phase section"
+        assert "DELEGATE to haiku subagent" in chain_window, \
+            "Haiku delegation must appear near CHAIN Phase section"

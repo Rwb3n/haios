@@ -171,6 +171,25 @@ just set-cycle close-work-cycle VALIDATE {work_id}
 just set-cycle close-work-cycle ARCHIVE {work_id}
 ```
 
+> **Execution Context: DELEGATE to haiku subagent (S436 operator directive)**
+> ARCHIVE is mechanical: status update, cascade, status propagation. No cognitive context
+> required. Delegate to save main-agent tokens. (S436: close-work-cycle-agent ran 68 tool
+> calls monolithically; delegation makes this mechanical.)
+
+**Delegation pattern:**
+```
+Task(
+  subagent_type='general-purpose',
+  model='haiku',
+  prompt='Execute close-work-cycle ARCHIVE phase for {work_id}.
+    1. Run: just close-work {work_id}
+    2. Verify: work file has status: complete and closed date set
+    3. Update associated plans to status: complete
+    4. Run StatusPropagator().propagate("{work_id}")
+    Report: DONE (archived_path) or FAIL (error).'
+)
+```
+
 **Goal:** Update work item status to complete.
 
 **Note:** Per ADR-041 "status over location" - work items stay in `docs/work/active/` until epoch cleanup. The `status: complete` field determines state, not directory path.
@@ -213,6 +232,27 @@ just set-cycle close-work-cycle ARCHIVE {work_id}
 **On Entry:**
 ```bash
 just set-cycle close-work-cycle CHAIN {work_id}
+```
+
+> **Execution Context: PARTIAL DELEGATE to haiku subagent (S436 operator directive)**
+> CHAIN has both mechanical steps (checkpoint, queue query) and interactive steps
+> (AskUserQuestion for operator routing). Mechanical steps delegate to haiku; the
+> AskUserQuestion MUST remain in main agent context (subagent isolated context cannot
+> reliably surface interactive prompts to operator — critique A8).
+
+**Delegation pattern (mechanical steps only):**
+```
+result = Task(
+  subagent_type='general-purpose',
+  model='haiku',
+  prompt='Execute close-work-cycle CHAIN mechanical steps for {work_id}.
+    1. Invoke checkpoint-cycle (Skill(skill="checkpoint-cycle"))
+    2. Run: just ready
+    3. Read each ready work item type field
+    Report: list of ready items with their types.'
+)
+# Main agent then presents AskUserQuestion with routing options
+# using the haiku result as input. AskUserQuestion stays inline.
 ```
 
 **Goal:** Checkpoint context then route to next work item.
