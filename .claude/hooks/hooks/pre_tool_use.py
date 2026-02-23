@@ -134,6 +134,11 @@ def handle(hook_data: dict) -> Optional[dict]:
             if result:
                 return result
 
+        # Process Review approval gate (WORK-209) - L3/L4 write protection
+        result = _check_process_review_gate(file_path)
+        if result:
+            return result
+
         # Path governance - only for new files
         result = _check_path_governance(file_path)
         if result:
@@ -827,6 +832,63 @@ def _check_exit_gate(file_path: str, old_string: str, new_string: str) -> Option
 
     except Exception:
         pass  # On error, allow operation
+
+    return None
+
+
+# =============================================================================
+# WORK-209: Process Review approval gate for manifesto L3/L4 writes
+# =============================================================================
+
+
+def _check_process_review_gate(file_path: str) -> Optional[dict]:
+    """
+    Block writes to manifesto/L3/ and manifesto/L4/ without ProcessReviewApproved event (WORK-209).
+
+    The process-review-cycle APPROVE phase logs a ProcessReviewApproved governance event
+    BEFORE the Write call. This gate enforces that contract mechanically.
+
+    Returns deny response if L3/L4 path without approval, None otherwise.
+    """
+    if not file_path:
+        return None
+
+    normalized = file_path.replace("\\", "/")
+
+    # Only applies to manifesto L3/L4 paths
+    is_l3_or_l4 = (
+        "manifesto/L3/" in normalized or
+        "manifesto/L4/" in normalized
+    )
+    if not is_l3_or_l4:
+        return None
+
+    try:
+        lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
+        if str(lib_dir) not in sys.path:
+            sys.path.insert(0, str(lib_dir))
+
+        from governance_events import read_events
+
+        # TODO(WORK-209): This reads ALL historical events, not just current session.
+        # Per-session scoping is a follow-on. Any prior ProcessReviewApproved event
+        # permanently unlocks L3/L4 writes. Acceptable for V1 given fail-permissive stance.
+        events = read_events()
+        has_approval = any(
+            e.get("type") == "ProcessReviewApproved"
+            for e in events
+        )
+
+        if not has_approval:
+            return _deny(
+                "BLOCKED: Writing to manifesto/L3/ or manifesto/L4/ requires a "
+                "ProcessReviewApproved governance event. "
+                "Run process-review-cycle APPROVE phase first, which logs the event before Write. "
+                "(WORK-209, REQ-FEEDBACK-007)"
+            )
+
+    except Exception:
+        pass  # Fail-permissive: gate failure must not block all L3/L4 writes
 
     return None
 

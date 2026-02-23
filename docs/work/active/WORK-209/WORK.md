@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-209
-title: "Enforce Session and Process Review Computable Predicates via Hooks"
+title: Enforce Session and Process Review Computable Predicates via Hooks
 type: implementation
 status: open
 owner: Hephaestus
@@ -14,35 +14,44 @@ closed: null
 priority: high
 effort: medium
 traces_to:
-  - REQ-CEREMONY-005
-  - REQ-FEEDBACK-006
-  - REQ-FEEDBACK-007
+- REQ-CEREMONY-005
+- REQ-FEEDBACK-006
+- REQ-FEEDBACK-007
 requirement_refs: []
 source_files:
-  - .claude/hooks/hooks/post_tool_use.py
-  - .claude/haios/lib/session_review_predicate.py (new)
+- .claude/hooks/hooks/post_tool_use.py
+- .claude/haios/lib/session_review_predicate.py (new)
 acceptance_criteria:
-  - "Session Review trigger predicate extracted to lib/ function (computable, testable)"
-  - "Stop hook or session-end flow injects 'MUST run session-review-cycle' when predicate passes"
-  - "PreToolUse hook blocks Write to manifesto/L3/ and manifesto/L4/ paths without preceding ProcessReviewApproved governance event"
-  - "Tests for predicate function and hook enforcement"
+- Session Review trigger predicate extracted to lib/ function (computable, testable)
+- Stop hook or session-end flow injects 'MUST run session-review-cycle' when predicate
+  passes
+- PreToolUse hook blocks Write to manifesto/L3/ and manifesto/L4/ paths without preceding
+  ProcessReviewApproved governance event
+- Tests for predicate function and hook enforcement
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: working
+cycle_phase: DO
+current_node: DO
 node_history:
-  - node: backlog
-    entered: 2026-02-23T18:07:51
-    exited: null
+- node: backlog
+  entered: 2026-02-23 18:07:51
+  exited: null
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-23
-last_updated: 2026-02-23T18:07:51
+last_updated: '2026-02-23T18:21:13.148321'
+queue_history:
+- position: ready
+  entered: '2026-02-23T18:21:13.113009'
+  exited: '2026-02-23T18:21:13.145759'
+- position: working
+  entered: '2026-02-23T18:21:13.145759'
+  exited: null
 ---
 # WORK-209: Enforce Session and Process Review Computable Predicates via Hooks
 

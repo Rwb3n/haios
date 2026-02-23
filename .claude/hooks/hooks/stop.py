@@ -96,8 +96,34 @@ def _run_session_end_actions() -> None:
 
         clear_cycle_state()
 
+        # Session-review predicate check (WORK-209)
+        _inject_session_review_reminder()
+
         changes = detect_uncommitted_changes()
         if changes:
             sys.stderr.write(f"[session-end] {len(changes)} uncommitted change(s)\n")
+    except Exception:
+        pass  # Fail-permissive
+
+
+def _inject_session_review_reminder() -> None:
+    """Check session-review predicate and inject reminder if it passes (WORK-209).
+
+    If should_run_session_review() returns True, writes reminder to stderr
+    so Claude Code displays it as context at session-end.
+
+    Fail-permissive: never raises, never blocks session-end.
+    """
+    try:
+        lib_dir = Path(__file__).parent.parent / "haios" / "lib"
+        if str(lib_dir) not in sys.path:
+            sys.path.insert(0, str(lib_dir))
+        from session_review_predicate import should_run_session_review
+
+        if should_run_session_review():
+            sys.stderr.write(
+                "[session-end] MUST run session-review-cycle before closing this session. "
+                "Trigger predicate passed (work closed or retro completed this session).\n"
+            )
     except Exception:
         pass  # Fail-permissive
