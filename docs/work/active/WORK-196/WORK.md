@@ -25,8 +25,7 @@ acceptance_criteria:
 - "Each injection is <5 tokens, total <20 tokens"
 - "Graceful degradation if any data source unavailable"
 - "Existing tests pass"
-blocked_by:
-- WORK-195
+blocked_by: []
 blocks: []
 enables: []
 queue_position: backlog  # WORK-105: parked|backlog|ready|working|done

@@ -3,14 +3,14 @@ template: work_item
 id: WORK-195
 title: UserPromptSubmit Slim-Read-Once Refactor
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-22
 spawned_by: WORK-194
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-02-23'
 priority: medium
 effort: small
 traces_to:
@@ -28,26 +28,36 @@ blocks:
 - WORK-196
 enables:
 - WORK-196
-queue_position: working
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
 - node: backlog
   entered: 2026-02-22 16:24:41
-  exited: null
+  exited: '2026-02-23T10:23:57.272960'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 87635
+- 87636
+- 87637
+- 87638
+- 87639
+- 87674
+- 87675
 extensions: {}
 version: '2.0'
 generated: 2026-02-22
-last_updated: '2026-02-22T16:33:08.902551'
+last_updated: '2026-02-23T10:23:57.275312'
 queue_history:
 - position: ready
   entered: '2026-02-22T16:33:08.872071'
   exited: '2026-02-22T16:33:08.900033'
 - position: working
   entered: '2026-02-22T16:33:08.900033'
+  exited: '2026-02-23T10:23:57.272960'
+- position: done
+  entered: '2026-02-23T10:23:57.272960'
   exited: null
 ---
 # WORK-195: UserPromptSubmit Slim-Read-Once Refactor
@@ -80,11 +90,11 @@ Refactor `handle()` to read slim JSON once at the top and pass the parsed dict a
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] `handle()` reads slim JSON once and passes parsed dict to consumers
-- [ ] `_get_session_state_warning` accepts slim dict parameter
-- [ ] `_get_phase_contract` accepts slim dict parameter
-- [ ] Disabled functions (`_get_vitals`, `_get_thresholds`) updated for consistency
-- [ ] Existing tests pass with no behavior change
+- [x] `handle()` reads slim JSON once and passes parsed dict to consumers
+- [x] `_get_session_state_warning` accepts slim dict parameter
+- [x] `_get_phase_contract` accepts slim dict parameter
+- [x] Disabled functions (`_get_vitals`, `_get_thresholds`) updated for consistency
+- [x] Existing tests pass with no behavior change
 
 ---
 
