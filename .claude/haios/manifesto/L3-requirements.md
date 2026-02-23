@@ -33,6 +33,7 @@ Mutability: IMMUTABLE (append-only under operator authorization)
 | L3.18 | LLM Nature | Completes Literally | - | L3.7 enforcement |
 | L3.19 | Principle | Coordination by Intent | L3.4, L3.3, L0.11 | REQ-COORD-* |
 | L3.20 | Principle | Proportional Governance | L3.10, L2.20, L1.6, L1.9 | REQ-LIFECYCLE-005, REQ-CEREMONY-005 |
+| L3.21 | Principle | Computable Means Mechanical | L3.15, L3.13, L2.13 | REQ-CEREMONY-005 |
 
 ---
 
@@ -78,6 +79,11 @@ Agents coordinate through shared understanding of intent (standing orders, persi
 Governance overhead scales with blast radius, not uniformly. Trivial changes get trivial oversight; architectural decisions get full ceremony. The weight of governance must be proportional to the risk and complexity of the work being governed. L3.10 prohibits grinding as a boundary (what NOT to do); L3.20 requires proportionality as a positive obligation (what TO do). These are complementary, not redundant.
 
 *Added Session 398 under operator authorization (same precedent as L3.19, S393). Derived from E2.5 finding that full ceremony chain consumes ~104% of 200k context budget (mem:85390), E2.8 Arc 1 "call" theme, and validated retro-cycle Phase 0 prototype (mem:85607). Derives from L3.10 (No Grinding the Operator), L2.20, L1.6 (Limited Time), L1.9 (Human as Bottleneck).*
+
+### [L3.21] Computable Means Mechanical
+If a predicate is machine-checkable, it MUST be enforced mechanically — in a Python function (lib/) with test coverage, enforced by hooks (PreToolUse/PostToolUse/Stop). SKILL.md describes the contract; hooks and lib enforce it. An agent reading a SKILL.md and deciding whether to comply is not enforcement. Computable predicates left in Tier 3 (agent-read markdown) are governance gaps.
+
+*Added Session 435 under operator directive. Derived from L3.15 (No Internal Friction — LLMs have no internal enforcement), L3.13 (Predicts, Doesn't Verify — agents will pattern-match compliance rather than verify it), and L2.13 (enforce constraints on the system, not on the agent). The distinction: computable = mechanical enforcement, judgment = agent reads SKILL.md.*
 
 ---
 
@@ -242,4 +248,4 @@ Architectural alignment items for future epochs:
 ---
 
 *L3 contains principles. L4 (CLAUDE.md, INV-052, configs) contains specific rules that implement these principles.*
-*Enumerated Session 237 for bidirectional traceability. L3.19 added Session 393. L3.20 added Session 398.*
+*Enumerated Session 237 for bidirectional traceability. L3.19 added Session 393. L3.20 added Session 398. L3.21 added Session 435.*
