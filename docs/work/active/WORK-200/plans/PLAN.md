@@ -68,18 +68,17 @@ The `/close` command and close-work-cycle skill will detect effort tier and bran
 
 | File | Action | Disposition |
 |------|--------|------------|
-| `tests/test_skills.py` | UPDATE | Verify skill files parse correctly after edits |
-
-**SKIPPED: No new test file.** This is a skill-document change, not code. Existing `test_skills.py` validates skill YAML frontmatter. The behavioral test is the close ceremony itself — run `/close` on an effort=small item and verify lightweight path executes.
+| `tests/test_skill_template.py` | REVIEW | Verify skill files parse correctly after edits (existing) |
+| `tests/test_close_work_cycle.py` | UPDATE | Add content-assertion test for lightweight path patterns |
 
 ### Scope Metrics
 
 | Metric | Value | Source |
 |--------|-------|--------|
 | Files to create | 0 | No new files |
-| Files to modify | 4 | Primary Files table |
-| Tests to write | 0 | Existing test coverage sufficient |
-| Total blast radius | 4 | 4 skill/command files modified |
+| Files to modify | 5 | 4 Primary Files + 1 test file |
+| Tests to write | 1 | Content-assertion test for lightweight patterns |
+| Total blast radius | 5 | 4 skill/command files + 1 test file |
 
 ---
 
@@ -100,7 +99,7 @@ The `/close` command and close-work-cycle skill will detect effort tier and bran
 
 ### Desired State
 
-**close.md**: After finding work item, reads `effort:` field from WORK.md. If `effort: small` AND `assess_scale()` returns "trivial", sets `lightweight: true` flag. Passes flag to retro-cycle (already scales via Phase 0) and close-work-cycle.
+**close.md**: After finding work item, reads `effort:` and `source_files:` from WORK.md frontmatter (prospective predicate per REQ-LIFECYCLE-005). If `effort: small` AND `source_files` count <= 3, sets `lightweight_close: true`. This flag exists in agent working memory — all skill invocations (retro-cycle, close-work-cycle, checkpoint-cycle) execute within the same agent turn, so the flag is naturally available. No file write needed for propagation.
 
 **close-work-cycle SKILL.md**: New "Lightweight Path (effort=small)" section. When lightweight:
 1. Skip dod-validation-cycle 3-phase bridge
@@ -117,7 +116,11 @@ The `/close` command and close-work-cycle skill will detect effort tier and bran
 
 ### Tests
 
-**SKIPPED: Document-only change.** No Python code is created or modified. Verification is via Grep for required patterns in modified files plus existing `test_skills.py` regression.
+#### Test: Content-Assertion for Lightweight Patterns
+- **file:** `tests/test_close_work_cycle.py`
+- **function:** `test_lightweight_close_patterns_present()`
+- **setup:** Read the 4 modified skill/command files
+- **assertion:** Each file contains the expected lightweight path pattern: close.md has "Detect Effort Tier", close-work-cycle has "Lightweight Path", dod-validation-cycle has "Lightweight Alternative", checkpoint-cycle has "Lightweight VERIFY"
 
 ### Design
 
@@ -126,25 +129,27 @@ The `/close` command and close-work-cycle skill will detect effort tier and bran
 Add tier detection after Step 1 (work item lookup), before Chain to Retro Cycle:
 
 ```markdown
-## Step 1.1: Detect Effort Tier
+## Step 1.1: Detect Effort Tier (Prospective Predicate — REQ-LIFECYCLE-005)
 
-After finding work item, determine close ceremony tier:
+After finding work item, determine close ceremony tier using WORK.md frontmatter (prospective predicate, not retrospective git diff):
 
 1. Read `effort:` field from WORK.md frontmatter
-2. If `effort: small`:
-   - Run `assess_scale(work_id)` from `.claude/haios/lib/retro_scale.py`
-   - If returns "trivial": Set `lightweight_close: true`
-   - If returns "substantial": Set `lightweight_close: false` (effort=small but substantial changes)
-3. If `effort: medium` or higher: Set `lightweight_close: false`
-4. Default (effort field missing): Set `lightweight_close: false` (conservative)
+2. Read `source_files:` list and count entries
+3. If `effort: small` AND `source_files` count <= 3: Set `lightweight_close: true`
+4. If `effort: medium` or higher: Set `lightweight_close: false`
+5. Default (effort field missing): Set `lightweight_close: false` (conservative — absent data MUST NOT produce more permissive classification per REQ-LIFECYCLE-005)
+
+**Note:** This is a prospective predicate (declared scope before work begins). retro-cycle Phase 0's `assess_scale()` is a retrospective predicate (git diff after work). Both are valid for their lifecycle position. Close ceremony tier uses the prospective predicate because tier detection happens before retro-cycle runs.
 
 **Lightweight close path:** If `lightweight_close: true`:
-- retro-cycle runs with trivial scaling (already implemented)
+- retro-cycle runs with trivial scaling (Phase 0 assess_scale handles this independently)
 - close-work-cycle uses inline DoD checklist (skip dod-validation-cycle)
 - checkpoint-cycle uses inline VERIFY (skip anti-pattern-checker)
 
 **Full close path:** If `lightweight_close: false`:
 - All ceremonies run at full weight (current behavior, unchanged)
+
+**Flag propagation:** All skill invocations (retro-cycle, close-work-cycle, checkpoint-cycle) execute within the same agent turn. The `lightweight_close` flag persists in agent working memory across skill boundaries. No file write needed.
 ```
 
 #### File 2 (MODIFY): `.claude/skills/close-work-cycle/SKILL.md`
@@ -154,7 +159,7 @@ Add lightweight path section after prerequisites, before VALIDATE phase:
 ```markdown
 ### Lightweight Path (effort=small)
 
-**When:** `/close` command sets `lightweight_close: true` (effort=small + assess_scale returns "trivial").
+**When:** `/close` command sets `lightweight_close: true` (effort=small + source_files <= 3).
 
 **Skip:** dod-validation-cycle 3-phase bridge (near-zero signal for planless small items per WORK-199 H2).
 
@@ -215,7 +220,7 @@ Full anti-pattern-checker VERIFY remains for standard+ closures.
   |
   +-> Step 1: Find work item
   +-> Step 1.1: Detect effort tier (NEW)
-  |     lightweight_close = effort:small AND assess_scale()=="trivial"
+  |     lightweight_close = effort:small AND source_files<=3 (prospective)
   |
   +-> retro-cycle (trivial scaling already implemented)
   |
@@ -237,9 +242,11 @@ Full anti-pattern-checker VERIFY remains for standard+ closures.
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
-| Tier detection in /close command | Read effort + assess_scale | Centralizes decision at entry point. Skills don't need to re-detect. |
+| Tier detection in /close command | Read effort + source_files from WORK.md frontmatter (prospective) | Centralizes decision at entry point. Prospective predicate per REQ-LIFECYCLE-005 (not retrospective git diff). Skills don't need to re-detect. |
 | Inline checklist vs reduced bridge | Inline checklist | Bridge skill invocation itself costs ~500 tokens. Inline eliminates that overhead entirely. |
-| Lightweight = effort:small AND trivial | Both conditions required | effort:small with substantial changes (many files) should still get full ceremony. Conservative. |
+| Lightweight = effort:small AND source_files<=3 | Both conditions required | Matches REQ-LIFECYCLE-005 Small tier predicate. Conservative: more source files → more ceremony. |
+| Prospective vs retrospective predicate | Prospective (WORK.md frontmatter) | REQ-LIFECYCLE-005 distinguishes: source_files is prospective, files_changed is retrospective. Close tier detection is pre-retro, so prospective is correct. |
+| Flag propagation via agent memory | No file write for lightweight_close | All /close skill invocations execute in same agent turn. Flag naturally available across Skill() boundaries. |
 | Pytest gate invariant | Never skip regardless of tier | Per close-work-cycle SKILL.md:109 and REQ-CEREMONY-005. Code correctness is non-negotiable. |
 | Checkpoint VERIFY inline vs skip | Inline field check | REQ-LIFECYCLE-005 says "phases lightweight, not skipped." Preserves phase at minimal cost. |
 | Missing effort field defaults to full | Conservative safe default | REQ-LIFECYCLE-005 invariant: absent data MUST NOT produce more permissive classification. |
@@ -248,18 +255,19 @@ Full anti-pattern-checker VERIFY remains for standard+ closures.
 
 | Case | Handling | Test |
 |------|----------|------|
-| effort field missing in WORK.md | Default to full close path | Grep for "Default.*full" in close.md |
-| effort=small but assess_scale returns "substantial" | Full close path (conservative) | Grep for "substantial.*false" in close.md |
+| effort field missing in WORK.md | Default to full close path | Grep for "Default.*conservative" in close.md |
+| effort=small but source_files > 3 | Full close path (conservative) | Grep for "source_files.*3" in close.md |
 | type=investigation + effort=small | Lightweight path, pytest gate skipped (type exempt) | Grep for "type.*investigation.*Skip" in close-work-cycle |
 | Memory store fails during lightweight checkpoint | Proceed (COMMIT degradation already defined in retro-cycle) | Existing retro-cycle degradation |
 | Inline DoD hard gate fails | BLOCK, revert to full path for operator review | Grep for "BLOCK.*revert" in close-work-cycle |
+| WORK-200 itself has effort=medium | Closes via full path, not lightweight (correct behavior) | N/A — WORK-200 designs for effort=small, doesn't use it itself |
 
 ### Risks
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | Skill wording ambiguity causes agent to skip checks | Med | Explicit "INVARIANT" labels on pytest gate. "MUST" on each inline check. |
-| Future effort=small items with plans | Low | assess_scale already checks plan existence — returns "substantial" if plan exists, forcing full path |
+| Future effort=small items with plans | Low | Small tier predicate (source_files <= 3) doesn't check plan existence. But REQ-LIFECYCLE-005 Small tier allows plans ("plan MAY exist"). Items with plans still get lightweight close if effort=small + source_files <= 3. Plan-specific DoD checks (Ground Truth) are N/A since dod-validation is skipped — the inline checklist handles what's needed. |
 | Inconsistency between /close command and close-work-cycle | Med | Single flag `lightweight_close` set once in /close, consumed downstream. No re-detection. |
 
 ---
@@ -294,12 +302,19 @@ Full anti-pattern-checker VERIFY remains for standard+ closures.
 - **output:** checkpoint-cycle documents inline VERIFY option
 - **verify:** `Grep(pattern="Lightweight VERIFY", path=".claude/skills/checkpoint-cycle/SKILL.md")` returns 1+ match
 
-### Step 5: Run existing tests
+### Step 5: Write content-assertion test (RED then GREEN)
+- **spec_ref:** Layer 1 > Tests > Content-Assertion
+- **input:** Steps 1-4 complete (all 4 files modified)
+- **action:** Add `test_lightweight_close_patterns_present()` to `tests/test_close_work_cycle.py`. Test reads 4 modified files and asserts lightweight path patterns are present.
+- **output:** Test passes (GREEN — patterns already present from Steps 1-4)
+- **verify:** `pytest tests/test_close_work_cycle.py::test_lightweight_close_patterns_present -v` exits 0
+
+### Step 6: Run full test suite
 - **spec_ref:** Layer 0 > Test Files
-- **input:** Steps 1-4 complete
-- **action:** Run `pytest tests/test_skills.py -v` to verify no skill parsing regressions
+- **input:** Steps 1-5 complete
+- **action:** Run `pytest tests/test_skill_template.py tests/test_close_work_cycle.py -v` to verify no regressions
 - **output:** All existing tests pass
-- **verify:** `pytest tests/test_skills.py -v` exits 0
+- **verify:** `pytest tests/test_skill_template.py tests/test_close_work_cycle.py -v` exits 0
 
 ---
 
@@ -309,8 +324,8 @@ Full anti-pattern-checker VERIFY remains for standard+ closures.
 
 | Command | Expected |
 |---------|----------|
-| `pytest tests/test_skills.py -v` | All passed, 0 failed |
-| `pytest tests/ -v` | 0 new failures vs baseline (1571 passed) |
+| `pytest tests/test_close_work_cycle.py::test_lightweight_close_patterns_present -v` | 1 passed, 0 failed |
+| `pytest tests/test_skill_template.py tests/test_close_work_cycle.py -v` | All passed, 0 failed |
 
 ### Deliverables
 
@@ -331,7 +346,7 @@ Full anti-pattern-checker VERIFY remains for standard+ closures.
 
 ### Completion Criteria (DoD)
 
-- [ ] All tests pass (Layer 2 Step 5 verify)
+- [ ] All tests pass (Layer 2 Steps 5-6 verify)
 - [ ] All WORK.md deliverables verified (table above)
 - [ ] No stale references to removed content
 - [ ] WHY captured (memory_refs populated via ingester_ingest)

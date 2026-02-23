@@ -43,6 +43,7 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-194 | UserPromptSubmit Hook Injection Candidates Evaluation | Complete | investigation |
 | WORK-195 | UserPromptSubmit Slim-Read-Once Refactor | Backlog | implementation |
 | WORK-196 | UserPromptSubmit Hook Injection Batch (Session, Working, Duration) | Backlog | implementation |
+| WORK-200 | Implement Proportional Close Ceremony | Active | implementation |
 
 ---
 

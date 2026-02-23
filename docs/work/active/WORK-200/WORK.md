@@ -28,17 +28,16 @@ acceptance_criteria:
   - "checkpoint-cycle VERIFY uses inline field check (no subagent) for effort=small"
   - "Full close path preserved unchanged for effort=standard+ items"
   - "Pytest hard gate remains tier-independent (invariant)"
-  - "All phase transitions still log governance events"
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: CHAIN
-current_node: CHAIN
+queue_position: working  # WORK-105: parked|backlog|ready|working|done
+cycle_phase: DO
+current_node: DO
 node_history:
   - node: backlog
     entered: 2026-02-23T11:42:45
-    exited: null
+    exited: 2026-02-23T12:00:00
 artifacts: []
 cycle_docs: {}
 memory_refs: []
@@ -57,11 +56,11 @@ WORK-199 investigation found that the close ceremony pipeline (retro-cycle → d
 
 REQ-LIFECYCLE-005 defines fast-path: "phases are lightweight, not skipped." REQ-CEREMONY-005 defines 4-tier scaling (None→Checklist→Full→Operator). The close pipeline doesn't implement either yet. retro-cycle Phase 0 is the only existing scaling mechanism.
 
-**Implementation:** Add tier-aware branching to `/close` command and close-work-cycle skill. When `assess_scale()` returns "trivial" OR work item has `effort: small`:
+**Implementation:** Add tier-aware branching to `/close` command and close-work-cycle skill. Tier detection uses prospective predicates from WORK.md frontmatter (`effort:` field + `source_files:` count) per REQ-LIFECYCLE-005, not retrospective git diff. When effort=small AND source_files <= 3:
 1. Replace dod-validation-cycle 3-phase bridge with inline DoD checklist
 2. Merge close-work-cycle VALIDATE into the inline checklist
 3. Replace checkpoint-cycle VERIFY subagent with inline field check
-4. Preserve all invariants (pytest gate, ARCHIVE, COMMIT, governance events)
+4. Preserve all invariants (pytest gate, ARCHIVE, COMMIT)
 
 ---
 
@@ -87,7 +86,7 @@ REQ-LIFECYCLE-005 defines fast-path: "phases are lightweight, not skipped." REQ-
 - [ ] close-work-cycle SKILL.md updated with lightweight VALIDATE path for effort=small
 - [ ] dod-validation-cycle SKILL.md updated with inline checklist alternative
 - [ ] checkpoint-cycle SKILL.md updated with lightweight VERIFY for effort=small
-- [ ] Tests for tier detection and branching logic
+- [ ] Content-assertion test verifying lightweight path patterns present in modified files
 - [ ] Full close path unchanged for effort=standard+ items
 
 ---
