@@ -54,6 +54,35 @@ class TestSyncWorkMdPhase:
         assert "Body text here." in content
         assert "cycle_phase: DO" in content
 
+    def test_updates_current_node_field(self, tmp_path):
+        """WORK-198: Also syncs current_node for backward compat."""
+        work_dir = tmp_path / "docs" / "work" / "active" / "WORK-999"
+        work_dir.mkdir(parents=True)
+        work_file = work_dir / "WORK.md"
+        work_file.write_text(
+            "---\nid: WORK-999\ncycle_phase: PLAN\ncurrent_node: PLAN\nstatus: active\n---\n# Content\n"
+        )
+        result = sync_work_md_phase("WORK-999", "DO", project_root=tmp_path)
+        assert result is True
+        content = work_file.read_text()
+        assert "cycle_phase: DO" in content
+        assert "current_node: DO" in content
+        assert "current_node: PLAN" not in content
+
+    def test_skips_current_node_if_missing(self, tmp_path):
+        """WORK-198: If no current_node field, only cycle_phase is updated."""
+        work_dir = tmp_path / "docs" / "work" / "active" / "WORK-999"
+        work_dir.mkdir(parents=True)
+        work_file = work_dir / "WORK.md"
+        work_file.write_text(
+            "---\nid: WORK-999\ncycle_phase: PLAN\nstatus: active\n---\n# Content\n"
+        )
+        result = sync_work_md_phase("WORK-999", "DO", project_root=tmp_path)
+        assert result is True
+        content = work_file.read_text()
+        assert "cycle_phase: DO" in content
+        assert "current_node" not in content
+
     def test_returns_false_missing_file(self, tmp_path):
         """Returns False when WORK.md does not exist (fail-permissive)."""
         result = sync_work_md_phase("WORK-999", "DO", project_root=tmp_path)

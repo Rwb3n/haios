@@ -135,10 +135,13 @@ def sync_work_md_phase(
     phase: str,
     project_root: Optional[Path] = None,
 ) -> bool:
-    """Write cycle_phase field to WORK.md frontmatter (WORK-171).
+    """Write cycle_phase and current_node fields to WORK.md frontmatter (WORK-171, WORK-198).
 
     Uses targeted regex line-replacement (not full YAML re-serialization)
     to avoid frontmatter corruption. Pattern from work_item.py:56-71.
+
+    WORK-198: Also syncs current_node (deprecated but still read by consumers).
+    Skips current_node if field doesn't exist in frontmatter.
 
     Args:
         work_id: Work item ID (e.g., "WORK-171")
@@ -166,6 +169,16 @@ def sync_work_md_phase(
             content,
             flags=re.MULTILINE,
         )
+
+        # WORK-198: Also sync current_node if it exists (backward compat)
+        if re.search(r"^current_node:\s", updated, re.MULTILINE):
+            updated = re.sub(
+                r"^current_node:\s.*$",
+                f"current_node: {phase}",
+                updated,
+                flags=re.MULTILINE,
+            )
+
         work_file.write_text(updated, encoding="utf-8")
         return True
     except Exception:

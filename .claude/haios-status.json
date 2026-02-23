@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-23T10:24:00",
+    "generated": "2026-02-23T10:52:56",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 424,
-        "current_session": 425,
+        "prior_session": 425,
+        "current_session": 426,
         "prior_date": "2026-02-22",
         "completed": [],
         "completed_count": 0,
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 87487,
-        "entities": 10506,
+        "concepts": 87503,
+        "entities": 10509,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -4316,6 +4316,15 @@
             "spawned_by": null
         },
         {
+            "path": "docs/checkpoints/2026-02-23-01-SESSION-426-work-195-closed-work-196-unblocked.md",
+            "template": "checkpoint",
+            "status": null,
+            "date": "2026-02-23",
+            "last_updated": null,
+            "backlog_id": null,
+            "spawned_by": null
+        },
+        {
             "path": "docs/checkpoints/checkpoint-386.md",
             "template": "checkpoint",
             "status": null,
@@ -7278,7 +7287,7 @@
         {
             "path": "docs/checkpoints/2025-12-24-01-SESSION-109-e2-160-m7-tooling-milestone-created.md",
             "last_updated": "2025-12-24T10:36:40",
-            "days_stale": 60
+            "days_stale": 61
         },
         {
             "path": "docs/checkpoints/2025-12-24-02-SESSION-110-e2-170-backfill-complete-and-inv-028-inv-029-created.md",
@@ -7448,7 +7457,7 @@
         {
             "path": "docs/checkpoints/2025-12-29-01-SESSION-142-e2-108-triage-cycle-m7c-progress.md",
             "last_updated": "2025-12-29T10:37:35",
-            "days_stale": 55
+            "days_stale": 56
         },
         {
             "path": "docs/checkpoints/2025-12-29-02-SESSION-143-m7c-complete-anti-pattern-checker-design.md",
@@ -7563,7 +7572,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-03-SESSION-165-e2-253-complete-e2-254-plan-ready.md",
             "last_updated": "2026-01-04T10:29:43",
-            "days_stale": 49
+            "days_stale": 50
         },
         {
             "path": "docs/checkpoints/2026-01-04-04-SESSION-166-e2-254-contextloader-and-governance-gap-fixes.md",
@@ -7823,7 +7832,7 @@
         {
             "path": "docs/checkpoints/2026-01-20-01-SESSION-215-configuration-arc-design.md",
             "last_updated": "2026-01-21T10:35:14",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/checkpoints/2026-01-21-01-SESSION-216-ch-002-session-simplify-complete.md",
@@ -8198,7 +8207,7 @@
         {
             "path": "docs/plans/PLAN-E2-180-work-creation-cycle-skill.md",
             "last_updated": "2025-12-25T10:44:46",
-            "days_stale": 59
+            "days_stale": 60
         },
         {
             "path": "docs/plans/PLAN-E2-181-close-work-cycle-skill.md",
@@ -8383,7 +8392,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-E2-085-hook-migration-powershell-to-python.md",
             "last_updated": "2025-12-23T10:33:46",
-            "days_stale": 61
+            "days_stale": 62
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-099-vitals-approaching-100-percent-bug.md",
@@ -8493,7 +8502,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-028-agent-error-reporting-and-observability-gap.md",
             "last_updated": "2025-12-24T10:48:01",
-            "days_stale": 60
+            "days_stale": 61
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-029-status-generation-architecture-gap.md",
@@ -8687,9 +8696,9 @@
         }
     ],
     "workspace": {
-        "total_files": 584,
+        "total_files": 585,
         "by_template": {
-            "checkpoint": 408,
+            "checkpoint": 409,
             "unknown": 13,
             "implementation_plan": 92,
             "investigation": 45,
@@ -8700,7 +8709,7 @@
         "by_status": {
             "complete": 192,
             "active": 118,
-            "unknown": 243,
+            "unknown": 244,
             "draft": 2,
             "approved": 6,
             "ready": 1,
