@@ -129,6 +129,22 @@ Task(subagent_type='anti-pattern-checker', input={
 
 **On FAIL:** Anti-patterns detected → fix manifest and re-verify
 
+### Lightweight VERIFY (effort=small)
+
+When invoked during a lightweight close path (effort=small closure), VERIFY uses inline field check instead of anti-pattern-checker subagent:
+
+**Inline checks:**
+1. `load_memory_refs` is not empty (principle: no learning loss)
+2. `pending` field populated (or explicitly empty with rationale)
+3. `completed` field has content
+
+**If all pass:** Proceed to CAPTURE.
+**If any fail:** Fix inline, then proceed.
+
+**Rationale (WORK-199 H3):** Small checkpoints have minimal anti-pattern surface area. The subagent invocation cost (~1500 tokens) exceeds the value of checking 3 fields. Inline check preserves the phase (REQ-LIFECYCLE-005: "phases lightweight, not skipped") at ~100 tokens.
+
+Full anti-pattern-checker VERIFY remains for standard+ closures.
+
 **Exit Criteria:**
 - [ ] anti-pattern-checker invoked successfully
 - [ ] Report reviewed and addressed

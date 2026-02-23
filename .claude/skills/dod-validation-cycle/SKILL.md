@@ -15,6 +15,14 @@ This is a **Validation Skill** (bridge) that validates Definition of Done criter
 **Invoked automatically** by close-work-cycle before VALIDATE phase.
 **Manual invocation:** `Skill(skill="dod-validation-cycle")` before closing a work item.
 
+### Lightweight Alternative (effort=small)
+
+For `effort: small` items where `/close` sets `lightweight_close: true`, this skill is **not invoked**. Instead, close-work-cycle runs an inline DoD checklist that covers the same criteria with reduced overhead.
+
+**Rationale (WORK-199 H2):** For planless effort=small items, the 3-phase CHECK->VALIDATE->APPROVE bridge yields near-zero signal — no plans to check, no Ground Truth tables, no Agent UX Test triggers. The inline checklist preserves all DoD gates (including tier-independent pytest hard gate) at ~500 tokens vs ~2500.
+
+Full dod-validation-cycle remains required for effort=medium+ items.
+
 ---
 
 ## The Cycle

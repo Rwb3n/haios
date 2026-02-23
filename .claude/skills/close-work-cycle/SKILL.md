@@ -88,6 +88,27 @@ This skill defines the VALIDATE-ARCHIVE-CHAIN cycle for closing work items with 
 
 ---
 
+### Lightweight Path (effort=small)
+
+**When:** `/close` command sets `lightweight_close: true` (effort=small + source_files <= 3).
+
+**Skip:** dod-validation-cycle 3-phase bridge (near-zero signal for planless small items per WORK-199 H2).
+
+**Replace VALIDATE with inline DoD checklist:**
+
+1. **Pytest gate** (if type=implementation AND source_files contains .py): Run `pytest` — INVARIANT, never skipped
+2. **WHY captured**: Check memory_refs populated in WORK.md or retro COMMIT produced concept IDs
+3. **Docs current**: If source_files touch CLAUDE.md consumers, prompt. Otherwise N/A.
+4. **Traced requirement** (REQ-TRACE-003): Read traces_to, verify deliverables address requirement
+5. **Governance events** (soft gate): Grep for work_id in governance-events.jsonl
+
+**If all pass:** Proceed to ARCHIVE (unchanged).
+**If any hard gate fails:** BLOCK — revert to full path.
+
+**ARCHIVE and CHAIN proceed normally**, except checkpoint-cycle uses lightweight VERIFY.
+
+---
+
 ### 1. VALIDATE Phase
 
 **On Entry:**

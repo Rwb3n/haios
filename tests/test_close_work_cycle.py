@@ -277,3 +277,38 @@ class TestCloseQueuePosition:
         work_md = tmp_path / "docs" / "work" / "active" / "WORK-T4" / "WORK.md"
         content = work_md.read_text(encoding="utf-8")
         assert "queue_position: done" in content
+
+
+# =============================================================================
+# Part 3: Content-Assertion Tests - Lightweight Close Patterns (WORK-200)
+# =============================================================================
+
+
+class TestLightweightClosePatterns:
+    """WORK-200: Verify lightweight close path patterns present in modified files.
+
+    Content-assertion test: reads 4 modified skill/command files and asserts
+    lightweight path patterns are present. REQ-LIFECYCLE-005 + REQ-CEREMONY-005.
+    """
+
+    def test_lightweight_close_patterns_present(self):
+        """Each modified file contains the expected lightweight path pattern.
+
+        - close.md has "Detect Effort Tier"
+        - close-work-cycle has "Lightweight Path"
+        - dod-validation-cycle has "Lightweight Alternative"
+        - checkpoint-cycle has "Lightweight VERIFY"
+        """
+        files_and_patterns = {
+            Path(".claude/commands/close.md"): "Detect Effort Tier",
+            Path(".claude/skills/close-work-cycle/SKILL.md"): "Lightweight Path",
+            Path(".claude/skills/dod-validation-cycle/SKILL.md"): "Lightweight Alternative",
+            Path(".claude/skills/checkpoint-cycle/SKILL.md"): "Lightweight VERIFY",
+        }
+
+        for file_path, expected_pattern in files_and_patterns.items():
+            assert file_path.exists(), f"File not found: {file_path}"
+            content = file_path.read_text(encoding="utf-8")
+            assert expected_pattern in content, (
+                f"Expected pattern '{expected_pattern}' not found in {file_path}"
+            )

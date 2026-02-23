@@ -1,50 +1,56 @@
 ---
 template: work_item
 id: WORK-200
-title: "Implement Proportional Close Ceremony"
+title: Implement Proportional Close Ceremony
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-23
 spawned_by: WORK-199
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-02-23'
 priority: medium
 effort: medium
 traces_to:
-  - REQ-LIFECYCLE-005
-  - REQ-CEREMONY-005
+- REQ-LIFECYCLE-005
+- REQ-CEREMONY-005
 requirement_refs: []
 source_files:
-  - .claude/commands/close.md
-  - .claude/skills/close-work-cycle/SKILL.md
-  - .claude/skills/dod-validation-cycle/SKILL.md
-  - .claude/skills/checkpoint-cycle/SKILL.md
+- .claude/commands/close.md
+- .claude/skills/close-work-cycle/SKILL.md
+- .claude/skills/dod-validation-cycle/SKILL.md
+- .claude/skills/checkpoint-cycle/SKILL.md
 acceptance_criteria:
-  - "effort=small items use inline DoD checklist instead of dod-validation-cycle 3-phase bridge"
-  - "close-work-cycle VALIDATE merged into inline checklist for effort=small"
-  - "checkpoint-cycle VERIFY uses inline field check (no subagent) for effort=small"
-  - "Full close path preserved unchanged for effort=standard+ items"
-  - "Pytest hard gate remains tier-independent (invariant)"
+- effort=small items use inline DoD checklist instead of dod-validation-cycle 3-phase
+  bridge
+- close-work-cycle VALIDATE merged into inline checklist for effort=small
+- checkpoint-cycle VERIFY uses inline field check (no subagent) for effort=small
+- Full close path preserved unchanged for effort=standard+ items
+- Pytest hard gate remains tier-independent (invariant)
 blocked_by: []
 blocks: []
 enables: []
-queue_position: working  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: DO
-current_node: DO
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
-  - node: backlog
-    entered: 2026-02-23T11:42:45
-    exited: 2026-02-23T12:00:00
+- node: backlog
+  entered: 2026-02-23 11:42:45
+  exited: '2026-02-23T12:22:39.787164'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 87764
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-23
-last_updated: 2026-02-23T11:42:45
+last_updated: '2026-02-23T12:22:39.789694'
+queue_history:
+- position: done
+  entered: '2026-02-23T12:22:39.787164'
+  exited: null
 ---
 # WORK-200: Implement Proportional Close Ceremony
 

@@ -42,6 +42,30 @@ Glob(pattern="docs/work/active/WORK-{backlog_id}-*.md")
 
 ---
 
+## Step 1.1: Detect Effort Tier (Prospective Predicate — REQ-LIFECYCLE-005)
+
+After finding work item, determine close ceremony tier using WORK.md frontmatter (prospective predicate, not retrospective git diff):
+
+1. Read `effort:` field from WORK.md frontmatter
+2. Read `source_files:` list and count entries
+3. If `effort: small` AND `source_files` count <= 3: Set `lightweight_close: true`
+4. If `effort: medium` or higher: Set `lightweight_close: false`
+5. Default (effort field missing): Set `lightweight_close: false` (conservative — absent data MUST NOT produce more permissive classification per REQ-LIFECYCLE-005)
+
+**Note:** This is a prospective predicate (declared scope before work begins). retro-cycle Phase 0's `assess_scale()` is a retrospective predicate (git diff after work). Both are valid for their lifecycle position. Close ceremony tier uses the prospective predicate because tier detection happens before retro-cycle runs.
+
+**Lightweight close path:** If `lightweight_close: true`:
+- retro-cycle runs with trivial scaling (Phase 0 assess_scale handles this independently)
+- close-work-cycle uses inline DoD checklist (skip dod-validation-cycle)
+- checkpoint-cycle uses inline VERIFY (skip anti-pattern-checker)
+
+**Full close path:** If `lightweight_close: false`:
+- All ceremonies run at full weight (current behavior, unchanged)
+
+**Flag propagation:** All skill invocations (retro-cycle, close-work-cycle, checkpoint-cycle) execute within the same agent turn. The `lightweight_close` flag persists in agent working memory across skill boundaries. No file write needed.
+
+---
+
 ## Chain to Retro Cycle
 
 After work item is found, first invoke retro-cycle for structured reflection:
