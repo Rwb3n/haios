@@ -3,18 +3,19 @@ template: work_item
 id: WORK-204
 title: Chapter Manifest Auto-Update on Work Closure
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-23
 spawned_by: WORK-179
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-02-23'
 priority: medium
 effort: small
 traces_to:
 - REQ-TRACE-004
+- REQ-CEREMONY-001
 requirement_refs: []
 source_files:
 - .claude/haios/modules/work_engine.py
@@ -23,27 +24,49 @@ acceptance_criteria:
   -> Complete)
 - 'Fail-permissive: chapter update failure never blocks closure'
 - Test verifies chapter manifest updated after work closure
+- Test verifies closure succeeds without error when chapter file is missing or chapter
+  field is empty
 blocked_by: []
 blocks: []
 enables: []
-queue_position: parked
-cycle_phase: backlog
-current_node: backlog
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: 2026-02-23 13:38:35
-  exited: null
+  exited: '2026-02-23T14:54:31.404496'
 artifacts: []
 cycle_docs: {}
 memory_refs:
 - 87789
+- 87826
+- 87839
+- 87840
+- 87841
+- 87842
+- 87843
+- 85322
+- 87844
 extensions: {}
 version: '2.0'
 generated: 2026-02-23
-last_updated: '2026-02-23T13:40:34.649485'
+last_updated: '2026-02-23T14:54:31.409306'
 queue_history:
 - position: parked
   entered: '2026-02-23T13:40:34.647345'
+  exited: '2026-02-23T13:59:58.780051'
+- position: backlog
+  entered: '2026-02-23T13:59:58.780051'
+  exited: '2026-02-23T14:21:10.096291'
+- position: ready
+  entered: '2026-02-23T14:21:10.096291'
+  exited: '2026-02-23T14:21:10.368223'
+- position: working
+  entered: '2026-02-23T14:21:10.368223'
+  exited: '2026-02-23T14:54:31.404496'
+- position: done
+  entered: '2026-02-23T14:54:31.404496'
   exited: null
 ---
 # WORK-204: Chapter Manifest Auto-Update on Work Closure
@@ -78,13 +101,18 @@ Evidence: WORK-179 retro WDN-1, retro-extract FEATURE-1 (mem:87789).
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Chapter manifest update function in WorkEngine.close() (fail-permissive)
-- [ ] Test verifying chapter CHAPTER.md status updated on work closure
-- [ ] Test verifying graceful failure when chapter file missing
+- [x] Chapter manifest update function in WorkEngine.close() (fail-permissive)
+- [x] Test verifying chapter CHAPTER.md status updated on work closure
+- [x] Test verifying graceful failure when chapter file missing
 
 ---
 
 ## History
+
+### 2026-02-23 - Implemented (Session 432)
+- Added update_chapter_manifest_status() and _try_update_chapter_manifest_status() to scaffold.py
+- Integrated into WorkEngine.close() via lazy import (fail-permissive)
+- 3 new tests, 108 total pass, zero debug cycles (TDD RED-GREEN)
 
 ### 2026-02-23 - Created (Session 431)
 - Spawned from WORK-179 retro-cycle EXTRACT FEATURE-1

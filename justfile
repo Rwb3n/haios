@@ -309,6 +309,7 @@ session-end session:
 set-cycle cycle phase work_id:
     @python -c "import json; from datetime import datetime; p='.claude/haios-status-slim.json'; d=json.load(open(p)); d['session_state']={'active_cycle':'{{cycle}}','current_phase':'{{phase}}','work_id':'{{work_id}}','entered_at':datetime.now().isoformat()}; json.dump(d,open(p,'w'),indent=4); print(f'Set: {{cycle}}/{{phase}}/{{work_id}}')"
     @python -c "import sys; sys.path.insert(0,'.claude/haios/lib'); from cycle_state import sync_work_md_phase; sync_work_md_phase('{{work_id}}','{{phase}}')" 2>/dev/null || true
+    @python -c "import sys; sys.path.insert(0,'.claude/haios/lib'); from governance_events import log_phase_transition; log_phase_transition('{{phase}}','{{work_id}}','Hephaestus')" 2>/dev/null || true
 
 # Get current cycle state (E2.4 CH-004 PreToolUseIntegration)
 # Returns: cycle/phase/work_id or empty string if no cycle active

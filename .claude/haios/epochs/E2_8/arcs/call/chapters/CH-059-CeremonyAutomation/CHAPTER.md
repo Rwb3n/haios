@@ -44,7 +44,8 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-195 | UserPromptSubmit Slim-Read-Once Refactor | Backlog | implementation |
 | WORK-196 | UserPromptSubmit Hook Injection Batch (Session, Working, Duration) | Backlog | implementation |
 | WORK-200 | Implement Proportional Close Ceremony | Complete | implementation |
-| WORK-204 | Chapter Manifest Auto-Update on Work Closure | Parked | implementation |
+| WORK-201 | Governance Events Not Written by set-cycle Recipe | Complete | investigation |
+| WORK-204 | Chapter Manifest Auto-Update on Work Closure | Complete | implementation |
 | WORK-205 | Survey-Cycle Auto-Prioritize for Backlog Items | Parked | implementation |
 
 ---

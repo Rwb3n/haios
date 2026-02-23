@@ -14510,3 +14510,121 @@
 {"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-23T13:15:54.188683"}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-23T13:26:28.672534"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-23T13:26:28.739098"}
+{"type": "SessionEnded", "session": 431, "agent": "Hephaestus", "timestamp": "2026-02-23T13:29:06.016433"}
+{"type": "CeremonyStart", "ceremony": "queue-park", "timestamp": "2026-02-23T13:40:34.640421"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-204", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-23T13:40:34.646337"}
+{"type": "QueueCeremony", "ceremony": "Park", "items": ["WORK-204"], "from": "backlog", "to": "parked", "timestamp": "2026-02-23T13:40:34.652234", "rationale": "Retro extract from WORK-179, park for epoch triage"}
+{"type": "CeremonyEnd", "ceremony": "queue-park", "side_effects": 1, "timestamp": "2026-02-23T13:40:34.653240"}
+{"type": "CeremonyStart", "ceremony": "queue-park", "timestamp": "2026-02-23T13:40:34.656270"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-205", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-23T13:40:34.663971"}
+{"type": "QueueCeremony", "ceremony": "Park", "items": ["WORK-205"], "from": "backlog", "to": "parked", "timestamp": "2026-02-23T13:40:34.668909", "rationale": "Retro extract from WORK-179, park for epoch triage"}
+{"type": "CeremonyEnd", "ceremony": "queue-park", "side_effects": 1, "timestamp": "2026-02-23T13:40:34.670429"}
+{"type": "CeremonyStart", "ceremony": "queue-unpark", "timestamp": "2026-02-23T13:59:58.773605"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-204", "result": "pass", "reason": "Valid transition: parked -> backlog", "timestamp": "2026-02-23T13:59:58.780051"}
+{"type": "QueueCeremony", "ceremony": "Unpark", "items": ["WORK-204"], "from": "parked", "to": "backlog", "timestamp": "2026-02-23T13:59:58.785571", "rationale": "In scope for CH-059 \u2014 closure-side chapter manifest auto-update"}
+{"type": "CeremonyEnd", "ceremony": "queue-unpark", "side_effects": 1, "timestamp": "2026-02-23T13:59:58.786198"}
+{"type": "SessionStarted", "session": 432, "agent": "Hephaestus", "timestamp": "2026-02-23T14:08:52.467071"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-23T14:11:44.443161"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-201", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-02-23T14:11:44.451846"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 0, "timestamp": "2026-02-23T14:11:44.510279"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-23T14:11:55.971322"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-201", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:11:55.980422"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-201"], "from": "backlog", "to": "ready", "timestamp": "2026-02-23T14:11:55.986758", "rationale": "Priority next from S430 retro, CH-059 pending work"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-23T14:11:55.987269"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-23T14:12:05.798674"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-201", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:12:05.804772"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-201"], "from": "ready", "to": "working", "timestamp": "2026-02-23T14:12:05.811305"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-23T14:12:05.811305"}
+{"type": "CyclePhaseEntered", "phase": "CONCLUDE", "work_id": "WORK-201", "agent": "Hephaestus", "timestamp": "2026-02-23T14:16:27.760045"}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-201", "agent": "Hephaestus", "timestamp": "2026-02-23T14:17:35.173120"}
+{"type": "CyclePhaseEntered", "phase": "VALIDATE", "work_id": "WORK-201", "agent": "Hephaestus", "timestamp": "2026-02-23T14:19:38.266553"}
+{"type": "CyclePhaseEntered", "phase": "ARCHIVE", "work_id": "WORK-201", "agent": "Hephaestus", "timestamp": "2026-02-23T14:20:06.532142"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-23T14:20:17.741955"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-23T14:20:17.796468"}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-201", "agent": "Hephaestus", "timestamp": "2026-02-23T14:20:55.963747"}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-23T14:21:10.085609"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-204", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:21:10.095762"}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-204"], "from": "backlog", "to": "ready", "timestamp": "2026-02-23T14:21:10.104512", "rationale": "Second item from S432 survey, CH-059 pending work"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-23T14:21:10.104904"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-23T14:21:10.361352"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-204", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:21:10.368223"}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-204"], "from": "ready", "to": "working", "timestamp": "2026-02-23T14:21:10.375465"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-23T14:21:10.375465"}
+{"type": "CyclePhaseEntered", "phase": "PLAN", "work_id": "WORK-204", "agent": "Hephaestus", "timestamp": "2026-02-23T14:21:41.561730"}
+{"type": "CyclePhaseEntered", "phase": "DO", "work_id": "WORK-204", "agent": "Hephaestus", "timestamp": "2026-02-23T14:40:44.181503"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-SET", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:54.077460"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-SET", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:54.103306"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-B", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:54.166488"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-B", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:54.190011"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-INT-D1", "agent": "Hephaestus", "timestamp": "2026-02-23T14:50:54.438957"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-INT-D2", "agent": "Hephaestus", "timestamp": "2026-02-23T14:50:54.439963"}
+{"type": "CyclePhaseEntered", "phase": "RUN", "work_id": "WORK-INT-D3", "agent": "Hephaestus", "timestamp": "2026-02-23T14:50:54.440467"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-5V", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-23T14:50:54.508685"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-5V", "result": "pass", "reason": "Valid transition: parked -> backlog", "timestamp": "2026-02-23T14:50:54.531543"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-5V", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:54.561489"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-5V", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:54.600389"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-5V", "result": "pass", "reason": "Valid transition: working -> done", "timestamp": "2026-02-23T14:50:54.625375"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-W1", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:54.663141"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-W1", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:54.690676"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-PARKED", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-23T14:50:54.770412"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-P1", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-23T14:50:54.841797"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-IND", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:54.921484"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-IND", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:54.945793"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-FORB", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:54.991517"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-FORB", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:55.040272"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-ARCH", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:55.069686"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-ARCH", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:55.095087"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-ARCH", "result": "pass", "reason": "Valid transition: working -> done", "timestamp": "2026-02-23T14:50:55.125255"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-ARCH", "result": "block", "reason": "Invalid queue transition: done -> backlog", "timestamp": "2026-02-23T14:50:55.171044"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-REV", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:55.272516"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-REV", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:55.298322"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-CATCH", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:55.387325"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-CATCH", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:55.413219"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T1", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-23T14:50:55.586563"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T1", "result": "pass", "reason": "Valid transition: parked -> backlog", "timestamp": "2026-02-23T14:50:55.608870"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T2", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:55.637498"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T3", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-23T14:50:55.670929"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T4", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:55.704191"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T4", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:55.725595"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T5", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:55.754933"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T5", "result": "pass", "reason": "Valid transition: ready -> backlog", "timestamp": "2026-02-23T14:50:55.776278"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T6", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:55.809433"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T6", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:55.830811"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T6", "result": "pass", "reason": "Valid transition: working -> done", "timestamp": "2026-02-23T14:50:55.858371"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T7", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-23T14:50:55.893271"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T7", "result": "block", "reason": "Invalid queue transition: parked -> ready", "timestamp": "2026-02-23T14:50:55.915354"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T8", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-23T14:50:56.017059"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T8", "result": "block", "reason": "Invalid queue transition: parked -> working", "timestamp": "2026-02-23T14:50:56.039445"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T9", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-02-23T14:50:56.144702"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T10", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:56.261438"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T10", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:56.282075"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T10", "result": "pass", "reason": "Valid transition: working -> done", "timestamp": "2026-02-23T14:50:56.310591"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T10", "result": "block", "reason": "Invalid queue transition: done -> working", "timestamp": "2026-02-23T14:50:56.336667"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T11", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:56.464343"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T11", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:56.487350"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-T11", "result": "block", "reason": "Invalid queue transition: working -> backlog", "timestamp": "2026-02-23T14:50:56.515724"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-P1", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-23T14:50:56.612836"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-P2", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-23T14:50:56.634924"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-R1", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:56.711786"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-R2", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:56.732984"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-W1", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:56.753211"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-W1", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:56.773879"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-INT", "result": "pass", "reason": "Valid transition: backlog -> parked", "timestamp": "2026-02-23T14:50:56.836122"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-INT", "result": "pass", "reason": "Valid transition: parked -> backlog", "timestamp": "2026-02-23T14:50:56.858162"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-INT", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-02-23T14:50:56.879514"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-INIT", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-02-23T14:50:56.967455"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-QH1", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:57.050500"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-QH2", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:57.099979"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-QH2", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:57.123880"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-QH5", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:57.201423"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-QH5", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:57.222877"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-23T14:50:57.302919"}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-23T14:50:57.323770"}
+{"type": "CyclePhaseEntered", "phase": "CHECK", "work_id": "WORK-204", "agent": "Hephaestus", "timestamp": "2026-02-23T14:51:11.799253"}
+{"type": "CyclePhaseEntered", "phase": "DONE", "work_id": "WORK-204", "agent": "Hephaestus", "timestamp": "2026-02-23T14:51:43.817747"}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-204", "agent": "Hephaestus", "timestamp": "2026-02-23T14:52:42.270210"}
+{"type": "CyclePhaseEntered", "phase": "VALIDATE", "work_id": "WORK-204", "agent": "Hephaestus", "timestamp": "2026-02-23T14:54:02.641400"}
+{"type": "CyclePhaseEntered", "phase": "ARCHIVE", "work_id": "WORK-204", "agent": "Hephaestus", "timestamp": "2026-02-23T14:54:20.260888"}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-23T14:54:31.381473"}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-23T14:54:31.431747"}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-204", "agent": "Hephaestus", "timestamp": "2026-02-23T14:55:02.941610"}

@@ -223,3 +223,73 @@ class TestUpdateChapterManifest:
         assert result["updated"] is False
         assert result["reason"] == "table_not_found"
         assert result["chapter_file"] is not None  # File exists, just no table
+
+
+class TestUpdateChapterManifestStatus:
+    """Tests for update_chapter_manifest_status() — WORK-204 closure-side."""
+
+    def test_chapter_manifest_status_updated_on_close(self, tmp_path):
+        """Test 1: When closing a work item, the chapter's CHAPTER.md
+        work items table row status is updated to 'Complete'."""
+        import scaffold
+
+        _create_chapter_file(
+            tmp_path, "CH-059", "CeremonyAutomation",
+            work_items=[
+                ("WORK-160", "Ceremony Automation", "Complete", "implementation"),
+                ("WORK-204", "Chapter Manifest Auto-Update", "Active", "implementation"),
+            ],
+        )
+
+        result = scaffold.update_chapter_manifest_status(
+            work_id="WORK-204",
+            chapter_id="CH-059",
+            base_path=tmp_path,
+        )
+
+        assert result["updated"] is True
+        assert result["reason"] == "status_updated"
+
+        # Verify the status column changed
+        content = Path(result["chapter_file"]).read_text(encoding="utf-8")
+        assert "| WORK-204 | Chapter Manifest Auto-Update | Complete | implementation |" in content
+        # Other rows unchanged
+        assert "| WORK-160 | Ceremony Automation | Complete | implementation |" in content
+
+    def test_chapter_manifest_status_missing_file_no_error(self, tmp_path):
+        """Test 2: When CHAPTER.md doesn't exist, returns graceful failure."""
+        import scaffold
+
+        result = scaffold.update_chapter_manifest_status(
+            work_id="WORK-204",
+            chapter_id="CH-999",
+            base_path=tmp_path,
+        )
+
+        assert result["updated"] is False
+        assert result["reason"] == "chapter_file_not_found"
+        assert result["chapter_file"] is None
+
+    def test_chapter_manifest_status_work_not_in_table(self, tmp_path):
+        """Test 3: When work ID is not in the chapter table, returns graceful result."""
+        import scaffold
+
+        chapter_file = _create_chapter_file(
+            tmp_path, "CH-059", "CeremonyAutomation",
+            work_items=[
+                ("WORK-160", "Ceremony Automation", "Active", "implementation"),
+            ],
+        )
+
+        original_content = chapter_file.read_text(encoding="utf-8")
+
+        result = scaffold.update_chapter_manifest_status(
+            work_id="WORK-999",
+            chapter_id="CH-059",
+            base_path=tmp_path,
+        )
+
+        assert result["updated"] is False
+        assert result["reason"] == "work_id_not_found"
+        # File unchanged
+        assert chapter_file.read_text(encoding="utf-8") == original_content

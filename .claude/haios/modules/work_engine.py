@@ -609,6 +609,15 @@ class WorkEngine:
         # Set closed date in frontmatter
         self._set_closed_date(work.path, datetime.now().strftime("%Y-%m-%d"))
 
+        # WORK-204: Auto-update chapter manifest status (fail-permissive)
+        chapter_id = getattr(work, 'chapter', None)
+        if chapter_id:
+            try:
+                from scaffold import _try_update_chapter_manifest_status
+                _try_update_chapter_manifest_status(work.id, chapter_id)
+            except Exception:
+                pass  # Fail-permissive: never block closure
+
         # ADR-041: No move to archive - status field determines state
         return work.path
 

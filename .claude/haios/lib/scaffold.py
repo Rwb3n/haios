@@ -737,6 +737,86 @@ def _try_update_chapter_manifest(
         )
 
 
+def update_chapter_manifest_status(
+    work_id: str,
+    chapter_id: str,
+    new_status: str = "Complete",
+    base_path: Optional[Path] = None,
+) -> dict:
+    """Update chapter CHAPTER.md work items table status for a work item. WORK-204.
+
+    Locates the chapter file by glob pattern matching CH-{id}-* directory
+    under the current epoch's arcs. Updates the status column for the
+    matching work ID row.
+
+    Fail-permissive: returns result dict, never raises.
+    Mirrors update_chapter_manifest() (WORK-177) for the closure side.
+
+    Args:
+        work_id: Work item ID (e.g., "WORK-204")
+        chapter_id: Chapter ID (e.g., "CH-059")
+        new_status: New status string (default: "Complete")
+        base_path: Project root (injectable for testing)
+
+    Returns:
+        {"updated": True/False, "reason": str, "chapter_file": str|None}
+    """
+    root = base_path or PROJECT_ROOT
+    pattern = f".claude/haios/epochs/*/arcs/*/chapters/{chapter_id}-*/CHAPTER.md"
+    matches = list(root.glob(pattern))
+    if not matches:
+        return {"updated": False, "reason": "chapter_file_not_found", "chapter_file": None}
+
+    chapter_file = matches[0]
+    content = chapter_file.read_text(encoding="utf-8")
+
+    # Find the row for this work_id
+    if f"| {work_id} |" not in content:
+        return {"updated": False, "reason": "work_id_not_found", "chapter_file": str(chapter_file)}
+
+    # Replace the status in the matching row
+    # Table format: | ID | Title | Status | Type |
+    lines = content.split("\n")
+    updated = False
+    for i, line in enumerate(lines):
+        if f"| {work_id} |" in line:
+            parts = line.split("|")
+            if len(parts) >= 5:  # | ID | Title | Status | Type |
+                parts[3] = f" {new_status} "
+                lines[i] = "|".join(parts)
+                updated = True
+            break
+
+    if not updated:
+        return {"updated": False, "reason": "parse_error", "chapter_file": str(chapter_file)}
+
+    chapter_file.write_text("\n".join(lines), encoding="utf-8")
+    return {"updated": True, "reason": "status_updated", "chapter_file": str(chapter_file)}
+
+
+def _try_update_chapter_manifest_status(
+    work_id: str, chapter_id: str
+) -> None:
+    """Fail-permissive wrapper for update_chapter_manifest_status. WORK-204.
+
+    Never raises. Emits warnings.warn() on non-update or exception
+    for operator observability (mirrors WORK-177 pattern).
+    """
+    import warnings
+    try:
+        result = update_chapter_manifest_status(work_id, chapter_id)
+        if not result.get("updated"):
+            warnings.warn(
+                f"WORK-204: Chapter manifest status not updated for {work_id}: {result.get('reason')}",
+                stacklevel=2,
+            )
+    except Exception as exc:
+        warnings.warn(
+            f"WORK-204: Chapter manifest status update failed (non-blocking): {exc}",
+            stacklevel=2,
+        )
+
+
 # CLI entry point
 if __name__ == "__main__":
     import sys
