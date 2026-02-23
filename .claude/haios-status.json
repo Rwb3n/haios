@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-23T13:12:03",
+    "generated": "2026-02-23T13:26:32",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 87576,
-        "entities": 10523,
+        "concepts": 87612,
+        "entities": 10532,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -7337,7 +7337,7 @@
         {
             "path": "docs/checkpoints/2025-12-24-02-SESSION-110-e2-170-backfill-complete-and-inv-028-inv-029-created.md",
             "last_updated": "2025-12-24T13:15:13",
-            "days_stale": 60
+            "days_stale": 61
         },
         {
             "path": "docs/checkpoints/2025-12-24-03-SESSION-111-work-item-review-and-milestone-organization.md",
@@ -7417,7 +7417,7 @@
         {
             "path": "docs/checkpoints/2025-12-27-01-SESSION-125-m7d-progress-and-skill-architecture-fixes.md",
             "last_updated": "2025-12-27T13:26:26",
-            "days_stale": 57
+            "days_stale": 58
         },
         {
             "path": "docs/checkpoints/2025-12-27-02-SESSION-126-m7d-complete-and-autonomous-session-loop-vision.md",
@@ -7882,7 +7882,7 @@
         {
             "path": "docs/checkpoints/2026-01-21-01-SESSION-216-ch-002-session-simplify-complete.md",
             "last_updated": "2026-01-21T13:21:41",
-            "days_stale": 32
+            "days_stale": 33
         },
         {
             "path": "docs/checkpoints/2026-01-21-02-SESSION-217-mcp-server-recovery.md",
@@ -8307,7 +8307,7 @@
         {
             "path": "docs/plans/PLAN-E2-206-slim-vitals-remove-static-infrastructure.md",
             "last_updated": "2025-12-27T13:23:11",
-            "days_stale": 57
+            "days_stale": 58
         },
         {
             "path": "docs/plans/PLAN-E2-210-context-threshold-auto-checkpoint.md",
