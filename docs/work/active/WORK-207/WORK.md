@@ -1,43 +1,52 @@
 ---
 template: work_item
 id: WORK-207
-title: "Auto-Reset Stale Status on Unpark Queue Transition"
+title: Auto-Reset Stale Status on Unpark Queue Transition
 type: refactor
-status: open
+status: complete
 owner: Hephaestus
 created: 2026-02-23
-spawned_by: WORK-102
+spawned_by: null
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-02-23'
 priority: medium
 effort: small
 traces_to:
-  - REQ-QUEUE-001
+- REQ-QUEUE-001
+- REQ-QUEUE-004
 requirement_refs: []
 source_files:
-  - .claude/haios/lib/queue_ceremonies.py
+- .claude/haios/lib/queue_ceremonies.py
+- .claude/haios/modules/work_engine.py
 acceptance_criteria:
-  - "execute_queue_transition() auto-resets status to 'open' when transitioning parked->backlog if blocked_by is empty"
-  - "Test verifies stale status=blocked with empty blocked_by is corrected on unpark"
+- set_queue_position() auto-resets status to 'active' when transitioning parked->backlog
+  if _is_actually_blocked() returns False
+- Test verifies stale status=blocked with empty blocked_by is corrected on unpark
+- Test verifies stale status=blocked with all-terminal blocked_by is corrected on
+  unpark
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: DONE
 node_history:
-  - node: backlog
-    entered: 2026-02-23T18:04:37
-    exited: null
+- node: backlog
+  entered: 2026-02-23 18:04:37
+  exited: '2026-02-23T20:51:18.934881'
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-23
-last_updated: 2026-02-23T18:04:37
+last_updated: '2026-02-23T20:51:18.938945'
+queue_history:
+- position: done
+  entered: '2026-02-23T20:51:18.934881'
+  exited: null
 ---
 # WORK-207: Auto-Reset Stale Status on Unpark Queue Transition
 
@@ -67,12 +76,18 @@ Retro extract from WORK-102 (S435). WORK-102 had `status: blocked` with `blocked
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] queue_ceremonies.py: unpark transition auto-resets stale status
-- [ ] Test coverage for stale status correction
+- [x] work_engine.py: set_queue_position() auto-resets stale blocked status on parked->backlog
+- [x] Test coverage for stale status correction (empty blocked_by + all-terminal blocked_by)
 
 ---
 
 ## History
+
+### 2026-02-23 - Implemented (Session 438)
+- Added 7-line auto-reset guard in set_queue_position() before _validate_state_combination()
+- Uses _is_actually_blocked() to detect stale blocked status (empty blocked_by or all-terminal blockers)
+- 3 tests: empty blocked_by reset, all-terminal reset, genuinely blocked regression guard
+- Discovery: _write_work_file does not persist blocked_by — tests use direct YAML frontmatter writes
 
 ### 2026-02-23 - Created (Session 435)
 - Initial creation
@@ -81,6 +96,6 @@ Retro extract from WORK-102 (S435). WORK-102 had `status: blocked` with `blocked
 
 ## References
 
-- @docs/work/active/WORK-102/WORK.md (parent retro extract)
+- Session 435 retro extract (REFACTOR-1)
 - @.claude/haios/lib/queue_ceremonies.py (target file)
 - Memory: 87988 (retro-extract REFACTOR-1)

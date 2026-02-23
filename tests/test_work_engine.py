@@ -1710,6 +1710,99 @@ def test_forbidden_state_caught_on_write(tmp_path, governance):
 
 
 # =============================================================================
+# WORK-207: Auto-Reset Stale Blocked Status Tests
+# =============================================================================
+
+
+def _set_frontmatter_field(work_path, field, value):
+    """Helper: directly set a frontmatter field in a WORK.md file on disk.
+
+    _write_work_file does not persist blocked_by, so tests that need to
+    simulate stale blocked_by state must write it directly to YAML.
+    """
+    import yaml as _yaml
+    content = work_path.read_text(encoding="utf-8")
+    parts = content.split("---", 2)
+    fm = _yaml.safe_load(parts[1]) or {}
+    fm[field] = value
+    new_fm = _yaml.dump(fm, default_flow_style=False, sort_keys=False, allow_unicode=True)
+    work_path.write_text(f"---\n{new_fm}---{parts[2]}", encoding="utf-8")
+
+
+def test_unpark_resets_stale_blocked_empty_blocked_by(tmp_path, governance):
+    """WORK-207 T1: Stale status=blocked with empty blocked_by resets to active on unpark."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+    engine.create_work("WORK-STALE1", "Stale Blocked Empty")
+    engine.set_queue_position("WORK-STALE1", "parked")
+
+    # Simulate stale state: status=blocked but blocked_by is empty
+    # Must write both fields directly to disk since _write_work_file
+    # doesn't persist blocked_by
+    work = engine.get_work("WORK-STALE1")
+    work.status = "blocked"
+    engine._write_work_file(work)
+    _set_frontmatter_field(work.path, "blocked_by", [])
+
+    # Verify stale state persisted
+    assert engine.get_work("WORK-STALE1").status == "blocked"
+
+    # Unpark: parked -> backlog should auto-reset status
+    result = engine.set_queue_position("WORK-STALE1", "backlog")
+    assert result.status == "active"
+    assert result.queue_position == "backlog"
+
+    # Verify persisted to disk
+    assert engine.get_work("WORK-STALE1").status == "active"
+
+
+def test_unpark_resets_stale_blocked_all_terminal_blocked_by(tmp_path, governance):
+    """WORK-207 T2: Stale status=blocked with all-terminal blockers resets to active."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Create a completed blocker — write status+queue directly to disk
+    engine.create_work("WORK-BLOCKER", "Completed Blocker")
+    blocker = engine.get_work("WORK-BLOCKER")
+    blocker.status = "complete"
+    blocker.queue_position = "done"
+    engine._write_work_file(blocker)
+
+    # Create item with stale blocked status pointing to terminal blocker
+    engine.create_work("WORK-STALE2", "Stale Blocked Terminal")
+    engine.set_queue_position("WORK-STALE2", "parked")
+    work = engine.get_work("WORK-STALE2")
+    work.status = "blocked"
+    engine._write_work_file(work)
+    _set_frontmatter_field(work.path, "blocked_by", ["WORK-BLOCKER"])
+
+    # Unpark: should auto-reset since all blockers are terminal
+    result = engine.set_queue_position("WORK-STALE2", "backlog")
+    assert result.status == "active"
+    assert result.queue_position == "backlog"
+
+
+def test_genuinely_blocked_item_not_reset(tmp_path, governance):
+    """WORK-207 T3: Genuinely blocked item keeps status=blocked (regression guard)."""
+    engine = WorkEngine(governance=governance, base_path=tmp_path)
+
+    # Create an active (non-terminal) blocker
+    engine.create_work("WORK-LIVE-BLOCKER", "Live Blocker")
+
+    # Create item with genuine blocked status and live blocker reference
+    engine.create_work("WORK-GENUINE", "Genuinely Blocked")
+    engine.set_queue_position("WORK-GENUINE", "parked")
+    work = engine.get_work("WORK-GENUINE")
+    work.status = "blocked"
+    engine._write_work_file(work)
+    _set_frontmatter_field(work.path, "blocked_by", ["WORK-LIVE-BLOCKER"])
+
+    # Unpark: parked -> backlog succeeds (no forbidden combo for blocked+backlog)
+    # but status should NOT be reset because blocker is still active
+    result = engine.set_queue_position("WORK-GENUINE", "backlog")
+    assert result.status == "blocked"
+    assert result.queue_position == "backlog"
+
+
+# =============================================================================
 # WORK-103: Dynamic Blocker Resolution Tests
 # =============================================================================
 

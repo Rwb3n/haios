@@ -726,6 +726,14 @@ class WorkEngine:
         if not gate_result.allowed:
             raise ValueError(f"Queue transition blocked: {gate_result.reason}")
 
+        # WORK-207: Auto-reset stale blocked status on unpark transition.
+        # If status=blocked but _is_actually_blocked() returns False (empty
+        # blocked_by, or all blockers are terminal), reset to 'active' BEFORE
+        # _validate_state_combination() fires.  This makes the unpark path
+        # self-healing for cross-epoch items whose blockers resolved independently.
+        if work.status == "blocked" and not self._is_actually_blocked(work):
+            work.status = "active"
+
         # WORK-105: Validate forbidden state combinations
         self._validate_state_combination(work.status, position)
 
