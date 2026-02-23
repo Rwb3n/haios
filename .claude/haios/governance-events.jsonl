@@ -14491,3 +14491,5 @@
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-23T11:48:01.282888"}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-23T11:48:01.339876"}
 {"type": "StatusPropagation", "work_id": "WORK-199", "chapter": "CH-058", "arc": "call", "action": "chapter_completed", "timestamp": "2026-02-23T11:48:17.296152"}
+{"type": "SessionEnded", "session": 429, "agent": "Hephaestus", "timestamp": "2026-02-23T11:49:28.773510"}
+{"type": "SessionStarted", "session": 430, "agent": "Hephaestus", "timestamp": "2026-02-23T11:56:20.106658"}

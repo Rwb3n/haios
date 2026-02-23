@@ -33,8 +33,8 @@ blocked_by: []
 blocks: []
 enables: []
 queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
   - node: backlog
     entered: 2026-02-23T11:42:45
