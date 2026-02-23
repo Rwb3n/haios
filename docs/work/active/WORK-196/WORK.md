@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-196
-title: "UserPromptSubmit Hook Injection Batch (Session, Working, Duration)"
+title: UserPromptSubmit Hook Injection Batch (Session, Working, Duration)
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-22
 spawned_by: WORK-194
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-02-23'
 priority: medium
 effort: small
 traces_to:
@@ -19,29 +19,42 @@ requirement_refs: []
 source_files:
 - .claude/hooks/hooks/user_prompt_submit.py
 acceptance_criteria:
-- "Hook injects [SESSION: N] on every prompt from .claude/session file"
-- "Hook injects [WORKING: WORK-XXX] when active cycle has work_id (from slim JSON)"
-- "Hook injects [DURATION: Nm] calculated from .claude/session file mtime"
-- "Each injection is <5 tokens, total <20 tokens"
-- "Graceful degradation if any data source unavailable"
-- "Existing tests pass"
+- 'Hook injects [SESSION: N] on every prompt from .claude/session file'
+- 'Hook injects [WORKING: WORK-XXX] when active cycle has work_id (from slim JSON)'
+- 'Hook injects [DURATION: Nm] calculated from .claude/session file mtime'
+- Each injection is <5 tokens, total <20 tokens
+- Graceful degradation if any data source unavailable
+- Existing tests pass
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
-  - node: backlog
-    entered: 2026-02-22T16:24:53
-    exited: null
+- node: backlog
+  entered: 2026-02-22 16:24:53
+  exited: 2026-02-23 11:00:34
+- node: PLAN
+  entered: 2026-02-23 11:00:34
+  exited: '2026-02-23T11:28:22.672102'
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-22
-last_updated: 2026-02-22T16:24:53
+last_updated: '2026-02-23T11:28:22.675312'
+queue_history:
+- position: ready
+  entered: '2026-02-23T11:00:22.889086'
+  exited: '2026-02-23T11:00:34.836081'
+- position: working
+  entered: '2026-02-23T11:00:34.836081'
+  exited: '2026-02-23T11:28:22.672102'
+- position: done
+  entered: '2026-02-23T11:28:22.672102'
+  exited: null
 ---
 # WORK-196: UserPromptSubmit Hook Injection Batch (Session, Working, Duration)
 
@@ -81,12 +94,12 @@ Depends on WORK-195 (slim-read-once refactor) being complete first.
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] `[SESSION: N]` injected on every prompt
-- [ ] `[WORKING: WORK-XXX]` injected when active cycle has work_id
-- [ ] `[DURATION: Nm]` injected from session file mtime
-- [ ] Graceful degradation for each injection (None if data unavailable)
-- [ ] Tests for each new injection function
-- [ ] Existing tests pass
+- [x] `[SESSION: N]` injected on every prompt
+- [x] `[WORKING: WORK-XXX]` injected when active cycle has work_id
+- [x] `[DURATION: Nm]` injected from session file mtime
+- [x] Graceful degradation for each injection (None if data unavailable)
+- [x] Tests for each new injection function
+- [x] Existing tests pass
 
 ---
 

@@ -67,6 +67,23 @@ def handle(hook_data: dict) -> str:
     # Part 1: Date/time context
     output_parts.append(_get_datetime_context())
 
+    # Part 1.2: Compact session state line (WORK-196)
+    # Read slim once here — passed to all downstream consumers (WORK-195 pattern)
+    cwd = hook_data.get("cwd", "")
+    slim = _read_slim(cwd)
+    session_parts = []
+    session_num = _get_session_number(cwd)
+    if session_num:
+        session_parts.append(session_num)
+    working_item = _get_working_item(slim)
+    if working_item:
+        session_parts.append(working_item)
+    duration = _get_session_duration(cwd)
+    if duration:
+        session_parts.append(duration)
+    if session_parts:
+        output_parts.append(" ".join(session_parts))
+
     # Part 1.5: Context usage from transcript JSONL (WORK-189, replaces E2-210)
     transcript_path = hook_data.get("transcript_path", "")
     context_usage = _get_context_usage(transcript_path)
@@ -81,10 +98,6 @@ def handle(hook_data: dict) -> str:
     # vitals = _get_vitals(cwd)
     # if vitals:
     #     output_parts.append("")
-    cwd = hook_data.get("cwd", "")
-
-    # WORK-195: Read slim JSON once, pass to all consumers
-    slim = _read_slim(cwd)
 
     # Part 2.5: Session state warning (E2-287)
     session_warning = _get_session_state_warning(cwd, slim)
@@ -142,6 +155,68 @@ def _read_slim(cwd: str) -> Optional[dict]:
         return None
     try:
         return json.loads(slim_path.read_text(encoding="utf-8-sig"))
+    except Exception:
+        return None
+
+
+def _get_session_number(cwd: str) -> Optional[str]:
+    """
+    Read session number from .claude/session (last non-blank, non-comment line).
+
+    Returns "[SESSION: N]" or None if file unavailable.
+    WORK-196: Session file has 3 lines; last line is integer session number.
+    """
+    if not cwd:
+        return None
+    session_path = Path(cwd) / ".claude" / "session"
+    if not session_path.exists():
+        return None
+    try:
+        text = session_path.read_text(encoding="utf-8").strip()
+        lines = [ln.strip() for ln in text.splitlines() if ln.strip() and not ln.strip().startswith('#')]
+        if not lines:
+            return None
+        session_num = int(lines[-1])
+        return f"[SESSION: {session_num}]"
+    except Exception:
+        return None
+
+
+def _get_working_item(slim: Optional[dict]) -> Optional[str]:
+    """
+    Extract active work_id from pre-parsed slim dict.
+
+    Returns "[WORKING: WORK-XXX]" or None if no active work item.
+    WORK-196: slim already parsed once by handle() — no file I/O here.
+    """
+    if slim is None:
+        return None
+    try:
+        work_id = slim.get("session_state", {}).get("work_id")
+        if not work_id:
+            return None
+        return f"[WORKING: {work_id}]"
+    except Exception:
+        return None
+
+
+def _get_session_duration(cwd: str) -> Optional[str]:
+    """
+    Calculate session duration from .claude/session file mtime.
+
+    Returns "[DURATION: Nm]" or None if mtime unavailable.
+    WORK-196: Uses file mtime as session start proxy. Resolution: 1 minute.
+    """
+    if not cwd:
+        return None
+    session_path = Path(cwd) / ".claude" / "session"
+    if not session_path.exists():
+        return None
+    try:
+        mtime = session_path.stat().st_mtime
+        start = datetime.fromtimestamp(mtime)
+        elapsed_minutes = int((datetime.now() - start).total_seconds() / 60)
+        return f"[DURATION: {elapsed_minutes}m]"
     except Exception:
         return None
 

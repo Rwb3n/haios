@@ -780,3 +780,113 @@ class TestPreToolUseEnterPlanModeBlock:
         args = mock_log.call_args[0]
         assert args[0] == "enter_plan_mode_block"  # gate_id
         assert args[1] == "block"  # violation_type
+
+
+class TestSessionInjections:
+    """Tests for WORK-196: Session, Working, Duration hook injections."""
+
+    def test_get_session_number_reads_last_line(self, tmp_path):
+        """Session number injection — happy path."""
+        from hooks.user_prompt_submit import _get_session_number
+
+        session_dir = tmp_path / ".claude"
+        session_dir.mkdir()
+        (session_dir / "session").write_text("# generated: 2026-01-21\n# System Auto: last updated on: 2026-01-21T11:26:51\n428\n")
+
+        result = _get_session_number(str(tmp_path))
+        assert result == "[SESSION: 428]"
+
+    def test_get_session_number_returns_none_if_missing(self):
+        """Session number injection — file missing."""
+        from hooks.user_prompt_submit import _get_session_number
+
+        result = _get_session_number("/nonexistent/path")
+        assert result is None
+
+    def test_get_working_item_returns_work_id(self):
+        """Working item injection — work_id present."""
+        from hooks.user_prompt_submit import _get_working_item
+
+        slim = {"session_state": {"work_id": "WORK-196"}}
+        result = _get_working_item(slim)
+        assert result == "[WORKING: WORK-196]"
+
+    def test_get_working_item_returns_none_when_no_work_id(self):
+        """Working item injection — no active work_id."""
+        from hooks.user_prompt_submit import _get_working_item
+
+        slim = {"session_state": {"active_cycle": "implementation-cycle", "work_id": None}}
+        result = _get_working_item(slim)
+        assert result is None
+
+    def test_get_working_item_returns_none_when_slim_none(self):
+        """Working item injection — slim is None."""
+        from hooks.user_prompt_submit import _get_working_item
+
+        result = _get_working_item(None)
+        assert result is None
+
+    def test_get_session_duration_returns_elapsed_minutes(self, tmp_path):
+        """Duration injection — happy path with mocked datetime."""
+        from hooks.user_prompt_submit import _get_session_duration
+        from datetime import datetime as real_datetime, timedelta
+
+        session_dir = tmp_path / ".claude"
+        session_dir.mkdir()
+        (session_dir / "session").write_text("428\n")
+
+        fixed_start = real_datetime(2026, 2, 23, 10, 0, 0)
+        fixed_now = fixed_start + timedelta(minutes=45)
+
+        mock_dt = MagicMock()
+        mock_dt.fromtimestamp.return_value = fixed_start
+        mock_dt.now.return_value = fixed_now
+
+        with patch("hooks.user_prompt_submit.datetime", mock_dt):
+            result = _get_session_duration(str(tmp_path))
+
+        assert result == "[DURATION: 45m]"
+
+    def test_get_session_duration_returns_none_if_missing(self):
+        """Duration injection — file missing."""
+        from hooks.user_prompt_submit import _get_session_duration
+
+        result = _get_session_duration("/nonexistent/path")
+        assert result is None
+
+    def test_handle_injects_session_working_duration(self, tmp_path):
+        """Integration — all three injections appear in handle() output."""
+        from hooks.user_prompt_submit import handle
+
+        # Set up session file
+        session_dir = tmp_path / ".claude"
+        session_dir.mkdir()
+        (session_dir / "session").write_text("# generated: 2026-01-21\n# System Auto: last updated\n428\n")
+
+        # Set up slim JSON
+        slim_data = {
+            "session_state": {
+                "work_id": "WORK-196",
+                "active_cycle": "implementation-cycle",
+                "current_phase": "DO"
+            }
+        }
+        (session_dir / "haios-status-slim.json").write_text(json.dumps(slim_data))
+
+        hook_data = {"cwd": str(tmp_path), "prompt": "test", "transcript_path": ""}
+        result = handle(hook_data)
+
+        assert "[SESSION: 428]" in result
+        assert "[WORKING: WORK-196]" in result
+        assert "[DURATION:" in result
+
+    def test_get_session_number_ignores_comment_lines(self, tmp_path):
+        """Session number injection — trailing comment after number."""
+        from hooks.user_prompt_submit import _get_session_number
+
+        session_dir = tmp_path / ".claude"
+        session_dir.mkdir()
+        (session_dir / "session").write_text("# generated\n# comment\n428\n# trailing\n")
+
+        result = _get_session_number(str(tmp_path))
+        assert result == "[SESSION: 428]"
