@@ -83,7 +83,7 @@ Side-effect boundaries. See `L4/functional_requirements.md` (REQ-CEREMONY-*).
 | Queue | Intake, Prioritize, Commit, Release |
 | Session | Start, End, Checkpoint |
 | Closure | Close Work/Chapter/Arc/Epoch |
-| Feedback | Chapter/Arc/Epoch/Requirements Review |
+| Feedback | Chapter/Arc/Epoch/Requirements Review, Session Review, Process Review |
 | Memory | Observation Capture, Triage, Memory Commit |
 
 ---

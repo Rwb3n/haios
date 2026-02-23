@@ -94,6 +94,7 @@ Session {N} ended.
 
 - **SHOULD** invoke `checkpoint-cycle` before session-end to capture state
 - **SHOULD** invoke `retro-cycle` for any completed work items (invoked by /close -- no separate invocation needed at session-end for closed items)
+- **SHOULD** invoke `session-review-cycle` before session-end if trigger predicate passes (conditional automatic — see session-review-cycle SKILL.md)
 - Session number auto-detected from `.claude/session` file if not provided
 
 ---

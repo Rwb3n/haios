@@ -60,6 +60,8 @@ Derived from: L3 principles + agent_user_requirements.md
 | REQ-FEEDBACK-003 | Feedback | Arc completion triggers Epoch Review ceremony | L3.1, L3.3 | close-arc-ceremony |
 | REQ-FEEDBACK-004 | Feedback | Epoch completion triggers Requirements Review ceremony | L3.1, L3.3 | close-epoch-ceremony |
 | REQ-FEEDBACK-005 | Feedback | Reviews MAY update parent scope (not just status) | L3.1, L3.3 | Review ceremonies |
+| REQ-FEEDBACK-006 | Feedback | Session completion triggers Session Review ceremony (conditional automatic) | L3.1, L3.3 | session-review-cycle |
+| REQ-FEEDBACK-007 | Feedback | Process Review ceremony produces typed system evolution proposals with operator approval | L3.1, L3.3, L3.5 | process-review-cycle |
 | REQ-ASSET-001 | Asset | Each lifecycle produces typed, immutable asset | L3.1, L3.7 | Lifecycle output |
 | REQ-ASSET-002 | Asset | Assets are versioned, not edited (append-only) | L3.1, L3.5 | Asset storage |
 | REQ-ASSET-003 | Asset | Assets can be piped to next lifecycle OR stored | L3.4, L3.6 | Lifecycle chaining |
@@ -470,6 +472,8 @@ Note: (b) depends on CH-059 CeremonyAutomation. Until then, (a) is the acceptanc
 | **REQ-FEEDBACK-003** | Arc completion triggers Epoch Review ceremony | L3.1, L3.3 | close-arc-ceremony chains to epoch-review |
 | **REQ-FEEDBACK-004** | Epoch completion triggers Requirements Review ceremony | L3.1, L3.3 | close-epoch-ceremony chains to requirements-review |
 | **REQ-FEEDBACK-005** | Reviews MAY update parent scope (not just propagate status) | L3.1, L3.3 | Review ceremony can edit parent document |
+| **REQ-FEEDBACK-006** | Session completion triggers Session Review ceremony (conditional automatic: at least 1 closed work item or 2+ retro-cycles) | L3.1, L3.3 | session-review-cycle aggregates cross-item patterns |
+| **REQ-FEEDBACK-007** | Process Review ceremony produces typed system evolution proposals (L3/L4/config/ceremony/work) with per-proposal operator approval and governance events | L3.1, L3.3, L3.5 | process-review-cycle with APPROVE gate |
 
 **Feedback Loop:**
 
