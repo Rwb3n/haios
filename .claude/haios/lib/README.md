@@ -87,7 +87,7 @@ context:
 | `observations.py` | Observation capture and triage |
 | `spawn_ceremonies.py` | Spawn execution for spawn-work-ceremony skill (WORK-137/CH-017) |
 | `node_cycle.py` | Node lifecycle transitions |
-| `governance_events.py` | Governance event logging |
+| `governance_events.py` | Governance event logging and epoch log rotation. `archive_governance_events(prior_epoch_dir)` copies live log to epoch directory and truncates for new epoch (WORK-214). |
 | `queue_ceremonies.py` | Queue ceremony execution and event logging (CH-010, WORK-110). Runtime consumers: queue-unpark, queue-intake, queue-prioritize, queue-commit skills |
 | `routing.py` | Work routing decisions |
 | `dependencies.py` | Dependency resolution |

@@ -34,6 +34,8 @@ side_effects:
   - "Update haios.yaml epoch config"
   - "Update EPOCH.md status to Active"
   - "Triage prior epoch work items"
+  - "Archive prior-epoch governance-events.jsonl to epoch directory"
+  - "Truncate live governance-events.jsonl to empty for new epoch"
   - "Log OpenEpoch event to governance-events.jsonl"
 generated: 2026-02-17
 last_updated: "2026-02-17"
@@ -85,11 +87,27 @@ SCAFFOLD --> CONFIG --> TRIAGE --> DECOMPOSE --> VALIDATE
    - `arcs/` — arc definitions (populated in DECOMPOSE)
    - `architecture/` — architecture docs (may carry forward)
    - `observations/` — session observations
-3. If EPOCH.md doesn't exist, scaffold it:
+3. Archive prior epoch governance events (WORK-214):
+   ```python
+   import sys
+   from pathlib import Path
+   _root = Path(".").resolve()
+   sys.path.insert(0, str(_root / ".claude/haios/lib"))
+   from governance_events import archive_governance_events
+
+   prior_epoch_dir = _root / ".claude/haios/epochs/{prior_epoch_dir_name}"
+   result = archive_governance_events(prior_epoch_dir)
+   if result["archived"]:
+       print(f"Archived {result['lines_archived']} events to {result['archive_path']}")
+   elif result["skipped"]:
+       print("governance-events.jsonl empty or missing — skipped archive")
+   ```
+   Replace `{prior_epoch_dir_name}` with the actual prior epoch directory (e.g., `E2_8`).
+4. If EPOCH.md doesn't exist, scaffold it:
    ```bash
    # Scaffold or copy from template
    ```
-4. If EPOCH.md already exists (pre-created in prior session), verify structure
+5. If EPOCH.md already exists (pre-created in prior session), verify structure
 
 **Pre-existing EPOCH.md:** Some epochs are designed before they open (E2.8 was written during E2.7). If EPOCH.md exists, SCAFFOLD verifies it has required sections rather than creating it.
 
@@ -102,6 +120,8 @@ SCAFFOLD --> CONFIG --> TRIAGE --> DECOMPOSE --> VALIDATE
 
 **Exit Criteria:**
 - [ ] Epoch directory exists with arcs/, architecture/, observations/
+- [ ] governance-events.jsonl archived to prior epoch directory (or skipped if source missing)
+- [ ] Live governance-events.jsonl is empty (new epoch starts clean)
 - [ ] EPOCH.md exists with required sections
 - [ ] Status field is `Active` (or ready to be set)
 

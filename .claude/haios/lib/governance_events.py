@@ -34,6 +34,9 @@ from typing import Optional
 # Events file location (append-only JSONL)
 EVENTS_FILE = Path(__file__).parent.parent / "governance-events.jsonl"
 
+# Session file location — read to inject session_id on every event (WORK-215)
+SESSION_FILE = Path(__file__).parent.parent.parent.parent / ".claude" / "session"
+
 
 def log_phase_transition(phase: str, work_id: str, agent: str) -> dict:
     """
@@ -453,11 +456,111 @@ def read_events() -> list[dict]:
     return events
 
 
+def _read_session_id() -> int:
+    """Read current session number from .claude/session.
+
+    Returns session number as int, or 0 if file missing, unreadable,
+    or contains no parseable integer line.
+
+    Pattern mirrors checkpoint_auto._read_session_number() and
+    session_end_actions.read_session_number() (established in E2.8).
+    """
+    try:
+        if not SESSION_FILE.exists():
+            return 0
+        for line in SESSION_FILE.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            try:
+                return int(line)
+            except ValueError:
+                continue
+        return 0
+    except Exception:
+        return 0
+
+
 def _append_event(event: dict) -> None:
-    """Append event to JSONL file."""
+    """Append event to JSONL file, injecting session_id."""
+    event["session_id"] = _read_session_id()
     EVENTS_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(EVENTS_FILE, "a", encoding="utf-8") as f:
         f.write(json.dumps(event) + "\n")
+
+
+def archive_governance_events(prior_epoch_dir: Path) -> dict:
+    """
+    Archive governance-events.jsonl to prior epoch directory and start fresh.
+
+    Called during open-epoch-ceremony SCAFFOLD phase after verifying the
+    prior epoch directory exists. Copies the live events file to the epoch
+    archive directory, then truncates the live file to empty so the new
+    epoch starts with a clean log.
+
+    Idempotency: if source is empty but archive already has content, the
+    write is skipped to prevent overwriting the only durable copy (A4).
+
+    Args:
+        prior_epoch_dir: Path to the just-closed epoch directory.
+                         E.g., Path(".claude/haios/epochs/E2_8")
+                         Must exist before calling.
+
+    Returns:
+        dict with keys:
+          - archived: bool — True if archive was written
+          - archive_path: str — absolute path of archive file (or "" if skipped)
+          - lines_archived: int — count of newline characters in archived file (or 0)
+          - skipped: bool — True if source missing or idempotency guard triggered
+
+    Raises:
+        NotADirectoryError: if prior_epoch_dir does not exist or is not a directory
+    """
+    prior_epoch_dir = Path(prior_epoch_dir)
+    if not prior_epoch_dir.is_dir():
+        raise NotADirectoryError(
+            f"archive_governance_events: prior_epoch_dir does not exist: {prior_epoch_dir}"
+        )
+
+    # Source file may not exist if system never logged any events
+    if not EVENTS_FILE.exists():
+        return {
+            "archived": False,
+            "archive_path": "",
+            "lines_archived": 0,
+            "skipped": True,
+        }
+
+    # Destination: <prior_epoch_dir>/governance-events.jsonl
+    archive_path = prior_epoch_dir / "governance-events.jsonl"
+
+    # Read source content once (atomic snapshot)
+    source_content = EVENTS_FILE.read_bytes()
+
+    # Idempotency guard (A4): if source is empty but archive already has content,
+    # skip overwrite to prevent destroying the only durable copy
+    if not source_content and archive_path.exists() and archive_path.stat().st_size > 0:
+        return {
+            "archived": False,
+            "archive_path": "",
+            "lines_archived": 0,
+            "skipped": True,
+        }
+
+    lines_archived = source_content.count(b"\n")
+
+    # Write archive (overwrites if re-run with same content)
+    archive_path.write_bytes(source_content)
+
+    # Truncate live file to empty (keep file handle; write empty string)
+    EVENTS_FILE.write_text("", encoding="utf-8")
+
+    return {
+        "archived": True,
+        "archive_path": str(archive_path.resolve()),
+        "lines_archived": lines_archived,
+        "skipped": False,
+    }
 
 
 def _check_repeated_failure(gate: str, work_id: str) -> None:

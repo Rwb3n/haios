@@ -266,6 +266,79 @@ node_history:
 # =============================================================================
 
 
+# =============================================================================
+# WORK-215: Session ID Injection on Governance Events
+# =============================================================================
+
+
+class TestSessionIdInjection:
+    """WORK-215: Every governance event includes session_id integer field."""
+
+    def test_log_phase_transition_includes_session_id(self, tmp_path):
+        """session_id from .claude/session appears in CyclePhaseEntered event."""
+        from governance_events import log_phase_transition
+
+        session_file = tmp_path / "session"
+        session_file.write_text("# generated: 2026-02-24\n442\n")
+        events_file = tmp_path / "governance-events.jsonl"
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file):
+            event = log_phase_transition("DO", "WORK-215", "Hephaestus")
+            assert event["session_id"] == 442
+
+    def test_log_session_start_includes_session_id(self, tmp_path):
+        """session_id from .claude/session appears in SessionStarted event."""
+        from governance_events import log_session_start
+
+        session_file = tmp_path / "session"
+        session_file.write_text("442\n")
+        events_file = tmp_path / "governance-events.jsonl"
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file):
+            event = log_session_start(442, "Hephaestus")
+            assert event["session_id"] == 442
+
+    def test_log_session_end_includes_session_id(self, tmp_path):
+        """session_id from .claude/session appears in SessionEnded event."""
+        from governance_events import log_session_end
+
+        session_file = tmp_path / "session"
+        session_file.write_text("442\n")
+        events_file = tmp_path / "governance-events.jsonl"
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file):
+            event = log_session_end(442, "Hephaestus")
+            assert event["session_id"] == 442
+
+    def test_session_id_defaults_to_zero_when_file_missing(self, tmp_path):
+        """session_id defaults to 0 when .claude/session does not exist."""
+        from governance_events import log_phase_transition
+
+        session_file = tmp_path / "nonexistent" / "session"  # Does not exist
+        events_file = tmp_path / "governance-events.jsonl"
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file):
+            event = log_phase_transition("PLAN", "WORK-215", "Hephaestus")
+            assert event["session_id"] == 0
+
+    def test_session_id_defaults_to_zero_when_malformed(self, tmp_path):
+        """session_id defaults to 0 when file contains non-integer content."""
+        from governance_events import log_phase_transition
+
+        session_file = tmp_path / "session"
+        session_file.write_text("not-an-integer\n")
+        events_file = tmp_path / "governance-events.jsonl"
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file):
+            event = log_phase_transition("PLAN", "WORK-215", "Hephaestus")
+            assert event["session_id"] == 0
+
+
 class TestGateViolationLogging:
     """Tests for gate violation event logging (WORK-146, REQ-OBSERVE-005)."""
 
@@ -340,3 +413,142 @@ class TestGateViolationLogging:
             assert "CyclePhaseEntered" in types
             assert "ValidationOutcome" in types
             assert "GateViolation" in types
+
+
+# =============================================================================
+# WORK-214: Governance Event Log Rotation Per Epoch
+# =============================================================================
+
+
+class TestArchiveGovernanceEvents:
+    """WORK-214: Archive governance-events.jsonl to epoch directory on transition."""
+
+    def _make_events_content(self, n_lines=3):
+        """Helper: create n JSON lines of event content."""
+        lines = []
+        for i in range(n_lines):
+            lines.append(json.dumps({"type": "TestEvent", "seq": i}) + "\n")
+        return "".join(lines)
+
+    def test_archive_governance_events_copies_to_epoch_dir(self, tmp_path, monkeypatch):
+        """Test 1: Archive copies file content to epoch directory."""
+        import governance_events
+        from governance_events import archive_governance_events
+
+        events_file = tmp_path / "governance-events.jsonl"
+        content = self._make_events_content(3)
+        events_file.write_text(content, encoding="utf-8")
+
+        epoch_dir = tmp_path / "epochs" / "E2_8"
+        epoch_dir.mkdir(parents=True)
+
+        monkeypatch.setattr(governance_events, "EVENTS_FILE", events_file)
+
+        result = archive_governance_events(epoch_dir)
+
+        archive_path = epoch_dir / "governance-events.jsonl"
+        assert archive_path.exists()
+        assert archive_path.read_text(encoding="utf-8") == content
+        assert result["archived"] is True
+        assert result["lines_archived"] == 3
+
+    def test_archive_governance_events_truncates_live_file(self, tmp_path, monkeypatch):
+        """Test 2: Archive truncates live file to empty after copying."""
+        import governance_events
+        from governance_events import archive_governance_events
+
+        events_file = tmp_path / "governance-events.jsonl"
+        content = self._make_events_content(3)
+        events_file.write_text(content, encoding="utf-8")
+
+        epoch_dir = tmp_path / "epochs" / "E2_8"
+        epoch_dir.mkdir(parents=True)
+
+        monkeypatch.setattr(governance_events, "EVENTS_FILE", events_file)
+
+        archive_governance_events(epoch_dir)
+
+        assert events_file.exists()
+        assert events_file.stat().st_size == 0
+
+    def test_archive_governance_events_skips_when_source_missing(self, tmp_path, monkeypatch):
+        """Test 3: Returns skipped when source events file does not exist."""
+        import governance_events
+        from governance_events import archive_governance_events
+
+        events_file = tmp_path / "governance-events.jsonl"
+        # Do NOT create the file
+
+        epoch_dir = tmp_path / "epochs" / "E2_8"
+        epoch_dir.mkdir(parents=True)
+
+        monkeypatch.setattr(governance_events, "EVENTS_FILE", events_file)
+
+        result = archive_governance_events(epoch_dir)
+
+        assert result["skipped"] is True
+        assert result["archived"] is False
+        assert result["lines_archived"] == 0
+        assert not (epoch_dir / "governance-events.jsonl").exists()
+
+    def test_archive_governance_events_raises_for_missing_epoch_dir(self, tmp_path, monkeypatch):
+        """Test 4: Raises NotADirectoryError when epoch dir does not exist."""
+        import governance_events
+        from governance_events import archive_governance_events
+
+        events_file = tmp_path / "governance-events.jsonl"
+        events_file.write_text(json.dumps({"type": "TestEvent"}) + "\n", encoding="utf-8")
+
+        monkeypatch.setattr(governance_events, "EVENTS_FILE", events_file)
+
+        with pytest.raises(NotADirectoryError, match="prior_epoch_dir does not exist"):
+            archive_governance_events(tmp_path / "nonexistent_epoch")
+
+    def test_archive_governance_events_idempotency_guard(self, tmp_path, monkeypatch):
+        """Test 5: Second call with empty source does not overwrite non-empty archive."""
+        import governance_events
+        from governance_events import archive_governance_events
+
+        events_file = tmp_path / "governance-events.jsonl"
+        content = self._make_events_content(3)
+        events_file.write_text(content, encoding="utf-8")
+
+        epoch_dir = tmp_path / "epochs" / "E2_8"
+        epoch_dir.mkdir(parents=True)
+
+        monkeypatch.setattr(governance_events, "EVENTS_FILE", events_file)
+
+        # First call: archives and truncates
+        first_result = archive_governance_events(epoch_dir)
+        assert first_result["archived"] is True
+
+        # Second call: source is now empty, archive has content
+        second_result = archive_governance_events(epoch_dir)
+        assert second_result["skipped"] is True
+        assert second_result["archived"] is False
+
+        # Archive still contains original content (not overwritten with empty)
+        archive_path = epoch_dir / "governance-events.jsonl"
+        assert archive_path.read_text(encoding="utf-8") == content
+
+    def test_archive_governance_events_empty_source_archives(self, tmp_path, monkeypatch):
+        """Test 6: Zero-byte source file archives empty file (guard does NOT fire)."""
+        import governance_events
+        from governance_events import archive_governance_events
+
+        events_file = tmp_path / "governance-events.jsonl"
+        events_file.write_text("", encoding="utf-8")  # 0-byte file
+
+        epoch_dir = tmp_path / "epochs" / "E2_8"
+        epoch_dir.mkdir(parents=True)
+
+        monkeypatch.setattr(governance_events, "EVENTS_FILE", events_file)
+
+        result = archive_governance_events(epoch_dir)
+
+        # Idempotency guard does NOT fire: no pre-existing archive with content
+        assert result["archived"] is True
+        assert result["lines_archived"] == 0
+        archive_path = epoch_dir / "governance-events.jsonl"
+        assert archive_path.exists()
+        assert archive_path.stat().st_size == 0

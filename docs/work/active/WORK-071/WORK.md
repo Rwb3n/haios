@@ -36,7 +36,13 @@ extensions:
   epoch: E2.5
 version: '2.0'
 generated: 2026-02-01
-last_updated: '2026-02-03T20:52:10'
+last_updated: '2026-02-24T21:46:32.304363'
+queue_history:
+- position: parked
+  entered: '2026-02-24T21:46:32.302351'
+  exited: null
+queue_position: parked
+cycle_phase: backlog
 ---
 # WORK-071: Pre-Decomposition Review Gate Design
 

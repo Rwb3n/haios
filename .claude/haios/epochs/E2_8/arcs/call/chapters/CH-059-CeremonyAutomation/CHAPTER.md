@@ -51,9 +51,9 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-206 | Implement Session Event Log | Complete | implementation |
 | WORK-209 | Enforce Session/Process Review Computable Predicates via Hooks | Complete | implementation |
 | WORK-210 | Split Retro-Cycle into Inline Reflect plus Delegated Close | Complete | implementation |
-| WORK-211 | Post-Retro Enrichment Subagent Design | Backlog | implementation |
+| WORK-211 | Post-Retro Enrichment Subagent Design | Complete | implementation |
 | WORK-212 | Mechanical Phase Delegation to Haiku Subagents | Complete | refactor |
-| WORK-214 | Governance Event Log Rotation Per Epoch | Backlog | implementation |
+| WORK-214 | Governance Event Log Rotation Per Epoch | Complete | implementation |
 | WORK-215 | Session ID Field on Governance Events | Complete | implementation |
 | WORK-216 | Hook Output Trimming for Noise Reduction | Complete | implementation |
 
