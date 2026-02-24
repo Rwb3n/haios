@@ -17,6 +17,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
+# Module-level cache: tracks last-injected phase contract key (WORK-216)
+# Format: "{active_cycle}/{current_phase}" — reset to None on new Python process (= new session)
+_LAST_INJECTED_KEY: Optional[str] = None
+
 
 def _refresh_slim_status(cwd: str) -> None:
     """
@@ -271,6 +275,12 @@ def _get_phase_contract(cwd: str, slim: Optional[dict] = None) -> Optional[str]:
     is running, read and inject the current phase's contract file so the agent
     always has the behavioral contract in context (recovery after compaction).
 
+    WORK-216: Deduplication via module-level cache. Only injects on first prompt
+    of session or phase transition. Within a single phase the contract is static
+    so re-injection adds no value. ADR-048 compaction recovery is preserved:
+    after compaction the module process may restart (new session = cache miss)
+    or the phase may change (different key = cache miss).
+
     Phase files live at: .claude/skills/{cycle}/phases/{PHASE}.md
 
     Fall-permissive: returns None if no active cycle, phase file missing, or any error.
@@ -282,8 +292,10 @@ def _get_phase_contract(cwd: str, slim: Optional[dict] = None) -> Optional[str]:
         slim: Pre-parsed haios-status-slim.json dict, or None if unavailable.
 
     Returns:
-        Formatted phase contract string, or None if not applicable.
+        Formatted phase contract string on first call for a given key, None on repeat.
     """
+    global _LAST_INJECTED_KEY
+
     if not cwd:
         return None
     if slim is None:
@@ -297,6 +309,12 @@ def _get_phase_contract(cwd: str, slim: Optional[dict] = None) -> Optional[str]:
         if not active_cycle or not current_phase:
             return None
 
+        cache_key = f"{active_cycle}/{current_phase}"
+
+        # WORK-216: Skip re-injection when phase unchanged since last injection
+        if cache_key == _LAST_INJECTED_KEY:
+            return None
+
         phase_file = (
             Path(cwd) / ".claude" / "skills" / active_cycle / "phases" / f"{current_phase}.md"
         )
@@ -304,6 +322,7 @@ def _get_phase_contract(cwd: str, slim: Optional[dict] = None) -> Optional[str]:
             return None
 
         content = phase_file.read_text(encoding="utf-8")
+        _LAST_INJECTED_KEY = cache_key
         return f"--- Phase Contract: {active_cycle}/{current_phase} ---\n{content}\n---"
     except Exception:
         return None

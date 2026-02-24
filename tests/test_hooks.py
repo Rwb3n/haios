@@ -890,3 +890,83 @@ class TestSessionInjections:
 
         result = _get_session_number(str(tmp_path))
         assert result == "[SESSION: 428]"
+
+
+class TestPhaseContractCaching:
+    """WORK-216: Phase contract injection caching — inject once per phase, skip repeats."""
+
+    def test_phase_contract_first_injection_fires(self, tmp_path):
+        """First call with a new cache key should return the phase contract."""
+        import hooks.user_prompt_submit as ups
+        from hooks.user_prompt_submit import _get_phase_contract
+
+        ups._LAST_INJECTED_KEY = None
+
+        # Create phase file
+        phase_dir = tmp_path / ".claude" / "skills" / "implementation-cycle" / "phases"
+        phase_dir.mkdir(parents=True)
+        (phase_dir / "DO.md").write_text("DO phase content")
+
+        slim = {"session_state": {"active_cycle": "implementation-cycle", "current_phase": "DO"}}
+        result = _get_phase_contract(str(tmp_path), slim)
+
+        assert result is not None
+        assert "DO phase content" in result
+        assert "--- Phase Contract: implementation-cycle/DO ---" in result
+
+    def test_phase_contract_repeat_skipped(self, tmp_path):
+        """Second call with same cache key should return None (suppressed)."""
+        import hooks.user_prompt_submit as ups
+        from hooks.user_prompt_submit import _get_phase_contract
+
+        ups._LAST_INJECTED_KEY = None
+
+        phase_dir = tmp_path / ".claude" / "skills" / "implementation-cycle" / "phases"
+        phase_dir.mkdir(parents=True)
+        (phase_dir / "DO.md").write_text("DO phase content")
+
+        slim = {"session_state": {"active_cycle": "implementation-cycle", "current_phase": "DO"}}
+
+        # First call — fires
+        first = _get_phase_contract(str(tmp_path), slim)
+        assert first is not None
+
+        # Second call — suppressed
+        second = _get_phase_contract(str(tmp_path), slim)
+        assert second is None
+
+    def test_phase_contract_phase_transition_reinjected(self, tmp_path):
+        """Phase transition (DO -> CHECK) should re-fire injection."""
+        import hooks.user_prompt_submit as ups
+        from hooks.user_prompt_submit import _get_phase_contract
+
+        ups._LAST_INJECTED_KEY = None
+
+        phase_dir = tmp_path / ".claude" / "skills" / "implementation-cycle" / "phases"
+        phase_dir.mkdir(parents=True)
+        (phase_dir / "DO.md").write_text("DO phase content")
+        (phase_dir / "CHECK.md").write_text("CHECK phase content")
+
+        slim_do = {"session_state": {"active_cycle": "implementation-cycle", "current_phase": "DO"}}
+        slim_check = {"session_state": {"active_cycle": "implementation-cycle", "current_phase": "CHECK"}}
+
+        # First call with DO — fires
+        _get_phase_contract(str(tmp_path), slim_do)
+
+        # Call with CHECK — different key, should fire
+        result = _get_phase_contract(str(tmp_path), slim_check)
+        assert result is not None
+        assert "CHECK phase content" in result
+
+    def test_phase_contract_no_active_cycle_returns_none(self, tmp_path):
+        """No active cycle should return None without touching the cache."""
+        import hooks.user_prompt_submit as ups
+        from hooks.user_prompt_submit import _get_phase_contract
+
+        ups._LAST_INJECTED_KEY = None
+
+        slim = {"session_state": {"active_cycle": None, "current_phase": None}}
+        result = _get_phase_contract(str(tmp_path), slim)
+
+        assert result is None
+        assert ups._LAST_INJECTED_KEY is None
