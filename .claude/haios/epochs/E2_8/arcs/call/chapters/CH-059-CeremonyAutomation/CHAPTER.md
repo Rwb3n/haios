@@ -27,8 +27,8 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-160 | Ceremony Automation | Complete | implementation |
 | WORK-167 | Governance Tier Detection | Complete | implementation |
 | WORK-168 | Cycle Phase Auto-Advancement | Complete | implementation |
-| WORK-169 | Critique-as-Hook | Backlog | implementation |
-| WORK-170 | Checkpoint Field Auto-Population | Backlog | implementation |
+| WORK-169 | Critique-as-Hook | Complete | implementation |
+| WORK-170 | Checkpoint Field Auto-Population | Complete | implementation |
 | WORK-171 | Mechanical Phase Migration | Backlog | implementation |
 | WORK-172 | Block EnterPlanMode via PreToolUse Hook | Complete | implementation |
 | WORK-173 | Blocked_by Cascade on Work Closure | Complete | implementation |
@@ -52,7 +52,10 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-209 | Enforce Session/Process Review Computable Predicates via Hooks | Complete | implementation |
 | WORK-210 | Split Retro-Cycle into Inline Reflect plus Delegated Close | Complete | implementation |
 | WORK-211 | Post-Retro Enrichment Subagent Design | Backlog | implementation |
-| WORK-212 | Mechanical Phase Delegation to Haiku Subagents | Backlog | refactor |
+| WORK-212 | Mechanical Phase Delegation to Haiku Subagents | Complete | refactor |
+| WORK-214 | Governance Event Log Rotation Per Epoch | Backlog | implementation |
+| WORK-215 | Session ID Field on Governance Events | Complete | implementation |
+| WORK-216 | Hook Output Trimming for Noise Reduction | Complete | implementation |
 
 ---
 
