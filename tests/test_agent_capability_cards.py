@@ -21,6 +21,7 @@ def test_all_agents_have_capability_card_fields():
     required_fields = {
         "requirement_level", "category", "trigger_conditions",
         "input_contract", "output_contract", "invoked_by", "related_agents",
+        "id", "role", "capabilities", "produces", "consumes",
     }
 
     for agent_file in sorted(AGENTS_DIR.glob("*.md")):

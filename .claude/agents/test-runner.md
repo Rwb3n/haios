@@ -15,6 +15,15 @@ invoked_by:
   - implementation-cycle (CHECK phase, optional)
 related_agents:
   - validation-agent (broader CHECK phase validation)
+id: test-runner
+role: utility
+capabilities:
+  - pytest-execution
+  - test-result-parsing
+produces:
+  - test-results
+consumes:
+  - work-item
 generated: '2026-02-01'
 last_updated: '2026-02-15T21:05:00'
 ---

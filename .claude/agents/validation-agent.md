@@ -18,6 +18,17 @@ related_agents:
   - test-runner (focused pytest execution)
   - preflight-checker (pre-DO validation)
   - critique-agent (pre-implementation critique)
+id: validation-agent
+role: verifier
+capabilities:
+  - test-execution
+  - dod-validation
+  - feature-demonstration
+produces:
+  - validation-report
+consumes:
+  - plan-document
+  - work-item
 generated: '2025-12-25'
 last_updated: '2026-02-15T21:05:00'
 ---

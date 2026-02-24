@@ -16,6 +16,16 @@ invoked_by:
   - close-work-cycle (closure learnings)
 related_agents:
   - ingester_ingest (MCP tool for memory storage)
+id: why-capturer
+role: utility
+capabilities:
+  - learning-extraction
+  - memory-storage
+produces:
+  - learning-extraction
+consumes:
+  - plan-document
+  - work-item
 generated: '2026-02-01'
 last_updated: '2026-02-15T21:05:00'
 ---

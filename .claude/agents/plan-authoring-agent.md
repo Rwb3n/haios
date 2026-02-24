@@ -19,6 +19,16 @@ related_agents:
   - critique-agent (runs AFTER this agent returns, on the completed plan)
   - preflight-checker (runs AFTER critique, validates plan readiness)
   - implementation-cycle-agent (full cycle delegation alternative)
+id: plan-authoring-agent
+role: cycle-delegate
+capabilities:
+  - plan-population
+  - spec-analysis
+  - ambiguity-resolution
+produces:
+  - plan-document
+consumes:
+  - work-item
 generated: '2026-02-21'
 last_updated: '2026-02-21T15:00:00'
 ---

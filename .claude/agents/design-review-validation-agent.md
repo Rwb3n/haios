@@ -19,6 +19,16 @@ related_agents:
   - critique-agent (runs during PLAN phase, before this agent)
   - preflight-checker (runs during CHECK phase, after this agent)
   - validation-agent (optional deeper review during CHECK)
+id: design-review-validation-agent
+role: verifier
+capabilities:
+  - design-alignment-verification
+  - plan-implementation-comparison
+produces:
+  - design-review
+consumes:
+  - plan-document
+  - work-item
 generated: '2026-02-21'
 last_updated: '2026-02-21T15:45:00'
 ---

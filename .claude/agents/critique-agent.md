@@ -18,6 +18,18 @@ related_agents:
   - anti-pattern-checker (post-hoc verification)
   - validation-agent (CHECK phase)
   - preflight-checker (plan readiness)
+id: critique-agent
+role: verifier
+capabilities:
+  - assumption-surfacing
+  - plan-critique
+  - cognitive-bias-detection
+produces:
+  - critique-report
+  - assumptions-yaml
+consumes:
+  - plan-document
+  - work-item
 generated: '2026-01-25'
 last_updated: '2026-02-15T21:05:00'
 ---

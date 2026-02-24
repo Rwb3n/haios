@@ -120,21 +120,12 @@ Side-effect boundaries. See `L4/functional_requirements.md` (REQ-CEREMONY-*).
 
 ## Agents
 
-| Agent | Model | Requirement | Category | Purpose |
-|-------|-------|-------------|----------|---------|
-| critique-agent | opus | recommended | verification | Assumption surfacing |
-| investigation-agent | opus | **required** | utility | EXPLORE phase |
-| validation-agent | sonnet | recommended | verification | CHECK phase |
-| preflight-checker | haiku | **required** | gate | Plan readiness |
-| schema-verifier | haiku | **required** | gate | SQL queries |
-| test-runner | haiku | optional | utility | Test execution |
-| anti-pattern-checker | sonnet | recommended | verification | L1 claim verification |
-| why-capturer | haiku | recommended | utility | Learning extraction |
-| implementation-cycle-agent | sonnet | optional | cycle-delegation | Full impl cycle delegation |
-| investigation-cycle-agent | sonnet | optional | cycle-delegation | Full investigation delegation |
-| close-work-cycle-agent | sonnet | optional | cycle-delegation | Full close cycle delegation |
-| plan-authoring-agent | sonnet | optional | cycle-delegation | Plan authoring in isolated context |
-| design-review-validation-agent | sonnet | optional | verification | DO phase exit gate (design alignment) |
+See **[AGENTS.md](AGENTS.md)** for the full agent registry (auto-generated from `.claude/agents/*.md` frontmatter).
+
+Key agents for governance gates:
+- **preflight-checker** (haiku, required): Plan readiness gate before DO phase
+- **schema-verifier** (haiku, required): SQL query gate — all DB queries require this agent
+- **critique-agent** (opus, recommended): Pre-implementation assumption surfacing
 
 ---
 

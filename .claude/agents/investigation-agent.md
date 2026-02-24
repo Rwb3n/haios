@@ -18,6 +18,17 @@ invoked_by:
 related_agents:
   - investigation-cycle-agent (full cycle delegation)
   - memory-agent skill (general memory retrieval)
+id: investigation-agent
+role: utility
+capabilities:
+  - hypothesis-testing
+  - evidence-gathering
+  - findings-synthesis
+  - memory-querying
+produces:
+  - investigation-findings
+consumes:
+  - work-item
 generated: 2025-12-22
 last_updated: '2026-02-15T21:05:00'
 ---

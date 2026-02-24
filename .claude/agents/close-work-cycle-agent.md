@@ -19,6 +19,16 @@ related_agents:
   - close-work-cycle skill (source of truth for phase structure)
   - retro-cycle skill (prerequisite)
   - dod-validation-cycle skill (DoD validation)
+id: close-work-cycle-agent
+role: cycle-delegate
+capabilities:
+  - dod-validation
+  - work-closure
+  - retro-integration
+produces:
+  - cycle-summary
+consumes:
+  - work-item
 generated: '2026-02-04'
 last_updated: '2026-02-15T21:05:00'
 ---

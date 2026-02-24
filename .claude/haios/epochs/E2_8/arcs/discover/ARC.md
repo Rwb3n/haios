@@ -37,7 +37,7 @@ Agent Cards for infrastructure-driven capability discovery. Agents find each oth
 
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
-| CH-063 | AgentCards | New | REQ-DISCOVER-002, REQ-DISCOVER-003 | None | Planning |
+| CH-063 | AgentCards | New | REQ-DISCOVER-002, REQ-DISCOVER-003 | None | Complete |
 | CH-064 | InfrastructureCeremonies | New | REQ-CEREMONY-001, REQ-CEREMONY-002 | None | Planning |
 
 ---

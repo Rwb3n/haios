@@ -26,7 +26,7 @@ Define structured capability cards for all agents — discoverable via infrastru
 
 | ID | Title | Status | Type |
 |----|-------|--------|------|
-| WORK-164 | Agent Cards | Backlog | design |
+| WORK-164 | Agent Cards | Complete | design |
 
 ---
 

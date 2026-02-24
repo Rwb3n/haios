@@ -1,55 +1,78 @@
 ---
 template: work_item
 id: WORK-164
-title: "Agent Cards"
+title: Agent Cards
 type: design
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-17
 spawned_by: Session-394-decomposition
 spawned_children: []
 chapter: CH-063
 arc: discover
-closed: null
+closed: '2026-02-24'
 priority: medium
 effort: large
 traces_to:
-  - REQ-DISCOVER-002
-  - REQ-DISCOVER-003
+- REQ-DISCOVER-002
+- REQ-DISCOVER-003
 requirement_refs: []
 source_files:
-  - .claude/agents/critique-agent.md
-  - .claude/agents/investigation-agent.md
-  - .claude/agents/validation-agent.md
-  - CLAUDE.md
+- .claude/agents/critique-agent.md
+- .claude/agents/investigation-agent.md
+- .claude/agents/validation-agent.md
+- CLAUDE.md
 acceptance_criteria:
-  - "Agent card schema defined (id, role, capabilities, tools, triggers, produces, consumes)"
-  - "All existing agents have structured capability cards"
-  - "Infrastructure query mechanism for agent discovery"
-  - "CLAUDE.md agent table replaced by infrastructure discovery"
+- Agent card schema defined (id, role, capabilities, tools, triggers, produces, consumes)
+- All existing agents have structured capability cards
+- Infrastructure query mechanism for agent discovery
+- CLAUDE.md agent table replaced by infrastructure discovery
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
-  - node: backlog
-    entered: 2026-02-17T22:08:08
-    exited: null
-artifacts: []
-cycle_docs: {}
+- node: backlog
+  entered: 2026-02-17 22:08:08
+  exited: '2026-02-24T10:46:35.346560'
+artifacts:
+- docs/work/active/WORK-164/plans/PLAN.md
+- .claude/haios/lib/agent_cards.py
+- .claude/haios/lib/generate_agents_md.py
+- AGENTS.md
+- tests/test_agent_cards.py
+- tests/test_generate_agents_md.py
+cycle_docs:
+  plan: docs/work/active/WORK-164/plans/PLAN.md
 memory_refs:
-  - 85154
-  - 85155
-  - 85210
-  - 85476
+- 85154
+- 85155
+- 85210
+- 85476
+- 88132
+- 88133
+- 88134
+- 88135
+- 85322
+- 88136
 extensions:
   epoch: E2.8
-  inspiration: "Google A2A Agent Cards + Dragon Quest class system"
-version: "2.0"
+  inspiration: Google A2A Agent Cards + Dragon Quest class system
+version: '2.0'
 generated: 2026-02-17
-last_updated: 2026-02-17T22:08:08
+last_updated: '2026-02-24T10:46:35.367859'
+queue_history:
+- position: ready
+  entered: '2026-02-24T10:09:54.006724'
+  exited: '2026-02-24T10:10:03.131543'
+- position: working
+  entered: '2026-02-24T10:10:03.131543'
+  exited: '2026-02-24T10:46:35.346560'
+- position: done
+  entered: '2026-02-24T10:46:35.346560'
+  exited: null
 ---
 # WORK-164: Agent Cards
 
@@ -86,11 +109,11 @@ Agents are currently hardcoded in the CLAUDE.md agent table (mem:85154, 85210). 
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Agent card schema definition
-- [ ] Existing agent audit (how many, what metadata exists)
-- [ ] Query mechanism design (infrastructure discovery)
-- [ ] Migration plan from CLAUDE.md table
-- [ ] Design document or ADR
+- [x] Agent card schema definition
+- [x] Existing agent audit (how many, what metadata exists)
+- [x] Query mechanism design (infrastructure discovery)
+- [x] Migration plan from CLAUDE.md table
+- [x] Design document or ADR
 
 ---
 

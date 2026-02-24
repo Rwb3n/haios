@@ -14,6 +14,14 @@ output_contract: "Schema info (columns, types) or SELECT query results"
 invoked_by:
   - Any agent needing database access (required by PreToolUse hook)
 related_agents: []
+id: schema-verifier
+role: gate
+capabilities:
+  - schema-verification
+  - read-only-sql-execution
+produces:
+  - schema-info
+consumes: []
 generated: '2026-02-01'
 last_updated: '2026-02-15T21:05:00'
 ---

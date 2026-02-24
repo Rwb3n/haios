@@ -18,6 +18,17 @@ related_agents:
   - implementation-cycle skill (source of truth for phase structure)
   - preflight-checker (PLAN phase gate)
   - validation-agent (CHECK phase)
+id: implementation-cycle-agent
+role: cycle-delegate
+capabilities:
+  - full-implementation-cycle
+  - tdd-execution
+  - governance-gate-enforcement
+produces:
+  - cycle-summary
+consumes:
+  - plan-document
+  - work-item
 generated: '2026-02-04'
 last_updated: '2026-02-15T21:05:00'
 ---

@@ -17,6 +17,17 @@ invoked_by:
 related_agents:
   - investigation-cycle skill (source of truth for phase structure)
   - investigation-agent (EXPLORE phase assistance)
+id: investigation-cycle-agent
+role: cycle-delegate
+capabilities:
+  - full-investigation-cycle
+  - hypothesis-validation
+  - work-spawning
+produces:
+  - cycle-summary
+  - investigation-findings
+consumes:
+  - work-item
 generated: '2026-02-04'
 last_updated: '2026-02-15T21:05:00'
 ---

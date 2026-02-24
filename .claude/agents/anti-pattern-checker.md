@@ -18,6 +18,15 @@ invoked_by:
 related_agents:
   - validation-agent (CHECK phase verification)
   - critique-agent (pre-implementation assumption surfacing)
+id: anti-pattern-checker
+role: verifier
+capabilities:
+  - l1-anti-pattern-verification
+  - claim-validation
+produces:
+  - anti-pattern-verdict
+consumes:
+  - work-item
 generated: '2025-12-29'
 last_updated: '2026-02-15T21:05:00'
 ---

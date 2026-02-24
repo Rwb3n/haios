@@ -16,6 +16,16 @@ invoked_by:
 related_agents:
   - critique-agent (assumption surfacing, runs before preflight)
   - validation-agent (CHECK phase, runs after implementation)
+id: preflight-checker
+role: gate
+capabilities:
+  - plan-readiness-validation
+  - file-count-gate
+produces:
+  - validation-report
+consumes:
+  - plan-document
+  - work-item
 generated: '2025-12-25'
 last_updated: '2026-02-15T21:05:00'
 ---
