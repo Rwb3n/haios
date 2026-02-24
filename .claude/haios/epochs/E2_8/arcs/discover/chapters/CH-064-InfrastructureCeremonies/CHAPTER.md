@@ -25,7 +25,7 @@ Make ceremonies discoverable and executable via infrastructure rather than agent
 | ID | Title | Status | Type |
 |----|-------|--------|------|
 | WORK-102 | Session and Process Review Ceremonies | Complete | design |
-| WORK-165 | Infrastructure Ceremonies | Active | implementation |
+| WORK-165 | Infrastructure Ceremonies | Complete | implementation |
 
 ---
 

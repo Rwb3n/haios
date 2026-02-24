@@ -3,14 +3,14 @@ template: work_item
 id: WORK-165
 title: Infrastructure Ceremonies
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-17
 spawned_by: Session-394-decomposition
 spawned_children: []
 chapter: CH-064
 arc: discover
-closed: null
+closed: '2026-02-24'
 priority: medium
 effort: medium
 traces_to:
@@ -30,16 +30,16 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: working
-cycle_phase: DONE
-current_node: DONE
+queue_position: done
+cycle_phase: done
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: 2026-02-17 22:08:08
   exited: 2026-02-24 19:55:00
 - node: PLAN
   entered: 2026-02-24 19:55:00
-  exited: null
+  exited: '2026-02-24T21:01:12.627106'
 artifacts: []
 cycle_docs: {}
 memory_refs:
@@ -48,13 +48,20 @@ memory_refs:
 - 88394
 - 88395
 - 88396
+- 88419
+- 88420
+- 88421
+- 88422
 extensions:
   epoch: E2.8
   note: open-epoch-ceremony already created in S393
 version: '2.0'
 generated: 2026-02-17
-last_updated: '2026-02-24T20:43:29.230507'
-queue_history: []
+last_updated: '2026-02-24T21:01:12.630800'
+queue_history:
+- position: done
+  entered: '2026-02-24T21:01:12.627106'
+  exited: null
 ---
 # WORK-165: Infrastructure Ceremonies
 

@@ -17481,3 +17481,6 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-24T20:39:59.716496", "session_id": 445}
 {"type": "CyclePhaseEntered", "phase": "CHECK", "work_id": "WORK-165", "agent": "Hephaestus", "timestamp": "2026-02-24T20:41:36.119429", "session_id": 445}
 {"type": "CyclePhaseEntered", "phase": "DONE", "work_id": "WORK-165", "agent": "Hephaestus", "timestamp": "2026-02-24T20:43:09.354496", "session_id": 445}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-165", "agent": "Hephaestus", "timestamp": "2026-02-24T20:44:50.478647", "session_id": 445}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-24T21:01:12.605507", "session_id": 445}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-24T21:01:12.653894", "session_id": 445}
