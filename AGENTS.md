@@ -3,7 +3,7 @@
 
 # AGENTS
 
-**13 agents** available in the HAIOS system.
+**14 agents** available in the HAIOS system.
 
 This file is the vendor-neutral discovery layer for agent capabilities.
 Source of truth: `.claude/agents/*.md` frontmatter.
@@ -21,8 +21,9 @@ Source of truth: `.claude/agents/*.md` frontmatter.
 | **investigation-cycle-agent** | sonnet | optional | cycle-delegation | Execute investigation-cycle autonomously in isolated context |
 | **plan-authoring-agent** | sonnet | optional | cycle-delegation | Execute plan-authoring-cycle in isolated context |
 | **preflight-checker** | haiku | required | gate | Validate plan readiness and enforce DO phase guardrails |
+| **retro-enrichment-agent** | haiku | recommended | cycle-delegation | Cross-reference retro-cycle EXTRACT output against memory |
 | **schema-verifier** | haiku | required | gate | Verify database schema and run read-only queries |
-| **test-runner** | haiku | optional | utility | Execute pytest in isolated context |
+| **test-runner** | haiku | required | utility | Execute pytest in isolated context |
 | **validation-agent** | sonnet | recommended | verification | Unbiased CHECK phase validation |
 | **why-capturer** | haiku | recommended | utility | Extract and store learnings from completed work |
 
@@ -95,8 +96,8 @@ Source of truth: `.claude/agents/*.md` frontmatter.
 - Capabilities: hypothesis-testing, evidence-gathering, findings-synthesis, memory-querying
 
 **test-runner** (haiku)
-- Requirement: optional
-- Triggers: CHECK phase of implementation-cycle, Large test suites benefit from isolated execution
+- Requirement: required
+- Triggers: DO phase of implementation-cycle (TDD test runs), CHECK phase of implementation-cycle (full suite verification)
 - Input: test path or filter expression
 - Output: Structured summary with pass/fail counts, duration, failed test names and errors
 - Produces: test-results
@@ -150,6 +151,15 @@ Source of truth: `.claude/agents/*.md` frontmatter.
 - Consumes: work-item
 - Capabilities: plan-population, spec-analysis, ambiguity-resolution
 
+**retro-enrichment-agent** (haiku)
+- Requirement: recommended
+- Triggers: After retro-cycle completes in /close command, retro-cycle output has extracted_items (non-empty list)
+- Input: work_id, memory_concept_ids, extract_concept_ids, extracted_items
+- Output: enriched_items list with annotations, enrichment_concept_ids list
+- Produces: enriched-retro-items
+- Consumes: retro-extract-output
+- Capabilities: memory-cross-referencing, convergence-detection, retro-annotation
+
 ## Invocation Pattern
 
 ```python
@@ -169,6 +179,7 @@ Task(subagent_type='<agent-name>', prompt='<task description>')
 | investigation-cycle-agent | cycle-summary, investigation-findings | work-item |
 | plan-authoring-agent | plan-document | work-item |
 | preflight-checker | validation-report | plan-document, work-item |
+| retro-enrichment-agent | enriched-retro-items | retro-extract-output |
 | schema-verifier | schema-info | - |
 | test-runner | test-results | work-item |
 | validation-agent | validation-report | plan-document, work-item |

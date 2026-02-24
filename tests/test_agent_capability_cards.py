@@ -67,10 +67,10 @@ def test_existing_frontmatter_fields_preserved():
 
 
 def test_agent_count():
-    """Verify exactly 13 agent files exist (excluding README)."""
+    """Verify exactly 14 agent files exist (excluding README)."""
     agent_files = [f for f in AGENTS_DIR.glob("*.md") if f.name != "README.md"]
-    assert len(agent_files) == 13, \
-        f"Expected 13 agents, found {len(agent_files)}: {[f.name for f in agent_files]}"
+    assert len(agent_files) == 14, \
+        f"Expected 14 agents, found {len(agent_files)}: {[f.name for f in agent_files]}"
 
 
 def test_contracts_are_nonempty():

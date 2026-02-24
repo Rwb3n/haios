@@ -78,9 +78,36 @@ This forces the agent into dedicated cognitive space (REFLECT -> DERIVE -> COMMI
 
 ---
 
+## Chain to Retro-Enrichment Agent
+
+After retro-cycle completes and returns `extracted_items`, invoke retro-enrichment-agent if `extracted_items` is non-empty.
+
+**IMPORTANT:** Before invoking Task(), substitute `{work_id}`, `{memory_concept_ids_json}`, `{extract_concept_ids_json}`, and `{extracted_items_yaml}` with actual values from the retro-cycle return object. Do NOT copy the template verbatim — literal placeholder strings will cause silent malformed input.
+
+```
+Task(
+  subagent_type='retro-enrichment-agent',
+  model='haiku',
+  prompt='Enrich retro-cycle EXTRACT output for {work_id}.
+    work_id: {work_id}
+    memory_concept_ids: {memory_concept_ids_json}
+    extract_concept_ids: {extract_concept_ids_json}
+    extracted_items: {extracted_items_yaml}
+    Cross-reference each item against memory via memory_search_with_experience.
+    Annotate with related_memory_ids, convergence_count, prior_work_ids.
+    Store enriched output with retro-enrichment:{work_id} provenance.
+    Return enriched_items list + enrichment_concept_ids.'
+)
+```
+
+If `extracted_items` is empty (trivial scale or no actionable items), skip enrichment.
+Enrichment never blocks closure — proceed to close-work-cycle regardless of enrichment result.
+
+---
+
 ## Chain to Close Work Cycle
 
-After retro-cycle completes, invoke close-work-cycle:
+After retro-enrichment completes (or was skipped), invoke close-work-cycle:
 
 ```
 Skill(skill="close-work-cycle")
@@ -295,13 +322,14 @@ After closure, verify:
 Expected flow:
 1. Find work file: `docs/work/active/E2-031/WORK.md`
 2. Invoke retro-cycle (REFLECT->DERIVE->COMMIT->EXTRACT)
-3. Check work directory for plans: `docs/work/active/E2-031/plans/`
-4. Read plan frontmatter to check statuses
-5. Prompt user for DoD confirmation
-6. Update work file status (stays in active/ per ADR-041)
-7. Update plan statuses to complete
-8. Store closure summary to memory
-9. Refresh haios-status.json
-10. Report completion
+3. Invoke retro-enrichment-agent (if extracted_items non-empty)
+4. Check work directory for plans: `docs/work/active/E2-031/plans/`
+5. Read plan frontmatter to check statuses
+6. Prompt user for DoD confirmation
+7. Update work file status (stays in active/ per ADR-041)
+8. Update plan statuses to complete
+9. Store closure summary to memory
+10. Refresh haios-status.json
+11. Report completion
 
 ---

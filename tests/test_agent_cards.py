@@ -92,10 +92,10 @@ class TestListAgents:
             assert isinstance(agent, AgentCard)
 
     def test_agent_count(self):
-        """Should find exactly 13 agents (excludes README.md)."""
+        """Should find exactly 14 agents (excludes README.md)."""
         agents = list_agents()
-        assert len(agents) == 13, \
-            f"Expected 13 agents, got {len(agents)}: {[a.name for a in agents]}"
+        assert len(agents) == 14, \
+            f"Expected 14 agents, got {len(agents)}: {[a.name for a in agents]}"
 
     def test_excludes_readme(self):
         """README.md should not appear in results."""
@@ -131,8 +131,19 @@ class TestListAgents:
         expected = {
             "critique-agent", "test-runner", "schema-verifier",
             "preflight-checker", "validation-agent", "why-capturer",
+            "retro-enrichment-agent",
         }
         assert expected.issubset(names), f"Missing agents: {expected - names}"
+
+
+    def test_retro_enrichment_agent_fields(self):
+        """retro-enrichment-agent has correct model, category, and capabilities."""
+        agents = list_agents()
+        agent = next((a for a in agents if a.name == "retro-enrichment-agent"), None)
+        assert agent is not None, "retro-enrichment-agent not found"
+        assert agent.model == "haiku"
+        assert agent.category == "cycle-delegation"
+        assert "memory-cross-referencing" in agent.capabilities
 
 
 # --- get_agent ---
@@ -193,7 +204,7 @@ class TestFilterAgents:
     def test_no_filters_returns_all(self):
         """No filters returns all agents."""
         all_agents = filter_agents()
-        assert len(all_agents) == 13
+        assert len(all_agents) == 14
 
     def test_combined_filters(self):
         """Multiple filters are ANDed together."""

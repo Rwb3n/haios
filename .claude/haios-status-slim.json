@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-24T22:23:21",
+    "generated": "2026-02-24T23:03:24",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -8,8 +8,8 @@
         "delta_source": null
     },
     "session_delta": {
-        "prior_session": 441,
-        "current_session": 444,
+        "prior_session": 444,
+        "current_session": 447,
         "prior_date": "2026-02-24",
         "completed": [],
         "completed_count": 0,
@@ -25,16 +25,18 @@
         "lifecycle_phase": null
     },
     "session_state": {
-        "active_cycle": "close-work-cycle",
-        "current_phase": "CHAIN",
-        "work_id": "WORK-214",
-        "entered_at": "2026-02-24T22:24:34.563610"
+        "active_cycle": null,
+        "current_phase": null,
+        "work_id": null,
+        "entered_at": null,
+        "active_queue": null,
+        "phase_history": []
     },
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 88438,
-        "entities": 10772,
+        "concepts": 88507,
+        "entities": 10789,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -103,6 +105,7 @@
             "investigation-cycle-agent",
             "plan-authoring-agent",
             "preflight-checker",
+            "retro-enrichment-agent",
             "schema-verifier",
             "test-runner",
             "validation-agent",
