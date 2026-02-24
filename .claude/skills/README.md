@@ -18,7 +18,7 @@ Skills are prompt injection components that provide domain-specific guidance and
 | `implementation-cycle` | Cycle | PLAN->DO->CHECK->DONE workflow for implementation |
 | `investigation-cycle` | Cycle | EXPLORE->HYPOTHESIZE->VALIDATE->CONCLUDE workflow for research |
 | `memory-agent` | Utility | Intelligent context retrieval and learning |
-| `retro-cycle` | Ceremony | Multi-step autonomous reflection with typed provenance (REFLECT->DERIVE->EXTRACT->COMMIT) |
+| `retro-cycle` | Ceremony | Multi-step autonomous reflection with typed provenance (REFLECT->DERIVE->COMMIT->EXTRACT) |
 | `observation-triage-cycle` | Cycle | SCAN->TRIAGE->PROMOTE workflow for processing captured observations |
 | `plan-authoring-cycle` | Cycle | ANALYZE->AUTHOR->VALIDATE workflow for plan population |
 | `plan-validation-cycle` | Validation | CHECK->VALIDATE->APPROVE bridge for plan readiness |

@@ -49,6 +49,9 @@ output:
     Memory from prior session:
     {memory_content}
 
+    Session Events (last session):
+    {session_log_summary}
+
     Pending:
     {pending}
   list_separator: "\n- "

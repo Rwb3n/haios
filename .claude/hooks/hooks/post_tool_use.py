@@ -95,6 +95,8 @@ def handle(hook_data: dict) -> Optional[str]:
 
     # File-specific processing only for editing tools
     if tool_name not in ("Edit", "MultiEdit", "Write"):
+        # Part 9: Session event log for Bash tool (WORK-206)
+        _append_session_event(tool_name, hook_data, "")
         return "\n".join(messages) if messages else None
 
     # Get file path based on tool type
@@ -148,6 +150,9 @@ def handle(hook_data: dict) -> Optional[str]:
     scaffold_msg = _scaffold_on_node_entry(path, hook_data)
     if scaffold_msg:
         messages.append(scaffold_msg)
+
+    # Part 9: Session event log for Edit/Write tools (WORK-206)
+    _append_session_event(tool_name, hook_data, str(file_path))
 
     return "\n".join(messages) if messages else None
 
@@ -984,3 +989,95 @@ def _auto_populate_checkpoint(path: Path) -> Optional[str]:
         return populate_checkpoint_fields(path)
     except Exception:
         return None  # Fail-permissive
+
+
+def _append_session_event(tool_name: str, hook_data: dict, file_path: str = "") -> None:
+    """
+    Detect and append compact session events to session-log.jsonl (WORK-206).
+
+    Detects:
+    - Phase transitions: Edit to WORK.md where cycle_phase field changes
+    - Git commits:       Bash tool with "git commit" in command
+    - Test results:      Bash tool with "pytest" in command
+    - Work spawns:       Write creating a new WORK.md in docs/work/active/
+    - Work closures:     Bash tool with close-work or cli.py close
+
+    Fail-permissive: never raises, returns None.
+    """
+    try:
+        lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
+        if str(lib_dir) not in sys.path:
+            sys.path.insert(0, str(lib_dir))
+        from session_event_log import append_event
+
+        # Resolve work_id from file path context
+        work_id = ""
+        if file_path:
+            work_match = re.search(
+                r"docs[/\\]work[/\\](?:active|archive)[/\\]([A-Z0-9]+-\d+)",
+                file_path,
+            )
+            if work_match:
+                work_id = work_match.group(1)
+
+        if tool_name == "Bash":
+            cmd = hook_data.get("tool_input", {}).get("command", "")
+
+            # Git commit
+            if re.search(r"git\s+commit", cmd):
+                msg_match = re.search(r'-m\s+"([^"]{1,40})', cmd)
+                value = msg_match.group(1) if msg_match else "commit"
+                append_event("commit", value, work_id)
+                return
+
+            # Pytest results
+            if "pytest" in cmd:
+                response = hook_data.get("tool_response", {})
+                stdout = ""
+                if isinstance(response, dict):
+                    stdout = response.get("stdout", "") or response.get("output", "")
+                passed = failed = 0
+                if m := re.search(r"(\d+) passed", stdout):
+                    passed = int(m.group(1))
+                if m := re.search(r"(\d+) failed", stdout):
+                    failed = int(m.group(1))
+                append_event("test", f"{passed}p/{failed}f", work_id)
+                return
+
+            # Work closure
+            if re.search(r"close.work|cli\.py\s+close", cmd):
+                close_match = re.search(r"(WORK-\d+|INV-\d+|[A-Z][A-Z0-9]+-\d+)", cmd)
+                closed_id = close_match.group(1) if close_match else work_id
+                append_event("close", closed_id, work_id)
+                return
+
+        elif tool_name in ("Edit", "Write"):
+            path_str = file_path.replace("\\", "/")
+
+            # Phase transition in WORK.md
+            if path_str.endswith("WORK.md") and "docs/work/" in path_str:
+                tool_input = hook_data.get("tool_input", {})
+                old_str = tool_input.get("old_string", "")
+                new_str = tool_input.get("new_string", "")
+                old_phase = re.search(r"cycle_phase:\s*(\S+)", old_str)
+                new_phase = re.search(r"cycle_phase:\s*(\S+)", new_str)
+                if old_phase and new_phase and old_phase.group(1) != new_phase.group(1):
+                    value = f"{old_phase.group(1)}->{new_phase.group(1)}"
+                    append_event("phase", value, work_id)
+                    return
+
+            # Work spawn: Write to a new WORK.md
+            if (
+                tool_name == "Write"
+                and path_str.endswith("WORK.md")
+                and "docs/work/active/" in path_str
+            ):
+                spawn_match = re.search(
+                    r"docs/work/active/([A-Z][A-Z0-9]+-\d+)/WORK\.md", path_str
+                )
+                if spawn_match:
+                    append_event("spawn", spawn_match.group(1), work_id)
+                    return
+
+    except Exception:
+        pass  # Fail-permissive — never break hook chain

@@ -1,0 +1,127 @@
+---
+# WORK-210 EXTRACT Phase Output
+# Generated: 2026-02-23
+# Lifecycle: retro-cycle EXTRACT phase
+# Source: REFLECT findings classified per SKILL.md Phase 3 Classification
+
+extracted_items:
+
+  - id: WCBB-1-EXTRACT
+    type: feature
+    title: "Enforce Execution Context markers mechanically via PreToolUse hook"
+    evidence: ".claude/skills/retro-cycle/SKILL.md:141-147 (blockquote pattern marked advisory-only)"
+    confidence: high
+    severity: null
+    source_dimension: WCBB
+    suggested_priority: next
+    priority_rationale: |
+      Execution Context blockquotes (INLINE, DELEGATE) are currently advisory — agents can ignore them.
+      S436 operator directive requires these to be enforced mechanically. Hook-based enforcement would
+      prevent future phases from violating the execution context boundary (inline vs delegated).
+      Priority: next (should be addressed in current chapter after WORK-210 completes).
+
+  - id: WCBB-2-EXTRACT
+    type: bug
+    title: "PreToolUse hook reports [STATE: EXPLORE] during DO phase instead of [STATE: DO]"
+    evidence: ".claude/hooks/hooks/post_tool_use.py (hook context injection during implementation cycles)"
+    confidence: high
+    severity: high
+    source_dimension: WCBB
+    suggested_priority: now
+    priority_rationale: |
+      State injection bug: governance hooks report wrong lifecycle state during DO phase execution.
+      This breaks state-dependent logic (gates, phase transitions, logging). Affects all work items
+      in implementation-cycle. High severity because it corrupts governance auditing and may mask
+      phase violations. Should be addressed immediately in next session.
+
+  - id: WSY-1-EXTRACT
+    type: bug
+    title: "Plan-authoring-agent invented nonexistent subagent_type names in PLAN critique"
+    evidence: "Plan critique finding A1 (retro-extract-agent, retro-commit-agent referenced but never defined)"
+    confidence: high
+    severity: medium
+    source_dimension: WSY
+    suggested_priority: now
+    priority_rationale: |
+      Agent hallucinated subagent types that don't exist in marketplace. This causes plan-authoring-agent
+      to produce invalid Task() delegation patterns that will fail at runtime. Medium severity because
+      it affects plan correctness but doesn't block execution (explicit typing catches it during PLAN review).
+      Should be fixed before next plan-authoring work.
+
+  - id: WDN-1-EXTRACT
+    type: refactor
+    title: "Sync 4 pre-existing EPOCH.md drift entries (WORK-160, 167, 168, 169)"
+    evidence: "Coldstart orchestrator output (epoch initialization detected 4 stale entries)"
+    confidence: medium
+    severity: null
+    source_dimension: WDN
+    suggested_priority: later
+    priority_rationale: |
+      Four EPOCH.md work item references are stale (pre-existing, not from WORK-210 scope).
+      These should be addressed as housekeeping but don't block current work. Refactor category
+      because they involve documentation alignment, not bug fix. Priority: later (backlog candidate).
+
+  - id: WMI-1-EXTRACT
+    type: feature
+    title: "Add PreToolUse hook enforcement for inline/delegate Execution Context markers"
+    evidence: ".claude/skills/retro-cycle/SKILL.md:141-147 (markers are advisory-only, no enforcement mechanism)"
+    confidence: high
+    severity: null
+    source_dimension: WMI
+    suggested_priority: next
+    priority_rationale: |
+      Missing: mechanical enforcement that prevents agents from violating Execution Context boundaries.
+      Currently advisory blockquotes can be ignored. Hook-based enforcement (PreToolUse check for
+      Task() calls in INLINE phases, or direct main-agent work in DELEGATE phases) would ensure
+      compliance. Feature category (new capability). Priority: next (complements WORK-210 scope,
+      should be addressed in current chapter).
+
+---
+
+# Classification Summary
+
+summary:
+  total_items: 5
+  by_type:
+    bug: 2
+    feature: 2
+    refactor: 1
+    upgrade: 0
+  by_source_dimension:
+    WCBB: 2
+    WSY: 1
+    WDN: 1
+    WMI: 1
+  by_priority:
+    now: 2
+    next: 2
+    later: 1
+
+# Rationale Notes
+
+notes:
+  WCBB-1_feature_not_bug: |
+    Execution Context advisory-only is not a bug (it was designed that way in S436 operator directive).
+    However, the lack of mechanical enforcement is a missing capability (feature). WORK-210 adds the
+    advisory markers; enforcement (preventing violations) is future work.
+
+  WCBB-2_severity_high: |
+    State injection bug is high severity because it affects governance auditing and phase transition logic
+    across all active implementation cycles. Corrupted state breaks downstream tools (status propagation,
+    event logging, cycle phase tracking).
+
+  WSY-1_confidence_high: |
+    Plan-authoring-agent consistently generates invalid subagent_type names. Critique found this multiple
+    times across WORK-210 plan review. High confidence because it's reproducible and directly observable
+    in artifact output.
+
+  WDN-1_refactor_not_bug: |
+    EPOCH.md drift is not a bug — entries are accurately documented but outdated relative to current
+    WORK.md status. Refactor category because it's documentation/schema alignment, not a functional defect.
+
+  WMI-1_not_blocked_WORK_210: |
+    WORK-210 scope is to add advisory markers (blockquotes) to SKILL.md and update tests. Enforcement
+    via hooks is out of scope but discovered as missing capability. Appropriately extracted as feature
+    for future work.
+
+---

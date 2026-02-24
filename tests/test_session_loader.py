@@ -288,3 +288,62 @@ class TestCheckpointSortTieBreaking:
 
         assert result is not None
         assert "SESSION-100" in result.name
+
+
+# =============================================================================
+# WORK-206: Session event log integration
+# =============================================================================
+
+
+class TestSessionLogSummary:
+    """WORK-206: SessionLoader includes session_log_summary in extract()."""
+
+    def test_extract_includes_session_log_summary(self, tmp_path):
+        """Test 8: extract() includes session_log_summary from session event log."""
+        from unittest.mock import patch
+        from session_loader import SessionLoader
+
+        cp_dir = tmp_path / "docs" / "checkpoints"
+        cp_dir.mkdir(parents=True)
+        (cp_dir / "2026-02-23-SESSION-434-checkpoint.md").write_text(
+            "---\nsession: 434\npending: []\n---"
+        )
+
+        # Write two events to a temp session-log.jsonl
+        log_file = tmp_path / "session-log.jsonl"
+        log_file.write_text(
+            '{"t":"phase","v":"PLAN->DO","w":"WORK-206","ts":"15:03"}\n'
+            '{"t":"commit","v":"Session 434","w":"WORK-206","ts":"15:30"}\n',
+            encoding="utf-8",
+        )
+
+        with patch("session_event_log.get_log_path", return_value=log_file):
+            loader = SessionLoader(checkpoint_dir=cp_dir)
+            extracted = loader.extract()
+
+        assert "session_log_summary" in extracted
+        summary = extracted["session_log_summary"]
+        assert isinstance(summary, str)
+        assert len(summary) > 0
+        assert "phase" in summary
+        assert "commit" in summary
+
+    def test_load_degrades_gracefully_no_session_log(self, tmp_path):
+        """Test 9: load() degrades gracefully when session log is missing."""
+        from unittest.mock import patch
+        from session_loader import SessionLoader
+
+        cp_dir = tmp_path / "docs" / "checkpoints"
+        cp_dir.mkdir(parents=True)
+        (cp_dir / "2026-02-23-SESSION-434-checkpoint.md").write_text(
+            "---\nsession: 434\npending: []\n---"
+        )
+
+        nonexistent = tmp_path / "nonexistent" / "session-log.jsonl"
+
+        with patch("session_event_log.get_log_path", return_value=nonexistent):
+            loader = SessionLoader(checkpoint_dir=cp_dir)
+            result = loader.load()
+
+        assert isinstance(result, str)
+        assert "(no session events)" in result

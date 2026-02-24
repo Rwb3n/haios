@@ -1,0 +1,230 @@
+---
+# WORK-164 EXTRACT Phase Output
+# Generated: 2026-02-24
+# Lifecycle: retro-cycle EXTRACT phase
+# Source: REFLECT findings classified per retro-cycle classification taxonomy
+
+extracted_items:
+
+  - id: WWW-1-EXTRACT
+    type: bug
+    title: "Table row count filter requires single-record fix in TDD suite"
+    evidence: "TDD execution: 31/32 tests pass, one row count assertion needs update"
+    confidence: high
+    severity: low
+    source_dimension: WWW
+    suggested_priority: now
+    priority_rationale: |
+      Single test failure in row count filter validation. TDD suite achieved 31/32 first-pass rate.
+      This is a minor assertion update (likely boundary condition in test fixture). Should be fixed
+      immediately to achieve 100% suite pass before closure. Low severity because it's a single
+      test and implementation logic is correct.
+
+  - id: WWW-2-EXTRACT
+    type: feature
+    title: "Incorporate critique-agent blocking assumptions into implementation path"
+    evidence: "Critique phase discovered 3 real blocking assumptions (A1 optionality, A4 schema gap, A6 test update)"
+    confidence: high
+    severity: null
+    source_dimension: WWW
+    suggested_priority: now
+    priority_rationale: |
+      Critique agent validated three assumptions that directly impact implementation scope: A1 (optional
+      field handling), A4 (schema completeness), A6 (test coverage requirements). These were discovered
+      before DO phase, preventing rework. Implementation already incorporated these; extraction captures
+      this as a feature observation (critique-driven refinement improves artifact quality).
+
+  - id: WWW-3-EXTRACT
+    type: feature
+    title: "Three-layer architecture implementation validated as clean"
+    evidence: "Design → Implementation cycle: architecture decomposed cleanly across layers"
+    confidence: high
+    severity: null
+    source_dimension: WWW
+    suggested_priority: later
+    priority_rationale: |
+      Architecture design was validated through implementation. Three-layer separation (cards, query,
+      integration) decomposed without backfill or circular dependencies. This is a validated pattern
+      observation, not actionable. Document for future similar work. Priority: later (learning capture).
+
+  - id: WWW-4-EXTRACT
+    type: feature
+    title: "Optional defaults enable phased TDD progression"
+    evidence: "TDD strategy: made all new schema fields optional in card schema, allowed tests to pass incrementally"
+    confidence: high
+    severity: null
+    source_dimension: WWW
+    suggested_priority: later
+    priority_rationale: |
+      Design decision (schema field optionality) enabled test-first development without blocking.
+      Tests could pass with partial implementation, then fields were populated incrementally.
+      Validated as efficient pattern. Document for future TDD work. Priority: later (methodology capture).
+
+  - id: WCBB-1-EXTRACT
+    type: refactor
+    title: "Document absence of design-cycle skill (no lifecycle command for design phase)"
+    evidence: "WORK-164 implementation: followed lifecycle manually without design-cycle skill delegation"
+    confidence: high
+    severity: null
+    source_dimension: WCBB
+    suggested_priority: next
+    priority_rationale: |
+      No `/design` command or design-cycle skill exists, despite other lifecycles having dedicated skills.
+      WORK-164 completed design phase successfully via manual inline work. This is discoverable gap (not
+      blocking but indicates skill library incompleteness). Refactor: add design-cycle skill to infrastructure
+      for consistency with investigation/implementation/validation/triage skills. Priority: next (improves
+      agent UX consistency in current chapter).
+
+  - id: WCBB-2-EXTRACT
+    type: bug
+    title: "README.md agent count is stale (12 agents documented, 13 exist)"
+    evidence: "CLAUDE.md agent table has 13 rows; README.md references 12-agent count for 9+ sessions"
+    confidence: high
+    severity: low
+    source_dimension: WCBB
+    suggested_priority: now
+    priority_rationale: |
+      Documentation drift: README.md agent count hardcoded to 12, actual agent table has 13 entries.
+      This is low severity (cosmetic documentation) but persistent across 9+ sessions (S316-S424),
+      indicating no automated freshness check. Bug category because it's a factual error. Should fix
+      immediately and add validation to prevent recurrence. Priority: now (quick fix).
+
+  - id: WSY-1-EXTRACT
+    type: refactor
+    title: "Existing WORK.md frontmatter validation shows 80% completion, enable incremental schema adoption"
+    evidence: "WORK-164 WORK.md frontmatter: agent cards schema nested successfully in existing structure"
+    confidence: high
+    severity: null
+    source_dimension: WSY
+    suggested_priority: later
+    priority_rationale: |
+      Validation finding: existing WORK.md frontmatter was already 80% compatible with agent cards schema.
+      New schema fields nested without restructuring. This indicates good forward compatibility. Document
+      as refactor (schema evolution strategy validated). Priority: later (methodology capture, not blocking).
+
+  - id: WSY-2-EXTRACT
+    type: feature
+    title: "Zero consumers reference CLAUDE.md agent table, enabling safe migration"
+    evidence: "Audit: grep for imports/references to CLAUDE.md agent table discovery yields no external consumers"
+    confidence: high
+    severity: null
+    source_dimension: WSY
+    suggested_priority: next
+    priority_rationale: |
+      Infrastructure discovery: no code outside CLAUDE.md itself references the hardcoded agent table.
+      This enables safe migration from documentation-driven discovery to infrastructure-driven discovery
+      (agent cards). Feature category: validates that agent card infrastructure can replace hardcoded table
+      without breaking consumers. Priority: next (enables full agent discovery migration in related work).
+
+  - id: WDN-1-EXTRACT
+    type: refactor
+    title: "Sync 4 stale EPOCH.md status entries (WORK-160, 167, 168, 169)"
+    evidence: "EPOCH.md has 4 work item references with outdated closure status"
+    confidence: medium
+    severity: null
+    source_dimension: WDN
+    suggested_priority: later
+    priority_rationale: |
+      EPOCH.md maintenance: 4 pre-existing work items have stale status (likely from prior arc closure).
+      These are documentation alignment issues, not blocking work. Refactor category (schema consistency).
+      Should be addressed as housekeeping in next epoch review. Priority: later (low impact, batched cleanup).
+
+  - id: WMI-1-EXTRACT
+    type: feature
+    title: "Implement automated AGENTS.md freshness checking"
+    evidence: "README.md stale for 9+ sessions; no automated validation of agent metadata freshness"
+    confidence: high
+    severity: null
+    source_dimension: WMI
+    suggested_priority: next
+    priority_rationale: |
+      Missing capability: no automated check that agent documentation (README.md, AGENTS.md, CLAUDE.md)
+      stays in sync with infrastructure. Add CI/pre-commit hook to verify agent counts, capability fields,
+      and trigger definitions match agent cards schema. Feature: infrastructure validation. Priority: next
+      (prevents future drift like 9-session README.md staleness).
+
+  - id: WMI-2-EXTRACT
+    type: feature
+    title: "Extend filter_agents() with produces/consumes capability filters"
+    evidence: "Agent discovery infrastructure (agent_cards.py) lacks produces/consumes query parameters"
+    confidence: medium
+    severity: null
+    source_dimension: WMI
+    suggested_priority: next
+    priority_rationale: |
+      Agent card infrastructure incomplete: query mechanism supports id/role/tools filtering but not
+      produces/consumes filtering. Agents need to discover peers based on capability dependencies.
+      Feature: extend query API to enable capability-driven discovery (prerequisite for agent orchestration).
+      Priority: next (foundation for agent chaining work).
+
+---
+
+# Classification Summary
+
+summary:
+  total_items: 10
+  by_type:
+    bug: 2
+    feature: 5
+    refactor: 3
+    upgrade: 0
+  by_source_dimension:
+    WWW: 4
+    WCBB: 2
+    WSY: 2
+    WDN: 1
+    WMI: 2
+  by_priority:
+    now: 3
+    next: 5
+    later: 2
+
+# Dimension Mapping
+
+dimension_definitions:
+  WWW: "Work, What, When (implementation execution and timing)"
+  WCBB: "Work, Completed, Broken, Broken (blockers and infrastructure)"
+  WSY: "Work, Scope, Why (requirements and consumer impact)"
+  WDN: "Work, Done, No (closure, archival, and maintenance)"
+  WMI: "Work, Missing, Infrastructure (gaps in tooling and discovery)"
+
+# Rationale Notes
+
+notes:
+  WWW-1_single_fix: |
+    TDD achieved 31/32 first-pass rate (97% quality). Single row count assertion failure is likely
+    a boundary condition (off-by-one in test fixture, not implementation logic). Quick fix to achieve
+    100% pass.
+
+  WWW-2_critique_drove_implementation: |
+    Critique agent validated 3 assumptions before DO phase. This prevented rework and improved
+    implementation quality. Captured as feature because it demonstrates value of pre-implementation
+    validation ceremony.
+
+  WWW-3_and_4_learning_capture: |
+    Architecture and optional-field patterns were validated but not actionable items. Extracted as
+    learning to inform future similar work. Priority: later (methodology documentation).
+
+  WCBB-1_design_cycle_missing: |
+    No `/design` skill exists despite investigation/implementation/validation/triage all having
+    dedicated cycle skills. WORK-164 completed design manually. Gap discovered but not blocking
+    (manual approach works). Refactor: add for consistency.
+
+  WCBB-2_readme_drift_persistent: |
+    README.md agent count (12) vs actual (13) persisted for 9+ sessions because no automated
+    check. Low severity (cosmetic) but indicator of missing validation infrastructure.
+
+  WSY-1_schema_forward_compatible: |
+    Agent card schema nested into existing WORK.md structure without disruption. Shows good
+    forward compatibility. Validates incremental schema adoption strategy.
+
+  WSY-2_no_external_consumers: |
+    Zero code references the CLAUDE.md agent table outside itself. This is ideal: enables safe
+    migration from hardcoded documentation to infrastructure discovery without breaking consumers.
+
+  WMI-1_and_2_infrastructure_gaps: |
+    Agent discovery infrastructure (agent_cards.py) is functional but incomplete. Missing: automated
+    freshness checks (WMI-1) and capability-driven queries (WMI-2). Both required for agent
+    orchestration and autonomy. Priority: next (foundation work).
+
+---

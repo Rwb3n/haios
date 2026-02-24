@@ -74,7 +74,7 @@ After work item is found, first invoke retro-cycle for structured reflection:
 Skill(skill="retro-cycle")
 ```
 
-This forces the agent into dedicated cognitive space (REFLECT -> DERIVE -> EXTRACT -> COMMIT) before entering "closing mode." Evidence-anchored observations are stored with typed provenance tags.
+This forces the agent into dedicated cognitive space (REFLECT -> DERIVE -> COMMIT -> EXTRACT) before entering "closing mode." Evidence-anchored observations are stored with typed provenance tags.
 
 ---
 
@@ -294,7 +294,7 @@ After closure, verify:
 
 Expected flow:
 1. Find work file: `docs/work/active/E2-031/WORK.md`
-2. Invoke retro-cycle (REFLECT->DERIVE->EXTRACT->COMMIT)
+2. Invoke retro-cycle (REFLECT->DERIVE->COMMIT->EXTRACT)
 3. Check work directory for plans: `docs/work/active/E2-031/plans/`
 4. Read plan frontmatter to check statuses
 5. Prompt user for DoD confirmation

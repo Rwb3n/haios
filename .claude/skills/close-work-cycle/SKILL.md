@@ -65,7 +65,7 @@ This skill defines the VALIDATE-ARCHIVE-CHAIN cycle for closing work items with 
       │                                                           [route next]
   structured reflection                                                  |
   (REFLECT->DERIVE->                                            /-------------\
-   EXTRACT->COMMIT)                                       type=investigation  has plan?   else
+   COMMIT->EXTRACT)                                       type=investigation  has plan?   else
                                                                 |                  |          |
                                                                  |          implement  work-creation
                                                             investigation    -cycle     -cycle
@@ -78,7 +78,7 @@ This skill defines the VALIDATE-ARCHIVE-CHAIN cycle for closing work items with 
    ```
    Skill(skill="retro-cycle")
    ```
-   This invocation is owned by `/close` command, not by close-work-cycle itself. retro-cycle structures autonomous reflection into typed, provenance-tagged memory entries (REFLECT->DERIVE->EXTRACT->COMMIT). If retro-cycle returned `dod_relevant_findings`, those are passed to VALIDATE phase.
+   This invocation is owned by `/close` command, not by close-work-cycle itself. retro-cycle structures autonomous reflection into typed, provenance-tagged memory entries (REFLECT->DERIVE->COMMIT->EXTRACT). If retro-cycle returned `dod_relevant_findings`, those are passed to VALIDATE phase.
 
 2. **DoD Validation:** Before VALIDATE phase, **MUST** invoke dod-validation-cycle:
    ```
@@ -322,7 +322,7 @@ just clear-cycle
 
 | Phase | Primary Tool | Memory Integration |
 |-------|--------------|-------------------|
-| (Prerequisite) retro-cycle | Skill (invoked by /close) | Typed reflection via REFLECT->DERIVE->EXTRACT->COMMIT |
+| (Prerequisite) retro-cycle | Skill (invoked by /close) | Typed reflection via REFLECT->DERIVE->COMMIT->EXTRACT |
 | VALIDATE | Read, Glob, Grep | dod_relevant_findings from retro-cycle |
 | ARCHIVE | Bash(just close-work) | - |
 | CHAIN | Skill (checkpoint-cycle, routing) | Context preservation (E2-287) |

@@ -110,6 +110,7 @@ paths:
 
   # Event log paths (WORK-127: single canonical location)
   governance_events: ".claude/haios/governance-events.jsonl"
+  session_log: ".claude/haios/session-log.jsonl"
 
 # Context loading configuration (WORK-008)
 # Role-based loader dispatch per L4 principles

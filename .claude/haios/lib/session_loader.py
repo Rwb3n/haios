@@ -26,6 +26,7 @@ Extracted Content:
     - Drift warnings (PROMINENT)
     - Memory refs content
 """
+import collections
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 import re
@@ -153,6 +154,25 @@ class SessionLoader:
         # Default: format IDs for manual query (fallback)
         return f"Memory IDs to query: {ids}"
 
+    def _load_session_log_summary(self) -> str:
+        """Load and format session event log summary (WORK-206)."""
+        try:
+            from session_event_log import read_events
+            events = read_events()
+            if not events:
+                return "(no session events)"
+            lines = []
+            for ev in events[-20:]:  # cap at 20 to avoid bloat
+                t = ev.get("t", "?")
+                v = ev.get("v", "")
+                w = ev.get("w", "")
+                ts = ev.get("ts", "")
+                suffix = f" [{w}]" if w else ""
+                lines.append(f"  {ts} {t}: {v}{suffix}")
+            return "\n".join(lines)
+        except Exception:
+            return "(session log unavailable)"
+
     def validate_pending_items(
         self,
         pending: List[str],
@@ -211,6 +231,7 @@ class SessionLoader:
             "drift_observed": [],
             "memory_refs": [],
             "memory_content": "",
+            "session_log_summary": "",
         }
 
         checkpoint = self._find_latest_checkpoint()
@@ -228,6 +249,7 @@ class SessionLoader:
         result["drift_observed"] = fm.get("drift_observed", [])
         result["memory_refs"] = fm.get("load_memory_refs", [])
         result["memory_content"] = self._query_memory_ids(result["memory_refs"])
+        result["session_log_summary"] = self._load_session_log_summary()
 
         return result
 
@@ -259,18 +281,21 @@ Completed last session:
 Memory from prior session:
 {memory_content}
 
+Session Events (last session):
+{session_log_summary}
+
 Pending:
 {pending}"""
 
         # Format lists
-        format_vals = {}
+        format_vals = collections.defaultdict(lambda: "(unknown)")
         for k, v in extracted.items():
             if isinstance(v, list):
                 format_vals[k] = sep.join(str(i) for i in v) if v else "(none)"
             else:
                 format_vals[k] = v if v is not None else "(unknown)"
 
-        return template.format(**format_vals)
+        return template.format_map(format_vals)
 
     def load(self) -> str:
         """

@@ -2,7 +2,7 @@
 name: retro-cycle
 type: ceremony
 description: "Multi-step autonomous reflection with typed provenance for work closure.
-  Replaces observation-capture-cycle with structured pipeline: REFLECT->DERIVE->EXTRACT->COMMIT."
+  Replaces observation-capture-cycle with structured pipeline: REFLECT->DERIVE->COMMIT->EXTRACT."
 category:
   - memory
   - closure
@@ -36,7 +36,11 @@ output_contract:
   - field: memory_concept_ids
     type: list
     guaranteed: on_success
-    description: "Concept IDs from all COMMIT stores"
+    description: "Concept IDs from COMMIT stores (reflect + kss + closure summary)"
+  - field: extract_concept_ids
+    type: list
+    guaranteed: on_success
+    description: "Concept IDs from EXTRACT store (retro-extract provenance)"
   - field: dod_relevant_findings
     type: list
     guaranteed: on_success
@@ -88,12 +92,13 @@ Multi-step autonomous reflection with typed provenance for work closure. Replace
   |     +-> Phase 2: DERIVE (Keep / Stop / Start)
   |     |     Proportional to scale assessment
   |     |
-  |     +-> Phase 3: EXTRACT (Bugs, Features, Refactors, Upgrades)
-  |     |     Confidence-tagged, priority-suggested, NO auto-spawn
+  |     +-> Phase 3: COMMIT (observations + K/S/S to memory)
+  |     |     Typed provenance: retro-reflect, retro-kss
+  |     |     Returns concept_ids for EXTRACT traceability
   |     |
-  |     +-> Phase 4: COMMIT (All to memory)
-  |           Typed provenance: retro-reflect, retro-kss, retro-extract
-  |           Also stores closure summary (absorbs MEMORY phase)
+  |     +-> Phase 4: EXTRACT (Bugs, Features, Refactors, Upgrades)
+  |           Confidence-tagged, priority-suggested, NO auto-spawn
+  |           Stores to memory with concept_ids from COMMIT
   |
   +-> close-work-cycle
         VALIDATE -> ARCHIVE -> CHAIN
@@ -109,8 +114,8 @@ Each phase operates under different cognitive pressure:
 |-------|----------|----------|
 | REFLECT | Observation (what happened?) | Data gathering with evidence anchoring |
 | DERIVE | Synthesis (what to do about it?) | Pattern extraction from observations |
-| EXTRACT | Classification (what type of action?) | Bug/feature/refactor/upgrade with priority signal |
-| COMMIT | Persistence (store with provenance) | Memory writes with typed tags |
+| COMMIT | Persistence (store with provenance) | Memory writes with typed tags — observations and K/S/S are complete, persist immediately |
+| EXTRACT | Classification (what type of action?) | Bug/feature/refactor/upgrade with priority signal — references concept_ids from COMMIT |
 
 Collapsing phases conflates observation with action, losing the signal quality that typed provenance enables. Each phase has a distinct input/output contract and can degrade independently.
 
@@ -235,12 +240,116 @@ If REFLECT produced zero observations (edge case), DERIVE is skipped. Log: "No o
 
 ---
 
-## Phase 3: EXTRACT
+## Phase 3: COMMIT
+
+> **Execution Context: DELEGATE to haiku subagent (S436 operator directive)**
+> COMMIT is mechanical persistence — calls ingester_ingest with structured outputs
+> from REFLECT and DERIVE phases. No cognitive context required. Delegate to save
+> main-agent tokens. Runs BEFORE EXTRACT so that observations and K/S/S are persisted
+> immediately (complete cognitive outputs). EXTRACT receives the resulting concept_ids
+> for traceability.
+
+**Delegation pattern:**
+```
+Task(
+  subagent_type='general-purpose',
+  model='haiku',
+  prompt='Execute retro-cycle COMMIT phase for {work_id}.
+    reflect_findings: {reflect_findings_json}
+    kss_directives: {kss_directives_json}
+    scaling: {scaling}
+    Store reflect_findings per retro-reflect provenance tag.
+    Store kss_directives per retro-kss provenance tag.
+    Store closure summary per closure:{work_id} provenance tag.
+    Return: memory_concept_ids list (reflect_ids, kss_ids, closure_id).
+    Verify: after each ingester_ingest, confirm concept_ids is non-empty (S407 silent-drop check).'
+)
+```
+
+Store REFLECT and DERIVE outputs to memory with typed provenance tags. No deduplication at write time.
+
+### Provenance Tags
+
+| Tag | Source Path Pattern | Content | Type Hint |
+|-----|-------------------|---------|-----------|
+| retro-reflect | `retro-reflect:{work_id}` | Raw 5-dimensional observations with evidence anchors | techne |
+| retro-kss | `retro-kss:{work_id}` | Keep/Stop/Start directives with traceability | techne |
+
+Note: `retro-extract` provenance store runs in Phase 4 EXTRACT (after concept_ids available from COMMIT).
+
+### Storage Implementation
+
+**MUST: Full Detail Preservation (S399 Operator Directive)**
+
+Each ingester_ingest call **MUST** preserve the full detail from the phase output. The content field is NOT a summary — it is the complete structured output. Downstream consumers (triage, future agents) must be able to act on stored data without re-deriving it from source artifacts.
+
+**retro-reflect content MUST include for each observation:**
+- Observation ID (e.g., WWW-1, WCBB-1, WSY-2)
+- Severity tag (if assigned)
+- Full description (not abbreviated)
+- Evidence anchor: exact file path with line numbers, exact diff reference, exact governance event, or exact test name
+- Impact statement
+
+**retro-kss content MUST include for each directive:**
+- K/S/S category and ID (e.g., K1, S2, S3)
+- Full directive text (not abbreviated)
+- Traceability: which REFLECT observation(s) it traces to (by ID)
+- For START directives: target file path and implementation sketch
+- For STOP directives: evidence of the anti-pattern with file path
+
+**Anti-pattern (S399):** Storing compressed summaries like "STOP: Don't use EnterPlanMode" loses the evidence anchors, file paths, and traceability that make the observation actionable. A future agent reading this cannot determine WHERE the hook should be added, WHAT the redirect message should say, or WHY the pattern is wrong. Full detail is the minimum viable signal.
+
+For each provenance type:
+```
+ingester_ingest(
+  content="<FULL structured output from phase — see detail requirements above>",
+  source_path="retro-reflect:{work_id}",  # or retro-kss
+  content_type_hint="techne"
+)
+```
+
+### Closure Summary (Absorbs MEMORY Phase)
+
+In addition to the 2 typed stores, COMMIT also stores a closure summary:
+```
+ingester_ingest(
+  content="Closure: {work_id} - {title}\nScale: {trivial|substantial}\nReflections: {count}\nK/S/S: {count}\nDoD-relevant: {count}",
+  source_path="closure:{work_id}",
+  content_type_hint="techne"
+)
+```
+
+This absorbs the responsibility previously held by close-work-cycle's MEMORY phase.
+
+### No Deduplication at Write Time
+
+Agents are stateless across sessions. If independent sessions converge on the same observation, frequency IS the signal. Deduplication happens at read time during the triage ceremony (WORK-143).
+
+### Governance Event
+
+Log partial ceremony event (extract_count not yet known):
+```
+RetroCycleCommitted: {work_id}, scaling: {trivial|substantial}, reflect_count: N, kss_count: N
+```
+
+### Degradation
+
+If memory storage fails for any provenance type:
+- Log the failure
+- Continue with remaining stores
+- Include failed store in error output
+- Never blocks closure
+
+---
+
+## Phase 4: EXTRACT
 
 > **Execution Context: DELEGATE to haiku subagent (S436 operator directive)**
 > EXTRACT is mechanical classification — takes REFLECT observations and assigns type
 > (bug/feature/refactor/upgrade), confidence, priority. No live session context required;
-> the observations are written output from Phase 1. Delegate to save main-agent tokens.
+> the observations are written output from Phase 1. Runs AFTER COMMIT so that
+> extracted items can reference memory concept_ids from COMMIT for traceability.
+> Delegate to save main-agent tokens.
 
 **Delegation pattern:**
 ```
@@ -249,8 +358,11 @@ Task(
   model='haiku',
   prompt='Execute retro-cycle EXTRACT phase for {work_id}.
     REFLECT findings (summary, not full text — chunk if >2000 tokens): {reflect_findings_text}
-    Classify each actionable item. Output format per SKILL.md Phase 3 Classification table.
-    Return: extracted_items list in YAML format.'
+    commit_concept_ids: {commit_concept_ids_json}
+    Classify each actionable item. Output format per SKILL.md Phase 4 Classification table.
+    Store each item with ingester_ingest using retro-extract:{work_id} source_path.
+    Include commit_concept_ids in content for traceability.
+    Return: extracted_items list in YAML format + extract_concept_ids list.'
 )
 ```
 
@@ -279,7 +391,30 @@ For each extracted item:
   source_dimension: WWW|WCBB|WSY|WDN|WMI
   suggested_priority: now|next|later
   priority_rationale: "Why this urgency level"
+  commit_concept_ids: [list of concept IDs from COMMIT phase]
 ```
+
+### Storage
+
+Store extracted items using `retro-extract` provenance:
+```
+ingester_ingest(
+  content="<FULL structured output — see retro-extract detail requirements below>",
+  source_path="retro-extract:{work_id}",
+  content_type_hint="techne"
+)
+```
+
+**retro-extract content MUST include for each item:**
+- Type (bug/feature/refactor/upgrade)
+- Title
+- File path(s) affected
+- Reproduction steps (bugs), implementation scope (features), structural target (refactors), or enhancement target (upgrades)
+- Confidence level with rationale
+- Severity level (bugs only)
+- Source dimension (WWW/WCBB/WSY/WDN/WMI)
+- Suggested priority (now/next/later) with rationale — agent has freshest context on urgency, triage makes final call
+- commit_concept_ids: list of concept IDs from COMMIT phase (for cross-reference traceability)
 
 ### Suggested Priority (Option C — Hybrid)
 
@@ -306,116 +441,16 @@ Extracted items are stored to memory only. They are NOT automatically converted 
 | Trivial | Max 2 items total |
 | Substantial | Uncapped |
 
-### Degradation
-
-If REFLECT produced no actionable items, EXTRACT produces an empty list. This is a valid outcome, not an error.
-
----
-
-## Phase 4: COMMIT
-
-> **Execution Context: DELEGATE to haiku subagent (S436 operator directive)**
-> COMMIT is mechanical persistence — calls ingester_ingest 4 times with structured outputs
-> from REFLECT/DERIVE/EXTRACT phases. No cognitive context required. Delegate to save
-> main-agent tokens.
-
-**Delegation pattern:**
-```
-Task(
-  subagent_type='general-purpose',
-  model='haiku',
-  prompt='Execute retro-cycle COMMIT phase for {work_id}.
-    reflect_findings: {reflect_findings_json}
-    kss_directives: {kss_directives_json}
-    extracted_items: {extracted_items_json}
-    scaling: {scaling}
-    Store each per SKILL.md Phase 4 Provenance Tags. Return: memory_concept_ids list.
-    Verify: after each ingester_ingest, confirm concept_ids is non-empty (S407 silent-drop check).'
-)
-```
-
-Store all outputs to memory with typed provenance tags. No deduplication at write time.
-
-### Provenance Tags
-
-| Tag | Source Path Pattern | Content | Type Hint |
-|-----|-------------------|---------|-----------|
-| retro-reflect | `retro-reflect:{work_id}` | Raw 5-dimensional observations with evidence anchors | techne |
-| retro-kss | `retro-kss:{work_id}` | Keep/Stop/Start directives with traceability | techne |
-| retro-extract | `retro-extract:{work_id}` | Bug/feature/refactor/upgrade items with confidence, severity, and suggested priority | techne |
-
-### Storage Implementation
-
-**MUST: Full Detail Preservation (S399 Operator Directive)**
-
-Each ingester_ingest call **MUST** preserve the full detail from the phase output. The content field is NOT a summary — it is the complete structured output. Downstream consumers (triage, future agents) must be able to act on stored data without re-deriving it from source artifacts.
-
-**retro-reflect content MUST include for each observation:**
-- Observation ID (e.g., WWW-1, WCBB-1, WSY-2)
-- Severity tag (if assigned)
-- Full description (not abbreviated)
-- Evidence anchor: exact file path with line numbers, exact diff reference, exact governance event, or exact test name
-- Impact statement
-
-**retro-kss content MUST include for each directive:**
-- K/S/S category and ID (e.g., K1, S2, S3)
-- Full directive text (not abbreviated)
-- Traceability: which REFLECT observation(s) it traces to (by ID)
-- For START directives: target file path and implementation sketch
-- For STOP directives: evidence of the anti-pattern with file path
-
-**retro-extract content MUST include for each item:**
-- Type (bug/feature/refactor/upgrade)
-- Title
-- File path(s) affected
-- Reproduction steps (bugs), implementation scope (features), structural target (refactors), or enhancement target (upgrades)
-- Confidence level with rationale
-- Severity level (bugs only)
-- Source dimension (WWW/WCBB/WSY/WDN/WMI)
-- Suggested priority (now/next/later) with rationale — agent has freshest context on urgency, triage makes final call
-
-**Anti-pattern (S399):** Storing compressed summaries like "STOP: Don't use EnterPlanMode" loses the evidence anchors, file paths, and traceability that make the observation actionable. A future agent reading this cannot determine WHERE the hook should be added, WHAT the redirect message should say, or WHY the pattern is wrong. Full detail is the minimum viable signal.
-
-For each provenance type:
-```
-ingester_ingest(
-  content="<FULL structured output from phase — see detail requirements above>",
-  source_path="retro-reflect:{work_id}",  # or retro-kss, retro-extract
-  content_type_hint="techne"
-)
-```
-
-### Closure Summary (Absorbs MEMORY Phase)
-
-In addition to the 3 typed stores, COMMIT also stores a closure summary:
-```
-ingester_ingest(
-  content="Closure: {work_id} - {title}\nScale: {trivial|substantial}\nReflections: {count}\nK/S/S: {count}\nExtractions: {count}\nDoD-relevant: {count}",
-  source_path="closure:{work_id}",
-  content_type_hint="techne"
-)
-```
-
-This absorbs the responsibility previously held by close-work-cycle's MEMORY phase.
-
-### No Deduplication at Write Time
-
-Agents are stateless across sessions. If independent sessions converge on the same observation, frequency IS the signal. Deduplication happens at read time during the triage ceremony (WORK-143).
-
 ### Governance Event
 
-Log ceremony completion:
+Log full ceremony completion (extract_count now known):
 ```
 RetroCycleCompleted: {work_id}, scaling: {trivial|substantial}, reflect_count: N, kss_count: N, extract_count: N
 ```
 
 ### Degradation
 
-If memory storage fails for any provenance type:
-- Log the failure
-- Continue with remaining stores
-- Include failed store in error output
-- Never blocks closure
+If REFLECT produced no actionable items, EXTRACT produces an empty list. This is a valid outcome, not an error.
 
 ---
 
@@ -425,11 +460,16 @@ If memory storage fails for any provenance type:
 |--------|---------|----------|
 | `--skip-retro` | Operator passes `skip_retro: true` | Log `RetroCycleSkipped` event, return early |
 | Evidence unavailable | Source files missing or unreadable | Skip unavailable sources, proceed with available |
-| Empty REFLECT | No observations surfaced | Skip DERIVE and EXTRACT, COMMIT stores empty summary |
+| Empty REFLECT | No observations surfaced | Skip DERIVE, COMMIT stores empty summary, skip EXTRACT |
 | Memory failure | `ingester_ingest` returns error | Log error, continue with remaining stores |
-| Phase timeout | Agent context approaching limits | Complete current phase, skip remaining, COMMIT what we have |
+| Phase timeout | Context usage reaches 15% remaining (alert); 10% = close territory; 5% = emergency stop | Complete current phase, skip remaining, COMMIT what we have |
 
 **Principle:** RETRO never blocks closure. Every sub-phase degrades gracefully.
+
+**Context Alert Thresholds (S439 operator directive):**
+- **15% remaining:** Alert — complete current phase and trigger graceful wind-down
+- **10% remaining:** Close territory — skip to COMMIT immediately if not already there
+- **5% remaining:** Emergency stop — COMMIT whatever is complete, return partial results
 
 ---
 
@@ -451,8 +491,8 @@ If memory storage fails for any provenance type:
 | Phase 0: Scale | Glob, Grep, Bash(git diff) | - | scaling: trivial\|substantial |
 | Phase 1: REFLECT | Read (work, plan, tests, diff, events) | - | reflect_findings list |
 | Phase 2: DERIVE | (synthesis from REFLECT output) | - | kss_directives object |
-| Phase 3: EXTRACT | (classification from REFLECT output) | - | extracted_items list |
-| Phase 4: COMMIT | ingester_ingest | 3 typed stores + closure summary | memory_concept_ids list |
+| Phase 3: COMMIT | ingester_ingest | 2 typed stores (reflect+kss) + closure summary | memory_concept_ids list (reflect+kss) |
+| Phase 4: EXTRACT | ingester_ingest (retro-extract) | classification from REFLECT + concept_ids from COMMIT | extracted_items list + extract_concept_ids |
 
 ---
 
@@ -467,8 +507,8 @@ If memory storage fails for any provenance type:
 | Phase 1 | Any DoD-relevant findings? | Tag and include in dod_relevant_findings |
 | Phase 2 | Do observations exist to derive from? | Skip DERIVE |
 | Phase 2 | Do directives trace to observations? | Filter untraceable directives |
-| Phase 3 | Are there actionable items? | Empty list (valid outcome) |
-| Phase 4 | Did memory stores succeed? | Log failure, continue |
+| Phase 3 | Did memory stores succeed? | Log failure, continue |
+| Phase 4 | Are there actionable items? | Empty list (valid outcome) |
 
 ---
 
@@ -480,7 +520,8 @@ If memory storage fails for any provenance type:
 | No auto-spawn | Extracted items to memory only | REQ-LIFECYCLE-004: chaining is caller choice. Surfaced at triage |
 | No dedup at write time | Frequency IS signal | Agents are stateless across sessions. Independent convergence = stronger signal |
 | Evidence anchoring | MUST reference artifact | Generic statements without evidence get lost. Evidence enables downstream triage |
-| 4 phases not 1 | REFLECT/DERIVE/EXTRACT/COMMIT | Observation != synthesis != classification != persistence |
+| 4 phases not 1 | REFLECT/DERIVE/COMMIT/EXTRACT | Observation != synthesis != persistence != classification. COMMIT before EXTRACT: observations and K/S/S are complete cognitive outputs — persist immediately. EXTRACT runs after with concept_ids for traceable cross-referencing. S439 operator directive. |
+| Context alert threshold | 15% remaining (was undocumented) | S439 operator directive: 15% alert, 10% close territory, 5% emergency stop — graduated response to context pressure |
 | Proportional scaling | Computable predicate | files_changed, plan, tests, CyclePhaseEntered -- all machine-checkable |
 | Absorb MEMORY phase | Closure summary in COMMIT | Reduces ceremony overhead. Single pass for all memory stores |
 | WWW dimension added | 5 dimensions not 4 | Observation (WWW) and action (Keep) are different cognitive pressures. WWW captures why something worked with evidence; Keep captures whether to continue it |
