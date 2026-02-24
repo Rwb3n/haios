@@ -108,6 +108,7 @@ context:
 | `critique_injector.py` | Critique injection for PreToolUse hook (WORK-169). compute_critique_injection() detects inhale-to-exhale lifecycle transitions and returns tier-appropriate critique guidance. Fail-permissive. Runtime consumer: pre_tool_use.py _check_critique_injection() |
 | `checkpoint_auto.py` | Checkpoint field auto-population (WORK-170). populate_checkpoint_fields() replaces {{PLACEHOLDER}} tokens in checkpoint frontmatter with values from session file, haios-status-slim.json, and work directory. Fail-permissive. Runtime consumer: post_tool_use.py _auto_populate_checkpoint() |
 | `session_review_predicate.py` | Session Review trigger predicate (WORK-209). should_run_session_review() evaluates OR logic: >=1 close event in session-log.jsonl OR >=2 RetroCycleCompleted in governance-events.jsonl. Fail-permissive. Runtime consumers: stop.py _inject_session_review_reminder() |
+| `ceremony_cards.py` | Ceremony skill discovery module (WORK-165, REQ-DISCOVER-003). Programmatic access to ceremony skills by parsing YAML frontmatter from .claude/skills/*/SKILL.md where type=ceremony. Public API: list_ceremonies(), get_ceremony(name), filter_ceremonies(category). Parallel to agent_cards.py. |
 
 ## Usage
 

@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-165
-title: "Infrastructure Ceremonies"
+title: Infrastructure Ceremonies
 type: implementation
 status: active
 owner: Hephaestus
@@ -14,39 +14,47 @@ closed: null
 priority: medium
 effort: medium
 traces_to:
-  - REQ-CEREMONY-001
-  - REQ-CEREMONY-002
+- REQ-CEREMONY-001
+- REQ-CEREMONY-002
+- REQ-DISCOVER-003
 requirement_refs: []
 source_files:
-  - .claude/skills/open-epoch-ceremony/SKILL.md
-  - .claude/skills/close-epoch-ceremony/SKILL.md
-  - .claude/skills/close-arc-ceremony/SKILL.md
-  - .claude/skills/close-chapter-ceremony/SKILL.md
+- .claude/skills/open-epoch-ceremony/SKILL.md
+- .claude/skills/close-epoch-ceremony/SKILL.md
+- .claude/skills/close-arc-ceremony/SKILL.md
+- .claude/skills/close-chapter-ceremony/SKILL.md
 acceptance_criteria:
-  - "Open-epoch-ceremony skill verified functional (created S393)"
-  - "Ceremony skills discoverable via infrastructure (not CLAUDE.md listing)"
-  - "Ceremony loop standardized (open/close pairs for epoch, arc, chapter)"
+- Open-epoch-ceremony skill verified functional (created S393)
+- Ceremony skills discoverable via infrastructure (not CLAUDE.md listing)
+- Ceremony loop standardized (open/close pairs for epoch, arc, chapter)
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: working
+cycle_phase: DONE
+current_node: DONE
 node_history:
-  - node: backlog
-    entered: 2026-02-17T22:08:08
-    exited: null
+- node: backlog
+  entered: 2026-02-17 22:08:08
+  exited: 2026-02-24 19:55:00
+- node: PLAN
+  entered: 2026-02-24 19:55:00
+  exited: null
 artifacts: []
 cycle_docs: {}
 memory_refs:
-  - 85098
-  - 85108
+- 85098
+- 85108
+- 88394
+- 88395
+- 88396
 extensions:
   epoch: E2.8
-  note: "open-epoch-ceremony already created in S393"
-version: "2.0"
+  note: open-epoch-ceremony already created in S393
+version: '2.0'
 generated: 2026-02-17
-last_updated: 2026-02-17T22:08:08
+last_updated: '2026-02-24T20:43:29.230507'
+queue_history: []
 ---
 # WORK-165: Infrastructure Ceremonies
 
@@ -54,12 +62,14 @@ last_updated: 2026-02-17T22:08:08
 
 ## Context
 
-Ceremonies should be discoverable via infrastructure, not by an agent reading CLAUDE.md or memorizing skill names. The open-epoch-ceremony skill was created in S393, completing the ceremony loop (open + close for epoch, arc, chapter, work).
+Ceremonies should be discoverable via infrastructure, not by an agent reading CLAUDE.md or memorizing skill names. The open-epoch-ceremony skill was created in S393, completing the ceremony loop (open + close for epoch, arc, chapter).
 
 This work item ensures:
 1. The ceremony loop is standardized and complete
 2. Ceremonies are discoverable via the same infrastructure as agent cards
 3. Open-epoch-ceremony (created S393) is verified functional
+
+**Discovery mechanism (N1/N2 resolution):** WORK-164 built `agent_cards.py` (.claude/haios/lib/) for agent discovery via frontmatter parsing of `.claude/agents/*.md`. WORK-165 builds an analogous `ceremony_cards.py` following the same pattern — parsing ceremony skill SKILL.md frontmatter from `.claude/skills/*-ceremony/SKILL.md`. This is a parallel module, not an extension of agent_cards.py, because ceremonies and agents have different schemas (ceremonies have phases/contracts, agents have tools/models).
 
 ---
 
