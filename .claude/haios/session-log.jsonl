@@ -3,3 +3,4 @@
 {"t": "test", "v": "1p/4f", "w": "", "ts": "22:43"}
 {"t": "test", "v": "34p/0f", "w": "", "ts": "22:45"}
 {"t": "commit", "v": "$(cat <<'EOF'\nSession 459: WORK-232, WOR", "w": "", "ts": "22:46"}
+{"t": "commit", "v": "$(cat <<'EOF'\nSession 459: WORK-231 \u00e2\u20ac\u201d ", "w": "", "ts": "22:50"}

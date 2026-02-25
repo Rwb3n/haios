@@ -20042,3 +20042,4 @@
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-25T22:49:47.763938", "session_id": 459}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-02-25T22:49:47.794826", "session_id": 459}
 {"type": "StatusPropagation", "work_id": "WORK-231", "chapter": "CH-061", "arc": "call", "action": "chapter_completed", "timestamp": "2026-02-25T22:49:49.028465"}
+{"type": "SessionEnded", "session": 459, "agent": "Hephaestus", "timestamp": "2026-02-25T22:52:01.853272", "session_id": 459}
