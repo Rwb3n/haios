@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-220
-title: "MCP Operations Server Core"
+title: MCP Operations Server Core
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-25
 spawned_by: WORK-218
 spawned_children: []
 chapter: CH-066
 arc: call
-closed: null
+closed: '2026-02-25'
 priority: high
 effort: medium
 traces_to:
@@ -23,32 +23,43 @@ source_files:
 - .claude/haios/haios_ops/bootstrap.py
 - .mcp.json
 acceptance_criteria:
-- ".claude/haios/haios_ops/ package created under .claude/haios/ for portability"
-- "FastMCP('haios-operations') server with stdio transport"
-- "Work tools: work_get, work_create, work_close, work_transition (~4 tools)"
-- "Queue tools: queue_ready, queue_list, queue_next, queue_prioritize, queue_commit, queue_park, queue_unpark (~7 tools)"
-- "Session tools: session_start, session_end, cycle_set, cycle_get, cycle_clear (~5 tools)"
-- "All tools return typed JSON (not prose strings)"
-- "bootstrap.py handles dual sys.path setup for modules/ and lib/"
-- ".mcp.json updated with haios-operations server entry"
-- "Tests verify each tool group with mocked backends"
+- .claude/haios/haios_ops/ package created under .claude/haios/ for portability
+- FastMCP('haios-operations') server with stdio transport
+- 'Work tools: work_get, work_create, work_close, work_transition (~4 tools)'
+- 'Queue tools: queue_ready, queue_list, queue_next, queue_prioritize, queue_commit,
+  queue_park, queue_unpark (~7 tools)'
+- 'Session tools: session_start, session_end, cycle_set, cycle_get, cycle_clear (~5
+  tools)'
+- All tools return typed JSON (not prose strings)
+- bootstrap.py handles dual sys.path setup for modules/ and lib/
+- .mcp.json updated with haios-operations server entry
+- Tests verify each tool group with mocked backends
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: CHAIN
 node_history:
-  - node: backlog
-    entered: 2026-02-25T10:04:09
-    exited: null
+- node: backlog
+  entered: 2026-02-25 10:04:09
+  exited: 2026-02-25 11:15:00
+- node: PLAN
+  entered: 2026-02-25 11:15:00
+  exited: '2026-02-25T11:59:30.028032'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 88750
+- 88751
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-25
-last_updated: 2026-02-25T10:04:09
+last_updated: '2026-02-25T11:59:30.035195'
+queue_history:
+- position: done
+  entered: '2026-02-25T11:59:30.028032'
+  exited: null
 ---
 # WORK-220: MCP Operations Server Core
 

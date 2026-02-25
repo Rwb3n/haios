@@ -6,6 +6,13 @@
       "env": {
         "DB_PATH": "haios_memory.db"
       }
+    },
+    "haios-operations": {
+      "command": "python",
+      "args": ["-m", "haios_ops.mcp_server"],
+      "env": {
+        "PYTHONPATH": ".claude/haios"
+      }
     }
   }
 }
