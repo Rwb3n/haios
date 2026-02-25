@@ -17926,3 +17926,25 @@
 {"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-217", "agent": "Hephaestus", "timestamp": "2026-02-24T22:58:05.924497", "session_id": 448}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-24T23:03:19.456844", "session_id": 448}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-24T23:03:19.510149", "session_id": 448}
+{"type": "SessionStarted", "session": 449, "agent": "Hephaestus", "timestamp": "2026-02-25T09:04:01.098072", "session_id": 449}
+{"type": "GateViolation", "gate_id": "scaffold_block", "work_id": "unknown", "violation_type": "block", "context": "BLOCKED: Direct work_item scaffold. Use '/new-work' command instead. Work items require work-creation-cycle to populate placeholders.", "timestamp": "2026-02-25T09:42:20.633539", "session_id": 449}
+{"type": "CyclePhaseEntered", "phase": "VERIFY", "work_id": "WORK-218", "agent": "Hephaestus", "timestamp": "2026-02-25T09:42:43.582123", "session_id": 449}
+{"type": "CyclePhaseEntered", "phase": "POPULATE", "work_id": "WORK-218", "agent": "Hephaestus", "timestamp": "2026-02-25T09:42:58.272701", "session_id": 449}
+{"type": "CyclePhaseEntered", "phase": "READY", "work_id": "WORK-218", "agent": "Hephaestus", "timestamp": "2026-02-25T09:44:09.260903", "session_id": 449}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-218", "agent": "Hephaestus", "timestamp": "2026-02-25T09:44:25.241759", "session_id": 449}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-25T09:44:36.983088", "session_id": 449}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-218", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-25T09:44:36.990920", "session_id": 449}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-218"], "from": "backlog", "to": "ready", "timestamp": "2026-02-25T09:44:36.996952", "rationale": "CH-066 is the largest remaining E2.8 exit criteria blocker \u2014 2 of 5 open exit criteria depend on MCP operations server"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-25T09:44:36.996952", "session_id": 449}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-25T09:44:46.311875", "session_id": 449}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-218", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-25T09:44:46.318423", "session_id": 449}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-218"], "from": "ready", "to": "working", "timestamp": "2026-02-25T09:44:46.325099"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-25T09:44:46.325099", "session_id": 449}
+{"type": "CyclePhaseEntered", "phase": "EXPLORE", "work_id": "WORK-218", "agent": "Hephaestus", "timestamp": "2026-02-25T09:45:00.541663", "session_id": 449}
+{"type": "CyclePhaseEntered", "phase": "HYPOTHESIZE", "work_id": "WORK-218", "agent": "Hephaestus", "timestamp": "2026-02-25T09:58:34.506032", "session_id": 449}
+{"type": "CyclePhaseEntered", "phase": "VALIDATE", "work_id": "WORK-218", "agent": "Hephaestus", "timestamp": "2026-02-25T10:01:20.402133", "session_id": 449}
+{"type": "CyclePhaseEntered", "phase": "CONCLUDE", "work_id": "WORK-218", "agent": "Hephaestus", "timestamp": "2026-02-25T10:01:53.947250", "session_id": 449}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-218", "agent": "Hephaestus", "timestamp": "2026-02-25T10:03:43.732340", "session_id": 449}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-25T10:06:15.370604", "session_id": 449}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 1, "timestamp": "2026-02-25T10:06:15.424998", "session_id": 449}
+{"type": "SessionEnded", "session": 449, "agent": "Hephaestus", "timestamp": "2026-02-25T10:14:34.350074", "session_id": 449}

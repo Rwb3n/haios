@@ -84,10 +84,10 @@ Move mechanical ceremony phases from SKILL.md (agent reads) to hooks/modules (au
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
 | CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Complete |
-| CH-059 | CeremonyAutomation | ~~WORK-160~~, ~~WORK-167~~, ~~WORK-168~~, WORK-169-176 | REQ-CEREMONY-002, REQ-CEREMONY-005 | CH-058 | In Progress |
+| CH-059 | CeremonyAutomation | ~~WORK-160~~, ~~WORK-167~~, ~~WORK-168~~, ~~WORK-169-176~~ | REQ-CEREMONY-002, REQ-CEREMONY-005 | CH-058 | Complete |
 | CH-060 | SessionBoundaryFix | WORK-161 | REQ-CEREMONY-001 | None | Complete |
 | CH-061 | ColdstartContextInjection | WORK-162, WORK-180 | REQ-CONFIG-001, L3.3 | None | Complete |
-| CH-066 | MCPOperationsServer | New | REQ-DISCOVER-002, REQ-CONFIG-001 | CH-061 | Planning |
+| CH-066 | MCPOperationsServer | ~~WORK-218~~, WORK-219, WORK-220 | REQ-DISCOVER-002, REQ-CONFIG-001 | CH-061 | In Progress |
 
 **CH-066 Design Note (S419):** Tool naming must be intuitive. `just work` is a good example — the name communicates intent immediately. MCP tool names should follow the same principle: `work_create`, `work_park`, `session_start` — not `execute_queue_transition` or `scaffold_template`. The operator's observation: "just work < good name" validates naming as a first-class UX concern for the MCP operations server.
 
@@ -120,7 +120,7 @@ Extend engine functions for context loading. Memory-first retrieval. Progressive
 | CH-062 | ProgressiveContracts | New | REQ-ASSET-001 | None | Planning |
 
 **Exit criteria:**
-- [ ] Lightweight coldstart variant exists for housekeeping sessions (tiered: full vs quick)
+- [x] Lightweight coldstart variant exists for housekeeping sessions (tiered: full vs quick) (ADR-047, WORK-180, S421)
 - [ ] Contracts designed for progressive disclosure (agent reads what it needs, not everything)
 - [ ] Context loading uses engine functions and memory before file reads
 
@@ -169,7 +169,22 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 |----|-------|-------|
 | WORK-143 | Retro-Triage Consumer Update | Closed prior to E2.8. Triage reads retro-* provenance tags. |
 | WORK-101 | Proportional Governance Design | Closed S398. L3.20, REQ-LIFECYCLE-005, REQ-CEREMONY-005, threshold criteria. CH-058. |
+| WORK-160 | Ceremony Automation | Closed S407. Parent item for CH-059 ceremony automation batch. |
+| WORK-161 | Session Boundary Fix | Closed S396. Stop hook session-end actions. CH-060. |
+| WORK-162 | Coldstart Context Injection | Closed S407. Design for ADR-047 tiered coldstart. CH-061. |
+| WORK-166 | BugBatch-E28 | Closed S395. Checkpoint sort, queue state machine admin. CH-065. |
+| WORK-167 | Governance Tier Detection | Closed S403. Effort-tier predicate in PreToolUse. CH-059. |
 | WORK-168 | Cycle Phase Auto-Advancement | Closed S403. PostToolUse Part 8 auto-advances session_state. CH-059. |
+| WORK-169 | Critique-as-Hook | Closed S407. PreToolUse critique injection at phase transitions. CH-059. |
+| WORK-170 | Checkpoint Field Auto-Population | Closed S407. Checkpoint frontmatter auto-filled by module. CH-059. |
+| WORK-171 | Mechanical Phase Migration | Closed S449. Capstone for WORK-160, migrated mechanical phases. CH-059. |
+| WORK-172 | Block EnterPlanMode via PreToolUse | Closed S403. Hook blocks ungoverned plan writes. CH-059. |
+| WORK-173 | Blocked_by Cascade on Work Closure | Closed S403. Auto-clear blocked_by on dependency closure. CH-059. |
+| WORK-174 | WorkState Dataclass Expansion | Closed S407. Extended WorkState for engine queries. CH-059. |
+| WORK-175 | Fix plan_tree.py --ready Filter | Closed S403. Blocked_by filter in ready list. CH-065. |
+| WORK-176 | Plan-Authoring-Cycle Subagent Delegation | Closed S412. Plan authoring runs as isolated subagent. CH-059. |
+| WORK-180 | Implement ADR-047 Tiered Coldstart | Closed S421. Three-tier coldstart orchestrator. CH-061. |
+| WORK-217 | Retro-Enrichment Agent | Closed S448. Agent card, /close integration, 26 tests. |
 
 ### Deferred (not E2.8)
 
