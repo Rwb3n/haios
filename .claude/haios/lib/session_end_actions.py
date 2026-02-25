@@ -13,6 +13,7 @@ Functions:
 """
 import json
 import subprocess
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -78,8 +79,8 @@ def log_session_ended(session_number: int, agent: str) -> Optional[dict]:
 def clear_cycle_state(project_root: Optional[Path] = None) -> bool:
     """Zero out session_state in haios-status-slim.json.
 
-    Always writes all 6 fields to normalize schema (old files may
-    have only 4 fields).
+    Delegates to cycle_state.clear_cycle_state (canonical impl moved to
+    cycle_state.py by WORK-219).
 
     Args:
         project_root: Project root path. Defaults to derived path.
@@ -88,22 +89,11 @@ def clear_cycle_state(project_root: Optional[Path] = None) -> bool:
         True if cleared successfully, False on error/missing file.
     """
     try:
-        root = project_root or _default_project_root()
-        slim_file = root / ".claude" / "haios-status-slim.json"
-        if not slim_file.exists():
-            return False
-
-        data = json.loads(slim_file.read_text(encoding="utf-8"))
-        data["session_state"] = {
-            "active_cycle": None,
-            "current_phase": None,
-            "work_id": None,
-            "entered_at": None,
-            "active_queue": None,
-            "phase_history": [],
-        }
-        slim_file.write_text(json.dumps(data, indent=4), encoding="utf-8")
-        return True
+        _lib_dir = Path(__file__).parent
+        if str(_lib_dir) not in sys.path:
+            sys.path.insert(0, str(_lib_dir))
+        from cycle_state import clear_cycle_state as _clear
+        return _clear(project_root=project_root)
     except Exception:
         return False
 

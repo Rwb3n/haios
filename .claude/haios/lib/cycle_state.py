@@ -213,3 +213,121 @@ def read_phase_contract(
         return phase_file.read_text(encoding="utf-8")
     except Exception:
         return None
+
+
+def set_cycle_state(
+    cycle: str,
+    phase: str,
+    work_id: str,
+    project_root: Optional[Path] = None,
+) -> bool:
+    """Set session_state in haios-status-slim.json for a new cycle phase.
+
+    Writes the 6-field session_state schema, then calls sync_work_md_phase
+    and log_phase_transition (both fail-permissive).
+
+    Args:
+        cycle: Lifecycle cycle name (e.g., "implementation-cycle")
+        phase: Phase name (e.g., "DO", "PLAN")
+        work_id: Work item ID (e.g., "WORK-219")
+        project_root: Project root. Defaults to derived path.
+
+    Returns:
+        True if session_state was written, False on error/missing file.
+    """
+    try:
+        root = project_root or _default_project_root()
+        slim_file = root / ".claude" / "haios-status-slim.json"
+        if not slim_file.exists():
+            return False
+
+        data = json.loads(slim_file.read_text(encoding="utf-8"))
+        now = datetime.now().isoformat()
+        data["session_state"] = {
+            "active_cycle": cycle,
+            "current_phase": phase,
+            "work_id": work_id,
+            "entered_at": now,
+            "active_queue": None,
+            "phase_history": [],
+        }
+        slim_file.write_text(json.dumps(data, indent=4), encoding="utf-8")
+
+        # Sync WORK.md cycle_phase (fail-permissive)
+        sync_work_md_phase(work_id, phase, project_root=root)
+
+        # Log governance event (fail-permissive)
+        try:
+            _lib_dir = Path(__file__).parent
+            if str(_lib_dir) not in sys.path:
+                sys.path.insert(0, str(_lib_dir))
+            from governance_events import log_phase_transition
+            log_phase_transition(phase, work_id, "Hephaestus")
+        except Exception:
+            pass
+
+        return True
+    except Exception:
+        return False
+
+
+def clear_cycle_state(project_root: Optional[Path] = None) -> bool:
+    """Zero out session_state in haios-status-slim.json.
+
+    Canonical implementation (WORK-219). Always writes all 6 fields
+    to normalize schema.
+
+    Args:
+        project_root: Project root path. Defaults to derived path.
+
+    Returns:
+        True if cleared successfully, False on error/missing file.
+    """
+    try:
+        root = project_root or _default_project_root()
+        slim_file = root / ".claude" / "haios-status-slim.json"
+        if not slim_file.exists():
+            return False
+
+        data = json.loads(slim_file.read_text(encoding="utf-8"))
+        data["session_state"] = {
+            "active_cycle": None,
+            "current_phase": None,
+            "work_id": None,
+            "entered_at": None,
+            "active_queue": None,
+            "phase_history": [],
+        }
+        slim_file.write_text(json.dumps(data, indent=4), encoding="utf-8")
+        return True
+    except Exception:
+        return False
+
+
+def set_active_queue(
+    queue_name: str,
+    project_root: Optional[Path] = None,
+) -> bool:
+    """Set active_queue in session_state of haios-status-slim.json.
+
+    Args:
+        queue_name: Queue name (e.g., "governance", "default")
+        project_root: Project root. Defaults to derived path.
+
+    Returns:
+        True if written, False on error/missing file/missing session_state.
+    """
+    try:
+        root = project_root or _default_project_root()
+        slim_file = root / ".claude" / "haios-status-slim.json"
+        if not slim_file.exists():
+            return False
+
+        data = json.loads(slim_file.read_text(encoding="utf-8"))
+        if "session_state" not in data:
+            return False
+        data["session_state"]["active_queue"] = queue_name
+        slim_file.write_text(json.dumps(data, indent=4), encoding="utf-8")
+        return True
+    except Exception:
+        return False

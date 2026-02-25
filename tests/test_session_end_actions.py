@@ -286,6 +286,7 @@ class TestStopHookSessionEndIntegration:
         from hooks.stop import handle, _run_session_end_actions
 
         with patch("session_end_actions._default_project_root", return_value=tmp_path), \
+             patch("cycle_state._default_project_root", return_value=tmp_path), \
              patch("governance_events.EVENTS_FILE", events_file), \
              patch("subprocess.run") as mock_git:
             mock_git.return_value = MagicMock(stdout="", returncode=0)
@@ -339,6 +340,7 @@ class TestStopHookSessionEndIntegration:
         mock_bridge.extract_learnings.return_value = MagicMock(success=True, outcome="stored")
 
         with patch("session_end_actions._default_project_root", return_value=tmp_path), \
+             patch("cycle_state._default_project_root", return_value=tmp_path), \
              patch("governance_events.EVENTS_FILE", events_file), \
              patch("subprocess.run") as mock_git:
             mock_git.return_value = MagicMock(stdout="", returncode=0)
@@ -395,6 +397,7 @@ class TestStopHookSessionEndIntegration:
             raise RuntimeError("MCP server down")
 
         with patch("session_end_actions._default_project_root", return_value=tmp_path), \
+             patch("cycle_state._default_project_root", return_value=tmp_path), \
              patch("governance_events.EVENTS_FILE", events_file), \
              patch("subprocess.run") as mock_git:
             mock_git.return_value = MagicMock(stdout="", returncode=0)

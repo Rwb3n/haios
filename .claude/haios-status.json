@@ -1,5 +1,5 @@
 {
-    "generated": "2026-02-25T10:06:19",
+    "generated": "2026-02-25T11:10:33",
     "milestone": {
         "id": "M8-Memory",
         "name": "Memory",
@@ -35,8 +35,8 @@
     "active_work": [],
     "blocked_items": {},
     "counts": {
-        "concepts": 88516,
-        "entities": 10794,
+        "concepts": 88560,
+        "entities": 10804,
         "backlog_pending": 0
     },
     "infrastructure": {
@@ -7449,7 +7449,7 @@
         {
             "path": "docs/checkpoints/2025-12-24-01-SESSION-109-e2-160-m7-tooling-milestone-created.md",
             "last_updated": "2025-12-24T10:36:40",
-            "days_stale": 62
+            "days_stale": 63
         },
         {
             "path": "docs/checkpoints/2025-12-24-02-SESSION-110-e2-170-backfill-complete-and-inv-028-inv-029-created.md",
@@ -7484,7 +7484,7 @@
         {
             "path": "docs/checkpoints/2025-12-25-02-SESSION-116-inv-033-inv-035-m8-skillarch-milestone.md",
             "last_updated": "2025-12-25T10:10:39",
-            "days_stale": 61
+            "days_stale": 62
         },
         {
             "path": "docs/checkpoints/2025-12-25-03-SESSION-116-inv-033-e2-177-e2-176-gate-contract-formalization.md",
@@ -7619,7 +7619,7 @@
         {
             "path": "docs/checkpoints/2025-12-29-01-SESSION-142-e2-108-triage-cycle-m7c-progress.md",
             "last_updated": "2025-12-29T10:37:35",
-            "days_stale": 57
+            "days_stale": 58
         },
         {
             "path": "docs/checkpoints/2025-12-29-02-SESSION-143-m7c-complete-anti-pattern-checker-design.md",
@@ -7734,7 +7734,7 @@
         {
             "path": "docs/checkpoints/2026-01-04-03-SESSION-165-e2-253-complete-e2-254-plan-ready.md",
             "last_updated": "2026-01-04T10:29:43",
-            "days_stale": 51
+            "days_stale": 52
         },
         {
             "path": "docs/checkpoints/2026-01-04-04-SESSION-166-e2-254-contextloader-and-governance-gap-fixes.md",
@@ -7994,7 +7994,7 @@
         {
             "path": "docs/checkpoints/2026-01-20-01-SESSION-215-configuration-arc-design.md",
             "last_updated": "2026-01-21T10:35:14",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/checkpoints/2026-01-21-01-SESSION-216-ch-002-session-simplify-complete.md",
@@ -8409,7 +8409,7 @@
         {
             "path": "docs/plans/PLAN-E2-160-work-file-prerequisite-gate.md",
             "last_updated": "2025-12-24T10:11:57",
-            "days_stale": 62
+            "days_stale": 63
         },
         {
             "path": "docs/plans/PLAN-E2-162-node-transition-just-recipes.md",
@@ -8449,7 +8449,7 @@
         {
             "path": "docs/plans/PLAN-E2-180-work-creation-cycle-skill.md",
             "last_updated": "2025-12-25T10:44:46",
-            "days_stale": 61
+            "days_stale": 62
         },
         {
             "path": "docs/plans/PLAN-E2-181-close-work-cycle-skill.md",
@@ -8624,17 +8624,17 @@
         {
             "path": "docs/investigations/INVESTIGATION-E2-037-governance-framework-constellation.md",
             "last_updated": "2025-12-23T11:02:17",
-            "days_stale": 63
+            "days_stale": 64
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-037-phase3-compliance-tracking.md",
             "last_updated": "2025-12-23T11:02:28",
-            "days_stale": 63
+            "days_stale": 64
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-085-hook-migration-powershell-to-python.md",
             "last_updated": "2025-12-23T10:33:46",
-            "days_stale": 63
+            "days_stale": 64
         },
         {
             "path": "docs/investigations/INVESTIGATION-E2-099-vitals-approaching-100-percent-bug.md",
@@ -8684,12 +8684,12 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-014-memory-context-injection-architecture.md",
             "last_updated": "2025-12-23T11:01:13",
-            "days_stale": 63
+            "days_stale": 64
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-015-retrieval-algorithm-intelligence.md",
             "last_updated": "2025-12-23T11:01:23",
-            "days_stale": 63
+            "days_stale": 64
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-016-haios-operational-infrastructure-audit.md",
@@ -8699,7 +8699,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-017-observability-gap-analysis.md",
             "last_updated": "2025-12-23T11:02:07",
-            "days_stale": 63
+            "days_stale": 64
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-018-adaptive-coldstart-query-formulation.md",
@@ -8724,7 +8724,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-023-reasoningbank-feedback-loop-architecture.md",
             "last_updated": "2025-12-23T11:00:47",
-            "days_stale": 63
+            "days_stale": 64
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-024-work-item-as-file-architecture.md",
@@ -8734,7 +8734,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-025-workflow-state-machine-architecture.md",
             "last_updated": "2025-12-23T11:01:52",
-            "days_stale": 63
+            "days_stale": 64
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-026-unified-architecture-metaphor-integration.md",
@@ -8749,7 +8749,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-028-agent-error-reporting-and-observability-gap.md",
             "last_updated": "2025-12-24T10:48:01",
-            "days_stale": 62
+            "days_stale": 63
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-029-status-generation-architecture-gap.md",
@@ -8794,7 +8794,7 @@
         {
             "path": "docs/investigations/INVESTIGATION-INV-037-context-level-architecture-and-source-optimization.md",
             "last_updated": "2025-12-26T10:54:46",
-            "days_stale": 60
+            "days_stale": 61
         },
         {
             "path": "docs/investigations/INVESTIGATION-INV-038-l1-invariants-content-completeness-audit.md",
@@ -8874,7 +8874,7 @@
         {
             "path": "docs/ADR/ADR-038-m2-governance-symphony-architecture.md",
             "last_updated": "2025-12-29T10:09:49",
-            "days_stale": 57
+            "days_stale": 58
         },
         {
             "path": "docs/ADR/ADR-039-work-item-as-file-architecture.md",
@@ -8899,7 +8899,7 @@
         {
             "path": "docs/ADR/ADR-043-runtime-vs-plugin-state-boundary.md",
             "last_updated": "2026-01-21T11:05:48",
-            "days_stale": 34
+            "days_stale": 35
         },
         {
             "path": "docs/ADR/ADR-044-l4-stateless-principle.md",

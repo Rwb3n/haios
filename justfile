@@ -297,7 +297,7 @@ cycle-events:
 # CH-002: Session Simplify - session number in simple file
 # E2-306: Now calls log_session_start() for orphan detection support
 session-start session:
-    @python -c "import json,os,sys; sys.path.insert(0,'.claude/haios/lib'); from governance_events import log_session_start; from session_event_log import reset_log; sf='.claude/session'; jf='.claude/haios-status.json'; s={{session}}; lines=open(sf).readlines() if os.path.exists(sf) else []; hdr=[l for l in lines if l.startswith('#')]; open(sf,'w').write(''.join(hdr)+str(s)+chr(10)); j=json.load(open(jf)) if os.path.exists(jf) else {}; j['session_delta']={'current_session':s,'prior_session':s-1}; json.dump(j,open(jf,'w'),indent=2); log_session_start(s,'Hephaestus'); reset_log(); print(f'Session {s} start logged')"
+    @python -c "import sys; sys.path.insert(0,'.claude/haios/lib'); from session_mgmt import start_session; ok=start_session({{session}}); print(f'Session {{session}} start logged' if ok else 'Session {{session}} start logged (partial)')"
 
 # Log session end event
 # E2-306: Now calls log_session_end() for orphan detection support
@@ -307,9 +307,7 @@ session-end session:
 # Set session_state for cycle tracking (E2-288)
 # Usage: just set-cycle implementation-cycle DO E2-288
 set-cycle cycle phase work_id:
-    @python -c "import json; from datetime import datetime; p='.claude/haios-status-slim.json'; d=json.load(open(p)); d['session_state']={'active_cycle':'{{cycle}}','current_phase':'{{phase}}','work_id':'{{work_id}}','entered_at':datetime.now().isoformat()}; json.dump(d,open(p,'w'),indent=4); print(f'Set: {{cycle}}/{{phase}}/{{work_id}}')"
-    @python -c "import sys; sys.path.insert(0,'.claude/haios/lib'); from cycle_state import sync_work_md_phase; sync_work_md_phase('{{work_id}}','{{phase}}')" 2>/dev/null || true
-    @python -c "import sys; sys.path.insert(0,'.claude/haios/lib'); from governance_events import log_phase_transition; log_phase_transition('{{phase}}','{{work_id}}','Hephaestus')" 2>/dev/null || true
+    @python -c "import sys; sys.path.insert(0,'.claude/haios/lib'); from cycle_state import set_cycle_state; set_cycle_state('{{cycle}}','{{phase}}','{{work_id}}'); print(f'Set: {{cycle}}/{{phase}}/{{work_id}}')"
 
 # Get current cycle state (E2.4 CH-004 PreToolUseIntegration)
 # Returns: cycle/phase/work_id or empty string if no cycle active
@@ -318,12 +316,12 @@ get-cycle:
 
 # Clear session_state after cycle exit (E2-288, E2-293)
 clear-cycle:
-    @python -c "import json; p='.claude/haios-status-slim.json'; d=json.load(open(p)); d['session_state']={'active_cycle':None,'current_phase':None,'work_id':None,'entered_at':None,'active_queue':None,'phase_history':[]}; json.dump(d,open(p,'w'),indent=4); print('Cleared session_state')"
+    @python -c "import sys; sys.path.insert(0,'.claude/haios/lib'); from cycle_state import clear_cycle_state; clear_cycle_state(); print('Cleared session_state')"
 
 # Set active_queue in session_state (E2-293)
 # Usage: just set-queue governance
 set-queue queue_name:
-    @python -c "import json; p='.claude/haios-status-slim.json'; d=json.load(open(p)); d['session_state']['active_queue']='{{queue_name}}'; json.dump(d,open(p,'w'),indent=4); print(f'Set queue: {{queue_name}}')"
+    @python -c "import sys; sys.path.insert(0,'.claude/haios/lib'); from cycle_state import set_active_queue; set_active_queue('{{queue_name}}'); print(f'Set queue: {{queue_name}}')"
 
 # =============================================================================
 # PLAN TREE RECIPES (E2-084)
