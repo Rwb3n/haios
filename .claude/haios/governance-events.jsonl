@@ -19984,3 +19984,6 @@
 {"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: mutation tools should not be needed during investigation", "session_id": 458}
 {"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-02-25T22:09:00.676931", "session_id": 458}
 {"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-02-25T22:09:00.681958", "session_id": 458}
+{"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: mutation tools should not be needed during investigation", "session_id": 458}
+{"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-02-25T22:21:23.636533", "session_id": 458}
+{"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-02-25T22:21:23.639995", "session_id": 458}
