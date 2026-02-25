@@ -22,9 +22,9 @@ Parse arguments as: `<backlog_id> <title>`
 
 **MUST** create work item before implementation plan (L1 invariant: Work Before Plan).
 
-```bash
+```
 # Step 1: Create work item
-just work <backlog_id> "<title>"
+mcp__haios-operations__scaffold_work(title="<title>", work_id="<backlog_id>")
 
 # Step 2: Run work-creation-cycle to populate Context/Deliverables
 Skill(skill="work-creation-cycle")
@@ -32,7 +32,7 @@ Skill(skill="work-creation-cycle")
 # Step 3: Then create plan (this command)
 ```
 
-If work file doesn't exist, `just plan` will fail with guidance to run `/new-work` first.
+If work file doesn't exist, `scaffold_plan` will fail with guidance to run `/new-work` first.
 
 ## Memory Query (E2-083: Proactive Retrieval)
 
@@ -45,15 +45,15 @@ Before scaffolding, query memory for relevant prior work:
 
 ## Create Plan
 
-Run scaffolding via just recipe:
+Run scaffolding via MCP tool:
 
-```bash
-just plan <backlog_id> "<title>"
+```
+mcp__haios-operations__scaffold_plan(work_id="<backlog_id>", title="<title>")
 ```
 
 Example:
-```bash
-just plan E2-094 "Test Runner Subagent"
+```
+mcp__haios-operations__scaffold_plan(work_id="E2-094", title="Test Runner Subagent")
 # Creates: docs/work/active/E2-094/plans/PLAN.md
 ```
 

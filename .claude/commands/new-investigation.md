@@ -25,11 +25,11 @@ Parse arguments:
 
 **MUST** create work item before investigation document (L1 invariant: Work Before Plan).
 
-```bash
+```
 # Step 1: Get next ID and create work item with type: investigation
 python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from scaffold import get_next_work_id; print(get_next_work_id())"
 # Use that ID:
-just work WORK-031 "<title>"
+mcp__haios-operations__scaffold_work(title="<title>", work_id="WORK-031")
 
 # Step 2: Set type: investigation in the work file frontmatter
 # Edit docs/work/active/WORK-031/WORK.md to set type: investigation
@@ -38,10 +38,10 @@ just work WORK-031 "<title>"
 Skill(skill="work-creation-cycle")
 
 # Step 4: Then create investigation document
-just inv WORK-031 "<title>"
+mcp__haios-operations__scaffold_investigation(work_id="WORK-031", title="<title>")
 ```
 
-If work file doesn't exist, `just inv` will fail with guidance to run `/new-work` first.
+If work file doesn't exist, `scaffold_investigation` will fail with guidance to run `/new-work` first.
 
 ## Memory Query (E2-083: Proactive Retrieval)
 
@@ -55,15 +55,15 @@ Before scaffolding, query memory for prior related work:
 
 ## Create Investigation
 
-Run scaffolding via just recipe:
+Run scaffolding via MCP tool:
 
-```bash
-just inv <backlog_id> "<title>"
+```
+mcp__haios-operations__scaffold_investigation(work_id="<backlog_id>", title="<title>")
 ```
 
 Example:
-```bash
-just inv WORK-031 "Observability Gap Analysis"
+```
+mcp__haios-operations__scaffold_investigation(work_id="WORK-031", title="Observability Gap Analysis")
 # Creates: docs/work/active/WORK-031/investigations/001-observability-gap-analysis.md
 ```
 

@@ -21,17 +21,17 @@ All new work items use **WORK-XXX** format (auto-incremented).
 # Get next ID
 python -c "import sys; sys.path.insert(0, '.claude/haios/lib'); from scaffold import get_next_work_id; print(get_next_work_id())"
 # Then scaffold with that ID
-just work WORK-031 "New Feature Implementation"
+mcp__haios-operations__scaffold_work(title="New Feature Implementation", work_id="WORK-031")
 ```
 
 **Option 2: Explicit ID (backwards compatible)**
-```bash
-just work WORK-031 "<title>"
+```
+mcp__haios-operations__scaffold_work(title="<title>", work_id="WORK-031")
 ```
 
 Example:
-```bash
-just work WORK-031 "New Feature Implementation"
+```
+mcp__haios-operations__scaffold_work(title="New Feature Implementation", work_id="WORK-031")
 # Creates: docs/work/active/WORK-031/WORK.md
 ```
 

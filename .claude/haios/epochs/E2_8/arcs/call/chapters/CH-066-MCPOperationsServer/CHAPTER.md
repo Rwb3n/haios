@@ -36,7 +36,7 @@ Expose work/hierarchy/session/scaffold operations as an MCP server — the agent
 | WORK-227 | Investigation CONCLUDE Spawn Completeness Enforcement | Active | implementation |
 | WORK-228 | Audit Just Recipe Consumers and Migrate to MCP Operations Tools | Complete | investigation |
 | WORK-229 | Migrate Remaining Skill cycle_set/clear/ready References to MCP | Complete | implementation |
-| WORK-230 | Migrate Scaffold Commands and Agent Files to MCP Operations Tools | Active | implementation |
+| WORK-230 | Migrate Scaffold Commands and Agent Files to MCP Operations Tools | Complete | implementation |
 
 ---
 

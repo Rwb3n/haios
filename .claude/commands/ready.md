@@ -18,10 +18,10 @@ Show what's ready to work on - unblocked items that can be started now.
 
 ## Execution
 
-Run the ready recipe:
+Run the ready MCP tool:
 
-```bash
-just ready
+```
+mcp__haios-operations__queue_ready()
 ```
 
 ## Example Output

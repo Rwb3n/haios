@@ -271,11 +271,11 @@ content_type_hint: "techne"
 ### 3d. Refresh haios-status.json
 
 Run:
-```bash
-just update-status
+```
+mcp__haios-operations__hierarchy_update_status(work_id="{backlog_id}", status="complete")
 ```
 
-> **Note (E2-190):** Must use full `update-status` (not slim) so `just ready` shows accurate data.
+> **Note (E2-190):** Must use full `hierarchy_update_status` (not slim) so `queue_ready()` shows accurate data.
 
 ### 3e. Git commit (E2-166)
 

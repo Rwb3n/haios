@@ -21,13 +21,13 @@ Custom slash commands for HAIOS governance. Available via `/command` syntax.
 | `/haios` | Show system status | Dashboard with hooks, memory, agents status |
 | `/status` | Compact status | Tests, memory count, git status |
 | `/validate <file>` | Validate template | `just validate` recipe |
-| `/new-plan <backlog_id> <title>` | Create plan → implementation-cycle | `just plan` → skill chain |
-| `/new-checkpoint <session> <title>` | Create checkpoint from template | `just checkpoint` recipe |
+| `/new-plan <backlog_id> <title>` | Create plan → implementation-cycle | `scaffold_plan` MCP → skill chain |
+| `/new-checkpoint <session> <title>` | Create checkpoint from template | `scaffold_checkpoint` MCP tool |
 | `/new-handoff <type> <name>` | Create handoff from template | `just scaffold` recipe |
-| `/new-adr <number> <title>` | Create ADR from template | `just adr` recipe |
+| `/new-adr <number> <title>` | Create ADR from template | `scaffold_adr` MCP tool |
 | `/new-report <name>` | Create report | `just scaffold report` recipe |
-| `/new-work <backlog_id> <title>` | Create work item file | `just work` → work-creation-cycle skill |
-| `/new-investigation <backlog_id> <title>` | Create investigation → investigation-cycle | `just inv` → skill chain |
+| `/new-work <backlog_id> <title>` | Create work item file | `scaffold_work` MCP → work-creation-cycle skill |
+| `/new-investigation <backlog_id> <title>` | Create investigation → investigation-cycle | `scaffold_investigation` MCP → skill chain |
 | `/schema [table]` | Quick schema lookup | MCP schema_info tool |
 | `/workspace` | Outstanding work status | Parses haios-status.json |
 | `/close <backlog_id>` | Close work item with DoD validation | ADR-033 enforcement |
@@ -51,7 +51,7 @@ Session 36+ converted these commands from LLM generation to template-based scaff
 - Aligns with "Doing right should be easy"
 
 Templates are in `.claude/templates/`
-Scaffolding via `just scaffold` recipe (Python-based, cross-platform)
+Scaffolding via MCP tools (Tier 2 agent interface, per ADR-045)
 
 ## Command File Format
 

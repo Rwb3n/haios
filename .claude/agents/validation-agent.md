@@ -146,7 +146,7 @@ Blockers:
 
 - Focus on Ground Truth Verification from the plan
 - Exercise the happy path at minimum
-- Check for discoverable artifacts (run `just update-status-slim`)
+- Check for discoverable artifacts (run `mcp__haios-operations__hierarchy_update_status(work_id, status)`)
 - Report specific blockers, not just "FAIL"
 
 ## Edge Cases

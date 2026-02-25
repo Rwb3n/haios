@@ -14,8 +14,8 @@ Arguments: $ARGUMENTS
 
 ## Step 1: Scaffold
 
-```bash
-just scaffold checkpoint <session_number> "<title>"
+```
+mcp__haios-operations__scaffold_checkpoint(session_number="<session_number>", title="<title>")
 ```
 
 This creates a minimal manifest file in `docs/checkpoints/`.

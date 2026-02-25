@@ -1,0 +1,149 @@
+---
+# WORK-230: Retro-Cycle EXTRACT Phase
+# Source: REFLECT findings from retro-cycle completion
+# Generated: 2026-02-25
+# Commit Concept IDs: [89034, 89035, 89036, 89037, 89038, 89039, 89040, 89041, 89042, 89043, 89044, 89045, 89046, 89047, 89048, 89049, 89050, 89051]
+
+extracted_items:
+  - item_id: WCBB-1
+    type: bug
+    title: PreToolUse hook reads wrong cycle_set state source
+    severity: medium
+    confidence: 0.95
+    suggested_priority: high
+    description: |
+      During DO phase execution in retro-cycle, PreToolUse hook shows EXPLORE state even though
+      cycle_set MCP correctly set state to DO. The hook is reading from a different state source
+      than what was written by cycle_set.
+    root_cause: |
+      State source mismatch between MCP write path and PreToolUse hook read path. Possible causes:
+      1. MCP cycle_set writes to haios-status-slim.json but hook reads from different file
+      2. Hook reads stale cached state before refresh
+      3. State write is not flushed to disk before hook runs
+    affected_files:
+      - .claude/hooks/pre-tool-use.py
+      - mcp__haios-operations__cycle_set
+      - .claude/haios/haios-status-slim.json
+    impact: |
+      Governance enforcement incorrect during execution. Hook cannot validate state transitions
+      reliably. Affects retro-cycle and potentially all lifecycle state validation.
+    reproduction: |
+      Run retro-cycle, observe PreToolUse log showing EXPLORE when cycle_set set DO.
+    stored_concept_ids: [89052, 89053, 89054, 89055, 89056, 89057]
+    parent_work: WORK-230
+    parent_concepts: [89034, 89035, 89036, 89037, 89038, 89039, 89040, 89041, 89042, 89043, 89044, 89045, 89046, 89047, 89048, 89049, 89050, 89051]
+
+  - item_id: WCBB-2
+    type: bug
+    title: critique-agent tool set lacks Write capability — critique reports not persisted
+    severity: high
+    confidence: 0.98
+    suggested_priority: high
+    description: |
+      critique-agent is invoked with tool set that excludes Write operations. Consequently,
+      critique reports generated during planning phases are never persisted to critique/ directory.
+      They exist in agent memory only and are lost after session ends.
+    root_cause: |
+      Tool set configuration for critique-agent does not include Write tooling. Governance model
+      requires critique artifacts to be persisted for traceability and audit.
+    affected_files:
+      - agents/critique-agent.md
+      - .claude/hooks/pre-tool-use.py
+      - implementation-cycle agents
+    expected_behavior: |
+      critique-agent completes and automatically persists report to {work_id}/critique/{timestamp}.md
+    actual_behavior: |
+      critique-agent completes but report is not written to disk
+    impact: |
+      Loss of governance artifacts. Cannot audit critique findings. Prevents post-hoc analysis of
+      planning assumptions. Violates traceability chain (L4 Requirement → Artifact).
+    affected_workflows:
+      - /new-plan command
+      - implementation-cycle
+      - design-cycle
+    stored_concept_ids: [89058, 89059, 89060, 89061, 89062, 89063]
+    parent_work: WORK-230
+    parent_concepts: [89034, 89035, 89036, 89037, 89038, 89039, 89040, 89041, 89042, 89043, 89044, 89045, 89046, 89047, 89048, 89049, 89050, 89051]
+
+  - item_id: WDN-1
+    type: bug
+    title: Two pre-existing test failures in manifest agent validation
+    severity: medium
+    confidence: 0.99
+    suggested_priority: medium
+    description: |
+      1. test_component_counts_match_file_system: Skills session-review-cycle and process-review-cycle
+         are defined in fixture but not in .claude/agents/manifest.yaml. Test expects manifest to
+         enumerate all skill agents.
+
+      2. test_agent_listed_in_readme: plan-authoring-agent is defined in agents/ directory but not
+         listed in docs/ADR/agents-README.md
+    root_cause: |
+      Manifest and README documentation not kept in sync with agent file definitions. These are
+      regression tests catching divergence.
+    affected_files:
+      - tests/test_manifest.py::test_component_counts_match_file_system
+      - tests/test_manifest.py::test_agent_listed_in_readme
+      - .claude/agents/manifest.yaml
+      - docs/ADR/agents-README.md
+      - .claude/skills/session-review-cycle/
+      - .claude/skills/process-review-cycle/
+    impact: |
+      Test suite has 2 pre-existing failures unrelated to WORK-230. These must be fixed separately
+      to achieve clean test baseline.
+    stored_concept_ids: [89064, 89065, 89066, 89067, 89068]
+    parent_work: WORK-230
+    parent_concepts: [89034, 89035, 89036, 89037, 89038, 89039, 89040, 89041, 89042, 89043, 89044, 89045, 89046, 89047, 89048, 89049, 89050, 89051]
+
+  - item_id: WMI-1
+    type: feature
+    title: No MCP scaffold tools for report and handoff documents
+    severity: medium
+    confidence: 0.90
+    suggested_priority: medium
+    description: |
+      CH-066 WORK-230 exit criterion 2 gap: new-report.md and new-handoff.md remain as Tier 3
+      (just recipe) commands. No MCP equivalents exist for scaffold_report and scaffold_handoff
+      operations.
+    root_cause: |
+      Report and handoff are governance ceremony artifacts that currently require just recipe
+      invocation. mcp__haios-operations__ tool set does not include scaffold tools for these
+      document types.
+    current_state: |
+      - scaffold_plan → MCP ✓
+      - scaffold_work → MCP ✓
+      - scaffold_investigation → MCP ✓
+      - scaffold_checkpoint → MCP ✓
+      - scaffold_adr → MCP ✓
+      - scaffold_report → NOT AVAILABLE (just only)
+      - scaffold_handoff → NOT AVAILABLE (just only)
+    requested_behavior: |
+      Extend mcp__haios-operations__ with:
+      1. scaffold_report(work_id, title) → creates docs/{work_id}/report/{timestamp}.md
+      2. scaffold_handoff(arc_id, title) → creates docs/arcs/{arc_id}/handoff/{timestamp}.md
+    affected_files:
+      - .claude/operations/scaffold.py
+      - .claude/commands/new-report.md
+      - .claude/commands/new-handoff.md
+      - docs/ADR/ADR-045-three-tier-entry-point-architecture.md
+    exit_criterion_dependency: |
+      CH-066 requires: "new-report.md and new-handoff.md use MCP scaffold tools"
+      This feature blocks chapter completion.
+    stored_concept_ids: [89069, 89070, 89071, 89072, 89073, 89074, 89075, 89076, 89077]
+    parent_work: WORK-230
+    parent_concepts: [89034, 89035, 89036, 89037, 89038, 89039, 89040, 89041, 89042, 89043, 89044, 89045, 89046, 89047, 89048, 89049, 89050, 89051]
+
+summary:
+  total_items: 4
+  bugs: 3
+  features: 1
+  refactors: 0
+  upgrades: 0
+  high_priority: 2
+  medium_priority: 2
+  total_stored_concepts: 26
+  extract_concept_ids: [89052, 89053, 89054, 89055, 89056, 89057, 89058, 89059, 89060, 89061, 89062, 89063, 89064, 89065, 89066, 89067, 89068, 89069, 89070, 89071, 89072, 89073, 89074, 89075, 89076, 89077]
+  source_path: retro-extract:WORK-230
+  content_type: techne
+  classification_source: retro-cycle REFLECT phase findings
+  commit_traceability: [89034, 89035, 89036, 89037, 89038, 89039, 89040, 89041, 89042, 89043, 89044, 89045, 89046, 89047, 89048, 89049, 89050, 89051]

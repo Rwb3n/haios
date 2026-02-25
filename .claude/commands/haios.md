@@ -9,10 +9,11 @@ last_updated: 2025-12-22T12:38:59
 
 Ref: @.claude/haios-status.json
 
-1. **Refresh Status** (auto-update from all sources):
+1. **Refresh Status** (update active work item status before reading):
    ```
-   just update-status-slim
+   mcp__haios-operations__hierarchy_update_status(work_id="WORK-XXX", status="active")
    ```
+   Replace `WORK-XXX` with the current work item ID and `active` with its current status.
 
 2. Read the refreshed `.claude/haios-status.json`
 

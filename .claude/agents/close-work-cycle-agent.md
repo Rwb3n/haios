@@ -54,7 +54,7 @@ Parent agent invokes this when:
 3. **Execute** all phases per skill structure:
    - (Prerequisite) retro-cycle must have completed (invoked by /close)
    - VALIDATE: Verify DoD criteria, check plans complete, verify traces_to addressed, review dod_relevant_findings, governance event check
-   - ARCHIVE: Run `just close-work {id}` to update status
+   - ARCHIVE: Run `mcp__haios-operations__hierarchy_close_work(work_id="{id}")` to update status
    - CHAIN: Identify next work, present options
 4. **Return** structured summary to parent
 
@@ -64,7 +64,7 @@ Parent agent invokes this when:
 |------------|------|--------|
 | Entry → VALIDATE | retro-completed | Verify retro-cycle completed (invoked by /close) |
 | VALIDATE → ARCHIVE | dod-validated | Verify all DoD criteria pass, traces_to addressed |
-| ARCHIVE → CHAIN | status-updated | Verify `just close-work` succeeded |
+| ARCHIVE → CHAIN | status-updated | Verify `mcp__haios-operations__hierarchy_close_work` succeeded |
 
 **You MUST report gate results in your output.** If any gate fails, return BLOCKED status.
 
@@ -168,7 +168,7 @@ None
 |------|----------|
 | Work file not found | Return FAIL with blocker |
 | DoD criteria not met | Return BLOCKED with specific failures |
-| `just close-work` fails | Return BLOCKED with error message |
+| `mcp__haios-operations__hierarchy_close_work` fails | Return BLOCKED with error message |
 | No next work in queue | Return PASS with Next Action: "await_operator" |
 | Retro not completed | Return BLOCKED - parent must invoke retro-cycle first |
 

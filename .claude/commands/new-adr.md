@@ -15,15 +15,15 @@ Parse arguments as: `<adr_number> <title>`
 - First argument is the ADR number (e.g., 033)
 - Remaining arguments form the title
 
-Run scaffolding via just recipe:
+Run scaffolding via MCP tool:
 
-```bash
-just adr <adr_number> "<title>"
+```
+mcp__haios-operations__scaffold_adr(adr_number="<adr_number>", title="<title>")
 ```
 
 Example:
-```bash
-just adr 039 "Workflow State Machine"
+```
+mcp__haios-operations__scaffold_adr(adr_number="039", title="Workflow State Machine")
 # Creates: docs/ADR/ADR-039-workflow-state-machine.md
 ```
 
