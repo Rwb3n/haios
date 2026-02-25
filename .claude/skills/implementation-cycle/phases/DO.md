@@ -41,7 +41,10 @@ For plans with `plan_version: "2.0"` in frontmatter, the DO phase dispatches mec
      Write the code. Run the verification command. Report result.
    ')
    ```
-   d. Run the step's `verify` command to confirm output
+   d. Delegate step verification to test-runner haiku subagent:
+      ```
+      Task(subagent_type='test-runner', model='haiku', prompt='Run verification: {step_verify_command}. Report pass/fail.')
+      ```
    e. If verify fails: re-delegate with failure context, or fix inline (max 2 retries)
    f. If verify passes: proceed to next step
 
@@ -65,6 +68,11 @@ For plans without `plan_version: "2.0"`, fall back to inline execution:
 - Tests **MUST** exist before implementation code (in both v1.5 and v2.0 flows)
 - For non-pytest code (PowerShell, configs), define manual verification steps in plan
 - If no tests possible, document why in plan and get operator approval
+- **For v2.0 plans, test runs MUST be delegated to test-runner haiku subagent** (S436 / Memory 88078):
+  ```
+  Task(subagent_type='test-runner', model='haiku', prompt='Run tests: {test_path_or_filter}. Report pass/fail counts and any failures.')
+  ```
+  For v2.0 plans, main agent MUST NOT run pytest inline. Receive structured summary from subagent.
 
 **Exit Criteria:**
 - [ ] All Layer 2 steps verified (v2.0) OR all Implementation Steps complete (v1.5)
@@ -81,4 +89,4 @@ This verifies implementation aligns with Layer 1 Specification / Detailed Design
 
 > **Rationale:** design-review-validation requires judgment (comparing plan intent to code) — sonnet model appropriate. Delegating saves main-agent context for DO phase implementation work.
 
-**Tools:** Write, Edit, Bash(pytest), Task(implementation-cycle-agent), Task(design-review-validation-agent, model=sonnet)
+**Tools:** Write, Edit, Task(test-runner, model=haiku), Task(implementation-cycle-agent), Task(design-review-validation-agent, model=sonnet)

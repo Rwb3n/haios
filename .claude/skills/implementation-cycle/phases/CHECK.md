@@ -12,8 +12,12 @@ just set-cycle implementation-cycle CHECK {work_id}
 **Goal:** Verify implementation meets quality bar.
 
 **Actions:**
-1. Run test suite: `pytest tests/ -v`
-2. Verify all tests pass (no regressions)
+1. **Delegate test suite run to test-runner haiku subagent** (S436 / Memory 88078):
+   ```
+   Task(subagent_type='test-runner', model='haiku', prompt='Run full test suite: pytest tests/ -v --tb=short. Report pass/fail counts, duration, and any failed test names with errors.')
+   ```
+   Main agent MUST NOT run pytest inline. Receive structured summary from subagent.
+2. Verify all tests pass (no regressions) per subagent summary
 3. **DEMO the feature** - Exercise the new code path to surface bugs (Session 90)
 4. Run plan's Ground Truth Verification
 5. Check DoD criteria (ADR-033)
@@ -74,4 +78,4 @@ foresight_prep:
 - [ ] Discoverable artifacts appear in runtime status (or N/A)
 - [ ] (Optional) foresight_prep calibration fields updated
 
-**Tools:** Bash(pytest), Read, Task(test-runner), Task(validation-agent), Task(preflight-checker, model=haiku), /validate, just update-status
+**Tools:** Read, Task(test-runner, model=haiku), Task(validation-agent), Task(preflight-checker, model=haiku), /validate, just update-status

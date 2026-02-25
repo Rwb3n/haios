@@ -29,8 +29,8 @@ Expose work/hierarchy/session/scaffold operations as an MCP server — the agent
 | WORK-220 | MCP Operations Server Core (Phase 1) | Complete | implementation |
 | WORK-221 | Investigation Closure Spawn Completeness | Active | investigation |
 | WORK-222 | StatusPropagator Exit Criteria Validation | Active | investigation |
-| WORK-223 | MCP Operations Extended Tools (Phase 2) | Active | implementation |
-| WORK-224 | MCP Operations Governance Integration (Phase 3) | Active | implementation |
+| WORK-223 | MCP Operations Extended Tools (Phase 2) | Complete | implementation |
+| WORK-224 | MCP Operations Governance Integration (Phase 3) | Complete | implementation |
 
 ---
 

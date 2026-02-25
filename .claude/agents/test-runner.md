@@ -1,18 +1,19 @@
 ---
 name: test-runner
 description: Execute pytest in isolated context. Returns structured pass/fail summary.
-  Use during CHECK phase.
+  Use during DO and CHECK phases.
 tools: Bash, Read
 model: haiku
-requirement_level: optional
+requirement_level: required
 category: utility
 trigger_conditions:
-  - CHECK phase of implementation-cycle
-  - Large test suites benefit from isolated execution
+  - DO phase of implementation-cycle (TDD test runs)
+  - CHECK phase of implementation-cycle (full suite verification)
 input_contract: "test path or filter expression"
 output_contract: "Structured summary with pass/fail counts, duration, failed test names and errors"
 invoked_by:
-  - implementation-cycle (CHECK phase, optional)
+  - implementation-cycle (DO phase, TDD test runs — required)
+  - implementation-cycle (CHECK phase, full suite verification — required)
 related_agents:
   - validation-agent (broader CHECK phase validation)
 id: test-runner
@@ -31,7 +32,10 @@ last_updated: '2026-02-15T21:05:00'
 
 ## Requirement Level
 
-**OPTIONAL** but **RECOMMENDED** during CHECK phase for large test suites.
+**REQUIRED** during DO phase for all pytest test runs.
+**REQUIRED** during CHECK phase for full test suite verification.
+
+Main agent MUST NOT run pytest inline. Delegate all test execution to this subagent (S436 / Memory 88078).
 
 Executes tests in isolated context, returns clean summary to parent.
 

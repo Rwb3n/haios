@@ -3,14 +3,14 @@ template: work_item
 id: WORK-224
 title: MCP Operations Governance Integration (Phase 3)
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-25
 spawned_by: WORK-220
 spawned_children: []
 chapter: CH-066
 arc: call
-closed: null
+closed: '2026-02-25'
 priority: medium
 effort: medium
 traces_to:
@@ -29,16 +29,16 @@ blocked_by:
 - WORK-223
 blocks: []
 enables: []
-queue_position: working
-cycle_phase: DONE
-current_node: DONE
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: 2026-02-25 12:10:11
   exited: 2026-02-25 12:57:00
 - node: PLAN
   entered: 2026-02-25 12:57:00
-  exited: null
+  exited: '2026-02-25T14:11:46.784791'
 artifacts: []
 cycle_docs: {}
 memory_refs:
@@ -53,8 +53,11 @@ memory_refs:
 extensions: {}
 version: '2.0'
 generated: 2026-02-25
-last_updated: '2026-02-25T13:49:26.376778'
-queue_history: []
+last_updated: '2026-02-25T14:11:46.793798'
+queue_history:
+- position: done
+  entered: '2026-02-25T14:11:46.784791'
+  exited: null
 ---
 # WORK-224: MCP Operations Governance Integration (Phase 3)
 

@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-221
-title: "Investigation Closure Spawn Completeness"
+title: Investigation Closure Spawn Completeness
 type: investigation
 status: active
 owner: Hephaestus
@@ -20,25 +20,31 @@ source_files:
 - .claude/skills/investigation-cycle/SKILL.md
 - .claude/skills/close/SKILL.md
 acceptance_criteria:
-- "Root cause identified: why investigation CONCLUDE phase does not enforce spawning all identified work"
-- "Fix or process change proposed to ensure all investigation-identified phases become work items"
+- 'Root cause identified: why investigation CONCLUDE phase does not enforce spawning
+  all identified work'
+- Fix or process change proposed to ensure all investigation-identified phases become
+  work items
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: ready
+cycle_phase: backlog
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-02-25T12:10:11
-    exited: null
+- node: backlog
+  entered: 2026-02-25 12:10:11
+  exited: null
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-25
-last_updated: 2026-02-25T12:10:11
+last_updated: '2026-02-25T12:16:14.284486'
+queue_history:
+- position: ready
+  entered: '2026-02-25T12:16:14.281974'
+  exited: null
 ---
 # WORK-221: Investigation Closure Spawn Completeness
 

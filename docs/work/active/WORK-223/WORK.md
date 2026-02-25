@@ -3,14 +3,14 @@ template: work_item
 id: WORK-223
 title: MCP Operations Extended Tools (Phase 2)
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-25
 spawned_by: WORK-220
 spawned_children: []
 chapter: CH-066
 arc: call
-closed: null
+closed: '2026-02-25'
 priority: high
 effort: medium
 traces_to:
@@ -30,13 +30,13 @@ blocked_by: []
 blocks:
 - WORK-224
 enables: []
-queue_position: working
-cycle_phase: DONE
-current_node: DONE
+queue_position: done
+cycle_phase: done
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: 2026-02-25 12:10:11
-  exited: null
+  exited: '2026-02-25T12:51:35.839896'
 artifacts: []
 cycle_docs: {}
 memory_refs:
@@ -45,16 +45,23 @@ memory_refs:
 - 88788
 - 88789
 - 88790
+- 88791
+- 88792
+- 88793
+- 88794
 extensions: {}
 version: '2.0'
 generated: 2026-02-25
-last_updated: '2026-02-25T12:49:55.618435'
+last_updated: '2026-02-25T12:53:58.431795'
 queue_history:
 - position: ready
   entered: '2026-02-25T12:17:24.371289'
   exited: '2026-02-25T12:17:31.109423'
 - position: working
   entered: '2026-02-25T12:17:31.109423'
+  exited: '2026-02-25T12:51:35.839896'
+- position: done
+  entered: '2026-02-25T12:51:35.839896'
   exited: null
 ---
 # WORK-223: MCP Operations Extended Tools (Phase 2)
