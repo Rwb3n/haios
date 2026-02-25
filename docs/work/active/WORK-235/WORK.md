@@ -20,7 +20,12 @@ queue_history:
 - position: backlog
   entered: '2026-02-25T22:21:23.637728'
   exited: null
-memory_refs: []
+memory_refs:
+- 89078
+- 89079
+- 89080
+- 89081
+- 89082
 documents:
   plans: []
   investigations: []
