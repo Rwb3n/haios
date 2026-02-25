@@ -19712,3 +19712,24 @@
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-02-25T16:29:36.785941", "session_id": 457}
 {"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-221", "agent": "Hephaestus", "timestamp": "2026-02-25T16:29:50.669011", "session_id": 457}
 {"type": "GateViolation", "gate_id": "path_governance", "work_id": "WORK-221", "violation_type": "block", "context": "BLOCKED: Governed path. Use '/new-checkpoint' command instead of raw Write/Edit.", "timestamp": "2026-02-25T16:30:10.750723", "session_id": 457}
+{"type": "SessionEnded", "session": 457, "agent": "Hephaestus", "timestamp": "2026-02-25T16:33:19.228289", "session_id": 457}
+{"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: mutation tools should not be needed during investigation", "session_id": 457}
+{"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-02-25T16:34:04.293308", "session_id": 457}
+{"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-02-25T16:34:04.296320", "session_id": 457}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-25T16:37:27.843442", "session_id": 457}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-228", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-25T16:37:27.854460", "session_id": 457}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-228"], "from": "backlog", "to": "ready", "timestamp": "2026-02-25T16:37:27.864092", "rationale": "Operator directive S457: systematic audit of just recipe consumers needed for CH-066 exit criterion 2"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-25T16:37:27.864092", "session_id": 457}
+{"type": "CyclePhaseEntered", "phase": "EXPLORE", "work_id": "WORK-228", "agent": "Hephaestus", "timestamp": "2026-02-25T16:37:35.836820", "session_id": 457}
+{"type": "CyclePhaseEntered", "phase": "HYPOTHESIZE", "work_id": "WORK-228", "agent": "Hephaestus", "timestamp": "2026-02-25T16:38:13.858713", "session_id": 457}
+{"type": "CyclePhaseEntered", "phase": "VALIDATE", "work_id": "WORK-228", "agent": "Hephaestus", "timestamp": "2026-02-25T16:38:29.795440", "session_id": 457}
+{"type": "CyclePhaseEntered", "phase": "CONCLUDE", "work_id": "WORK-228", "agent": "Hephaestus", "timestamp": "2026-02-25T16:39:34.627332", "session_id": 457}
+{"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "CONCLUDE", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 457}
+{"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-02-25T16:39:52.531595", "session_id": 457}
+{"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-02-25T16:39:52.535181", "session_id": 457}
+{"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "CONCLUDE", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 457}
+{"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-02-25T16:39:53.300524", "session_id": 457}
+{"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-02-25T16:39:53.303576", "session_id": 457}
+{"type": "MCPGateChecked", "tool": "hierarchy_close_work", "primitive": "mcp-mutate", "state": "CONCLUDE", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 457}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-25T16:44:39.967480", "session_id": 457}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-02-25T16:44:40.009777", "session_id": 457}

@@ -1,1 +1,5 @@
 {"t": "spawn", "v": "WORK-227", "w": "WORK-227", "ts": "16:26"}
+{"t": "commit", "v": "$(cat <<'EOF'\nSession 457: WORK-221 clos", "w": "", "ts": "16:32"}
+{"t": "spawn", "v": "WORK-228", "w": "WORK-228", "ts": "16:34"}
+{"t": "spawn", "v": "WORK-229", "w": "WORK-229", "ts": "16:40"}
+{"t": "spawn", "v": "WORK-230", "w": "WORK-230", "ts": "16:40"}
