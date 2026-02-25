@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-224
-title: "MCP Operations Governance Integration (Phase 3)"
+title: MCP Operations Governance Integration (Phase 3)
 type: implementation
 status: active
 owner: Hephaestus
@@ -21,27 +21,40 @@ source_files:
 - .claude/haios/haios_ops/mcp_server.py
 - .claude/haios/modules/governance_layer.py
 acceptance_criteria:
-- "GovernanceLayer.check_activity() called per-tool in mcp_server.py"
-- "Ceremony contract validation enforced for mutation tools"
-- "Governance events logged for all MCP tool invocations"
-- "Tests verify governance gate enforcement"
-blocked_by: [WORK-223]
+- GovernanceLayer.check_activity() called per-tool in mcp_server.py
+- Ceremony contract validation enforced for mutation tools
+- Governance events logged for all MCP tool invocations
+- Tests verify governance gate enforcement
+blocked_by:
+- WORK-223
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: working
+cycle_phase: DONE
+current_node: DONE
 node_history:
-  - node: backlog
-    entered: 2026-02-25T12:10:11
-    exited: null
+- node: backlog
+  entered: 2026-02-25 12:10:11
+  exited: 2026-02-25 12:57:00
+- node: PLAN
+  entered: 2026-02-25 12:57:00
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 88796
+- 88797
+- 88798
+- 88799
+- 88800
+- 88801
+- 88802
+- 88803
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-25
-last_updated: 2026-02-25T12:10:11
+last_updated: '2026-02-25T13:49:26.376778'
+queue_history: []
 ---
 # WORK-224: MCP Operations Governance Integration (Phase 3)
 
@@ -71,14 +84,21 @@ WORK-220 (Phase 1) deferred GovernanceLayer integration per WORK-218 finding F3.
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] GovernanceLayer.check_activity() integrated per-tool in mcp_server.py
-- [ ] Ceremony contract validation for mutation tools (work_create, work_close, queue_commit, etc.)
-- [ ] Governance events logged for MCP tool invocations
-- [ ] Tests verify governance enforcement and bypass rejection
+- [x] GovernanceLayer.check_activity() integrated per-tool in mcp_server.py
+- [x] Ceremony contract validation for mutation tools (work_create, work_close, queue_commit, etc.)
+- [x] Governance events logged for MCP tool invocations
+- [x] Tests verify governance enforcement and bypass rejection
 
 ---
 
 ## History
+
+### 2026-02-25 - Completed (Session 453)
+- 3 helpers: _get_current_state, _check_tool_gate, _log_governance_gate
+- All 24 MCP tools gated with check_activity per-tool
+- 5 new activity matrix primitives: mcp-mutate, mcp-queue, mcp-scaffold, mcp-session, mcp-cascade
+- 8 new tests (Tests 29-36), 36 total pass, zero regressions
+- Memory: 88796-88803
 
 ### 2026-02-25 - Created (Session 451)
 - Initial creation

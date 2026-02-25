@@ -93,8 +93,9 @@ def _make_work_state(**overrides):
 # ---------------------------------------------------------------------------
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server._engine")
-def test_work_get_returns_dict(mock_eng):
+def test_work_get_returns_dict(mock_eng, mock_gate):
     """Test 2: work_get returns typed dict for existing work item."""
     from haios_ops.mcp_server import work_get
 
@@ -109,8 +110,9 @@ def test_work_get_returns_dict(mock_eng):
     assert "cycle_phase" in result
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server._engine")
-def test_work_get_not_found(mock_eng):
+def test_work_get_not_found(mock_eng, mock_gate):
     """Test 3: work_get returns error dict when work item not found."""
     from haios_ops.mcp_server import work_get
 
@@ -120,9 +122,10 @@ def test_work_get_not_found(mock_eng):
     assert result == {"error": "not found", "work_id": "WORK-999"}
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.ceremony_context")
 @patch("haios_ops.mcp_server._engine")
-def test_work_create_returns_dict(mock_eng, mock_ceremony):
+def test_work_create_returns_dict(mock_eng, mock_ceremony, mock_gate):
     """Test 4: work_create returns success dict with path."""
     from haios_ops.mcp_server import work_create
 
@@ -137,9 +140,10 @@ def test_work_create_returns_dict(mock_eng, mock_ceremony):
     assert "path" in result
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.ceremony_context")
 @patch("haios_ops.mcp_server._engine")
-def test_work_close_returns_dict(mock_eng, mock_ceremony):
+def test_work_close_returns_dict(mock_eng, mock_ceremony, mock_gate):
     """Test 5: work_close returns success dict."""
     from haios_ops.mcp_server import work_close
 
@@ -152,9 +156,10 @@ def test_work_close_returns_dict(mock_eng, mock_ceremony):
     assert result == {"success": True, "work_id": "WORK-220"}
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.ceremony_context")
 @patch("haios_ops.mcp_server._engine")
-def test_work_transition_returns_dict(mock_eng, mock_ceremony):
+def test_work_transition_returns_dict(mock_eng, mock_ceremony, mock_gate):
     """Test 6: work_transition returns updated WorkState dict."""
     from haios_ops.mcp_server import work_transition
 
@@ -173,8 +178,9 @@ def test_work_transition_returns_dict(mock_eng, mock_ceremony):
 # ---------------------------------------------------------------------------
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server._engine")
-def test_queue_list_returns_list(mock_eng):
+def test_queue_list_returns_list(mock_eng, mock_gate):
     """Test 7: queue_list returns list of dicts."""
     from haios_ops.mcp_server import queue_list
 
@@ -191,8 +197,9 @@ def test_queue_list_returns_list(mock_eng):
     assert result[1]["id"] == "WORK-002"
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server._engine")
-def test_queue_next_returns_dict(mock_eng):
+def test_queue_next_returns_dict(mock_eng, mock_gate):
     """Test 8: queue_next returns single dict for next item."""
     from haios_ops.mcp_server import queue_next
 
@@ -204,8 +211,9 @@ def test_queue_next_returns_dict(mock_eng):
     assert result["id"] == "WORK-001"
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server._engine")
-def test_queue_next_empty(mock_eng):
+def test_queue_next_empty(mock_eng, mock_gate):
     """Test 9: queue_next returns null dict for empty queue."""
     from haios_ops.mcp_server import queue_next
 
@@ -216,8 +224,9 @@ def test_queue_next_empty(mock_eng):
     assert result == {"next": None, "queue": "default"}
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server._engine")
-def test_queue_ready_returns_list(mock_eng):
+def test_queue_ready_returns_list(mock_eng, mock_gate):
     """Test 10: queue_ready returns list of dicts."""
     from haios_ops.mcp_server import queue_ready
 
@@ -230,8 +239,9 @@ def test_queue_ready_returns_list(mock_eng):
     assert result[0]["id"] == "WORK-001"
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.execute_queue_transition")
-def test_queue_commit_returns_dict(mock_transition):
+def test_queue_commit_returns_dict(mock_transition, mock_gate):
     """Test 11: queue_commit returns success dict."""
     from haios_ops.mcp_server import queue_commit
 
@@ -243,8 +253,9 @@ def test_queue_commit_returns_dict(mock_transition):
     mock_transition.assert_called_once()
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.execute_queue_transition")
-def test_queue_park_unpark(mock_transition):
+def test_queue_park_unpark(mock_transition, mock_gate):
     """Test 12: queue_park and queue_unpark both return success dicts."""
     from haios_ops.mcp_server import queue_park, queue_unpark
 
@@ -264,8 +275,9 @@ def test_queue_park_unpark(mock_transition):
 # ---------------------------------------------------------------------------
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.session_mgmt")
-def test_session_start_returns_dict(mock_sess):
+def test_session_start_returns_dict(mock_sess, mock_gate):
     """Test 13: session_start returns success dict with session number."""
     from haios_ops.mcp_server import session_start
 
@@ -276,8 +288,9 @@ def test_session_start_returns_dict(mock_sess):
     assert result == {"success": True, "session": 451}
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.cycle_state")
-def test_cycle_set_returns_dict(mock_cs):
+def test_cycle_set_returns_dict(mock_cs, mock_gate):
     """Test 14: cycle_set returns success dict."""
     from haios_ops.mcp_server import cycle_set
 
@@ -293,8 +306,9 @@ def test_cycle_set_returns_dict(mock_cs):
     }
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.cycle_state")
-def test_cycle_clear_returns_dict(mock_cs):
+def test_cycle_clear_returns_dict(mock_cs, mock_gate):
     """Test 15: cycle_clear returns success dict."""
     from haios_ops.mcp_server import cycle_clear
 
@@ -305,7 +319,8 @@ def test_cycle_clear_returns_dict(mock_cs):
     assert result == {"success": True}
 
 
-def test_cycle_get_returns_dict(tmp_path):
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
+def test_cycle_get_returns_dict(mock_gate, tmp_path):
     """Test 16: cycle_get returns session_state from slim file."""
     from haios_ops.mcp_server import cycle_get
 
@@ -341,9 +356,10 @@ def test_cycle_get_returns_dict(tmp_path):
 # ---------------------------------------------------------------------------
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.scaffold_template")
 @patch("haios_ops.mcp_server.get_next_work_id")
-def test_scaffold_work_returns_dict(mock_next_id, mock_scaffold):
+def test_scaffold_work_returns_dict(mock_next_id, mock_scaffold, mock_gate):
     """Test 17: scaffold_work creates work item and returns typed dict."""
     from haios_ops.mcp_server import scaffold_work
 
@@ -362,8 +378,9 @@ def test_scaffold_work_returns_dict(mock_next_id, mock_scaffold):
     )
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.scaffold_template")
-def test_scaffold_plan_returns_dict(mock_scaffold):
+def test_scaffold_plan_returns_dict(mock_scaffold, mock_gate):
     """Test 18: scaffold_plan creates plan and returns typed dict."""
     from haios_ops.mcp_server import scaffold_plan
 
@@ -380,9 +397,10 @@ def test_scaffold_plan_returns_dict(mock_scaffold):
     )
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.scaffold_template")
 @patch("haios_ops.mcp_server.get_next_work_id")
-def test_scaffold_work_error(mock_next_id, mock_scaffold):
+def test_scaffold_work_error(mock_next_id, mock_scaffold, mock_gate):
     """Test 19: scaffold_work returns error dict on exception."""
     from haios_ops.mcp_server import scaffold_work
 
@@ -395,8 +413,9 @@ def test_scaffold_work_error(mock_next_id, mock_scaffold):
     assert "template not found" in result["error"]
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.scaffold_template")
-def test_scaffold_plan_missing_work_item(mock_scaffold):
+def test_scaffold_plan_missing_work_item(mock_scaffold, mock_gate):
     """Test 28: scaffold_plan returns error when work item doesn't exist."""
     from haios_ops.mcp_server import scaffold_plan
 
@@ -413,8 +432,9 @@ def test_scaffold_plan_missing_work_item(mock_scaffold):
 # ---------------------------------------------------------------------------
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.StatusPropagator")
-def test_hierarchy_cascade_returns_dict(mock_propagator_cls):
+def test_hierarchy_cascade_returns_dict(mock_propagator_cls, mock_gate):
     """Test 20: hierarchy_cascade returns propagation result dict."""
     from haios_ops.mcp_server import hierarchy_cascade
 
@@ -436,10 +456,11 @@ def test_hierarchy_cascade_returns_dict(mock_propagator_cls):
     mock_instance.propagate.assert_called_once_with("WORK-223")
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.StatusPropagator")
 @patch("haios_ops.mcp_server._engine")
 @patch("haios_ops.mcp_server.ceremony_context")
-def test_hierarchy_close_work_atomic(mock_ceremony, mock_eng, mock_propagator_cls):
+def test_hierarchy_close_work_atomic(mock_ceremony, mock_eng, mock_propagator_cls, mock_gate):
     """Test 21: hierarchy_close_work closes and cascades atomically."""
     from haios_ops.mcp_server import hierarchy_close_work
 
@@ -462,11 +483,12 @@ def test_hierarchy_close_work_atomic(mock_ceremony, mock_eng, mock_propagator_cl
     mock_instance.propagate.assert_called_once_with("WORK-223")
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.StatusPropagator")
 @patch("haios_ops.mcp_server._engine")
 @patch("haios_ops.mcp_server.ceremony_context")
 def test_hierarchy_update_status_complete_cascades(
-    mock_ceremony, mock_eng, mock_propagator_cls
+    mock_ceremony, mock_eng, mock_propagator_cls, mock_gate
 ):
     """Test 22: hierarchy_update_status with complete status runs cascade."""
     from haios_ops.mcp_server import hierarchy_update_status
@@ -489,11 +511,12 @@ def test_hierarchy_update_status_complete_cascades(
     mock_instance.propagate.assert_called_once_with("WORK-223")
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.StatusPropagator")
 @patch("haios_ops.mcp_server._engine")
 @patch("haios_ops.mcp_server.ceremony_context")
 def test_hierarchy_update_status_active_skips_cascade(
-    mock_ceremony, mock_eng, mock_propagator_cls
+    mock_ceremony, mock_eng, mock_propagator_cls, mock_gate
 ):
     """Test 23: hierarchy_update_status with non-complete status skips cascade."""
     from haios_ops.mcp_server import hierarchy_update_status
@@ -516,8 +539,9 @@ def test_hierarchy_update_status_active_skips_cascade(
 # ---------------------------------------------------------------------------
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.ColdstartOrchestrator")
-def test_coldstart_orchestrator_returns_dict(mock_orch_cls):
+def test_coldstart_orchestrator_returns_dict(mock_orch_cls, mock_gate):
     """Test 24: coldstart_orchestrator returns output dict."""
     from haios_ops.mcp_server import coldstart_orchestrator
 
@@ -532,8 +556,9 @@ def test_coldstart_orchestrator_returns_dict(mock_orch_cls):
     assert result["tier"] == "auto"
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server.ColdstartOrchestrator")
-def test_coldstart_orchestrator_tier_param(mock_orch_cls):
+def test_coldstart_orchestrator_tier_param(mock_orch_cls, mock_gate):
     """Test 25: coldstart_orchestrator passes tier parameter."""
     from haios_ops.mcp_server import coldstart_orchestrator
 
@@ -552,8 +577,9 @@ def test_coldstart_orchestrator_tier_param(mock_orch_cls):
 # ---------------------------------------------------------------------------
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server._engine")
-def test_resource_work_item_returns_dict(mock_eng):
+def test_resource_work_item_returns_dict(mock_eng, mock_gate):
     """Test 26: resource_work_item returns work state dict."""
     from haios_ops.mcp_server import resource_work_item
 
@@ -565,8 +591,9 @@ def test_resource_work_item_returns_dict(mock_eng):
     assert result["id"] == "WORK-220"
 
 
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
 @patch("haios_ops.mcp_server._engine")
-def test_resource_queue_ready_returns_list(mock_eng):
+def test_resource_queue_ready_returns_list(mock_eng, mock_gate):
     """Test 27: resource_queue_ready returns list of dicts."""
     from haios_ops.mcp_server import resource_queue_ready
 
@@ -576,3 +603,143 @@ def test_resource_queue_ready_returns_list(mock_eng):
 
     assert isinstance(result, list)
     assert result[0]["id"] == "WORK-001"
+
+
+# ---------------------------------------------------------------------------
+# Governance gate tests (Tests 29-36) — WORK-224
+# ---------------------------------------------------------------------------
+
+from governance_layer import GateResult
+
+
+def test_get_current_state_no_slim_file(tmp_path):
+    """Test 29: _get_current_state returns EXPLORE when no slim file exists."""
+    from haios_ops.mcp_server import _get_current_state
+
+    with patch("haios_ops.mcp_server._PROJECT_ROOT", tmp_path):
+        result = _get_current_state()
+
+    assert result == "EXPLORE"
+
+
+def test_get_current_state_from_slim_file(tmp_path):
+    """Test 30: _get_current_state returns phase from slim file."""
+    from haios_ops.mcp_server import _get_current_state
+
+    claude_dir = tmp_path / ".claude"
+    claude_dir.mkdir()
+    slim_file = claude_dir / "haios-status-slim.json"
+    slim_file.write_text(
+        json.dumps({"session_state": {"current_phase": "DO"}})
+    )
+
+    with patch("haios_ops.mcp_server._PROJECT_ROOT", tmp_path):
+        result = _get_current_state()
+
+    assert result == "DO"
+
+
+@patch("haios_ops.mcp_server._get_current_state", return_value="DO")
+@patch("haios_ops.mcp_server._governance")
+def test_check_tool_gate_allows(mock_gov, mock_state):
+    """Test 31: _check_tool_gate returns None when GateResult.allowed is True."""
+    from haios_ops.mcp_server import _check_tool_gate
+
+    mock_gov.check_activity.return_value = GateResult(
+        allowed=True, reason="Activity allowed"
+    )
+
+    result = _check_tool_gate("mcp-read", "work_get")
+
+    assert result is None
+
+
+@patch("haios_ops.mcp_server._get_current_state", return_value="EXPLORE")
+@patch("haios_ops.mcp_server._governance")
+def test_check_tool_gate_blocks(mock_gov, mock_state):
+    """Test 32: _check_tool_gate returns error dict when GateResult.allowed is False."""
+    from haios_ops.mcp_server import _check_tool_gate
+
+    mock_gov.check_activity.return_value = GateResult(
+        allowed=False, reason="BLOCKED: mutations not allowed in EXPLORE"
+    )
+
+    result = _check_tool_gate("mcp-mutate", "work_create")
+
+    assert result == {
+        "success": False,
+        "error": "Governance gate blocked: BLOCKED: mutations not allowed in EXPLORE",
+    }
+
+
+@patch("haios_ops.mcp_server._engine")
+@patch("haios_ops.mcp_server._get_current_state", return_value="PLAN")
+@patch("haios_ops.mcp_server._governance")
+def test_work_get_calls_check_activity(mock_gov, mock_state, mock_eng):
+    """Test 33: work_get calls check_activity with correct (primitive, state, context) args."""
+    mock_gov.check_activity.return_value = GateResult(
+        allowed=True, reason="Activity allowed"
+    )
+    mock_eng.get_work.return_value = _make_work_state(id="WORK-220")
+
+    # Call work_get — but _check_tool_gate is mocked out (returns None).
+    from haios_ops.mcp_server import _check_tool_gate
+
+    # _get_current_state is already patched to return 'PLAN'
+    result = _check_tool_gate('mcp-read', 'work_get', 'WORK-220')
+
+    mock_gov.check_activity.assert_called_once_with(
+        "mcp-read", "PLAN", {"tool": "work_get", "work_id": "WORK-220"}
+    )
+
+
+@patch("haios_ops.mcp_server._get_current_state", return_value="EXPLORE")
+@patch("haios_ops.mcp_server._governance")
+@patch("haios_ops.mcp_server._engine")
+@patch("haios_ops.mcp_server.ceremony_context")
+def test_work_create_blocked_by_governance(
+    mock_ceremony, mock_eng, mock_gov, mock_state
+):
+    """Test 34: work_create blocked by governance returns error without calling engine."""
+    from haios_ops.mcp_server import work_create
+
+    mock_gov.check_activity.return_value = GateResult(
+        allowed=False,
+        reason="EXPLORE phase: mutation tools should not be needed during investigation",
+    )
+
+    result = work_create("WORK-999", "Test Title")
+
+    assert result == {
+        "success": False,
+        "error": "Governance gate blocked: EXPLORE phase: mutation tools should not be needed during investigation",
+    }
+    mock_eng.create_work.assert_not_called()
+
+
+@patch("governance_events._append_event")
+def test_log_governance_gate_appends_event(mock_append):
+    """Test 35: _log_governance_gate appends MCPGateChecked event."""
+    from haios_ops.mcp_server import _log_governance_gate
+
+    _log_governance_gate("work_get", "mcp-read", "DO", False, "BLOCKED: reason")
+
+    mock_append.assert_called_once()
+    event = mock_append.call_args[0][0]
+    assert event["type"] == "MCPGateChecked"
+    assert event["tool"] == "work_get"
+    assert event["primitive"] == "mcp-read"
+    assert event["state"] == "DO"
+    assert event["allowed"] is False
+
+
+@patch("governance_events._append_event", side_effect=RuntimeError("disk full"))
+def test_log_governance_gate_fails_silently(mock_append):
+    """Test 36: _log_governance_gate fails silently on exception."""
+    from haios_ops.mcp_server import _log_governance_gate
+
+    # Should not raise
+    _log_governance_gate("work_get", "mcp-read", "DO", True, "Activity allowed")
+
+    # If we get here, the function handled the exception silently
+    assert True

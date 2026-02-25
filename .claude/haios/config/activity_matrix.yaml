@@ -152,6 +152,32 @@ rules:
   mcp-read:
     _all_states: {action: allow}
 
+  # MCP Operations Server primitives (WORK-224)
+  mcp-mutate:
+    EXPLORE: {action: warn, message: "EXPLORE phase: mutation tools should not be needed during investigation"}
+    DESIGN: {action: warn, message: "DESIGN phase: mutation tools should not be needed during design"}
+    PLAN: {action: allow}
+    DO: {action: allow}
+    CHECK: {action: warn, message: "CHECK phase: mutations should be rare — only fixes"}
+    DONE: {action: allow}
+
+  mcp-queue:
+    _all_states: {action: allow}
+
+  mcp-scaffold:
+    EXPLORE: {action: warn, message: "EXPLORE phase: scaffolding new items during investigation is unusual"}
+    DESIGN: {action: allow}
+    PLAN: {action: allow}
+    DO: {action: allow}
+    CHECK: {action: allow}
+    DONE: {action: allow}
+
+  mcp-session:
+    _all_states: {action: allow}
+
+  mcp-cascade:
+    _all_states: {action: allow}
+
 # =============================================================================
 # Skill Restrictions (per CH-001 "Skill Restrictions in DO")
 # =============================================================================

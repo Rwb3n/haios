@@ -65,6 +65,74 @@ def _work_to_dict(work: WorkState) -> Dict[str, Any]:
     return d
 
 
+def _get_current_state() -> str:
+    """Get current governance state from haios-status-slim.json.
+
+    Reads directly from haios-status-slim.json (NOT get_activity_state() which
+    shells out to `just get-cycle` — unavailable inside MCP server process).
+    Fail-open: returns EXPLORE when no cycle is active (per CH-003).
+    """
+    try:
+        slim_file = _PROJECT_ROOT / ".claude" / "haios-status-slim.json"
+        if not slim_file.exists():
+            return "EXPLORE"
+        data = json.loads(slim_file.read_text(encoding="utf-8"))
+        session_state = data.get("session_state", {})
+        phase = session_state.get("current_phase")
+        return phase if phase else "EXPLORE"
+    except Exception:
+        return "EXPLORE"
+
+
+def _check_tool_gate(
+    primitive: str,
+    tool_name: str,
+    work_id: str = "unknown",
+) -> Optional[Dict[str, Any]]:
+    """Check governance gate for an MCP tool invocation.
+
+    Returns None if allowed (caller proceeds normally).
+    Returns error dict if blocked (caller returns this immediately).
+
+    Args:
+        primitive: MCP primitive type (e.g., "mcp-read", "mcp-mutate")
+        tool_name: Tool function name for context/logging (e.g., "work_get")
+        work_id: Work item ID if available, else "unknown"
+    """
+    state = _get_current_state()
+    context = {"tool": tool_name, "work_id": work_id}
+    result = _governance.check_activity(primitive, state, context)
+    # Only log non-trivial gate decisions (blocked or warned) to avoid
+    # unbounded governance-events.jsonl growth from always-allowed reads.
+    if not result.allowed or result.reason != "Activity allowed":
+        _log_governance_gate(tool_name, primitive, state, result.allowed, result.reason)
+    if not result.allowed:
+        return {"success": False, "error": f"Governance gate blocked: {result.reason}"}
+    return None
+
+
+def _log_governance_gate(
+    tool_name: str,
+    primitive: str,
+    state: str,
+    allowed: bool,
+    reason: str,
+) -> None:
+    """Log MCP governance gate decision to governance-events.jsonl."""
+    try:
+        from governance_events import _append_event
+        _append_event({
+            "type": "MCPGateChecked",
+            "tool": tool_name,
+            "primitive": primitive,
+            "state": state,
+            "allowed": allowed,
+            "reason": reason,
+        })
+    except Exception:
+        pass  # Fail-permissive — gate logging must not break tool execution
+
+
 # ---------------------------------------------------------------------------
 # Work tools
 # ---------------------------------------------------------------------------
@@ -79,6 +147,9 @@ def work_get(work_id: str) -> Dict[str, Any]:
     Returns:
         Typed dict of WorkState fields, or {"error": ..., "work_id": ...} if not found.
     """
+    blocked = _check_tool_gate("mcp-read", "work_get", work_id)
+    if blocked:
+        return blocked
     work = _engine.get_work(work_id)
     if work is None:
         return {"error": "not found", "work_id": work_id}
@@ -103,6 +174,9 @@ def work_create(
     Returns:
         {"success": True, "path": "<work_md_path>"} or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-mutate", "work_create", work_id)
+    if blocked:
+        return blocked
     try:
         with ceremony_context("create-work"):
             path = _engine.create_work(
@@ -127,6 +201,9 @@ def work_close(work_id: str) -> Dict[str, Any]:
     Returns:
         {"success": True, "work_id": "..."} or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-mutate", "work_close", work_id)
+    if blocked:
+        return blocked
     try:
         with ceremony_context("close-work"):
             _engine.close(work_id)
@@ -149,6 +226,9 @@ def work_transition(work_id: str, to_node: str) -> Dict[str, Any]:
     Returns:
         Updated WorkState dict, or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-mutate", "work_transition", work_id)
+    if blocked:
+        return blocked
     try:
         with ceremony_context("transition-work"):
             work = _engine.transition(work_id, to_node)
@@ -171,6 +251,9 @@ def queue_ready() -> List[Dict[str, Any]]:
     Returns:
         List of WorkState dicts (may be empty).
     """
+    blocked = _check_tool_gate("mcp-read", "queue_ready")
+    if blocked:
+        return []
     items = _engine.get_ready()
     return [_work_to_dict(w) for w in items]
 
@@ -185,6 +268,9 @@ def queue_list(queue_name: str = "default") -> List[Dict[str, Any]]:
     Returns:
         Ordered list of WorkState dicts.
     """
+    blocked = _check_tool_gate("mcp-read", "queue_list")
+    if blocked:
+        return []
     items = _engine.get_queue(queue_name)
     return [_work_to_dict(w) for w in items]
 
@@ -199,6 +285,9 @@ def queue_next(queue_name: str = "default") -> Dict[str, Any]:
     Returns:
         WorkState dict of next item, or {"next": null, "queue": "<name>"} if empty.
     """
+    blocked = _check_tool_gate("mcp-read", "queue_next")
+    if blocked:
+        return {"error": "governance gate blocked", "queue": queue_name}
     work = _engine.get_next(queue_name)
     if work is None:
         return {"next": None, "queue": queue_name}
@@ -216,6 +305,9 @@ def queue_prioritize(work_id: str, rationale: str = "") -> Dict[str, Any]:
     Returns:
         {"success": True} or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-queue", "queue_prioritize", work_id)
+    if blocked:
+        return blocked
     result = execute_queue_transition(
         _engine, work_id, "ready", "Prioritize", rationale=rationale or None
     )
@@ -235,6 +327,9 @@ def queue_commit(work_id: str, rationale: str = "") -> Dict[str, Any]:
     Returns:
         {"success": True} or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-queue", "queue_commit", work_id)
+    if blocked:
+        return blocked
     result = execute_queue_transition(
         _engine, work_id, "working", "Commit", rationale=rationale or None
     )
@@ -254,6 +349,9 @@ def queue_park(work_id: str, rationale: str = "") -> Dict[str, Any]:
     Returns:
         {"success": True} or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-queue", "queue_park", work_id)
+    if blocked:
+        return blocked
     result = execute_queue_transition(
         _engine, work_id, "parked", "Park", rationale=rationale or None
     )
@@ -273,6 +371,9 @@ def queue_unpark(work_id: str, rationale: str = "") -> Dict[str, Any]:
     Returns:
         {"success": True} or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-queue", "queue_unpark", work_id)
+    if blocked:
+        return blocked
     result = execute_queue_transition(
         _engine, work_id, "backlog", "Unpark", rationale=rationale or None
     )
@@ -296,6 +397,9 @@ def session_start(session_number: int, agent: str = "Hephaestus") -> Dict[str, A
     Returns:
         {"success": True, "session": <n>} or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-session", "session_start")
+    if blocked:
+        return blocked
     ok = session_mgmt.start_session(session_number, agent=agent)
     if ok:
         return {"success": True, "session": session_number}
@@ -313,6 +417,9 @@ def session_end(session_number: int, agent: str = "Hephaestus") -> Dict[str, Any
     Returns:
         {"success": True, "session": <n>} or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-session", "session_end")
+    if blocked:
+        return blocked
     try:
         from governance_events import log_session_end
         log_session_end(session_number, agent)
@@ -334,6 +441,9 @@ def cycle_set(cycle: str, phase: str, work_id: str) -> Dict[str, Any]:
     Returns:
         {"success": True} or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-session", "cycle_set", work_id)
+    if blocked:
+        return blocked
     ok = cycle_state.set_cycle_state(cycle, phase, work_id)
     if ok:
         return {"success": True, "cycle": cycle, "phase": phase, "work_id": work_id}
@@ -352,6 +462,9 @@ def cycle_get(project_root: Optional[Path] = None) -> Dict[str, Any]:
         Session state dict with keys: active_cycle, current_phase, work_id,
         entered_at, active_queue, phase_history. Or {"error": "..."} on failure.
     """
+    blocked = _check_tool_gate("mcp-read", "cycle_get")
+    if blocked:
+        return {"error": "governance gate blocked"}
     try:
         root = project_root or _PROJECT_ROOT
         slim_file = root / ".claude" / "haios-status-slim.json"
@@ -371,6 +484,9 @@ def cycle_clear() -> Dict[str, Any]:
     Returns:
         {"success": True} or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-session", "cycle_clear")
+    if blocked:
+        return blocked
     ok = cycle_state.clear_cycle_state()
     if ok:
         return {"success": True}
@@ -398,6 +514,9 @@ def scaffold_work(
         {"success": True, "path": "<work_md_path>", "work_id": "<id>"}
         or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-scaffold", "scaffold_work")
+    if blocked:
+        return blocked
     try:
         backlog_id = work_id or get_next_work_id()
         path = scaffold_template(
@@ -428,6 +547,9 @@ def scaffold_plan(
     Returns:
         {"success": True, "path": "<plan_md_path>"} or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-scaffold", "scaffold_plan", work_id)
+    if blocked:
+        return blocked
     try:
         path = scaffold_template(
             "implementation_plan",
@@ -456,6 +578,9 @@ def hierarchy_cascade(work_id: str) -> Dict[str, Any]:
         Dict with keys: action, work_id, chapter, arc, arc_updated, arc_complete.
         action: no_hierarchy | chapter_incomplete | chapter_completed | arc_completed
     """
+    blocked = _check_tool_gate("mcp-cascade", "hierarchy_cascade", work_id)
+    if blocked:
+        return blocked
     try:
         propagator = StatusPropagator()
         return propagator.propagate(work_id)
@@ -485,6 +610,9 @@ def hierarchy_update_status(
         {"success": True, "work_id": ..., "status": ..., "cascade": <propagate result>}
         or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-mutate", "hierarchy_update_status", work_id)
+    if blocked:
+        return blocked
     try:
         with ceremony_context("update-status"):
             work = _engine.get_work(work_id)
@@ -523,6 +651,9 @@ def hierarchy_close_work(work_id: str) -> Dict[str, Any]:
         {"success": True, "work_id": ..., "cascade": <propagate result>}
         or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-mutate", "hierarchy_close_work", work_id)
+    if blocked:
+        return blocked
     try:
         with ceremony_context("close-work"):
             _engine.close(work_id)
@@ -558,6 +689,9 @@ def coldstart_orchestrator(tier: str = "auto") -> Dict[str, Any]:
         {"success": True, "output": "<coldstart text>", "tier": "<tier>"}
         or {"success": False, "error": "..."}
     """
+    blocked = _check_tool_gate("mcp-cascade", "coldstart_orchestrator")
+    if blocked:
+        return blocked
     try:
         orch = ColdstartOrchestrator()
         output = orch.run(tier=tier)
@@ -578,6 +712,9 @@ def resource_work_item(work_id: str) -> Dict[str, Any]:
     URI pattern: work://WORK-223
     Returns typed WorkState dict or {"error": "not found", "work_id": ...}.
     """
+    blocked = _check_tool_gate("mcp-read", "resource_work_item", work_id)
+    if blocked:
+        return {"error": "governance gate blocked", "work_id": work_id}
     work = _engine.get_work(work_id)
     if work is None:
         return {"error": "not found", "work_id": work_id}
@@ -591,6 +728,9 @@ def resource_queue_ready() -> List[Dict[str, Any]]:
     URI pattern: haios://queue/ready
     Returns list of WorkState dicts for all unblocked active items.
     """
+    blocked = _check_tool_gate("mcp-read", "resource_queue_ready")
+    if blocked:
+        return []
     items = _engine.get_ready()
     return [_work_to_dict(w) for w in items]
 
@@ -602,6 +742,9 @@ def resource_queue(queue_name: str) -> List[Dict[str, Any]]:
     URI pattern: haios://queue/default
     Returns ordered list of WorkState dicts.
     """
+    blocked = _check_tool_gate("mcp-read", "resource_queue")
+    if blocked:
+        return []
     items = _engine.get_queue(queue_name)
     return [_work_to_dict(w) for w in items]
 
