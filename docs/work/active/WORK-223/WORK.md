@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-223
-title: "MCP Operations Extended Tools (Phase 2)"
+title: MCP Operations Extended Tools (Phase 2)
 type: implementation
 status: active
 owner: Hephaestus
@@ -20,29 +20,42 @@ requirement_refs: []
 source_files:
 - .claude/haios/haios_ops/mcp_server.py
 acceptance_criteria:
-- "Scaffold tools added: scaffold_work, scaffold_plan (wrapping scaffold_template)"
-- "Hierarchy tools added: cascade, update_status, close_work (wrapping just recipes)"
-- "Coldstart tool added: coldstart_orchestrator (wrapping cli.py coldstart)"
-- "MCP Resources for read-only queries (CQRS pattern from WORK-218 F2)"
-- "All new tools return typed JSON dicts"
-- "Tests cover all new tool groups"
+- 'Scaffold tools added: scaffold_work, scaffold_plan (wrapping scaffold_template)'
+- 'Hierarchy tools added: cascade, update_status, close_work (wrapping just recipes)'
+- 'Coldstart tool added: coldstart_orchestrator (wrapping cli.py coldstart)'
+- MCP Resources for read-only queries (CQRS pattern from WORK-218 F2)
+- All new tools return typed JSON dicts
+- Tests cover all new tool groups
 blocked_by: []
-blocks: [WORK-224]
+blocks:
+- WORK-224
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: working
+cycle_phase: DONE
+current_node: DONE
 node_history:
-  - node: backlog
-    entered: 2026-02-25T12:10:11
-    exited: null
+- node: backlog
+  entered: 2026-02-25 12:10:11
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 88786
+- 88787
+- 88788
+- 88789
+- 88790
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-25
-last_updated: 2026-02-25T12:10:11
+last_updated: '2026-02-25T12:49:55.618435'
+queue_history:
+- position: ready
+  entered: '2026-02-25T12:17:24.371289'
+  exited: '2026-02-25T12:17:31.109423'
+- position: working
+  entered: '2026-02-25T12:17:31.109423'
+  exited: null
 ---
 # WORK-223: MCP Operations Extended Tools (Phase 2)
 
@@ -72,11 +85,11 @@ WORK-220 (Phase 1) delivered work, queue, and session tools. But agents still ca
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Scaffold tool group added to haios_ops/mcp_server.py
-- [ ] Hierarchy/status tool group added (cascade, update_status, close_work)
-- [ ] Coldstart orchestrator tool added
-- [ ] MCP Resources for read-only queries (CQRS)
-- [ ] Tests for all new tool groups
+- [x] Scaffold tool group added to haios_ops/mcp_server.py
+- [x] Hierarchy/status tool group added (cascade, update_status, close_work)
+- [x] Coldstart orchestrator tool added
+- [x] MCP Resources for read-only queries (CQRS)
+- [x] Tests for all new tool groups
 
 ---
 

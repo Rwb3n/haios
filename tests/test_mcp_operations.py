@@ -1,8 +1,9 @@
 # generated: 2026-02-25
-"""Tests for haios-operations MCP server (WORK-220).
+"""Tests for haios-operations MCP server (WORK-220, WORK-223).
 
-16 test functions covering work, queue, and session tool groups
-with mocked backends. Tests import haios_ops from .claude/haios/.
+28 test functions covering work, queue, session, scaffold, hierarchy,
+coldstart, and resource tool groups with mocked backends.
+Tests import haios_ops from .claude/haios/.
 """
 import json
 import sys
@@ -333,3 +334,245 @@ def test_cycle_get_returns_dict(tmp_path):
     assert result["active_cycle"] == "implementation-cycle"
     assert result["current_phase"] == "DO"
     assert result["work_id"] == "WORK-220"
+
+
+# ---------------------------------------------------------------------------
+# Scaffold tools tests (Tests 17-19, 28) — WORK-223
+# ---------------------------------------------------------------------------
+
+
+@patch("haios_ops.mcp_server.scaffold_template")
+@patch("haios_ops.mcp_server.get_next_work_id")
+def test_scaffold_work_returns_dict(mock_next_id, mock_scaffold):
+    """Test 17: scaffold_work creates work item and returns typed dict."""
+    from haios_ops.mcp_server import scaffold_work
+
+    mock_next_id.return_value = "WORK-225"
+    mock_scaffold.return_value = "/fake/WORK.md"
+
+    result = scaffold_work(title="Test Work Item")
+
+    assert result == {"success": True, "path": "/fake/WORK.md", "work_id": "WORK-225"}
+    mock_next_id.assert_called_once()
+    mock_scaffold.assert_called_once_with(
+        "work_item",
+        backlog_id="WORK-225",
+        title="Test Work Item",
+        variables={"TYPE": "implementation"},
+    )
+
+
+@patch("haios_ops.mcp_server.scaffold_template")
+def test_scaffold_plan_returns_dict(mock_scaffold):
+    """Test 18: scaffold_plan creates plan and returns typed dict."""
+    from haios_ops.mcp_server import scaffold_plan
+
+    mock_scaffold.return_value = "/fake/plans/PLAN.md"
+
+    result = scaffold_plan(work_id="WORK-223", title="Test Plan")
+
+    assert result == {"success": True, "path": "/fake/plans/PLAN.md"}
+    mock_scaffold.assert_called_once_with(
+        "implementation_plan",
+        backlog_id="WORK-223",
+        title="Test Plan",
+        variables={"TYPE": "implementation"},
+    )
+
+
+@patch("haios_ops.mcp_server.scaffold_template")
+@patch("haios_ops.mcp_server.get_next_work_id")
+def test_scaffold_work_error(mock_next_id, mock_scaffold):
+    """Test 19: scaffold_work returns error dict on exception."""
+    from haios_ops.mcp_server import scaffold_work
+
+    mock_next_id.return_value = "WORK-225"
+    mock_scaffold.side_effect = ValueError("template not found")
+
+    result = scaffold_work(title="Bad Work")
+
+    assert result["success"] is False
+    assert "template not found" in result["error"]
+
+
+@patch("haios_ops.mcp_server.scaffold_template")
+def test_scaffold_plan_missing_work_item(mock_scaffold):
+    """Test 28: scaffold_plan returns error when work item doesn't exist."""
+    from haios_ops.mcp_server import scaffold_plan
+
+    mock_scaffold.side_effect = ValueError("Work file required.")
+
+    result = scaffold_plan(work_id="WORK-999", title="Bad Plan")
+
+    assert result["success"] is False
+    assert "Work file required" in result["error"]
+
+
+# ---------------------------------------------------------------------------
+# Hierarchy tools tests (Tests 20-23) — WORK-223
+# ---------------------------------------------------------------------------
+
+
+@patch("haios_ops.mcp_server.StatusPropagator")
+def test_hierarchy_cascade_returns_dict(mock_propagator_cls):
+    """Test 20: hierarchy_cascade returns propagation result dict."""
+    from haios_ops.mcp_server import hierarchy_cascade
+
+    mock_instance = MagicMock()
+    mock_instance.propagate.return_value = {
+        "action": "chapter_completed",
+        "work_id": "WORK-223",
+        "chapter": "CH-066",
+        "arc": "call",
+        "arc_updated": True,
+        "arc_complete": False,
+    }
+    mock_propagator_cls.return_value = mock_instance
+
+    result = hierarchy_cascade("WORK-223")
+
+    assert result["action"] == "chapter_completed"
+    assert result["chapter"] == "CH-066"
+    mock_instance.propagate.assert_called_once_with("WORK-223")
+
+
+@patch("haios_ops.mcp_server.StatusPropagator")
+@patch("haios_ops.mcp_server._engine")
+@patch("haios_ops.mcp_server.ceremony_context")
+def test_hierarchy_close_work_atomic(mock_ceremony, mock_eng, mock_propagator_cls):
+    """Test 21: hierarchy_close_work closes and cascades atomically."""
+    from haios_ops.mcp_server import hierarchy_close_work
+
+    mock_ceremony.return_value.__enter__ = MagicMock()
+    mock_ceremony.return_value.__exit__ = MagicMock(return_value=False)
+    mock_eng.close.return_value = None
+
+    mock_instance = MagicMock()
+    mock_instance.propagate.return_value = {
+        "action": "chapter_incomplete",
+        "work_id": "WORK-223",
+    }
+    mock_propagator_cls.return_value = mock_instance
+
+    result = hierarchy_close_work("WORK-223")
+
+    assert result["success"] is True
+    assert result["cascade"]["action"] == "chapter_incomplete"
+    mock_eng.close.assert_called_once_with("WORK-223")
+    mock_instance.propagate.assert_called_once_with("WORK-223")
+
+
+@patch("haios_ops.mcp_server.StatusPropagator")
+@patch("haios_ops.mcp_server._engine")
+@patch("haios_ops.mcp_server.ceremony_context")
+def test_hierarchy_update_status_complete_cascades(
+    mock_ceremony, mock_eng, mock_propagator_cls
+):
+    """Test 22: hierarchy_update_status with complete status runs cascade."""
+    from haios_ops.mcp_server import hierarchy_update_status
+
+    mock_ceremony.return_value.__enter__ = MagicMock()
+    mock_ceremony.return_value.__exit__ = MagicMock(return_value=False)
+    mock_eng.get_work.return_value = _make_work_state(id="WORK-223")
+    mock_eng._write_work_file = MagicMock()
+
+    mock_instance = MagicMock()
+    mock_instance.propagate.return_value = {"action": "chapter_incomplete"}
+    mock_propagator_cls.return_value = mock_instance
+
+    result = hierarchy_update_status("WORK-223", "complete")
+
+    assert result["success"] is True
+    assert result["status"] == "complete"
+    assert result["cascade"]["action"] == "chapter_incomplete"
+    mock_eng._write_work_file.assert_called_once()
+    mock_instance.propagate.assert_called_once_with("WORK-223")
+
+
+@patch("haios_ops.mcp_server.StatusPropagator")
+@patch("haios_ops.mcp_server._engine")
+@patch("haios_ops.mcp_server.ceremony_context")
+def test_hierarchy_update_status_active_skips_cascade(
+    mock_ceremony, mock_eng, mock_propagator_cls
+):
+    """Test 23: hierarchy_update_status with non-complete status skips cascade."""
+    from haios_ops.mcp_server import hierarchy_update_status
+
+    mock_ceremony.return_value.__enter__ = MagicMock()
+    mock_ceremony.return_value.__exit__ = MagicMock(return_value=False)
+    mock_eng.get_work.return_value = _make_work_state(id="WORK-223")
+    mock_eng._write_work_file = MagicMock()
+
+    result = hierarchy_update_status("WORK-223", "active")
+
+    assert result["success"] is True
+    assert result["cascade"] == {}
+    mock_eng._write_work_file.assert_called_once()
+    mock_propagator_cls.assert_not_called()
+
+
+# ---------------------------------------------------------------------------
+# Coldstart tool tests (Tests 24-25) — WORK-223
+# ---------------------------------------------------------------------------
+
+
+@patch("haios_ops.mcp_server.ColdstartOrchestrator")
+def test_coldstart_orchestrator_returns_dict(mock_orch_cls):
+    """Test 24: coldstart_orchestrator returns output dict."""
+    from haios_ops.mcp_server import coldstart_orchestrator
+
+    mock_instance = MagicMock()
+    mock_instance.run.return_value = "[IDENTITY]\n...coldstart output..."
+    mock_orch_cls.return_value = mock_instance
+
+    result = coldstart_orchestrator()
+
+    assert result["success"] is True
+    assert "coldstart output" in result["output"]
+    assert result["tier"] == "auto"
+
+
+@patch("haios_ops.mcp_server.ColdstartOrchestrator")
+def test_coldstart_orchestrator_tier_param(mock_orch_cls):
+    """Test 25: coldstart_orchestrator passes tier parameter."""
+    from haios_ops.mcp_server import coldstart_orchestrator
+
+    mock_instance = MagicMock()
+    mock_instance.run.return_value = "light output"
+    mock_orch_cls.return_value = mock_instance
+
+    result = coldstart_orchestrator(tier="light")
+
+    assert result["tier"] == "light"
+    mock_instance.run.assert_called_once_with(tier="light")
+
+
+# ---------------------------------------------------------------------------
+# MCP Resource tests (Tests 26-27) — WORK-223
+# ---------------------------------------------------------------------------
+
+
+@patch("haios_ops.mcp_server._engine")
+def test_resource_work_item_returns_dict(mock_eng):
+    """Test 26: resource_work_item returns work state dict."""
+    from haios_ops.mcp_server import resource_work_item
+
+    mock_eng.get_work.return_value = _make_work_state(id="WORK-220")
+
+    result = resource_work_item("WORK-220")
+
+    assert isinstance(result, dict)
+    assert result["id"] == "WORK-220"
+
+
+@patch("haios_ops.mcp_server._engine")
+def test_resource_queue_ready_returns_list(mock_eng):
+    """Test 27: resource_queue_ready returns list of dicts."""
+    from haios_ops.mcp_server import resource_queue_ready
+
+    mock_eng.get_ready.return_value = [_make_work_state(id="WORK-001")]
+
+    result = resource_queue_ready()
+
+    assert isinstance(result, list)
+    assert result[0]["id"] == "WORK-001"
