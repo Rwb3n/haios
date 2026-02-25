@@ -564,6 +564,173 @@ def scaffold_plan(
 
 
 # ---------------------------------------------------------------------------
+# Scaffold tools (WORK-226) — Phase 4: checkpoint, investigation, adr
+# ---------------------------------------------------------------------------
+
+
+@mcp.tool()
+def scaffold_checkpoint(
+    session_number: str,
+    title: str,
+) -> Dict[str, Any]:
+    """Scaffold a checkpoint file for the current session.
+
+    Args:
+        session_number: Session number used as backlog_id (e.g., "455")
+        title: Checkpoint title (e.g., "pre-compact")
+
+    Returns:
+        {"success": True, "path": "<checkpoint_md_path>"}
+        or {"success": False, "error": "..."}
+    """
+    blocked = _check_tool_gate("mcp-scaffold", "scaffold_checkpoint")
+    if blocked:
+        return blocked
+    try:
+        path = scaffold_template(
+            "checkpoint",
+            backlog_id=session_number,
+            title=title,
+        )
+        return {"success": True, "path": path}
+    except Exception as e:
+        logger.error(f"scaffold_checkpoint failed: {e}")
+        return {"success": False, "error": str(e)}
+
+
+@mcp.tool()
+def scaffold_investigation(
+    work_id: str,
+    title: str,
+) -> Dict[str, Any]:
+    """Scaffold an investigation document inside a work item directory.
+
+    Args:
+        work_id: Work item ID the investigation belongs to (e.g., "WORK-226")
+        title: Investigation title
+
+    Returns:
+        {"success": True, "path": "<investigation_md_path>"}
+        or {"success": False, "error": "..."}
+    """
+    blocked = _check_tool_gate("mcp-scaffold", "scaffold_investigation", work_id)
+    if blocked:
+        return blocked
+    try:
+        path = scaffold_template(
+            "investigation",
+            backlog_id=work_id,
+            title=title,
+        )
+        return {"success": True, "path": path}
+    except Exception as e:
+        logger.error(f"scaffold_investigation failed: {e}")
+        return {"success": False, "error": str(e)}
+
+
+@mcp.tool()
+def scaffold_adr(
+    adr_number: str,
+    title: str,
+) -> Dict[str, Any]:
+    """Scaffold an Architecture Decision Record (ADR) file.
+
+    Args:
+        adr_number: ADR number used as backlog_id (e.g., "049")
+        title: ADR title (e.g., "Event Sourcing for Audit Trail")
+
+    Returns:
+        {"success": True, "path": "<adr_md_path>"}
+        or {"success": False, "error": "..."}
+    """
+    blocked = _check_tool_gate("mcp-scaffold", "scaffold_adr")
+    if blocked:
+        return blocked
+    try:
+        path = scaffold_template(
+            "architecture_decision_record",
+            backlog_id=adr_number,
+            title=title,
+        )
+        return {"success": True, "path": path}
+    except Exception as e:
+        logger.error(f"scaffold_adr failed: {e}")
+        return {"success": False, "error": str(e)}
+
+
+# ---------------------------------------------------------------------------
+# Document link and spawn query tools (WORK-226) — Phase 4
+# ---------------------------------------------------------------------------
+
+
+@mcp.tool()
+def link_document(
+    work_id: str,
+    doc_type: str,
+    doc_path: str,
+) -> Dict[str, Any]:
+    """Link a document to a work item (plan, investigation, checkpoint).
+
+    Updates cycle_docs and documents section of WORK.md.
+
+    Args:
+        work_id: Work item ID (e.g., "WORK-226")
+        doc_type: Document type: plan | investigation | checkpoint
+        doc_path: Path to the document being linked
+
+    Returns:
+        {"success": True, "work_id": ..., "doc_type": ..., "doc_path": ...}
+        or {"success": False, "error": "..."}
+    """
+    blocked = _check_tool_gate("mcp-mutate", "link_document", work_id)
+    if blocked:
+        return blocked
+    try:
+        _engine.add_document_link(work_id, doc_type, doc_path)
+        return {"success": True, "work_id": work_id, "doc_type": doc_type, "doc_path": doc_path}
+    except WorkNotFoundError as e:
+        return {"success": False, "error": str(e)}
+    except Exception as e:
+        logger.error(f"link_document failed: {e}")
+        return {"success": False, "error": str(e)}
+
+
+@mcp.tool()
+def spawn_tree(
+    root_id: str,
+    max_depth: int = 5,
+) -> Dict[str, Any]:
+    """Return spawn tree for a work item as formatted ASCII art and raw dict.
+
+    Read-only query — no mutations. Scans active and archive WORK.md files
+    for spawned_by relationships.
+
+    Args:
+        root_id: Root work item ID (e.g., "WORK-220")
+        max_depth: Maximum recursion depth (default: 5)
+
+    Returns:
+        {"success": True, "root_id": ..., "tree": <nested dict>, "formatted": "<ascii art>"}
+        or {"success": False, "error": "..."}
+    """
+    blocked = _check_tool_gate("mcp-read", "spawn_tree", root_id)
+    if blocked:
+        return blocked
+    try:
+        tree = _engine.spawn_tree(root_id, max_depth=max_depth)
+        formatted = _engine.format_tree(tree, use_ascii=True)
+        return {
+            "success": True,
+            "root_id": root_id,
+            "tree": tree,
+            "formatted": formatted,
+        }
+    except Exception as e:
+        logger.error(f"spawn_tree failed: {e}")
+        return {"success": False, "error": str(e)}
+
+
+# ---------------------------------------------------------------------------
 # Hierarchy tools (WORK-223)
 # ---------------------------------------------------------------------------
 

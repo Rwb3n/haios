@@ -743,3 +743,194 @@ def test_log_governance_gate_fails_silently(mock_append):
 
     # If we get here, the function handled the exception silently
     assert True
+
+
+# ---------------------------------------------------------------------------
+# Phase 4 tools tests (Tests 37-46) — WORK-226
+# ---------------------------------------------------------------------------
+
+
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
+@patch("haios_ops.mcp_server.scaffold_template")
+def test_scaffold_checkpoint_returns_dict(mock_scaffold, mock_gate):
+    """Test 37: scaffold_checkpoint creates checkpoint and returns typed dict."""
+    from haios_ops.mcp_server import scaffold_checkpoint
+
+    mock_scaffold.return_value = "/fake/docs/checkpoints/2026-02-25-01-SESSION-455-pre-compact.md"
+
+    result = scaffold_checkpoint(session_number="455", title="pre-compact")
+
+    assert result == {
+        "success": True,
+        "path": "/fake/docs/checkpoints/2026-02-25-01-SESSION-455-pre-compact.md",
+    }
+    mock_scaffold.assert_called_once_with(
+        "checkpoint",
+        backlog_id="455",
+        title="pre-compact",
+    )
+
+
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
+@patch("haios_ops.mcp_server.scaffold_template")
+def test_scaffold_checkpoint_error(mock_scaffold, mock_gate):
+    """Test 38: scaffold_checkpoint returns error dict on exception."""
+    from haios_ops.mcp_server import scaffold_checkpoint
+
+    mock_scaffold.side_effect = FileNotFoundError("Template not found")
+
+    result = scaffold_checkpoint(session_number="455", title="bad")
+
+    assert result["success"] is False
+    assert "Template not found" in result["error"]
+
+
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
+@patch("haios_ops.mcp_server.scaffold_template")
+def test_scaffold_investigation_returns_dict(mock_scaffold, mock_gate):
+    """Test 39: scaffold_investigation creates investigation doc and returns typed dict."""
+    from haios_ops.mcp_server import scaffold_investigation
+
+    mock_scaffold.return_value = "/fake/docs/work/active/WORK-226/investigations/001-my-inv.md"
+
+    result = scaffold_investigation(work_id="WORK-226", title="My Inv")
+
+    assert result == {
+        "success": True,
+        "path": "/fake/docs/work/active/WORK-226/investigations/001-my-inv.md",
+    }
+    mock_scaffold.assert_called_once_with(
+        "investigation",
+        backlog_id="WORK-226",
+        title="My Inv",
+    )
+
+
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
+@patch("haios_ops.mcp_server.scaffold_template")
+def test_scaffold_adr_returns_dict(mock_scaffold, mock_gate):
+    """Test 40: scaffold_adr creates ADR file and returns typed dict."""
+    from haios_ops.mcp_server import scaffold_adr
+
+    mock_scaffold.return_value = "/fake/docs/ADR/ADR-049-my-adr.md"
+
+    result = scaffold_adr(adr_number="049", title="My ADR")
+
+    assert result == {
+        "success": True,
+        "path": "/fake/docs/ADR/ADR-049-my-adr.md",
+    }
+    mock_scaffold.assert_called_once_with(
+        "architecture_decision_record",
+        backlog_id="049",
+        title="My ADR",
+    )
+
+
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
+@patch("haios_ops.mcp_server.scaffold_template")
+def test_scaffold_adr_error(mock_scaffold, mock_gate):
+    """Test 41: scaffold_adr returns error dict on exception."""
+    from haios_ops.mcp_server import scaffold_adr
+
+    mock_scaffold.side_effect = ValueError("template not found")
+
+    result = scaffold_adr(adr_number="999", title="Bad ADR")
+
+    assert result["success"] is False
+    assert "template not found" in result["error"]
+
+
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
+@patch("haios_ops.mcp_server._engine")
+def test_link_document_returns_dict(mock_eng, mock_gate):
+    """Test 42: link_document links doc to work item and returns typed dict."""
+    from haios_ops.mcp_server import link_document
+
+    mock_eng.add_document_link.return_value = None
+
+    result = link_document(
+        work_id="WORK-226",
+        doc_type="plan",
+        doc_path="docs/work/active/WORK-226/plans/PLAN.md",
+    )
+
+    assert result == {
+        "success": True,
+        "work_id": "WORK-226",
+        "doc_type": "plan",
+        "doc_path": "docs/work/active/WORK-226/plans/PLAN.md",
+    }
+    mock_eng.add_document_link.assert_called_once_with(
+        "WORK-226", "plan", "docs/work/active/WORK-226/plans/PLAN.md"
+    )
+
+
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
+@patch("haios_ops.mcp_server._engine")
+def test_link_document_not_found(mock_eng, mock_gate):
+    """Test 43: link_document returns error dict when work item not found."""
+    from haios_ops.mcp_server import link_document
+    from work_engine import WorkNotFoundError
+
+    mock_eng.add_document_link.side_effect = WorkNotFoundError("Work item WORK-999 not found")
+
+    result = link_document(
+        work_id="WORK-999",
+        doc_type="plan",
+        doc_path="docs/work/active/WORK-999/plans/PLAN.md",
+    )
+
+    assert result["success"] is False
+    assert "WORK-999" in result["error"]
+
+
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
+@patch("haios_ops.mcp_server._engine")
+def test_spawn_tree_returns_dict(mock_eng, mock_gate):
+    """Test 44: spawn_tree returns nested tree dict and formatted ASCII art."""
+    from haios_ops.mcp_server import spawn_tree
+
+    mock_eng.spawn_tree.return_value = {"WORK-220": {"WORK-221": {}, "WORK-222": {}}}
+    mock_eng.format_tree.return_value = "WORK-220\n+-- WORK-221\n+-- WORK-222"
+
+    result = spawn_tree(root_id="WORK-220")
+
+    assert result["success"] is True
+    assert result["root_id"] == "WORK-220"
+    assert result["tree"] == {"WORK-220": {"WORK-221": {}, "WORK-222": {}}}
+    assert "WORK-221" in result["formatted"]
+    mock_eng.spawn_tree.assert_called_once_with("WORK-220", max_depth=5)
+    mock_eng.format_tree.assert_called_once_with(
+        {"WORK-220": {"WORK-221": {}, "WORK-222": {}}}, use_ascii=True
+    )
+
+
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
+@patch("haios_ops.mcp_server.scaffold_template")
+def test_scaffold_investigation_error(mock_scaffold, mock_gate):
+    """Test 45: scaffold_investigation returns error dict when WORK.md missing."""
+    from haios_ops.mcp_server import scaffold_investigation
+
+    mock_scaffold.side_effect = ValueError("Work file required for template 'investigation'")
+
+    result = scaffold_investigation(work_id="WORK-999", title="Bad Inv")
+
+    assert result["success"] is False
+    assert "Work file required" in result["error"]
+
+
+@patch("haios_ops.mcp_server._check_tool_gate", return_value=None)
+@patch("haios_ops.mcp_server._engine")
+def test_spawn_tree_no_children(mock_eng, mock_gate):
+    """Test 46: spawn_tree returns tree with no children."""
+    from haios_ops.mcp_server import spawn_tree
+
+    mock_eng.spawn_tree.return_value = {"WORK-220": {}}
+    mock_eng.format_tree.return_value = "WORK-220 (no spawned items found)"
+
+    result = spawn_tree(root_id="WORK-220")
+
+    assert result["success"] is True
+    assert result["tree"] == {"WORK-220": {}}
+    assert "no spawned items" in result["formatted"]
