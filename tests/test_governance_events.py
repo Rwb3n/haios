@@ -339,6 +339,90 @@ class TestSessionIdInjection:
             assert event["session_id"] == 0
 
 
+# =============================================================================
+# WORK-233: context_pct Field on Governance Events
+# =============================================================================
+
+
+class TestContextPctField:
+    """WORK-233: Governance events accept optional context_pct field."""
+
+    def test_log_phase_transition_with_context_pct(self, tmp_path):
+        """context_pct appears in event when passed to log_phase_transition."""
+        from governance_events import log_phase_transition, read_events
+
+        events_file = tmp_path / "governance-events.jsonl"
+        session_file = tmp_path / "session"
+        session_file.write_text("459\n")
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file):
+            event = log_phase_transition("DO", "WORK-233", "Hephaestus", context_pct=72.5)
+            assert event["context_pct"] == 72.5
+
+            events = read_events()
+            assert events[0]["context_pct"] == 72.5
+
+    def test_log_phase_transition_without_context_pct(self, tmp_path):
+        """context_pct absent from event when not passed (backward compat)."""
+        from governance_events import log_phase_transition, read_events
+
+        events_file = tmp_path / "governance-events.jsonl"
+        session_file = tmp_path / "session"
+        session_file.write_text("459\n")
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file):
+            event = log_phase_transition("DO", "WORK-233", "Hephaestus")
+            assert "context_pct" not in event
+
+            events = read_events()
+            assert "context_pct" not in events[0]
+
+    def test_log_validation_outcome_with_context_pct(self, tmp_path):
+        """context_pct appears in ValidationOutcome event when passed."""
+        from governance_events import log_validation_outcome, read_events
+
+        events_file = tmp_path / "governance-events.jsonl"
+        session_file = tmp_path / "session"
+        session_file.write_text("459\n")
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file):
+            event = log_validation_outcome(
+                "preflight", "WORK-233", "pass", "OK", context_pct=65.0
+            )
+            assert event["context_pct"] == 65.0
+
+    def test_log_session_start_with_context_pct(self, tmp_path):
+        """context_pct appears in SessionStarted event when passed."""
+        from governance_events import log_session_start
+
+        events_file = tmp_path / "governance-events.jsonl"
+        session_file = tmp_path / "session"
+        session_file.write_text("459\n")
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file):
+            event = log_session_start(459, "Hephaestus", context_pct=81.0)
+            assert event["context_pct"] == 81.0
+
+    def test_log_gate_violation_with_context_pct(self, tmp_path):
+        """context_pct appears in GateViolation event when passed."""
+        from governance_events import log_gate_violation
+
+        events_file = tmp_path / "governance-events.jsonl"
+        session_file = tmp_path / "session"
+        session_file.write_text("459\n")
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file):
+            event = log_gate_violation(
+                "sql_block", "WORK-233", "block", "SQL detected", context_pct=55.3
+            )
+            assert event["context_pct"] == 55.3
+
+
 class TestGateViolationLogging:
     """Tests for gate violation event logging (WORK-146, REQ-OBSERVE-005)."""
 

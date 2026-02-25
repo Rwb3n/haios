@@ -357,6 +357,12 @@ Task(
   subagent_type='general-purpose',
   model='haiku',
   prompt='Execute retro-cycle EXTRACT phase for {work_id}.
+
+    IMPORTANT CONSTRAINTS:
+    - Do NOT use the Read tool. All evidence is provided below — do not read WORK.md, PLAN.md, or any other files.
+    - Do NOT independently verify observations. Classify from the provided findings only.
+    - Your ONLY tools: ingester_ingest (for storage) and text output (for results).
+
     REFLECT findings (summary, not full text — chunk if >2000 tokens): {reflect_findings_text}
     commit_concept_ids: {commit_concept_ids_json}
     Classify each actionable item. Output format per SKILL.md Phase 4 Classification table.

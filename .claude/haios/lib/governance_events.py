@@ -38,7 +38,7 @@ EVENTS_FILE = Path(__file__).parent.parent / "governance-events.jsonl"
 SESSION_FILE = Path(__file__).parent.parent.parent.parent / ".claude" / "session"
 
 
-def log_phase_transition(phase: str, work_id: str, agent: str) -> dict:
+def log_phase_transition(phase: str, work_id: str, agent: str, *, context_pct: Optional[float] = None) -> dict:
     """
     Log cycle phase entry.
 
@@ -46,6 +46,7 @@ def log_phase_transition(phase: str, work_id: str, agent: str) -> dict:
         phase: Cycle phase (PLAN, DO, CHECK, DONE)
         work_id: Work item ID (e.g., E2-108)
         agent: Agent name (e.g., Hephaestus)
+        context_pct: Optional context window remaining percentage (0-100)
 
     Returns:
         The logged event dict
@@ -57,12 +58,12 @@ def log_phase_transition(phase: str, work_id: str, agent: str) -> dict:
         "agent": agent,
         "timestamp": datetime.now().isoformat(),
     }
-    _append_event(event)
+    _append_event(event, context_pct=context_pct)
     return event
 
 
 def log_validation_outcome(
-    gate: str, work_id: str, result: str, reason: str
+    gate: str, work_id: str, result: str, reason: str, *, context_pct: Optional[float] = None
 ) -> dict:
     """
     Log validation outcome and check thresholds.
@@ -72,6 +73,7 @@ def log_validation_outcome(
         work_id: Work item ID (e.g., E2-108)
         result: Outcome (pass, warn, block)
         reason: Human-readable explanation
+        context_pct: Optional context window remaining percentage (0-100)
 
     Returns:
         The logged event dict
@@ -84,7 +86,7 @@ def log_validation_outcome(
         "reason": reason,
         "timestamp": datetime.now().isoformat(),
     }
-    _append_event(event)
+    _append_event(event, context_pct=context_pct)
 
     # Check if repeated failure threshold exceeded
     if result == "block":
@@ -94,7 +96,7 @@ def log_validation_outcome(
 
 
 def log_gate_violation(
-    gate_id: str, work_id: str, violation_type: str, context: str
+    gate_id: str, work_id: str, violation_type: str, context: str, *, context_pct: Optional[float] = None
 ) -> dict:
     """
     Log gate violation event.
@@ -109,6 +111,7 @@ def log_gate_violation(
                  work context
         violation_type: "warn" (allowed but flagged) or "block" (denied)
         context: Human-readable description of the violation
+        context_pct: Optional context window remaining percentage (0-100)
 
     Returns:
         The logged event dict
@@ -121,7 +124,7 @@ def log_gate_violation(
         "context": context,
         "timestamp": datetime.now().isoformat(),
     }
-    _append_event(event)
+    _append_event(event, context_pct=context_pct)
     return event
 
 
@@ -148,13 +151,14 @@ def get_gate_violations(work_id: str) -> list[dict]:
 # =============================================================================
 
 
-def log_session_start(session_number: int, agent: str) -> dict:
+def log_session_start(session_number: int, agent: str, *, context_pct: Optional[float] = None) -> dict:
     """
     Log session start event.
 
     Args:
         session_number: Current session number
         agent: Agent name (e.g., "Hephaestus")
+        context_pct: Optional context window remaining percentage (0-100)
 
     Returns:
         The logged event dict
@@ -165,17 +169,18 @@ def log_session_start(session_number: int, agent: str) -> dict:
         "agent": agent,
         "timestamp": datetime.now().isoformat(),
     }
-    _append_event(event)
+    _append_event(event, context_pct=context_pct)
     return event
 
 
-def log_session_end(session_number: int, agent: str) -> dict:
+def log_session_end(session_number: int, agent: str, *, context_pct: Optional[float] = None) -> dict:
     """
     Log session end event.
 
     Args:
         session_number: Current session number
         agent: Agent name
+        context_pct: Optional context window remaining percentage (0-100)
 
     Returns:
         The logged event dict
@@ -186,11 +191,11 @@ def log_session_end(session_number: int, agent: str) -> dict:
         "agent": agent,
         "timestamp": datetime.now().isoformat(),
     }
-    _append_event(event)
+    _append_event(event, context_pct=context_pct)
     return event
 
 
-def log_tier_detected(work_id: str, tier: str) -> dict:
+def log_tier_detected(work_id: str, tier: str, *, context_pct: Optional[float] = None) -> dict:
     """
     Log TierDetected governance event (WORK-167).
 
@@ -200,6 +205,7 @@ def log_tier_detected(work_id: str, tier: str) -> dict:
     Args:
         work_id: Work item ID (e.g., "WORK-167")
         tier: Detected tier (trivial, small, standard, architectural)
+        context_pct: Optional context window remaining percentage (0-100)
 
     Returns:
         The logged event dict
@@ -210,11 +216,11 @@ def log_tier_detected(work_id: str, tier: str) -> dict:
         "tier": tier,
         "timestamp": datetime.now().isoformat(),
     }
-    _append_event(event)
+    _append_event(event, context_pct=context_pct)
     return event
 
 
-def log_critique_injected(work_id: str, tier: str, phase: str, skill: str) -> dict:
+def log_critique_injected(work_id: str, tier: str, phase: str, skill: str, *, context_pct: Optional[float] = None) -> dict:
     """
     Log CritiqueInjected governance event (WORK-169).
 
@@ -225,6 +231,7 @@ def log_critique_injected(work_id: str, tier: str, phase: str, skill: str) -> di
         tier: Governance tier (trivial, small, standard, architectural)
         phase: Current lifecycle phase (e.g., "PLAN", "EXPLORE")
         skill: Skill that triggered the injection (e.g., "implementation-cycle")
+        context_pct: Optional context window remaining percentage (0-100)
 
     Returns:
         The logged event dict
@@ -237,7 +244,7 @@ def log_critique_injected(work_id: str, tier: str, phase: str, skill: str) -> di
         "skill": skill,
         "timestamp": datetime.now().isoformat(),
     }
-    _append_event(event)
+    _append_event(event, context_pct=context_pct)
     return event
 
 
@@ -481,9 +488,11 @@ def _read_session_id() -> int:
         return 0
 
 
-def _append_event(event: dict) -> None:
-    """Append event to JSONL file, injecting session_id."""
+def _append_event(event: dict, context_pct: Optional[float] = None) -> None:
+    """Append event to JSONL file, injecting session_id and optional context_pct."""
     event["session_id"] = _read_session_id()
+    if context_pct is not None:
+        event["context_pct"] = context_pct
     EVENTS_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(EVENTS_FILE, "a", encoding="utf-8") as f:
         f.write(json.dumps(event) + "\n")

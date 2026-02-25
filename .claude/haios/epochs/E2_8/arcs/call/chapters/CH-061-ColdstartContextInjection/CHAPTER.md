@@ -28,6 +28,7 @@ Make coldstart inject ALL operational context so the agent needs zero Read instr
 |----|-------|--------|------|
 | WORK-162 | Coldstart Context Injection (Design) | Complete | design |
 | WORK-180 | Implement ADR-047 Tiered Coldstart | Backlog | implementation |
+| WORK-232 | Inject Memory Schema Hints into Coldstart Orchestrator Output | Complete | implementation |
 
 ---
 

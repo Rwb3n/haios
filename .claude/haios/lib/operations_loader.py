@@ -47,6 +47,17 @@ COMMON_PATTERNS = [
     "Agent MUST NOT run `just X` directly — use Skill() or Task() wrappers (ADR-045 Tier model)",
 ]
 
+# Memory schema hints (WORK-232: prevent wrong column name queries)
+# Source of truth: docs/specs/memory_db_schema_v3.sql
+MEMORY_SCHEMA_HINTS = {
+    "concepts": {
+        "columns": ["id", "type", "content", "source_adr",
+                     "synthesis_confidence", "synthesized_at",
+                     "synthesis_cluster_id", "synthesis_source_count"],
+        "note": "Column is 'type' NOT 'concept_type'. Use db_query with sql= parameter.",
+    },
+}
+
 
 class OperationsLoader:
     """
@@ -149,6 +160,7 @@ class OperationsLoader:
             "agent_table": self._extract_agent_table(),
             "governance_triggers": self._extract_governance_triggers(),
             "common_patterns": COMMON_PATTERNS,
+            "memory_schema": MEMORY_SCHEMA_HINTS,
         }
 
     def format(self, extracted: Dict[str, Any]) -> str:
@@ -188,6 +200,16 @@ class OperationsLoader:
         lines.append("\nCommon Patterns:")
         for p in extracted["common_patterns"]:
             lines.append(f"  {p}")
+
+        # Memory schema hints (WORK-232)
+        schema = extracted.get("memory_schema", {})
+        if schema:
+            lines.append("\nMemory DB Schema (haios_memory.db):")
+            for table, info in schema.items():
+                cols = ", ".join(info["columns"])
+                lines.append(f"  {table}: {cols}")
+                if info.get("note"):
+                    lines.append(f"  NOTE: {info['note']}")
 
         return "\n".join(lines)
 

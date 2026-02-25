@@ -19987,3 +19987,44 @@
 {"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: mutation tools should not be needed during investigation", "session_id": 458}
 {"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-02-25T22:21:23.636533", "session_id": 458}
 {"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-02-25T22:21:23.639995", "session_id": 458}
+{"type": "SessionStarted", "session": 459, "agent": "Hephaestus", "timestamp": "2026-02-25T22:27:47.750220", "session_id": 459}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-25T22:37:52.856319", "session_id": 459}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-232", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-25T22:37:52.862422", "session_id": 459}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-232"], "from": "backlog", "to": "ready", "timestamp": "2026-02-25T22:37:52.870070", "rationale": "S459 batch: token efficiency improvements from WORK-235 investigation. Small effort, E2.8-aligned."}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-25T22:37:52.871066", "session_id": 459}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-25T22:37:53.444086", "session_id": 459}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-233", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-25T22:37:53.453644", "session_id": 459}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-233"], "from": "backlog", "to": "ready", "timestamp": "2026-02-25T22:37:53.459926", "rationale": "S459 batch: token efficiency improvements from WORK-235 investigation. Small effort, E2.8-aligned."}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-25T22:37:53.460933", "session_id": 459}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-25T22:37:54.028276", "session_id": 459}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-234", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-25T22:37:54.037527", "session_id": 459}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-234"], "from": "backlog", "to": "ready", "timestamp": "2026-02-25T22:37:54.045688", "rationale": "S459 batch: token efficiency improvements from WORK-235 investigation. Small effort, E2.8-aligned."}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-25T22:37:54.046696", "session_id": 459}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-25T22:40:14.699729", "session_id": 459}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-234", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-25T22:40:14.711538", "session_id": 459}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-234"], "from": "ready", "to": "working", "timestamp": "2026-02-25T22:40:14.722156", "rationale": "S459 batch item 1/3: text-only prompt constraint, effort=small, skip PLAN per proportional governance"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-25T22:40:14.722750", "session_id": 459}
+{"type": "CyclePhaseEntered", "phase": "DO", "work_id": "WORK-234", "agent": "Hephaestus", "timestamp": "2026-02-25T22:40:15.264075", "session_id": 459}
+{"type": "CyclePhaseEntered", "phase": "CHECK", "work_id": "WORK-234", "agent": "Hephaestus", "timestamp": "2026-02-25T22:40:40.250098", "session_id": 459}
+{"type": "CyclePhaseEntered", "phase": "DONE", "work_id": "WORK-234", "agent": "Hephaestus", "timestamp": "2026-02-25T22:40:49.042487", "session_id": 459}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-25T22:41:01.681316", "session_id": 459}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-02-25T22:41:01.723798", "session_id": 459}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-25T22:41:14.111839", "session_id": 459}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-232", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-25T22:41:14.119952", "session_id": 459}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-232"], "from": "ready", "to": "working", "timestamp": "2026-02-25T22:41:14.128961", "rationale": "S459 batch item 2/3: coldstart schema hints, effort=small"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-25T22:41:14.129468", "session_id": 459}
+{"type": "CyclePhaseEntered", "phase": "DO", "work_id": "WORK-232", "agent": "Hephaestus", "timestamp": "2026-02-25T22:41:14.689499", "session_id": 459}
+{"type": "CyclePhaseEntered", "phase": "CHECK", "work_id": "WORK-232", "agent": "Hephaestus", "timestamp": "2026-02-25T22:42:49.304225", "session_id": 459}
+{"type": "CyclePhaseEntered", "phase": "DONE", "work_id": "WORK-232", "agent": "Hephaestus", "timestamp": "2026-02-25T22:42:57.552419", "session_id": 459}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-25T22:43:00.183420", "session_id": 459}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-02-25T22:43:00.221265", "session_id": 459}
+{"type": "StatusPropagation", "work_id": "WORK-232", "chapter": "CH-061", "arc": "call", "action": "chapter_completed", "timestamp": "2026-02-25T22:43:01.321235"}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-25T22:43:10.301356", "session_id": 459}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-233", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-25T22:43:10.308287", "session_id": 459}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-233"], "from": "ready", "to": "working", "timestamp": "2026-02-25T22:43:10.315413", "rationale": "S459 batch item 3/3: governance event context_pct field, effort=small"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-25T22:43:10.315413", "session_id": 459}
+{"type": "CyclePhaseEntered", "phase": "DO", "work_id": "WORK-233", "agent": "Hephaestus", "timestamp": "2026-02-25T22:43:10.892630", "session_id": 459}
+{"type": "CyclePhaseEntered", "phase": "CHECK", "work_id": "WORK-233", "agent": "Hephaestus", "timestamp": "2026-02-25T22:45:22.585431", "session_id": 459}
+{"type": "CyclePhaseEntered", "phase": "DONE", "work_id": "WORK-233", "agent": "Hephaestus", "timestamp": "2026-02-25T22:45:32.500784", "session_id": 459}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-25T22:45:35.840854", "session_id": 459}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-02-25T22:45:35.881931", "session_id": 459}

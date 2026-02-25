@@ -57,6 +57,8 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-215 | Session ID Field on Governance Events | Complete | implementation |
 | WORK-216 | Hook Output Trimming for Noise Reduction | Complete | implementation |
 | WORK-217 | Implement Retro-Enrichment Agent | Complete | implementation |
+| WORK-233 | Add context_pct Field to Governance Events | Complete | implementation |
+| WORK-234 | Constrain EXTRACT Phase Haiku Prompt to Eliminate File Reads | Complete | implementation |
 
 ---
 
