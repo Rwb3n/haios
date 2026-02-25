@@ -5,8 +5,8 @@ skill: implementation-cycle
 # CHAIN Phase (Post-DONE)
 
 **On Entry:**
-```bash
-just set-cycle implementation-cycle CHAIN {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="implementation-cycle", phase="CHAIN", work_id="{work_id}")
 ```
 
 **Goal:** Close work item and route to next work item.
@@ -17,7 +17,7 @@ just set-cycle implementation-cycle CHAIN {work_id}
    ```
    Task(subagent_type='Bash', model='haiku', prompt='Stage and commit all changes for {backlog_id}. Command: git add -A && git commit -m "Session {session}: {backlog_id} {title}". Report exit code and commit hash.')
    ```
-3. Query next work: `just ready`
+3. Query next work: `mcp__haios-operations__queue_ready()`
 4. If items returned, read first work file to check `documents.plans`
 5. Read work item `type` field from WORK.md
 6. **Apply routing decision table** (see `routing-gate` skill):
@@ -39,8 +39,8 @@ just set-cycle implementation-cycle CHAIN {work_id}
 - [ ] Appropriate cycle skill invoked (or awaiting operator)
 
 **On Complete:**
-```bash
-just clear-cycle
+```
+mcp__haios-operations__cycle_clear()
 ```
 
-**Tools:** /close, Task(Bash, model=haiku), Bash(just ready), Read, Skill(routing-gate)
+**Tools:** /close, Task(Bash, model=haiku), mcp__haios-operations__queue_ready, Read, Skill(routing-gate)

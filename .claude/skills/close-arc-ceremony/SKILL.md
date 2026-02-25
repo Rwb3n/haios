@@ -60,8 +60,8 @@ VALIDATE --> MARK --> REPORT
 ### 1. VALIDATE Phase
 
 **On Entry:**
-```bash
-just set-cycle close-arc-ceremony VALIDATE {arc_id}
+```
+mcp__haios-operations__cycle_set(cycle="close-arc-ceremony" VALIDATE {arc_id}
 ```
 
 **Goal:** Verify arc meets Definition of Done criteria.
@@ -96,8 +96,8 @@ just set-cycle close-arc-ceremony VALIDATE {arc_id}
 ### 2. MARK Phase
 
 **On Entry:**
-```bash
-just set-cycle close-arc-ceremony MARK {arc_id}
+```
+mcp__haios-operations__cycle_set(cycle="close-arc-ceremony" MARK {arc_id}
 ```
 
 **Goal:** Update arc status to Complete.
@@ -123,8 +123,8 @@ just set-cycle close-arc-ceremony MARK {arc_id}
 ### 3. REPORT Phase
 
 **On Entry:**
-```bash
-just set-cycle close-arc-ceremony REPORT {arc_id}
+```
+mcp__haios-operations__cycle_set(cycle="close-arc-ceremony" REPORT {arc_id}
 ```
 
 **Goal:** Summarize arc closure to operator.
@@ -140,7 +140,7 @@ just set-cycle close-arc-ceremony REPORT {arc_id}
 
 **On Complete:**
 ```bash
-just clear-cycle
+mcp__haios-operations__cycle_clear()
 ```
 
 **Exit Criteria:**

@@ -29,17 +29,18 @@ source_files:
 - .claude/skills/implementation-cycle/reference/composition.md
 - .claude/skills/routing-gate/SKILL.md
 acceptance_criteria:
-- "All just set-cycle references replaced with cycle_set MCP tool in skills"
-- "All just clear-cycle references replaced with cycle_clear MCP tool in skills"
-- "All just ready references replaced with queue_ready MCP tool in skills"
-- "just update-status/update-status-slim replaced with hierarchy_update_status where applicable"
-- "No regressions: all existing tests pass"
+- All just set-cycle references replaced with cycle_set MCP tool in skills
+- All just clear-cycle references replaced with cycle_clear MCP tool in skills
+- All just ready references replaced with queue_ready MCP tool in skills
+- just update-status/update-status-slim replaced with hierarchy_update_status where
+  applicable
+- 'No regressions: all existing tests pass'
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: ready
+cycle_phase: DO
+current_node: DO
 node_history:
 - node: backlog
   entered: '2026-02-25T16:39:52.533618'
@@ -50,10 +51,13 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: 2026-02-25
-last_updated: '2026-02-25T16:39:52.533618'
+last_updated: '2026-02-25T16:48:25.604677'
 queue_history:
 - position: backlog
   entered: '2026-02-25T16:39:52.533618'
+  exited: '2026-02-25T16:48:25.601161'
+- position: ready
+  entered: '2026-02-25T16:48:25.601161'
   exited: null
 ---
 # WORK-229: Migrate Remaining Skill cycle_set/clear/ready References to MCP

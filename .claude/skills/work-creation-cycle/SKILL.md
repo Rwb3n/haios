@@ -36,8 +36,8 @@ VERIFY --> POPULATE --> READY --> CHAIN
 ### 1. VERIFY Phase
 
 **On Entry:**
-```bash
-just set-cycle work-creation-cycle VERIFY {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="work-creation-cycle" VERIFY {work_id}
 ```
 
 **Goal:** Confirm work file was created and is valid.
@@ -61,8 +61,8 @@ just set-cycle work-creation-cycle VERIFY {work_id}
 ### 2. POPULATE Phase
 
 **On Entry:**
-```bash
-just set-cycle work-creation-cycle POPULATE {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="work-creation-cycle" POPULATE {work_id}
 ```
 
 **Goal:** Fill in essential work item fields.
@@ -131,8 +131,8 @@ Every work item MUST trace to at least one L4 requirement. This is governance, n
 ### 3. READY Phase
 
 **On Entry:**
-```bash
-just set-cycle work-creation-cycle READY {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="work-creation-cycle" READY {work_id}
 ```
 
 **Goal:** Validate work item is actionable.
@@ -161,8 +161,8 @@ just set-cycle work-creation-cycle READY {work_id}
 ### 4. CHAIN Phase (Post-READY)
 
 **On Entry:**
-```bash
-just set-cycle work-creation-cycle CHAIN {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="work-creation-cycle" CHAIN {work_id}
 ```
 
 **Goal:** Route to appropriate next cycle based on confidence.

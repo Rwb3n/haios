@@ -48,7 +48,7 @@ Input (next_work_id, has_plan, work_type)
 **Before applying the decision table, check cycle-locking:**
 
 1. Determine active queue (from survey-cycle context or "default")
-2. Run `just is-cycle-allowed [queue] [cycle]`
+2. Run `just is-cycle-allowed [queue] [cycle]` (Tier 3 — no MCP equivalent yet)
 3. If BLOCKED:
    - Return `{action: "blocked", reason: "Queue [name] only allows [cycles]"}`
    - Display warning:
@@ -77,9 +77,9 @@ Input (next_work_id, has_plan, work_type)
 
 **From cycle skill CHAIN phase:**
 
-1. Query next work: `just queue [name]` (or `just ready` for backward compat)
+1. Query next work: `mcp__haios-operations__queue_list(queue_name="[name]")` (or `mcp__haios-operations__queue_ready()`)
 2. Read first work file, check `documents.plans` field
-3. **Check cycle-locking:** `just is-cycle-allowed [queue] [cycle]`
+3. **Check cycle-locking:** `just is-cycle-allowed [queue] [cycle]` (Tier 3 — no MCP equivalent yet)
    - If BLOCKED: display warning and stop
 4. Read work item `type` field from WORK.md frontmatter
 5. Apply the decision table above (WORK-014: type field takes precedence):

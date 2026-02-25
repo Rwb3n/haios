@@ -5,8 +5,8 @@ skill: implementation-cycle
 # CHECK Phase
 
 **On Entry:**
-```bash
-just set-cycle implementation-cycle CHECK {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="implementation-cycle", phase="CHECK", work_id="{work_id}")
 ```
 
 **Goal:** Verify implementation meets quality bar.
@@ -52,7 +52,7 @@ Task(subagent_type='preflight-checker', model='haiku', prompt='Verify deliverabl
 - Manual review replaces automated tests
 
 **For discoverable artifacts** (skills, agents, commands):
-- Run `just update-status-slim`
+- Run `mcp__haios-operations__hierarchy_update_status()`
 - Verify artifact appears in haios-status-slim.json
 - File existence is NOT sufficient - must verify runtime discovery
 - See INV-012 for anti-pattern details
@@ -78,4 +78,4 @@ foresight_prep:
 - [ ] Discoverable artifacts appear in runtime status (or N/A)
 - [ ] (Optional) foresight_prep calibration fields updated
 
-**Tools:** Read, Task(test-runner, model=haiku), Task(validation-agent), Task(preflight-checker, model=haiku), /validate, just update-status
+**Tools:** Read, Task(test-runner, model=haiku), Task(validation-agent), Task(preflight-checker, model=haiku), /validate, mcp__haios-operations__hierarchy_update_status

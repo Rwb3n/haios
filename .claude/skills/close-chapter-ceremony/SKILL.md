@@ -65,8 +65,8 @@ VALIDATE --> MARK --> REPORT
 ### 1. VALIDATE Phase
 
 **On Entry:**
-```bash
-just set-cycle close-chapter-ceremony VALIDATE {chapter_id}
+```
+mcp__haios-operations__cycle_set(cycle="close-chapter-ceremony" VALIDATE {chapter_id}
 ```
 
 **Goal:** Verify chapter meets Definition of Done criteria.
@@ -107,8 +107,8 @@ just set-cycle close-chapter-ceremony VALIDATE {chapter_id}
 ### 2. MARK Phase
 
 **On Entry:**
-```bash
-just set-cycle close-chapter-ceremony MARK {chapter_id}
+```
+mcp__haios-operations__cycle_set(cycle="close-chapter-ceremony" MARK {chapter_id}
 ```
 
 **Goal:** Update chapter status to Complete.
@@ -134,8 +134,8 @@ just set-cycle close-chapter-ceremony MARK {chapter_id}
 ### 3. REPORT Phase
 
 **On Entry:**
-```bash
-just set-cycle close-chapter-ceremony REPORT {chapter_id}
+```
+mcp__haios-operations__cycle_set(cycle="close-chapter-ceremony" REPORT {chapter_id}
 ```
 
 **Goal:** Summarize chapter closure to operator.
@@ -152,7 +152,7 @@ just set-cycle close-chapter-ceremony REPORT {chapter_id}
 
 **On Complete:**
 ```bash
-just clear-cycle
+mcp__haios-operations__cycle_clear()
 ```
 
 **Exit Criteria:**

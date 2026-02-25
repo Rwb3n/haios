@@ -29,7 +29,7 @@ skill: implementation-cycle
 | CHECK | Is artifact discoverable? | Run update-status, verify in slim JSON |
 | DONE  | Is WHY captured? | Store learnings |
 | CHAIN | Is work item closed? | Run /close {backlog_id} |
-| CHAIN | Is next work identified? | Run `just ready` |
+| CHAIN | Is next work identified? | Run `mcp__haios-operations__queue_ready()` |
 
 **DO phase guardrails:**
 - List files BEFORE writing (manifest)
@@ -40,7 +40,7 @@ skill: implementation-cycle
 - Code: `pytest tests/ -v` + Ground Truth
 - Docs/ADRs: `/validate` + Ground Truth
 - Config: Manual review + Ground Truth
-- Skills/Agents/Commands: `just update-status` + verify in haios-status-slim.json
+- Skills/Agents/Commands: `mcp__haios-operations__hierarchy_update_status()` + verify in haios-status-slim.json
 
 ---
 
@@ -70,7 +70,7 @@ Phase transitions are logged automatically via PostToolUse hook (WORK-168). The 
 - **Auto-advances** session_state to the next phase after each lifecycle skill invocation
 - **Auto-syncs** the WORK.md `cycle_phase` field to match session_state (WORK-171)
 
-No manual `just set-cycle` calls are needed — phase advancement is automatic.
+No manual `cycle_set` calls are needed — phase advancement is automatic.
 
 View metrics with:
 ```bash

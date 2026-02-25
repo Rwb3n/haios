@@ -59,11 +59,11 @@ Each phase's full behavioral contract is in its own file (ADR-048 progressive di
 ---
 
 **On Entry (any phase):**
-```bash
-just set-cycle implementation-cycle {PHASE} {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="implementation-cycle", phase="{PHASE}", work_id="{work_id}")
 ```
 
 **On Complete:**
-```bash
-just clear-cycle
+```
+mcp__haios-operations__cycle_clear()
 ```

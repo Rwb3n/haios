@@ -5,8 +5,8 @@ skill: implementation-cycle
 # PLAN Phase
 
 **On Entry:**
-```bash
-just set-cycle implementation-cycle PLAN {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="implementation-cycle", phase="PLAN", work_id="{work_id}")
 ```
 
 **Goal:** Verify plan exists and is ready for implementation.

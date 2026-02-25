@@ -59,8 +59,8 @@ VALIDATE --> ARCHIVE --> TRANSITION
 ### 1. VALIDATE Phase
 
 **On Entry:**
-```bash
-just set-cycle close-epoch-ceremony VALIDATE {epoch_id}
+```
+mcp__haios-operations__cycle_set(cycle="close-epoch-ceremony" VALIDATE {epoch_id}
 ```
 
 **Goal:** Verify epoch meets Definition of Done criteria.
@@ -95,8 +95,8 @@ just set-cycle close-epoch-ceremony VALIDATE {epoch_id}
 ### 2. ARCHIVE Phase
 
 **On Entry:**
-```bash
-just set-cycle close-epoch-ceremony ARCHIVE {epoch_id}
+```
+mcp__haios-operations__cycle_set(cycle="close-epoch-ceremony" ARCHIVE {epoch_id}
 ```
 
 **Goal:** Mark epoch complete and archive work items.
@@ -123,8 +123,8 @@ just set-cycle close-epoch-ceremony ARCHIVE {epoch_id}
 ### 3. TRANSITION Phase
 
 **On Entry:**
-```bash
-just set-cycle close-epoch-ceremony TRANSITION {epoch_id}
+```
+mcp__haios-operations__cycle_set(cycle="close-epoch-ceremony" TRANSITION {epoch_id}
 ```
 
 **Goal:** Transition to the new epoch.
@@ -152,7 +152,7 @@ epoch:
 
 **On Complete:**
 ```bash
-just clear-cycle
+mcp__haios-operations__cycle_clear()
 ```
 
 **Exit Criteria:**

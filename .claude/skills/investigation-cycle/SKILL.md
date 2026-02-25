@@ -62,8 +62,8 @@ EXPLORE --> HYPOTHESIZE --> VALIDATE --> CONCLUDE --> CHAIN
 ### 1. EXPLORE Phase
 
 **On Entry:**
-```bash
-just set-cycle investigation-cycle EXPLORE {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="investigation-cycle", phase="EXPLORE", work_id="{work_id}")
 ```
 
 **Goal:** Gather evidence through unrestricted exploration before forming hypotheses.
@@ -101,8 +101,8 @@ just set-cycle investigation-cycle EXPLORE {work_id}
 ### 2. HYPOTHESIZE Phase
 
 **On Entry:**
-```bash
-just set-cycle investigation-cycle HYPOTHESIZE {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="investigation-cycle", phase="HYPOTHESIZE", work_id="{work_id}")
 ```
 
 **Goal:** Form hypotheses FROM the gathered evidence.
@@ -138,8 +138,8 @@ just set-cycle investigation-cycle HYPOTHESIZE {work_id}
 ### 3. VALIDATE Phase
 
 **On Entry:**
-```bash
-just set-cycle investigation-cycle VALIDATE {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="investigation-cycle", phase="VALIDATE", work_id="{work_id}")
 ```
 
 **Goal:** Test each hypothesis against the gathered evidence.
@@ -174,8 +174,8 @@ just set-cycle investigation-cycle VALIDATE {work_id}
 ### 4. CONCLUDE Phase
 
 **On Entry:**
-```bash
-just set-cycle investigation-cycle CONCLUDE {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="investigation-cycle", phase="CONCLUDE", work_id="{work_id}")
 ```
 
 **Goal:** Synthesize findings, spawn work items, and reconcile epoch artifacts.
@@ -287,15 +287,15 @@ For each chapter referenced in work item (`chapter:` field or `@` references):
 ### 5. CHAIN Phase (Post-CONCLUDE)
 
 **On Entry:**
-```bash
-just set-cycle investigation-cycle CHAIN {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="investigation-cycle", phase="CHAIN", work_id="{work_id}")
 ```
 
 **Goal:** Close investigation and route to next work item.
 
 **Actions:**
 1. Close investigation: `/close {backlog_id}`
-2. Query next work: `just ready`
+2. Query next work: `mcp__haios-operations__queue_ready()`
 3. If items returned, read first work file to check `documents.plans`
 4. Read work item `type` field from WORK.md
 5. **Apply routing decision table** (see `routing-gate` skill):
@@ -317,11 +317,11 @@ just set-cycle investigation-cycle CHAIN {work_id}
 - [ ] Appropriate cycle skill invoked (or awaiting operator)
 
 **On Complete:**
-```bash
-just clear-cycle
+```
+mcp__haios-operations__cycle_clear()
 ```
 
-**Tools:** /close, Bash(just ready), Read, Skill(routing-gate)
+**Tools:** /close, mcp__haios-operations__queue_ready, Read, Skill(routing-gate)
 
 ---
 
@@ -352,7 +352,7 @@ just clear-cycle
 | CONCLUDE | **Are epoch artifacts reconciled?** | **Update chapters/arc/epoch per findings** |
 | CONCLUDE | Are learnings stored? | Run ingester_ingest |
 | CHAIN | Is investigation closed? | Run /close {backlog_id} |
-| CHAIN | Is next work identified? | Run `just ready` |
+| CHAIN | Is next work identified? | Run `mcp__haios-operations__queue_ready()` |
 
 **EXPLORE phase principles:**
 - Explore freely before constraining with hypotheses
