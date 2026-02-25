@@ -19972,3 +19972,15 @@
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-02-25T22:02:41.433366", "session_id": 458}
 {"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-230", "agent": "Hephaestus", "timestamp": "2026-02-25T22:02:47.236100", "session_id": 458}
 {"type": "SessionEnded", "session": 458, "agent": "Hephaestus", "timestamp": "2026-02-25T22:03:49.395893", "session_id": 458}
+{"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: mutation tools should not be needed during investigation", "session_id": 458}
+{"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-02-25T22:08:56.962224", "session_id": 458}
+{"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-02-25T22:08:56.966989", "session_id": 458}
+{"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: mutation tools should not be needed during investigation", "session_id": 458}
+{"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-02-25T22:08:58.237795", "session_id": 458}
+{"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-02-25T22:08:58.241461", "session_id": 458}
+{"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: mutation tools should not be needed during investigation", "session_id": 458}
+{"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-02-25T22:08:59.355141", "session_id": 458}
+{"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-02-25T22:08:59.361154", "session_id": 458}
+{"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: mutation tools should not be needed during investigation", "session_id": 458}
+{"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-02-25T22:09:00.676931", "session_id": 458}
+{"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-02-25T22:09:00.681958", "session_id": 458}

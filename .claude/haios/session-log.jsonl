@@ -1,2 +1,3 @@
 {"t": "test", "v": "0p/0f", "w": "", "ts": "21:56"}
 {"t": "test", "v": "1767p/2f", "w": "", "ts": "21:56"}
+{"t": "commit", "v": "$(cat <<'EOF'\nSession 458: WORK-230 Migr", "w": "", "ts": "22:04"}
