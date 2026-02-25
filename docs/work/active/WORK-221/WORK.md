@@ -3,14 +3,15 @@ template: work_item
 id: WORK-221
 title: Investigation Closure Spawn Completeness
 type: investigation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-25
 spawned_by: WORK-220
-spawned_children: []
+spawned_children:
+- WORK-227
 chapter: CH-066
 arc: call
-closed: null
+closed: '2026-02-25'
 priority: medium
 effort: small
 traces_to:
@@ -27,23 +28,36 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: ready
-cycle_phase: backlog
-current_node: backlog
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: 2026-02-25 12:10:11
-  exited: null
+  exited: '2026-02-25T16:29:36.754834'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 89005
+- 89006
+- 89007
+- 89008
+- 89009
+- 89010
+- 89011
+- 89012
+- 89013
+- 89014
 extensions: {}
 version: '2.0'
 generated: 2026-02-25
-last_updated: '2026-02-25T12:16:14.284486'
+last_updated: '2026-02-25T16:29:36.759655'
 queue_history:
 - position: ready
   entered: '2026-02-25T12:16:14.281974'
+  exited: '2026-02-25T16:29:36.754834'
+- position: done
+  entered: '2026-02-25T16:29:36.754834'
   exited: null
 ---
 # WORK-221: Investigation Closure Spawn Completeness
@@ -74,12 +88,20 @@ WORK-218 investigation identified Phases 0-3 for the MCP Operations Server but o
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] Root cause analysis of investigation-cycle CONCLUDE phase spawn behavior
-- [ ] Proposed fix (skill update, gate, or checklist) to prevent silent work item drops
+- [x] Root cause analysis of investigation-cycle CONCLUDE phase spawn behavior
+- [x] Proposed fix (skill update, gate, or checklist) to prevent silent work item drops
 
 ---
 
 ## History
+
+### 2026-02-25 - Investigated (Session 457)
+- Root cause: Three enforcement points use binary presence checks, not completeness checks
+- H1 Confirmed: spawned_work optional is by design for zero-spawn, but partial-spawn case unconsidered
+- H2 Confirmed: Completeness enforcement never built (no cross-reference validation)
+- H3 Confirmed: Deferred work relies on informal prose, recovered via implicit implementation chaining
+- Spawned WORK-227: Implementation to add Work Disposition table + cross-reference validation
+- Memory stored: concepts 89005-89014
 
 ### 2026-02-25 - Created (Session 451)
 - Initial creation
