@@ -12,31 +12,20 @@ last_updated: '2026-02-21T00:40:00'
 
 ---
 
-## Step 1: Load Config
-
-Read `.claude/haios/config/haios.yaml` first - this drives everything else.
-
-Extract:
-- `epoch.epoch_file` - path to current epoch
-- `epoch.active_arcs` - list of active arcs (ADR-042: arcs > chapters)
-- `epoch.arcs_dir` - path to arcs directory
-
----
-
-## Step 2: Load Context via Orchestrator (WORK-011, WORK-180)
+## Step 1: Load Context via Orchestrator (WORK-011, WORK-180)
 
 Run the unified coldstart orchestrator:
 
-```bash
-just coldstart-orchestrator
+```
+mcp__haios-operations__coldstart_orchestrator()
 ```
 
 **Tier selection (ADR-047):** The orchestrator auto-detects the appropriate tier, or you can specify one explicitly:
 
-```bash
-just coldstart-orchestrator --tier full     # New epoch/arc work, first session after transition
-just coldstart-orchestrator --tier light    # Continuation of prior session work
-just coldstart-orchestrator --tier minimal  # Housekeeping (doc fixes, drift correction)
+```
+mcp__haios-operations__coldstart_orchestrator(tier="full")    # New epoch/arc work, first session after transition
+mcp__haios-operations__coldstart_orchestrator(tier="light")   # Continuation of prior session work
+mcp__haios-operations__coldstart_orchestrator(tier="minimal") # Housekeeping (doc fixes, drift correction)
 ```
 
 | Tier | When | Phases |
@@ -65,7 +54,7 @@ The output includes:
 
 ---
 
-## Step 3: Query Memory Refs
+## Step 2: Query Memory Refs
 
 If the SESSION CONTEXT output shows "Memory IDs to query: [...]":
 
@@ -75,17 +64,17 @@ Query those IDs via db_query or let the orchestrator handle it.
 
 ---
 
-## Step 4: Session Start
+## Step 3: Session Start
 
-```bash
-just session-start {N}
+```
+mcp__haios-operations__session_start(session_number=N)
 ```
 
 Where N = current session + 1 from `.claude/session` (read last line as integer, increment by 1).
 
 ---
 
-## Step 5: Summary Output
+## Step 4: Summary Output
 
 Provide brief summary:
 - **Context loaded:** Via orchestrator (which tier, which phases)
@@ -95,7 +84,7 @@ Provide brief summary:
 
 ---
 
-## Step 6: Invoke Survey Cycle
+## Step 5: Invoke Survey Cycle
 
 **MUST** chain to survey-cycle for work selection:
 
@@ -105,7 +94,7 @@ Skill(skill="survey-cycle")
 
 Survey-cycle owns routing:
 - Checks checkpoint `pending` for prior work
-- Presents options from `just ready`
+- Presents options from `mcp__haios-operations__queue_ready()`
 - Routes to correct cycle based on work type
 
 ---
@@ -114,16 +103,16 @@ Survey-cycle owns routing:
 
 If an agent in Light or Minimal tier discovers it needs more context mid-session:
 
-```bash
-just coldstart-orchestrator --extend epoch operations
+```
+mcp__haios-operations__coldstart_orchestrator(tier="full")
 ```
 
-**Note:** `--extend` is not yet implemented (deferred to WORK-181). Currently prints a message. Use `--tier full` as a workaround.
+**Note:** `--extend` was a Tier 3 flag (deferred to WORK-181, not yet implemented). Use the MCP tool with `tier="full"` as the workaround.
 
 ---
 
 ## Key Principle
 
-**Ground yourself first. Config -> Orchestrator -> Survey.**
+**Ground yourself first. Orchestrator -> Memory Refs -> Session Start -> Survey.**
 
 Coldstart loads context. Survey-cycle selects work. Agent doesn't skip the chain.
