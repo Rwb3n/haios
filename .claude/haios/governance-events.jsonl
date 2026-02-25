@@ -19733,3 +19733,11 @@
 {"type": "MCPGateChecked", "tool": "hierarchy_close_work", "primitive": "mcp-mutate", "state": "CONCLUDE", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 457}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-25T16:44:39.967480", "session_id": 457}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-02-25T16:44:40.009777", "session_id": 457}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-25T16:48:25.592391", "session_id": 457}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-229", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-25T16:48:25.600158", "session_id": 457}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-229"], "from": "backlog", "to": "ready", "timestamp": "2026-02-25T16:48:25.607286", "rationale": "Operator directive S457: continue MCP migration, skills batch first"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-25T16:48:25.607286", "session_id": 457}
+{"type": "CyclePhaseEntered", "phase": "DO", "work_id": "WORK-229", "agent": "Hephaestus", "timestamp": "2026-02-25T16:48:31.451916", "session_id": 457}
+{"type": "MCPGateChecked", "tool": "hierarchy_close_work", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: mutation tools should not be needed during investigation", "session_id": 457}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-25T16:51:41.714359", "session_id": 457}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-02-25T16:51:41.756371", "session_id": 457}

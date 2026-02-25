@@ -32,9 +32,13 @@ load_memory_refs:
 pending:
   - WORK-222
   - WORK-227
+  - WORK-230
 
-drift_observed: []
+drift_observed:
+  - "scaffold_checkpoint MCP tool (WORK-226) has no consumer in checkpoint-cycle skill"
 
 completed:
-  - "WORK-221: Investigation Closure Spawn Completeness — root cause identified (binary presence checks, no completeness enforcement), 3 hypotheses confirmed, spawned WORK-227"
+  - "WORK-221: Investigation Closure Spawn Completeness — root cause (binary presence checks), spawned WORK-227"
+  - "WORK-228: Audit Just Recipe Consumers — 62 migratable refs found, spawned WORK-229/230"
+  - "WORK-229: Migrated 35 just refs to MCP across 11 skill files (cycle_set/clear/ready/update-status)"
 ---

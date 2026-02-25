@@ -3,14 +3,14 @@ template: work_item
 id: WORK-229
 title: Migrate Remaining Skill cycle_set/clear/ready References to MCP
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: '2026-02-25'
 spawned_by: WORK-228
 spawned_children: []
 chapter: CH-066
 arc: call
-closed: null
+closed: '2026-02-25'
 priority: medium
 effort: medium
 traces_to:
@@ -38,26 +38,29 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: ready
-cycle_phase: DO
+queue_position: done
+cycle_phase: done
 current_node: DO
 node_history:
 - node: backlog
   entered: '2026-02-25T16:39:52.533618'
-  exited: null
+  exited: '2026-02-25T16:51:41.720979'
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions: {}
 version: '2.0'
 generated: 2026-02-25
-last_updated: '2026-02-25T16:48:25.604677'
+last_updated: '2026-02-25T16:51:41.726152'
 queue_history:
 - position: backlog
   entered: '2026-02-25T16:39:52.533618'
   exited: '2026-02-25T16:48:25.601161'
 - position: ready
   entered: '2026-02-25T16:48:25.601161'
+  exited: '2026-02-25T16:51:41.720979'
+- position: done
+  entered: '2026-02-25T16:51:41.720979'
   exited: null
 ---
 # WORK-229: Migrate Remaining Skill cycle_set/clear/ready References to MCP
