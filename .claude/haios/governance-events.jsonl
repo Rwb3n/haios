@@ -20046,3 +20046,28 @@
 {"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: mutation tools should not be needed during investigation", "session_id": 459}
 {"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-02-25T22:58:17.049252", "session_id": 459}
 {"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-02-25T22:58:17.052822", "session_id": 459}
+{"type": "SessionStarted", "session": 460, "agent": "Hephaestus", "timestamp": "2026-02-26T00:48:54.874371", "session_id": 460}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-26T00:50:16.901354", "session_id": 460}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-236", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-02-26T00:50:16.908390", "session_id": 460}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 0, "timestamp": "2026-02-26T00:50:16.981296", "session_id": 460}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-02-26T00:50:21.494490", "session_id": 460}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-236", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-02-26T00:50:21.503642", "session_id": 460}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-236"], "from": "backlog", "to": "ready", "timestamp": "2026-02-26T00:50:21.512025", "rationale": "Session 460 selection \u2014 context_pct consumer design, completes CH-059 governance event infrastructure"}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-02-26T00:50:21.513024", "session_id": 460}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-02-26T00:50:28.044402", "session_id": 460}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-236", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-02-26T00:50:28.055248", "session_id": 460}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-236"], "from": "ready", "to": "working", "timestamp": "2026-02-26T00:50:28.065760", "rationale": "Session 460 active work"}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-02-26T00:50:28.065760", "session_id": 460}
+{"type": "CyclePhaseEntered", "phase": "EXPLORE", "work_id": "WORK-236", "agent": "Hephaestus", "timestamp": "2026-02-26T00:50:36.568179", "session_id": 460}
+{"type": "MCPGateChecked", "tool": "scaffold_investigation", "primitive": "mcp-scaffold", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: scaffolding new items during investigation is unusual", "session_id": 460}
+{"type": "CyclePhaseEntered", "phase": "HYPOTHESIZE", "work_id": "WORK-236", "agent": "Hephaestus", "timestamp": "2026-02-26T00:55:06.138797", "session_id": 460}
+{"type": "CyclePhaseEntered", "phase": "VALIDATE", "work_id": "WORK-236", "agent": "Hephaestus", "timestamp": "2026-02-26T00:56:31.399409", "session_id": 460}
+{"type": "CyclePhaseEntered", "phase": "CONCLUDE", "work_id": "WORK-236", "agent": "Hephaestus", "timestamp": "2026-02-26T00:57:02.694185", "session_id": 460}
+{"type": "MCPGateChecked", "tool": "scaffold_work", "primitive": "mcp-scaffold", "state": "CONCLUDE", "allowed": true, "reason": "Unknown primitive 'mcp-scaffold', defaulting to allow", "session_id": 460}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-236", "agent": "Hephaestus", "timestamp": "2026-02-26T00:59:58.464178", "session_id": 460}
+{"type": "CyclePhaseEntered", "phase": "VALIDATE", "work_id": "WORK-236", "agent": "Hephaestus", "timestamp": "2026-02-26T01:02:48.879512", "session_id": 460}
+{"type": "CyclePhaseEntered", "phase": "ARCHIVE", "work_id": "WORK-236", "agent": "Hephaestus", "timestamp": "2026-02-26T01:02:58.133506", "session_id": 460}
+{"type": "MCPGateChecked", "tool": "hierarchy_close_work", "primitive": "mcp-mutate", "state": "ARCHIVE", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 460}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-02-26T01:03:02.427190", "session_id": 460}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-02-26T01:03:02.461775", "session_id": 460}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-236", "agent": "Hephaestus", "timestamp": "2026-02-26T01:03:23.938466", "session_id": 460}

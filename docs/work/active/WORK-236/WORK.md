@@ -3,10 +3,10 @@ template: work_item
 id: WORK-236
 title: 'Investigation: context_pct Governance Event Consumer Design'
 type: investigation
-status: active
+status: complete
 owner: Hephaestus
 created: '2026-02-25'
-closed: null
+closed: '2026-02-26'
 priority: medium
 effort: small
 chapter: CH-059
@@ -14,37 +14,62 @@ arc: call
 traces_to:
 - REQ-CEREMONY-002
 spawned_by: WORK-233
-spawned_children: []
+spawned_children:
+- WORK-237
 blocked_by: []
 blocks: []
 enables:
 - WORK-233
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: '2026-02-25T22:58:17.052301'
-  exited: null
+  exited: '2026-02-26T01:03:02.432219'
 queue_history:
 - position: backlog
   entered: '2026-02-25T22:58:17.052301'
+  exited: '2026-02-26T00:50:21.504644'
+- position: ready
+  entered: '2026-02-26T00:50:21.504644'
+  exited: '2026-02-26T00:50:28.056255'
+- position: working
+  entered: '2026-02-26T00:50:28.056255'
+  exited: '2026-02-26T01:03:02.432219'
+- position: done
+  entered: '2026-02-26T01:03:02.432219'
   exited: null
-memory_refs: []
+memory_refs:
+- 89083
+- 89084
+- 89085
+- 89086
+- 89087
+- 89109
+- 89110
+- 89111
+- 89112
+- 89113
+- 89109
+- 89114
+- 89115
 requirement_refs: []
 source_files:
 - .claude/haios/lib/governance_events.py
 - .claude/hooks/hooks/user_prompt_submit.py
 - .claude/hooks/hooks/post_tool_use.py
 acceptance_criteria:
-- "Identify which hook(s) should populate context_pct when calling governance event log functions"
-- "Design proposal: where _estimate_context_usage() should be called and how context_pct flows to log_* functions"
-- "Determine if PostToolUse hook or UserPromptSubmit hook is the right injection point"
+- Identify which hook(s) should populate context_pct when calling governance event
+  log functions
+- 'Design proposal: where _estimate_context_usage() should be called and how context_pct
+  flows to log_* functions'
+- Determine if PostToolUse hook or UserPromptSubmit hook is the right injection point
 artifacts: []
 extensions: {}
 version: '2.0'
 generated: '2026-02-25'
-last_updated: '2026-02-25'
+last_updated: '2026-02-26T01:03:02.437755'
 ---
 # WORK-236: Investigation: context_pct Governance Event Consumer Design
 
