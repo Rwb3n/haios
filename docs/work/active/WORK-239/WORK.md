@@ -20,17 +20,21 @@ source_files:
 - .claude/haios/lib/status_propagator.py
 - tests/test_status_propagator.py
 acceptance_criteria:
-- "is_chapter_complete() checks both work item statuses AND exit criteria checkboxes from CHAPTER.md"
-- "New _check_exit_criteria() method parses ## Exit Criteria section from CHAPTER.md"
-- "Graceful degradation: returns True (count-only) when CHAPTER.md or exit criteria section missing"
-- "New action 'chapter_criteria_unmet' returned when all work items done but exit criteria unchecked"
-- "Tests cover: all criteria checked, some unchecked, no CHAPTER.md, no exit criteria section"
+- is_chapter_complete() checks both work item statuses AND exit criteria checkboxes
+  from CHAPTER.md
+- 'New _check_exit_criteria() method parses ## Exit Criteria section from CHAPTER.md'
+- 'Graceful degradation: returns True (count-only) when CHAPTER.md or exit criteria
+  section missing'
+- New action 'chapter_criteria_unmet' returned when all work items done but exit criteria
+  unchecked
+- 'Tests cover: all criteria checked, some unchecked, no CHAPTER.md, no exit criteria
+  section'
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: working
+cycle_phase: DONE
+current_node: DONE
 node_history:
 - node: backlog
   entered: '2026-03-06T22:09:18.890077'
@@ -38,14 +42,22 @@ node_history:
 queue_history:
 - position: backlog
   entered: '2026-03-06T22:09:18.890077'
+  exited: '2026-03-06T22:17:56.366660'
+- position: ready
+  entered: '2026-03-06T22:17:56.366660'
+  exited: '2026-03-06T22:17:59.828466'
+- position: working
+  entered: '2026-03-06T22:17:59.828466'
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 89202
+- 89203
 extensions: {}
 version: '2.0'
 generated: '2026-03-06'
-last_updated: '2026-03-06T22:09:18.890077'
+last_updated: '2026-03-06T22:22:43.725798'
 ---
 # WORK-239: Implement Exit Criteria Gate in StatusPropagator
 

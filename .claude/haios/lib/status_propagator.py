@@ -27,7 +27,7 @@ import re
 import yaml
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 # Work item statuses considered "complete"
 COMPLETE_STATUSES = {"complete", "completed", "done", "closed", "archived"}
@@ -75,7 +75,7 @@ class StatusPropagator:
 
         Returns:
             dict with keys:
-            - action: "no_hierarchy" | "chapter_incomplete" | "chapter_completed" | "arc_completed"
+            - action: "no_hierarchy" | "chapter_incomplete" | "chapter_criteria_unmet" | "chapter_completed" | "arc_completed"
             - work_id: The work item ID
             - chapter: Chapter ID (if hierarchy exists)
             - arc: Arc name (if hierarchy exists)
@@ -89,11 +89,30 @@ class StatusPropagator:
         chapter_id = ctx["chapter"]
         arc_name = ctx["arc"]
 
-        if not self.is_chapter_complete(chapter_id):
+        # Check work item completion first
+        items = self._hierarchy.get_work(chapter_id)
+        all_items_complete = (
+            bool(items) and all(item.status.lower() in COMPLETE_STATUSES for item in items)
+        )
+
+        if not all_items_complete:
             return {
                 "action": "chapter_incomplete",
                 "work_id": work_id,
                 "chapter": chapter_id,
+            }
+
+        # Check exit criteria (WORK-239: two-predicate conjunction)
+        criteria = self._check_exit_criteria(chapter_id, arc_name)
+        if criteria is not None and not criteria["all_checked"]:
+            return {
+                "action": "chapter_criteria_unmet",
+                "work_id": work_id,
+                "chapter": chapter_id,
+                "arc": arc_name,
+                "unchecked_items": criteria["unchecked_items"],
+                "criteria_checked": criteria["checked"],
+                "criteria_total": criteria["total"],
             }
 
         update_result = self.update_arc_chapter_status(arc_name, chapter_id, "Complete")
@@ -134,24 +153,125 @@ class StatusPropagator:
             return None
         return {"chapter": chapter, "arc": arc}
 
-    def is_chapter_complete(self, chapter_id: str) -> bool:
+    def is_chapter_complete(self, chapter_id: str, arc_name: Optional[str] = None) -> bool:
         """
-        Check if all work items assigned to chapter_id are complete.
+        Check if chapter is complete: all work items done AND exit criteria checked.
 
-        Delegates to HierarchyQueryEngine.get_work() for chapter membership
-        (authoritative source per A4 critique). Returns False for unfunded
-        chapters (no work items found).
+        Two-predicate conjunction (WORK-222 / WORK-239):
+        1. All work items assigned to chapter have complete status
+        2. All exit criteria checkboxes in CHAPTER.md are checked
+
+        Graceful degradation (L3.6): if CHAPTER.md or exit criteria section
+        is missing, falls back to work-item-count-only predicate.
 
         Args:
             chapter_id: Chapter ID (e.g., "CH-045")
+            arc_name: Arc directory name (optional). When provided, enables
+                      exit criteria validation by locating CHAPTER.md.
 
         Returns:
-            True if all chapter work items have complete status, False otherwise.
+            True if chapter is complete, False otherwise.
         """
+        # Predicate 1: All work items complete
         items = self._hierarchy.get_work(chapter_id)
         if not items:
             return False  # No items = not complete (unfunded)
-        return all(item.status.lower() in COMPLETE_STATUSES for item in items)
+        if not all(item.status.lower() in COMPLETE_STATUSES for item in items):
+            return False
+
+        # Predicate 2: Exit criteria (when arc_name available)
+        if arc_name is not None:
+            criteria = self._check_exit_criteria(chapter_id, arc_name)
+            if criteria is not None and not criteria["all_checked"]:
+                return False
+
+        return True
+
+    def _check_exit_criteria(self, chapter_id: str, arc_name: str) -> Optional[Dict]:
+        """
+        Parse exit criteria checkboxes from CHAPTER.md.
+
+        Locates CHAPTER.md via arcs_dir/arc_name/chapters/CH-XXX-*/CHAPTER.md
+        convention, then parses the ## Exit Criteria section for markdown
+        checkboxes (- [ ] / - [x]).
+
+        Args:
+            chapter_id: Chapter ID (e.g., "CH-045")
+            arc_name: Arc directory name (e.g., "infrastructure")
+
+        Returns:
+            {"all_checked": bool, "total": int, "checked": int, "unchecked_items": list[str]}
+            or None if CHAPTER.md not found or no exit criteria section.
+        """
+        chapter_file = self._find_chapter_file(chapter_id, arc_name)
+        if chapter_file is None:
+            return None
+
+        content = chapter_file.read_text(encoding="utf-8")
+
+        # Find ## Exit Criteria section
+        lines = content.split("\n")
+        in_section = False
+        criteria: List[tuple] = []
+
+        for line in lines:
+            if re.match(r"^##\s+Exit Criteria", line):
+                in_section = True
+                continue
+            if in_section and re.match(r"^##\s+", line):
+                break  # Next section starts
+            if in_section:
+                m = re.match(r"^- \[([ x])\] (.+)$", line)
+                if m:
+                    checked = m.group(1) == "x"
+                    criteria.append((checked, m.group(2).strip()))
+
+        if not criteria:
+            return None  # No exit criteria found
+
+        checked_count = sum(1 for c, _ in criteria if c)
+        unchecked_items = [desc for c, desc in criteria if not c]
+
+        return {
+            "all_checked": checked_count == len(criteria),
+            "total": len(criteria),
+            "checked": checked_count,
+            "unchecked_items": unchecked_items,
+        }
+
+    def _find_chapter_file(self, chapter_id: str, arc_name: str) -> Optional[Path]:
+        """
+        Locate CHAPTER.md for a given chapter ID and arc.
+
+        Convention: {arcs_dir}/{arc_name}/chapters/{chapter_id}-{Name}/CHAPTER.md
+
+        Args:
+            chapter_id: Chapter ID (e.g., "CH-045")
+            arc_name: Arc directory name (e.g., "infrastructure")
+
+        Returns:
+            Path to CHAPTER.md, or None if not found.
+        """
+        haios_path = self._base_path / ".claude" / "haios" / "config" / "haios.yaml"
+        if not haios_path.exists():
+            return None
+        haios_config = yaml.safe_load(haios_path.read_text(encoding="utf-8"))
+        arcs_dir = haios_config.get("epoch", {}).get("arcs_dir", "")
+        if not arcs_dir:
+            return None
+
+        chapters_dir = self._base_path / arcs_dir / arc_name / "chapters"
+        if not chapters_dir.exists():
+            return None
+
+        # Scan for directory starting with chapter_id
+        for d in chapters_dir.iterdir():
+            if d.is_dir() and d.name.startswith(f"{chapter_id}-"):
+                chapter_file = d / "CHAPTER.md"
+                if chapter_file.exists():
+                    return chapter_file
+
+        return None
 
     def update_arc_chapter_status(
         self, arc_name: str, chapter_id: str, new_status: str

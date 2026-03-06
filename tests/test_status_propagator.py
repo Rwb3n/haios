@@ -270,3 +270,204 @@ class TestIsArcComplete:
         ])
         propagator = StatusPropagator(base_path=tmp_path)
         assert propagator.is_arc_complete("infrastructure") is False
+
+
+# =========================================================================
+# Helpers for exit criteria tests
+# =========================================================================
+
+
+def _create_chapter_md(base: Path, arc_name: str, chapter_id: str, chapter_name: str, criteria: list[tuple[bool, str]]):
+    """Helper: create a CHAPTER.md with exit criteria checkboxes.
+
+    criteria: list of (checked, description) tuples.
+    """
+    haios_dir = base / ".claude" / "haios"
+    config_dir = haios_dir / "config"
+    config_dir.mkdir(parents=True, exist_ok=True)
+    arcs_dir = haios_dir / "epochs" / "E2_7" / "arcs"
+
+    # Write haios.yaml if not exists
+    haios_yaml = config_dir / "haios.yaml"
+    if not haios_yaml.exists():
+        haios_yaml.write_text(
+            "epoch:\n  arcs_dir: .claude/haios/epochs/E2_7/arcs\n",
+            encoding="utf-8",
+        )
+
+    # Create chapter directory and CHAPTER.md
+    chapter_dir = arcs_dir / arc_name / "chapters" / f"{chapter_id}-{chapter_name}"
+    chapter_dir.mkdir(parents=True, exist_ok=True)
+
+    criteria_lines = []
+    for checked, desc in criteria:
+        mark = "x" if checked else " "
+        criteria_lines.append(f"- [{mark}] {desc}")
+
+    content = f"""# Chapter: {chapter_name}
+
+## Chapter Definition
+
+**Chapter ID:** {chapter_id}
+**Arc:** {arc_name}
+**Status:** Active
+
+## Exit Criteria
+
+{chr(10).join(criteria_lines)}
+"""
+    (chapter_dir / "CHAPTER.md").write_text(content, encoding="utf-8")
+
+
+# =========================================================================
+# Test 9: Exit criteria parsing
+# =========================================================================
+
+
+class TestCheckExitCriteria:
+    def test_all_criteria_checked(self, tmp_path):
+        """Returns all_checked=True when every exit criteria checkbox is marked [x]."""
+        _create_chapter_md(tmp_path, "infrastructure", "CH-049", "BugBatch", [
+            (True, "Bug A fixed"),
+            (True, "Bug B fixed"),
+        ])
+        propagator = StatusPropagator(base_path=tmp_path)
+        result = propagator._check_exit_criteria("CH-049", "infrastructure")
+        assert result is not None
+        assert result["all_checked"] is True
+        assert result["total"] == 2
+        assert result["checked"] == 2
+        assert result["unchecked_items"] == []
+
+    def test_some_criteria_unchecked(self, tmp_path):
+        """Returns all_checked=False when some checkboxes are unchecked."""
+        _create_chapter_md(tmp_path, "infrastructure", "CH-049", "BugBatch", [
+            (True, "Bug A fixed"),
+            (False, "Bug B fixed"),
+            (False, "Bug C fixed"),
+        ])
+        propagator = StatusPropagator(base_path=tmp_path)
+        result = propagator._check_exit_criteria("CH-049", "infrastructure")
+        assert result is not None
+        assert result["all_checked"] is False
+        assert result["total"] == 3
+        assert result["checked"] == 1
+        assert result["unchecked_items"] == ["Bug B fixed", "Bug C fixed"]
+
+    def test_no_chapter_file_returns_none(self, tmp_path):
+        """Returns None when CHAPTER.md does not exist (graceful degradation)."""
+        _create_arc_md(tmp_path, "infrastructure", [("CH-049", "BugBatch", "Planning")])
+        propagator = StatusPropagator(base_path=tmp_path)
+        result = propagator._check_exit_criteria("CH-049", "infrastructure")
+        assert result is None
+
+    def test_no_exit_criteria_section_returns_none(self, tmp_path):
+        """Returns None when CHAPTER.md has no Exit Criteria heading."""
+        haios_dir = tmp_path / ".claude" / "haios"
+        config_dir = haios_dir / "config"
+        config_dir.mkdir(parents=True, exist_ok=True)
+        (config_dir / "haios.yaml").write_text(
+            "epoch:\n  arcs_dir: .claude/haios/epochs/E2_7/arcs\n",
+            encoding="utf-8",
+        )
+        chapter_dir = haios_dir / "epochs" / "E2_7" / "arcs" / "infrastructure" / "chapters" / "CH-049-BugBatch"
+        chapter_dir.mkdir(parents=True, exist_ok=True)
+        (chapter_dir / "CHAPTER.md").write_text("# Chapter\n\n## Purpose\n\nSome text.\n", encoding="utf-8")
+
+        propagator = StatusPropagator(base_path=tmp_path)
+        result = propagator._check_exit_criteria("CH-049", "infrastructure")
+        assert result is None
+
+
+# =========================================================================
+# Test 10: is_chapter_complete with exit criteria gate
+# =========================================================================
+
+
+class TestIsChapterCompleteWithExitCriteria:
+    def test_complete_when_items_done_and_criteria_checked(self, tmp_path):
+        """Returns True when all work items complete AND all exit criteria checked."""
+        _create_work_item(tmp_path, "WORK-153", chapter="CH-049", arc="infrastructure", status="complete")
+        _create_arc_md(tmp_path, "infrastructure", [("CH-049", "BugBatch", "Planning")])
+        _create_chapter_md(tmp_path, "infrastructure", "CH-049", "BugBatch", [
+            (True, "Bug A fixed"),
+            (True, "Bug B fixed"),
+        ])
+        propagator = StatusPropagator(base_path=tmp_path)
+        assert propagator.is_chapter_complete("CH-049", arc_name="infrastructure") is True
+
+    def test_incomplete_when_items_done_but_criteria_unchecked(self, tmp_path):
+        """Returns False when all work items complete but exit criteria unchecked."""
+        _create_work_item(tmp_path, "WORK-153", chapter="CH-049", arc="infrastructure", status="complete")
+        _create_arc_md(tmp_path, "infrastructure", [("CH-049", "BugBatch", "Planning")])
+        _create_chapter_md(tmp_path, "infrastructure", "CH-049", "BugBatch", [
+            (True, "Bug A fixed"),
+            (False, "Bug B fixed"),
+        ])
+        propagator = StatusPropagator(base_path=tmp_path)
+        assert propagator.is_chapter_complete("CH-049", arc_name="infrastructure") is False
+
+    def test_incomplete_when_items_not_done(self, tmp_path):
+        """Returns False when work items not all complete (regardless of exit criteria)."""
+        _create_work_item(tmp_path, "WORK-153", chapter="CH-049", arc="infrastructure", status="complete")
+        _create_work_item(tmp_path, "WORK-154", chapter="CH-049", arc="infrastructure", status="active")
+        _create_arc_md(tmp_path, "infrastructure", [("CH-049", "BugBatch", "Planning")])
+        _create_chapter_md(tmp_path, "infrastructure", "CH-049", "BugBatch", [
+            (True, "Bug A fixed"),
+        ])
+        propagator = StatusPropagator(base_path=tmp_path)
+        assert propagator.is_chapter_complete("CH-049", arc_name="infrastructure") is False
+
+    def test_graceful_degradation_no_chapter_file(self, tmp_path):
+        """Falls back to count-only when no CHAPTER.md exists (L3.6)."""
+        _create_work_item(tmp_path, "WORK-153", chapter="CH-049", arc="infrastructure", status="complete")
+        _create_arc_md(tmp_path, "infrastructure", [("CH-049", "BugBatch", "Planning")])
+        propagator = StatusPropagator(base_path=tmp_path)
+        # No CHAPTER.md → graceful degradation → count-only → True
+        assert propagator.is_chapter_complete("CH-049", arc_name="infrastructure") is True
+
+    def test_backward_compat_no_arc_name(self, tmp_path):
+        """Works without arc_name (backward compatibility, skips exit criteria)."""
+        _create_work_item(tmp_path, "WORK-153", chapter="CH-049", arc="infrastructure", status="complete")
+        propagator = StatusPropagator(base_path=tmp_path)
+        # No arc_name → can't locate CHAPTER.md → count-only
+        assert propagator.is_chapter_complete("CH-049") is True
+
+
+# =========================================================================
+# Test 11: Propagation with chapter_criteria_unmet action
+# =========================================================================
+
+
+class TestPropagateCriteriaUnmet:
+    def test_criteria_unmet_action(self, tmp_path):
+        """Returns chapter_criteria_unmet when items done but criteria unchecked."""
+        _create_work_item(tmp_path, "WORK-153", chapter="CH-049", arc="infrastructure", status="complete")
+        _create_arc_md(tmp_path, "infrastructure", [("CH-049", "BugBatch", "Planning")])
+        _create_chapter_md(tmp_path, "infrastructure", "CH-049", "BugBatch", [
+            (True, "Bug A fixed"),
+            (False, "Bug B fixed"),
+        ])
+        propagator = StatusPropagator(base_path=tmp_path)
+        result = propagator.propagate("WORK-153")
+        assert result["action"] == "chapter_criteria_unmet"
+        assert result["chapter"] == "CH-049"
+        assert "unchecked_items" in result
+        assert result["unchecked_items"] == ["Bug B fixed"]
+
+    def test_chapter_completes_when_criteria_met(self, tmp_path):
+        """Full propagation succeeds when items done AND criteria checked."""
+        _create_work_item(tmp_path, "WORK-153", chapter="CH-049", arc="infrastructure", status="complete")
+        _create_arc_md(tmp_path, "infrastructure", [
+            ("CH-049", "BugBatch", "Planning"),
+            ("CH-050", "OtherChapter", "Planning"),
+        ])
+        _create_chapter_md(tmp_path, "infrastructure", "CH-049", "BugBatch", [
+            (True, "Bug A fixed"),
+            (True, "Bug B fixed"),
+        ])
+        propagator = StatusPropagator(base_path=tmp_path)
+        result = propagator.propagate("WORK-153")
+        assert result["action"] == "chapter_completed"
+        assert result["arc_updated"] is True
+        assert result["arc_complete"] is False
