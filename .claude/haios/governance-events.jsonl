@@ -20540,3 +20540,4 @@
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-03-06T22:23:02.654918", "session_id": 462, "context_pct": 63.4}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-06T22:23:02.702523", "session_id": 462, "context_pct": 63.4}
 {"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-239", "agent": "Hephaestus", "timestamp": "2026-03-06T22:23:06.253492", "session_id": 462, "context_pct": 63.4}
+{"type": "SessionEnded", "session": 462, "agent": "Hephaestus", "timestamp": "2026-03-06T22:24:13.281769", "session_id": 462, "context_pct": 63.4}
