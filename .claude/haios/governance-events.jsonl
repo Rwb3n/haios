@@ -20562,3 +20562,4 @@
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-03-06T22:53:05.142637", "session_id": 463}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-06T22:53:05.200299", "session_id": 463}
 {"type": "MCPGateChecked", "tool": "scaffold_checkpoint", "primitive": "mcp-scaffold", "state": "CHAIN", "allowed": true, "reason": "Unknown primitive 'mcp-scaffold', defaulting to allow", "session_id": 463}
+{"type": "SessionEnded", "session": 463, "agent": "Hephaestus", "timestamp": "2026-03-06T23:00:08.639644", "session_id": 463}
