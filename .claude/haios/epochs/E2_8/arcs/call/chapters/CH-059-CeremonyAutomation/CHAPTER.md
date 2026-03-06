@@ -61,6 +61,10 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-234 | Constrain EXTRACT Phase Haiku Prompt to Eliminate File Reads | Complete | implementation |
 | WORK-236 | Investigation: context_pct Governance Event Consumer Design | Complete | investigation |
 | WORK-237 | Implement context_pct Auto-Injection via Slim Relay | Complete | implementation |
+| WORK-238 | Investigation: DONE/CHAIN Phase Duplication with Close-Work-Cycle | Complete | investigation |
+| WORK-241 | Eliminate dod-validation-cycle: absorb Agent UX Test into close-work VALIDATE | Backlog | implementation |
+| WORK-242 | Remove plan status double-update from impl-cycle DONE phase | Backlog | implementation |
+| WORK-243 | Clean /close command: remove stale Steps 2-3 duplicate documentation | Backlog | implementation |
 
 ---
 

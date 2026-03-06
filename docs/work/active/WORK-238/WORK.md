@@ -1,42 +1,48 @@
 ---
 template: work_item
 id: WORK-238
-title: "Investigation: Implementation-Cycle DONE/CHAIN Phase Duplication with Close-Work-Cycle"
+title: 'Investigation: Implementation-Cycle DONE/CHAIN Phase Duplication with Close-Work-Cycle'
 type: investigation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-03-06
 spawned_by: WORK-237
-spawned_children: []
+spawned_children:
+- WORK-241
+- WORK-242
+- WORK-243
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-03-06'
 priority: medium
 effort: medium
 traces_to:
 - REQ-CEREMONY-002
 - REQ-LIFECYCLE-005
-requirement_refs: []  # DEPRECATED: use traces_to instead
+requirement_refs: []
 source_files:
 - .claude/skills/implementation-cycle/phases/DONE.md
 - .claude/skills/implementation-cycle/phases/CHAIN.md
 - .claude/skills/close-work-cycle/SKILL.md
 - .claude/skills/retro-cycle/SKILL.md
 acceptance_criteria:
-- "Duplication map documented: which actions appear in multiple phases/skills with evidence"
-- "Root cause identified: why DONE/CHAIN diverged from close-work-cycle over time"
-- "Design proposal: unified closure flow that eliminates duplication while preserving all gates"
-- "Impact assessment: which other lifecycle skills (investigation-cycle, design-cycle) have similar patterns"
+- 'Duplication map documented: which actions appear in multiple phases/skills with
+  evidence'
+- 'Root cause identified: why DONE/CHAIN diverged from close-work-cycle over time'
+- 'Design proposal: unified closure flow that eliminates duplication while preserving
+  all gates'
+- 'Impact assessment: which other lifecycle skills (investigation-cycle, design-cycle)
+  have similar patterns'
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
-  - node: backlog
-    entered: 2026-03-06T21:46:30
-    exited: null
+- node: backlog
+  entered: 2026-03-06 21:46:30
+  exited: '2026-03-06T23:50:13.743289'
 artifacts: []
 cycle_docs: {}
 memory_refs:
@@ -54,10 +60,32 @@ memory_refs:
 - 89286
 - 89287
 - 89288
+- 89334
+- 89335
+- 89336
+- 89337
+- 89338
+- 89339
+- 89340
+- 89341
+- 89342
+- 89343
+- 89344
+- 89374
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-03-06
-last_updated: 2026-03-06T21:46:30
+last_updated: '2026-03-06T23:50:13.752018'
+queue_history:
+- position: ready
+  entered: '2026-03-06T23:37:05.150439'
+  exited: '2026-03-06T23:37:07.044343'
+- position: working
+  entered: '2026-03-06T23:37:07.044343'
+  exited: '2026-03-06T23:50:13.743289'
+- position: done
+  entered: '2026-03-06T23:50:13.743289'
+  exited: null
 ---
 # WORK-238: Investigation: Implementation-Cycle DONE/CHAIN Phase Duplication with Close-Work-Cycle
 
