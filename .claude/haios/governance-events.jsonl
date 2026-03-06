@@ -20498,3 +20498,45 @@
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-06T21:32:00.178435", "session_id": 461}
 {"type": "MCPGateChecked", "tool": "scaffold_work", "primitive": "mcp-scaffold", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: scaffolding new items during investigation is unusual", "session_id": 461}
 {"type": "SessionEnded", "session": 461, "agent": "Hephaestus", "timestamp": "2026-03-06T21:50:08.400482", "session_id": 461}
+{"type": "SessionStarted", "session": 462, "agent": "Hephaestus", "timestamp": "2026-03-06T22:03:48.991801", "session_id": 462, "context_pct": 17.2}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-03-06T22:06:23.941033", "session_id": 462, "context_pct": 17.2}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-222", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-03-06T22:06:23.948068", "session_id": 462, "context_pct": 17.2}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 0, "timestamp": "2026-03-06T22:06:24.043908", "session_id": 462, "context_pct": 17.2}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-03-06T22:06:34.861484", "session_id": 462, "context_pct": 17.2}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-222", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-03-06T22:06:34.871656", "session_id": 462, "context_pct": 17.2}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-222"], "from": "backlog", "to": "ready", "timestamp": "2026-03-06T22:06:34.880337", "rationale": "Operator selected for S462. Small investigation, CH-066."}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-03-06T22:06:34.880337", "session_id": 462, "context_pct": 17.2}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-03-06T22:06:38.161073", "session_id": 462, "context_pct": 17.2}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-222", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-03-06T22:06:38.168612", "session_id": 462, "context_pct": 17.2}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-222"], "from": "ready", "to": "working", "timestamp": "2026-03-06T22:06:38.178748", "rationale": "Operator selected for S462. Small investigation, CH-066 arc:call."}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-03-06T22:06:38.178748", "session_id": 462, "context_pct": 17.2}
+{"type": "CyclePhaseEntered", "phase": "EXPLORE", "work_id": "WORK-222", "agent": "Hephaestus", "timestamp": "2026-03-06T22:06:49.465472", "session_id": 462, "context_pct": 17.2}
+{"type": "CyclePhaseEntered", "phase": "HYPOTHESIZE", "work_id": "WORK-222", "agent": "Hephaestus", "timestamp": "2026-03-06T22:08:11.826570", "session_id": 462, "context_pct": 17.2}
+{"type": "CyclePhaseEntered", "phase": "VALIDATE", "work_id": "WORK-222", "agent": "Hephaestus", "timestamp": "2026-03-06T22:08:24.275901", "session_id": 462, "context_pct": 17.2}
+{"type": "CyclePhaseEntered", "phase": "CONCLUDE", "work_id": "WORK-222", "agent": "Hephaestus", "timestamp": "2026-03-06T22:08:37.005607", "session_id": 462, "context_pct": 17.2}
+{"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "CONCLUDE", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 462, "context_pct": 17.2}
+{"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-03-06T22:09:18.886407", "session_id": 462, "context_pct": 17.2}
+{"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-03-06T22:09:18.892742", "session_id": 462, "context_pct": 17.2}
+{"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "CONCLUDE", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 462, "context_pct": 63.4}
+{"type": "CeremonyStart", "ceremony": "create-work", "timestamp": "2026-03-06T22:11:36.436225", "session_id": 462, "context_pct": 63.4}
+{"type": "CeremonyEnd", "ceremony": "create-work", "side_effects": 0, "timestamp": "2026-03-06T22:11:36.439037", "session_id": 462, "context_pct": 63.4}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-222", "agent": "Hephaestus", "timestamp": "2026-03-06T22:12:23.649720", "session_id": 462, "context_pct": 63.4}
+{"type": "MCPGateChecked", "tool": "work_close", "primitive": "mcp-mutate", "state": "CHAIN", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 462, "context_pct": 63.4}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-03-06T22:12:30.296991", "session_id": 462, "context_pct": 63.4}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-06T22:12:30.324376", "session_id": 462, "context_pct": 63.4}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-03-06T22:17:56.358539", "session_id": 462, "context_pct": 63.4}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-239", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-03-06T22:17:56.366155", "session_id": 462, "context_pct": 63.4}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-239"], "from": "backlog", "to": "ready", "timestamp": "2026-03-06T22:17:56.372666", "rationale": "Context hot from WORK-222, small TDD implementation."}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-03-06T22:17:56.372666", "session_id": 462, "context_pct": 63.4}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-03-06T22:17:59.814950", "session_id": 462, "context_pct": 63.4}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-239", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-03-06T22:17:59.827466", "session_id": 462, "context_pct": 63.4}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-239"], "from": "ready", "to": "working", "timestamp": "2026-03-06T22:17:59.834976", "rationale": "Context hot from WORK-222 investigation. Small TDD implementation."}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-03-06T22:17:59.834976", "session_id": 462, "context_pct": 63.4}
+{"type": "CyclePhaseEntered", "phase": "DO", "work_id": "WORK-239", "agent": "Hephaestus", "timestamp": "2026-03-06T22:18:29.627429", "session_id": 462, "context_pct": 63.4}
+{"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": false, "reason": "BLOCKED: mutations not allowed in EXPLORE", "session_id": 462, "context_pct": 63.4}
+{"type": "MCPGateChecked", "tool": "work_create", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": false, "reason": "EXPLORE phase: mutation tools should not be needed during investigation", "session_id": 462, "context_pct": 63.4}
+{"type": "CyclePhaseEntered", "phase": "CHECK", "work_id": "WORK-239", "agent": "Hephaestus", "timestamp": "2026-03-06T22:22:18.980480", "session_id": 462, "context_pct": 63.4}
+{"type": "CyclePhaseEntered", "phase": "DONE", "work_id": "WORK-239", "agent": "Hephaestus", "timestamp": "2026-03-06T22:22:31.500252", "session_id": 462, "context_pct": 63.4}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-03-06T22:23:02.654918", "session_id": 462, "context_pct": 63.4}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-06T22:23:02.702523", "session_id": 462, "context_pct": 63.4}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-239", "agent": "Hephaestus", "timestamp": "2026-03-06T22:23:06.253492", "session_id": 462, "context_pct": 63.4}

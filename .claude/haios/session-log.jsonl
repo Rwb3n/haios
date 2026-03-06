@@ -1,9 +1,6 @@
-{"t": "test", "v": "0p/7f", "w": "", "ts": "21:23"}
-{"t": "test", "v": "4p/1f", "w": "", "ts": "21:23"}
-{"t": "test", "v": "4p/0f", "w": "", "ts": "21:24"}
-{"t": "test", "v": "16p/0f", "w": "", "ts": "21:24"}
-{"t": "test", "v": "7p/0f", "w": "", "ts": "21:25"}
-{"t": "test", "v": "41p/0f", "w": "", "ts": "21:25"}
-{"t": "test", "v": "1778p/3f", "w": "", "ts": "21:29"}
-{"t": "commit", "v": "$(cat <<'EOF'\nSession 461: WORK-237 \u00e2\u20ac\u201d ", "w": "", "ts": "21:31"}
-{"t": "commit", "v": "$(cat <<'EOF'\nSession 461: Spawn WORK-23", "w": "", "ts": "21:47"}
+{"t": "commit", "v": "$(cat <<'EOF'\nSession 462: WORK-222 \u00e2\u20ac\u201d ", "w": "", "ts": "22:12"}
+{"t": "test", "v": "15p/10f", "w": "", "ts": "22:19"}
+{"t": "test", "v": "24p/1f", "w": "", "ts": "22:21"}
+{"t": "test", "v": "25p/0f", "w": "", "ts": "22:21"}
+{"t": "test", "v": "61p/0f", "w": "", "ts": "22:22"}
+{"t": "commit", "v": "$(cat <<'EOF'\nSession 462: WORK-239 \u00e2\u20ac\u201d ", "w": "", "ts": "22:22"}
