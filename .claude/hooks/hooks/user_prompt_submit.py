@@ -93,6 +93,10 @@ def handle(hook_data: dict) -> str:
     context_usage = _get_context_usage(transcript_path)
     if context_usage:
         output_parts.append(context_usage)
+    # WORK-237: Write context_pct float to slim for governance event relay
+    context_pct = _extract_context_pct(transcript_path)
+    if context_pct is not None:
+        _write_context_pct_to_slim(cwd, context_pct)
 
     # Part 2: HAIOS Vitals (E2-119: refresh status before reading)
     # DISABLED Session 179: Vitals structure outdated after E2.2 chapter redesign
@@ -388,6 +392,76 @@ def _get_context_usage(transcript_path: str) -> Optional[str]:
         return f"[CONTEXT: {remaining:.0f}% remaining]"
     except Exception:
         return None
+
+
+def _extract_context_pct(transcript_path: str) -> Optional[float]:
+    """Extract remaining context percentage as float from transcript JSONL.
+
+    WORK-237: Returns float 0-100 representing remaining % for slim relay.
+    Mirrors _get_context_usage() computation without string formatting.
+    If _get_context_usage() changes, this function MUST be updated to match.
+
+    Returns:
+        Float 0-100 (rounded to 1 decimal) or None if unavailable.
+    """
+    if not transcript_path:
+        return None
+    path = Path(transcript_path)
+    if not path.exists():
+        return None
+    try:
+        last_usage = None
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    record = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if record.get("type") != "assistant":
+                    continue
+                msg = record.get("message")
+                if not isinstance(msg, dict) or "usage" not in msg:
+                    continue
+                last_usage = msg["usage"]
+        if last_usage is None:
+            return None
+        input_tokens = last_usage.get("input_tokens", 0)
+        cache_creation = last_usage.get("cache_creation_input_tokens", 0)
+        cache_read = last_usage.get("cache_read_input_tokens", 0)
+        total = input_tokens + cache_creation + cache_read
+        if total == 0:
+            return None
+        context_limit = 200_000
+        pct = min(100.0, (total / context_limit) * 100)
+        return round(100.0 - pct, 1)
+    except Exception:
+        return None
+
+
+def _write_context_pct_to_slim(cwd: str, context_pct: float) -> None:
+    """Write context_pct float to haios-status-slim.json for governance event relay.
+
+    WORK-237: Slim relay pattern — UserPromptSubmit writes, _append_event reads.
+    Fail-silent: stale/missing slim is better than broken hook.
+
+    Args:
+        cwd: Working directory path.
+        context_pct: Remaining context percentage (0-100 float).
+    """
+    if not cwd:
+        return
+    slim_path = Path(cwd) / ".claude" / "haios-status-slim.json"
+    if not slim_path.exists():
+        return
+    try:
+        data = json.loads(slim_path.read_text(encoding="utf-8-sig"))
+        data["context_pct"] = context_pct
+        slim_path.write_text(json.dumps(data, indent=4), encoding="utf-8")
+    except Exception:
+        pass
 
 
 def _get_vitals(cwd: str, slim: Optional[dict] = None) -> Optional[str]:

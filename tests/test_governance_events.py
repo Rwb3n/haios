@@ -21,7 +21,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent / ".claude" / "haios" / "lib
 def temp_events_file(tmp_path):
     """Create a temporary events file for testing."""
     events_file = tmp_path / "governance-events.jsonl"
-    with patch("governance_events.EVENTS_FILE", events_file):
+    with patch("governance_events.EVENTS_FILE", events_file), \
+         patch("governance_events.SLIM_FILE", tmp_path / "nonexistent-slim.json"):
         yield events_file
 
 
@@ -364,7 +365,7 @@ class TestContextPctField:
             assert events[0]["context_pct"] == 72.5
 
     def test_log_phase_transition_without_context_pct(self, tmp_path):
-        """context_pct absent from event when not passed (backward compat)."""
+        """context_pct absent from event when not passed and slim has no field (backward compat)."""
         from governance_events import log_phase_transition, read_events
 
         events_file = tmp_path / "governance-events.jsonl"
@@ -372,7 +373,8 @@ class TestContextPctField:
         session_file.write_text("459\n")
 
         with patch("governance_events.EVENTS_FILE", events_file), \
-             patch("governance_events.SESSION_FILE", session_file):
+             patch("governance_events.SESSION_FILE", session_file), \
+             patch("governance_events.SLIM_FILE", tmp_path / "nonexistent-slim.json"):
             event = log_phase_transition("DO", "WORK-233", "Hephaestus")
             assert "context_pct" not in event
 
@@ -636,3 +638,150 @@ class TestArchiveGovernanceEvents:
         archive_path = epoch_dir / "governance-events.jsonl"
         assert archive_path.exists()
         assert archive_path.stat().st_size == 0
+
+
+# =============================================================================
+# WORK-237: context_pct Auto-Injection via Slim Relay
+# =============================================================================
+
+
+class TestContextPctAutoInjection:
+    """WORK-237: Auto-inject context_pct from slim when caller doesn't provide explicit value."""
+
+    def test_append_event_reads_context_pct_from_slim(self, tmp_path):
+        """Test 1: _append_event auto-injects context_pct from slim file."""
+        import governance_events
+        from governance_events import log_phase_transition, read_events
+
+        events_file = tmp_path / "governance-events.jsonl"
+        session_file = tmp_path / "session"
+        session_file.write_text("461\n")
+        slim_file = tmp_path / "haios-status-slim.json"
+        slim_file.write_text(json.dumps({"context_pct": 42.5}), encoding="utf-8")
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file), \
+             patch("governance_events.SLIM_FILE", slim_file):
+            event = log_phase_transition("DO", "WORK-237", "Hephaestus")
+            assert event["context_pct"] == 42.5
+
+            events = read_events()
+            assert events[0]["context_pct"] == 42.5
+
+    def test_explicit_context_pct_overrides_slim(self, tmp_path):
+        """Test 2: Explicit caller value wins over slim value."""
+        import governance_events
+        from governance_events import log_phase_transition
+
+        events_file = tmp_path / "governance-events.jsonl"
+        session_file = tmp_path / "session"
+        session_file.write_text("461\n")
+        slim_file = tmp_path / "haios-status-slim.json"
+        slim_file.write_text(json.dumps({"context_pct": 42.5}), encoding="utf-8")
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file), \
+             patch("governance_events.SLIM_FILE", slim_file):
+            event = log_phase_transition("DO", "WORK-237", "Hephaestus", context_pct=99.0)
+            assert event["context_pct"] == 99.0
+
+    def test_append_event_no_context_pct_when_slim_missing(self, tmp_path):
+        """Test 3: No context_pct in event when slim file does not exist."""
+        import governance_events
+        from governance_events import log_phase_transition
+
+        events_file = tmp_path / "governance-events.jsonl"
+        session_file = tmp_path / "session"
+        session_file.write_text("461\n")
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file), \
+             patch("governance_events.SLIM_FILE", tmp_path / "nonexistent-slim.json"):
+            event = log_phase_transition("DO", "WORK-237", "Hephaestus")
+            assert "context_pct" not in event
+
+    def test_append_event_no_context_pct_when_slim_lacks_field(self, tmp_path):
+        """Test 4: No context_pct when slim exists but has no context_pct key."""
+        import governance_events
+        from governance_events import log_phase_transition
+
+        events_file = tmp_path / "governance-events.jsonl"
+        session_file = tmp_path / "session"
+        session_file.write_text("461\n")
+        slim_file = tmp_path / "haios-status-slim.json"
+        slim_file.write_text(json.dumps({"session_state": {}}), encoding="utf-8")
+
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SESSION_FILE", session_file), \
+             patch("governance_events.SLIM_FILE", slim_file):
+            event = log_phase_transition("DO", "WORK-237", "Hephaestus")
+            assert "context_pct" not in event
+
+    def test_write_context_pct_to_slim(self, tmp_path):
+        """Test 5: _write_context_pct_to_slim writes float and preserves other keys."""
+        # Add hooks path to sys.path for import
+        hooks_path = str(Path(__file__).parent.parent / ".claude" / "hooks" / "hooks")
+        if hooks_path not in sys.path:
+            sys.path.insert(0, hooks_path)
+        from user_prompt_submit import _write_context_pct_to_slim
+
+        slim_dir = tmp_path / ".claude"
+        slim_dir.mkdir()
+        slim_file = slim_dir / "haios-status-slim.json"
+        slim_file.write_text(json.dumps({"session_state": {"work_id": "WORK-237"}}), encoding="utf-8")
+
+        _write_context_pct_to_slim(str(tmp_path), 75.5)
+
+        data = json.loads(slim_file.read_text(encoding="utf-8"))
+        assert data["context_pct"] == 75.5
+        assert data["session_state"]["work_id"] == "WORK-237"  # Other keys preserved
+
+    def test_extract_context_pct_returns_float(self, tmp_path):
+        """Test 6: _extract_context_pct returns correct float from transcript."""
+        hooks_path = str(Path(__file__).parent.parent / ".claude" / "hooks" / "hooks")
+        if hooks_path not in sys.path:
+            sys.path.insert(0, hooks_path)
+        from user_prompt_submit import _extract_context_pct
+
+        transcript = tmp_path / "transcript.jsonl"
+        record = {
+            "type": "assistant",
+            "message": {
+                "usage": {
+                    "input_tokens": 100000,
+                    "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 0,
+                }
+            },
+        }
+        transcript.write_text(json.dumps(record) + "\n", encoding="utf-8")
+
+        result = _extract_context_pct(str(transcript))
+        assert result == 50.0  # 100000/200000 = 50% used → 50% remaining
+
+    def test_extract_context_pct_consistent_with_get_context_usage(self, tmp_path):
+        """Test 7: _extract_context_pct and _get_context_usage produce consistent values."""
+        hooks_path = str(Path(__file__).parent.parent / ".claude" / "hooks" / "hooks")
+        if hooks_path not in sys.path:
+            sys.path.insert(0, hooks_path)
+        from user_prompt_submit import _extract_context_pct, _get_context_usage
+
+        transcript = tmp_path / "transcript.jsonl"
+        record = {
+            "type": "assistant",
+            "message": {
+                "usage": {
+                    "input_tokens": 150000,
+                    "cache_creation_input_tokens": 0,
+                    "cache_read_input_tokens": 0,
+                }
+            },
+        }
+        transcript.write_text(json.dumps(record) + "\n", encoding="utf-8")
+
+        float_val = _extract_context_pct(str(transcript))
+        string_val = _get_context_usage(str(transcript))
+
+        assert float_val == 25.0  # 150000/200000 = 75% used → 25% remaining
+        assert string_val is not None
+        assert "25" in string_val  # "[CONTEXT: 25% remaining]"

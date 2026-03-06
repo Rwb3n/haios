@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-237
-title: "Implement context_pct Auto-Injection via Slim Relay"
+title: Implement context_pct Auto-Injection via Slim Relay
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-26
 spawned_by: WORK-236
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: 2026-03-06
 priority: medium
 effort: small
 traces_to:
@@ -21,29 +21,37 @@ source_files:
 - .claude/haios/lib/governance_events.py
 - tests/test_governance_events.py
 acceptance_criteria:
-- "UserPromptSubmit hook writes context_pct float to haios-status-slim.json on every prompt"
-- "_append_event() reads context_pct from slim when caller does not provide explicit value"
-- "All governance events in governance-events.jsonl include context_pct field"
-- "Existing callers that pass explicit context_pct override slim value"
-- "Tests verify auto-injection and explicit override behavior"
+- UserPromptSubmit hook writes context_pct float to haios-status-slim.json on every
+  prompt
+- _append_event() reads context_pct from slim when caller does not provide explicit
+  value
+- All governance events in governance-events.jsonl include context_pct field
+- Existing callers that pass explicit context_pct override slim value
+- Tests verify auto-injection and explicit override behavior
 blocked_by: []
 blocks: []
 enables:
 - WORK-233
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
-  - node: backlog
-    entered: 2026-02-26T00:57:13
-    exited: null
+- node: backlog
+  entered: 2026-02-26 00:57:13
+  exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 89149
+- 89150
+- 89151
+- 89152
+- 89153
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-26
-last_updated: 2026-02-26T00:57:13
+last_updated: '2026-03-06T21:30:26.060386'
+queue_history: []
 ---
 # WORK-237: Implement context_pct Auto-Injection via Slim Relay
 

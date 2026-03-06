@@ -37,6 +37,9 @@ EVENTS_FILE = Path(__file__).parent.parent / "governance-events.jsonl"
 # Session file location — read to inject session_id on every event (WORK-215)
 SESSION_FILE = Path(__file__).parent.parent.parent.parent / ".claude" / "session"
 
+# Slim status file — read to auto-inject context_pct on every event (WORK-237)
+SLIM_FILE = Path(__file__).parent.parent.parent.parent / ".claude" / "haios-status-slim.json"
+
 
 def log_phase_transition(phase: str, work_id: str, agent: str, *, context_pct: Optional[float] = None) -> dict:
     """
@@ -488,11 +491,35 @@ def _read_session_id() -> int:
         return 0
 
 
+def _read_context_pct_from_slim() -> Optional[float]:
+    """Read context_pct from haios-status-slim.json.
+
+    WORK-237: Slim relay read side. Returns float 0-100 or None if unavailable.
+    Fail-silent: missing/malformed slim returns None (event logged without context_pct).
+    """
+    try:
+        if not SLIM_FILE.exists():
+            return None
+        data = json.loads(SLIM_FILE.read_text(encoding="utf-8-sig"))
+        val = data.get("context_pct")
+        if val is None:
+            return None
+        return float(val)
+    except Exception:
+        return None
+
+
 def _append_event(event: dict, context_pct: Optional[float] = None) -> None:
-    """Append event to JSONL file, injecting session_id and optional context_pct."""
+    """Append event to JSONL file, injecting session_id and context_pct.
+
+    WORK-237: context_pct auto-injected from slim when caller does not provide
+    explicit value. Caller-supplied value overrides slim (explicit > implicit).
+    """
     event["session_id"] = _read_session_id()
-    if context_pct is not None:
-        event["context_pct"] = context_pct
+    # WORK-237: explicit caller value overrides slim; slim auto-injects when not provided
+    resolved_pct = context_pct if context_pct is not None else _read_context_pct_from_slim()
+    if resolved_pct is not None:
+        event["context_pct"] = resolved_pct
     EVENTS_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(EVENTS_FILE, "a", encoding="utf-8") as f:
         f.write(json.dumps(event) + "\n")
