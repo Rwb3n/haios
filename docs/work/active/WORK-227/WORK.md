@@ -3,14 +3,14 @@ template: work_item
 id: WORK-227
 title: Investigation CONCLUDE Spawn Completeness Enforcement
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: '2026-02-25'
 spawned_by: WORK-221
 spawned_children: []
 chapter: CH-066
 arc: call
-closed: null
+closed: '2026-03-06'
 priority: medium
 effort: small
 traces_to:
@@ -20,30 +20,84 @@ source_files:
 - .claude/templates/investigation/CONCLUDE.md
 - .claude/commands/close.md
 - .claude/skills/investigation-cycle/SKILL.md
+- .claude/templates/investigation.md
 acceptance_criteria:
-- "CONCLUDE template has Work Disposition table requiring each finding-recommended item to have disposition (spawned/deferred with rationale)"
-- "Close command Step 1.5b validates spawned work completeness against findings, not just non-empty check"
-- "Investigation-cycle CONCLUDE exit criteria include completeness qualifier for spawned work"
+- CONCLUDE template has Work Disposition table requiring each finding-recommended
+  item to have disposition (spawned/deferred with rationale)
+- Close command Step 1.5b validates spawned work completeness against findings, not
+  just non-empty check
+- Investigation-cycle CONCLUDE exit criteria include completeness qualifier for spawned
+  work
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: done
+cycle_phase: done
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: '2026-02-25T16:26:23.365897'
-  exited: null
+  exited: '2026-03-06T22:53:05.160814'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 89235
+- 89236
+- 89237
+- 81334
+- 89238
+- 89239
+- 89240
+- 89241
+- 89242
+- 89243
+- 89244
+- 89245
+- 89246
+- 89247
+- 89248
+- 89249
+- 89250
+- 89251
+- 89252
+- 89253
+- 89254
+- 89255
+- 89256
+- 89257
+- 89258
+- 89259
+- 89260
+- 89261
+- 89262
+- 89263
+- 89264
+- 89265
+- 89266
+- 89267
+- 89268
+- 89269
+- 89270
+- 89271
+- 89272
+- 89273
+- 89274
 extensions: {}
 version: '2.0'
 generated: 2026-02-25
-last_updated: '2026-02-25T16:26:23.365897'
+last_updated: '2026-03-06T22:53:05.168037'
 queue_history:
 - position: backlog
   entered: '2026-02-25T16:26:23.365897'
+  exited: '2026-03-06T22:34:02.295926'
+- position: ready
+  entered: '2026-03-06T22:34:02.295926'
+  exited: '2026-03-06T22:34:05.404967'
+- position: working
+  entered: '2026-03-06T22:34:05.404967'
+  exited: '2026-03-06T22:53:05.160814'
+- position: done
+  entered: '2026-03-06T22:53:05.160814'
   exited: null
 ---
 # WORK-227: Investigation CONCLUDE Spawn Completeness Enforcement

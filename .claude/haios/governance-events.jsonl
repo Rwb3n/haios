@@ -20541,3 +20541,24 @@
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-06T22:23:02.702523", "session_id": 462, "context_pct": 63.4}
 {"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-239", "agent": "Hephaestus", "timestamp": "2026-03-06T22:23:06.253492", "session_id": 462, "context_pct": 63.4}
 {"type": "SessionEnded", "session": 462, "agent": "Hephaestus", "timestamp": "2026-03-06T22:24:13.281769", "session_id": 462, "context_pct": 63.4}
+{"type": "SessionStarted", "session": 463, "agent": "Hephaestus", "timestamp": "2026-03-06T22:32:51.947398", "session_id": 463, "context_pct": 44.7}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-03-06T22:33:51.583318", "session_id": 463, "context_pct": 44.7}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-227", "result": "block", "reason": "Invalid queue transition: backlog -> working", "timestamp": "2026-03-06T22:33:51.590841", "session_id": 463, "context_pct": 44.7}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 0, "timestamp": "2026-03-06T22:33:51.692753", "session_id": 463, "context_pct": 44.7}
+{"type": "CeremonyStart", "ceremony": "queue-prioritize", "timestamp": "2026-03-06T22:34:02.283743", "session_id": 463, "context_pct": 44.7}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-227", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-03-06T22:34:02.295404", "session_id": 463, "context_pct": 44.7}
+{"type": "QueueCeremony", "ceremony": "Prioritize", "items": ["WORK-227"], "from": "backlog", "to": "ready", "timestamp": "2026-03-06T22:34:02.304552", "rationale": "Small implementation, chapter-assigned (CH-066), clear acceptance criteria. Selected for S463."}
+{"type": "CeremonyEnd", "ceremony": "queue-prioritize", "side_effects": 1, "timestamp": "2026-03-06T22:34:02.305065", "session_id": 463, "context_pct": 44.7}
+{"type": "CeremonyStart", "ceremony": "queue-commit", "timestamp": "2026-03-06T22:34:05.395408", "session_id": 463, "context_pct": 44.7}
+{"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-227", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-03-06T22:34:05.403911", "session_id": 463, "context_pct": 44.7}
+{"type": "QueueCeremony", "ceremony": "Commit", "items": ["WORK-227"], "from": "ready", "to": "working", "timestamp": "2026-03-06T22:34:05.411929", "rationale": "S463 work selection. CONCLUDE spawn completeness enforcement."}
+{"type": "CeremonyEnd", "ceremony": "queue-commit", "side_effects": 1, "timestamp": "2026-03-06T22:34:05.413004", "session_id": 463, "context_pct": 44.7}
+{"type": "CyclePhaseEntered", "phase": "PLAN", "work_id": "WORK-227", "agent": "Hephaestus", "timestamp": "2026-03-06T22:34:17.158912", "session_id": 463, "context_pct": 44.7}
+{"type": "CyclePhaseEntered", "phase": "DO", "work_id": "WORK-227", "agent": "Hephaestus", "timestamp": "2026-03-06T22:45:32.072218", "session_id": 463, "context_pct": 44.7}
+{"type": "CyclePhaseEntered", "phase": "CHECK", "work_id": "WORK-227", "agent": "Hephaestus", "timestamp": "2026-03-06T22:48:32.747126", "session_id": 463}
+{"type": "CyclePhaseEntered", "phase": "DONE", "work_id": "WORK-227", "agent": "Hephaestus", "timestamp": "2026-03-06T22:48:55.693968", "session_id": 463}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-227", "agent": "Hephaestus", "timestamp": "2026-03-06T22:49:38.352671", "session_id": 463}
+{"type": "MCPGateChecked", "tool": "hierarchy_close_work", "primitive": "mcp-mutate", "state": "CHAIN", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 463}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-03-06T22:53:05.142637", "session_id": 463}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-06T22:53:05.200299", "session_id": 463}
+{"type": "MCPGateChecked", "tool": "scaffold_checkpoint", "primitive": "mcp-scaffold", "state": "CHAIN", "allowed": true, "reason": "Unknown primitive 'mcp-scaffold', defaulting to allow", "session_id": 463}

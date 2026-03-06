@@ -29,10 +29,10 @@ output_contract:
   type: enum
   required: false
   description: If DEFER verdict — operator response (proceed/investigate-more/defer-to-next-session)
-- field: spawned_work
+- field: work_disposition
   type: table
   required: false
-  description: Spawned work items created (gated by verdict)
+  description: Every finding-recommended item with disposition (SPAWNED/DEFERRED)
 - field: memory_stored
   type: list
   required: true
@@ -70,7 +70,7 @@ Synthesize findings, spawn work, store to memory.
 - [ ] Epistemic review completed (K/I/U table + verdict)
 - [ ] Verdict rendered (PROCEED/DEFER/INVESTIGATE-MORE)
 - [ ] If DEFER: operator consulted via AskUserQuestion
-- [ ] Spawned work items created via `/new-work` or `/new-plan` (gated by verdict)
+- [ ] Work Disposition table complete: every finding-recommended item has disposition (SPAWNED with ID, or DEFERRED with rationale)
 - [ ] Memory stored via `ingester_ingest`
 - [ ] `memory_refs` populated in work item frontmatter
 - [ ] Rationale documented if no spawned work
@@ -102,15 +102,21 @@ Synthesize findings, spawn work, store to memory.
 **Operator Decision:** [proceed / investigate-more / defer-to-next-session]
 **Decision Rationale:** [Why operator chose this direction]
 
-## Spawned Work
+## Work Disposition
 
-| ID | Title | spawned_by |
-|----|-------|------------|
-| | | {this_work_id} |
+<!-- MUST: Every finding that recommends follow-on work MUST appear in this table.
+     Each item must have a disposition: SPAWNED (with ID) or DEFERRED (with rationale).
+     Close command Step 1.5b validates completeness against findings. -->
 
-### Not Spawned Rationale (if none)
+| Finding | Recommended Work | Disposition | ID / Rationale |
+|---------|-----------------|-------------|----------------|
+| [K1/I1] | [Work description] | SPAWNED | WORK-XXX |
+| [K2] | [Work description] | DEFERRED | [Why not now] |
 
-[Explain why this investigation produced no follow-on work]
+### No Follow-On Work (if none)
+
+[Explain why this investigation produced no follow-on work items.
+ Valid reasons: all questions answered, no actionable gaps found, purely informational.]
 
 ## Memory Storage
 

@@ -274,7 +274,7 @@ For each chapter referenced in work item (`chapter:` field or `@` references):
 - [ ] **MUST:** Verdict rendered and documented (PROCEED/DEFER/INVESTIGATE-MORE)
 - [ ] If DEFER: Operator consulted via AskUserQuestion and decision recorded in CONCLUDE.md
 - [ ] Agent verification: Read own CONCLUDE.md to confirm K/I/U table + verdict present before marking CONCLUDE complete
-- [ ] Spawned work items created with `spawned_by` field linking to investigation
+- [ ] Work Disposition table complete: every finding-recommended item has disposition (SPAWNED with ID, or DEFERRED with rationale)
 - [ ] **MUST:** Epoch artifacts reconciled (chapters, arc, epoch updated if applicable)
 - [ ] Learnings stored to memory (`ingester_ingest` called)
 - [ ] `memory_refs` populated in work item frontmatter
@@ -348,7 +348,7 @@ mcp__haios-operations__cycle_clear()
 | VALIDATE | Do all hypotheses have verdicts? | Review evidence, render verdict |
 | VALIDATE | Are verdicts supported by evidence? | Cite specific sources |
 | CONCLUDE | Are findings synthesized? | Write answer to objective |
-| CONCLUDE | Are spawned items created? | Create via /new-* commands |
+| CONCLUDE | Is Work Disposition table complete? | Complete disposition for all findings |
 | CONCLUDE | **Are epoch artifacts reconciled?** | **Update chapters/arc/epoch per findings** |
 | CONCLUDE | Are learnings stored? | Run ingester_ingest |
 | CHAIN | Is investigation closed? | Run /close {backlog_id} |

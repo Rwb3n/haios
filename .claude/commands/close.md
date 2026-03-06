@@ -164,7 +164,7 @@ Read the investigation file and check these criteria:
 | Criterion | Check | Fail Condition |
 |-----------|-------|----------------|
 | **Findings documented** | Read `## Findings` section | Contains placeholder text or < 50 characters |
-| **Spawned items exist** | Read `## Spawned Work Items` section | Contains "None yet" |
+| **Spawned work complete** | Read `## Work Disposition` table; verify every row has disposition (SPAWNED or DEFERRED). Legacy fallback: if `## Spawned Work Items` exists instead, check for "None yet" | Any row missing disposition, or table has only placeholder rows |
 | **Memory refs populated** | Check frontmatter `memory_refs:` | Missing or empty array |
 
 **Placeholder detection:**

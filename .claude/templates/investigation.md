@@ -291,30 +291,22 @@ OUTCOME: [What results from the mechanism]
 
 ---
 
-## Spawned Work Items
+## Work Disposition
 
-<!-- CONCLUDE PHASE: Create items via /new-* commands
-     Each item MUST have spawned_by: {this_investigation_id}
+<!-- DEPRECATED: This monolithic template is preserved for backward compatibility.
+     Prefer fractured template: .claude/templates/investigation/CONCLUDE.md
 
-     DoD: This section MUST have entries, not "None yet"
-     If truly no spawns, explain why in rationale -->
+     MUST: Every finding that recommends follow-on work MUST appear in this table.
+     Each item must have a disposition: SPAWNED (with ID) or DEFERRED (with rationale). -->
 
-### Immediate (Can implement now)
+| Finding | Recommended Work | Disposition | ID / Rationale |
+|---------|-----------------|-------------|----------------|
+| [K1/I1] | [Work description] | SPAWNED | WORK-XXX |
+| [K2] | [Work description] | DEFERRED | [Why not now] |
 
-- [ ] **{ID}: {Title}**
-  - Description: [What this item does]
-  - Fixes: [What problem from investigation this addresses]
-  - Spawned via: `/new-plan {ID} "{Title}"`
+### No Follow-On Work (if none)
 
-### Future (Requires more work first)
-
-- [ ] **{ID}: {Title}**
-  - Description: [What this item does]
-  - Blocked by: [What must happen first]
-
-### Not Spawned Rationale (if no items)
-
-**RATIONALE:** [Why this investigation produced no spawned items - rare, explain thoroughly]
+[Explain why this investigation produced no follow-on work items.]
 
 ---
 
