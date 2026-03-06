@@ -60,7 +60,7 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-233 | Add context_pct Field to Governance Events | Complete | implementation |
 | WORK-234 | Constrain EXTRACT Phase Haiku Prompt to Eliminate File Reads | Complete | implementation |
 | WORK-236 | Investigation: context_pct Governance Event Consumer Design | Complete | investigation |
-| WORK-237 | Implement context_pct Auto-Injection via Slim Relay | Backlog | implementation |
+| WORK-237 | Implement context_pct Auto-Injection via Slim Relay | Complete | implementation |
 
 ---
 
