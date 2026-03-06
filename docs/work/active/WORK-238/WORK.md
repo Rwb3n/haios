@@ -39,7 +39,21 @@ node_history:
     exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 89161
+- 89162
+- 89163
+- 89164
+- 89165
+- 89180
+- 89181
+- 89182
+- 89183
+- 89284
+- 89285
+- 89286
+- 89287
+- 89288
 extensions: {}
 version: "2.0"
 generated: 2026-03-06
@@ -96,3 +110,5 @@ last_updated: 2026-03-06T21:46:30
 - @.claude/skills/retro-cycle/SKILL.md
 - WORK-237 retro findings: WCBB-2 (retro skipped), WMI-1 (no mechanical enforcement)
 - Memory: 89161-89165 (retro-reflect), 89180-89183 (retro-kss)
+- WORK-235 investigation findings (S464): Triple DoD verification redundancy confirmed, dod-validation-cycle redundant for all tiers, DONE→CHECK merge proposed, ~3900 tokens/closure savings estimated
+- @docs/work/active/WORK-235/investigations/001-post-work-ceremony-token-efficiency.md
