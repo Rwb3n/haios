@@ -33,20 +33,25 @@ acceptance_criteria:
 - dod_validation.py reads ARC.md frontmatter Status instead of _parse_markdown_field()
 - Migration script converts all existing ARC.md files to frontmatter format
 - 4 duplicate chapter table parsers eliminated
-blocked_by:
-- WORK-244
+blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: CHAIN
-current_node: CHAIN
+queue_position: working
+cycle_phase: DONE
+current_node: DONE
 node_history:
 - node: backlog
   entered: '2026-03-07T00:07:55.178399'
+  exited: '2026-03-07T14:05:00'
+- node: PLAN
+  entered: '2026-03-07T14:05:00'
   exited: null
 queue_history:
 - position: backlog
   entered: '2026-03-07T00:07:55.178399'
+  exited: '2026-03-07T14:05:00'
+- position: working
+  entered: '2026-03-07T14:05:00'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -66,10 +71,18 @@ memory_refs:
 - 89490
 - 89491
 - 89492
+- 89551
+- 89552
+- 89553
+- 89554
+- 89555
+- 89556
+- 89557
+- 89558
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T12:53:49.966322'
+last_updated: '2026-03-07T14:16:29.765907'
 ---
 # WORK-245: ARC.md YAML Frontmatter Migration (Phase 2)
 

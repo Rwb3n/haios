@@ -109,6 +109,10 @@ context:
 | `checkpoint_auto.py` | Checkpoint field auto-population (WORK-170). populate_checkpoint_fields() replaces {{PLACEHOLDER}} tokens in checkpoint frontmatter with values from session file, haios-status-slim.json, and work directory. Fail-permissive. Runtime consumer: post_tool_use.py _auto_populate_checkpoint() |
 | `session_review_predicate.py` | Session Review trigger predicate (WORK-209). should_run_session_review() evaluates OR logic: >=1 close event in session-log.jsonl OR >=2 RetroCycleCompleted in governance-events.jsonl. Fail-permissive. Runtime consumers: stop.py _inject_session_review_reminder() |
 | `ceremony_cards.py` | Ceremony skill discovery module (WORK-165, REQ-DISCOVER-003). Programmatic access to ceremony skills by parsing YAML frontmatter from .claude/skills/*/SKILL.md where type=ceremony. Public API: list_ceremonies(), get_ceremony(name), filter_ceremonies(category). Parallel to agent_cards.py. |
+| `chapter_frontmatter.py` | CHAPTER.md YAML frontmatter parser and writer (WORK-244). Frontmatter-first with bold-markdown fallback (L3.6). Public API: parse_chapter_frontmatter(), get_chapter_status(), get_work_items(), update_chapter_manifest_status(), add_work_item_to_frontmatter(). Runtime consumers: hierarchy_engine, status_propagator, dod_validation |
+| `migrate_chapter_frontmatter.py` | Migration script: convert CHAPTER.md files from bold-markdown to YAML frontmatter (WORK-244). Idempotent. Usage: `python migrate_chapter_frontmatter.py [--dry-run]` |
+| `arc_frontmatter.py` | ARC.md YAML frontmatter parser and writer (WORK-245). Frontmatter-first with bold-markdown/table fallback (L3.6). Public API: parse_arc_frontmatter(), get_arc_status(), get_arc_metadata(), get_chapters(), get_exit_criteria(), update_chapter_in_frontmatter(). Runtime consumers: hierarchy_engine, status_propagator, epoch_loader, epoch_validator, dod_validation |
+| `migrate_arc_frontmatter.py` | Migration script: convert ARC.md files from bold-markdown + chapter tables to YAML frontmatter (WORK-245). Handles 4/5/6-column table variants. Idempotent. Usage: `python migrate_arc_frontmatter.py [--dry-run]` |
 
 ## Usage
 
