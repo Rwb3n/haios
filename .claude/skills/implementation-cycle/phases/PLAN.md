@@ -65,22 +65,53 @@ foresight_prep:
 - [ ] Tests defined in "Tests First" section
 - [ ] Current/Desired state documented
 - [ ] (Optional) foresight_prep captured with prediction
-- [ ] **MUST:** Invoke critique-agent and pass critique-revise loop (see Exit Gate). Minimum 2 passes when REVISE — S397.
-- [ ] **MUST:** Invoke plan-validation as haiku subagent (Gate 2 — S397)
-- [ ] **MUST:** Invoke preflight-checker as haiku subagent (Gate 3 — S397)
+- [ ] **Tier-aware:** Exit gates applied per tier (see Exit Gate below — REQ-LIFECYCLE-005)
 
-**Exit Gate (MUST):**
-Before transitioning to DO phase, execute these three gates in order:
+**Exit Gate (Tier-Aware — REQ-LIFECYCLE-005, REQ-CEREMONY-005):**
+
+Before transitioning to DO phase, determine the work item's governance tier, then apply the appropriate gate set.
+
+**Step 1: Determine Tier**
+
+Read `docs/work/active/{backlog_id}/WORK.md` frontmatter (already read at PLAN entry) and classify:
+
+| Tier | Conditions |
+|------|-----------|
+| **architectural** | `type: design` OR any entry in `traces_to` starts with `ADR-` |
+| **trivial** | `effort: small` AND `source_files` has 1-2 entries AND not architectural |
+| **small** | `effort: small` AND `source_files` has 1-3 entries AND not architectural |
+| **standard** | All other cases (default — conservative) |
+
+> **Note:** Architectural is checked first (escalation always wins). Absent or empty `source_files` defaults to **standard** per REQ-LIFECYCLE-005 invariant: "Absent data MUST NOT produce a more permissive classification."
+
+**Step 2: Apply Gate Set**
+
+**If tier = trivial:**
+> All exit gates SKIPPED. Trivial work items have no architectural decisions, no plan complexity requiring independent validation, and no source-file scope requiring preflight. Rationale: REQ-CEREMONY-005 (ceremony depth scales proportionally: none->checklist->full->operator). Gate-skip governance events are logged by the hook layer (PostToolUse observes PLAN->DO transition; critique_injector.py logs CritiqueInjected events for non-trivial tiers).
+
+**If tier = small:**
+> Gate 1 (Critique) runs in checklist mode — no subagent, inline self-check only. Verify:
+> - [ ] All acceptance criteria are achievable with current design
+> - [ ] Source files referenced in WORK.md exist and are correct
+> - [ ] No implicit assumptions about interfaces or data formats
+> - [ ] Edge cases identified (empty inputs, missing files, permission errors)
+> - [ ] Fail-permissive pattern applied where appropriate
+>
+> Gate 2 (Plan-Validation) SKIPPED. Gate 3 (Preflight) SKIPPED.
+> Rationale: Small items have 1-3 source files and no ADR. Structural validation overhead exceeds protection benefit.
+> **Note:** critique_injector.py hook may also inject this same checklist via additionalContext. If you see the checklist in both the hook injection and this skill text, run it once (they are the same check).
+
+**If tier = standard:**
 
 **Gate 1 - MUST: Critique (Assumption Surfacing)**
 Invoke critique-agent to surface implicit assumptions on the raw plan:
 ```
-Task(subagent_type='critique-agent', prompt='Critique plan: docs/work/active/{backlog_id}/plans/PLAN.md')
+Task(subagent_type='critique-agent', model='sonnet', prompt='Critique plan: docs/work/active/{backlog_id}/plans/PLAN.md')
 ```
 
 Apply critique-revise loop based on verdict:
 - **PROCEED on first pass:** All assumptions mitigated. Continue to Gate 2. (Only case where single pass is sufficient.)
-- **REVISE:** Flagged assumptions exist. Revise plan to address them, then **MUST** re-invoke critique to verify revisions. Minimum 2 passes when first verdict is REVISE — a single REVISE→address→proceed is insufficient. The revision must be re-verified by critique-agent. Repeat until PROCEED or max 3 iterations (then escalate to operator via AskUserQuestion).
+- **REVISE:** Flagged assumptions exist. Revise plan to address them, then **MUST** re-invoke critique to verify revisions. Minimum 2 passes when first verdict is REVISE. Repeat until PROCEED or max 3 iterations (then escalate to operator via AskUserQuestion).
 - **BLOCK:** Unmitigated low-confidence assumptions. Return to plan-authoring-cycle. DO phase blocked.
 
 > **S397 Operator Directive:** NEVER accept a single critique pass when verdict is REVISE. The agent addressing findings is not the same as the agent verifying they were addressed. Minimum 2 passes enforced.
@@ -91,9 +122,7 @@ Apply critique-revise loop based on verdict:
 ```
 Task(subagent_type='preflight-checker', model='haiku', prompt='Run plan-validation-cycle for {backlog_id}. Plan: docs/work/active/{backlog_id}/plans/PLAN.md. Check: all required sections present, no placeholders. Spec-align: read all referenced specs and verify plan matches. Validate: quality checks, no [BLOCKED] in Open Decisions. Report pass/fail with specifics.')
 ```
-Validates structural completeness and quality. Runs CHECK → SPEC_ALIGN → VALIDATE → APPROVE logic. Delegated to haiku subagent to save main context tokens — these are structural checks, not judgment calls.
-
-> **S397 Operator Directive:** Plan validation is structural, not cognitive. MUST run as haiku subagent, not inline. Saves ~5k+ main context tokens per invocation.
+Validates structural completeness and quality. Delegated to haiku subagent to save main context tokens — structural checks, not judgment calls.
 
 **Gate 3 - MUST: Preflight Check (as haiku subagent — S397 Operator Directive)**
 ```
@@ -101,6 +130,15 @@ Task(subagent_type='preflight-checker', model='haiku', prompt='Check plan readin
 ```
 Validates plan completeness and file scope. DO phase is blocked until all three gates pass.
 
-> **S397 Operator Directive:** Preflight is structural verification. MUST run as haiku subagent, not inline.
+**If tier = architectural:**
+
+Same as standard (Gates 1+2+3), PLUS:
+
+**Gate 4 - MUST: Operator Approval**
+After Gate 3 passes, invoke operator confirmation:
+```
+AskUserQuestion(questions=[{"question": "Architectural work item {backlog_id} has passed all 3 automated gates. Confirm approach and approve DO phase.", "header": "Operator Approval Required", "options": [{"label": "Approved — proceed to DO phase"}, {"label": "BLOCK — revise plan first"}], "multiSelect": false}])
+```
+> Architectural items require explicit operator sign-off before DO phase. Gate 4 makes this explicit (was implicit in critique_injector.py TIER_INJECTIONS).
 
 **Tools:** Read, Glob, AskUserQuestion, Task(plan-authoring-agent, model=sonnet), Task(critique-agent, model=sonnet), Task(preflight-checker, model=haiku), Task(plan-validation, model=haiku)

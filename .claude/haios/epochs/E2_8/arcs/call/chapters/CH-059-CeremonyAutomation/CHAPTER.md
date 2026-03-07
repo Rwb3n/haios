@@ -169,6 +169,10 @@ work_items:
   title: 'Clean /close command: remove stale Steps 2-3 duplicate documentation'
   status: Complete
   type: implementation
+- id: WORK-250
+  title: Tier-Aware Gate Skipping — Proportional Ceremony Enforcement
+  status: Complete
+  type: implementation
 exit_criteria:
 - text: At least 3 mechanical ceremony phases migrated from SKILL.md to hooks/modules
   checked: false
@@ -254,6 +258,7 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-241 | Eliminate dod-validation-cycle: absorb Agent UX Test into close-work VALIDATE | Complete | implementation |
 | WORK-242 | Remove plan status double-update from impl-cycle DONE phase | Complete | implementation |
 | WORK-243 | Clean /close command: remove stale Steps 2-3 duplicate documentation | Complete | implementation |
+| WORK-250 | Tier-Aware Gate Skipping — Proportional Ceremony Enforcement | Active | implementation |
 
 ---
 
