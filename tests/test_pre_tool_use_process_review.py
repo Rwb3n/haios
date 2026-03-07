@@ -52,9 +52,10 @@ def test_l3_write_blocked_without_process_review_approved(tmp_path, monkeypatch)
 
 
 def test_l3_write_allowed_with_process_review_approved(tmp_path, monkeypatch):
-    """Write to manifesto/L3/ is allowed when ProcessReviewApproved event exists."""
+    """Write to manifesto/L3/ is allowed when ProcessReviewApproved event exists in current session."""
     governance_events = _load_governance_events()
     events_file = tmp_path / "governance-events.jsonl"
+    # WORK-248: gate now scopes to current session via session_id field
     events_file.write_text(
         json.dumps({
             "type": "ProcessReviewApproved",
@@ -62,11 +63,14 @@ def test_l3_write_allowed_with_process_review_approved(tmp_path, monkeypatch):
             "target": ".claude/haios/manifesto/L3/principles.md",
             "scope": "l3_principle",
             "session": 435,
+            "session_id": 435,
             "timestamp": "2026-02-23T17:00:00",
         }) + "\n",
         encoding="utf-8",
     )
     monkeypatch.setattr(governance_events, "EVENTS_FILE", events_file)
+    # Mock _read_session_id to return the matching session
+    monkeypatch.setattr(governance_events, "_read_session_id", lambda: 435)
 
     pre_tool_use = _load_pre_tool_use()
     result = pre_tool_use._check_process_review_gate(

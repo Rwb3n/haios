@@ -327,12 +327,6 @@ def _check_scaffold_governance(command: str) -> Optional[dict]:
     if not command:
         return None
 
-    # Session 297: Temporary bypass for batch work item creation (E2.5 decomposition)
-    # TODO: Remove after E2.5 Phase 1 work items created
-    batch_bypass_file = Path(__file__).parent.parent.parent / "haios" / "config" / ".batch_work_bypass"
-    if batch_bypass_file.exists():
-        return None
-
     # Only block work_item scaffolding - other types are called by governed commands
     # that chain to cycles which fill placeholders
     #
@@ -430,12 +424,6 @@ def _check_path_governance(file_path: str) -> Optional[dict]:
     Returns deny response if governed path, None otherwise.
     """
     if not file_path:
-        return None
-
-    # Session 297: Temporary bypass for batch work item creation (E2.5 decomposition)
-    # TODO: Remove after E2.5 Phase 1 work items created
-    batch_bypass_file = Path(__file__).parent.parent.parent / "haios" / "config" / ".batch_work_bypass"
-    if batch_bypass_file.exists():
         return None
 
     # If file already exists, allow edits
@@ -932,14 +920,15 @@ def _check_process_review_gate(file_path: str) -> Optional[dict]:
         if str(lib_dir) not in sys.path:
             sys.path.insert(0, str(lib_dir))
 
-        from governance_events import read_events
+        from governance_events import read_events, _read_session_id
 
-        # TODO(WORK-209): This reads ALL historical events, not just current session.
-        # Per-session scoping is a follow-on. Any prior ProcessReviewApproved event
-        # permanently unlocks L3/L4 writes. Acceptable for V1 given fail-permissive stance.
+        # WORK-248: Scope to current session. A ProcessReviewApproved approval
+        # is valid only for the session in which it was logged.
+        current_session = _read_session_id()
         events = read_events()
         has_approval = any(
             e.get("type") == "ProcessReviewApproved"
+            and e.get("session_id") == current_session
             for e in events
         )
 

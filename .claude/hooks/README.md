@@ -192,8 +192,7 @@ last_updated: 2025-12-21T14:30:00  # YAML field (new)
 │   ├── pre_tool_use.py
 │   ├── post_tool_use.py
 │   └── stop.py
-├── memory_retrieval.py     # Memory context injection
-├── reasoning_extraction.py # Learning extraction
+├── reasoning_extraction.py # Learning extraction (used by memory_bridge.py)
 ├── # error_capture.py moved to .claude/lib/ (E2-130)
 ├── archive/                # DEPRECATED PowerShell (E2-120)
 │   ├── UserPromptSubmit.ps1
