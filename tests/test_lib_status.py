@@ -388,8 +388,12 @@ class TestGenerateSlimStatus:
             with open(slim_path, encoding="utf-8-sig") as f:
                 existing = json.load(f)
 
-            # Same top-level keys
-            assert set(slim.keys()) == set(existing.keys())
+            # Generated keys must be present in existing file.
+            # Existing file may have additional hook-injected keys (e.g. context_pct
+            # written by user_prompt_submit hook, not by generate_slim_status).
+            assert set(slim.keys()) <= set(existing.keys()), (
+                f"Generated keys not in existing file: {set(slim.keys()) - set(existing.keys())}"
+            )
 
 
 class TestWriteSlimStatus:

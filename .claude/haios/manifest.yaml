@@ -64,7 +64,7 @@ components:
     - id: "workspace"
       source: "commands/workspace/"
 
-  # Skills (30 total)
+  # Skills (32 total)
   skills:
     - id: "audit"
       source: "skills/audit/"
@@ -120,6 +120,9 @@ components:
     - id: "plan-validation-cycle"
       source: "skills/plan-validation-cycle/"
       category: "bridge"
+    - id: "process-review-cycle"
+      source: "skills/process-review-cycle/"
+      category: "cycle"
     - id: "queue-commit"
       source: "skills/queue-commit/"
       category: "ceremony"
@@ -144,6 +147,9 @@ components:
     - id: "session-end-ceremony"
       source: "skills/session-end-ceremony/"
       category: "ceremony"
+    - id: "session-review-cycle"
+      source: "skills/session-review-cycle/"
+      category: "cycle"
     - id: "session-start-ceremony"
       source: "skills/session-start-ceremony/"
       category: "ceremony"
@@ -157,7 +163,7 @@ components:
       source: "skills/work-creation-cycle/"
       category: "cycle"
 
-  # Agents (13 total)
+  # Agents (14 total)
   agents:
     - id: "anti-pattern-checker"
       source: "agents/anti-pattern-checker/"
@@ -186,6 +192,9 @@ components:
     - id: "preflight-checker"
       source: "agents/preflight-checker/"
       required: true
+    - id: "retro-enrichment-agent"
+      source: "agents/retro-enrichment-agent/"
+      required: false
     - id: "schema-verifier"
       source: "agents/schema-verifier/"
       required: true

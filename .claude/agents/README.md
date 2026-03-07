@@ -53,6 +53,25 @@ gates = filter_agents(category="gate")
 
 Module: `.claude/haios/lib/agent_cards.py`
 
+## Agent Index
+
+| Agent | Role | Required |
+|-------|------|----------|
+| `anti-pattern-checker` | verifier | no |
+| `close-work-cycle-agent` | cycle-delegate | no |
+| `critique-agent` | gate | no |
+| `design-review-validation-agent` | verifier | no |
+| `implementation-cycle-agent` | cycle-delegate | no |
+| `investigation-agent` | utility | no |
+| `investigation-cycle-agent` | cycle-delegate | no |
+| `plan-authoring-agent` | cycle-delegate | no |
+| `preflight-checker` | gate | yes |
+| `retro-enrichment-agent` | utility | no |
+| `schema-verifier` | gate | yes |
+| `test-runner` | utility | no |
+| `validation-agent` | verifier | no |
+| `why-capturer` | utility | no |
+
 ## Related
 
 - **AGENTS.md** (project root) - Auto-generated registry
