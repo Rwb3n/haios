@@ -23325,3 +23325,4 @@
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-07T14:58:59.335843", "session_id": 471, "context_pct": 32.0}
 {"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-247", "agent": "Hephaestus", "timestamp": "2026-03-07T14:59:04.046643", "session_id": 471, "context_pct": 32.0}
 {"type": "MCPGateChecked", "tool": "scaffold_checkpoint", "primitive": "mcp-scaffold", "state": "CHAIN", "allowed": true, "reason": "Unknown primitive 'mcp-scaffold', defaulting to allow", "session_id": 471, "context_pct": 32.0}
+{"type": "SessionEnded", "session": 471, "agent": "Hephaestus", "timestamp": "2026-03-07T14:59:57.527077", "session_id": 471, "context_pct": 32.0}
