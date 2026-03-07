@@ -21367,3 +21367,5 @@
 {"type": "MCPGateChecked", "tool": "hierarchy_close_work", "primitive": "mcp-mutate", "state": "ARCHIVE", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 467, "context_pct": 9.3}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-03-07T01:16:19.265325", "session_id": 467, "context_pct": 9.3}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-07T01:16:19.320249", "session_id": 467, "context_pct": 9.3}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-244", "agent": "Hephaestus", "timestamp": "2026-03-07T01:16:51.668222", "session_id": 467, "context_pct": 9.3}
+{"type": "MCPGateChecked", "tool": "scaffold_checkpoint", "primitive": "mcp-scaffold", "state": "CHAIN", "allowed": true, "reason": "Unknown primitive 'mcp-scaffold', defaulting to allow", "session_id": 467, "context_pct": 9.3}
