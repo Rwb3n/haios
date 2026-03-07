@@ -1,16 +1,18 @@
 ---
 template: work_item
 id: WORK-240
-title: "Investigation: Epoch/Arc/Chapter File Format Structuring"
+title: 'Investigation: Epoch/Arc/Chapter File Format Structuring'
 type: investigation
-status: active
+status: complete
 owner: Hephaestus
 created: '2026-03-06'
 spawned_by: WORK-222
-spawned_children: []
+spawned_children:
+- WORK-244
+- WORK-245
 chapter: ''
 arc: ''
-closed: null
+closed: '2026-03-07'
 priority: medium
 effort: medium
 traces_to:
@@ -23,32 +25,44 @@ source_files:
 - .claude/haios/lib/status_propagator.py
 - .claude/haios/lib/hierarchy_engine.py
 acceptance_criteria:
-- "Inventory of all fields currently expressed as markdown conventions vs frontmatter across EPOCH.md, ARC.md, CHAPTER.md"
-- "Design proposal: which fields should become structured frontmatter (exit_criteria, status, work items, dependencies)"
-- "Migration path: how to transition existing files without breaking consumers (HierarchyQueryEngine, StatusPropagator, coldstart loaders)"
-- "Consumer impact assessment: which modules parse these files and what they expect"
-- "Decision on scope: CHAPTER.md only, or also ARC.md and EPOCH.md"
+- Inventory of all fields currently expressed as markdown conventions vs frontmatter
+  across EPOCH.md, ARC.md, CHAPTER.md
+- 'Design proposal: which fields should become structured frontmatter (exit_criteria,
+  status, work items, dependencies)'
+- 'Migration path: how to transition existing files without breaking consumers (HierarchyQueryEngine,
+  StatusPropagator, coldstart loaders)'
+- 'Consumer impact assessment: which modules parse these files and what they expect'
+- 'Decision on scope: CHAPTER.md only, or also ARC.md and EPOCH.md'
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: '2026-03-06T22:11:36.437963'
-  exited: null
+  exited: '2026-03-07T00:13:24.260967'
 queue_history:
 - position: backlog
   entered: '2026-03-06T22:11:36.437963'
+  exited: '2026-03-07T00:13:24.260967'
+- position: done
+  entered: '2026-03-07T00:13:24.260967'
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 89402
+- 89403
+- 89404
+- 89405
+- 89406
+- 89407
 extensions: {}
 version: '2.0'
 generated: '2026-03-06'
-last_updated: '2026-03-06T22:11:36.437963'
+last_updated: '2026-03-07T00:13:24.268555'
 ---
 # WORK-240: Investigation: Epoch/Arc/Chapter File Format Structuring
 
