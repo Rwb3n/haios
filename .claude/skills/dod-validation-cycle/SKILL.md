@@ -1,10 +1,10 @@
 ---
 name: dod-validation-cycle
 type: lifecycle
-description: HAIOS DoD Validation Cycle for validating Definition of Done before closure.
-  Use before DONE phase. Guides CHECK->VALIDATE->APPROVE workflow.
+deprecated: true
+description: "DEPRECATED (WORK-241, S466): Fully redundant with close-work-cycle VALIDATE phase. All MUST gates (tests, plans, WHY, docs, ground truth) already verified by impl-cycle CHECK and close-work VALIDATE. Agent UX Test (only unique contribution) absorbed as optional inline item in close-work VALIDATE."
 generated: '2025-12-25'
-last_updated: '2025-12-28T21:12:55'
+last_updated: '2026-03-07T00:30:00'
 ---
 # DoD Validation Cycle (Bridge Skill)
 

@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-242
-title: "Remove plan status double-update from impl-cycle DONE phase"
+title: Remove plan status double-update from impl-cycle DONE phase
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-03-06
 spawned_by: WORK-238
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-03-07'
 priority: medium
 effort: small
 traces_to:
@@ -19,28 +19,32 @@ requirement_refs: []
 source_files:
 - .claude/skills/implementation-cycle/phases/DONE.md
 acceptance_criteria:
-- "Plan status update (step 2) removed from DONE.md"
-- "DONE.md retains WHY capture, docs update, and git commit steps"
-- "close-work ARCHIVE remains the sole owner of plan status -> complete"
+- Plan status update (step 2) removed from DONE.md
+- DONE.md retains WHY capture, docs update, and git commit steps
+- close-work ARCHIVE remains the sole owner of plan status -> complete
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-03-06T23:42:12
-    exited: null
+- node: backlog
+  entered: 2026-03-06 23:42:12
+  exited: '2026-03-07T00:30:46.108241'
 artifacts: []
 cycle_docs: {}
 memory_refs:
 - 89334
 - 89337
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-03-06
-last_updated: 2026-03-06T23:42:12
+last_updated: '2026-03-07T00:30:46.111242'
+queue_history:
+- position: done
+  entered: '2026-03-07T00:30:46.108241'
+  exited: null
 ---
 # WORK-242: Remove plan status double-update from impl-cycle DONE phase
 

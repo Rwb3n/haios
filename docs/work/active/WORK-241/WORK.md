@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-241
-title: "Eliminate dod-validation-cycle: absorb Agent UX Test into close-work VALIDATE"
+title: 'Eliminate dod-validation-cycle: absorb Agent UX Test into close-work VALIDATE'
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-03-06
 spawned_by: WORK-238
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-03-07'
 priority: medium
 effort: small
 traces_to:
@@ -21,20 +21,20 @@ source_files:
 - .claude/skills/dod-validation-cycle/SKILL.md
 - .claude/skills/close-work-cycle/SKILL.md
 acceptance_criteria:
-- "dod-validation-cycle invocation removed from close-work-cycle SKILL.md"
-- "Agent UX Test absorbed as optional inline checklist item in close-work VALIDATE"
-- "dod-validation-cycle SKILL.md marked deprecated: true"
-- "CLAUDE.md ceremony table updated to reflect removal"
+- dod-validation-cycle invocation removed from close-work-cycle SKILL.md
+- Agent UX Test absorbed as optional inline checklist item in close-work VALIDATE
+- 'dod-validation-cycle SKILL.md marked deprecated: true'
+- CLAUDE.md ceremony table updated to reflect removal
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
+queue_position: done
+cycle_phase: done
 current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-03-06T23:42:11
-    exited: null
+- node: backlog
+  entered: 2026-03-06 23:42:11
+  exited: '2026-03-07T00:30:44.809629'
 artifacts: []
 cycle_docs: {}
 memory_refs:
@@ -42,9 +42,13 @@ memory_refs:
 - 89335
 - 89336
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-03-06
-last_updated: 2026-03-06T23:42:11
+last_updated: '2026-03-07T00:30:44.815208'
+queue_history:
+- position: done
+  entered: '2026-03-07T00:30:44.809629'
+  exited: null
 ---
 # WORK-241: Eliminate dod-validation-cycle: absorb Agent UX Test into close-work VALIDATE
 

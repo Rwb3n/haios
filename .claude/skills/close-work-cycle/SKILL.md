@@ -60,16 +60,16 @@ This skill defines the VALIDATE-ARCHIVE-CHAIN cycle for closing work items with 
 ## The Cycle
 
 ```
-[retro-cycle] --> [dod-validation-cycle] --> VALIDATE --> ARCHIVE --> CHAIN
-      │                                                                  |
-      │                                                           [route next]
-  structured reflection                                                  |
-  (REFLECT->DERIVE->                                            /-------------\
-   COMMIT->EXTRACT)                                       type=investigation  has plan?   else
-                                                                |                  |          |
-                                                                 |          implement  work-creation
-                                                            investigation    -cycle     -cycle
-                                                               -cycle
+[retro-cycle] --> VALIDATE --> ARCHIVE --> CHAIN
+      │                                      |
+      │                                [route next]
+  structured reflection                      |
+  (REFLECT->DERIVE->               /-------------\
+   COMMIT->EXTRACT)          type=investigation  has plan?   else
+                                   |                  |          |
+                                   |          implement  work-creation
+                              investigation    -cycle     -cycle
+                                 -cycle
 ```
 
 **Prerequisite (MUST):**
@@ -80,19 +80,11 @@ This skill defines the VALIDATE-ARCHIVE-CHAIN cycle for closing work items with 
    ```
    This invocation is owned by `/close` command, not by close-work-cycle itself. retro-cycle structures autonomous reflection into typed, provenance-tagged memory entries (REFLECT->DERIVE->COMMIT->EXTRACT). If retro-cycle returned `dod_relevant_findings`, those are passed to VALIDATE phase.
 
-2. **DoD Validation:** Before VALIDATE phase, **MUST** invoke dod-validation-cycle:
-   ```
-   Skill(skill="dod-validation-cycle")
-   ```
-   This validates DoD criteria in an isolated bridge skill.
-
 ---
 
 ### Lightweight Path (effort=small)
 
 **When:** `/close` command sets `lightweight_close: true` (effort=small + source_files <= 3).
-
-**Skip:** dod-validation-cycle 3-phase bridge (near-zero signal for planless small items per WORK-199 H2).
 
 **Replace VALIDATE with inline DoD checklist:**
 
@@ -112,8 +104,8 @@ This skill defines the VALIDATE-ARCHIVE-CHAIN cycle for closing work items with 
 ### 1. VALIDATE Phase
 
 **On Entry:**
-```bash
-just set-cycle close-work-cycle VALIDATE {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="close-work-cycle", phase="VALIDATE", work_id="{work_id}")
 ```
 
 **Goal:** Verify work item meets Definition of Done criteria.
@@ -150,7 +142,12 @@ just set-cycle close-work-cycle VALIDATE {work_id}
 7. **Governance event check (moved from MEMORY phase, E2-108):**
    - Check for cycle events: `grep "{id}" .claude/haios/governance-events.jsonl`
    - If no events found, warn that governance may have been bypassed (soft gate)
-8. Prompt user for DoD confirmation
+8. **Agent UX Test (SHOULD, not MUST — WORK-241):**
+   - If work item modified SKILL.md files or ceremony definitions:
+     - Check: Are instructions clear and unambiguous for a stateless agent?
+     - Check: Do examples match current tool names and patterns?
+   - Skip if no ceremony/skill files modified (most closures)
+9. Prompt user for DoD confirmation
 
 **Exit Criteria:**
 - [ ] Work file exists and has status: active
@@ -167,8 +164,8 @@ just set-cycle close-work-cycle VALIDATE {work_id}
 ### 2. ARCHIVE Phase
 
 **On Entry:**
-```bash
-just set-cycle close-work-cycle ARCHIVE {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="close-work-cycle", phase="ARCHIVE", work_id="{work_id}")
 ```
 
 > **Execution Context: DELEGATE to haiku subagent (S436 operator directive)**
@@ -182,7 +179,7 @@ Task(
   subagent_type='general-purpose',
   model='haiku',
   prompt='Execute close-work-cycle ARCHIVE phase for {work_id}.
-    1. Run: just close-work {work_id}
+    1. Run: mcp__haios-operations__hierarchy_close_work(work_id="{work_id}")
     2. Verify: work file has status: complete and closed date set
     3. Update associated plans to status: complete
     4. Run StatusPropagator().propagate("{work_id}")
@@ -195,16 +192,16 @@ Task(
 **Note:** Per ADR-041 "status over location" - work items stay in `docs/work/active/` until epoch cleanup. The `status: complete` field determines state, not directory path.
 
 **Actions:**
-1. Run atomic close-work recipe:
-   ```bash
-   just close-work {id}
+1. Run atomic hierarchy_close_work MCP tool:
+   ```
+   mcp__haios-operations__hierarchy_close_work(work_id="{id}")
    ```
    This atomically performs:
    - Update `status: active` to `status: complete`
    - Update `closed: null` to `closed: {YYYY-MM-DD}`
    - Run cascade (report unblocked items)
    - Clear blocked_by references in downstream WORK.md files (WORK-173, fail-permissive)
-   - Run update-status
+   - Run StatusPropagator cascade (absorbed into hierarchy_close_work)
 
 2. Update any associated plans to `status: complete` (if not already)
 
@@ -218,20 +215,20 @@ Task(
    Results: `chapter_completed` (ARC.md updated), `chapter_incomplete` (no change), `no_hierarchy` (no chapter/arc fields), or `arc_completed` (all chapters done).
 
 **Exit Criteria:**
-- [ ] `just close-work` succeeded
+- [ ] `hierarchy_close_work` succeeded
 - [ ] Work file has `status: complete` and `closed: {date}`
 - [ ] Associated plans marked complete
 - [ ] Status propagation executed (chapter/arc status synced)
 
-**Tools:** Bash(just close-work), Python(status_propagator)
+**Tools:** mcp__haios-operations__hierarchy_close_work, Python(status_propagator)
 
 ---
 
 ### 3. CHAIN Phase (Post-ARCHIVE)
 
 **On Entry:**
-```bash
-just set-cycle close-work-cycle CHAIN {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="close-work-cycle", phase="CHAIN", work_id="{work_id}")
 ```
 
 > **Execution Context: PARTIAL DELEGATE to haiku subagent (S436 operator directive)**
@@ -247,7 +244,7 @@ result = Task(
   model='haiku',
   prompt='Execute close-work-cycle CHAIN mechanical steps for {work_id}.
     1. Invoke checkpoint-cycle (Skill(skill="checkpoint-cycle"))
-    2. Run: just ready
+    2. Run: mcp__haios-operations__queue_ready()
     3. Read each ready work item type field
     Report: list of ready items with their types.'
 )
@@ -272,7 +269,7 @@ Skill(skill="checkpoint-cycle")
 **Actions:**
 1. (Closure already completed in MEMORY phase)
 2. (Checkpoint completed in 4a)
-3. Query next work: `just ready`
+3. Query next work: `mcp__haios-operations__queue_ready()`
 4. If items returned, read first work file to determine suggested routing
 5. Read work item `type` field from WORK.md
 6. **Determine suggested action** (WORK-030: type field is authoritative):
@@ -310,11 +307,11 @@ Skill(skill="checkpoint-cycle")
 - [ ] Appropriate cycle skill invoked (or awaiting operator)
 
 **On Complete:**
-```bash
-just clear-cycle
+```
+mcp__haios-operations__cycle_clear()
 ```
 
-**Tools:** Bash(just ready), Read, Skill(checkpoint-cycle, routing-gate)
+**Tools:** mcp__haios-operations__queue_ready, Read, Skill(checkpoint-cycle, routing-gate)
 
 ---
 
@@ -324,7 +321,7 @@ just clear-cycle
 |-------|--------------|-------------------|
 | (Prerequisite) retro-cycle | Skill (invoked by /close) | Typed reflection via REFLECT->DERIVE->COMMIT->EXTRACT |
 | VALIDATE | Read, Glob, Grep | dod_relevant_findings from retro-cycle |
-| ARCHIVE | Bash(just close-work) | - |
+| ARCHIVE | mcp__haios-operations__hierarchy_close_work | - |
 | CHAIN | Skill (checkpoint-cycle, routing) | Context preservation (E2-287) |
 
 ---
@@ -341,8 +338,8 @@ just clear-cycle
 | VALIDATE | Governance events exist for work_id? | Warn (soft gate) |
 | VALIDATE | Does user confirm DoD? | STOP - DoD not met |
 | VALIDATE | **Pytest gate pass? (type=implementation + .py)** | **BLOCK - return to DO** |
-| ARCHIVE | Is work file archived? | Run `just close-work` |
-| CHAIN | Is next work identified? | Run `just ready` |
+| ARCHIVE | Is work file archived? | Run `mcp__haios-operations__hierarchy_close_work(work_id)` |
+| CHAIN | Is next work identified? | Run `mcp__haios-operations__queue_ready()` |
 
 ---
 
@@ -366,7 +363,7 @@ just clear-cycle
 - **retro-cycle skill:** Prerequisite for structured reflection (WORK-142, replaces observation-capture-cycle)
 - **observation-capture-cycle skill:** DEPRECATED, replaced by retro-cycle (WORK-142)
 - **observation-triage-cycle skill:** Processes retro-cycle provenance tags (WORK-143)
-- **dod-validation-cycle skill:** Invoked at start of VALIDATE phase
+- **dod-validation-cycle skill:** DEPRECATED (WORK-241) — Agent UX Test absorbed into VALIDATE step 8
 - **work-creation-cycle skill:** Parallel workflow for creation
 - **implementation-cycle skill:** Parallel workflow for implementation
 - **investigation-cycle skill:** Parallel workflow for research
