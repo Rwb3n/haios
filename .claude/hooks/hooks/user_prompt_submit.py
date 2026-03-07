@@ -88,13 +88,9 @@ def handle(hook_data: dict) -> str:
     if session_parts:
         output_parts.append(" ".join(session_parts))
 
-    # Part 1.5: Context usage from transcript JSONL (WORK-189, replaces E2-210)
-    transcript_path = hook_data.get("transcript_path", "")
-    context_usage = _get_context_usage(transcript_path)
-    if context_usage:
-        output_parts.append(context_usage)
-    # WORK-237: Write context_pct float to slim for governance event relay
-    context_pct = _extract_context_pct(transcript_path)
+    # Part 1.5: Context budget — relay .claude/context_remaining to slim for governance events
+    # (Display removed: statusLine shows context in terminal; PreToolUse injects warnings when low)
+    context_pct = _read_context_remaining(cwd)
     if context_pct is not None:
         _write_context_pct_to_slim(cwd, context_pct)
 
@@ -332,113 +328,6 @@ def _get_phase_contract(cwd: str, slim: Optional[dict] = None) -> Optional[str]:
         return None
 
 
-def _get_context_usage(transcript_path: str) -> Optional[str]:
-    """
-    Extract real context window usage from transcript JSONL (WORK-189).
-
-    Parses the last assistant message's API usage metadata to calculate
-    context window consumption. Reflects usage as of last completed
-    assistant response — current prompt tokens not yet recorded.
-    Replaces the unreliable file-size heuristic (disabled S179).
-
-    Pattern from: github.com/harrymunro/nelson/scripts/count-tokens.py
-
-    Args:
-        transcript_path: Path to Claude Code transcript JSONL file.
-
-    Returns:
-        Formatted string like "[CONTEXT: 25% remaining]", or None if unavailable.
-    """
-    if not transcript_path:
-        return None
-
-    path = Path(transcript_path)
-    if not path.exists():
-        return None
-
-    try:
-        last_usage = None
-        with open(path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                try:
-                    record = json.loads(line)
-                except json.JSONDecodeError:
-                    continue
-                if record.get("type") != "assistant":
-                    continue
-                msg = record.get("message")
-                if not isinstance(msg, dict) or "usage" not in msg:
-                    continue
-                last_usage = msg["usage"]
-
-        if last_usage is None:
-            return None
-
-        input_tokens = last_usage.get("input_tokens", 0)
-        cache_creation = last_usage.get("cache_creation_input_tokens", 0)
-        cache_read = last_usage.get("cache_read_input_tokens", 0)
-        total = input_tokens + cache_creation + cache_read
-
-        if total == 0:
-            return None  # No usage data found — graceful degradation (A13)
-
-        context_limit = 200_000
-        pct = min(100.0, (total / context_limit) * 100)
-
-        remaining = 100.0 - pct
-        return f"[CONTEXT: {remaining:.0f}% remaining]"
-    except Exception:
-        return None
-
-
-def _extract_context_pct(transcript_path: str) -> Optional[float]:
-    """Extract remaining context percentage as float from transcript JSONL.
-
-    WORK-237: Returns float 0-100 representing remaining % for slim relay.
-    Mirrors _get_context_usage() computation without string formatting.
-    If _get_context_usage() changes, this function MUST be updated to match.
-
-    Returns:
-        Float 0-100 (rounded to 1 decimal) or None if unavailable.
-    """
-    if not transcript_path:
-        return None
-    path = Path(transcript_path)
-    if not path.exists():
-        return None
-    try:
-        last_usage = None
-        with open(path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                try:
-                    record = json.loads(line)
-                except json.JSONDecodeError:
-                    continue
-                if record.get("type") != "assistant":
-                    continue
-                msg = record.get("message")
-                if not isinstance(msg, dict) or "usage" not in msg:
-                    continue
-                last_usage = msg["usage"]
-        if last_usage is None:
-            return None
-        input_tokens = last_usage.get("input_tokens", 0)
-        cache_creation = last_usage.get("cache_creation_input_tokens", 0)
-        cache_read = last_usage.get("cache_read_input_tokens", 0)
-        total = input_tokens + cache_creation + cache_read
-        if total == 0:
-            return None
-        context_limit = 200_000
-        pct = min(100.0, (total / context_limit) * 100)
-        return round(100.0 - pct, 1)
-    except Exception:
-        return None
 
 
 def _write_context_pct_to_slim(cwd: str, context_pct: float) -> None:
@@ -462,6 +351,25 @@ def _write_context_pct_to_slim(cwd: str, context_pct: float) -> None:
         slim_path.write_text(json.dumps(data, indent=4), encoding="utf-8")
     except Exception:
         pass
+
+
+def _read_context_remaining(cwd: str) -> Optional[float]:
+    """Read remaining context percentage from .claude/context_remaining.
+
+    File written by statusLine with Claude Code native context_window.remaining_percentage.
+    Returns float 0-100 or None if unavailable. Fail-silent.
+
+    WORK-247: Replaces _extract_context_pct (transcript parsing) for slim relay.
+    """
+    if not cwd:
+        return None
+    try:
+        remaining_file = Path(cwd) / ".claude" / "context_remaining"
+        if not remaining_file.exists():
+            return None
+        return float(remaining_file.read_text(encoding="utf-8").strip())
+    except Exception:
+        return None
 
 
 def _get_vitals(cwd: str, slim: Optional[dict] = None) -> Optional[str]:
@@ -672,53 +580,6 @@ def _get_lifecycle_guidance(prompt: str, cwd: str) -> Optional[str]:
     return None
 
 
-# SUPERSEDED by _get_context_usage (WORK-189)
-def _estimate_context_usage(transcript_path: str) -> float:
-    """
-    Estimate context usage percentage from transcript file size.
-
-    Uses rough heuristic: ~4 chars per token, 200k token context window.
-    Returns 0-100 percentage.
-    """
-    if not transcript_path:
-        return 0.0
-
-    path = Path(transcript_path)
-    if not path.exists():
-        return 0.0
-
-    try:
-        # Get file size in bytes, convert to estimated tokens
-        # Calibration (Session 132): ~8 chars per token accounts for JSON/tool overhead
-        # Previous: 6 chars/token was ~15-20% too aggressive
-        file_size = path.stat().st_size
-        estimated_tokens = file_size // 8  # ~8 chars per token (recalibrated S132)
-        context_limit = 200000  # Claude's context window
-
-        return min(100.0, (estimated_tokens / context_limit) * 100)
-    except Exception:
-        return 0.0
-
-
-# SUPERSEDED by _get_context_usage (WORK-189)
-def _check_context_threshold(transcript_path: str, threshold: float = 80.0) -> Optional[str]:
-    """
-    Check if context usage exceeds threshold.
-
-    Args:
-        transcript_path: Path to transcript JSONL file
-        threshold: Percentage threshold (default 80%)
-
-    Returns:
-        Warning message if above threshold, None otherwise.
-    """
-    pct = _estimate_context_usage(transcript_path)
-    if pct >= threshold:
-        return (
-            f"CONTEXT: ~{100.0 - pct:.0f}% remaining. "
-            "Consider /new-checkpoint before context exhaustion."
-        )
-    return None
 
 
 def _get_rfc2119_reminders(prompt: str) -> Optional[str]:

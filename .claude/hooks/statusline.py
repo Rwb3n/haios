@@ -36,7 +36,7 @@ def main():
     # Write remaining % to file for hook consumption
     if remaining is not None:
         try:
-            remaining_file = Path(".claude/context_remaining")
+            remaining_file = Path(cwd) / ".claude" / "context_remaining"
             remaining_file.write_text(str(remaining), encoding="utf-8")
         except Exception:
             pass  # Fail-silent: display must never break

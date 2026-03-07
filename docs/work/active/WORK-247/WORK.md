@@ -1,16 +1,16 @@
 ---
 template: work_item
 id: WORK-247
-title: "Context Budget Gate \u2014 Wire Prototype to Production"
+title: Context Budget Gate — Wire Prototype to Production
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: '2026-03-07'
 spawned_by: null
 spawned_children: []
 chapter: CH-060
 arc: call
-closed: null
+closed: '2026-03-07'
 priority: high
 effort: medium
 traces_to:
@@ -37,24 +37,37 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: '2026-03-07T13:42:19.874074'
-  exited: null
+  exited: '2026-03-07T14:58:59.290197'
 queue_history:
 - position: backlog
   entered: '2026-03-07T13:42:19.874074'
+  exited: '2026-03-07T14:58:59.290197'
+- position: done
+  entered: '2026-03-07T14:58:59.290197'
   exited: null
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 89590
+- 89591
+- 89592
+- 89593
+- 89594
+- 89595
+- 89596
+- 89597
+- 89598
+- 89599
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T13:42:19.874074'
+last_updated: '2026-03-07T14:58:59.294202'
 ---
 # WORK-247: Context Budget Gate — Wire Prototype to Production
 

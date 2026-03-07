@@ -475,43 +475,6 @@ class TestLifecycleGuidance:
         assert "RFC 2119" in result or "Today is" in result
 
 
-class TestContextThreshold:
-    """Test E2-210: Context threshold auto-checkpoint warning."""
-
-    def test_estimate_context_usage_calculates_percentage(self):
-        """Estimate context from transcript file size."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.jsonl', delete=False) as f:
-            # Write ~4000 chars ≈ 1000 tokens ≈ 0.5% of 200k
-            for _ in range(100):
-                f.write(json.dumps({"type": "user", "content": "a" * 40}) + "\n")
-            f.flush()
-            temp_path = f.name
-
-        try:
-            from hooks.user_prompt_submit import _estimate_context_usage
-            pct = _estimate_context_usage(temp_path)
-            assert 0 < pct < 5  # Should be small percentage
-        finally:
-            Path(temp_path).unlink(missing_ok=True)
-
-    def test_check_context_threshold_warns_above_80(self):
-        """Warning returned when context > 80%."""
-        with patch('hooks.user_prompt_submit._estimate_context_usage', return_value=85.0):
-            from hooks.user_prompt_submit import _check_context_threshold
-            warning = _check_context_threshold("/fake/path")
-            assert warning is not None
-            assert "CONTEXT:" in warning
-            assert "15%" in warning  # 100 - 85 = 15% remaining
-            assert "checkpoint" in warning.lower()
-
-    def test_check_context_threshold_silent_below_80(self):
-        """No warning when context < 80%."""
-        with patch('hooks.user_prompt_submit._estimate_context_usage', return_value=50.0):
-            from hooks.user_prompt_submit import _check_context_threshold
-            warning = _check_context_threshold("/fake/path")
-            assert warning is None
-
-
 class TestYamlTimestampNestedStructures:
     """Test E2-172: YAML timestamp injection preserves nested structures."""
 
