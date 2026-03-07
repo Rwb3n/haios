@@ -21361,3 +21361,9 @@
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: backlog -> ready", "timestamp": "2026-03-07T01:10:10.704708", "session_id": 467, "context_pct": 9.3}
 {"type": "ValidationOutcome", "gate": "queue_transition", "work_id": "WORK-NH1", "result": "pass", "reason": "Valid transition: ready -> working", "timestamp": "2026-03-07T01:10:10.723444", "session_id": 467, "context_pct": 9.3}
 {"type": "CyclePhaseEntered", "phase": "DONE", "work_id": "WORK-244", "agent": "Hephaestus", "timestamp": "2026-03-07T01:10:34.132403", "session_id": 467, "context_pct": 9.3}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-244", "agent": "Hephaestus", "timestamp": "2026-03-07T01:12:16.033370", "session_id": 467, "context_pct": 9.3}
+{"type": "CyclePhaseEntered", "phase": "VALIDATE", "work_id": "WORK-244", "agent": "Hephaestus", "timestamp": "2026-03-07T01:16:03.028259", "session_id": 467, "context_pct": 9.3}
+{"type": "CyclePhaseEntered", "phase": "ARCHIVE", "work_id": "WORK-244", "agent": "Hephaestus", "timestamp": "2026-03-07T01:16:15.438980", "session_id": 467, "context_pct": 9.3}
+{"type": "MCPGateChecked", "tool": "hierarchy_close_work", "primitive": "mcp-mutate", "state": "ARCHIVE", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 467, "context_pct": 9.3}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-03-07T01:16:19.265325", "session_id": 467, "context_pct": 9.3}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-07T01:16:19.320249", "session_id": 467, "context_pct": 9.3}

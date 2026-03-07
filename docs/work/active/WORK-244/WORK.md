@@ -3,14 +3,14 @@ template: work_item
 id: WORK-244
 title: CHAPTER.md YAML Frontmatter Migration (Phase 1)
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: '2026-03-07'
 spawned_by: WORK-240
 spawned_children: []
 chapter: CH-067
 arc: infrastructure
-closed: null
+closed: '2026-03-07'
 priority: medium
 effort: medium
 traces_to:
@@ -37,13 +37,13 @@ blocks:
 - WORK-245
 enables:
 - WORK-245
-queue_position: working
-cycle_phase: DONE
-current_node: DONE
+queue_position: done
+cycle_phase: done
+current_node: ARCHIVE
 node_history:
 - node: backlog
   entered: '2026-03-07T00:07:54.769183'
-  exited: null
+  exited: '2026-03-07T01:16:19.285270'
 queue_history:
 - position: backlog
   entered: '2026-03-07T00:07:54.769183'
@@ -53,6 +53,9 @@ queue_history:
   exited: '2026-03-07T00:39:32.891248'
 - position: working
   entered: '2026-03-07T00:39:32.891248'
+  exited: '2026-03-07T01:16:19.285270'
+- position: done
+  entered: '2026-03-07T01:16:19.285270'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -71,10 +74,12 @@ memory_refs:
 - 89446
 - 89447
 - 89448
+- 89458
+- 89459
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T01:11:05.141412'
+last_updated: '2026-03-07T01:16:19.291911'
 ---
 # WORK-244: CHAPTER.md YAML Frontmatter Migration (Phase 1)
 
