@@ -23753,3 +23753,4 @@
 {"type": "StatusPropagation", "work_id": "WORK-252", "chapter": "CH-065", "arc": "infrastructure", "action": "chapter_completed", "timestamp": "2026-03-07T15:28:22.720305"}
 {"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-252", "agent": "Hephaestus", "timestamp": "2026-03-07T15:28:27.942786", "session_id": 472, "context_pct": 73.0}
 {"type": "MCPGateChecked", "tool": "scaffold_checkpoint", "primitive": "mcp-scaffold", "state": "CHAIN", "allowed": true, "reason": "Unknown primitive 'mcp-scaffold', defaulting to allow", "session_id": 472, "context_pct": 73.0}
+{"type": "SessionEnded", "session": 472, "agent": "Hephaestus", "timestamp": "2026-03-07T15:37:17.180846", "session_id": 472, "context_pct": 55.0}
