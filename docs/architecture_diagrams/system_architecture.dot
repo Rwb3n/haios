@@ -1,0 +1,72 @@
+digraph HAIOS {
+    rankdir = TB;
+    nodesep = 0.8;
+    ranksep = 1.2;
+    node [shape = box; style = "rounded,filled"; fillcolor = white; fontname = "Helvetica"; penwidth = 2;];
+    edge [fontname = "Helvetica"; fontsize = 10; penwidth = 1.5;];
+    
+    // Overall title
+    labelloc = "t";
+    label = "HAIOS Architecture (Epoch 2.8)";
+    fontsize = 20;
+    fontname = "Helvetica-Bold";
+    
+    subgraph cluster_interfaces {
+        label = "Interfaces";
+        style = dashed;
+        color = gray;
+        fontname = "Helvetica-Bold";
+        ClaudeCode [label = "Claude Code Plugin\n(/coldstart, /haios, hooks)";fillcolor = "#f9f9f9";];
+        MCP [label = "MCP Server\n(Claude Desktop Integration)";fillcolor = "#f9f9f9";];
+    }
+    
+    subgraph cluster_governance {
+        label = "Governance Layer (L0-L4)";
+        style = filled;
+        color = "#eef2f5";
+        fontname = "Helvetica-Bold";
+        Hooks [label = "Governance Hooks\n(Pre/PostToolUse, PromptSubmit, Stop)";fillcolor = "#d9e6f2";];
+        Lifecycles [label = "Independent Lifecycles\n(Investigation, Design,\nImplementation, Validation)";fillcolor = "#d9e6f2";];
+        WorkItems [label = "Work Items\n(docs/work/active/WORK-XXX)";fillcolor = "#d9e6f2";];
+    }
+    
+    subgraph cluster_agents {
+        label = "Agent Ecosystem";
+        style = dashed;
+        color = gray;
+        fontname = "Helvetica-Bold";
+        MainAgent [label = "Main Agent\n(L0-L3 Grounded)";fillcolor = "#fdf6e3";];
+        BuilderAgent [label = "Builder Agent\n(Hephaestus)";fillcolor = "#fdf6e3";];
+        UtilityAgents [label = "Utility & Verification Agents\n(Critique, Schema-Verifier, etc.)";fillcolor = "#fdf6e3";];
+    }
+    
+    subgraph cluster_core {
+        label = "Cognitive Memory Engine";
+        style = filled;
+        color = "#eef8f2";
+        fontname = "Helvetica-Bold";
+        LangExtract [label = "LangExtract\n(Structured Knowledge Extraction)";fillcolor = "#dcedc8";];
+        ReasoningBank [label = "ReasoningBank\n(Strategy & Experience Extraction)";fillcolor = "#dcedc8";];
+        SQLite [label = "Memory DB\n(SQLite + Embeddings)\n[81k+ Concepts]";shape = cylinder;fillcolor = "#c5e1a5";];
+        MemorySynthesis [label = "Memory Synthesis\n(Clustering & Cross-Pollination)";fillcolor = "#dcedc8";];
+    }
+    
+    // Edges
+    ClaudeCode -> Hooks [label = "Triggers";];
+    MCP -> UtilityAgents [label = "Tools";];
+    
+    Hooks -> Lifecycles [label = "Enforces\nState Changes";];
+    Lifecycles -> WorkItems [label = "Manages";];
+    
+    MainAgent -> Hooks [label = "Governed by";];
+    BuilderAgent -> WorkItems [label = "Executes";];
+    UtilityAgents -> Lifecycles [label = "Gates & Checks";];
+    
+    Hooks -> LangExtract [label = "Triggers Capture\n(On Stop)";];
+    
+    LangExtract -> SQLite [label = "Writes\n{Entity, Concept, Source}";];
+    ReasoningBank -> SQLite [dir = both; label = "Stores/Retrieves\nStrategies";];
+    MemorySynthesis -> SQLite [dir = both; label = "Prunes & Enhances";];
+    
+    ReasoningBank -> MainAgent [label = "Injects Strategies\ninto Prompts"; style = dashed; color = blue;];
+}

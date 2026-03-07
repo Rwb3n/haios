@@ -1,0 +1,32 @@
+digraph Interfaces {
+    rankdir = TB;
+    node [shape = box; style = "rounded,filled"; fillcolor = white; fontname = "Helvetica";];
+    
+    labelloc = "t";
+    label = "Subsystem: Interfaces & Touchpoints";
+    fontsize = 16;
+    
+    subgraph cluster_workspace {
+        label = "User Workspace";
+        style = dashed;
+        color = gray;
+        ClaudeCodeUser [label = "Claude Code\n(CLI sessions)";fillcolor = "#f0f0f0";];
+        ClaudeDesktop [label = "Claude Desktop\n(GUI client)";fillcolor = "#f0f0f0";];
+    }
+    
+    subgraph cluster_entry {
+        label = "HAIOS Entry Points";
+        style = filled;
+        color = "#eef2f5";
+        Plugin [label = "Plugin (.claude dir)\nCommands: /coldstart, /new-work";fillcolor = "#d9e6f2";];
+        MCP [label = "MCP Server\nhaios_etl.mcp_server";fillcolor = "#d9e6f2";];
+        Skills [label = "Skills & Commands\n(/haios, /status)";fillcolor = "#d9e6f2";];
+    }
+    
+    ClaudeCodeUser -> Plugin [label = "Invokes";];
+    ClaudeDesktop -> MCP [label = "Connects to";];
+    Plugin -> Skills [label = "Executes";];
+    
+    Skills -> "Governance Hooks" [style = dashed;];
+    MCP -> "Memory DB Tools" [style = dashed;];
+}

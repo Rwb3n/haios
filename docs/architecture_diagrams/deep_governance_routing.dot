@@ -1,0 +1,36 @@
+digraph HookDispatcher {
+    rankdir = TB;
+    node [shape = box; style = "rounded,filled"; fillcolor = white; fontname = "Helvetica";];
+    
+    labelloc = "t";
+    label = "Deep Detail: hook_dispatcher.py Routing";
+    fontsize = 16;
+    
+    ClaudeCLIIn [label = "Claude Code CLI\nEmits specific JSON payload to stdin";fillcolor = "#f0f0f0";];
+    ClaudeCLIOut [label = "Claude Code CLI\nExecutes tool or modifies prompt";fillcolor = "#f0f0f0";];
+    
+    Dispatcher [label = "hook_dispatcher.py\n(Main router)";fillcolor = "#d9e6f2";];
+    
+    subgraph cluster_handlers {
+        label = ".claude/hooks/handlers";
+        style = filled;
+        color = "#eef2f5";
+        
+        UPS [label = "user_prompt_submit.py\n(Injects text/vitals)";fillcolor = "#fff";];
+        PreT [label = "pre_tool_use.py\n(JSON allow/block decision)";fillcolor = "#fff";];
+        PostT [label = "post_tool_use.py\n(Side-effects: timestamp/validate)";fillcolor = "#fff";];
+        Stop [label = "stop.py\n(Side-effects: learning extraction)";fillcolor = "#fff";];
+    }
+    
+    ClaudeCLIIn -> Dispatcher [label = "JSON via stdin";];
+    
+    Dispatcher -> UPS [label = "UserPromptSubmit";];
+    Dispatcher -> PreT [label = "PreToolUse";];
+    Dispatcher -> PostT [label = "PostToolUse";];
+    Dispatcher -> Stop [label = "Stop";];
+    
+    UPS -> ClaudeCLIOut [label = "Prints Text\nto stdout";];
+    PreT -> ClaudeCLIOut [label = "Prints JSON\nto stdout";];
+    PostT -> ClaudeCLIOut [label = "No stdout return";];
+    Stop -> ClaudeCLIOut [label = "No stdout return";];
+}

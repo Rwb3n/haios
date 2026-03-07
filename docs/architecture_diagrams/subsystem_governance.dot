@@ -1,0 +1,20 @@
+digraph Governance {
+    rankdir = TB;
+    node [shape = box; style = "rounded,filled"; fillcolor = white; fontname = "Helvetica";];
+    
+    labelloc = "t";
+    label = "Subsystem: Governance Layer";
+    fontsize = 16;
+    
+    Hooks [label = "Governance Hooks\nPreToolUse, PostToolUse,\nUserPromptSubmit, Stop";fillcolor = "#d9e6f2";];
+    L4Reqs [label = "L4 Requirements\nTechnical Specs & Config\n(haios.yaml)";fillcolor = "#fdf6e3";];
+    Ceremony [label = "Ceremony Engine\nState Transition Gates";fillcolor = "#d9e6f2";];
+    Lifecycles [label = "Independent Lifecycles\nInvestigation, Design,\nImplementation, Validation";fillcolor = "#d9e6f2";];
+    WorkItems [label = "Work Items\nFormat: WORK-XXX";fillcolor = "#dcebc8";];
+    
+    Hooks -> Ceremony [label = "Triggers";];
+    Hooks -> L4Reqs [label = "Reads Config"; style = dashed;];
+    L4Reqs -> Lifecycles [label = "Defines Constraints"; style = dotted;];
+    Ceremony -> Lifecycles [label = "Enforces\nStage Check";];
+    Lifecycles -> WorkItems [label = "Validates State\n(PLAN, DO, DONE)";];
+}

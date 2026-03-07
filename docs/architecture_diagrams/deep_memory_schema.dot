@@ -1,0 +1,40 @@
+digraph DBSchema {
+    rankdir = TB;
+    node [shape = box; style = "rounded,filled"; fillcolor = white; fontname = "Helvetica";];
+    
+    labelloc = "t";
+    label = "Deep Detail: Memory SQLite Schema & Abstraction";
+    fontsize = 16;
+    
+    subgraph cluster_mcp {
+        label = "MCP Tools (mcp_server.py)";
+        style = filled;
+        color = "#eef2f5";
+        MCPTools [label = "• memory_search_with_experience()\n• extract_content()\n• schema_info()\n• db_query()";fillcolor = "#fff";shape = note;];
+    }
+    
+    subgraph cluster_abstraction {
+        label = "Database Manager (database.py)";
+        style = filled;
+        color = "#e8f5e9";
+        DBAbst [label = "• insert_entity() / insert_concept()\n• insert_embedding()\n• search_memories()\n• query_read_only()";fillcolor = "#fff";shape = note;];
+    }
+    
+    subgraph cluster_tables {
+        label = "haios_memory.db Tables";
+        style = filled;
+        color = "#fff3e0";
+        Entities [label = "entities\n(id, type, value)";shape = cylinder;fillcolor = "#fff";];
+        Concepts [label = "concepts\n(id, type, content, source_adr)";shape = cylinder;fillcolor = "#fff";];
+        Artifacts [label = "artifacts\n(id, file_path, file_hash, version)";shape = cylinder;fillcolor = "#fff";];
+        Traces [label = "reasoning_traces\n(id, query, approach, outcome,\n strategy_title/_description)";shape = cylinder;fillcolor = "#fff";];
+        Embeddings [label = "embeddings (sqlite-vec)\n(Vector storage)";shape = cylinder;fillcolor = "#fff";];
+    }
+    
+    MCPTools -> DBAbst [label = "Calls";];
+    DBAbst -> Entities [label = "Writes O(1)";];
+    DBAbst -> Concepts [label = "Writes O(1)";];
+    DBAbst -> Artifacts [label = "Writes/Updates";];
+    DBAbst -> Traces [label = "Logs Experience";];
+    DBAbst -> Embeddings [label = "Stores Vectors";];
+}

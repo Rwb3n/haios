@@ -1,0 +1,43 @@
+digraph CognitiveMemory {
+    rankdir = TB;
+    node [shape = box; style = "rounded,filled"; fillcolor = white; fontname = "Helvetica";];
+    
+    labelloc = "t";
+    label = "Subsystem: Cognitive Memory Engine";
+    fontsize = 16;
+    
+    subgraph cluster_extraction {
+        label = "Extraction Layer";
+        style = filled;
+        color = "#e8f5e9";
+        LangExtract [label = "LangExtract\nStructured Entity & Concept Extraction\n(Grounded in source data)";fillcolor = "#fff";];
+        ReasoningBank [label = "ReasoningBank\nStrategy & Trace Extraction\n(Learns from success/failure)";fillcolor = "#fff";];
+    }
+    
+    subgraph cluster_storage {
+        label = "Storage Layer";
+        style = filled;
+        color = "#eef8f2";
+        SQLite [label = "haios_memory.db\n(SQLite w/ Vector Embeddings)";shape = cylinder;fillcolor = "#c5e1a5";];
+        Records [label = "Records:\n• 9,000+ Entities\n• 81,000+ Concepts\n• Reasoning Traces";shape = note;fillcolor = "#fff";];
+        Taxonomy [label = "Taxonomy:\nEpisteme, Techne, Doxa";shape = note;fillcolor = "#fff";];
+    }
+    
+    subgraph cluster_maintenance {
+        label = "Maintenance Layer";
+        style = filled;
+        color = "#fff3e0";
+        Synthesis [label = "Synthesis Hub\nClusters & Prunes nodes";fillcolor = "#fff";];
+        Pollinate [label = "Cross-Pollination\nInjects learned strategies into Agent context";fillcolor = "#fff";];
+    }
+    
+    LangExtract -> SQLite [label = "Writes\nStructured Data";];
+    ReasoningBank -> SQLite [label = "Writes\nStrategies";];
+    
+    SQLite -> Records [dir = none; style = dashed;];
+    SQLite -> Taxonomy [dir = none; style = dashed;];
+    
+    Synthesis -> SQLite [dir = both; label = "Reads & Updates\nClusters";];
+    SQLite -> Pollinate [label = "Reads Strategies";];
+    Pollinate -> "Agent Ecosystem" [label = "Context\nInjection"; style = dashed; color = blue;];
+}

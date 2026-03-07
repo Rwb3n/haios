@@ -1,0 +1,33 @@
+digraph AgentContext {
+    rankdir = TB;
+    node [shape = box; style = "rounded,filled"; fillcolor = white; fontname = "Helvetica";];
+    
+    labelloc = "t";
+    label = "Deep Detail: Agent Context & Prompt Injection";
+    fontsize = 16;
+    
+    subgraph cluster_config {
+        label = ".claude/haios/config/haios.yaml";
+        style = filled;
+        color = "#eef2f5";
+        Loader [label = "Context Loaders\n(Maps Roles to required .md files)";fillcolor = "#fff";];
+    }
+    
+    subgraph cluster_prompt {
+        label = "Agent System Prompt Window";
+        style = filled;
+        color = "#fdf6e3";
+        
+        Identity [label = "1. Static Identity\n(.claude/agents/*.md)";fillcolor = "#fff";shape = note;];
+        Dynamic [label = "2. Dynamic Context\n(L0-L4 Requirements loaded via haios.yaml)";fillcolor = "#fff";shape = note;];
+        Injection [label = "3. Reasoning Injection\n(Past failure/success strategies\nfrom SQLite)";fillcolor = "#e8f5e9";shape = note;];
+    }
+    
+    Execution [label = "Agent Execution Phase\n(Calls MCP Tools)";shape = ellipse;fillcolor = "#dcebc8";];
+    
+    Loader -> Dynamic [label = "Defines Constraints";];
+    
+    Identity -> Execution [label = "Provides Identity";];
+    Dynamic -> Execution [label = "Provides Rules";];
+    Injection -> Execution [label = "Provides Experience";];
+}

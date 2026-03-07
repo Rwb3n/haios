@@ -1,0 +1,34 @@
+digraph InterfacesRouting {
+    rankdir = TB;
+    node [shape = box; style = "rounded,filled"; fillcolor = white; fontname = "Helvetica";];
+    
+    labelloc = "t";
+    label = "Deep Detail: Code Interfaces & Routing";
+    fontsize = 16;
+    
+    subgraph cluster_cli {
+        label = "CLI & Plugin Commands\n(User Triggered)";
+        style = filled;
+        color = "#fdf6e3";
+        ETLCli [label = "haios_etl.cli\n(ingest, process, refine)";fillcolor = "#fff";];
+        ClaudeCmds [label = "Claude Commands\n(/coldstart, /new-work, /status)";fillcolor = "#fff";];
+    }
+    
+    subgraph cluster_mcp {
+        label = "MCP Server\n(Tool Triggers)";
+        style = filled;
+        color = "#eef2f5";
+        MCPMem [label = "Memory Tools\n(memory_search, extract)";fillcolor = "#fff";];
+        MCPAgent [label = "Agent Orchestration\n(ingest, marketplace)";fillcolor = "#fff";];
+        MCPSchema [label = "Introspection\n(schema_info, db_query)";fillcolor = "#fff";];
+    }
+    
+    InternalLib [label = "Internal Python Modules\n(database.py, extraction.py, etc.)";shape = box3d;fillcolor = "#dcedc8";];
+    
+    ETLCli -> InternalLib [label = "Direct API";];
+    ClaudeCmds -> InternalLib [label = "Bash Scripts/Direct";];
+    
+    MCPMem -> InternalLib [label = "Wraps";];
+    MCPAgent -> InternalLib [label = "Wraps";];
+    MCPSchema -> InternalLib [label = "Wraps";];
+}

@@ -3,14 +3,14 @@ template: work_item
 id: WORK-248
 title: Hook Infrastructure Cleanup — Dead Code and Stale Gates
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: '2026-03-07'
 spawned_by: null
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-03-07'
 priority: medium
 effort: medium
 traces_to: []
@@ -33,13 +33,13 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: working
-cycle_phase: DONE
-current_node: DONE
+queue_position: done
+cycle_phase: done
+current_node: ARCHIVE
 node_history:
 - node: backlog
   entered: '2026-03-07T13:54:21.470332'
-  exited: null
+  exited: '2026-03-07T16:56:13.838575'
 queue_history:
 - position: backlog
   entered: '2026-03-07T13:54:21.470332'
@@ -49,6 +49,9 @@ queue_history:
   exited: '2026-03-07T16:18:39.725212'
 - position: working
   entered: '2026-03-07T16:18:39.725212'
+  exited: '2026-03-07T16:56:13.838575'
+- position: done
+  entered: '2026-03-07T16:56:13.838575'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -70,6 +73,6 @@ memory_refs:
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T16:53:39.035424'
+last_updated: '2026-03-07T16:56:13.846100'
 ---
 # WORK-248: Hook Infrastructure Cleanup — Dead Code and Stale Gates

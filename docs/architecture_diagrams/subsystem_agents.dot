@@ -1,0 +1,37 @@
+digraph Agents {
+    rankdir = TB;
+    node [shape = box; style = "rounded,filled"; fillcolor = white; fontname = "Helvetica";];
+    
+    labelloc = "t";
+    label = "Subsystem: Agent Ecosystem";
+    fontsize = 16;
+    
+    subgraph cluster_main {
+        label = "Main Routing & Philosophical Grounding";
+        style = filled;
+        color = "#fdf6e3";
+        MainAgent [label = "Main Agent\nLoads: L0-L3 Manifesto\nHandles user interaction";fillcolor = "#fff";];
+    }
+    
+    subgraph cluster_builder {
+        label = "Execution";
+        style = filled;
+        color = "#e8f5e9";
+        BuilderAgent [label = "Builder Agent (Hephaestus)\nLoads: L4 Tech Reqs, Work Items\nGenerates artifacts";fillcolor = "#fff";];
+    }
+    
+    subgraph cluster_utility {
+        label = "Utility / Verification (Gates)";
+        style = filled;
+        color = "#fff3e0";
+        Critique [label = "Critique Agent\n(Surfaces Assumptions)";fillcolor = "#fff";];
+        Schema [label = "Schema Verifier\n(Gates SQL Queries)";fillcolor = "#fff";];
+        Validator [label = "Validator Agent\n(Reqs verification)";fillcolor = "#fff";];
+        Preflight [label = "Preflight Checker\n(Plan readiness)";fillcolor = "#fff";];
+    }
+    
+    MainAgent -> BuilderAgent [label = "Delegates Work";];
+    BuilderAgent -> Critique [label = "Invokes during DESIGN";];
+    BuilderAgent -> Schema [label = "Invokes before SQL";];
+    BuilderAgent -> Validator [label = "Invokes during CHECK";];
+}
