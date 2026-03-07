@@ -1,3 +1,65 @@
+---
+id: Breath
+name: Pressure Dynamics
+epoch: E2.2 (The Refinement)
+status: Active
+chapters:
+- id: CH-001
+  title: ObservationIsolation
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-002
+  title: SessionCeremony
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-003
+  title: MemoryRefEnforcement
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Active
+- id: CH-004
+  title: PhaseAnnotation
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-005
+  title: BatchCycleExecution
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-006
+  title: SessionStateWiring
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-007
+  title: ObservationTriageOperationalization
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Active
+exit_criteria:
+- text: Observation capture is standalone skill (E2-280)
+  checked: true
+- text: Checkpoint thinned (24 lines, manifest not log) (E2-281)
+  checked: true
+- text: memory_refs enforced via load_memory_refs (E2-282)
+  checked: true
+- text: Session state wiring complete - all skills update session_state (E2-293/294/295)
+  checked: true
+- text: All skills annotated with pressure ([MAY]/[MUST])
+  checked: false
+- text: Agent actually breathes (doesn't skip volumous phases)
+  checked: false
+---
 # generated: 2026-01-06
 # System Auto: last updated on: 2026-01-18T15:34:14
 # Arc: Breath

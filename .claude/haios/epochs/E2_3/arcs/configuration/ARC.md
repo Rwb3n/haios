@@ -1,3 +1,20 @@
+---
+id: configuration
+epoch: E2.3
+status: Active
+chapters: []
+exit_criteria:
+- text: Single discovery root (haios.yaml points to all config)
+  checked: false
+- text: Session number from `.claude/session` (not 258KB JSON)
+  checked: false
+- text: Coldstart via injection (no manual file reads)
+  checked: false
+- text: All loaders config-driven
+  checked: false
+- text: haios-status.json < 10KB
+  checked: false
+---
 # generated: 2026-01-20
 # System Auto: last updated on: 2026-01-21T21:17:25
 # Arc: Configuration

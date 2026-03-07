@@ -1,3 +1,45 @@
+---
+id: portability
+epoch: E2.5
+theme: HAIOS as distributable, portable plugin
+status: Planned
+chapters:
+- id: CH-028
+  title: PathConfigMigration
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-PORTABLE-001, REQ-CONFIG-001
+- id: CH-029
+  title: SeedStructure
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-PORTABLE-003
+- id: CH-030
+  title: InitCeremony
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-PORTABLE-002
+- id: CH-031
+  title: UpgradePath
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-PORTABLE-002
+exit_criteria:
+- text: All hardcoded paths identified and made configurable
+  checked: false
+- text: Template seed/runtime pattern implemented
+  checked: false
+- text: Init ceremony functional
+  checked: false
+- text: Plugin can be installed in fresh project via init
+  checked: false
+- text: Upgrade path documented (seed changes → runtime sync)
+  checked: false
+---
 # generated: 2026-02-03
 # System Auto: last updated on: 2026-02-03T20:14:09
 # Arc: Portability

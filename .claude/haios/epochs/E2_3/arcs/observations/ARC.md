@@ -1,3 +1,49 @@
+---
+id: Observations
+name: Observation Lifecycle Rewiring
+epoch: E2.3 (The Pipeline)
+status: Active
+chapters:
+- id: CH-001
+  title: ObservationPromoteCycle
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-002
+  title: CapturePathUpdate
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-003
+  title: TriageRefactor
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-004
+  title: AtomicObsTemplate
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-005
+  title: ObservationsLibUpdate
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+exit_criteria:
+- text: Three-phase flow implemented
+  checked: false
+- text: Observations in epochs, not docs/
+  checked: false
+- text: Atomic obs files created by promote cycle
+  checked: false
+- text: Triage scans epoch obs dir
+  checked: false
+---
 # generated: 2026-01-18
 # System Auto: last updated on: 2026-01-21T18:40:33
 # Arc: Observations

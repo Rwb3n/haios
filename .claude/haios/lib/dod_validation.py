@@ -438,12 +438,16 @@ def validate_epoch_dod(
             failures=failures,
         )
 
+    try:
+        from arc_frontmatter import get_arc_status
+    except ImportError:
+        from .arc_frontmatter import get_arc_status
+
     incomplete = []
     skipped = []
     for arc_file in arc_files:
         arc_name = arc_file.parent.name
-        content = arc_file.read_text(encoding="utf-8")
-        status = _parse_markdown_field(content, "Status") or "Unknown"
+        status = get_arc_status(arc_file) or "Unknown"
 
         # Skip deferred arcs
         if "deferred" in status.lower():

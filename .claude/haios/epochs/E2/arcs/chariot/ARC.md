@@ -1,3 +1,65 @@
+---
+id: Chariot
+name: Module Architecture
+epoch: E2.2 (The Refinement)
+status: Active
+chapters:
+- id: CH-001
+  title: ModuleWiring
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-002
+  title: BoundaryEnforcement
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-003
+  title: SDKMigration
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Vision
+- id: CH-004
+  title: PathAuthority
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-005
+  title: FileTypeLocking
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-006
+  title: CycleDelegation
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Active
+- id: CH-007
+  title: APIDocumentation
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-008
+  title: ToolDiscoverability
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+exit_criteria:
+- text: All 9 modules have runtime consumers (E2-279)
+  checked: true
+- text: Module boundaries enforced (no cross-boundary calls)
+  checked: false
+- text: Portable plugin structure works
+  checked: false
+---
 # generated: 2026-01-06
 # System Auto: last updated on: 2026-02-02T17:01:01
 # Arc: Chariot

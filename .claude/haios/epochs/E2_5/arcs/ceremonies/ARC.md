@@ -1,3 +1,76 @@
+---
+id: ceremonies
+epoch: E2.5
+theme: Implement ceremony boundaries and contracts
+status: Complete
+completed: 2026-02-12 (Session 358)
+chapters:
+- id: CH-011
+  title: CeremonyContracts
+  work_items: []
+  requirements:
+  - REQ-CEREMONY-002
+  dependencies: []
+  status: Complete
+- id: CH-012
+  title: SideEffectBoundaries
+  work_items: []
+  requirements:
+  - REQ-CEREMONY-001
+  dependencies:
+  - CH-011
+  status: Complete
+- id: CH-013
+  title: CeremonyLifecycleDistinction
+  work_items: []
+  requirements:
+  - REQ-CEREMONY-003
+  dependencies:
+  - CH-011
+  - Lifecycles:CH-001
+  status: Complete
+- id: CH-014
+  title: SessionCeremonies
+  work_items: []
+  requirements:
+  - REQ-CEREMONY-001
+  dependencies:
+  - CH-011
+  status: Complete
+- id: CH-015
+  title: ClosureCeremonies
+  work_items: []
+  requirements:
+  - REQ-CEREMONY-001
+  dependencies:
+  - CH-011
+  status: Complete
+- id: CH-016
+  title: MemoryCeremonies
+  work_items: []
+  requirements:
+  - REQ-CEREMONY-001
+  dependencies:
+  - CH-011
+  status: Complete
+- id: CH-017
+  title: SpawnCeremony
+  work_items: []
+  requirements:
+  - REQ-CEREMONY-001
+  dependencies:
+  - CH-011
+  status: Complete
+exit_criteria:
+- text: All 20 ceremonies have skill implementations
+  checked: true
+- text: Each ceremony has documented input/output contract
+  checked: true
+- text: Ceremonies log events for audit
+  checked: true
+- text: No state changes occur outside ceremony boundaries
+  checked: true
+---
 # generated: 2026-02-03
 # System Auto: last updated on: 2026-02-11T18:42:00
 # Arc: Ceremonies

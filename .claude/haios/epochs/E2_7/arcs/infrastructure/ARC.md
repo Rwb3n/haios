@@ -1,3 +1,43 @@
+---
+id: infrastructure
+epoch: E2.7
+theme: Clean the house first — bug fixes, epoch transition validation, staleness detection
+status: Active
+chapters:
+- id: CH-049
+  title: BugBatch
+  work_items:
+  - WORK-153
+  requirements:
+  - REQ-CEREMONY-001
+  - REQ-CEREMONY-002
+  dependencies: []
+  status: Complete
+- id: CH-050
+  title: EpochTransition
+  work_items:
+  - WORK-154
+  requirements:
+  - REQ-CONFIG-003
+  dependencies: []
+  status: Complete
+- id: CH-051
+  title: StalenessDetection
+  work_items:
+  - WORK-136
+  - WORK-156
+  requirements:
+  - REQ-CEREMONY-001
+  dependencies: []
+  status: Complete
+exit_criteria:
+- text: All 6 bugs in WORK-153 resolved (ceremony stubs, doc drift, code duplication)
+  checked: false
+- text: Epoch transition validates work_queues.yaml and EPOCH.md status auto-syncs
+  checked: false
+- text: Checkpoint pending items have staleness detection at session start
+  checked: false
+---
 # generated: 2026-02-16
 # System Auto: last updated on: 2026-02-16T19:00:00
 # Arc: Infrastructure

@@ -1,3 +1,51 @@
+---
+id: Ground
+name: Context Loading
+epoch: E2.2 (The Refinement)
+status: Active
+chapters:
+- id: CH-001
+  title: GroundCycle
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-002
+  title: PortalSystem
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-003
+  title: SessionManifest
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-004
+  title: CycleWiring
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-005
+  title: ObservationCentralization
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+exit_criteria:
+- text: ground-cycle designed and implemented (E2-276)
+  checked: true
+- text: Portal system (references/REFS.md) in work items (E2-277, S179)
+  checked: true
+- text: Session manifest contract (E2-281, E2-282)
+  checked: true
+- text: Calling cycles invoke ground-cycle before cognitive work
+  checked: false
+- text: E2-271 can be correctly planned with grounded context
+  checked: false
+---
 # generated: 2026-01-06
 # System Auto: last updated on: 2026-01-18T15:30:12
 # Arc: Ground

@@ -244,14 +244,21 @@ class StatusPropagator:
 
         return None
 
+    def _resolve_arc_file(self, arc_name: str):
+        """Shared helper: resolve ARC.md path from haios.yaml config."""
+        haios_path = self._base_path / ".claude" / "haios" / "config" / "haios.yaml"
+        if not haios_path.exists():
+            return None
+        haios_config = yaml.safe_load(haios_path.read_text(encoding="utf-8"))
+        arcs_dir = haios_config.get("epoch", {}).get("arcs_dir", "")
+        arc_file = self._base_path / arcs_dir / arc_name / "ARC.md"
+        return arc_file if arc_file.exists() else None
+
     def update_arc_chapter_status(
         self, arc_name: str, chapter_id: str, new_status: str
     ) -> dict:
         """
-        Update the chapter row in ARC.md status table.
-
-        Finds the ARC.md file via haios.yaml epoch.arcs_dir, locates the
-        chapter row by ID in the markdown table, and replaces the status cell.
+        Update the chapter row in ARC.md — frontmatter-first with table surgery fallback.
 
         Args:
             arc_name: Arc directory name (e.g., "engine-functions")
@@ -261,24 +268,27 @@ class StatusPropagator:
         Returns:
             {"updated": True} on success, {"updated": False, "reason": str} on failure.
         """
-        haios_path = self._base_path / ".claude" / "haios" / "config" / "haios.yaml"
-        if not haios_path.exists():
-            return {"updated": False, "reason": "haios_config_not_found"}
-        haios_config = yaml.safe_load(haios_path.read_text(encoding="utf-8"))
-        arcs_dir = haios_config.get("epoch", {}).get("arcs_dir", "")
-        arc_file = self._base_path / arcs_dir / arc_name / "ARC.md"
-        if not arc_file.exists():
+        try:
+            from arc_frontmatter import update_chapter_in_frontmatter
+        except ImportError:
+            from .arc_frontmatter import update_chapter_in_frontmatter
+
+        arc_file = self._resolve_arc_file(arc_name)
+        if arc_file is None:
             return {"updated": False, "reason": "arc_file_not_found"}
 
+        # Try frontmatter update first
+        result = update_chapter_in_frontmatter(arc_file, chapter_id, new_status)
+        if result:
+            return {"updated": True}
+
+        # Fallback: legacy table surgery for unmigrated files
         content = arc_file.read_text(encoding="utf-8")
-        # Line-by-line approach: find the chapter row, replace last cell (Status)
         lines = content.split("\n")
         found = False
         for i, line in enumerate(lines):
             if re.match(rf"\s*\|\s*{re.escape(chapter_id)}\s*\|", line):
                 cells = line.split("|")
-                # cells: ['', ' CH-XXX ', ' Title ', ..., ' Status ', '']
-                # Find last non-empty cell (Status) and replace it
                 for j in range(len(cells) - 1, -1, -1):
                     if cells[j].strip():
                         cells[j] = f" {new_status} "
@@ -288,16 +298,13 @@ class StatusPropagator:
                 break
         if not found:
             return {"updated": False, "reason": "chapter_row_not_found"}
-
         arc_file.write_text("\n".join(lines), encoding="utf-8")
         return {"updated": True}
 
     def is_arc_complete(self, arc_name: str) -> bool:
         """
         Check if all chapters in ARC.md have Complete status.
-
-        Parses the chapter table and checks every status cell.
-        Returns False if no chapters found or any chapter is not complete.
+        Frontmatter-first with table parsing fallback.
 
         Args:
             arc_name: Arc directory name (e.g., "infrastructure")
@@ -305,25 +312,19 @@ class StatusPropagator:
         Returns:
             True if all chapter rows have complete status, False otherwise.
         """
-        haios_path = self._base_path / ".claude" / "haios" / "config" / "haios.yaml"
-        if not haios_path.exists():
+        try:
+            from arc_frontmatter import get_chapters
+        except ImportError:
+            from .arc_frontmatter import get_chapters
+
+        arc_file = self._resolve_arc_file(arc_name)
+        if arc_file is None:
             return False
-        haios_config = yaml.safe_load(haios_path.read_text(encoding="utf-8"))
-        arcs_dir = haios_config.get("epoch", {}).get("arcs_dir", "")
-        arc_file = self._base_path / arcs_dir / arc_name / "ARC.md"
-        if not arc_file.exists():
+
+        chapters = get_chapters(arc_file)
+        if not chapters:
             return False
-        content = arc_file.read_text(encoding="utf-8")
-        # Parse chapter rows by splitting cells — more reliable than regex across lines
-        statuses = []
-        for line in content.split("\n"):
-            if re.match(r"\s*\|\s*CH-\d+", line):
-                cells = [c.strip() for c in line.split("|") if c.strip()]
-                if cells:
-                    statuses.append(cells[-1])  # Last cell = Status
-        if not statuses:
-            return False
-        return all(s.lower() in ARC_COMPLETE_STATUSES for s in statuses)
+        return all(ch["status"].lower() in ARC_COMPLETE_STATUSES for ch in chapters)
 
     def _log_event(
         self, work_id: str, chapter: str, arc: str, action: str

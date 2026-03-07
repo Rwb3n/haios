@@ -1,3 +1,51 @@
+---
+id: feedback
+epoch: E2.5
+theme: Implement review ceremonies and upward flow
+status: Planned
+chapters:
+- id: CH-018
+  title: ChapterReview
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-FEEDBACK-001
+- id: CH-019
+  title: ArcReview
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-FEEDBACK-002
+- id: CH-020
+  title: EpochReview
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-FEEDBACK-003
+- id: CH-021
+  title: RequirementsReview
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-FEEDBACK-004
+- id: CH-022
+  title: ParentScopeUpdate
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-FEEDBACK-005
+exit_criteria:
+- text: Chapter Review ceremony implemented and tested
+  checked: false
+- text: Arc Review ceremony implemented and tested
+  checked: false
+- text: Epoch Review ceremony implemented and tested
+  checked: false
+- text: Requirements Review ceremony implemented and tested
+  checked: false
+- text: Review can update parent document (not just status)
+  checked: false
+---
 # generated: 2026-02-03
 # System Auto: last updated on: 2026-02-03T01:00:56
 # Arc: Feedback

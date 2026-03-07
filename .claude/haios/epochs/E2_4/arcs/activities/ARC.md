@@ -1,3 +1,43 @@
+---
+id: activities
+name: Governed Activities
+epoch: E2.4 (The Activity Layer)
+status: Planned
+chapters:
+- id: CH-001
+  title: ActivityMatrix
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-002
+  title: StateDefinitions
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-003
+  title: GovernanceRules
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-004
+  title: PreToolUseIntegration
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+exit_criteria:
+- text: Activity matrix documented
+  checked: false
+- text: States formally defined
+  checked: false
+- text: Governance rules implemented
+  checked: false
+- text: PreToolUse enforces state-based restrictions
+  checked: false
+---
 # generated: 2026-01-30
 # System Auto: last updated on: 2026-02-01T16:55:45
 # Arc: Activities

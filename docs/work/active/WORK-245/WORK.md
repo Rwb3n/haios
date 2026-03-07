@@ -1,15 +1,15 @@
 ---
 template: work_item
 id: WORK-245
-title: "ARC.md YAML Frontmatter Migration (Phase 2)"
+title: ARC.md YAML Frontmatter Migration (Phase 2)
 type: implementation
 status: active
 owner: Hephaestus
 created: '2026-03-07'
 spawned_by: WORK-240
 spawned_children: []
-chapter: ''
-arc: ''
+chapter: CH-067
+arc: infrastructure
 closed: null
 priority: medium
 effort: medium
@@ -23,21 +23,23 @@ source_files:
 - .claude/haios/lib/epoch_validator.py
 - .claude/haios/lib/dod_validation.py
 acceptance_criteria:
-- "ARC.md files have YAML frontmatter with: id, epoch, theme, status, started, chapters (list), exit_criteria"
-- "hierarchy_engine.py reads ARC.md frontmatter instead of bold-markdown + table parsing"
-- "status_propagator.py updates ARC.md frontmatter chapters list instead of pipe-split table row surgery"
-- "epoch_loader.py reads ARC.md frontmatter chapters list instead of table extraction"
-- "epoch_validator.py reads ARC.md frontmatter for drift detection"
-- "dod_validation.py reads ARC.md frontmatter Status instead of _parse_markdown_field()"
-- "Migration script converts all existing ARC.md files to frontmatter format"
-- "4 duplicate chapter table parsers eliminated"
+- 'ARC.md files have YAML frontmatter with: id, epoch, theme, status, started, chapters
+  (list), exit_criteria'
+- hierarchy_engine.py reads ARC.md frontmatter instead of bold-markdown + table parsing
+- status_propagator.py updates ARC.md frontmatter chapters list instead of pipe-split
+  table row surgery
+- epoch_loader.py reads ARC.md frontmatter chapters list instead of table extraction
+- epoch_validator.py reads ARC.md frontmatter for drift detection
+- dod_validation.py reads ARC.md frontmatter Status instead of _parse_markdown_field()
+- Migration script converts all existing ARC.md files to frontmatter format
+- 4 duplicate chapter table parsers eliminated
 blocked_by:
 - WORK-244
 blocks: []
 enables: []
 queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+cycle_phase: DONE
+current_node: DONE
 node_history:
 - node: backlog
   entered: '2026-03-07T00:07:55.178399'
@@ -53,10 +55,21 @@ memory_refs:
 - 89403
 - 89404
 - 89405
+- 89406
+- 89407
+- 89484
+- 89485
+- 89486
+- 89487
+- 89488
+- 89489
+- 89490
+- 89491
+- 89492
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T00:07:55.178399'
+last_updated: '2026-03-07T12:53:49.966322'
 ---
 # WORK-245: ARC.md YAML Frontmatter Migration (Phase 2)
 

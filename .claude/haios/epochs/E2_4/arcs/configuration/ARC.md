@@ -1,3 +1,11 @@
+---
+id: configuration
+name: Object-Oriented Configuration
+epoch: E2.4 (The Activity Layer)
+status: Active (carried from E2.3)
+chapters: []
+exit_criteria: []
+---
 # generated: 2026-01-30
 # System Auto: last updated on: 2026-02-01T17:19:45
 # Arc: Configuration (Carried from E2.3)

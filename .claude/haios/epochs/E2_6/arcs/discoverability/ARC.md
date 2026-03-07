@@ -1,3 +1,52 @@
+---
+id: discoverability
+epoch: E2.6
+theme: Infrastructure for agent discovery of skills, recipes, commands, agents, templates
+status: Complete
+chapters:
+- id: CH-032
+  title: EntryPointInventory
+  work_items:
+  - WORK-020 (EXPLORE)
+  requirements:
+  - REQ-DISCOVER-001
+  dependencies: []
+  status: Complete
+- id: CH-033
+  title: ThreeTierArchitecture
+  work_items:
+  - WORK-020 (HYPOTHESIZE/VALIDATE)
+  requirements:
+  - REQ-DISCOVER-002
+  dependencies:
+  - CH-032
+  status: Complete
+- id: CH-034
+  title: DiscoveryMechanism
+  work_items:
+  - WORK-020 (CONCLUDE) + spawn
+  requirements:
+  - REQ-DISCOVER-003
+  dependencies:
+  - CH-033
+  status: Complete
+exit_criteria:
+- text: 'All 151 entry points inventoried with tier assignment (WORK-020 S368: 87
+    recipes, 34 skills, 19 commands, 11 agents)'
+  checked: true
+- text: 'Friction map of overlaps and gaps completed (WORK-020 S368: 7 friction points
+    documented)'
+  checked: true
+- text: 'Three-tier model defined with clear boundaries (WORK-020 S368: Tier 1 commands,
+    Tier 2 skills+agents, Tier 3 recipes)'
+  checked: true
+- text: 'Discovery mechanism designed (WORK-020 S368: Claude Code auto-discovery +
+    capability cards + recipe hiding)'
+  checked: true
+- text: 'Consolidation work spawned (WORK-148 S382: stubs removed; E2.7 deferred items
+    documented in ARC spawn table)'
+  checked: true
+---
 # generated: 2026-02-14
 # System Auto: last updated on: 2026-02-14T14:40:00
 # Arc: Discoverability

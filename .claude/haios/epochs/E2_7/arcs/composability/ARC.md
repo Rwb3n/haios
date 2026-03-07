@@ -1,3 +1,55 @@
+---
+id: composability
+epoch: E2.7
+theme: Compose, don't concatenate — flat metadata, template composability, recipe
+  rationalization
+status: Complete
+completed: 2026-02-17 (Session 393)
+chapters:
+- id: CH-046
+  title: FlatMetadataMigration
+  work_items:
+  - WORK-158
+  requirements:
+  - REQ-CONFIG-001
+  - REQ-CONFIG-003
+  dependencies: []
+  status: Complete
+- id: CH-047
+  title: TemplateComposability
+  work_items:
+  - WORK-152
+  - WORK-155
+  requirements:
+  - REQ-ASSET-001
+  - REQ-ASSET-004
+  dependencies: []
+  status: Complete
+- id: CH-048
+  title: RecipeRationalization
+  work_items:
+  - WORK-159
+  requirements:
+  - REQ-CONFIG-004
+  - REQ-DISCOVER-002
+  - REQ-DISCOVER-003
+  dependencies:
+  - CH-046 (flat metadata enables recipe simplification)
+  status: Complete
+exit_criteria:
+- text: Plan templates fractured by work type with type-specific sections (CH-047,
+    WORK-152/155 closed S390)
+  checked: true
+- text: Lifecycle adapts to work type (skip gates, computable predicates) (CH-047,
+    WORK-155 closed S390)
+  checked: true
+- text: Recipe surface area rationalized (grouped, documented, composable) (CH-048,
+    WORK-159 closed S393. ADR-045 three-tier model, stub cleaned, README updated)
+  checked: true
+- text: ConfigLoader used for all path resolution (zero hardcoded paths) (CH-046,
+    WORK-158 closed S393)
+  checked: true
+---
 # generated: 2026-02-16
 # System Auto: last updated on: 2026-02-16T19:00:00
 # Arc: Composability

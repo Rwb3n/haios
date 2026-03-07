@@ -1,3 +1,86 @@
+---
+id: Form
+name: Skill Decomposition
+epoch: E2.2 (The Refinement)
+status: Active
+chapters:
+- id: CH-001
+  title: ConfigDrivenGeneration
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-002
+  title: CategoryRouting
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-003
+  title: TemplateSimplification
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-004
+  title: SkillAtomization
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-005
+  title: SoftEnforcement
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-006
+  title: WorkUniversality
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-007
+  title: MultiPartPlans
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-009
+  title: SessionStateCascade
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-010
+  title: TriageOperationalization
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Active
+- id: CH-011
+  title: TemplateCommentStripping
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+exit_criteria:
+- text: Category field drives routing (not ID prefix)
+  checked: false
+- text: Templates simplified (checkpoint 112→24 lines, observations 105→26 lines)
+  checked: true
+- text: Skills decomposed into single-responsibility units (E2-283 DONE, E2-284 DONE,
+    E2-285 DONE)
+  checked: true
+- text: 'UNIX philosophy applied: each skill does one thing well'
+  checked: true
+- text: Skill template defaults to single-phase (E2-285 DONE)
+  checked: true
+- text: Soft enforcement operational (E2-286/287/288 DONE Session 190)
+  checked: true
+- text: Session state cascade wiring complete (E2-293/294/295 DONE Session 196)
+  checked: true
+---
 # generated: 2026-01-06
 # System Auto: last updated on: 2026-01-18T15:34:33
 # Arc: Form

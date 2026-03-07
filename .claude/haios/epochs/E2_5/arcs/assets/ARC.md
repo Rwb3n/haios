@@ -1,3 +1,51 @@
+---
+id: assets
+epoch: E2.5
+theme: Implement typed, versioned asset production
+status: Planned
+chapters:
+- id: CH-023
+  title: LifecycleAssetTypes
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-ASSET-001
+- id: CH-024
+  title: AssetVersioning
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-ASSET-002
+- id: CH-025
+  title: AssetPiping
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-ASSET-003
+- id: CH-026
+  title: AssetSchemas
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-ASSET-004
+- id: CH-027
+  title: AssetProvenance
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-ASSET-005
+exit_criteria:
+- text: Asset schema defined per lifecycle
+  checked: false
+- text: Provenance frontmatter on all assets
+  checked: false
+- text: Version tracking (edit creates v2, not overwrites v1)
+  checked: false
+- text: 'Piping works: `investigation | design`'
+  checked: false
+- text: 'Storing works: `investigation > findings.md`'
+  checked: false
+---
 # generated: 2026-02-03
 # System Auto: last updated on: 2026-02-03T01:00:58
 # Arc: Assets

@@ -1,3 +1,37 @@
+---
+id: query
+epoch: E2.8
+theme: The agent should not search what it can query
+status: Planning
+started: 2026-02-17 (Session 393)
+chapters:
+- id: CH-061
+  title: ColdstartContextInjection
+  work_items:
+  - WORK-162 (complete)
+  - WORK-180
+  requirements:
+  - REQ-CONFIG-001
+  - L3.3
+  dependencies: []
+  status: In Progress
+- id: CH-062
+  title: ProgressiveContracts
+  work_items:
+  - New
+  requirements:
+  - REQ-ASSET-001
+  dependencies: []
+  status: Complete
+exit_criteria:
+- text: Lightweight coldstart variant exists for housekeeping sessions
+  checked: false
+- text: Contracts designed for progressive disclosure (agent reads what it needs,
+    not everything)
+  checked: false
+- text: Context loading uses engine functions and memory before file reads
+  checked: false
+---
 # generated: 2026-02-17
 # System Auto: last updated on: 2026-02-17T21:00:00
 # Arc: Query

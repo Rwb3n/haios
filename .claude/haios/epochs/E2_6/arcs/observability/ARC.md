@@ -1,3 +1,52 @@
+---
+id: observability
+epoch: E2.6
+theme: System state visibility, epistemic discipline, agent capability cards, legacy
+  cleanup
+status: Complete
+chapters:
+- id: CH-041
+  title: EpistemicReviewAndUXDoD
+  work_items: []
+  requirements:
+  - WORK-082 (complete)
+  - WORK-096
+  - WORK-151 (spawned)
+  dependencies:
+  - REQ-CEREMONY-004
+  - REQ-CEREMONY-003
+  status: None
+- id: CH-042
+  title: AgentCards
+  work_items: []
+  requirements:
+  - WORK-144
+  dependencies:
+  - REQ-DISCOVER-004
+  status: None
+- id: CH-043
+  title: LegacyCleanup
+  work_items: []
+  requirements:
+  - WORK-145
+  dependencies:
+  - REQ-CONFIG-003
+  status: None
+exit_criteria:
+- text: 'Epistemic review ceremony designed (KNOWN/INFERRED/UNKNOWN at investigation
+    boundary) — WORK-082 S372: inside CONCLUDE, three-level verdict, WORK-151 spawned
+    for implementation'
+  checked: true
+- text: 'Agent UX Test criterion added to dod-validation-cycle (WORK-096 S380: agent
+    UX test in DoD validation)'
+  checked: true
+- text: 'All 11 agents have structured capability cards (WORK-144: A2A-inspired agent
+    cards)'
+  checked: true
+- text: 'Legacy duplication resolved (WORK-145 S377: lib/ orphans and deprecated artifacts
+    cleaned up)'
+  checked: true
+---
 # generated: 2026-02-14
 # System Auto: last updated on: 2026-02-14T17:25:00
 # Arc: Observability

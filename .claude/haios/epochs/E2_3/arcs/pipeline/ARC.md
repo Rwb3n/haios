@@ -1,3 +1,69 @@
+---
+id: Pipeline
+name: Doc-to-Product Stages
+epoch: E2.3 (The Pipeline)
+status: Active
+chapters:
+- id: CH-001
+  title: '[CorpusLoader](CH-001-corpus-loader.md)'
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-002
+  title: '[RequirementExtractor](CH-002-requirement-extractor.md)'
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-003
+  title: '[PlannerAgent](CH-003-planner-agent.md)'
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-004
+  title: BuilderInterface
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-005
+  title: ValidatorAgent
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-006
+  title: '[Orchestrator](CH-006-orchestrator.md)'
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-007
+  title: '[ChapterTriage](CH-007-chapter-triage.md)'
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-008
+  title: '[CalibrationCycle](CH-008-calibration-cycle.md)'
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+exit_criteria:
+- text: At least INGEST stage functional (CorpusLoader + RequirementExtractor)
+  checked: true
+- text: Corpus loads from arbitrary path (CorpusLoader with YAML config)
+  checked: true
+- text: Requirements extracted and structured (RequirementSet schema)
+  checked: true
+- text: PLAN stage functional (PlannerAgent has runtime consumer via Orchestrator)
+  checked: true
+- text: Orchestrator wires stages together (WORK-033, `just pipeline-run`)
+  checked: true
+---
 # generated: 2026-01-18
 # System Auto: last updated on: 2026-01-30T17:46:02
 # Arc: Pipeline

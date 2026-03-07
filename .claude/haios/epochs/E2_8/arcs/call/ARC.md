@@ -1,3 +1,83 @@
+---
+id: call
+epoch: E2.8
+theme: The agent should not read what it can call
+status: Planning
+started: 2026-02-17 (Session 393)
+chapters:
+- id: CH-058
+  title: ProportionalGovernanceDesign
+  work_items:
+  - WORK-101
+  requirements:
+  - REQ-CEREMONY-001
+  dependencies: []
+  status: Complete
+- id: CH-059
+  title: CeremonyAutomation
+  work_items:
+  - WORK-160
+  - WORK-167-176
+  requirements:
+  - REQ-CEREMONY-002
+  - REQ-CEREMONY-005
+  dependencies:
+  - CH-058
+  status: In Progress
+- id: CH-060
+  title: SessionBoundaryFix
+  work_items:
+  - WORK-161
+  requirements:
+  - REQ-CEREMONY-001
+  dependencies: []
+  status: Complete
+- id: CH-061
+  title: ColdstartContextInjection
+  work_items:
+  - WORK-162 (complete)
+  - WORK-180
+  requirements:
+  - REQ-CONFIG-001
+  - L3.3
+  dependencies: []
+  status: Complete
+- id: CH-066
+  title: MCPOperationsServer
+  work_items:
+  - New
+  requirements:
+  - REQ-DISCOVER-002
+  - REQ-CONFIG-001
+  dependencies:
+  - CH-061
+  status: Complete
+exit_criteria:
+- text: 'Governance overhead measurably reduced (target: perceptible improvement over
+    E2.5 baseline)'
+  checked: false
+- text: Trivial items skip heavy ceremony phases (computable predicates, extending
+    retro-cycle Phase 0 pattern)
+  checked: false
+- text: Mechanical ceremony phases migrated to hooks/modules (session-end, checkpoint
+    population, cycle_phase advancement)
+  checked: false
+- text: Session boundary gap governed (post-closure transition runs reliably) (WORK-161,
+    S396)
+  checked: true
+- text: Coldstart injects ALL operational context (zero manual Read steps in coldstart
+    skill)
+  checked: false
+- text: 'Minimum viable context contract enforced: identity + mission + prior + work
+    + operational HOW'
+  checked: false
+- text: haios-operations MCP server exposes work/hierarchy/session/scaffold tools
+    as agent-native interface
+  checked: false
+- text: Just recipes retired for agent use — MCP tools replace Tier 2 operations,
+    just remains Tier 3 (operator terminal only)
+  checked: false
+---
 # generated: 2026-02-17
 # System Auto: last updated on: 2026-02-17T21:00:00
 # Arc: Call

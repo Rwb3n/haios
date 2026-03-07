@@ -1,3 +1,39 @@
+---
+id: workinfra
+name: Work Infrastructure
+epoch: E2
+status: Active
+chapters:
+- id: CH-001
+  title: GroundCycle
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Active
+- id: CH-002
+  title: PortalSystem
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-003
+  title: ChariotWiring
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+exit_criteria:
+- text: ground-cycle designed and implemented
+  checked: false
+- text: Portal system (references/REFS.md) in all work items
+  checked: false
+- text: Chariot modules wired with runtime consumers
+  checked: false
+- text: ContextLoader loads chapter context
+  checked: false
+- text: E2-271 (and similar) can be correctly planned
+  checked: false
+---
 # generated: 2026-01-06
 # System Auto: last updated on: 2026-01-18T15:30:36
 # Arc: WorkInfra

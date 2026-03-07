@@ -1,3 +1,56 @@
+---
+id: lifecycles
+epoch: E2.5
+theme: Implement CycleRunner with pure function semantics
+status: Complete
+completed: 2026-02-05 (Session 318)
+chapters:
+- id: CH-001
+  title: LifecycleSignature
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-LIFECYCLE-001
+- id: CH-002
+  title: PauseSemantics
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-LIFECYCLE-002
+- id: CH-003
+  title: BatchMode
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-LIFECYCLE-003
+- id: CH-004
+  title: CallerChaining
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-LIFECYCLE-004
+- id: CH-005
+  title: PhaseTemplateContracts
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-TEMPLATE-001
+- id: CH-006
+  title: TemplateFracturing
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-TEMPLATE-002
+exit_criteria:
+- text: CycleRunner.run() returns output, does not auto-chain
+  checked: true
+- text: '"Complete without spawn" accepted by close-work-cycle'
+  checked: true
+- text: Pause points (per S27) recognized as valid completion
+  checked: true
+- text: Batch mode tested (3+ items in same phase)
+  checked: true
+---
 # generated: 2026-02-03
 # System Auto: last updated on: 2026-02-05T22:35:15
 # Arc: Lifecycles

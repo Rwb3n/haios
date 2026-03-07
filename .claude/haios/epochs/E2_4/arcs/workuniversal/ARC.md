@@ -1,3 +1,11 @@
+---
+id: workuniversal
+name: Universal Work Item Structure
+epoch: E2.4 (The Activity Layer)
+status: Active (carried from E2.3)
+chapters: []
+exit_criteria: []
+---
 # generated: 2026-01-30
 # System Auto: last updated on: 2026-02-01T21:04:52
 # Arc: WorkUniversal (Carried from E2.3)

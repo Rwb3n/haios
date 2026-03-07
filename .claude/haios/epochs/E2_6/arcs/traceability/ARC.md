@@ -1,3 +1,55 @@
+---
+id: traceability
+epoch: E2.6
+theme: Bidirectional tracing from L4 requirements to artifacts, with governance violation
+  logging
+status: Complete
+chapters:
+- id: CH-038
+  title: DecompositionAndMappings
+  work_items:
+  - WORK-097 (complete)
+  - WORK-104
+  - WORK-150 (spawned)
+  requirements:
+  - REQ-ASSET-003
+  - REQ-LIFECYCLE-001
+  dependencies: []
+  status: In Progress
+- id: CH-039
+  title: L4CoverageAudit
+  work_items:
+  - WORK-075
+  requirements:
+  - REQ-TRACE-005
+  dependencies:
+  - None (blockers WORK-069/070 resolved)
+  status: Planning
+- id: CH-040
+  title: GateSkipLogging
+  work_items:
+  - WORK-146
+  requirements:
+  - REQ-OBSERVE-005
+  dependencies: []
+  status: Planning
+exit_criteria:
+- text: 'Plan decomposition pattern documented with WORK.md/plan.md fields (WORK-097
+    S368: spawn_type field + decomposition_map section)'
+  checked: true
+- text: 'Activity matrix has validation-cycle and triage-cycle phase mappings (WORK-104:
+    validation VERIFY/JUDGE/REPORT + triage SCAN/ASSESS/RANK/COMMIT mapped)'
+  checked: true
+- text: 'L4 requirements bidirectionally traceable to work items and artifacts (WORK-075:
+    system audit with L4 coverage analysis)'
+  checked: true
+- text: 'MUST gate violations logged to governance-events.jsonl (WORK-146: gate skip
+    violation logging implemented)'
+  checked: true
+- text: 'Gap analysis produced (WORK-075: unimplemented requirements and decisions
+    inventoried)'
+  checked: true
+---
 # generated: 2026-02-14
 # System Auto: last updated on: 2026-02-14T15:02:00
 # Arc: Traceability

@@ -88,8 +88,18 @@ class EpochLoader:
                 criteria.append(line.strip())
         return criteria
 
-    def _extract_chapter_table(self, content: str) -> List[Dict]:
-        """Extract chapter status rows from arc markdown tables."""
+    def _extract_chapter_table(self, content: str, arc_path: Optional[Path] = None) -> List[Dict]:
+        """Extract chapter status rows — frontmatter-first if arc_path given, else table parse."""
+        if arc_path is not None and arc_path.exists():
+            try:
+                from arc_frontmatter import get_chapters
+            except ImportError:
+                from .arc_frontmatter import get_chapters
+            chapters = get_chapters(arc_path)
+            if chapters:
+                return [{"id": ch["id"], "title": ch["title"], "status": ch["status"]} for ch in chapters]
+
+        # Fallback: inline table parsing (for callers that pass content only)
         chapters = []
         for line in content.split("\n"):
             line_s = line.strip()
@@ -175,7 +185,7 @@ class EpochLoader:
                 continue
 
             arc_content = arc_path.read_text(encoding="utf-8")
-            arc_data["chapters"] = self._extract_chapter_table(arc_content)
+            arc_data["chapters"] = self._extract_chapter_table(arc_content, arc_path=arc_path)
             result["arcs"].append(arc_data)
 
         return result

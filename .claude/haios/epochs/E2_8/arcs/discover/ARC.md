@@ -1,3 +1,36 @@
+---
+id: discover
+epoch: E2.8
+theme: The agent should not guess what it can discover
+status: Planning
+started: 2026-02-17 (Session 393)
+chapters:
+- id: CH-063
+  title: AgentCards
+  work_items:
+  - New
+  requirements:
+  - REQ-DISCOVER-002
+  - REQ-DISCOVER-003
+  dependencies: []
+  status: Complete
+- id: CH-064
+  title: InfrastructureCeremonies
+  work_items:
+  - New
+  requirements:
+  - REQ-CEREMONY-001
+  - REQ-CEREMONY-002
+  dependencies: []
+  status: Planning
+exit_criteria:
+- text: All agents have structured capability cards discoverable via infrastructure
+  checked: false
+- text: Open-epoch-ceremony skill exists (full ceremony loop standardized) (S393)
+  checked: true
+- text: Agents not hardcoded in CLAUDE.md — discovered via infrastructure
+  checked: false
+---
 # generated: 2026-02-17
 # System Auto: last updated on: 2026-02-17T21:00:00
 # Arc: Discover

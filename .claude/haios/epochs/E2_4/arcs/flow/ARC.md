@@ -1,3 +1,85 @@
+---
+id: flow
+name: Universal Flow with Gates
+epoch: E2.4 (The Activity Layer)
+status: Planned
+chapters:
+- id: CH-001
+  title: FlowStateMachine
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-002
+  title: CritiqueGate
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-003
+  title: InvestigationFlow
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-004
+  title: ImplementationFlow
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-005
+  title: FlowRouter
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-006
+  title: '[ChapterFlow](CH-006-chapter-flow.md)'
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-007
+  title: '[BatchOperations](CH-007-batch-operations.md)'
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-008
+  title: '[EpochTransition](CH-008-epoch-transition.md)'
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-009
+  title: '[DecisionTraceability](CH-009-DecisionTraceability.md)'
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Active
+- id: CH-010
+  title: MultiLevelDoD
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-011
+  title: PreDecomposition
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+exit_criteria:
+- text: State machine implemented
+  checked: false
+- text: Critique hard gate enforced
+  checked: false
+- text: Investigation uses EXPLORE-FIRST
+  checked: false
+- text: DO phase is black-box
+  checked: false
+---
 # generated: 2026-01-30
 # System Auto: last updated on: 2026-02-02T19:33:02
 # Arc: Flow

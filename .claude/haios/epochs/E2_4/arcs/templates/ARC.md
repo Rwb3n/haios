@@ -1,3 +1,43 @@
+---
+id: templates
+name: Fractured Phase Templates
+epoch: E2.4 (The Activity Layer)
+status: Planned
+chapters:
+- id: CH-001
+  title: InvestigationFracture
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-002
+  title: ImplementationFracture
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-003
+  title: ContractValidation
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-004
+  title: TemplateRouter
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+exit_criteria:
+- text: Investigation template fractured (4 files)
+  checked: false
+- text: Implementation template fractured (6 files)
+  checked: false
+- text: Contract validation implemented
+  checked: false
+- text: Skills route to phase templates
+  checked: false
+---
 # generated: 2026-01-30
 # System Auto: last updated on: 2026-01-30T21:28:21
 # Arc: Templates

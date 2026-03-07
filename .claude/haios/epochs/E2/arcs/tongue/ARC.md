@@ -1,3 +1,17 @@
+---
+id: Tongue
+name: Cognitive Notation
+epoch: E2.2 (The Refinement)
+status: Planned
+chapters: []
+exit_criteria:
+- text: Notation lexicon formalized
+  checked: false
+- text: Skills use notation instead of prose
+  checked: false
+- text: 'Empirical evidence: notation degrades slower than NL'
+  checked: false
+---
 # generated: 2026-01-06
 # System Auto: last updated on: 2026-01-15T20:11:31
 # Arc: Tongue

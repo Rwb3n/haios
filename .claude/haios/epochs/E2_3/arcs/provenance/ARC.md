@@ -1,3 +1,35 @@
+---
+id: Provenance
+name: Source Traceability
+epoch: E2.3 (The Pipeline)
+status: Planned
+chapters:
+- id: CH-001
+  title: IngesterProvenance
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-002
+  title: RelationshipCapture
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+- id: CH-003
+  title: RationaleLink
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Planned
+exit_criteria:
+- text: '`ingester_ingest` creates artifact and occurrence records'
+  checked: false
+- text: All new concepts have provenance
+  checked: false
+- text: Relationship types defined and populated
+  checked: false
+---
 # generated: 2026-01-18
 # System Auto: last updated on: 2026-01-18T16:51:08
 # Arc: Provenance

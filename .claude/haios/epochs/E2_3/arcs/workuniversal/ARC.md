@@ -1,3 +1,49 @@
+---
+id: WorkUniversal
+name: Universal Work Item Structure
+epoch: E2.3 (The Pipeline)
+status: Active
+chapters:
+- id: CH-001
+  title: SchemaDesign
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-002
+  title: TemplateUpdate
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-003
+  title: WorkEngineAdapt
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-004
+  title: ScaffoldUpdate
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Complete
+- id: CH-005
+  title: ValidationRules
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: Active
+exit_criteria:
+- text: Schema design approved with rationale
+  checked: false
+- text: Template updated
+  checked: false
+- text: WorkEngine handles new fields
+  checked: false
+- text: First work items using universal structure
+  checked: false
+---
 # generated: 2026-01-18
 # System Auto: last updated on: 2026-01-27T23:17:50
 # Arc: WorkUniversal

@@ -190,45 +190,88 @@ class EpochValidator:
             if idx != -1:
                 active_content = active_content[:idx]
 
-        # Parse table rows with CH- prefix (arc chapter tables)
-        for line in active_content.split("\n"):
-            line_stripped = line.strip()
-            if not line_stripped.startswith("|"):
-                continue
-            # Skip header/separator rows
-            if "CH-ID" in line_stripped or "---" in line_stripped:
-                continue
+        # Read arc chapter data via arc_frontmatter if arcs_dir resolvable,
+        # else fall back to inline table parsing from EPOCH.md content
+        try:
+            from arc_frontmatter import get_chapters as get_arc_chapters
+            _arc_fm_available = True
+        except ImportError:
+            try:
+                from .arc_frontmatter import get_chapters as get_arc_chapters
+                _arc_fm_available = True
+            except ImportError:
+                _arc_fm_available = False
 
-            # Extract all WORK-NNN IDs from this row (handles multi-item cells)
-            work_ids = re.findall(r"WORK-\d{3}", line_stripped)
-            if not work_ids:
-                continue
+        # A5 critique fix: derive arcs_dir from self._haios_config
+        arcs_dir_str = self._haios_config.get("epoch", {}).get("arcs_dir", "")
+        arcs_dir = self._base_path / arcs_dir_str if arcs_dir_str else None
 
-            # Extract the last column as the EPOCH.md status
-            cells = [c.strip() for c in line_stripped.split("|") if c.strip()]
-            if len(cells) < 4:
-                continue
-            epoch_status = cells[-1].lower()
+        # Build chapter data from ARC.md frontmatter if available
+        # Guard: only use frontmatter path when base_path was explicitly set
+        # (not defaulting to real project root in test mode).
+        # When work_statuses is injected, caller owns the data — use EPOCH.md fallback.
+        arc_chapters_map = {}  # chapter_id -> {"work_items": [...], "status": str}
+        _use_frontmatter = (_arc_fm_available and arcs_dir and arcs_dir.exists()
+                            and self._work_statuses is None)
+        if _use_frontmatter:
+            for arc_dir in arcs_dir.iterdir():
+                if not arc_dir.is_dir():
+                    continue
+                arc_file = arc_dir / "ARC.md"
+                if arc_file.exists():
+                    for ch in get_arc_chapters(arc_file):
+                        arc_chapters_map[ch["id"]] = ch
 
-            for work_id in work_ids:
-                # Get actual status
-                if self._work_statuses is not None:
-                    actual_status = self._work_statuses.get(work_id)
-                else:
-                    actual_status = self._load_work_status(work_id)
-
-                if actual_status is None:
-                    continue  # Work item not found (TBD or archived), skip
-
-                # Drift: actual is complete but EPOCH.md doesn't show complete
-                if (
-                    actual_status.lower() in COMPLETE_STATUSES
-                    and epoch_status not in EPOCH_COMPLETE_LABELS
-                ):
-                    result["drift"].append(
-                        f"DRIFT: {work_id} is '{actual_status}' in WORK.md "
-                        f"but shown as '{cells[-1]}' in EPOCH.md"
-                    )
+        # Process: prefer arc_frontmatter data, fall back to EPOCH.md table parsing
+        if arc_chapters_map:
+            for ch_id, ch_data in arc_chapters_map.items():
+                work_ids = re.findall(r"WORK-\d{3}", " ".join(ch_data.get("work_items", [])))
+                epoch_status = ch_data["status"].lower()
+                for work_id in work_ids:
+                    if self._work_statuses is not None:
+                        actual_status = self._work_statuses.get(work_id)
+                    else:
+                        actual_status = self._load_work_status(work_id)
+                    if actual_status is None:
+                        continue
+                    if (
+                        actual_status.lower() in COMPLETE_STATUSES
+                        and epoch_status not in EPOCH_COMPLETE_LABELS
+                    ):
+                        result["drift"].append(
+                            f"DRIFT: {work_id} is '{actual_status}' in WORK.md "
+                            f"but shown as '{ch_data['status']}' in ARC.md"
+                        )
+        else:
+            # Legacy fallback: parse EPOCH.md table rows directly
+            for line in active_content.split("\n"):
+                line_stripped = line.strip()
+                if not line_stripped.startswith("|"):
+                    continue
+                if "CH-ID" in line_stripped or "---" in line_stripped:
+                    continue
+                work_ids = re.findall(r"WORK-\d{3}", line_stripped)
+                if not work_ids:
+                    continue
+                cells = [c.strip() for c in line_stripped.split("|") if c.strip()]
+                if len(cells) < 4:
+                    continue
+                epoch_status = cells[-1].lower()
+                for work_id in work_ids:
+                    if self._work_statuses is not None:
+                        actual_status = self._work_statuses.get(work_id)
+                    else:
+                        actual_status = self._load_work_status(work_id)
+                    if actual_status is None:
+                        continue
+                    if (
+                        actual_status.lower() in COMPLETE_STATUSES
+                        and epoch_status not in EPOCH_COMPLETE_LABELS
+                    ):
+                        result["drift"].append(
+                            f"DRIFT: {work_id} is '{actual_status}' in WORK.md "
+                            f"but shown as '{cells[-1]}' in EPOCH.md"
+                        )
 
         return result
 

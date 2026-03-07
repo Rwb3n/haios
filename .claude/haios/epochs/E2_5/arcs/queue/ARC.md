@@ -1,3 +1,48 @@
+---
+id: queue
+epoch: E2.5
+theme: Implement orthogonal queue tracking
+status: Complete
+completed: 2026-02-09 (Session 331)
+chapters:
+- id: CH-007
+  title: QueuePositionField
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-QUEUE-001
+- id: CH-008
+  title: CompleteWithoutSpawn
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-QUEUE-002
+- id: CH-009
+  title: QueueLifecycle
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-QUEUE-003
+- id: CH-010
+  title: QueueCeremonies
+  work_items: []
+  requirements: []
+  dependencies: []
+  status: REQ-QUEUE-004
+exit_criteria:
+- text: queue_position field tracked independently with 5 states (parked/backlog/ready/working/done)
+  checked: true
+- text: Queue ceremonies (Unpark, Intake, Prioritize, Commit, Release) implemented
+  checked: true
+- text: Work item can be queue:done + status:complete without spawn
+  checked: true
+- text: WorkEngine.get_queue() respects queue_position
+  checked: true
+- text: Parked items excluded from survey-cycle and `just ready`
+  checked: true
+- text: Parked vs blocked distinction enforced (parked = scope, blocked = dependency)
+  checked: true
+---
 # generated: 2026-02-03
 # System Auto: last updated on: 2026-02-07T15:36:07
 # Arc: Queue

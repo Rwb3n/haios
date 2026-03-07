@@ -1,3 +1,36 @@
+---
+id: engine-functions
+epoch: E2.7
+theme: Functions over file reads — engine query functions and status cascade
+status: Complete
+completed: 2026-02-17 (Session 393)
+chapters:
+- id: CH-044
+  title: HierarchyQueryEngine
+  work_items:
+  - WORK-157
+  requirements:
+  - REQ-TRACE-005
+  dependencies: []
+  status: Complete
+- id: CH-045
+  title: StatusCascade
+  work_items:
+  - WORK-034
+  requirements:
+  - REQ-QUEUE-001
+  dependencies:
+  - CH-044 (engine functions needed for cascade)
+  status: Complete
+exit_criteria:
+- text: Engine functions for hierarchy queries exist and are callable (get_arcs, get_chapters,
+    get_work)
+  checked: true
+- text: Status cascades automatically on work/chapter/arc closure
+  checked: true
+- text: No manual path resolution for hierarchy navigation
+  checked: true
+---
 # generated: 2026-02-16
 # System Auto: last updated on: 2026-02-16T19:00:00
 # Arc: Engine Functions

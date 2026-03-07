@@ -1,3 +1,31 @@
+---
+id: infrastructure
+epoch: E2.8
+theme: Fix what's broken
+status: Planning
+started: 2026-02-17 (Session 393)
+chapters:
+- id: CH-065
+  title: BugBatch-E28
+  work_items:
+  - New
+  requirements:
+  - REQ-CEREMONY-001
+  dependencies: []
+  status: Complete
+- id: CH-067
+  title: FileFormatMigration
+  work_items:
+  - WORK-244
+  - WORK-245
+  requirements:
+  - REQ-TRACE-004
+  dependencies: []
+  status: Active
+exit_criteria:
+- text: All confirmed bugs from E2.7 triage resolved (WORK-166, S395)
+  checked: true
+---
 # generated: 2026-02-17
 # System Auto: last updated on: 2026-02-17T21:00:00
 # Arc: Infrastructure

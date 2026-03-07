@@ -1,3 +1,50 @@
+---
+id: referenceability
+epoch: E2.6
+theme: Portable schemas, structured configuration, clear interface contracts
+status: Complete
+chapters:
+- id: CH-035
+  title: SchemaLocationStrategy
+  work_items: []
+  requirements:
+  - WORK-067 (complete)
+  dependencies:
+  - REQ-REFERENCE-001
+  status: None
+- id: CH-036
+  title: TemplateBootstrapPattern
+  work_items: []
+  requirements:
+  - WORK-067 findings + spawned impl
+  dependencies:
+  - REQ-REFERENCE-002
+  status: CH-035
+- id: CH-037
+  title: ManifestDriftPrevention
+  work_items: []
+  requirements:
+  - WORK-135
+  dependencies:
+  - REQ-PORTABLE-001
+  status: None
+exit_criteria:
+- text: 'Schema location strategy documented (WORK-067: `.claude/haios/schemas/` with
+    core/ and project/ tiers)'
+  checked: true
+- text: 'Template reference pattern defined (WORK-067: `{{schema:domain.key}}` resolved
+    at scaffold time)'
+  checked: true
+- text: 'Bootstrap pattern for new projects defined (WORK-067: copy core/, create
+    project/, add schemas: to haios.yaml)'
+  checked: true
+- text: 'Core vs project-specific boundary clear (WORK-067: TRD enums = core ~10,
+    HAIOS enums = project ~35)'
+  checked: true
+- text: 'Manifest drift detectable automatically (WORK-135 S381: manifest auto-sync
+    mechanism, diff detection, roundtrip validation)'
+  checked: true
+---
 # generated: 2026-02-14
 # System Auto: last updated on: 2026-02-14T12:50:00
 # Arc: Referenceability

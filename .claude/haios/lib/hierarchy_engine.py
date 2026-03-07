@@ -280,50 +280,41 @@ class HierarchyQueryEngine:
             return {}
 
     def _parse_arc_metadata(self, arc_file: Path) -> Dict[str, str]:
-        """Extract theme and status from ARC.md definition section."""
-        content = arc_file.read_text(encoding="utf-8")
-        theme = ""
-        status = ""
-        for line in content.split("\n"):
-            if line.startswith("**Theme:**"):
-                theme = line.split("**Theme:**", 1)[1].strip()
-            elif line.startswith("**Status:**"):
-                status = line.split("**Status:**", 1)[1].strip()
-        return {"theme": theme, "status": status}
+        """Extract theme and status from ARC.md — frontmatter-first with fallback."""
+        try:
+            from arc_frontmatter import get_arc_metadata
+        except ImportError:
+            from .arc_frontmatter import get_arc_metadata
+        return get_arc_metadata(arc_file)
 
     def _parse_arc_chapters(
         self, arc_file: Path, arc_name: str
     ) -> List[ChapterInfo]:
-        """Parse chapter table rows from ARC.md.
+        """Parse chapter rows from ARC.md — frontmatter-first with table fallback.
 
         Note (A4 critique): ChapterInfo.work_items is INFORMATIONAL only
-        (from ARC.md table). For authoritative chapter membership, use
+        (from ARC.md). For authoritative chapter membership, use
         get_work(chapter_id) which scans WORK.md files.
-
-        A2 critique: guard requires >= 6 columns (the documented table format).
         """
-        content = arc_file.read_text(encoding="utf-8")
+        try:
+            from arc_frontmatter import get_chapters
+        except ImportError:
+            from .arc_frontmatter import get_chapters
+        raw = get_chapters(arc_file)
         chapters = []
-        for line in content.split("\n"):
-            # Match: | CH-XXX | Title | Work Items | Requirements | Dependencies | Status |
-            if re.match(r"\s*\|\s*CH-\d+", line):
-                cells = [c.strip() for c in line.split("|") if c.strip()]
-                if len(cells) >= 6:  # A2: must be 6-column table
-                    ch_id = cells[0]  # CH-044
-                    title = cells[1]  # HierarchyQueryEngine
-                    work_str = cells[2]  # "WORK-157" or "WORK-152, WORK-155"
-                    status = cells[-1]  # Planning, Complete
-                    # Parse work item IDs from cell
-                    work_items = re.findall(r"WORK-\d+", work_str)
-                    chapters.append(
-                        ChapterInfo(
-                            id=ch_id,
-                            title=title,
-                            work_items=work_items,
-                            status=status,
-                            arc=arc_name,
-                        )
-                    )
+        for ch in raw:
+            # Extract WORK-NNN IDs from the work_items list entries
+            work_str = " ".join(ch.get("work_items", []))
+            work_items = re.findall(r"WORK-\d+", work_str)
+            chapters.append(
+                ChapterInfo(
+                    id=ch["id"],
+                    title=ch["title"],
+                    work_items=work_items,
+                    status=ch["status"],
+                    arc=arc_name,
+                )
+            )
         return chapters
 
     def _parse_work_info(self, work_dir: Path) -> Optional[WorkInfo]:
