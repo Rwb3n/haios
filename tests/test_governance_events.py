@@ -203,7 +203,7 @@ node_history:
         assert len(result) == 0, "Archived items should be excluded"
 
     def test_scan_incomplete_work_includes_active_status(self, tmp_path):
-        """Work items with status: active and exited: null should appear."""
+        """Work items with status: active in lifecycle phase and exited: null should appear."""
         from governance_events import scan_incomplete_work
 
         work_dir = tmp_path / "docs" / "work" / "active" / "E2-TEST"
@@ -211,15 +211,16 @@ node_history:
         (work_dir / "WORK.md").write_text("""---
 id: E2-TEST
 status: active
-current_node: backlog
+cycle_phase: DO
+current_node: DO
 node_history:
-- node: backlog
+- node: DO
   entered: 2026-01-01
   exited: null
 ---
 """)
         result = scan_incomplete_work(tmp_path)
-        assert len(result) == 1, "Active items should be included"
+        assert len(result) == 1, "Active items in lifecycle phase should be included"
         assert result[0]["id"] == "E2-TEST"
 
 
@@ -240,9 +241,10 @@ class TestScanIncompleteWorkStringInput:
         (work_dir / "WORK.md").write_text("""---
 id: E2-STR
 status: active
-current_node: backlog
+cycle_phase: DO
+current_node: DO
 node_history:
-- node: backlog
+- node: DO
   entered: 2026-01-01
   exited: null
 ---
@@ -260,6 +262,125 @@ node_history:
         result = scan_incomplete_work(".")
         # Should not raise; result depends on actual project state
         assert isinstance(result, list)
+
+
+# =============================================================================
+# WORK-251: scan_incomplete_work lifecycle phase filtering
+# =============================================================================
+
+
+class TestScanIncompleteWorkLifecycleFiltering:
+    """WORK-251: scan_incomplete_work should only flag items in lifecycle phases."""
+
+    def test_scan_incomplete_work_ignores_backlog_items(self, tmp_path):
+        """Items with cycle_phase: backlog should NOT be flagged as incomplete."""
+        from governance_events import scan_incomplete_work
+
+        work_dir = tmp_path / "docs" / "work" / "active" / "WORK-TEST1"
+        work_dir.mkdir(parents=True)
+        (work_dir / "WORK.md").write_text("""---
+id: WORK-TEST1
+status: active
+cycle_phase: backlog
+current_node: backlog
+node_history:
+- node: backlog
+  entered: 2026-01-01
+  exited: null
+---
+""")
+        result = scan_incomplete_work(tmp_path)
+        assert len(result) == 0, "Backlog items should not be flagged as incomplete"
+
+    def test_scan_incomplete_work_flags_lifecycle_phase_items(self, tmp_path):
+        """Items with cycle_phase: DO should be flagged as incomplete."""
+        from governance_events import scan_incomplete_work
+
+        work_dir = tmp_path / "docs" / "work" / "active" / "WORK-TEST2"
+        work_dir.mkdir(parents=True)
+        (work_dir / "WORK.md").write_text("""---
+id: WORK-TEST2
+status: active
+cycle_phase: DO
+current_node: DO
+node_history:
+- node: DO
+  entered: 2026-01-01
+  exited: null
+---
+""")
+        result = scan_incomplete_work(tmp_path)
+        assert len(result) == 1, "DO phase items should be flagged as incomplete"
+        assert result[0]["id"] == "WORK-TEST2"
+
+    def test_scan_incomplete_work_mixed_items(self, tmp_path):
+        """Only lifecycle phase items should be flagged, not queue items."""
+        from governance_events import scan_incomplete_work
+
+        # Backlog item — should NOT be flagged
+        work_dir1 = tmp_path / "docs" / "work" / "active" / "WORK-BL"
+        work_dir1.mkdir(parents=True)
+        (work_dir1 / "WORK.md").write_text("""---
+id: WORK-BL
+status: active
+cycle_phase: backlog
+current_node: backlog
+node_history:
+- node: backlog
+  entered: 2026-01-01
+  exited: null
+---
+""")
+        # DO item — SHOULD be flagged
+        work_dir2 = tmp_path / "docs" / "work" / "active" / "WORK-DO"
+        work_dir2.mkdir(parents=True)
+        (work_dir2 / "WORK.md").write_text("""---
+id: WORK-DO
+status: active
+cycle_phase: DO
+current_node: DO
+node_history:
+- node: DO
+  entered: 2026-01-01
+  exited: null
+---
+""")
+        # Ready item — should NOT be flagged
+        work_dir3 = tmp_path / "docs" / "work" / "active" / "WORK-RD"
+        work_dir3.mkdir(parents=True)
+        (work_dir3 / "WORK.md").write_text("""---
+id: WORK-RD
+status: active
+cycle_phase: ready
+current_node: ready
+node_history:
+- node: ready
+  entered: 2026-01-01
+  exited: null
+---
+""")
+        result = scan_incomplete_work(tmp_path)
+        assert len(result) == 1, "Only DO phase item should be flagged"
+        assert result[0]["id"] == "WORK-DO"
+
+    def test_scan_incomplete_work_missing_cycle_phase_not_flagged(self, tmp_path):
+        """Items with no cycle_phase field should NOT be flagged (conservative)."""
+        from governance_events import scan_incomplete_work
+
+        work_dir = tmp_path / "docs" / "work" / "active" / "WORK-OLD"
+        work_dir.mkdir(parents=True)
+        (work_dir / "WORK.md").write_text("""---
+id: WORK-OLD
+status: active
+current_node: backlog
+node_history:
+- node: backlog
+  entered: 2026-01-01
+  exited: null
+---
+""")
+        result = scan_incomplete_work(tmp_path)
+        assert len(result) == 0, "Missing cycle_phase should not produce false positive"
 
 
 # =============================================================================

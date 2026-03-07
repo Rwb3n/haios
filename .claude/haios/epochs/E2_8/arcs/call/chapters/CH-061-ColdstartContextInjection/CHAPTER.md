@@ -21,6 +21,10 @@ work_items:
   title: Inject Memory Schema Hints into Coldstart Orchestrator Output
   status: Complete
   type: implementation
+- id: WORK-251
+  title: Coldstart Crash Recovery — Detect Unclosed Sessions
+  status: Complete
+  type: implementation
 exit_criteria:
 - text: Coldstart injects ALL operational context (zero manual Read steps in coldstart
     skill)
@@ -68,6 +72,7 @@ Make coldstart inject ALL operational context so the agent needs zero Read instr
 | WORK-180 | Implement ADR-047 Tiered Coldstart | Backlog | implementation |
 | WORK-231 | Coldstart Token Waste: Remove Agent-Read of config.yaml | Complete | implementation |
 | WORK-232 | Inject Memory Schema Hints into Coldstart Orchestrator Output | Complete | implementation |
+| WORK-251 | Coldstart Crash Recovery — Detect Unclosed Sessions | Active | implementation |
 
 ---
 

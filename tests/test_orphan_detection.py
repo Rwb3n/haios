@@ -98,6 +98,7 @@ class TestScanIncompleteWork:
             """---
 id: E2-999
 title: Test Work Item
+cycle_phase: DO
 node_history:
 - node: doing
   entered: 2026-01-26 10:00:00

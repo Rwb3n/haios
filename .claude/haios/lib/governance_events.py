@@ -304,11 +304,17 @@ def detect_orphan_session(events_file: Optional[Path] = None) -> Optional[dict]:
     return None
 
 
+# WORK-251: Active lifecycle phases where exited:null indicates a stuck item
+LIFECYCLE_PHASES = {"PLAN", "DO", "CHECK", "DONE", "CHAIN"}
+
+
 def scan_incomplete_work(project_root: Path) -> list[dict]:
     """
     Scan WORK.md files for incomplete transitions (exited: null).
 
     Per INV-052 Section 2A: Scan for `exited: null` entries in node_history.
+    WORK-251: Only flags items in active lifecycle phases (PLAN/DO/CHECK/DONE/CHAIN).
+    Items in queue positions (backlog/ready/working) are normal — not stuck.
 
     Args:
         project_root: Project root path (accepts str or Path)
@@ -350,6 +356,14 @@ def scan_incomplete_work(project_root: Path) -> list[dict]:
             status = status_match.group(1).strip() if status_match else ""
             terminal_statuses = {"complete", "archived", "dismissed", "invalid", "deferred"}
             if status in terminal_statuses:
+                continue
+
+            # WORK-251: Only flag items in active lifecycle phases
+            # Items in queue positions (backlog/ready/working) have exited:null
+            # on their current node as normal state — not stuck
+            phase_match = re.search(r"cycle_phase:\s*(\S+)", yaml_content)
+            cycle_phase = phase_match.group(1).strip() if phase_match else ""
+            if cycle_phase not in LIFECYCLE_PHASES:
                 continue
 
             # Check for exited: null in node_history

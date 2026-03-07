@@ -37,11 +37,13 @@ chapters:
   work_items:
   - WORK-162 (complete)
   - WORK-180
+  - WORK-251
   requirements:
   - REQ-CONFIG-001
+  - REQ-CONTEXT-001
   - L3.3
   dependencies: []
-  status: Complete
+  status: In Progress
 - id: CH-066
   title: MCPOperationsServer
   work_items:
@@ -125,7 +127,7 @@ This arc moves what it can from Tier 3 (SKILL.md) to Tier 1/2 (hooks/modules).
 | CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Complete |
 | CH-059 | CeremonyAutomation | WORK-160, WORK-167-176 | REQ-CEREMONY-002, REQ-CEREMONY-005 | CH-058 | In Progress |
 | CH-060 | SessionBoundaryFix | WORK-161 | REQ-CEREMONY-001 | None | Complete |
-| CH-061 | ColdstartContextInjection | WORK-162 (complete), WORK-180 | REQ-CONFIG-001, L3.3 | None | Complete |
+| CH-061 | ColdstartContextInjection | WORK-162 (complete), WORK-180, WORK-251 | REQ-CONFIG-001, REQ-CONTEXT-001, L3.3 | None | In Progress |
 | CH-066 | MCPOperationsServer | New | REQ-DISCOVER-002, REQ-CONFIG-001 | CH-061 | Complete |
 
 ---
