@@ -598,8 +598,14 @@ def _check_context_budget(cwd: str) -> Optional[str]:
         if remaining <= 10.0:
             return (
                 f"[CONTEXT CRITICAL: {remaining:.1f}% remaining] "
-                "STOP current work. Checkpoint, commit, and close session NOW. "
-                "Do NOT start new phases or investigations."
+                "STOP current work. Commit whatever is staged and close session NOW. "
+                "No retro, no ceremony — just commit and stop."
+            )
+        elif remaining <= 15.0:
+            return (
+                f"[CONTEXT SESSION-END: {remaining:.1f}% remaining] "
+                "Begin session-end sequence NOW: checkpoint, retro, commit, handoff prep. "
+                "Work continues next session. Priority is preserving learnings, not finishing."
             )
         elif remaining <= 20.0:
             return (
