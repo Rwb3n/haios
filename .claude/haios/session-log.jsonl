@@ -1,3 +1,4 @@
 {"t": "test", "v": "22p/0f", "w": "", "ts": "14:11"}
 {"t": "test", "v": "1830p/3f", "w": "", "ts": "14:13"}
 {"t": "commit", "v": "$(cat <<'EOF'\nSession 470: WORK-245 ARC.", "w": "", "ts": "14:17"}
+{"t": "commit", "v": "$(cat <<'EOF'\nSession 470: WORK-245 clos", "w": "", "ts": "14:21"}

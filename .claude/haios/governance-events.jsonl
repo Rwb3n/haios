@@ -23051,3 +23051,4 @@
 {"type": "MCPGateChecked", "tool": "hierarchy_close_work", "primitive": "mcp-mutate", "state": "CHAIN", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 470, "context_pct": 21.3}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-03-07T14:21:00.200650", "session_id": 470, "context_pct": 21.3}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-07T14:21:00.263891", "session_id": 470, "context_pct": 21.3}
+{"type": "SessionEnded", "session": 470, "agent": "Hephaestus", "timestamp": "2026-03-07T14:22:09.920208", "session_id": 470, "context_pct": 18.4}

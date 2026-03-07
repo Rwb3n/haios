@@ -11,7 +11,7 @@ work_items:
   type: implementation
 - id: WORK-245
   title: ARC.md YAML Frontmatter Migration (Phase 2)
-  status: Active
+  status: Complete
   type: implementation
 exit_criteria:
 - text: CHAPTER.md files have YAML frontmatter; consumers read frontmatter instead
