@@ -277,16 +277,32 @@ class WorkEngine:
         milestone: Optional[str] = None,
         priority: str = "medium",
         category: str = "implementation",
+        effort: str = "medium",
+        spawned_by: Optional[str] = None,
+        chapter: str = "",
+        arc: str = "",
+        traces_to: Optional[List[str]] = None,
+        source_files: Optional[List[str]] = None,
+        acceptance_criteria: Optional[List[str]] = None,
+        blocked_by: Optional[List[str]] = None,
     ) -> Path:
         """
-        Create new work item with directory structure.
+        Create new work item with directory structure and v2.0-compliant frontmatter.
 
         Args:
-            id: Work item ID
+            id: Work item ID (e.g., "WORK-244")
             title: Work item title
             milestone: Optional milestone assignment
             priority: Priority level (low, medium, high)
-            category: Category (implementation, investigation, etc.)
+            category: Work type (implementation, investigation, design, etc.)
+            effort: Effort estimate (small, medium, large). Default: medium
+            spawned_by: Parent work item ID if spawned (e.g., "WORK-240")
+            chapter: Chapter assignment (e.g., "CH-059"). Default: empty
+            arc: Arc assignment (e.g., "call"). Default: empty
+            traces_to: Requirement traceability refs. Default: empty list
+            source_files: Source files relevant to this work. Default: empty list
+            acceptance_criteria: DoD acceptance criteria. Default: empty list
+            blocked_by: Work item IDs that block this. Default: empty list
 
         Returns:
             Path to created WORK.md
@@ -308,22 +324,33 @@ class WorkEngine:
         # Create initial REFS.md portal (delegated)
         self._create_portal(id, work_dir / "references" / "REFS.md")
 
-        # Generate WORK.md
+        # Generate WORK.md with v2.0-compliant frontmatter
         work_path = work_dir / "WORK.md"
         now = datetime.now()
         frontmatter = {
             "template": "work_item",
             "id": id,
             "title": title,
+            "type": category,
             "status": "active",
             "owner": "Hephaestus",
             "created": now.strftime("%Y-%m-%d"),
+            "spawned_by": spawned_by,
+            "spawned_children": [],
+            "chapter": chapter,
+            "arc": arc,
             "closed": None,
-            "milestone": milestone,
             "priority": priority,
-            "category": category,
-            "blocked_by": [],
+            "effort": effort,
+            "traces_to": traces_to or [],
+            "requirement_refs": [],
+            "source_files": source_files or [],
+            "acceptance_criteria": acceptance_criteria or [],
+            "blocked_by": blocked_by or [],
             "blocks": [],
+            "enables": [],
+            "queue_position": "backlog",
+            "cycle_phase": "backlog",
             "current_node": "backlog",
             "node_history": [
                 {"node": "backlog", "entered": now.isoformat(), "exited": None}
@@ -331,10 +358,17 @@ class WorkEngine:
             "queue_history": [  # WORK-126: Seed queue audit trail
                 {"position": "backlog", "entered": now.isoformat(), "exited": None}
             ],
+            "artifacts": [],
+            "cycle_docs": {},
             "memory_refs": [],
-            "documents": {"plans": [], "investigations": [], "checkpoints": []},
+            "extensions": {},
+            "version": "2.0",
+            "generated": now.strftime("%Y-%m-%d"),
+            "last_updated": now.isoformat(),
         }
-        content = f"---\n{yaml.dump(frontmatter, default_flow_style=False, sort_keys=False)}---\n# WORK-{id}: {title}\n"
+        # Fix: id already contains "WORK-" prefix, don't double it
+        heading = id if id.startswith("WORK-") else f"WORK-{id}"
+        content = f"---\n{yaml.dump(frontmatter, default_flow_style=False, sort_keys=False)}---\n# {heading}: {title}\n"
         work_path.write_text(content, encoding="utf-8")
         return work_path
 

@@ -162,6 +162,14 @@ def work_create(
     title: str,
     priority: str = "medium",
     category: str = "implementation",
+    effort: str = "medium",
+    spawned_by: Optional[str] = None,
+    chapter: str = "",
+    arc: str = "",
+    traces_to: Optional[List[str]] = None,
+    source_files: Optional[List[str]] = None,
+    acceptance_criteria: Optional[List[str]] = None,
+    blocked_by: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     """Create a new work item with directory structure.
 
@@ -170,6 +178,14 @@ def work_create(
         title: Human-readable title
         priority: low | medium | high (default: medium)
         category: implementation | investigation | etc. (default: implementation)
+        effort: small | medium | large (default: medium)
+        spawned_by: Parent work item ID if spawned (e.g., "WORK-240")
+        chapter: Chapter assignment (e.g., "CH-059")
+        arc: Arc assignment (e.g., "call")
+        traces_to: Requirement traceability refs (e.g., ["REQ-TRACE-004"])
+        source_files: Source files relevant to this work
+        acceptance_criteria: DoD acceptance criteria
+        blocked_by: Work item IDs that block this
 
     Returns:
         {"success": True, "path": "<work_md_path>"} or {"success": False, "error": "..."}
@@ -184,6 +200,14 @@ def work_create(
                 title=title,
                 priority=priority,
                 category=category,
+                effort=effort,
+                spawned_by=spawned_by,
+                chapter=chapter,
+                arc=arc,
+                traces_to=traces_to,
+                source_files=source_files,
+                acceptance_criteria=acceptance_criteria,
+                blocked_by=blocked_by,
             )
         return {"success": True, "path": str(path)}
     except Exception as e:
