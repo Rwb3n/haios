@@ -683,7 +683,23 @@ def update_chapter_manifest(
     chapter_file = matches[0]  # First match (should be unique)
     content = chapter_file.read_text(encoding="utf-8")
 
-    # Check for duplicate
+    # Try frontmatter path first (WORK-244)
+    from chapter_frontmatter import (
+        parse_chapter_frontmatter,
+        add_work_item_to_frontmatter,
+    )
+    fm = parse_chapter_frontmatter(chapter_file)
+    if fm is not None:
+        # Frontmatter path: check duplicate then add
+        work_items = fm.get("work_items", []) or []
+        if any(item.get("id") == work_id for item in work_items):
+            return {"updated": False, "reason": "already_present", "chapter_file": str(chapter_file)}
+        added = add_work_item_to_frontmatter(chapter_file, work_id, title, "Backlog", work_type)
+        if added:
+            return {"updated": True, "reason": "row_added", "chapter_file": str(chapter_file)}
+        return {"updated": False, "reason": "frontmatter_write_error", "chapter_file": str(chapter_file)}
+
+    # Fallback: legacy line-by-line table insertion
     if f"| {work_id} |" in content:
         return {"updated": False, "reason": "already_present", "chapter_file": str(chapter_file)}
 
@@ -770,7 +786,17 @@ def update_chapter_manifest_status(
     chapter_file = matches[0]
     content = chapter_file.read_text(encoding="utf-8")
 
-    # Find the row for this work_id
+    # A6 fix: try frontmatter path FIRST, without markdown substring guard
+    # Work items added via add_work_item_to_frontmatter exist only in YAML, not table
+    from chapter_frontmatter import parse_chapter_frontmatter, update_work_item_in_frontmatter
+    fm = parse_chapter_frontmatter(chapter_file)
+    if fm is not None:
+        updated = update_work_item_in_frontmatter(chapter_file, work_id, new_status)
+        if updated:
+            return {"updated": True, "reason": "status_updated", "chapter_file": str(chapter_file)}
+        return {"updated": False, "reason": "work_id_not_found", "chapter_file": str(chapter_file)}
+
+    # Fallback: legacy line-by-line table surgery (substring guard here only)
     if f"| {work_id} |" not in content:
         return {"updated": False, "reason": "work_id_not_found", "chapter_file": str(chapter_file)}
 

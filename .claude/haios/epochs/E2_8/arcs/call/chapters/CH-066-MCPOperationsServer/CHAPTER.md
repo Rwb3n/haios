@@ -1,3 +1,74 @@
+---
+id: CH-066
+name: MCP Operations Server
+arc: call
+epoch: E2.8
+status: Active
+work_items:
+- id: WORK-218
+  title: MCP Operations Server Investigation
+  status: Complete
+  type: investigation
+- id: WORK-219
+  title: Extract State Management Abstractions (Phase 0)
+  status: Complete
+  type: implementation
+- id: WORK-220
+  title: MCP Operations Server Core (Phase 1)
+  status: Complete
+  type: implementation
+- id: WORK-221
+  title: Investigation Closure Spawn Completeness
+  status: Complete
+  type: investigation
+- id: WORK-222
+  title: StatusPropagator Exit Criteria Validation
+  status: Complete
+  type: investigation
+- id: WORK-223
+  title: MCP Operations Extended Tools (Phase 2)
+  status: Complete
+  type: implementation
+- id: WORK-224
+  title: MCP Operations Governance Integration (Phase 3)
+  status: Complete
+  type: implementation
+- id: WORK-225
+  title: Migrate Skill Consumers from Just Recipes to MCP Operations Tools
+  status: Complete
+  type: implementation
+- id: WORK-226
+  title: 'MCP Operations Server Phase 4: Scaffold and Query Tools'
+  status: Complete
+  type: implementation
+- id: WORK-227
+  title: Investigation CONCLUDE Spawn Completeness Enforcement
+  status: Complete
+  type: implementation
+- id: WORK-228
+  title: Audit Just Recipe Consumers and Migrate to MCP Operations Tools
+  status: Complete
+  type: investigation
+- id: WORK-229
+  title: Migrate Remaining Skill cycle_set/clear/ready References to MCP
+  status: Complete
+  type: implementation
+- id: WORK-230
+  title: Migrate Scaffold Commands and Agent Files to MCP Operations Tools
+  status: Complete
+  type: implementation
+exit_criteria:
+- text: haios-operations MCP server exposes work/hierarchy/session/scaffold tools
+  checked: false
+- text: Just recipes retired for agent use — MCP tools replace Tier 2 operations
+  checked: false
+- text: Just remains Tier 3 (operator terminal only)
+  checked: false
+dependencies:
+- direction: Blocked by
+  target: CH-061 (ColdstartContextInjection)
+  reason: MCP server depends on coldstart context being comprehensive
+---
 # generated: 2026-02-19
 # System Auto: last updated on: 2026-02-19T08:30:00
 # Chapter: MCPOperationsServer
@@ -33,7 +104,7 @@ Expose work/hierarchy/session/scaffold operations as an MCP server — the agent
 | WORK-224 | MCP Operations Governance Integration (Phase 3) | Complete | implementation |
 | WORK-225 | Migrate Skill Consumers from Just Recipes to MCP Operations Tools | Complete | implementation |
 | WORK-226 | MCP Operations Server Phase 4: Scaffold and Query Tools | Complete | implementation |
-| WORK-227 | Investigation CONCLUDE Spawn Completeness Enforcement | Active | implementation |
+| WORK-227 | Investigation CONCLUDE Spawn Completeness Enforcement | Complete | implementation |
 | WORK-228 | Audit Just Recipe Consumers and Migrate to MCP Operations Tools | Complete | investigation |
 | WORK-229 | Migrate Remaining Skill cycle_set/clear/ready References to MCP | Complete | implementation |
 | WORK-230 | Migrate Scaffold Commands and Agent Files to MCP Operations Tools | Complete | implementation |

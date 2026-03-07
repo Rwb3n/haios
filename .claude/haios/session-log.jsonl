@@ -1,7 +1,8 @@
-{"t": "spawn", "v": "WORK-244", "w": "WORK-244", "ts": "00:08"}
-{"t": "spawn", "v": "WORK-245", "w": "WORK-245", "ts": "00:08"}
-{"t": "commit", "v": "$(cat <<'EOF'\nSession 466: WORK-240 inve", "w": "", "ts": "00:14"}
-{"t": "test", "v": "102p/0f", "w": "", "ts": "00:26"}
-{"t": "test", "v": "46p/0f", "w": "", "ts": "00:26"}
-{"t": "commit", "v": "$(cat <<'EOF'\nSession 466: Fix work_crea", "w": "", "ts": "00:26"}
-{"t": "commit", "v": "$(cat <<'EOF'\nSession 466: Batch WORK-24", "w": "", "ts": "00:31"}
+{"t": "test", "v": "2p/17f", "w": "", "ts": "00:58"}
+{"t": "test", "v": "15p/4f", "w": "", "ts": "01:00"}
+{"t": "test", "v": "19p/0f", "w": "", "ts": "01:02"}
+{"t": "test", "v": "0p/0f", "w": "", "ts": "01:02"}
+{"t": "test", "v": "47p/0f", "w": "", "ts": "01:02"}
+{"t": "test", "v": "1807p/4f", "w": "", "ts": "01:04"}
+{"t": "test", "v": "66p/0f", "w": "", "ts": "01:05"}
+{"t": "test", "v": "1808p/3f", "w": "", "ts": "01:10"}

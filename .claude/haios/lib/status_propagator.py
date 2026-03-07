@@ -27,7 +27,7 @@ import re
 import yaml
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
 # Work item statuses considered "complete"
 COMPLETE_STATUSES = {"complete", "completed", "done", "closed", "archived"}
@@ -207,37 +207,8 @@ class StatusPropagator:
         if chapter_file is None:
             return None
 
-        content = chapter_file.read_text(encoding="utf-8")
-
-        # Find ## Exit Criteria section
-        lines = content.split("\n")
-        in_section = False
-        criteria: List[tuple] = []
-
-        for line in lines:
-            if re.match(r"^##\s+Exit Criteria", line):
-                in_section = True
-                continue
-            if in_section and re.match(r"^##\s+", line):
-                break  # Next section starts
-            if in_section:
-                m = re.match(r"^- \[([ x])\] (.+)$", line)
-                if m:
-                    checked = m.group(1) == "x"
-                    criteria.append((checked, m.group(2).strip()))
-
-        if not criteria:
-            return None  # No exit criteria found
-
-        checked_count = sum(1 for c, _ in criteria if c)
-        unchecked_items = [desc for c, desc in criteria if not c]
-
-        return {
-            "all_checked": checked_count == len(criteria),
-            "total": len(criteria),
-            "checked": checked_count,
-            "unchecked_items": unchecked_items,
-        }
+        from chapter_frontmatter import get_exit_criteria
+        return get_exit_criteria(chapter_file)
 
     def _find_chapter_file(self, chapter_id: str, arc_name: str) -> Optional[Path]:
         """

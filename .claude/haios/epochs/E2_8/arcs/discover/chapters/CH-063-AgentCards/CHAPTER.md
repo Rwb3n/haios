@@ -1,3 +1,23 @@
+---
+id: CH-063
+name: Agent Cards
+arc: discover
+epoch: E2.8
+status: Planning
+work_items:
+- id: WORK-164
+  title: Agent Cards
+  status: Complete
+  type: design
+exit_criteria:
+- text: All agents have structured capability cards
+  checked: false
+- text: Cards discoverable via infrastructure query (not CLAUDE.md lookup)
+  checked: false
+- text: 'Schema defined: id, role, capabilities, tools, triggers, produces, consumes'
+  checked: false
+dependencies: []
+---
 # generated: 2026-02-19
 # System Auto: last updated on: 2026-02-19T08:30:00
 # Chapter: AgentCards

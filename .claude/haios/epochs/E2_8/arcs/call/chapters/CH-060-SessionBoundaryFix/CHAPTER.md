@@ -1,3 +1,26 @@
+---
+id: CH-060
+name: Session Boundary Fix
+arc: call
+epoch: E2.8
+status: Complete
+work_items:
+- id: WORK-161
+  title: Session Boundary Fix
+  status: Complete
+  type: implementation
+exit_criteria:
+- text: Post-closure ceremonies run reliably (not dropped due to context exhaustion)
+    (S396)
+  checked: true
+- text: Session-end ceremony triggered automatically on session boundary (S396)
+  checked: true
+- text: Governance events logged for session transitions (S396)
+  checked: true
+- text: No orphan sessions (session started but never ended) (S396)
+  checked: true
+dependencies: []
+---
 # generated: 2026-02-19
 # System Auto: last updated on: 2026-02-19T08:30:00
 # Chapter: SessionBoundaryFix

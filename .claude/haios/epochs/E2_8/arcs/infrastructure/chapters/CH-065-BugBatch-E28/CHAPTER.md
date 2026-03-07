@@ -1,3 +1,37 @@
+---
+id: CH-065
+name: Bug Batch E2.8
+arc: infrastructure
+epoch: E2.8
+status: In Progress
+work_items:
+- id: WORK-166
+  title: Bug Batch E2.8
+  status: Complete
+  type: implementation
+- id: WORK-175
+  title: Fix plan_tree.py --ready Blocked_by Filter
+  status: Active
+  type: implementation
+- id: WORK-181
+  title: Investigate Test Failure Root Causes
+  status: Complete
+  type: investigation
+- id: WORK-183
+  title: Fix 13 Pre-Existing Test Failures
+  status: Active
+  type: implementation
+exit_criteria:
+- text: Checkpoint same-session sort bug fixed (session_loader.py:120) (S395)
+  checked: true
+- text: Queue state machine backlog->done transition added (S395)
+  checked: true
+- text: All confirmed E2.7 triage bugs resolved or explicitly deferred (S395)
+  checked: true
+- text: Zero test regressions (S395)
+  checked: true
+dependencies: []
+---
 # generated: 2026-02-19
 # System Auto: last updated on: 2026-02-19T08:30:00
 # Chapter: BugBatch-E28

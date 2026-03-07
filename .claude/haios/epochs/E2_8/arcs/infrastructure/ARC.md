@@ -31,6 +31,7 @@ Bug fixes and deferred items from E2.7 triage. Clean foundation for the UX arcs.
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
 | CH-065 | BugBatch-E28 | New | REQ-CEREMONY-001 | None | Complete |
+| CH-067 | FileFormatMigration | WORK-244, WORK-245 | REQ-TRACE-004 | None | Active |
 
 ---
 

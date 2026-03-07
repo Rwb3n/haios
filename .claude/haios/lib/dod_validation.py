@@ -226,9 +226,12 @@ def validate_chapter_dod(
     checks = []
     failures = []
 
-    # Find chapter file (glob for CH-{id}-*.md pattern)
+    # Find chapter file — try subdirectory CHAPTER.md first, then flat file
     arc_dir = base_path / epoch_dir / "arcs" / arc
-    chapter_files = list(arc_dir.glob(f"{chapter_id}-*.md"))
+    chapter_files = list(arc_dir.glob(f"chapters/{chapter_id}-*/CHAPTER.md"))
+    if not chapter_files:
+        # Backward compat: flat file format
+        chapter_files = list(arc_dir.glob(f"{chapter_id}-*.md"))
     if not chapter_files:
         checks.append(DoDCheck("chapter_exists", False, f"{chapter_id} not found in {arc}"))
         failures.append(f"Chapter {chapter_id} not found in {arc_dir}")
@@ -263,19 +266,39 @@ def validate_chapter_dod(
             failures.append(f"Work item {wid} is not complete")
 
     # Check 2: Exit criteria all checked
-    checked, total = _count_exit_criteria(content)
-    if total > 0:
-        ec_ok = checked == total
+    # Try frontmatter-aware reader first (WORK-244)
+    from chapter_frontmatter import get_exit_criteria as _get_chapter_exit_criteria
+
+    # chapter_file from glob may be a flat .md file or CHAPTER.md in subdirectory
+    _chapter_md_path = chapter_file if chapter_file.name == "CHAPTER.md" else None
+    if _chapter_md_path is None:
+        # Try: look for CHAPTER.md in same directory
+        candidate = chapter_file.parent / "CHAPTER.md"
+        if candidate.exists():
+            _chapter_md_path = candidate
+
+    if _chapter_md_path is not None:
+        criteria = _get_chapter_exit_criteria(_chapter_md_path)
+    else:
+        criteria = None
+
+    if criteria is None:
+        # Fallback: count from markdown body of chapter_file itself
+        checked, total = _count_exit_criteria(content)
+        criteria = {"checked": checked, "total": total, "all_checked": checked == total} if total > 0 else None
+
+    if criteria is not None and criteria["total"] > 0:
+        ec_ok = criteria["all_checked"]
         checks.append(
             DoDCheck(
                 "exit_criteria_checked",
                 ec_ok,
-                f"{checked}/{total} checked",
+                f"{criteria['checked']}/{criteria['total']} checked",
             )
         )
         if not ec_ok:
             failures.append(
-                f"Exit criteria incomplete: {checked}/{total} checked"
+                f"Exit criteria incomplete: {criteria['checked']}/{criteria['total']} checked"
             )
     else:
         checks.append(

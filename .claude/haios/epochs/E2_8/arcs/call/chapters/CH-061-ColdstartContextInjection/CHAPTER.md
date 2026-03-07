@@ -1,3 +1,41 @@
+---
+id: CH-061
+name: Coldstart Context Injection
+arc: call
+epoch: E2.8
+status: In Progress
+work_items:
+- id: WORK-162
+  title: Coldstart Context Injection (Design)
+  status: Complete
+  type: design
+- id: WORK-180
+  title: Implement ADR-047 Tiered Coldstart
+  status: Backlog
+  type: implementation
+- id: WORK-231
+  title: 'Coldstart Token Waste: Remove Agent-Read of config.yaml'
+  status: Complete
+  type: implementation
+- id: WORK-232
+  title: Inject Memory Schema Hints into Coldstart Orchestrator Output
+  status: Complete
+  type: implementation
+exit_criteria:
+- text: Coldstart injects ALL operational context (zero manual Read steps in coldstart
+    skill)
+  checked: false
+- text: 'Minimum viable context contract enforced: identity + mission + prior + work
+    + operational HOW'
+  checked: false
+- text: Agent can execute work immediately after coldstart without reading additional
+    files
+  checked: false
+dependencies:
+- direction: Blocks
+  target: CH-066 (MCPOperationsServer)
+  reason: MCP server depends on coldstart context being comprehensive
+---
 # generated: 2026-02-19
 # System Auto: last updated on: 2026-02-19T08:30:00
 # Chapter: ColdstartContextInjection

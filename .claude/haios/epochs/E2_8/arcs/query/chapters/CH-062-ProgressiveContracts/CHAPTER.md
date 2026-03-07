@@ -1,3 +1,32 @@
+---
+id: CH-062
+name: Progressive Contracts
+arc: query
+epoch: E2.8
+status: Planning
+work_items:
+- id: WORK-163
+  title: Progressive Contracts
+  status: Done
+  type: design
+- id: WORK-187
+  title: Fracture Implementation-Cycle SKILL.md into Phase Files
+  status: Active
+  type: implementation
+- id: WORK-188
+  title: Hook Auto-Injection for Phase Contracts
+  status: Active
+  type: implementation
+exit_criteria:
+- text: Contracts designed for progressive disclosure (agent reads what it needs,
+    not everything)
+  checked: false
+- text: Context loading uses engine functions and memory before file reads
+  checked: false
+- text: Lightweight coldstart variant exists for housekeeping sessions
+  checked: false
+dependencies: []
+---
 # generated: 2026-02-19
 # System Auto: last updated on: 2026-02-19T08:30:00
 # Chapter: ProgressiveContracts

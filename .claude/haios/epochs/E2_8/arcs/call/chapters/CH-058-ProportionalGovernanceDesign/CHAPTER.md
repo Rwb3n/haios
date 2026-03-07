@@ -1,3 +1,30 @@
+---
+id: CH-058
+name: Proportional Governance Design
+arc: call
+epoch: E2.8
+status: Complete
+work_items:
+- id: WORK-101
+  title: Proportional Governance Design
+  status: Complete
+  type: design
+exit_criteria:
+- text: L3.20 Proportional Governance principle defined (S398)
+  checked: true
+- text: REQ-LIFECYCLE-005 fast-path requirement defined (S398)
+  checked: true
+- text: REQ-CEREMONY-005 proportional depth requirement defined (S398)
+  checked: true
+- text: Close-work-cycle updated with pytest hard gate (S398)
+  checked: true
+- text: Complexity threshold criteria documented (S398)
+  checked: true
+dependencies:
+- direction: Blocks
+  target: CH-059 (CeremonyAutomation)
+  reason: CH-059 implements what CH-058 designs
+---
 # generated: 2026-02-18
 # System Auto: last updated on: 2026-02-18T23:30:00
 # Chapter: ProportionalGovernanceDesign

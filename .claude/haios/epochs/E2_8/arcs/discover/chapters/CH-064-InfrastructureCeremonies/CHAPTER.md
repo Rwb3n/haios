@@ -1,3 +1,27 @@
+---
+id: CH-064
+name: Infrastructure Ceremonies
+arc: discover
+epoch: E2.8
+status: Planning
+work_items:
+- id: WORK-102
+  title: Session and Process Review Ceremonies
+  status: Complete
+  type: design
+- id: WORK-165
+  title: Infrastructure Ceremonies
+  status: Complete
+  type: implementation
+exit_criteria:
+- text: Ceremonies executable via infrastructure (hooks/modules), not just SKILL.md
+  checked: false
+- text: Open-epoch-ceremony exists as full ceremony loop (already done S393)
+  checked: false
+- text: Ceremony discovery via typed infrastructure queries
+  checked: false
+dependencies: []
+---
 # generated: 2026-02-19
 # System Auto: last updated on: 2026-02-19T08:30:00
 # Chapter: InfrastructureCeremonies

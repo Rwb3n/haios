@@ -1,15 +1,15 @@
 ---
 template: work_item
 id: WORK-244
-title: "CHAPTER.md YAML Frontmatter Migration (Phase 1)"
+title: CHAPTER.md YAML Frontmatter Migration (Phase 1)
 type: implementation
 status: active
 owner: Hephaestus
 created: '2026-03-07'
 spawned_by: WORK-240
 spawned_children: []
-chapter: ''
-arc: ''
+chapter: CH-067
+arc: infrastructure
 closed: null
 priority: medium
 effort: medium
@@ -21,20 +21,25 @@ source_files:
 - .claude/haios/lib/dod_validation.py
 - .claude/haios/lib/scaffold.py
 acceptance_criteria:
-- "CHAPTER.md files have YAML frontmatter with: id, name, arc, epoch, status, work_items, exit_criteria, dependencies"
-- "status_propagator.py reads CHAPTER.md frontmatter instead of regex-parsing exit criteria checkboxes"
-- "dod_validation.py reads CHAPTER.md frontmatter instead of _parse_markdown_field() for Status"
-- "scaffold.py update_chapter_manifest() updates frontmatter dict instead of line-by-line table surgery"
-- "Migration script converts all existing CHAPTER.md files to frontmatter format"
-- "All existing tests pass after migration (backward-compatible fallback for missing frontmatter)"
+- 'CHAPTER.md files have YAML frontmatter with: id, name, arc, epoch, status, work_items,
+  exit_criteria, dependencies'
+- status_propagator.py reads CHAPTER.md frontmatter instead of regex-parsing exit
+  criteria checkboxes
+- dod_validation.py reads CHAPTER.md frontmatter instead of _parse_markdown_field()
+  for Status
+- scaffold.py update_chapter_manifest() updates frontmatter dict instead of line-by-line
+  table surgery
+- Migration script converts all existing CHAPTER.md files to frontmatter format
+- All existing tests pass after migration (backward-compatible fallback for missing
+  frontmatter)
 blocked_by: []
 blocks:
 - WORK-245
 enables:
 - WORK-245
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: working
+cycle_phase: DONE
+current_node: DONE
 node_history:
 - node: backlog
   entered: '2026-03-07T00:07:54.769183'
@@ -42,6 +47,12 @@ node_history:
 queue_history:
 - position: backlog
   entered: '2026-03-07T00:07:54.769183'
+  exited: '2026-03-07T00:39:29.189954'
+- position: ready
+  entered: '2026-03-07T00:39:29.189954'
+  exited: '2026-03-07T00:39:32.891248'
+- position: working
+  entered: '2026-03-07T00:39:32.891248'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -50,10 +61,20 @@ memory_refs:
 - 89403
 - 89404
 - 89405
+- 89406
+- 89407
+- 89441
+- 89442
+- 89443
+- 89444
+- 89445
+- 89446
+- 89447
+- 89448
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T00:07:54.769183'
+last_updated: '2026-03-07T01:11:05.141412'
 ---
 # WORK-244: CHAPTER.md YAML Frontmatter Migration (Phase 1)
 
