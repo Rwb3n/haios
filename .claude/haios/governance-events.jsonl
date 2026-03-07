@@ -20720,3 +20720,4 @@
 {"type": "MCPGateChecked", "tool": "hierarchy_close_work", "primitive": "mcp-mutate", "state": "EXPLORE", "allowed": true, "reason": "EXPLORE phase: mutation tools should not be needed during investigation", "session_id": 466}
 {"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-03-07T00:30:47.027413", "session_id": 466}
 {"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-07T00:30:47.058739", "session_id": 466}
+{"type": "SessionEnded", "session": 466, "agent": "Hephaestus", "timestamp": "2026-03-07T00:31:33.002643", "session_id": 466, "context_pct": 10.2}
