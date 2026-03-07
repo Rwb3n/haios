@@ -25,9 +25,9 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: working
+cycle_phase: DONE
+current_node: DONE
 node_history:
 - node: backlog
   entered: '2026-03-07T14:28:16.434826'
@@ -35,6 +35,12 @@ node_history:
 queue_history:
 - position: backlog
   entered: '2026-03-07T14:28:16.434826'
+  exited: '2026-03-07T19:19:43.378862'
+- position: ready
+  entered: '2026-03-07T19:19:43.378862'
+  exited: '2026-03-07T19:19:48.242786'
+- position: working
+  entered: '2026-03-07T19:19:48.242786'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -42,6 +48,6 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T14:28:16.434826'
+last_updated: '2026-03-07T19:19:48.244786'
 ---
 # WORK-256: Auto-promote queue_position when cycle_phase changes

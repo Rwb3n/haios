@@ -215,6 +215,86 @@ def read_phase_contract(
         return None
 
 
+def _auto_promote_queue(
+    work_id: str,
+    project_root: Optional[Path] = None,
+) -> bool:
+    """Auto-promote queue_position from backlog/ready to working (WORK-256).
+
+    Called by set_cycle_state() after sync_work_md_phase(). Prevents
+    queue_position:backlog + cycle_phase:PLAN drift.
+
+    Only promotes if current queue_position is 'backlog' or 'ready'.
+    Positions 'working', 'done', 'parked' are left unchanged.
+
+    Updates queue_history atomically: closes previous entry with exited
+    timestamp, appends new 'working' entry.
+
+    Fail-permissive: never raises, returns False on any error.
+
+    Args:
+        work_id: Work item ID (e.g., "WORK-256")
+        project_root: Project root. Defaults to derived path.
+
+    Returns:
+        True if promoted, False if no promotion needed or error.
+    """
+    try:
+        root = project_root or _default_project_root()
+        work_file = root / "docs" / "work" / "active" / work_id / "WORK.md"
+        if not work_file.exists():
+            return False
+
+        content = work_file.read_text(encoding="utf-8")
+
+        # Check current queue_position
+        match = re.search(r"^queue_position:\s*(.+)$", content, re.MULTILINE)
+        if not match:
+            return False
+
+        current_pos = match.group(1).strip()
+        if current_pos not in ("backlog", "ready"):
+            return False  # No promotion needed
+
+        now = datetime.now().isoformat()
+
+        # Update queue_position field
+        updated = re.sub(
+            r"^queue_position:\s.*$",
+            "queue_position: working",
+            content,
+            flags=re.MULTILINE,
+        )
+
+        # Close previous queue_history entry (set exited on last null entry)
+        updated = re.sub(
+            r"(  exited: null)(?![\s\S]*  exited: null)",
+            f"  exited: '{now}'",
+            updated,
+        )
+
+        # Append new queue_history entry before the next top-level field
+        # Find the end of queue_history block (next field at column 0 that isn't
+        # a continuation of the list)
+        qh_entry = (
+            f"- position: 'working'\n"
+            f"  entered: '{now}'\n"
+            f"  exited: null"
+        )
+        # Insert after the last queue_history entry (before next top-level key)
+        updated = re.sub(
+            r"(queue_history:.*?)(\n[a-z])",
+            lambda m: m.group(1) + "\n" + qh_entry + m.group(2),
+            updated,
+            flags=re.DOTALL,
+        )
+
+        work_file.write_text(updated, encoding="utf-8")
+        return True
+    except Exception:
+        return False
+
+
 def set_cycle_state(
     cycle: str,
     phase: str,
@@ -255,6 +335,9 @@ def set_cycle_state(
 
         # Sync WORK.md cycle_phase (fail-permissive)
         sync_work_md_phase(work_id, phase, project_root=root)
+
+        # WORK-256: Auto-promote queue_position if backlog/ready -> working
+        _auto_promote_queue(work_id, project_root=root)
 
         # Log governance event (fail-permissive)
         try:
