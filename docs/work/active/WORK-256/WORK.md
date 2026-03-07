@@ -3,14 +3,14 @@ template: work_item
 id: WORK-256
 title: Auto-promote queue_position when cycle_phase changes
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: '2026-03-07'
 spawned_by: WORK-245
 spawned_children: []
 chapter: CH-067
 arc: infrastructure
-closed: null
+closed: '2026-03-07'
 priority: medium
 effort: small
 traces_to: []
@@ -25,13 +25,13 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: working
-cycle_phase: DONE
-current_node: DONE
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: '2026-03-07T14:28:16.434826'
-  exited: null
+  exited: '2026-03-07T19:35:22.638999'
 queue_history:
 - position: backlog
   entered: '2026-03-07T14:28:16.434826'
@@ -41,6 +41,9 @@ queue_history:
   exited: '2026-03-07T19:19:48.242786'
 - position: working
   entered: '2026-03-07T19:19:48.242786'
+  exited: '2026-03-07T19:35:22.638999'
+- position: done
+  entered: '2026-03-07T19:35:22.638999'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -48,6 +51,6 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T19:19:48.244786'
+last_updated: '2026-03-07T19:35:22.644751'
 ---
 # WORK-256: Auto-promote queue_position when cycle_phase changes
