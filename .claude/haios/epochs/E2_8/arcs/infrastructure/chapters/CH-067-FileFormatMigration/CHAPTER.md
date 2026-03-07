@@ -51,7 +51,7 @@ Spawned from WORK-240 investigation findings (mem:89402-89407).
 
 | ID | Title | Status | Type |
 |----|-------|--------|------|
-| WORK-244 | CHAPTER.md YAML Frontmatter Migration (Phase 1) | Active | implementation |
+| WORK-244 | CHAPTER.md YAML Frontmatter Migration (Phase 1) | Complete | implementation |
 | WORK-245 | ARC.md YAML Frontmatter Migration (Phase 2) | Active | implementation |
 
 ---

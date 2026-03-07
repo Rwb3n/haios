@@ -186,7 +186,7 @@ Use observation template:
 
 ```bash
 just commit-session {session} "{title}"
-just session-end {session}
+mcp__haios-operations__session_end(session_number={session})
 ```
 
 **Exit Criteria:**

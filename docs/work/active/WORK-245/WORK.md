@@ -38,8 +38,8 @@ blocked_by:
 blocks: []
 enables: []
 queue_position: backlog
-cycle_phase: DONE
-current_node: DONE
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: '2026-03-07T00:07:55.178399'

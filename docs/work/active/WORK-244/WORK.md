@@ -38,8 +38,8 @@ blocks:
 enables:
 - WORK-245
 queue_position: done
-cycle_phase: done
-current_node: ARCHIVE
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: '2026-03-07T00:07:54.769183'

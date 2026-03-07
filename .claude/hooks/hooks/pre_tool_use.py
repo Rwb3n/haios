@@ -68,13 +68,16 @@ def handle(hook_data: dict) -> Optional[dict]:
     tool_name = hook_data.get("tool_name", "")
     tool_input = hook_data.get("tool_input", {})
 
+    # Context budget check — reads .claude/context_remaining (written by statusLine)
+    context_warning = _check_context_budget(hook_data.get("cwd", ""))
+
     # E2.4 CH-004: State-aware governed activity check (checked FIRST)
     # WORK-064: Now always returns context, but only block if denied
     activity_result = _check_governed_activity(tool_name, tool_input)
     if activity_result:
         # If blocked by activity governance, return immediately
         if activity_result.get("hookSpecificOutput", {}).get("permissionDecision") == "deny":
-            return activity_result
+            return _inject_context_warning(activity_result, context_warning)
         # Otherwise continue checking other governance rules
 
     # WORK-172: Block EnterPlanMode (S399 operator directive)
@@ -91,20 +94,20 @@ def handle(hook_data: dict) -> Optional[dict]:
         # Check SQL first
         result = _check_sql_governance(command)
         if result:
-            return result
+            return _inject_context_warning(result, context_warning)
 
         # Check PowerShell (toggle-controlled)
         result = _check_powershell_governance(command)
         if result:
-            return result
+            return _inject_context_warning(result, context_warning)
 
         # Check scaffold recipes (E2-305)
         result = _check_scaffold_governance(command)
         if result:
-            return result
+            return _inject_context_warning(result, context_warning)
 
         # WORK-064: Return activity context if no other governance blocked
-        return activity_result
+        return _inject_context_warning(activity_result, context_warning)
 
     # Check Write/Edit for governance
     if tool_name in ("Write", "Edit"):
@@ -116,36 +119,36 @@ def handle(hook_data: dict) -> Optional[dict]:
         # Plan validation (E2-015)
         result = _check_plan_validation(file_path, content)
         if result:
-            return result
+            return _inject_context_warning(result, context_warning)
 
         # Memory reference warning (E2-021)
         result = _check_memory_refs(file_path, new_string or content)
         if result:
-            return result
+            return _inject_context_warning(result, context_warning)
 
         # Backlog ID uniqueness (E2-141)
         result = _check_backlog_id_uniqueness(file_path, content)
         if result:
-            return result
+            return _inject_context_warning(result, context_warning)
 
         # Exit gate check (E2-155) - only for Edit with old_string
         if tool_name == "Edit" and old_string:
             result = _check_exit_gate(file_path, old_string, new_string)
             if result:
-                return result
+                return _inject_context_warning(result, context_warning)
 
         # Process Review approval gate (WORK-209) - L3/L4 write protection
         result = _check_process_review_gate(file_path)
         if result:
-            return result
+            return _inject_context_warning(result, context_warning)
 
         # Path governance - only for new files
         result = _check_path_governance(file_path)
         if result:
-            return result
+            return _inject_context_warning(result, context_warning)
 
     # WORK-064: Return activity context if no other governance blocked
-    return activity_result
+    return _inject_context_warning(activity_result, context_warning)
 
 
 def _check_governed_activity(tool_name: str, tool_input: dict) -> Optional[dict]:
@@ -552,6 +555,61 @@ def _log_violation(gate_id: str, violation_type: str, reason: str) -> None:
         log_gate_violation(gate_id, work_id, violation_type, reason)
     except Exception:
         pass  # Fail-permissive: logging must never break agent workflow
+
+
+def _inject_context_warning(result: Optional[dict], warning: Optional[str]) -> Optional[dict]:
+    """Merge context budget warning into a hook result's additionalContext.
+
+    If no warning, returns result unchanged. If warning but no result,
+    creates an allow-with-context response. If both, appends warning
+    to existing additionalContext.
+    """
+    if not warning:
+        return result
+    if result is None:
+        return {
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "permissionDecision": "allow",
+                "additionalContext": warning,
+            }
+        }
+    # Merge into existing hookSpecificOutput
+    hso = result.setdefault("hookSpecificOutput", {"hookEventName": "PreToolUse"})
+    existing = hso.get("additionalContext", "")
+    hso["additionalContext"] = f"{existing}\n{warning}".strip() if existing else warning
+    return result
+
+
+def _check_context_budget(cwd: str) -> Optional[str]:
+    """Read .claude/context_remaining and return warning if below threshold.
+
+    File written by statusLine command with Claude Code native context_window data.
+    Returns warning string at <=20%, urgent string at <=10%, None otherwise.
+    Fail-silent: missing/unreadable file returns None.
+    """
+    if not cwd:
+        return None
+    try:
+        remaining_file = Path(cwd) / ".claude" / "context_remaining"
+        if not remaining_file.exists():
+            return None
+        remaining = float(remaining_file.read_text(encoding="utf-8").strip())
+        if remaining <= 10.0:
+            return (
+                f"[CONTEXT CRITICAL: {remaining:.1f}% remaining] "
+                "STOP current work. Checkpoint, commit, and close session NOW. "
+                "Do NOT start new phases or investigations."
+            )
+        elif remaining <= 20.0:
+            return (
+                f"[CONTEXT LOW: {remaining:.1f}% remaining] "
+                "Finish current step, then begin session-end sequence. "
+                "No new PLAN or DO phases."
+            )
+        return None
+    except Exception:
+        return None
 
 
 def _deny(reason: str) -> dict:

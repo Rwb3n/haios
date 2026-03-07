@@ -1,53 +1,70 @@
 ---
 template: work_item
 id: WORK-225
-title: "Migrate Skill Consumers from Just Recipes to MCP Operations Tools"
+title: Migrate Skill Consumers from Just Recipes to MCP Operations Tools
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-02-25
 spawned_by: WORK-224
 spawned_children: []
 chapter: CH-066
 arc: call
-closed: null
+closed: '2026-02-25'
 priority: high
 effort: medium
 traces_to:
 - REQ-DISCOVER-002
+- REQ-CEREMONY-001
 requirement_refs: []
 source_files:
-- .claude/skills/coldstart/SKILL.md
+- .claude/commands/coldstart.md
 - .claude/skills/survey-cycle/SKILL.md
 - .claude/skills/close-work-cycle/SKILL.md
 - .claude/skills/checkpoint-cycle/SKILL.md
 - .claude/skills/implementation-cycle/phases/DO.md
+- .claude/skills/implementation-cycle/phases/CHECK.md
 - .claude/skills/implementation-cycle/phases/DONE.md
 - .claude/skills/session-start-ceremony/SKILL.md
 - .claude/skills/session-end-ceremony/SKILL.md
 acceptance_criteria:
-- "Skills reference MCP tools (cycle_set, cycle_clear, queue_ready, etc.) instead of just recipes for Tier 2 operations"
-- "session-start/end skills use session_start/session_end MCP tools"
-- "close-work-cycle uses hierarchy_close_work MCP tool instead of just close-work"
-- "coldstart skill uses coldstart_orchestrator MCP tool instead of just coldstart-orchestrator"
-- "No regressions: all existing tests pass after migration"
+- Skills reference MCP tools (cycle_set, cycle_clear, queue_ready, etc.) instead of
+  just recipes for Tier 2 operations
+- session-start/end skills use session_start/session_end MCP tools
+- close-work-cycle uses hierarchy_close_work MCP tool instead of just close-work
+- coldstart skill uses coldstart_orchestrator MCP tool instead of just coldstart-orchestrator
+- 'No regressions: all existing tests pass after migration'
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
-  - node: backlog
-    entered: 2026-02-25T14:19:10
-    exited: null
+- node: backlog
+  entered: 2026-02-25 14:19:10
+  exited: 2026-02-25 15:15:00
+- node: PLAN
+  entered: 2026-02-25 15:15:00
+  exited: '2026-02-25T15:55:20.312843'
 artifacts: []
 cycle_docs: {}
-memory_refs: []
+memory_refs:
+- 88929
+- 88930
+- 88931
+- 88932
+- 88933
+- 88973
+- 88974
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-02-25
-last_updated: 2026-02-25T14:19:10
+last_updated: '2026-02-25T15:55:20.317292'
+queue_history:
+- position: done
+  entered: '2026-02-25T15:55:20.312843'
+  exited: null
 ---
 # WORK-225: Migrate Skill Consumers from Just Recipes to MCP Operations Tools
 
@@ -87,17 +104,24 @@ Migration map:
      Deliverables are implementation outputs, not requirements.
 -->
 
-- [ ] coldstart skill migrated: `just coldstart-orchestrator` → `coldstart_orchestrator` MCP tool
-- [ ] session-start-ceremony migrated: `just session-start` → `session_start` MCP tool
-- [ ] session-end-ceremony migrated: `just session-end` → `session_end` MCP tool
-- [ ] survey-cycle migrated: `just ready` → `queue_ready` MCP tool
-- [ ] close-work-cycle migrated: `just close-work` → `hierarchy_close_work`, `just set-cycle` → `cycle_set`, `just clear-cycle` → `cycle_clear`
-- [ ] implementation-cycle phases migrated: `just set-cycle` → `cycle_set` in DO.md, DONE.md, CHECK.md
-- [ ] checkpoint-cycle migrated: `just commit-session` remains (git — no MCP equivalent)
+- [x] coldstart command migrated: `just coldstart-orchestrator` → `coldstart_orchestrator` MCP tool
+- [x] session-start-ceremony migrated: `just session-start` → `session_start` MCP tool
+- [x] session-end-ceremony migrated: `just session-end` → `session_end` MCP tool
+- [x] survey-cycle migrated: `just ready` → `queue_ready` MCP tool
+- [x] close-work-cycle migrated: `just close-work` → `hierarchy_close_work`, `just set-cycle` → `cycle_set`, `just clear-cycle` → `cycle_clear`
+- [x] implementation-cycle phases migrated: `just set-cycle` → `cycle_set` in DO.md, DONE.md, CHECK.md
+- [x] checkpoint-cycle migrated: `just commit-session` remains (git — no MCP equivalent)
 
 ---
 
 ## History
+
+### 2026-02-25 - Implemented (Session 456)
+- All 9 skill/command files migrated from `just` recipes to MCP tool references
+- Critique caught 5 work item issues (blocking: coldstart path wrong) + 6 plan assumptions across 2 passes
+- Design review caught 1 missed prose reference in session-start-ceremony
+- 1767 tests pass, 0 new failures (2 pre-existing unrelated)
+- Zero-iteration TDD success (text-only migration, no Python code changed)
 
 ### 2026-02-25 - Created (Session 454)
 - Initial creation

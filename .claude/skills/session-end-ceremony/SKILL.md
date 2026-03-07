@@ -70,8 +70,8 @@ All steps execute within a `ceremony_context("session-end")` boundary per REQ-CE
 
 ### Step 3: Log SessionEnded Event
 
-- Execute: `just session-end {N}`
-- This invokes `governance_events.log_session_end(session, "Hephaestus")`
+- Execute: `mcp__haios-operations__session_end(session_number=N)`
+- This invokes `governance_events.log_session_end(session, "Hephaestus")` internally
 - Event appended to `.claude/haios/governance-events.jsonl`:
   ```json
   {"type": "SessionEnded", "session": N, "agent": "Hephaestus", "timestamp": "..."}

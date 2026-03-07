@@ -5,8 +5,8 @@ skill: implementation-cycle
 # DO Phase
 
 **On Entry:**
-```bash
-just set-cycle implementation-cycle DO {work_id}
+```
+mcp__haios-operations__cycle_set(cycle="implementation-cycle", phase="DO", work_id="{work_id}")
 ```
 
 **Goal:** Execute the plan's implementation steps via sub-agent delegation.

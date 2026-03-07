@@ -4,9 +4,7 @@ type: lifecycle
 description: HAIOS Survey Cycle for structured session-level work selection. Use after
   coldstart context loading. Guides GATHER->ASSESS->OPTIONS->CHOOSE->ROUTE workflow
   with volumous exploration before tight commitment.
-recipes:
-- ready
-- queue
+recipes: []
 generated: 2026-01-11
 last_updated: '2026-01-28T22:44:56'
 ---
@@ -21,8 +19,8 @@ Select work after coldstart. Invoked automatically or via `Skill(skill="survey-c
    - If work in_progress from prior session, continue it
 
 2. **Otherwise, present options**
-   - Run `just queue [name]` for ordered items (default: "default" queue)
-   - Alternatively: `just ready` for flat unordered list (backward compat)
+   - Run `mcp__haios-operations__queue_list(queue_name="{queue_name}")` for ordered items (default: "default")
+   - Alternatively: `mcp__haios-operations__queue_ready()` for flat unordered list (backward compat)
    - Select top 3 from queue head
    - Present via `AskUserQuestion` (or auto-select if autonomous)
 

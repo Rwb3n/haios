@@ -17,6 +17,7 @@ mcp-config.sh
 # Claude Code specific
 .claude/settings.local.json
 .claude/haios-events.jsonl
+.claude/context_remaining
 .env
 
 # Personal/private files (not for public repo)

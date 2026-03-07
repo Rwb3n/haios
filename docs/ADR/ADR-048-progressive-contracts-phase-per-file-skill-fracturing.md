@@ -18,7 +18,7 @@ version: "1.1"
 
 > **Status:** Accepted
 > **Date:** 2026-02-22
-> **Decision:** Pending
+> **Decision:** Accepted
 
 ---
 

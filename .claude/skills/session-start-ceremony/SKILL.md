@@ -68,8 +68,8 @@ All steps execute within a `ceremony_context("session-start")` boundary per REQ-
 
 ### Step 3: Log SessionStarted Event
 
-- Execute: `just session-start {N}`
-- This invokes `governance_events.log_session_start(session, "Hephaestus")`
+- Execute: `mcp__haios-operations__session_start(session_number=N)`
+- This invokes `governance_events.log_session_start(session, "Hephaestus")` internally
 - Event appended to `.claude/haios/governance-events.jsonl`:
   ```json
   {"type": "SessionStarted", "session": N, "agent": "Hephaestus", "timestamp": "..."}
@@ -111,13 +111,13 @@ Session {N} started.
 ## Integration with Coldstart
 
 The `/coldstart` command orchestrates the full context loading flow via ColdstartOrchestrator.
-Within coldstart, this ceremony is invoked via `just session-start N`.
+Within coldstart, this ceremony is invoked via `mcp__haios-operations__session_start(session_number=N)`.
 
 ```
 Flow:
   /coldstart
     -> ColdstartOrchestrator.run()  (loads identity, session, work context)
-    -> just session-start N          (this ceremony: state change + event log)
+    -> mcp__haios-operations__session_start(session_number=N)   (this ceremony: state change + event log)
     -> survey-cycle                  (work selection)
 ```
 
