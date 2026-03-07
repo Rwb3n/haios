@@ -7,7 +7,8 @@ status: active
 owner: Hephaestus
 created: '2026-03-07'
 spawned_by: WORK-251
-spawned_children: []
+spawned_children:
+- WORK-277
 chapter: CH-067
 arc: infrastructure
 closed: null
