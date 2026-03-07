@@ -18,6 +18,17 @@ chapters:
   work_items:
   - WORK-244
   - WORK-245
+  - WORK-254
+  - WORK-256
+  - WORK-257
+  - WORK-260
+  - WORK-264
+  - WORK-265
+  - WORK-268
+  - WORK-269
+  - WORK-272
+  - WORK-276
+  - WORK-277
   requirements:
   - REQ-TRACE-004
   dependencies: []
@@ -59,7 +70,7 @@ Bug fixes and deferred items from E2.7 triage. Clean foundation for the UX arcs.
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
 | CH-065 | BugBatch-E28 | New | REQ-CEREMONY-001 | None | Complete |
-| CH-067 | FileFormatMigration | WORK-244, WORK-245 | REQ-TRACE-004 | None | Active |
+| CH-067 | FileFormatMigration | WORK-244, WORK-245, WORK-254, WORK-256, WORK-257, WORK-260, WORK-264, WORK-265, WORK-268, WORK-269, WORK-272, WORK-276, WORK-277 | REQ-TRACE-004 | None | Active |
 
 ---
 

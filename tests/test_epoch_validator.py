@@ -72,6 +72,8 @@ def test_validate_epoch_status_drift():
     validator = EpochValidator(epoch_content=epoch_content, work_statuses=work_statuses)
     result = validator.validate_epoch_status()
     assert len(result["drift"]) == 1
+    # WORK-272: message now uses chapter-level format
+    assert "CH-049" in result["drift"][0]
     assert "WORK-153" in result["drift"][0]
 
 
@@ -184,11 +186,9 @@ def test_validate_epoch_status_multi_item_cell():
     work_statuses = {"WORK-152": "complete", "WORK-155": "active"}
     validator = EpochValidator(epoch_content=epoch_content, work_statuses=work_statuses)
     result = validator.validate_epoch_status()
-    # WORK-152 is complete but EPOCH.md says Planning -> drift
-    assert len(result["drift"]) == 1
-    assert "WORK-152" in result["drift"][0]
-    # WORK-155 is active, no drift expected
-    assert not any("WORK-155" in d for d in result["drift"])
+    # WORK-272 fix: chapter-level drift — not all items complete, so NO drift
+    # (WORK-155 is still active, chapter is correctly "Planning")
+    assert result["drift"] == []
 
 
 # ---------------------------------------------------------------------------
@@ -271,3 +271,92 @@ def test_validate_disk_loading_path(tmp_path):
     assert isinstance(result, str)
     # No drift expected (WORK-001 is active, EPOCH.md says Planning)
     assert "DRIFT" not in result
+
+
+# ---------------------------------------------------------------------------
+# Test 11: Mixed chapter — some complete, some active — no drift (WORK-272)
+# ---------------------------------------------------------------------------
+def test_validate_epoch_status_no_drift_mixed_chapter():
+    """Chapter with mix of complete and active work items produces no drift."""
+    from epoch_validator import EpochValidator
+
+    epoch_content = (
+        "### Arc 1: call\n"
+        "\n"
+        "| CH-ID | Title | Work Items | Status |\n"
+        "|-------|-------|------------|--------|\n"
+        "| CH-059 | CeremonyAutomation | WORK-160, WORK-167, WORK-170 | In Progress |\n"
+    )
+    work_statuses = {
+        "WORK-160": "complete",
+        "WORK-167": "complete",
+        "WORK-170": "active",
+    }
+    validator = EpochValidator(epoch_content=epoch_content, work_statuses=work_statuses)
+    result = validator.validate_epoch_status()
+    # Chapter correctly "In Progress" — not all items complete
+    assert result["drift"] == []
+
+
+# ---------------------------------------------------------------------------
+# Test 12: All chapter items complete but chapter not promoted — drift (WORK-272)
+# ---------------------------------------------------------------------------
+def test_validate_epoch_status_drift_all_complete():
+    """Chapter where ALL work items are complete but status is not produces drift."""
+    from epoch_validator import EpochValidator
+
+    epoch_content = (
+        "### Arc 1: infrastructure\n"
+        "\n"
+        "| CH-ID | Title | Work Items | Status |\n"
+        "|-------|-------|------------|--------|\n"
+        "| CH-065 | BugBatch | WORK-200, WORK-201 | Active |\n"
+    )
+    work_statuses = {"WORK-200": "complete", "WORK-201": "complete"}
+    validator = EpochValidator(epoch_content=epoch_content, work_statuses=work_statuses)
+    result = validator.validate_epoch_status()
+    assert len(result["drift"]) == 1
+    assert "CH-065" in result["drift"][0]
+    assert "WORK-200" in result["drift"][0]
+    assert "WORK-201" in result["drift"][0]
+
+
+# ---------------------------------------------------------------------------
+# Test 13: Chapter already complete — no drift (WORK-272)
+# ---------------------------------------------------------------------------
+def test_validate_epoch_status_no_drift_chapter_complete():
+    """Chapter marked Complete with all complete items produces no drift."""
+    from epoch_validator import EpochValidator
+
+    epoch_content = (
+        "### Arc 1: infrastructure\n"
+        "\n"
+        "| CH-ID | Title | Work Items | Status |\n"
+        "|-------|-------|------------|--------|\n"
+        "| CH-065 | BugBatch | WORK-200, WORK-201 | Complete |\n"
+    )
+    work_statuses = {"WORK-200": "complete", "WORK-201": "complete"}
+    validator = EpochValidator(epoch_content=epoch_content, work_statuses=work_statuses)
+    result = validator.validate_epoch_status()
+    assert result["drift"] == []
+
+
+# ---------------------------------------------------------------------------
+# Test 14: Legacy fallback — all complete, chapter stale — drift (WORK-272)
+# ---------------------------------------------------------------------------
+def test_validate_epoch_status_drift_legacy_all_complete():
+    """Legacy EPOCH.md path: all work items complete but chapter stale produces drift."""
+    from epoch_validator import EpochValidator
+
+    epoch_content = (
+        "### Arc 2: composability\n"
+        "\n"
+        "| CH-ID | Title | Work Items | Status |\n"
+        "|-------|-------|------------|--------|\n"
+        "| CH-047 | Templates | WORK-152, WORK-155 | Planning |\n"
+    )
+    work_statuses = {"WORK-152": "complete", "WORK-155": "complete"}
+    validator = EpochValidator(epoch_content=epoch_content, work_statuses=work_statuses)
+    result = validator.validate_epoch_status()
+    assert len(result["drift"]) == 1
+    assert "CH-047" in result["drift"][0]

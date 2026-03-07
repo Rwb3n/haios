@@ -7,7 +7,8 @@ status: complete
 owner: Hephaestus
 created: '2026-03-07'
 spawned_by: null
-spawned_children: []
+spawned_children:
+- WORK-272
 chapter: CH-061
 arc: call
 closed: '2026-03-07'

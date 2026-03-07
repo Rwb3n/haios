@@ -223,25 +223,38 @@ class EpochValidator:
                         arc_chapters_map[ch["id"]] = ch
 
         # Process: prefer arc_frontmatter data, fall back to EPOCH.md table parsing
+        # WORK-272: Chapter-level drift detection — only flag when ALL work items
+        # in a chapter are complete but the chapter status hasn't been promoted.
+        # Previously flagged per-item, producing false positives for chapters
+        # that legitimately contain a mix of complete and incomplete items.
         if arc_chapters_map:
             for ch_id, ch_data in arc_chapters_map.items():
                 work_ids = re.findall(r"WORK-\d{3}", " ".join(ch_data.get("work_items", [])))
                 epoch_status = ch_data["status"].lower()
+                if not work_ids:
+                    continue
+                # Collect statuses for ALL work items in the chapter
+                statuses = {}
                 for work_id in work_ids:
                     if self._work_statuses is not None:
                         actual_status = self._work_statuses.get(work_id)
                     else:
                         actual_status = self._load_work_status(work_id)
-                    if actual_status is None:
-                        continue
-                    if (
-                        actual_status.lower() in COMPLETE_STATUSES
-                        and epoch_status not in EPOCH_COMPLETE_LABELS
-                    ):
-                        result["drift"].append(
-                            f"DRIFT: {work_id} is '{actual_status}' in WORK.md "
-                            f"but shown as '{ch_data['status']}' in ARC.md"
-                        )
+                    if actual_status is not None:
+                        statuses[work_id] = actual_status.lower()
+                # Only flag drift when ALL chapter work items are complete
+                # but the chapter status is not
+                if (
+                    statuses
+                    and all(s in COMPLETE_STATUSES for s in statuses.values())
+                    and epoch_status not in EPOCH_COMPLETE_LABELS
+                ):
+                    ids_str = ", ".join(sorted(statuses.keys()))
+                    result["drift"].append(
+                        f"DRIFT: All work items in {ch_id} are complete "
+                        f"({ids_str}) but chapter status is "
+                        f"'{ch_data['status']}' in ARC.md"
+                    )
         else:
             # Legacy fallback: parse EPOCH.md table rows directly
             for line in active_content.split("\n"):
@@ -257,21 +270,28 @@ class EpochValidator:
                 if len(cells) < 4:
                     continue
                 epoch_status = cells[-1].lower()
+                # Collect statuses for ALL work items in this chapter row
+                statuses = {}
                 for work_id in work_ids:
                     if self._work_statuses is not None:
                         actual_status = self._work_statuses.get(work_id)
                     else:
                         actual_status = self._load_work_status(work_id)
-                    if actual_status is None:
-                        continue
-                    if (
-                        actual_status.lower() in COMPLETE_STATUSES
-                        and epoch_status not in EPOCH_COMPLETE_LABELS
-                    ):
-                        result["drift"].append(
-                            f"DRIFT: {work_id} is '{actual_status}' in WORK.md "
-                            f"but shown as '{cells[-1]}' in EPOCH.md"
-                        )
+                    if actual_status is not None:
+                        statuses[work_id] = actual_status.lower()
+                # Only flag drift when ALL work items are complete
+                if (
+                    statuses
+                    and all(s in COMPLETE_STATUSES for s in statuses.values())
+                    and epoch_status not in EPOCH_COMPLETE_LABELS
+                ):
+                    ch_id = cells[0] if cells else "unknown"
+                    ids_str = ", ".join(sorted(statuses.keys()))
+                    result["drift"].append(
+                        f"DRIFT: All work items in {ch_id} are complete "
+                        f"({ids_str}) but chapter status is "
+                        f"'{cells[-1]}' in EPOCH.md"
+                    )
 
         return result
 
