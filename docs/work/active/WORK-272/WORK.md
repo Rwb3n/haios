@@ -3,7 +3,7 @@ template: work_item
 id: WORK-272
 title: ARC.md Status Propagation Drift — Batch Fix 6 Stale Entries
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: '2026-03-07'
 spawned_by: WORK-251
@@ -14,7 +14,7 @@ spawned_children:
 - WORK-282
 chapter: CH-067
 arc: infrastructure
-closed: null
+closed: '2026-03-07'
 priority: medium
 effort: small
 traces_to: []
@@ -31,19 +31,22 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: working
-cycle_phase: CHAIN
+queue_position: done
+cycle_phase: done
 current_node: CHAIN
 node_history:
 - node: backlog
   entered: '2026-03-07T18:20:43.176037'
-  exited: null
+  exited: '2026-03-07T20:52:02.020544'
 queue_history:
 - position: backlog
   entered: '2026-03-07T18:20:43.176037'
   exited: '2026-03-07T20:41:45.123257'
 - position: working
   entered: '2026-03-07T20:41:45.123257'
+  exited: '2026-03-07T20:52:02.020544'
+- position: done
+  entered: '2026-03-07T20:52:02.020544'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -61,6 +64,6 @@ memory_refs:
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T20:47:09.913617'
+last_updated: '2026-03-07T20:52:02.025050'
 ---
 # WORK-272: ARC.md Status Propagation Drift — Batch Fix 6 Stale Entries
