@@ -23045,3 +23045,9 @@
 {"type": "CyclePhaseEntered", "phase": "DO", "work_id": "WORK-245", "agent": "Hephaestus", "timestamp": "2026-03-07T14:13:33.079312", "session_id": 470, "context_pct": 22.9}
 {"type": "CyclePhaseEntered", "phase": "CHECK", "work_id": "WORK-245", "agent": "Hephaestus", "timestamp": "2026-03-07T14:14:17.560859", "session_id": 470, "context_pct": 22.9}
 {"type": "CyclePhaseEntered", "phase": "DONE", "work_id": "WORK-245", "agent": "Hephaestus", "timestamp": "2026-03-07T14:16:00.138517", "session_id": 470, "context_pct": 22.9}
+{"type": "CyclePhaseEntered", "phase": "CHAIN", "work_id": "WORK-245", "agent": "Hephaestus", "timestamp": "2026-03-07T14:17:10.698502", "session_id": 470, "context_pct": 22.9}
+{"type": "GateViolation", "gate_id": "ceremony_contract", "work_id": "WORK-245", "violation_type": "warn", "context": "Ceremony 'retro-cycle' contract validation: Required field 'work_id' is missing", "timestamp": "2026-03-07T14:17:27.672631", "session_id": 470, "context_pct": 22.9}
+{"type": "GateViolation", "gate_id": "ceremony_contract", "work_id": "WORK-245", "violation_type": "warn", "context": "Ceremony 'close-work-cycle' contract validation: Required field 'work_id' is missing", "timestamp": "2026-03-07T14:20:42.968291", "session_id": 470, "context_pct": 21.3}
+{"type": "MCPGateChecked", "tool": "hierarchy_close_work", "primitive": "mcp-mutate", "state": "CHAIN", "allowed": true, "reason": "Unknown primitive 'mcp-mutate', defaulting to allow", "session_id": 470, "context_pct": 21.3}
+{"type": "CeremonyStart", "ceremony": "close-work", "timestamp": "2026-03-07T14:21:00.200650", "session_id": 470, "context_pct": 21.3}
+{"type": "CeremonyEnd", "ceremony": "close-work", "side_effects": 0, "timestamp": "2026-03-07T14:21:00.263891", "session_id": 470, "context_pct": 21.3}

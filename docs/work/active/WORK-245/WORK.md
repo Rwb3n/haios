@@ -3,14 +3,14 @@ template: work_item
 id: WORK-245
 title: ARC.md YAML Frontmatter Migration (Phase 2)
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: '2026-03-07'
 spawned_by: WORK-240
 spawned_children: []
 chapter: CH-067
 arc: infrastructure
-closed: null
+closed: '2026-03-07'
 priority: medium
 effort: medium
 traces_to:
@@ -36,22 +36,25 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: working
-cycle_phase: DONE
-current_node: DONE
+queue_position: done
+cycle_phase: done
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: '2026-03-07T00:07:55.178399'
   exited: '2026-03-07T14:05:00'
 - node: PLAN
   entered: '2026-03-07T14:05:00'
-  exited: null
+  exited: '2026-03-07T14:21:00.216323'
 queue_history:
 - position: backlog
   entered: '2026-03-07T00:07:55.178399'
   exited: '2026-03-07T14:05:00'
 - position: working
   entered: '2026-03-07T14:05:00'
+  exited: '2026-03-07T14:21:00.216323'
+- position: done
+  entered: '2026-03-07T14:21:00.216323'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -79,10 +82,11 @@ memory_refs:
 - 89556
 - 89557
 - 89558
+- 89574
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T14:16:29.765907'
+last_updated: '2026-03-07T14:21:00.222832'
 ---
 # WORK-245: ARC.md YAML Frontmatter Migration (Phase 2)
 
