@@ -16,7 +16,7 @@ _lib_dir = Path(__file__).parent.parent / ".claude" / "haios" / "lib"
 if str(_lib_dir) not in sys.path:
     sys.path.insert(0, str(_lib_dir))
 
-from cycle_state import advance_cycle_phase
+from cycle_state import advance_cycle_phase, _auto_promote_queue
 
 
 def _write_slim(tmp_path: Path, session_state: dict) -> Path:
@@ -170,3 +170,58 @@ def test_active_cycle_mismatch_returns_false(tmp_path):
     assert result is False
     data = _read_slim(tmp_path)
     assert data["session_state"]["current_phase"] == "PLAN"  # unchanged
+
+
+# ---------------------------------------------------------------------------
+# Test 9: advance_cycle_phase calls _auto_promote_queue (WORK-276)
+# ---------------------------------------------------------------------------
+def _write_work_md(tmp_path: Path, work_id: str, queue_position: str = "backlog") -> Path:
+    """Helper: write minimal WORK.md with queue_position field."""
+    work_dir = tmp_path / "docs" / "work" / "active" / work_id
+    work_dir.mkdir(parents=True, exist_ok=True)
+    work_file = work_dir / "WORK.md"
+    work_file.write_text(
+        f"---\nid: {work_id}\ncycle_phase: backlog\ncurrent_node: backlog\n"
+        f"queue_position: {queue_position}\nqueue_history:\n- position: {queue_position}\n"
+        f"  entered: '2026-03-08T00:00:00'\n  exited: null\n---\n",
+        encoding="utf-8",
+    )
+    return work_file
+
+
+def test_advance_cycle_phase_auto_promotes_queue(tmp_path):
+    """advance_cycle_phase should call _auto_promote_queue after sync_work_md_phase."""
+    work_id = "WORK-276"
+    _write_slim(tmp_path, {
+        "active_cycle": "implementation-cycle",
+        "current_phase": "PLAN",
+        "work_id": work_id,
+        "entered_at": "2026-03-08T00:00:00",
+    })
+    work_file = _write_work_md(tmp_path, work_id, queue_position="backlog")
+
+    result = advance_cycle_phase("implementation-cycle", project_root=tmp_path)
+    assert result is True
+
+    # Verify queue_position was promoted from backlog to working
+    content = work_file.read_text(encoding="utf-8")
+    assert "queue_position: working" in content
+
+
+def test_advance_cycle_phase_no_promote_if_already_working(tmp_path):
+    """advance_cycle_phase should not re-promote if already working."""
+    work_id = "WORK-276"
+    _write_slim(tmp_path, {
+        "active_cycle": "implementation-cycle",
+        "current_phase": "DO",
+        "work_id": work_id,
+        "entered_at": "2026-03-08T00:00:00",
+    })
+    work_file = _write_work_md(tmp_path, work_id, queue_position="working")
+
+    result = advance_cycle_phase("implementation-cycle", project_root=tmp_path)
+    assert result is True
+
+    # queue_position should remain working (not double-promoted)
+    content = work_file.read_text(encoding="utf-8")
+    assert "queue_position: working" in content

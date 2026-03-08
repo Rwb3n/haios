@@ -8,13 +8,17 @@ chapters:
 - id: CH-061
   title: ColdstartContextInjection
   work_items:
-  - WORK-162 (complete)
+  - WORK-162
   - WORK-180
+  - WORK-231
+  - WORK-232
+  - WORK-251
   requirements:
   - REQ-CONFIG-001
+  - REQ-CONTEXT-001
   - L3.3
   dependencies: []
-  status: In Progress
+  status: Complete
 - id: CH-062
   title: ProgressiveContracts
   work_items:
@@ -25,7 +29,7 @@ chapters:
   status: Complete
 exit_criteria:
 - text: Lightweight coldstart variant exists for housekeeping sessions
-  checked: false
+  checked: true
 - text: Contracts designed for progressive disclosure (agent reads what it needs,
     not everything)
   checked: false
@@ -69,14 +73,14 @@ Progressive disclosure means: load summary first, details on demand. Engine func
 
 | CH-ID | Title | Work Items | Requirements | Dependencies | Status |
 |-------|-------|------------|--------------|--------------|--------|
-| CH-061 | ColdstartContextInjection | WORK-162 (complete), WORK-180 | REQ-CONFIG-001, L3.3 | None | In Progress |
+| CH-061 | ColdstartContextInjection | WORK-162, WORK-180, WORK-231, WORK-232, WORK-251 | REQ-CONFIG-001, REQ-CONTEXT-001, L3.3 | None | Complete |
 | CH-062 | ProgressiveContracts | New | REQ-ASSET-001 | None | Complete |
 
 ---
 
 ## Exit Criteria
 
-- [ ] Lightweight coldstart variant exists for housekeeping sessions
+- [x] Lightweight coldstart variant exists for housekeeping sessions (S480: tiered coldstart — light/minimal variants via WORK-180)
 - [ ] Contracts designed for progressive disclosure (agent reads what it needs, not everything)
 - [ ] Context loading uses engine functions and memory before file reads
 

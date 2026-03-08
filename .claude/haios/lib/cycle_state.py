@@ -114,6 +114,8 @@ def advance_cycle_phase(
         work_id = session_state.get("work_id")
         if work_id:
             sync_work_md_phase(work_id, next_phase, project_root=root)
+            # WORK-276: Auto-promote queue_position if backlog/ready -> working
+            _auto_promote_queue(work_id, project_root=root)
 
         # Log governance event (fail-permissive)
         try:

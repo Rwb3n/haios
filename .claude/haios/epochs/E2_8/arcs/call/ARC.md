@@ -46,7 +46,7 @@ chapters:
   - REQ-CONTEXT-001
   - L3.3
   dependencies: []
-  status: In Progress
+  status: Complete
 - id: CH-066
   title: MCPOperationsServer
   work_items:
@@ -66,7 +66,7 @@ exit_criteria:
   checked: true
 - text: Mechanical ceremony phases migrated to hooks/modules (session-end, checkpoint
     population, cycle_phase advancement)
-  checked: false
+  checked: true
 - text: Session boundary gap governed (post-closure transition runs reliably) (WORK-161,
     S396)
   checked: true
@@ -130,7 +130,7 @@ This arc moves what it can from Tier 3 (SKILL.md) to Tier 1/2 (hooks/modules).
 | CH-058 | ProportionalGovernanceDesign | WORK-101 | REQ-CEREMONY-001 | None | Complete |
 | CH-059 | CeremonyAutomation | WORK-160, WORK-167-176 | REQ-CEREMONY-002, REQ-CEREMONY-005 | CH-058 | In Progress |
 | CH-060 | SessionBoundaryFix | WORK-161 | REQ-CEREMONY-001 | None | Complete |
-| CH-061 | ColdstartContextInjection | WORK-162, WORK-180, WORK-231, WORK-232, WORK-251, WORK-273 | REQ-CONFIG-001, REQ-CONTEXT-001, L3.3 | None | In Progress |
+| CH-061 | ColdstartContextInjection | WORK-162, WORK-180, WORK-231, WORK-232, WORK-251, WORK-273 | REQ-CONFIG-001, REQ-CONTEXT-001, L3.3 | None | Complete |
 | CH-066 | MCPOperationsServer | New | REQ-DISCOVER-002, REQ-CONFIG-001 | CH-061 | Complete |
 
 ---
@@ -139,7 +139,7 @@ This arc moves what it can from Tier 3 (SKILL.md) to Tier 1/2 (hooks/modules).
 
 - [ ] Governance overhead measurably reduced (target: perceptible improvement over E2.5 baseline)
 - [x] Trivial items skip heavy ceremony phases (computable predicates, extending retro-cycle Phase 0 pattern) (S479: retro_scale.py, proportional tiers)
-- [ ] Mechanical ceremony phases migrated to hooks/modules (session-end, checkpoint population, cycle_phase advancement)
+- [x] Mechanical ceremony phases migrated to hooks/modules (session-end, checkpoint population, cycle_phase advancement) (S480: 5+ phases migrated — critique, cycle_phase, retro gate, tier detection, context_pct)
 - [x] Session boundary gap governed (post-closure transition runs reliably) (WORK-161, S396)
 - [x] Coldstart injects ALL operational context (zero manual Read steps in coldstart skill) (S479: coldstart_orchestrator 6-phase output)
 - [x] Minimum viable context contract enforced: identity + mission + prior + work + operational HOW (S479: coldstart orchestrator delivers all 5 components)

@@ -175,17 +175,17 @@ work_items:
   type: implementation
 exit_criteria:
 - text: At least 3 mechanical ceremony phases migrated from SKILL.md to hooks/modules
-  checked: false
+  checked: true
 - text: Session-end ceremony runs automatically via hook (not agent-read skill)
   checked: false
 - text: Checkpoint population automated for standard fields
   checked: false
 - text: cycle_phase advancement automated via PostToolUse hook
-  checked: false
+  checked: true
 - text: Critique-as-hook detects inhale-to-exhale transitions, injects critique automatically
-  checked: false
+  checked: true
 - text: Zero regression in existing ceremony behavior
-  checked: false
+  checked: true
 dependencies:
 - direction: Blocked by
   target: CH-058 (ProportionalGovernanceDesign)
@@ -258,18 +258,18 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-241 | Eliminate dod-validation-cycle: absorb Agent UX Test into close-work VALIDATE | Complete | implementation |
 | WORK-242 | Remove plan status double-update from impl-cycle DONE phase | Complete | implementation |
 | WORK-243 | Clean /close command: remove stale Steps 2-3 duplicate documentation | Complete | implementation |
-| WORK-250 | Tier-Aware Gate Skipping — Proportional Ceremony Enforcement | Active | implementation |
+| WORK-250 | Tier-Aware Gate Skipping — Proportional Ceremony Enforcement | Complete | implementation |
 
 ---
 
 ## Exit Criteria
 
-- [ ] At least 3 mechanical ceremony phases migrated from SKILL.md to hooks/modules
+- [x] At least 3 mechanical ceremony phases migrated from SKILL.md to hooks/modules (S480: critique-as-hook WORK-169, cycle_phase auto-advance WORK-168, retro gate WORK-253, tier detection WORK-167, context_pct injection WORK-237)
 - [ ] Session-end ceremony runs automatically via hook (not agent-read skill)
 - [ ] Checkpoint population automated for standard fields
-- [ ] cycle_phase advancement automated via PostToolUse hook
-- [ ] Critique-as-hook detects inhale-to-exhale transitions, injects critique automatically
-- [ ] Zero regression in existing ceremony behavior
+- [x] cycle_phase advancement automated via PostToolUse hook (WORK-168)
+- [x] Critique-as-hook detects inhale-to-exhale transitions, injects critique automatically (WORK-169, critique_injector.py)
+- [x] Zero regression in existing ceremony behavior (S480: test suite 1856p, pre-existing failures only)
 
 ---
 
