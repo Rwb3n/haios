@@ -3,7 +3,7 @@ id: CH-062
 name: Progressive Contracts
 arc: query
 epoch: E2.8
-status: Planning
+status: Complete
 work_items:
 - id: WORK-163
   title: Progressive Contracts
@@ -11,20 +11,23 @@ work_items:
   type: design
 - id: WORK-187
   title: Fracture Implementation-Cycle SKILL.md into Phase Files
-  status: Active
+  status: Done
   type: implementation
 - id: WORK-188
   title: Hook Auto-Injection for Phase Contracts
-  status: Active
+  status: Done
   type: implementation
 exit_criteria:
 - text: Contracts designed for progressive disclosure (agent reads what it needs,
     not everything)
-  checked: false
+  checked: true
+  evidence: ADR-048, WORK-187 (phase-per-file fracturing), WORK-188 (hook auto-injection). 468-line monolithic SKILL.md -> 80-line router + 5 phase files. PostToolUse injects current phase contract.
 - text: Context loading uses engine functions and memory before file reads
-  checked: false
+  checked: true
+  evidence: ColdstartOrchestrator uses engine functions (HierarchyQueryEngine, ConfigLoader). Memory refs queried via memory_search_with_experience. Phase contracts auto-injected by hooks.
 - text: Lightweight coldstart variant exists for housekeeping sessions
-  checked: false
+  checked: true
+  evidence: ADR-047, WORK-180 S421. Three tiers - full/light/minimal. Shared with CH-061.
 dependencies: []
 ---
 # generated: 2026-02-19

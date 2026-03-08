@@ -121,8 +121,8 @@ Extend engine functions for context loading. Memory-first retrieval. Progressive
 
 **Exit criteria:**
 - [x] Lightweight coldstart variant exists for housekeeping sessions (tiered: full vs quick) (ADR-047, WORK-180, S421)
-- [ ] Contracts designed for progressive disclosure (agent reads what it needs, not everything)
-- [ ] Context loading uses engine functions and memory before file reads
+- [x] Contracts designed for progressive disclosure (agent reads what it needs, not everything) (ADR-048, WORK-187/188, S481)
+- [x] Context loading uses engine functions and memory before file reads (ColdstartOrchestrator, hook auto-injection, S481)
 
 **Evidence:** mem:84835, 84836 (coldstart overhead), 85459 (most tokens on context loading), 85815 (Dimension 2: context switching)
 
@@ -138,9 +138,9 @@ Agent Cards for infrastructure-driven capability discovery. Agents find each oth
 | CH-064 | InfrastructureCeremonies | New | REQ-CEREMONY-001, REQ-CEREMONY-002 | None | Planning |
 
 **Exit criteria:**
-- [ ] All agents have structured capability cards discoverable via infrastructure
-- [ ] Open-epoch-ceremony skill exists (mirror of close-epoch-ceremony)
-- [ ] Agents not hardcoded in CLAUDE.md — discovered via infrastructure
+- [x] All agents have structured capability cards discoverable via infrastructure (14 agents, agent_cards.py, WORK-164, S481)
+- [x] Open-epoch-ceremony skill exists (mirror of close-epoch-ceremony) (S393)
+- [x] Agents not hardcoded in CLAUDE.md — discovered via infrastructure (AGENTS.md auto-generated from .claude/agents/, S481)
 
 **Evidence:** mem:85154, 85210 (agents not discoverable), 85098/85108 (WORK-143 triage consumer), 85476 (capability card query tool)
 
@@ -203,10 +203,10 @@ Bug fixes and deferred items. Clean foundation for the UX arcs.
 ## Exit Criteria
 
 - [ ] Governance overhead measurably reduced (target: perceptible improvement over E2.5 baseline)
-- [ ] Lightweight coldstart variant exists for housekeeping sessions
+- [x] Lightweight coldstart variant exists for housekeeping sessions
 - [ ] Mechanical ceremony phases migrated to hooks/modules
-- [ ] Contracts designed for progressive disclosure
-- [ ] All agents have structured capability cards
+- [x] Contracts designed for progressive disclosure (ADR-048 phase-per-file fracturing, WORK-187/188, S481)
+- [x] All agents have structured capability cards (14 agents, agent_cards.py API, AGENTS.md auto-gen, WORK-164, S481)
 - [x] Open-epoch-ceremony skill exists (full ceremony loop standardized) (S393)
 - [x] Confirmed bugs from E2.7/E2.8 triage resolved (checkpoint sort, queue state machine) (WORK-166, S395)
 - [ ] Coldstart produces accurate context after epoch transition (no stale epoch, no stale checkpoint)
