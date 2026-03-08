@@ -63,7 +63,7 @@ exit_criteria:
   checked: false
 - text: Trivial items skip heavy ceremony phases (computable predicates, extending
     retro-cycle Phase 0 pattern)
-  checked: false
+  checked: true
 - text: Mechanical ceremony phases migrated to hooks/modules (session-end, checkpoint
     population, cycle_phase advancement)
   checked: false
@@ -72,13 +72,13 @@ exit_criteria:
   checked: true
 - text: Coldstart injects ALL operational context (zero manual Read steps in coldstart
     skill)
-  checked: false
+  checked: true
 - text: 'Minimum viable context contract enforced: identity + mission + prior + work
     + operational HOW'
-  checked: false
+  checked: true
 - text: haios-operations MCP server exposes work/hierarchy/session/scaffold tools
     as agent-native interface
-  checked: false
+  checked: true
 - text: Just recipes retired for agent use — MCP tools replace Tier 2 operations,
     just remains Tier 3 (operator terminal only)
   checked: false
@@ -138,12 +138,12 @@ This arc moves what it can from Tier 3 (SKILL.md) to Tier 1/2 (hooks/modules).
 ## Exit Criteria
 
 - [ ] Governance overhead measurably reduced (target: perceptible improvement over E2.5 baseline)
-- [ ] Trivial items skip heavy ceremony phases (computable predicates, extending retro-cycle Phase 0 pattern)
+- [x] Trivial items skip heavy ceremony phases (computable predicates, extending retro-cycle Phase 0 pattern) (S479: retro_scale.py, proportional tiers)
 - [ ] Mechanical ceremony phases migrated to hooks/modules (session-end, checkpoint population, cycle_phase advancement)
 - [x] Session boundary gap governed (post-closure transition runs reliably) (WORK-161, S396)
-- [ ] Coldstart injects ALL operational context (zero manual Read steps in coldstart skill)
-- [ ] Minimum viable context contract enforced: identity + mission + prior + work + operational HOW
-- [ ] haios-operations MCP server exposes work/hierarchy/session/scaffold tools as agent-native interface
+- [x] Coldstart injects ALL operational context (zero manual Read steps in coldstart skill) (S479: coldstart_orchestrator 6-phase output)
+- [x] Minimum viable context contract enforced: identity + mission + prior + work + operational HOW (S479: coldstart orchestrator delivers all 5 components)
+- [x] haios-operations MCP server exposes work/hierarchy/session/scaffold tools as agent-native interface (S479: mcp_server.py active, all tool categories covered)
 - [ ] Just recipes retired for agent use — MCP tools replace Tier 2 operations, just remains Tier 3 (operator terminal only)
 
 ---
