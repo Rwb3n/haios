@@ -28,7 +28,7 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
+queue_position: ready
 cycle_phase: backlog
 current_node: backlog
 node_history:
@@ -38,6 +38,9 @@ node_history:
 queue_history:
 - position: backlog
   entered: '2026-03-07T16:12:51.656982'
+  exited: '2026-03-08T16:23:25.673833'
+- position: ready
+  entered: '2026-03-08T16:23:25.673833'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -45,6 +48,6 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T16:12:51.656982'
+last_updated: '2026-03-08T16:23:25.676833'
 ---
 # WORK-262: Validate Chapter Status at Work Item Scaffold Time

@@ -857,3 +857,57 @@ class TestContextPctAutoInjection:
         assert data["context_pct"] == 75.5
         assert data["session_state"]["work_id"] == "WORK-237"  # Other keys preserved
 
+
+# =============================================================================
+# WORK-291: log_retro_completed emits RetroCycleCompleted event
+# =============================================================================
+
+
+class TestLogRetroCompleted:
+    """WORK-291: Mechanical RetroCycleCompleted event emission."""
+
+    def test_log_retro_completed_creates_event(self, temp_events_file):
+        """log_retro_completed writes correct event to governance-events.jsonl."""
+        from governance_events import log_retro_completed, read_events
+
+        with patch("governance_events.EVENTS_FILE", temp_events_file):
+            result = log_retro_completed(
+                work_id="WORK-291",
+                scaling="substantial",
+                reflect_count=5,
+                kss_count=3,
+                extract_count=2,
+            )
+
+            assert result["type"] == "RetroCycleCompleted"
+            assert result["work_id"] == "WORK-291"
+            assert result["scaling"] == "substantial"
+            assert result["reflect_count"] == 5
+            assert result["kss_count"] == 3
+            assert result["extract_count"] == 2
+            assert "timestamp" in result
+
+            events = read_events()
+            retro_events = [e for e in events if e["type"] == "RetroCycleCompleted"]
+            assert len(retro_events) == 1
+            assert retro_events[0]["work_id"] == "WORK-291"
+
+    def test_log_retro_completed_trivial_scaling(self, temp_events_file):
+        """log_retro_completed works with trivial scaling and zero counts."""
+        from governance_events import log_retro_completed, read_events
+
+        with patch("governance_events.EVENTS_FILE", temp_events_file):
+            result = log_retro_completed(
+                work_id="WORK-999",
+                scaling="trivial",
+                reflect_count=1,
+                kss_count=0,
+                extract_count=0,
+            )
+
+            assert result["scaling"] == "trivial"
+            assert result["extract_count"] == 0
+
+            events = read_events()
+            assert len(events) == 1
+

@@ -119,3 +119,57 @@ class TestCheckRetroGate:
 
         assert result["blocked"] is True
         assert result["retro_found"] is False
+
+
+# =============================================================================
+# WORK-291: Round-trip test — log_retro_completed then check_retro_gate
+# =============================================================================
+
+
+class TestRetroGateRoundTrip:
+    """WORK-291: Verify log_retro_completed produces events that check_retro_gate accepts."""
+
+    def test_retro_gate_passes_after_log_retro_completed(self, tmp_path: Path) -> None:
+        """Round-trip: emit event via lib function, then gate passes."""
+        import sys as _sys
+        _lib = str(Path(__file__).parent.parent / ".claude" / "haios" / "lib")
+        if _lib not in _sys.path:
+            _sys.path.insert(0, _lib)
+
+        from unittest.mock import patch
+        from governance_events import log_retro_completed
+
+        _write_session(tmp_path, 482)
+        # Create events dir and file
+        events_dir = tmp_path / ".claude" / "haios"
+        events_dir.mkdir(parents=True, exist_ok=True)
+        events_file = events_dir / "governance-events.jsonl"
+        events_file.write_text("", encoding="utf-8")
+
+        # Emit event via lib function (patches EVENTS_FILE to tmp_path)
+        with patch("governance_events.EVENTS_FILE", events_file), \
+             patch("governance_events.SLIM_FILE", tmp_path / "nonexistent-slim.json"), \
+             patch("governance_events.SESSION_FILE", tmp_path / ".claude" / "session"):
+            log_retro_completed(
+                work_id="WORK-291",
+                scaling="substantial",
+                reflect_count=5,
+                kss_count=3,
+                extract_count=2,
+            )
+
+        # Now check gate — uses project_root to find events file
+        result = check_retro_gate("WORK-291", project_root=tmp_path)
+
+        assert result["blocked"] is False, f"Gate should pass after log_retro_completed: {result}"
+        assert result["retro_found"] is True
+
+    def test_retro_gate_blocks_without_retro_completed(self, tmp_path: Path) -> None:
+        """Confirm gate blocks when no event exists (regression guard)."""
+        _write_session(tmp_path, 482)
+        _write_events(tmp_path, [])  # Empty events file
+
+        result = check_retro_gate("WORK-291", project_root=tmp_path)
+
+        assert result["blocked"] is True
+        assert result["retro_found"] is False

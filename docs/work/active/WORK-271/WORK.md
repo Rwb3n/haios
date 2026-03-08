@@ -1,8 +1,8 @@
 ---
 template: work_item
 id: WORK-271
-title: "Batch Scaffold Traceability \u2014 Enforce traces_to and Chapter Registration\
-  \ at Creation"
+title: Batch Scaffold Traceability — Enforce traces_to and Chapter Registration at
+  Creation
 type: implementation
 status: active
 owner: Hephaestus
@@ -24,13 +24,13 @@ acceptance_criteria:
 - scaffold_work validates traces_to is non-empty before creating work item (warn or
   block)
 - scaffold_work validates chapter field references an existing, non-Complete chapter
-- "WORK-251 retro WCBB-1: S474 batch created 6 items with empty traceability \u2014\
-  \ prevent recurrence"
+- 'WORK-251 retro WCBB-1: S474 batch created 6 items with empty traceability — prevent
+  recurrence'
 - 'Convergence: 10 related memory entries (enrichment convergence_count=10)'
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
+queue_position: ready
 cycle_phase: backlog
 current_node: backlog
 node_history:
@@ -40,6 +40,9 @@ node_history:
 queue_history:
 - position: backlog
   entered: '2026-03-07T18:20:38.183386'
+  exited: '2026-03-08T16:23:27.505281'
+- position: ready
+  entered: '2026-03-08T16:23:27.505281'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -47,6 +50,6 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T18:20:38.183386'
+last_updated: '2026-03-08T16:23:27.510294'
 ---
 # WORK-271: Batch Scaffold Traceability — Enforce traces_to and Chapter Registration at Creation

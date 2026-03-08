@@ -26,12 +26,12 @@ acceptance_criteria:
 - 'Root cause identified: contract definition vs invocation mismatch, or overly broad
   scanning'
 - Findings doc with fix recommendation
-- "Evidence: S476 governance-events.jsonl \u2014 3 ceremony_contract + 2 backlog_id_uniqueness\
-  \ false positives"
+- 'Evidence: S476 governance-events.jsonl — 3 ceremony_contract + 2 backlog_id_uniqueness
+  false positives'
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
+queue_position: ready
 cycle_phase: backlog
 current_node: backlog
 node_history:
@@ -41,6 +41,9 @@ node_history:
 queue_history:
 - position: backlog
   entered: '2026-03-07T19:38:13.946228'
+  exited: '2026-03-08T16:23:23.853720'
+- position: ready
+  entered: '2026-03-08T16:23:23.853720'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -48,6 +51,6 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-07T19:38:13.946228'
+last_updated: '2026-03-08T16:23:23.857718'
 ---
 # WORK-275: Fix ceremony_contract false-positive GateViolations in queue-commit

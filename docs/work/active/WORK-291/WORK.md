@@ -28,14 +28,14 @@ acceptance_criteria:
 - 'Options: (a) add governance event emission to COMMIT/EXTRACT haiku subagent prompt,
   (b) add to retro-cycle skill text as explicit step after EXTRACT, (c) mechanical
   emission in lib/ triggered by cycle_set phase transition'
-- "Bug evidence: S481 WORK-287 closure blocked by retro gate despite retro completing\
-  \ \u2014 no RetroCycleCompleted event was logged, required manual Python injection"
+- 'Bug evidence: S481 WORK-287 closure blocked by retro gate despite retro completing
+  — no RetroCycleCompleted event was logged, required manual Python injection'
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
-cycle_phase: backlog
-current_node: backlog
+queue_position: working
+cycle_phase: DONE
+current_node: DONE
 node_history:
 - node: backlog
   entered: '2026-03-08T15:12:32.281431'
@@ -43,6 +43,12 @@ node_history:
 queue_history:
 - position: backlog
   entered: '2026-03-08T15:12:32.281431'
+  exited: '2026-03-08T16:23:22.943050'
+- position: ready
+  entered: '2026-03-08T16:23:22.943050'
+  exited: '2026-03-08T19:03:34.506993'
+- position: working
+  entered: '2026-03-08T19:03:34.506993'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -50,6 +56,6 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: '2026-03-08'
-last_updated: '2026-03-08T15:12:32.281431'
+last_updated: '2026-03-08T19:03:34.511994'
 ---
 # WORK-291: Fix RetroCycleCompleted Governance Event Not Emitted by Retro-Cycle

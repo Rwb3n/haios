@@ -15,6 +15,7 @@ Event Types:
 - SessionStarted: Logged when a session begins (E2-236)
 - SessionEnded: Logged when a session ends (E2-236)
 - TierDetected: Logged when governance tier is computed for a work item (WORK-167)
+- RetroCycleCompleted: Logged when retro-cycle finishes all phases (WORK-291)
 
 Usage:
     from governance_events import log_phase_transition, log_validation_outcome
@@ -245,6 +246,45 @@ def log_critique_injected(work_id: str, tier: str, phase: str, skill: str, *, co
         "tier": tier,
         "phase": phase,
         "skill": skill,
+        "timestamp": datetime.now().isoformat(),
+    }
+    _append_event(event, context_pct=context_pct)
+    return event
+
+
+def log_retro_completed(
+    work_id: str,
+    scaling: str,
+    reflect_count: int,
+    kss_count: int,
+    extract_count: int,
+    *,
+    context_pct: Optional[float] = None,
+) -> dict:
+    """
+    Log RetroCycleCompleted governance event (WORK-291).
+
+    Emitted mechanically after retro-cycle Phase 4 EXTRACT completes.
+    Consumed by retro_gate.py to allow close-work-cycle to proceed.
+
+    Args:
+        work_id: Work item ID (e.g., "WORK-291")
+        scaling: Scale assessment result ("trivial" or "substantial")
+        reflect_count: Number of REFLECT observations
+        kss_count: Number of K/S/S directives
+        extract_count: Number of EXTRACT items
+        context_pct: Optional context window remaining percentage (0-100)
+
+    Returns:
+        The logged event dict.
+    """
+    event = {
+        "type": "RetroCycleCompleted",
+        "work_id": work_id,
+        "scaling": scaling,
+        "reflect_count": reflect_count,
+        "kss_count": kss_count,
+        "extract_count": extract_count,
         "timestamp": datetime.now().isoformat(),
     }
     _append_event(event, context_pct=context_pct)

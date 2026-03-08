@@ -447,12 +447,25 @@ Extracted items are stored to memory only. They are NOT automatically converted 
 | Trivial | Max 2 items total |
 | Substantial | Uncapped |
 
-### Governance Event
+### Governance Event (MECHANICAL — MUST)
 
-Log full ceremony completion (extract_count now known):
+After EXTRACT completes, emit the governance event mechanically via lib function.
+This is NOT optional prose — it is a required function call that the retro gate depends on.
+
+```python
+# MUST execute after EXTRACT phase completes (WORK-291)
+from governance_events import log_retro_completed
+log_retro_completed(
+    work_id="{work_id}",
+    scaling="{scaling}",
+    reflect_count={reflect_count},
+    kss_count={kss_count},
+    extract_count={extract_count},
+)
 ```
-RetroCycleCompleted: {work_id}, scaling: {trivial|substantial}, reflect_count: N, kss_count: N, extract_count: N
-```
+
+**Why mechanical:** retro_gate.py (WORK-253) blocks `/close` unless this event exists.
+Agent-dependent emission failed in S481 (WORK-287). This function call is the fix.
 
 ### Degradation
 
