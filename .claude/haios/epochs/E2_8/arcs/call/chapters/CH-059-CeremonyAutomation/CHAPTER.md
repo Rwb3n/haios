@@ -175,7 +175,7 @@ work_items:
   type: implementation
 - id: WORK-291
   title: Fix RetroCycleCompleted Governance Event Not Emitted by Retro-Cycle
-  status: Active
+  status: Complete
   type: implementation
 exit_criteria:
 - text: At least 3 mechanical ceremony phases migrated from SKILL.md to hooks/modules
