@@ -200,6 +200,13 @@ def _check_governed_activity(tool_name: str, tool_input: dict) -> Optional[dict]
                 ceremony_result["hookSpecificOutput"]["additionalContext"] = ctx
                 return ceremony_result
 
+            # 4b-NEW. Retro gate (WORK-253) — block close-work-cycle if retro not completed
+            retro_result = _check_retro_gate(skill_name, tool_input)
+            if retro_result:
+                ctx = _build_additional_context(state, layer)
+                retro_result["hookSpecificOutput"]["additionalContext"] = ctx
+                return retro_result
+
             # 4c. Critique injection (WORK-169)
             critique_ctx = _check_critique_injection(skill_name)
             if critique_ctx:
@@ -524,6 +531,8 @@ def _infer_gate_id(reason: str) -> str:
         return "memory_refs"
     if "exit" in reason_lower and "gate" in reason_lower:
         return "exit_gate"
+    if "retro-cycle" in reason_lower or "retro gate" in reason_lower:
+        return "retro_gate"
     if "activity" in reason_lower or "state" in reason_lower:
         return "activity_governance"
     return "unknown_gate"
@@ -1105,3 +1114,33 @@ def _check_critique_injection(skill_name: str) -> Optional[str]:
         return compute_critique_injection(skill_name)
     except Exception:
         return None  # Fail-permissive
+
+
+def _check_retro_gate(skill_name: str, tool_input: dict) -> Optional[dict]:
+    """
+    Block close-work-cycle invocation if retro-cycle not completed this session (WORK-253).
+
+    Returns deny response if retro gate fails, None otherwise.
+    Fail-permissive: if events file unreadable, returns None (WARN logged, not block).
+    """
+    if skill_name not in ("close-work-cycle", "close"):
+        return None
+
+    try:
+        lib_dir = Path(__file__).parent.parent.parent / "haios" / "lib"
+        if str(lib_dir) not in sys.path:
+            sys.path.insert(0, str(lib_dir))
+
+        from retro_gate import check_retro_gate
+
+        work_id = _extract_ceremony_inputs(tool_input).get("work_id", "")
+        result = check_retro_gate(work_id)
+
+        if result["blocked"]:
+            return _deny(result["reason"])
+        if result.get("warning"):
+            return _allow_with_warning(result["warning"])
+    except Exception:
+        pass  # Fail-permissive
+
+    return None
