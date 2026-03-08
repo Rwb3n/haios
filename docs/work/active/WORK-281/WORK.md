@@ -1,16 +1,17 @@
 ---
 template: work_item
 id: WORK-281
-title: "Agent Pattern: Use git log/show Instead of git stash for Pre-Existing Failure Verification"
+title: 'Agent Pattern: Use git log/show Instead of git stash for Pre-Existing Failure
+  Verification'
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: 2026-03-07
 spawned_by: WORK-272
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-03-08'
 priority: low
 effort: small
 traces_to: []
@@ -18,26 +19,32 @@ requirement_refs: []
 source_files:
 - CLAUDE.md
 acceptance_criteria:
-- "Document in CLAUDE.md or MEMORY.md: never use git stash to verify pre-existing failures"
-- "Document alternative: git log to check when test last passed, or git show HEAD:path to compare"
-- "Optionally: add PreToolUse hook warning when Bash command contains 'git stash'"
+- 'Document in CLAUDE.md or MEMORY.md: never use git stash to verify pre-existing
+  failures'
+- 'Document alternative: git log to check when test last passed, or git show HEAD:path
+  to compare'
+- 'Optionally: add PreToolUse hook warning when Bash command contains ''git stash'''
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog  # WORK-105: parked|backlog|ready|working|done
-cycle_phase: backlog     # WORK-066: backlog|plan|implement|check|done
-current_node: backlog    # DEPRECATED: use cycle_phase
+queue_position: done
+cycle_phase: done
+current_node: backlog
 node_history:
-  - node: backlog
-    entered: 2026-03-07T20:49:53
-    exited: null
+- node: backlog
+  entered: 2026-03-07 20:49:53
+  exited: '2026-03-08T13:31:52.973529'
 artifacts: []
 cycle_docs: {}
 memory_refs: []
 extensions: {}
-version: "2.0"
+version: '2.0'
 generated: 2026-03-07
-last_updated: 2026-03-07T20:49:53
+last_updated: '2026-03-08T13:31:52.978013'
+queue_history:
+- position: done
+  entered: '2026-03-08T13:31:52.973529'
+  exited: null
 ---
 # WORK-281: Agent Pattern: Use git log/show Instead of git stash for Pre-Existing Failure Verification
 
