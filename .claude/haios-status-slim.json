@@ -25,10 +25,10 @@
         "lifecycle_phase": null
     },
     "session_state": {
-        "active_cycle": null,
-        "current_phase": null,
-        "work_id": null,
-        "entered_at": null,
+        "active_cycle": "close-work-cycle",
+        "current_phase": "CHAIN",
+        "work_id": "WORK-287",
+        "entered_at": "2026-03-08T14:33:15.809322",
         "active_queue": null,
         "phase_history": []
     },
@@ -122,5 +122,5 @@
             }
         ]
     },
-    "context_pct": 51.0
+    "context_pct": 34.0
 }
