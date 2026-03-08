@@ -3,14 +3,14 @@ template: work_item
 id: WORK-253
 title: Mechanical Retro-Before-Close Enforcement
 type: implementation
-status: active
+status: complete
 owner: Hephaestus
 created: '2026-03-07'
 spawned_by: null
 spawned_children: []
 chapter: CH-059
 arc: call
-closed: null
+closed: '2026-03-08'
 priority: medium
 effort: small
 traces_to:
@@ -27,13 +27,13 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: working
-cycle_phase: DONE
-current_node: DONE
+queue_position: done
+cycle_phase: CHAIN
+current_node: CHAIN
 node_history:
 - node: backlog
   entered: '2026-03-07T14:31:39.178759'
-  exited: null
+  exited: '2026-03-08T12:01:25.240098'
 queue_history:
 - position: backlog
   entered: '2026-03-07T14:31:39.178759'
@@ -43,6 +43,9 @@ queue_history:
   exited: '2026-03-08T11:26:36.865945'
 - position: working
   entered: '2026-03-08T11:26:36.865945'
+  exited: '2026-03-08T12:01:25.240098'
+- position: done
+  entered: '2026-03-08T12:01:25.240098'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -63,6 +66,6 @@ memory_refs:
 extensions: {}
 version: '2.0'
 generated: '2026-03-07'
-last_updated: '2026-03-08T11:43:55.373989'
+last_updated: '2026-03-08T12:01:25.245149'
 ---
 # WORK-253: Mechanical Retro-Before-Close Enforcement
