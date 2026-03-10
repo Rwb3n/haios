@@ -1,7 +1,7 @@
 ---
 template: work_item
 id: WORK-289
-title: "Implement Tiered Session Architecture \u2014 Plan/Build Session Boundary"
+title: Implement Tiered Session Architecture — Plan/Build Session Boundary
 type: implementation
 status: active
 owner: Hephaestus
@@ -39,7 +39,7 @@ acceptance_criteria:
 blocked_by: []
 blocks: []
 enables: []
-queue_position: backlog
+queue_position: ready
 cycle_phase: backlog
 current_node: backlog
 node_history:
@@ -49,6 +49,9 @@ node_history:
 queue_history:
 - position: backlog
   entered: '2026-03-08T14:27:22.240320'
+  exited: '2026-03-10T22:20:07.342933'
+- position: ready
+  entered: '2026-03-10T22:20:07.342933'
   exited: null
 artifacts: []
 cycle_docs: {}
@@ -56,6 +59,6 @@ memory_refs: []
 extensions: {}
 version: '2.0'
 generated: '2026-03-08'
-last_updated: '2026-03-08T14:27:22.240320'
+last_updated: '2026-03-10T22:20:07.347366'
 ---
 # WORK-289: Implement Tiered Session Architecture — Plan/Build Session Boundary
