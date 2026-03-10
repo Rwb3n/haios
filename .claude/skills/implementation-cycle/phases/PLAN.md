@@ -130,6 +130,32 @@ Task(subagent_type='preflight-checker', model='haiku', prompt='Check plan readin
 ```
 Validates plan completeness and file scope. DO phase is blocked until all three gates pass.
 
+**Session Yield (standard — MUST after all gates pass):**
+
+After all three gates pass, standard items MUST yield the session rather than proceeding to DO inline.
+This gives the DO phase a clean context window (mem:89943, mem:89951).
+
+**Actions:**
+1. Update plan status to `approved` (if not already set by plan-authoring-agent)
+2. Update work item `cycle_phase` to record plan-session complete:
+   ```
+   mcp__haios-operations__cycle_set(cycle="implementation-cycle", phase="PLAN", work_id="{work_id}")
+   ```
+3. Invoke checkpoint-cycle. During the FILL phase, **MUST** set `pending: ["{work_id}"]`.
+   This is the handoff signal — if `pending` is empty, the build-session will not detect the approved plan.
+   ```
+   Skill(skill="checkpoint-cycle")
+   ```
+4. End the plan-session. **Do NOT proceed to DO phase.** Checkpoint-cycle's CAPTURE phase
+   invokes `session_end()`, which mechanically prevents continuation to DO phase.
+
+> **Rationale (WORK-287):** PLAN phase consumes ~70% of context budget (mem:87482). Proceeding inline
+> leaves insufficient context for DO phase. Session split gives each phase a full context window.
+> Build-session starts clean: coldstart → survey detects approved plan → DO phase (no PLAN re-run).
+>
+> **Regression guard:** trivial and small tiers are NOT affected. They continue single-session behavior
+> (PLAN → DO inline). Only standard and architectural yield after plan approval.
+
 **If tier = architectural:**
 
 Same as standard (Gates 1+2+3), PLUS:
@@ -140,5 +166,15 @@ After Gate 3 passes, invoke operator confirmation:
 AskUserQuestion(questions=[{"question": "Architectural work item {backlog_id} has passed all 3 automated gates. Confirm approach and approve DO phase.", "header": "Operator Approval Required", "options": [{"label": "Approved — proceed to DO phase"}, {"label": "BLOCK — revise plan first"}], "multiSelect": false}])
 ```
 > Architectural items require explicit operator sign-off before DO phase. Gate 4 makes this explicit (was implicit in critique_injector.py TIER_INJECTIONS).
+
+**Session Yield (architectural — MUST after Gate 4 approval):**
+
+After operator approves, architectural items MUST yield the session (same as standard):
+1. Update plan status to `approved`
+2. `mcp__haios-operations__cycle_set(cycle="implementation-cycle", phase="PLAN", work_id="{work_id}")`
+3. `Skill(skill="checkpoint-cycle")` — **MUST** set `pending: ["{work_id}"]` during FILL phase
+4. End the plan-session. **Do NOT proceed to DO phase.** (session_end() enforces mechanically)
+
+> **Regression guard:** trivial and small tiers are NOT affected. They continue single-session behavior.
 
 **Tools:** Read, Glob, AskUserQuestion, Task(plan-authoring-agent, model=sonnet), Task(critique-agent, model=sonnet), Task(preflight-checker, model=haiku), Task(plan-validation, model=haiku)

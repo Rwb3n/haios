@@ -177,6 +177,10 @@ work_items:
   title: Fix RetroCycleCompleted Governance Event Not Emitted by Retro-Cycle
   status: Complete
   type: implementation
+- id: WORK-289
+  title: Implement Tiered Session Architecture — Plan/Build Session Boundary
+  status: Complete
+  type: implementation
 exit_criteria:
 - text: At least 3 mechanical ceremony phases migrated from SKILL.md to hooks/modules
   checked: true
@@ -263,6 +267,8 @@ Migrate mechanical (judgment-free) ceremony phases from SKILL.md (Tier 3, agent 
 | WORK-242 | Remove plan status double-update from impl-cycle DONE phase | Complete | implementation |
 | WORK-243 | Clean /close command: remove stale Steps 2-3 duplicate documentation | Complete | implementation |
 | WORK-250 | Tier-Aware Gate Skipping — Proportional Ceremony Enforcement | Complete | implementation |
+| WORK-289 | Implement Tiered Session Architecture — Plan/Build Session Boundary | Active | implementation |
+| WORK-291 | Fix RetroCycleCompleted Governance Event Not Emitted by Retro-Cycle | Complete | implementation |
 
 ---
 
