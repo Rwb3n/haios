@@ -53,8 +53,7 @@ load_memory_refs:
 - 90145
 
 pending:
-- WORK-293
-- WORK-294
+- WORK-289
 
 drift_observed:
 - "Coldstart drift detection checks ARC.md work_items list (2 items for CH-059) instead of WORK.md chapter fields (41 items), producing false drift warnings"
