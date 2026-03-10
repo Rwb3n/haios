@@ -3,9 +3,6 @@ name: thinking-router
 type: workflow
 trigger: facing a problem that benefits from structured thinking, or when the user requests a specific thinking mode
 cadence: on demand (agent-initiated or manual)
-depends: none
-references: P2 (Observe Before You Act), P6 (Feedback Over Prescription)
-provenance: ad-hoc thinking produced inconsistent quality; structured cognitive modes (12 modes across 4 categories) produce more rigorous analysis by matching the thinking approach to the problem type
 ---
 
 # Thinking Router
